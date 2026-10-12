@@ -1,0 +1,17 @@
+{
+  "inputSha256": "D59FC6F43452EE988DDE6F3CA4D8E26888DCD1EFD034220D3318DD55905800B5",
+  "outputSha256": "AC4A2C31E335E4F1D690B474F7FCEC60BDE9D56FD7EE717022EECE7583C58F48",
+  "effectId": 95000402,
+  "nativeSourceEffect": 6999611,
+  "vfxId": 199852,
+  "sfxId": 803800,
+  "dummyId": 220,
+  "onlyCooldownVfxChanged": true,
+  "initialOnly": true,
+  "existingCommonResourceVerified": true,
+  "gameplayVerified": false,
+  "installed": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": false,
+  "runtimeTestsPassed": 21
+}

@@ -1,22 +1,19 @@
 {
-  "version": "0.17.13",
-  "nativeGoods": 3550,
-  "nativeBullet": 10355000,
-  "nativeEffect": 503550,
-  "nativeVfx": 5280,
-  "midstSfxId": 4530,
-  "midstDmyId": 905,
-  "addedEffect": 95001204,
-  "durationSeconds": 10,
-  "originalEscapeVisualRetained": true,
-  "visualFieldsMatchNeutralTemplate": true,
-  "originalEffectsAndUnrelatedTablesUnchanged": true,
-  "changedAssets": [
-    "mod/regulation.bin",
-    "natives/NRHex.dll"
-  ],
-  "previousBalanceSyncCageAssetsAndUserConfigurationUnchanged": true,
-  "rustTestsPassed": 155,
+  "inputSha256": "AC4A2C31E335E4F1D690B474F7FCEC60BDE9D56FD7EE717022EECE7583C58F48",
+  "outputSha256": "A9B9BFD9C9AAF72AFE2E43D155F3B95E81549BFF245DE456F3B9A62577C0D481",
+  "effectId": 95001204,
+  "vfxId": 95001204,
+  "nativeBullet": 30903000,
+  "sfxId": 460820,
+  "dummyId": 220,
+  "initialOnly": true,
+  "visualDuration": 0.2,
+  "activeDuration": 10,
+  "cooldownDuration": 60,
+  "unrelatedParametersPreserved": true,
   "gameplayVerified": false,
-  "multiplayerVerified": false
+  "installed": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": false,
+  "runtimeTestsPassed": 5
 }

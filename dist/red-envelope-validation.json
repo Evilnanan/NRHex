@@ -1,0 +1,14 @@
+{
+  "inputSha256": "AB670A06B7CE521BF0EE4F8763261181A093B725B2C5AAD20E43095C269B0460",
+  "outputSha256": "D59FC6F43452EE988DDE6F3CA4D8E26888DCD1EFD034220D3318DD55905800B5",
+  "effectId": 95000102,
+  "vfxId": 104392,
+  "sfxId": 43,
+  "dummyId": 220,
+  "runeAmount": 88888,
+  "onlyPayoutVfxChanged": true,
+  "gameplayVerified": false,
+  "installed": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": false
+}

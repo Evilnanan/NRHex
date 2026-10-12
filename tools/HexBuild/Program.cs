@@ -78,6 +78,12 @@ if(args.Contains("--storm-extract")){StormVfx.Extract(root,smith,game);return;}
 if(args.Contains("--storm-resources")){StormVfx.Resources(root);return;}
 if(args.Contains("--storm-vfx-stage")){StormVfx.Stage(root);return;}
 if(args.Contains("--ability-buffs-probe")){AbilityBuffs.Probe(root,Parse);return;}
+if(args.Contains("--red-envelope-probe")){RedEnvelope.Probe(root,bnd,Parse);return;}
+if(args.Contains("--red-envelope-only")){RedEnvelope.Stage(root,Parse);return;}
+if(args.Contains("--ultimate-vfx-probe")){UltimateRefreshVfx.Probe(root,bnd,Parse);return;}
+if(args.Contains("--ultimate-vfx-only")){UltimateRefreshVfx.Stage(root,Parse);return;}
+if(args.Contains("--escape-duchess-probe")){EscapeVfx.Probe(root,bnd,Parse);return;}
+if(args.Contains("--escape-duchess-only")){EscapeVfx.Stage(root,Parse);return;}
 if(args.Contains("--coop-01749-probe")){CoopAudit.Probe(root,Parse,Parse("NpcParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="NpcParam.param").Bytes),Hash(source));return;}
 if(args.Contains("--coop-01749-stage")){CoopAudit.Stage(root,Parse);return;}
 if(args.Contains("--spirit-corpse-cue-only")){SpiritPlacement.Stage(root,Parse);return;}
@@ -704,10 +710,10 @@ Set(escape,"vfxId",nativeLowHp["vfxId"].Value);
 var bloodboilGoods=pars["EquipParamGoods"].Rows.Single(r=>r.ID==3550);
 Require(Convert.ToInt32(bloodboilGoods["refCategory"].Value)==1&&Convert.ToInt32(bloodboilGoods["refId_default"].Value)==10355000,"Bloodboil goods reference changed");
 Require(Convert.ToInt32(pars["Bullet"].Rows.Single(r=>r.ID==10355000)["spEffectId0"].Value)==503550,"Bloodboil bullet reference changed");
-Require(Convert.ToInt32(pars["SpEffectParam"].Rows.Single(r=>r.ID==503550)["vfxId"].Value)==5280,"Bloodboil ongoing VFX reference changed");
 var escapeVisual=Clone("SpEffectParam",8000000,95001204);
 Set(escapeVisual,"maxHpRate",1f);Set(escapeVisual,"saveCategory",-1);Set(escapeVisual,"effectEndurance",10f);Set(escapeVisual,"spCategory",20);
 Set(escapeVisual,"iconId",-1);Set(escapeVisual,"spEffectTextId_1",-1);Set(escapeVisual,"displayIconForPermamentEffect",0);Set(escapeVisual,"vfxId",5280);
+EscapeVfx.Apply(pars["SpEffectParam"],pars["SpEffectVfxParam"],pars["Bullet"]);
 foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(escape,f,.4f);
 var escapeCooldown=Clone("SpEffectParam",8000000,95001202);
 Set(escapeCooldown,"maxHpRate",1f);Set(escapeCooldown,"effectEndurance",60f);Set(escapeCooldown,"iconId",-1);Set(escapeCooldown,"displayIconForPermamentEffect",0);Set(escapeCooldown,"spEffectTextId_1",95001202);
@@ -719,10 +725,12 @@ Set(escapeReady,"spCategory",20);Set(escapeReady,"effectEndurance",2f);
 Require(Convert.ToSingle(escape["conditionHp"].Value)==-1f&&Convert.ToInt32(escape["stateInfo"].Value)==0,"Escape must not inherit a conditional damage/animation state");
 var paid=Clone("SpEffectParam",8000000,95000101);Set(paid,"maxHpRate",1f);Set(paid,"iconId",-1);Set(paid,"spEffectTextId_1",-1);
 var money=Clone("SpEffectParam",3269,95000102);Set(money,"soul",88888);
+RedEnvelope.Apply(pars["SpEffectParam"],pars["SpEffectVfxParam"]);
 // Retain the old refill row for compatibility; the DLL uses the native
 // percentage API in 0.2.2. Only the saved cooldown remains active here.
 var refill=Clone("SpEffectParam",99823,95000401);
 var cooldown=Clone("SpEffectParam",8000000,95000402);Set(cooldown,"maxHpRate",1f);Set(cooldown,"effectEndurance",45f);Set(cooldown,"iconId",-1);Set(cooldown,"displayIconForPermamentEffect",0);Set(cooldown,"spEffectTextId_1",95000400);
+UltimateRefreshVfx.Apply(pars["SpEffectParam"],pars["SpEffectVfxParam"]);
 var ultimateReady=Clone("SpEffectParam",8000000,95000403);Set(ultimateReady,"maxHpRate",1f);Set(ultimateReady,"saveCategory",-1);Set(ultimateReady,"iconId",20297);Set(ultimateReady,"displayIconForPermamentEffect",1);Set(ultimateReady,"spEffectTextId_1",95000403);
 Set(ultimateReady,"spCategory",20);Set(ultimateReady,"effectEndurance",2f);
 // Native finite-effect HUD merges the same icon and counts live instances.
@@ -919,7 +927,7 @@ File.WriteAllText(Path.Combine(root,".work/noisy/serialized.json"),JsonSerialize
 var escapeIds=new[]{95001200,95001201,95001202,95001203,95001204};
 foreach(int id in escapeIds)Require(Convert.ToSingle(Effect(id)["maxHpRate"].Value)==1f,"Escape adds an unintended max-HP bonus");
 Require(Convert.ToSingle(Effect(95001201)["effectEndurance"].Value)==10f&&Convert.ToSingle(Effect(95001202)["effectEndurance"].Value)==60f,"Escape duration/cooldown mismatch");
-Require(Convert.ToInt32(Effect(95001204)["vfxId"].Value)==5280&&Convert.ToSingle(Effect(95001204)["effectEndurance"].Value)==10f&&Convert.ToInt32(Effect(95001204)["saveCategory"].Value)==-1&&Convert.ToInt32(Effect(95001204)["iconId"].Value)==-1&&Convert.ToInt32(Effect(95001204)["stateInfo"].Value)==0,"Escape Bloodboil visual must be neutral, hidden and last ten seconds");
+Require(Convert.ToInt32(Effect(95001204)["vfxId"].Value)==EscapeVfx.Visual&&Convert.ToSingle(Effect(95001204)["effectEndurance"].Value)==0.2f&&Convert.ToInt32(Effect(95001204)["saveCategory"].Value)==-1&&Convert.ToInt32(Effect(95001204)["iconId"].Value)==-1&&Convert.ToInt32(Effect(95001204)["stateInfo"].Value)==0,"Escape Restage cue must be neutral, hidden and transient");
 foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Require(Convert.ToSingle(Effect(95001201)[f].Value)==.4f,"Escape must reduce all damage types by 60%");
 Require(Convert.ToInt32(Effect(95001203)["iconId"].Value)==20222&&Convert.ToInt32(Effect(95001203)["displayIconForPermamentEffect"].Value)==1&&Convert.ToInt32(Effect(95001203)["saveCategory"].Value)==-1,"Escape ready HUD icon mismatch");
 File.WriteAllText(Path.Combine(root,".work/effects/escape-serialized.json"),JsonSerializer.Serialize(escapeIds.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));

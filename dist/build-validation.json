@@ -30,5 +30,24 @@
   "nativeCasesPassed": 47,
   "nativeValidation": ".work/glass-cannon-01769/native-validation.json",
   "me3ProfilesValid": true,
-  "groupPackageUpdated": true
+  "groupPackageUpdated": true,
+  "redEnvelopeVfxUpdate": {
+    "validation": "red-envelope-validation.json",
+    "installed": true,
+    "gameplayVerified": false,
+    "groupPackageUpdated": true
+  },
+  "ultimateRefreshVfxUpdate": {
+    "validation": "ultimate-vfx-validation.json",
+    "installed": true,
+    "gameplayVerified": false,
+    "groupPackageUpdated": true
+  },
+  "escapeVfxUpdate": {
+    "validation": "escape-vfx-validation.json",
+    "installed": true,
+    "gameplayVerified": false,
+    "groupPackageUpdated": true
+  },
+  "latestTextSourcesVerified": true
 }
