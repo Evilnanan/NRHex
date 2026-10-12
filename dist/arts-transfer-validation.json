@@ -1,0 +1,21 @@
+{
+  "version": "0.15.4",
+  "nativeGroundUidOffset": "5C",
+  "groundDescriptorOffset": "20",
+  "serializedWeaponBytes": 72,
+  "menuDropRva": "7E91A0",
+  "serializeRva": "6C16F0",
+  "networkQueueCopyRva": "570410",
+  "directCreationRva": "5759E0",
+  "pickupRva": "57CA60",
+  "instanceFactoryRva": "57B490",
+  "pickupArgumentCount": 7,
+  "localInventoryOnly": true,
+  "exactGroundUidBinding": true,
+  "identicalWeaponsNotMatchedByTypeOrOrder": true,
+  "nativeInventoryAndDropPayloadUnchanged": true,
+  "nestedReplacementDropCovered": true,
+  "multiplayerQueueCoveredByStaticCallFlow": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -1,0 +1,756 @@
+{
+  "version": "0.17.27",
+  "functions": [
+    {
+      "id": 533,
+      "name": "SwordArts_Update",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 535,
+      "name": "Skill_Update",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 536,
+      "name": "DrawStanceRightStart_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 537,
+      "name": "DrawStanceRightLoop_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": true,
+      "magicSkillOnly": false,
+      "prefixInstructions": 46
+    },
+    {
+      "id": 538,
+      "name": "DrawStanceNoSyncLoop_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": true,
+      "magicSkillOnly": false,
+      "prefixInstructions": 46
+    },
+    {
+      "id": 539,
+      "name": "DrawStanceNoSyncLoopMax_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 540,
+      "name": "DrawStanceRightEnd_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 541,
+      "name": "DrawStanceRightAttackLight_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 542,
+      "name": "DrawStanceRightAttackLightCancel_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 543,
+      "name": "SwordArtsStanceAttackLightStart_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 544,
+      "name": "SwordArtsStanceAttackLight180_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 545,
+      "name": "DrawStanceRightAttackHeavy_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 546,
+      "name": "DrawStanceRightAttackHeavy2_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 547,
+      "name": "StormRuler_AttackHeavy_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 548,
+      "name": "StormRuler_AttackLight1_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 549,
+      "name": "StormRuler_AttackLight2_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 550,
+      "name": "StormRuler_AttackLight3_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 551,
+      "name": "SwordArtsStanceAttackHeavyStart_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 552,
+      "name": "SwordArtsStanceAttackHeavy180_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 553,
+      "name": "SwordArtsOneShot_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 554,
+      "name": "SwordArtsHalfOneShot_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 555,
+      "name": "SwordArtsOneShotComboEnd_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 556,
+      "name": "SwordArtsHalfOneShotComboEnd_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 557,
+      "name": "SwordArtsOneShotComboEnd_2_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 558,
+      "name": "SwordArtsHalfOneShotComboEnd_2_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 559,
+      "name": "SwordArtsOneShotShieldLeft_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 560,
+      "name": "SwordArtsHalfOneShotShieldLeft_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 561,
+      "name": "SwordArtsOneShotShieldLeft_Cancel_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 562,
+      "name": "SwordArtsOneShotShieldBoth_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 563,
+      "name": "SwordArtsOneShotShieldBoth_Cancel_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 564,
+      "name": "SwordArtsRolling_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 565,
+      "name": "SwordArtsRolling_SelfTrans_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 566,
+      "name": "SwordArtsLoopLoop_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 567,
+      "name": "SwordArtsHalfLoopLoop_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 568,
+      "name": "SwordArtsLoopEnd_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 569,
+      "name": "SwordArtsHalfLoopEnd_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 570,
+      "name": "SwordArtsBothLoopLoop_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 571,
+      "name": "SwordArtsBothLoopEnd_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 572,
+      "name": "SwordArtsLeftLoopLoop_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 573,
+      "name": "SwordArtsHalfLeftLoopLoop_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 574,
+      "name": "SwordArtsLeftLoopEnd_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 575,
+      "name": "SwordArtsHalfLeftLoopEnd_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 576,
+      "name": "SwordArtsChargeCancelEarly_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 577,
+      "name": "SwordArtsChargeCancelLate_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 578,
+      "name": "SwordArtsChargeCancelEarly2_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 579,
+      "name": "SwordArtsStandDodge_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 580,
+      "name": "SwordArtsLeft_Activate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 581,
+      "name": "SwordArtsArrowStanceStart_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 584,
+      "name": "SwordArtsArrowStanceLoop_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 585,
+      "name": "SwordArtsArrowDrawStart_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 586,
+      "name": "SwordArtsArrowDrawLoop_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 587,
+      "name": "SwordArtsArrowFire_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 588,
+      "name": "SwordArtsArrowFireEnd_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 26
+    },
+    {
+      "id": 589,
+      "name": "SwordArtsArrowStanceEnd_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": false,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 799,
+      "name": "MagicLaunchRight_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 800,
+      "name": "MagicLoopRight_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 801,
+      "name": "MagicFireRight_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 802,
+      "name": "MagicFireRightCancel_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 803,
+      "name": "MagicLaunchLeft_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 804,
+      "name": "MagicLoopLeft_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 805,
+      "name": "MagicFireLeftCancel_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 806,
+      "name": "MagicFireRight2_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 807,
+      "name": "MagicFireRight3_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 808,
+      "name": "MagicFireLeft_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 809,
+      "name": "MagicFireRightCancel2_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 810,
+      "name": "MagicFireRightCancel3_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 811,
+      "name": "MagicFireLeftCancel2_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 812,
+      "name": "MagicFireLeft2_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 813,
+      "name": "MagicFireLeftCancel3_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 814,
+      "name": "MagicFireLeft3_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 815,
+      "name": "QuickMagicFireRightDash_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 816,
+      "name": "QuickMagicFireRightStep_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 817,
+      "name": "QuickMagicFireRightBackStep_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 818,
+      "name": "QuickMagicFireRightAttackLeft_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 819,
+      "name": "QuickMagicFireRightAttackRight_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 820,
+      "name": "QuickMagicFireLeftDash_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 821,
+      "name": "QuickMagicFireLeftStep_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 822,
+      "name": "QuickMagicFireLeftBackStep_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 823,
+      "name": "QuickMagicFireLeftAttackRight_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 824,
+      "name": "QuickMagicFireLeftAttackLeft_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 825,
+      "name": "MagicFireRightJump_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 826,
+      "name": "MagicFireRightJumpCancel_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 827,
+      "name": "MagicFireLeftJump_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 828,
+      "name": "MagicFireLeftJumpCancel_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 829,
+      "name": "StealthMagicRightLaunch_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 830,
+      "name": "StealthMagicRightFire_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    },
+    {
+      "id": 831,
+      "name": "StealthMagicLeftLaunch_Upper_onUpdate",
+      "used": false,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 832,
+      "name": "StealthMagicLeftFire_Upper_onUpdate",
+      "used": true,
+      "attackStanceOnly": false,
+      "magicSkillOnly": true,
+      "prefixInstructions": 33
+    }
+  ],
+  "inverseRestoresInput": true,
+  "originalBranchesUnchanged": true,
+  "registersPreserved": true,
+  "ownerNonownerAndBothHandsChecked": true,
+  "stanceOnlyDoesNotCountAsUse": true,
+  "continuousAttackStanceTypes": [
+    10,
+    11,
+    25,
+    239
+  ],
+  "normalSpellExcluded": true,
+  "gameplayVerified": false,
+  "independentDecompilePassed": true,
+  "nativeFpMultiplierField": "artsConsumptionRate",
+  "nativeFpCostUsesEffectMultiplier": true,
+  "instanceOverrideOffset": "1c",
+  "weaponHandleGenerationValidated": true,
+  "nativeInventoryAndDropBytesNeverModified": true,
+  "localSixWeaponSlotsOnly": true,
+  "protectedOriginalSkills": [
+    1200,
+    303
+  ],
+  "protectedWeaponTemplates": [
+    201750002,
+    203750002,
+    205750000,
+    209750002,
+    211750000,
+    218750002,
+    221750002,
+    223750002,
+    233750002,
+    241750002
+  ],
+  "uniqueSkillPool": 183,
+  "actualNameTextChecked": true,
+  "excludedPreviouslyRandomUnnamedSkills": [
+    104,
+    121,
+    407,
+    1180,
+    1181
+  ],
+  "multiplayerVerified": false,
+  "stanceReentryFix": "arts-stance-validation.json"
+}

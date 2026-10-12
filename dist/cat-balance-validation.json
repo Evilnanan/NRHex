@@ -1,0 +1,41 @@
+{
+  "version": "0.17.12",
+  "oldCoefficient": 0.4,
+  "coefficient": 1.0,
+  "formula": "max(0, 1.00 * (1 + log2(h / 1)))",
+  "rustTestsPassed": 155,
+  "heightAnchors": [
+    {
+      "metres": 1,
+      "bonusPercent": 100,
+      "damageMultiplier": 2
+    },
+    {
+      "metres": 2,
+      "bonusPercent": 200,
+      "damageMultiplier": 3
+    },
+    {
+      "metres": 4,
+      "bonusPercent": 300,
+      "damageMultiplier": 4
+    },
+    {
+      "metres": 8,
+      "bonusPercent": 400,
+      "damageMultiplier": 5
+    },
+    {
+      "metres": 16,
+      "bonusPercent": 500,
+      "damageMultiplier": 6
+    }
+  ],
+  "nativeHeightChecks": "cat-jump-native-validation.json",
+  "changedAssets": [
+    "natives/NRHex.dll"
+  ],
+  "previousJiahaoSyncCageAssetsAndUserConfigurationUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -1,0 +1,33 @@
+{
+  "version": "0.17.22",
+  "activeHotkeys": {
+    "Ctrl+F6": "random reward",
+    "Ctrl+F7": [
+      "Monster Cage",
+      "Crystal Shell",
+      "Versatile Arts"
+    ]
+  },
+  "preferredOwnerIds": [
+    95001600,
+    95000700,
+    95001400
+  ],
+  "removedDedicatedKeySettings": [
+    "CageVirtualKey",
+    "CatVirtualKey",
+    "JiahaoVirtualKey",
+    "NoisyVirtualKey",
+    "ShellVirtualKey",
+    "SwordVirtualKey"
+  ],
+  "existingCooldownFocusOwnershipTerrainAndPendingBallGuardsPreserved": true,
+  "unrelatedAssetsAndUserBalanceUnchanged": true,
+  "rustTestsPassed": 155,
+  "changedAssets": [
+    "natives/NRHex.dll",
+    "natives/NRHex.ini"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

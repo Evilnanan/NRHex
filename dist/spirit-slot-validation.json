@@ -1,0 +1,21 @@
+{
+  "version": "0.17.42",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "selectorRva": "3922C0",
+  "cases": 17161,
+  "onlyFFIsFree": true,
+  "selectorDoesNotMutateSlots": true,
+  "nativeLifecycleRvas": [
+    "3922F0",
+    "391780"
+  ],
+  "lifecycleEvidence": "Static: 1 -> 2 on death/unload; 2 -> 3 after timer; 391780 removes collision/world actor then sets FF.",
+  "regression": "Old >1 predicate selected dying/removing states 2 and 3.",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "limits": "Executes the real selector only. Does not reproduce a full physics crash or prove game-thread safety.",
+  "rustTestsPassed": 199,
+  "signatureChecksPassed": 86,
+  "buildPassed": true,
+  "installedDllSha256": "f7696603b2449a2afeccf1d0ff17aef401fab4f327b6b5092fa1229cd2d6e455"
+}

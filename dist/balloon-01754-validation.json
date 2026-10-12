@@ -1,0 +1,117 @@
+{
+  "version": "0.17.54",
+  "buildPassed": true,
+  "parameterAndTextReadbackPassed": true,
+  "parameters": {
+    "version": "0.17.54",
+    "inputSha256": "8D6D40EB7B701E5440B4F001C88C6B0DF2A6D4DFAE367BD6EC8722C261BEBFA1",
+    "outputSha256": "F4C3EB0F6FA6648B0E5F101551E50212900ADFAFD2CE669FD5B5FE9234D47ED0",
+    "effectId": 95001700,
+    "field": "thrustDamageCutRate",
+    "before": 2.6,
+    "after": 1.95,
+    "unrelatedRowsAndFieldsPreserved": true,
+    "hexes": [
+      {
+        "Id": 95001700,
+        "Zh": "气球",
+        "En": "Balloon",
+        "ZhInfo": "血量上限提升50%。减伤率降低30%。对突刺的减伤率额外降低50%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害",
+        "EnInfo": "Maximum HP +50%. Reduces damage negation by 30%. Further reduces damage negation against piercing attacks by 50%. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies.",
+        "LargeIcon": 21229,
+        "SmallIcon": 22229
+      }
+    ],
+    "gameplayVerified": false
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "1D9EFDC1D47EADC7CFDFCD7B75B7478C85831175EFFF033036C0A04C9DCA8F07",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "55AA6155033A58AF390CE85579149F4DCAD02A9726DC1DE37CD4A510B5CC0BBA",
+        "outputSha256": "138923EC538DBB81A59AA0AD457D13CD154087FBA7F48D32C591D1FA27BC1677",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001700,
+            "before": "血量上限提升50%。减伤率降低30%。突刺抗性降低100%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害",
+            "after": "血量上限提升50%。减伤率降低30%。对突刺的减伤率额外降低50%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001700,
+            "before": "血量上限提升50%。减伤率降低30%。突刺抗性降低100%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害",
+            "after": "血量上限提升50%。减伤率降低30%。对突刺的减伤率额外降低50%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001700,
+            "before": "血量上限提升50%。减伤率降低30%。突刺抗性降低100%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害",
+            "after": "血量上限提升50%。减伤率降低30%。对突刺的减伤率额外降低50%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+        "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "C973CE94C643AA334FEFBFD56DA75DFFA3639E27EBBDD2BB93C4AB6B7DF7BE77",
+        "outputSha256": "0E161535B0AB57B9D19BD8A9EAD911FB317E4E44243C42065C38448B0C2C06B1",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001700,
+            "before": "Maximum HP +50%. Take 30% more damage and twice as much piercing damage. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies.",
+            "after": "Maximum HP +50%. Reduces damage negation by 30%. Further reduces damage negation against piercing attacks by 50%. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001700,
+            "before": "Maximum HP +50%. Take 30% more damage and twice as much piercing damage. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies.",
+            "after": "Maximum HP +50%. Reduces damage negation by 30%. Further reduces damage negation against piercing attacks by 50%. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001700,
+            "before": "Maximum HP +50%. Take 30% more damage and twice as much piercing damage. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies.",
+            "after": "Maximum HP +50%. Reduces damage negation by 30%. Further reduces damage negation against piercing attacks by 50%. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+        "outputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "installedFiles": {
+    "natives/NRHex.dll": "B660660FB1212556C954D6008484A1AD26460EF2694C56AE59CC9EEDCDEBBE0C",
+    "mod/regulation.bin": "F4C3EB0F6FA6648B0E5F101551E50212900ADFAFD2CE669FD5B5FE9234D47ED0",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "138923EC538DBB81A59AA0AD457D13CD154087FBA7F48D32C591D1FA27BC1677",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "0E161535B0AB57B9D19BD8A9EAD911FB317E4E44243C42065C38448B0C2C06B1",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameStarted": false
+}

@@ -1,0 +1,263 @@
+{
+  "version": "0.17.31",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "rustTests": 166,
+  "signatureCount": 62,
+  "dllSha256": "5f82e934c90697890ea5be311ed240fa921cd308c5a6349abdb42111f50585b0",
+  "nativeIsolatedChecks": {
+    "version": "0.17.31",
+    "nativeState434Cases": [
+      {
+        "state": 0,
+        "aggregate": false,
+        "flags": 0,
+        "stanceBroken": false
+      },
+      {
+        "state": 0,
+        "aggregate": false,
+        "flags": 1,
+        "stanceBroken": false
+      },
+      {
+        "state": 0,
+        "aggregate": false,
+        "flags": 262144,
+        "stanceBroken": false
+      },
+      {
+        "state": 0,
+        "aggregate": false,
+        "flags": 2147483648,
+        "stanceBroken": false
+      },
+      {
+        "state": 0,
+        "aggregate": true,
+        "flags": 0,
+        "stanceBroken": false
+      },
+      {
+        "state": 0,
+        "aggregate": true,
+        "flags": 1,
+        "stanceBroken": false
+      },
+      {
+        "state": 0,
+        "aggregate": true,
+        "flags": 262144,
+        "stanceBroken": false
+      },
+      {
+        "state": 0,
+        "aggregate": true,
+        "flags": 2147483648,
+        "stanceBroken": false
+      },
+      {
+        "state": 433,
+        "aggregate": false,
+        "flags": 0,
+        "stanceBroken": false
+      },
+      {
+        "state": 433,
+        "aggregate": false,
+        "flags": 1,
+        "stanceBroken": false
+      },
+      {
+        "state": 433,
+        "aggregate": false,
+        "flags": 262144,
+        "stanceBroken": false
+      },
+      {
+        "state": 433,
+        "aggregate": false,
+        "flags": 2147483648,
+        "stanceBroken": false
+      },
+      {
+        "state": 433,
+        "aggregate": true,
+        "flags": 0,
+        "stanceBroken": false
+      },
+      {
+        "state": 433,
+        "aggregate": true,
+        "flags": 1,
+        "stanceBroken": false
+      },
+      {
+        "state": 433,
+        "aggregate": true,
+        "flags": 262144,
+        "stanceBroken": false
+      },
+      {
+        "state": 433,
+        "aggregate": true,
+        "flags": 2147483648,
+        "stanceBroken": false
+      },
+      {
+        "state": 434,
+        "aggregate": false,
+        "flags": 0,
+        "stanceBroken": false
+      },
+      {
+        "state": 434,
+        "aggregate": false,
+        "flags": 1,
+        "stanceBroken": false
+      },
+      {
+        "state": 434,
+        "aggregate": false,
+        "flags": 262144,
+        "stanceBroken": false
+      },
+      {
+        "state": 434,
+        "aggregate": false,
+        "flags": 2147483648,
+        "stanceBroken": false
+      },
+      {
+        "state": 434,
+        "aggregate": true,
+        "flags": 0,
+        "stanceBroken": true
+      },
+      {
+        "state": 434,
+        "aggregate": true,
+        "flags": 1,
+        "stanceBroken": false
+      },
+      {
+        "state": 434,
+        "aggregate": true,
+        "flags": 262144,
+        "stanceBroken": false
+      },
+      {
+        "state": 434,
+        "aggregate": true,
+        "flags": 2147483648,
+        "stanceBroken": false
+      },
+      {
+        "state": 435,
+        "aggregate": false,
+        "flags": 0,
+        "stanceBroken": false
+      },
+      {
+        "state": 435,
+        "aggregate": false,
+        "flags": 1,
+        "stanceBroken": false
+      },
+      {
+        "state": 435,
+        "aggregate": false,
+        "flags": 262144,
+        "stanceBroken": false
+      },
+      {
+        "state": 435,
+        "aggregate": false,
+        "flags": 2147483648,
+        "stanceBroken": false
+      },
+      {
+        "state": 435,
+        "aggregate": true,
+        "flags": 0,
+        "stanceBroken": false
+      },
+      {
+        "state": 435,
+        "aggregate": true,
+        "flags": 1,
+        "stanceBroken": false
+      },
+      {
+        "state": 435,
+        "aggregate": true,
+        "flags": 262144,
+        "stanceBroken": false
+      },
+      {
+        "state": 435,
+        "aggregate": true,
+        "flags": 2147483648,
+        "stanceBroken": false
+      },
+      {
+        "twoNodes": true,
+        "inactiveFirst": true,
+        "stanceBroken": true
+      }
+    ],
+    "nativeEquipmentDifferenceBranches": [
+      {
+        "base0": 2000000,
+        "base1": 2000000,
+        "skill0": -1,
+        "skill1": 1173,
+        "nativeDetectsChange": true
+      },
+      {
+        "base0": 2000000,
+        "base1": 2000000,
+        "skill0": 1173,
+        "skill1": 1047,
+        "nativeDetectsChange": true
+      },
+      {
+        "base0": 41000000,
+        "base1": 41000000,
+        "skill0": -1,
+        "skill1": 400,
+        "nativeDetectsChange": true
+      },
+      {
+        "base0": 2000000,
+        "base1": 3000000,
+        "skill0": 1173,
+        "skill1": 1173,
+        "nativeDetectsChange": true
+      }
+    ],
+    "nativeInstanceSkillGetterCases": 4,
+    "stanceParameterSource": "stance-effects.json",
+    "comparisonProofLimitedToEarlyDifferenceBranches": true,
+    "nativePacketDeliveryAndPeerAnimationsNotExecuted": true,
+    "originalExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "gameMemoryWritten": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "sourceHashes": {
+    "src/lib.rs": "3f9c5f0267497540d6e2aaa9fe2da6df9b07460667ba49f55300b6a002413aac",
+    "src/arts.rs": "0e3287823e61f8dda24569cd51e85c930d86b516fdd46cae4da58f12a67e7450",
+    "src/jiahao.rs": "8eb330a1b3a56e92fc2f58dc693922fe944d287e764b3f4159f9f31930fa9dcc",
+    "tools/HexBuild/Cages.cs": "4f8afe785cfc1094c3bd20aa9e95cca2007b740aadfe6fcba677b90465074764",
+    "tools/HexBuild/CageEncounters.cs": "b9ca23e1d0b0717d7493e81a5d50418c7b2a82d65e642446e9b92f3c6db2cae2",
+    "tools/HexBuild/HexTexts.cs": "6b2652b82e6750d4f69a38250f9ed5b1410b0b129ec74d6b6c9642bc57a457fb",
+    "tools/HexBuild/Program.cs": "bc815382512abc767df0deb369629f811161eb08fde6f8f05e077ecda34a6dad",
+    "docs/hexes.md": "3699ec039f9ca3048631a75890b3534aef0b5423d997c3c331cf26771d310c59"
+  },
+  "pendingChecks": [
+    "Two-peer cage visibility, fog, HUD, repeat and rejoin",
+    "Two-peer reforged skill animation including immediate stance reuse",
+    "Non-broken backstep recovery, roll cost and frontal critical gameplay"
+  ]
+}

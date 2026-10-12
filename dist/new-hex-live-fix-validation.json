@@ -1,0 +1,34 @@
+{
+  "version": "0.17.36",
+  "testsPassed": 182,
+  "signaturesPassed": 79,
+  "buildPassed": true,
+  "dllSha256": "756696b4b2bd3bd88b668d05f22b0f8a9e765496d27e2a1275c2dbc703b8bb7e",
+  "installedDllSha256": "756696b4b2bd3bd88b668d05f22b0f8a9e765496d27e2a1275c2dbc703b8bb7e",
+  "liveEvidenceVersion": "0.17.35",
+  "liveEvidence": [
+    "Native Draconic Tree Sentinel defeated, killer matches player, stored soul empty; wrong PlayerGameData values both -1",
+    "HP zero; emitter effect present then expires; native death update skips state 275 emission"
+  ],
+  "fixes": [
+    "Use native NPC/Think/CharaInit ordering in capture, creator and multiplayer packet; allow NPC -1 CharaInit",
+    "Direct native behavior emission with the golden shockwave descriptor; no deferred emitter effect or duplicate"
+  ],
+  "scope": [
+    "Rust DLL",
+    "Documentation and validation records"
+  ],
+  "parameterFilesChanged": false,
+  "hksChanged": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pendingChecks": [
+    "Balloon death and near-death visible shockwave, actual damage/impact, revival rearming",
+    "Spirit boss capture after empty recall, summon, friendly AI/white visual, drain and lifetime",
+    "Multiplayer views and damage"
+  ],
+  "loadingVerified": true,
+  "pid": 26704,
+  "active": 1,
+  "restartAuthorizedByUser": true
+}

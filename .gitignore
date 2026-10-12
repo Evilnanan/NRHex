@@ -1,0 +1,9 @@
+/target/
+/tools/**/bin/
+/tools/**/obj/
+/dist/mod/natives/*.log
+/dist/testmods/**/*.log
+/dist/testmods/**/log.*
+/.work/
+**/__pycache__/
+*.pyc

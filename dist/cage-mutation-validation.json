@@ -1,0 +1,217 @@
+{
+  "version": "0.17.27",
+  "maps": [
+    {
+      "modifier": 10,
+      "flag": 7600,
+      "slots": 55,
+      "counts": [
+        0,
+        5,
+        5,
+        5,
+        5
+      ],
+      "probabilities": [
+        0,
+        0.09090909,
+        0.09090909,
+        0.09090909,
+        0.09090909
+      ]
+    },
+    {
+      "modifier": 11,
+      "flag": 7601,
+      "slots": 64,
+      "counts": [
+        0,
+        6,
+        6,
+        6,
+        6
+      ],
+      "probabilities": [
+        0,
+        0.09375,
+        0.09375,
+        0.09375,
+        0.09375
+      ]
+    },
+    {
+      "modifier": 12,
+      "flag": 7602,
+      "slots": 66,
+      "counts": [
+        0,
+        7,
+        7,
+        7,
+        7
+      ],
+      "probabilities": [
+        0,
+        0.10606061,
+        0.10606061,
+        0.10606061,
+        0.10606061
+      ]
+    },
+    {
+      "modifier": 13,
+      "flag": 7603,
+      "slots": 55,
+      "counts": [
+        0,
+        7,
+        7,
+        7,
+        7
+      ],
+      "probabilities": [
+        0,
+        0.12727273,
+        0.12727273,
+        0.12727273,
+        0.12727273
+      ]
+    },
+    {
+      "modifier": 14,
+      "flag": 7604,
+      "slots": 55,
+      "counts": [
+        0,
+        5,
+        5,
+        5,
+        5
+      ],
+      "probabilities": [
+        0,
+        0.09090909,
+        0.09090909,
+        0.09090909,
+        0.09090909
+      ]
+    },
+    {
+      "modifier": 15,
+      "flag": 7605,
+      "slots": 67,
+      "counts": [
+        0,
+        9,
+        9,
+        9,
+        9
+      ],
+      "probabilities": [
+        0,
+        0.13432837,
+        0.13432837,
+        0.13432837,
+        0.13432837
+      ]
+    }
+  ],
+  "decisionCases": 15984,
+  "hostOnlyRoll": true,
+  "clientWaitAndReloadPassed": true,
+  "deathResetPassed": true,
+  "nativeGetterBitCases": 256,
+  "nativeMutationAndRewardGettersExecutedInIsolation": true,
+  "towerSources": [
+    {
+      "map": "m48_10_00_00",
+      "sourceNpc": 78200010,
+      "cloneNpc": 95300030,
+      "entity": 48100800,
+      "entityOffset": 5272,
+      "firstFlag": 48100300,
+      "firstLot": 6850000,
+      "secondFlag": 48100301,
+      "secondLot": 6851000,
+      "alternateThink": 78200010
+    },
+    {
+      "map": "m48_30_00_00",
+      "sourceNpc": 79200010,
+      "cloneNpc": 95300031,
+      "entity": 48300800,
+      "entityOffset": 4464,
+      "firstFlag": 48300300,
+      "firstLot": 6850000,
+      "secondFlag": 48300301,
+      "secondLot": 6851000,
+      "alternateThink": 79200010
+    },
+    {
+      "map": "m48_40_00_00",
+      "sourceNpc": 21300510,
+      "cloneNpc": 95300032,
+      "entity": 48400800,
+      "entityOffset": 2112,
+      "firstFlag": 48400300,
+      "firstLot": 6851000,
+      "secondFlag": 48400301,
+      "secondLot": 6852000,
+      "alternateThink": 21300510
+    },
+    {
+      "map": "m49_10_00_00",
+      "sourceNpc": 47509010,
+      "cloneNpc": 95300033,
+      "entity": 49100800,
+      "entityOffset": 6760,
+      "firstFlag": 49100300,
+      "firstLot": 6850000,
+      "secondFlag": 49100301,
+      "secondLot": 6851000,
+      "alternateThink": 47500020
+    },
+    {
+      "map": "m49_17_00_00",
+      "sourceNpc": 47700020,
+      "cloneNpc": 95300034,
+      "entity": 49170800,
+      "entityOffset": 8208,
+      "firstFlag": 49170300,
+      "firstLot": 6850000,
+      "secondFlag": 49170301,
+      "secondLot": 6851000,
+      "alternateThink": 47700030
+    },
+    {
+      "map": "m49_18_00_00",
+      "sourceNpc": 49110010,
+      "cloneNpc": 95300035,
+      "entity": 49180800,
+      "entityOffset": 7208,
+      "firstFlag": 49180300,
+      "firstLot": 6851000,
+      "secondFlag": 49180301,
+      "secondLot": 6852000,
+      "alternateThink": 49100030
+    },
+    {
+      "map": "m49_20_00_00",
+      "sourceNpc": 46809010,
+      "cloneNpc": 95300036,
+      "entity": 49200800,
+      "entityOffset": 6776,
+      "firstFlag": 49200300,
+      "firstLot": 6851000,
+      "secondFlag": 49200301,
+      "secondLot": 6852000,
+      "alternateThink": 46800030
+    }
+  ],
+  "towerRewardPolicy": "First native tower reward binding; no tower floor placement in cages; same weapon lot for normal/red, native red rune multiplier retained",
+  "markerNeutral": true,
+  "combatScalingAndRuneBonusUseNativeEffects": true,
+  "gameProcessAccessed": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

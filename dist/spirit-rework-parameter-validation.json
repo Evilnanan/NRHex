@@ -1,0 +1,72 @@
+{
+  "version": "0.17.43",
+  "inputSha256": "E8D57F82510DA4EA99AD04ECA0CF4FD3994743F45F64BB5ED0737C5CA12130D5",
+  "outputSha256": "1DE5270C839B9B104CFB7944BDC0146906CBB37E77092DDB7B9FA22A96BAB5A5",
+  "fields": [
+    {
+      "table": "SpEffectParam",
+      "ID": 95001801,
+      "field": "physicsAttackRate",
+      "before": 1,
+      "after": 0.1
+    },
+    {
+      "table": "SpEffectParam",
+      "ID": 95001801,
+      "field": "magicAttackRate",
+      "before": 1,
+      "after": 0.1
+    },
+    {
+      "table": "SpEffectParam",
+      "ID": 95001801,
+      "field": "fireAttackRate",
+      "before": 1,
+      "after": 0.1
+    },
+    {
+      "table": "SpEffectParam",
+      "ID": 95001801,
+      "field": "thunderAttackRate",
+      "before": 1,
+      "after": 0.1
+    },
+    {
+      "table": "SpEffectParam",
+      "ID": 95001801,
+      "field": "changeHpRate",
+      "before": 0,
+      "after": 1.6666666
+    },
+    {
+      "table": "SpEffectParam",
+      "ID": 95001801,
+      "field": "vfxId",
+      "before": -1,
+      "after": 95001804
+    },
+    {
+      "table": "SpEffectParam",
+      "ID": 95001801,
+      "field": "darkAttackRate",
+      "before": 1,
+      "after": 0.1
+    }
+  ],
+  "added": {
+    "SpEffectParam": [
+      95001802
+    ],
+    "SpEffectVfxParam": [
+      95001803,
+      95001804
+    ]
+  },
+  "native705200Unchanged": true,
+  "hpLossFractionPerSecond": 0.016666666666666666,
+  "damageMultiplier": 0.1,
+  "collectionSfx": 461351,
+  "summonSfx": 460801,
+  "unrelatedRowsAndTablesUnchanged": true,
+  "gameplayVerified": false
+}

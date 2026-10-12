@@ -1,0 +1,19 @@
+{
+  "version": "0.17.31",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "returnSites": [
+    "0x381602",
+    "0x38177d",
+    "0x20cb11",
+    "0xb0e0d3",
+    "0xbea18b"
+  ],
+  "transientPayloadSize": 72,
+  "modifiedFieldOffset": 4,
+  "nativeArgumentReturnAndNakedWrapperAbiTestPassed": true,
+  "nativeComparisonDifferenceCases": 4,
+  "nativeInstanceGetterCases": 4,
+  "inventoryAndDropSerializationPreserved": true,
+  "nativePacketDeliveryAndPeerAnimationsNotExecuted": true
+}

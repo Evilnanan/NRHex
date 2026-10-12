@@ -1,0 +1,1084 @@
+{
+  "source": "https://soulsmods.github.io/emedf/nr-emedf.html",
+  "opcodes": [
+    {
+      "bank": 0,
+      "id": 0,
+      "name": "IfConditionGroup",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "byte",
+          "desiredConditionGroupState"
+        ],
+        [
+          "sbyte",
+          "targetConditionGroup"
+        ]
+      ]
+    },
+    {
+      "bank": 1,
+      "id": 0,
+      "name": "IfElapsedSeconds",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "float",
+          "targetTimeSeconds"
+        ]
+      ]
+    },
+    {
+      "bank": 1,
+      "id": 7,
+      "name": "IfPlayAreaCurrentTimeInRange",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "byte",
+          "startingHours"
+        ],
+        [
+          "byte",
+          "startingMinutes"
+        ],
+        [
+          "byte",
+          "startingSeconds"
+        ],
+        [
+          "byte",
+          "endingHours"
+        ],
+        [
+          "byte",
+          "endingMinutes"
+        ],
+        [
+          "byte",
+          "endingSeconds"
+        ]
+      ]
+    },
+    {
+      "bank": 3,
+      "id": 0,
+      "name": "IfEventFlag",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "byte",
+          "desiredFlagState"
+        ],
+        [
+          "byte",
+          "targetEventFlagType"
+        ],
+        [
+          "uint",
+          "targetEventFlagId"
+        ]
+      ]
+    },
+    {
+      "bank": 3,
+      "id": 3,
+      "name": "IfEntityInoutsideRadiusOfEntity",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "byte",
+          "desiredState"
+        ],
+        [
+          "uint",
+          "targetEntityIdA"
+        ],
+        [
+          "uint",
+          "targetEntityIdB"
+        ],
+        [
+          "float",
+          "targetDistance"
+        ],
+        [
+          "int",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 3,
+      "id": 4,
+      "name": "IfPlayerHasdoesntHaveItem",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "byte",
+          "itemType"
+        ],
+        [
+          "int",
+          "itemId"
+        ],
+        [
+          "byte",
+          "desiredPossessionState"
+        ]
+      ]
+    },
+    {
+      "bank": 3,
+      "id": 24,
+      "name": "IfActionButtonInArea",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "int",
+          "actionButtonParameterId"
+        ],
+        [
+          "uint",
+          "targetEntityId"
+        ]
+      ]
+    },
+    {
+      "bank": 4,
+      "id": 0,
+      "name": "IfCharacterDeadalive",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "uint",
+          "targetEntityId"
+        ],
+        [
+          "byte",
+          "desiredLifeState"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "float",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 4,
+      "id": 5,
+      "name": "IfCharacterHasSpEffect",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "uint",
+          "targetEntityId"
+        ],
+        [
+          "int",
+          "spEffectId"
+        ],
+        [
+          "bool",
+          "shouldHave"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "float",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 4,
+      "id": 7,
+      "name": "IfCharacterBackreadStatus",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "uint",
+          "targetEntityId"
+        ],
+        [
+          "bool",
+          "isBackread"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "float",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 4,
+      "id": 9,
+      "name": "IfCharacterAIState",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "uint",
+          "targetEntityId"
+        ],
+        [
+          "byte",
+          "aiState"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "float",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 4,
+      "id": 14,
+      "name": "IfCharacterHPValue",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "uint",
+          "targetEntityId"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "int",
+          "targetHP"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "float",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 12,
+      "id": 1,
+      "name": "IfIsMapVariation",
+      "args": [
+        [
+          "sbyte",
+          "resultConditionGroup"
+        ],
+        [
+          "bool",
+          "isVariation"
+        ],
+        [
+          "byte",
+          "mapVariationId"
+        ]
+      ]
+    },
+    {
+      "bank": 1000,
+      "id": 1,
+      "name": "SkipIfConditionGroupStateUncompiled",
+      "args": [
+        [
+          "byte",
+          "numberOfSkippedLines"
+        ],
+        [
+          "byte",
+          "desiredConditionGroupState"
+        ],
+        [
+          "sbyte",
+          "targetConditionGroup"
+        ]
+      ]
+    },
+    {
+      "bank": 1000,
+      "id": 2,
+      "name": "EndIfConditionGroupStateUncompiled",
+      "args": [
+        [
+          "byte",
+          "executionEndType"
+        ],
+        [
+          "byte",
+          "desiredConditionGroupState"
+        ],
+        [
+          "sbyte",
+          "targetConditionGroup"
+        ]
+      ]
+    },
+    {
+      "bank": 1000,
+      "id": 3,
+      "name": "SkipUnconditionally",
+      "args": [
+        [
+          "byte",
+          "numberOfSkippedLines"
+        ]
+      ]
+    },
+    {
+      "bank": 1000,
+      "id": 4,
+      "name": "EndUnconditionally",
+      "args": [
+        [
+          "byte",
+          "executionEndType"
+        ]
+      ]
+    },
+    {
+      "bank": 1000,
+      "id": 7,
+      "name": "SkipIfConditionGroupStateCompiled",
+      "args": [
+        [
+          "byte",
+          "numberOfSkippedLines"
+        ],
+        [
+          "byte",
+          "desiredConditionGroupState"
+        ],
+        [
+          "sbyte",
+          "targetConditionGroup"
+        ]
+      ]
+    },
+    {
+      "bank": 1000,
+      "id": 101,
+      "name": "GotoIfConditionGroupStateUncompiled",
+      "args": [
+        [
+          "byte",
+          "label"
+        ],
+        [
+          "byte",
+          "desiredConditionGroupState"
+        ],
+        [
+          "sbyte",
+          "targetConditionGroup"
+        ]
+      ]
+    },
+    {
+      "bank": 1000,
+      "id": 103,
+      "name": "GotoUnconditionally",
+      "args": [
+        [
+          "byte",
+          "label"
+        ]
+      ]
+    },
+    {
+      "bank": 1001,
+      "id": 0,
+      "name": "WaitFixedTimeSeconds",
+      "args": [
+        [
+          "float",
+          "timeSeconds"
+        ]
+      ]
+    },
+    {
+      "bank": 1001,
+      "id": 1,
+      "name": "WaitFixedTimeFrames",
+      "args": [
+        [
+          "int",
+          "timeFrames"
+        ]
+      ]
+    },
+    {
+      "bank": 1003,
+      "id": 1,
+      "name": "SkipIfEventFlag",
+      "args": [
+        [
+          "byte",
+          "numberOfSkippedLines"
+        ],
+        [
+          "byte",
+          "desiredFlagState"
+        ],
+        [
+          "byte",
+          "targetEventFlagType"
+        ],
+        [
+          "uint",
+          "targetEventFlagId"
+        ]
+      ]
+    },
+    {
+      "bank": 1003,
+      "id": 2,
+      "name": "EndIfEventFlag",
+      "args": [
+        [
+          "byte",
+          "executionEndType"
+        ],
+        [
+          "byte",
+          "desiredFlagState"
+        ],
+        [
+          "byte",
+          "targetEventFlagType"
+        ],
+        [
+          "uint",
+          "targetEventFlagId"
+        ]
+      ]
+    },
+    {
+      "bank": 1003,
+      "id": 101,
+      "name": "GotoIfEventFlag",
+      "args": [
+        [
+          "byte",
+          "label"
+        ],
+        [
+          "byte",
+          "desiredFlagState"
+        ],
+        [
+          "byte",
+          "targetEventFlagType"
+        ],
+        [
+          "uint",
+          "targetEventFlagId"
+        ]
+      ]
+    },
+    {
+      "bank": 1004,
+      "id": 0,
+      "name": "SkipIfCharacterHasSpEffect",
+      "args": [
+        [
+          "byte",
+          "numberOfSkippedLines"
+        ],
+        [
+          "uint",
+          "targetEntityId"
+        ],
+        [
+          "int",
+          "spEffectId"
+        ],
+        [
+          "bool",
+          "shouldHave"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "int",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 1004,
+      "id": 2,
+      "name": "EndIfCharacterHasSpEffect",
+      "args": [
+        [
+          "byte",
+          "executionEndType"
+        ],
+        [
+          "uint",
+          "targetEntityId"
+        ],
+        [
+          "int",
+          "spEffectId"
+        ],
+        [
+          "bool",
+          "shouldHave"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "int",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 1004,
+      "id": 6,
+      "name": "SkipIfIsPlayerNo",
+      "args": [
+        [
+          "byte",
+          "numberOfSkippedLines"
+        ],
+        [
+          "byte",
+          "playerNo"
+        ],
+        [
+          "bool",
+          "isPlayerNo"
+        ]
+      ]
+    },
+    {
+      "bank": 1014,
+      "id": 0,
+      "name": "Label0",
+      "args": []
+    },
+    {
+      "bank": 1014,
+      "id": 1,
+      "name": "Label1",
+      "args": []
+    },
+    {
+      "bank": 1014,
+      "id": 2,
+      "name": "Label2",
+      "args": []
+    },
+    {
+      "bank": 1014,
+      "id": 3,
+      "name": "Label3",
+      "args": []
+    },
+    {
+      "bank": 1014,
+      "id": 4,
+      "name": "Label4",
+      "args": []
+    },
+    {
+      "bank": 1014,
+      "id": 8,
+      "name": "Label8",
+      "args": []
+    },
+    {
+      "bank": 2000,
+      "id": 0,
+      "name": "InitializeEvent",
+      "args": [
+        [
+          "int",
+          "eventSlotId"
+        ],
+        [
+          "uint",
+          "eventId"
+        ]
+      ]
+    },
+    {
+      "bank": 2000,
+      "id": 2,
+      "name": "SetNetworkSyncState",
+      "args": [
+        [
+          "byte",
+          "disabledEnabled"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 11,
+      "name": "DisplayBossHealthBar",
+      "args": [
+        [
+          "sbyte",
+          "disabledEnabled"
+        ],
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "short",
+          "slotNumber"
+        ],
+        [
+          "int",
+          "nameId"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 18,
+      "name": "ForceAnimationPlayback",
+      "args": [
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "int",
+          "animationId"
+        ],
+        [
+          "bool",
+          "shouldLoop"
+        ],
+        [
+          "bool",
+          "shouldWaitForCompletion"
+        ],
+        [
+          "bool",
+          "ignoreWaitForTransition"
+        ],
+        [
+          "sbyte",
+          "comparisonType"
+        ],
+        [
+          "float",
+          "numberOfTargetCharacters"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 24,
+      "name": "RemoveItemFromPlayer",
+      "args": [
+        [
+          "byte",
+          "itemType"
+        ],
+        [
+          "int",
+          "itemId"
+        ],
+        [
+          "int",
+          "number"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 31,
+      "name": "IncrementNetworkconnectedEventValue",
+      "args": [
+        [
+          "uint",
+          "baseEventFlagId"
+        ],
+        [
+          "uint",
+          "numberOfUsedFlagBits"
+        ],
+        [
+          "uint",
+          "maximumAllowedValue"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 54,
+      "name": "InvokeEnemyGenerator",
+      "args": [
+        [
+          "uint",
+          "generatorEntityId"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 63,
+      "name": "BatchSetNetworkconnectedEventFlags",
+      "args": [
+        [
+          "uint",
+          "eventFlagIdStart"
+        ],
+        [
+          "uint",
+          "eventFlagIdEnd"
+        ],
+        [
+          "byte",
+          "flagState"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 69,
+      "name": "SetNetworkconnectedEventFlag",
+      "args": [
+        [
+          "byte",
+          "targetEventFlagType"
+        ],
+        [
+          "uint",
+          "targetEventFlagId"
+        ],
+        [
+          "byte",
+          "desiredFlagState"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 96,
+      "name": "RandomlySetNetworkconnectedEventFlagInRange",
+      "args": [
+        [
+          "uint",
+          "eventFlagIdMin"
+        ],
+        [
+          "uint",
+          "eventFlagIdMax"
+        ],
+        [
+          "byte",
+          "flagState"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 100,
+      "name": "RecordUserDispLog",
+      "args": [
+        [
+          "int",
+          "userDispLogParamId"
+        ],
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "byte",
+          "logObjectType"
+        ],
+        [
+          "int",
+          "logObjectId"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 101,
+      "name": "IncrementTeamBossesKilled",
+      "args": [
+        [
+          "int",
+          "amount"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 114,
+      "name": "SetWorldMapPointFlag",
+      "args": [
+        [
+          "byte",
+          "flagIndex"
+        ],
+        [
+          "byte",
+          "onOff"
+        ]
+      ]
+    },
+    {
+      "bank": 2004,
+      "id": 1,
+      "name": "SetCharacterAIState",
+      "args": [
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "byte",
+          "disabledEnabled"
+        ]
+      ]
+    },
+    {
+      "bank": 2004,
+      "id": 5,
+      "name": "ChangeCharacterEnableState",
+      "args": [
+        [
+          "uint",
+          "characterEntityId"
+        ],
+        [
+          "byte",
+          "disabledEnabled"
+        ]
+      ]
+    },
+    {
+      "bank": 2004,
+      "id": 8,
+      "name": "SetSpEffect",
+      "args": [
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "int",
+          "spEffectId"
+        ]
+      ]
+    },
+    {
+      "bank": 2004,
+      "id": 21,
+      "name": "ClearSpEffect",
+      "args": [
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "int",
+          "spEffectId"
+        ]
+      ]
+    },
+    {
+      "bank": 2004,
+      "id": 29,
+      "name": "SetCharacterBackreadState",
+      "args": [
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "bool",
+          "removed"
+        ]
+      ]
+    },
+    {
+      "bank": 2004,
+      "id": 34,
+      "name": "SetNetworkUpdateRate",
+      "args": [
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "bool",
+          "useFixedFrequency"
+        ],
+        [
+          "sbyte",
+          "updateFrequency"
+        ]
+      ]
+    },
+    {
+      "bank": 2004,
+      "id": 39,
+      "name": "ChangeCharacterCollisionState",
+      "args": [
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "byte",
+          "disabledEnabled"
+        ]
+      ]
+    },
+    {
+      "bank": 2006,
+      "id": 3,
+      "name": "SpawnOneshotSFX",
+      "args": [
+        [
+          "int",
+          "targetEntityType"
+        ],
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "int",
+          "dummypolyId"
+        ],
+        [
+          "int",
+          "sfxId"
+        ]
+      ]
+    },
+    {
+      "bank": 2007,
+      "id": 19,
+      "name": "DisplayTextEffectId",
+      "args": [
+        [
+          "int",
+          "textEffectParamId"
+        ]
+      ]
+    },
+    {
+      "bank": 2010,
+      "id": 2,
+      "name": "PlaySE",
+      "args": [
+        [
+          "uint",
+          "entityId"
+        ],
+        [
+          "int",
+          "soundType"
+        ],
+        [
+          "int",
+          "soundId"
+        ]
+      ]
+    },
+    {
+      "bank": 2010,
+      "id": 12,
+      "name": "SetFieldBattleBGMHeatUp",
+      "args": [
+        [
+          "uint",
+          "npcThreatLevel"
+        ],
+        [
+          "bool",
+          "heatUp"
+        ]
+      ]
+    },
+    {
+      "bank": 2003,
+      "id": 66,
+      "name": "SetEventFlag",
+      "args": [
+        [
+          "byte",
+          "targetEventFlagType"
+        ],
+        [
+          "uint",
+          "targetEventFlagId"
+        ],
+        [
+          "byte",
+          "desiredFlagState"
+        ]
+      ]
+    }
+  ]
+}

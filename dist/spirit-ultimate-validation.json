@@ -1,0 +1,32 @@
+{
+  "version": "0.17.39",
+  "rustTests": 192,
+  "signatureChecks": 83,
+  "nativeIsolatedCases": 512,
+  "mechanics": {
+    "triggerEffect": 6999615,
+    "requiresEmptyFamily": false,
+    "consumesSoulOnSuccess": true,
+    "forwardMetres": 5,
+    "periodicHpLoss": false,
+    "lifetimeSeconds": 15,
+    "usesGameTime": true,
+    "forcedDeath": "3D5010(actor, false, false)",
+    "rewardsDisabled": true
+  },
+  "files": {
+    "natives/NRHex.dll": "F709F2FA25852BA73D7F33D9D8DC06A0C471A39C6066F57730890CCA8184907A",
+    "mod/regulation.bin": "677915E9EF6BED3C164FCD753500B781E7BF7B68D93EFB9995BD666EBC357438",
+    "mod/action/script/c0000.hks": "E476CE175D9ECF6C8B1BF3F727280EBD8636221CF537133C7F01DEF17B406FC9",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "44C49D4B79D64A401CF69887BC84AE978435801639AE27EA03E4F358B81796D4",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "0545C63564A61AED8D9751C34DA51AD41F86A0EF9F3C6FE5E0AEB2381EE24E89"
+  },
+  "nativeValidation": "spirit-expiry-native-validation.json",
+  "parameterValidation": "spirit-ultimate-parameter-validation.json",
+  "hksValidation": "spirit-ultimate-hks-validation.json",
+  "textValidation": "spirit-ultimate-text-validation.json",
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameLaunched": false
+}

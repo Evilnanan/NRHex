@@ -1,0 +1,18 @@
+{
+  "version": "0.17.39",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "nativeKillRva": "3D5010",
+  "nativeHpSetterRva": "426B00",
+  "nativeFamilyCallerRva": "386681",
+  "cases": 512,
+  "zeroHpUnconditional": true,
+  "rewardFlagsDisabled": true,
+  "controlledDependencies": [
+    "death cleanup callback",
+    "red-HP presentation gate",
+    "fall-height getter returns zero",
+    "security-cookie check"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

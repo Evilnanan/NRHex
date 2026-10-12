@@ -1,0 +1,122 @@
+{
+  "version": "0.17.60",
+  "hexes": [
+    {
+      "id": 95000100,
+      "name": "红包",
+      "large": 21267,
+      "small": 22267
+    },
+    {
+      "id": 95000200,
+      "name": "星界躯体",
+      "large": 21208,
+      "small": 22208
+    },
+    {
+      "id": 95000300,
+      "name": "玻璃大炮",
+      "large": 21206,
+      "small": 22206
+    },
+    {
+      "id": 95000400,
+      "name": "终极刷新",
+      "large": 21297,
+      "small": 22297
+    },
+    {
+      "id": 95000500,
+      "name": "豪饮",
+      "large": 21291,
+      "small": 22291
+    },
+    {
+      "id": 95000600,
+      "name": "再生术",
+      "large": 21291,
+      "small": 22291
+    },
+    {
+      "id": 95000700,
+      "name": "结晶外壳",
+      "large": 21208,
+      "small": 22208
+    },
+    {
+      "id": 95000800,
+      "name": "人是猫",
+      "large": 21222,
+      "small": 22222
+    },
+    {
+      "id": 95000900,
+      "name": "亮出你的剑",
+      "large": 21206,
+      "small": 22206
+    },
+    {
+      "id": 95001100,
+      "name": "大力",
+      "large": 21206,
+      "small": 22206
+    },
+    {
+      "id": 95001200,
+      "name": "逃跑计划",
+      "large": 21222,
+      "small": 22222
+    },
+    {
+      "id": 95001300,
+      "name": "嘉豪身法",
+      "large": 21222,
+      "small": 22222
+    },
+    {
+      "id": 95001400,
+      "name": "百般武艺",
+      "large": 21295,
+      "small": 22295
+    },
+    {
+      "id": 95001500,
+      "name": "吵闹鬼",
+      "large": 21229,
+      "small": 22229
+    },
+    {
+      "id": 95001600,
+      "name": "刷怪笼",
+      "large": 21267,
+      "small": 22267
+    },
+    {
+      "id": 95001700,
+      "name": "气球",
+      "large": 21229,
+      "small": 22229
+    },
+    {
+      "id": 95001800,
+      "name": "强化【死灵术】",
+      "large": 21267,
+      "small": 22267
+    },
+    {
+      "id": 95002000,
+      "name": "别停止咏唱",
+      "large": 21222,
+      "small": 22222
+    }
+  ],
+  "source": "data/reference/ui/icon-ids.json",
+  "allIdsPresentInOriginalAtlases": true,
+  "permanentSpecialEffectIcons": true,
+  "readyHudIcons": {
+    "ultimate": 20297,
+    "escape": 20222
+  },
+  "cooldownHudIconsHidden": true,
+  "gameplayVerified": false
+}

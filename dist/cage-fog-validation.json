@@ -1,0 +1,25 @@
+{
+  "version": "0.17.29",
+  "oldPendingSecondEncounterSkipReproduced": 336,
+  "freshDelayRepeatAndReconnectCases": 2352,
+  "nativeLatchProof": {
+    "nativeGroupUpdateRva": "5aa3b0",
+    "group5CompiledMasks": [
+      0,
+      16,
+      16
+    ],
+    "mainConditionRemainedFalse": true,
+    "previousRoundTrueSurvivesNextRoundFalse": true,
+    "originalExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "gameMemoryWritten": false
+  },
+  "all336SingleGroupAndMountBirthEventsCovered": true,
+  "originalFogAnimationsAndCoopActivationPreserved": true,
+  "generationRewardsHudAndAllOtherEventsUnchanged": true,
+  "gameMemoryWritten": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pluginLoadingVerified": true,
+  "runtimeEvidence": "runtime-validation.json"
+}

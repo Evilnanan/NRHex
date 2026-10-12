@@ -1,0 +1,48 @@
+[
+  {
+    "textId": 95000701,
+    "ownerId": 95000700,
+    "zhInfo": "可以抵挡一次攻击",
+    "enInfo": "Negates damage from a single attack."
+  },
+  {
+    "textId": 95000403,
+    "ownerId": 95000400,
+    "zhInfo": "施放绝招后，回复100%绝招量表",
+    "enInfo": "Fully restores the Art gauge upon using an Ultimate Art."
+  },
+  {
+    "textId": 95001203,
+    "ownerId": 95001200,
+    "zhInfo": "血量偏低时，触发加速和60%减伤",
+    "enInfo": "Increases action speed and boosts damage negation by 60% when HP is low."
+  },
+  {
+    "textId": 95001201,
+    "ownerId": 95001200,
+    "zhInfo": "行动加快，减伤率提升60%",
+    "enInfo": "Increases action speed and boosts damage negation by 60%."
+  },
+  {
+    "textId": 95001202,
+    "ownerId": 95001200,
+    "zhSuffix": "（冷却）",
+    "enSuffix": " (Cooldown)",
+    "zhInfo": "逃跑计划暂时无法触发",
+    "enInfo": "Escape Plan is temporarily unavailable."
+  },
+  {
+    "textId": 95000500,
+    "ownerId": 95000500,
+    "zhInfo": "每层提升5%攻击力，持续15秒",
+    "enInfo": "Boosts attack power by 5% for 15 seconds. This effect accumulates."
+  },
+  {
+    "textId": 95000800,
+    "ownerId": 95000800,
+    "zhName": "隐身",
+    "enName": "Invisibility",
+    "zhInfo": "隐藏身形",
+    "enInfo": "Conceals the body."
+  }
+]

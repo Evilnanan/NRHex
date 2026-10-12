@@ -1,0 +1,52 @@
+{
+  "version": "0.15.5",
+  "poolCount": 183,
+  "ordinaryPoolCount": 176,
+  "bowPoolCount": 7,
+  "bowSkills": [
+    400,
+    401,
+    402,
+    404,
+    405,
+    406,
+    1169
+  ],
+  "bowWeaponTypes": [
+    50,
+    51,
+    53
+  ],
+  "bowWeaponCount": 21,
+  "excludedUnusableSkills": [
+    0,
+    1,
+    2,
+    10,
+    117,
+    9999
+  ],
+  "torchNativeAnimationTypeDisabled": 17,
+  "allOtherNamedSkillsRetained": true,
+  "projectileCreationRva": "3975D0",
+  "nativeArgumentCount": 10,
+  "nativeReturn": "AL/u8",
+  "originalDescriptorAndOutputsPreserved": true,
+  "localOwnerSelectedSkillOnly": true,
+  "fireMuzzles": {
+    "1001": [
+      10141,
+      20141
+    ],
+    "1002": [
+      10142,
+      20142
+    ]
+  },
+  "fallbackBodyDummy": 58,
+  "originalFireShieldMuzzlesUnchanged": true,
+  "nativeParametersAndTaeUnchanged": true,
+  "nativeMappingVerified": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

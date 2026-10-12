@@ -1,0 +1,35 @@
+{
+  "version": "0.17.21",
+  "spellCount": 160,
+  "csvPath": "data/balance/sword.csv",
+  "csvSha256": "4f7801c7353cce364a689bd13108c272a9601487d8280dd8008fffa0c1efac60",
+  "compiledSnapshotSha256": "f58ff8c3247b2bedd1d4a9bb314e63477f3ca2c32ba305d44ed5ebe81c2a2d79",
+  "allUserValuesPreserved": true,
+  "runtimeCsvRequired": false,
+  "csvEditsRequireRecompile": true,
+  "isolatedBuildScriptCases": [
+    {
+      "case": "fresh_fractional_value",
+      "expectedSuccess": true,
+      "passed": true
+    },
+    {
+      "case": "invalid_percentage",
+      "expectedSuccess": false,
+      "passed": true
+    },
+    {
+      "case": "missing_csv",
+      "expectedSuccess": false,
+      "passed": true
+    }
+  ],
+  "rustTestsPassed": 158,
+  "changedAssets": [
+    "natives/NRHex.dll",
+    "natives/sword.csv"
+  ],
+  "unrelatedAssetsAndUserConfigsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

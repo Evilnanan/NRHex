@@ -1,0 +1,518 @@
+{
+  "version": "0.17.30",
+  "rustTestsPassed": 162,
+  "signatureCount": 57,
+  "native": {
+    "version": "0.17.30",
+    "nativeGreatshield": {
+      "ID": 32000000,
+      "fields": {
+        "wepType": 69,
+        "guardBaseRepel": 70,
+        "attackBaseRepel": 80,
+        "guardLevel": 4
+      }
+    },
+    "nativeHardnessRva": "439d50",
+    "nativeRecoilRva": "436e50",
+    "comparisonCases": [
+      {
+        "raw": 0,
+        "effect": 0,
+        "attack": 0,
+        "rebound": true
+      },
+      {
+        "raw": 0,
+        "effect": 50,
+        "attack": 50,
+        "rebound": true
+      },
+      {
+        "raw": 0,
+        "effect": 80,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 0,
+        "effect": 99,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 30,
+        "effect": 0,
+        "attack": 30,
+        "rebound": true
+      },
+      {
+        "raw": 30,
+        "effect": 50,
+        "attack": 50,
+        "rebound": true
+      },
+      {
+        "raw": 30,
+        "effect": 80,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 30,
+        "effect": 99,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 50,
+        "effect": 0,
+        "attack": 50,
+        "rebound": true
+      },
+      {
+        "raw": 50,
+        "effect": 50,
+        "attack": 50,
+        "rebound": true
+      },
+      {
+        "raw": 50,
+        "effect": 80,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 50,
+        "effect": 99,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 69,
+        "effect": 0,
+        "attack": 69,
+        "rebound": true
+      },
+      {
+        "raw": 69,
+        "effect": 50,
+        "attack": 69,
+        "rebound": true
+      },
+      {
+        "raw": 69,
+        "effect": 80,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 69,
+        "effect": 99,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 70,
+        "effect": 0,
+        "attack": 70,
+        "rebound": true
+      },
+      {
+        "raw": 70,
+        "effect": 50,
+        "attack": 70,
+        "rebound": true
+      },
+      {
+        "raw": 70,
+        "effect": 80,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 70,
+        "effect": 99,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 71,
+        "effect": 0,
+        "attack": 71,
+        "rebound": false
+      },
+      {
+        "raw": 71,
+        "effect": 50,
+        "attack": 71,
+        "rebound": false
+      },
+      {
+        "raw": 71,
+        "effect": 80,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 71,
+        "effect": 99,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 80,
+        "effect": 0,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 80,
+        "effect": 50,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 80,
+        "effect": 80,
+        "attack": 80,
+        "rebound": false
+      },
+      {
+        "raw": 80,
+        "effect": 99,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 99,
+        "effect": 0,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 99,
+        "effect": 50,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 99,
+        "effect": 80,
+        "attack": 99,
+        "rebound": false
+      },
+      {
+        "raw": 99,
+        "effect": 99,
+        "attack": 99,
+        "rebound": false
+      }
+    ],
+    "recoilCases": [
+      {
+        "weapon": 0,
+        "gate": "valid",
+        "motion": [
+          1000
+        ]
+      },
+      {
+        "weapon": 0,
+        "gate": "nullified_hp",
+        "motion": [
+          1000
+        ]
+      },
+      {
+        "weapon": 0,
+        "gate": "no_damage",
+        "motion": []
+      },
+      {
+        "weapon": 0,
+        "gate": "guard_break",
+        "motion": []
+      },
+      {
+        "weapon": 0,
+        "gate": "cancelled",
+        "motion": []
+      },
+      {
+        "weapon": 0,
+        "gate": "not_repelled",
+        "motion": []
+      },
+      {
+        "weapon": 2,
+        "gate": "valid",
+        "motion": [
+          1003
+        ]
+      },
+      {
+        "weapon": 2,
+        "gate": "nullified_hp",
+        "motion": [
+          1003
+        ]
+      },
+      {
+        "weapon": 2,
+        "gate": "no_damage",
+        "motion": []
+      },
+      {
+        "weapon": 2,
+        "gate": "guard_break",
+        "motion": []
+      },
+      {
+        "weapon": 2,
+        "gate": "cancelled",
+        "motion": []
+      },
+      {
+        "weapon": 2,
+        "gate": "not_repelled",
+        "motion": []
+      },
+      {
+        "weapon": 6,
+        "gate": "valid",
+        "motion": [
+          1008
+        ]
+      },
+      {
+        "weapon": 6,
+        "gate": "nullified_hp",
+        "motion": [
+          1008
+        ]
+      },
+      {
+        "weapon": 6,
+        "gate": "no_damage",
+        "motion": []
+      },
+      {
+        "weapon": 6,
+        "gate": "guard_break",
+        "motion": []
+      },
+      {
+        "weapon": 6,
+        "gate": "cancelled",
+        "motion": []
+      },
+      {
+        "weapon": 6,
+        "gate": "not_repelled",
+        "motion": []
+      },
+      {
+        "weapon": 7,
+        "gate": "valid",
+        "motion": [
+          1009
+        ]
+      },
+      {
+        "weapon": 7,
+        "gate": "nullified_hp",
+        "motion": [
+          1009
+        ]
+      },
+      {
+        "weapon": 7,
+        "gate": "no_damage",
+        "motion": []
+      },
+      {
+        "weapon": 7,
+        "gate": "guard_break",
+        "motion": []
+      },
+      {
+        "weapon": 7,
+        "gate": "cancelled",
+        "motion": []
+      },
+      {
+        "weapon": 7,
+        "gate": "not_repelled",
+        "motion": []
+      },
+      {
+        "weapon": 8,
+        "gate": "valid",
+        "motion": [
+          1010
+        ]
+      },
+      {
+        "weapon": 8,
+        "gate": "nullified_hp",
+        "motion": [
+          1010
+        ]
+      },
+      {
+        "weapon": 8,
+        "gate": "no_damage",
+        "motion": []
+      },
+      {
+        "weapon": 8,
+        "gate": "guard_break",
+        "motion": []
+      },
+      {
+        "weapon": 8,
+        "gate": "cancelled",
+        "motion": []
+      },
+      {
+        "weapon": 8,
+        "gate": "not_repelled",
+        "motion": []
+      }
+    ],
+    "isolatedNativeCases": 62,
+    "nativeHpNullifyAndRecoilIndependent": true,
+    "dependenciesStubbed": [
+      "recipient identity",
+      "effect hardness override",
+      "module lookup",
+      "direction handle",
+      "motion and notification sinks"
+    ],
+    "originalExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "gameMemoryWritten": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "57EE8D6B1F8F1EAD7FD5C3DE4D3C082D91AD4A9E1E88D694917AFF313F2E42DC",
+    "reports": [
+      {
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "CD84ADEBA5842A1DEAE01506751689B552D15FA50BA56275F1990BBB46214DF3",
+        "outputSha256": "F15C499B18F32606A3E59E9ACF7C33964D8BFACBE0B11E99993D9182F0D79DA0",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000200,
+            "before": "你造成的伤害降低25%。全属性提升10点",
+            "after": "降低25%攻击力。全属性提升10点"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000300,
+            "before": "承受10倍伤害。造成伤害提升40%",
+            "after": "承受10倍伤害。提升40%攻击力"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000500,
+            "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%伤害，持续15秒",
+            "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001100,
+            "before": "你的攻击造成更高的冲击力",
+            "after": "提升冲击力"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001300,
+            "before": "强化后跃的闪避能力。非后跃闪避时，损失25%绝招量表。后跃攻击命中时，回复25%绝招量表。正面处决敌人时，回复25%绝招量表。受到损伤时，损失30%绝招量表。后跃攻击的伤害增幅当前绝招量表百分比的两倍",
+            "after": "强化后跃的闪避能力。翻滚/受到损伤时，损失25%/30%绝招量表。后跃攻击命中/正面处决敌人时，回复25%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000200,
+            "before": "你造成的伤害降低25%。全属性提升10点",
+            "after": "降低25%攻击力。全属性提升10点"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000300,
+            "before": "承受10倍伤害。造成伤害提升40%",
+            "after": "承受10倍伤害。提升40%攻击力"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000500,
+            "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%伤害，持续15秒",
+            "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001100,
+            "before": "你的攻击造成更高的冲击力",
+            "after": "提升冲击力"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001300,
+            "before": "强化后跃的闪避能力。非后跃闪避时，损失25%绝招量表。后跃攻击命中时，回复25%绝招量表。正面处决敌人时，回复25%绝招量表。受到损伤时，损失30%绝招量表。后跃攻击的伤害增幅当前绝招量表百分比的两倍",
+            "after": "强化后跃的闪避能力。翻滚/受到损伤时，损失25%/30%绝招量表。后跃攻击命中/正面处决敌人时，回复25%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000200,
+            "before": "你造成的伤害降低25%。全属性提升10点",
+            "after": "降低25%攻击力。全属性提升10点"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000300,
+            "before": "承受10倍伤害。造成伤害提升40%",
+            "after": "承受10倍伤害。提升40%攻击力"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000500,
+            "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%伤害，持续15秒",
+            "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001100,
+            "before": "你的攻击造成更高的冲击力",
+            "after": "提升冲击力"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001300,
+            "before": "强化后跃的闪避能力。非后跃闪避时，损失25%绝招量表。后跃攻击命中时，回复25%绝招量表。正面处决敌人时，回复25%绝招量表。受到损伤时，损失30%绝招量表。后跃攻击的伤害增幅当前绝招量表百分比的两倍",
+            "after": "强化后跃的闪避能力。翻滚/受到损伤时，损失25%/30%绝招量表。后跃攻击命中/正面处决敌人时，回复25%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "286AB190C5E715CD323E2C307D719DAF65F898BC3181809326D377E769072A4E",
+        "outputSha256": "286AB190C5E715CD323E2C307D719DAF65F898BC3181809326D377E769072A4E",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "shellCooldownSeconds": 40,
+  "hiddenEffectDescriptionUnchanged": true,
+  "directCharacterSourcesOnly": true,
+  "privateRecoilInputPreservesOriginalHit": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pluginLoadingVerified": true,
+  "runtimeEvidence": "runtime-validation.json",
+  "documentDescriptionsReadbackPassed": true
+}

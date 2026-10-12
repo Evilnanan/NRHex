@@ -1,0 +1,66 @@
+{
+  "version": "0.17.32",
+  "baseline": ".work/status-routing-01732/baseline.json",
+  "assets": [
+    {
+      "file": "README.md",
+      "before": "8d29a6b295d63a8e2b7827550f8bceab7b6c3fcc98c1fe71d712473b5cb94209",
+      "after": "350b27c8c0fb8c70a4b1658046669c2613124ae63ae93d3b63b8612c990c40b7"
+    },
+    {
+      "file": "build-validation.json",
+      "before": "4ac9b55758fea8a756b51c229c4b26924f88edebde7dec9c3f0bf902bc078651",
+      "after": "6ad5604a80d135c9c0ba0f4b4dc25e28431026e4403d1ad553ed58213873ddfb"
+    },
+    {
+      "file": "icon-validation.json",
+      "before": "54e05cf1119094922bede4c0320b6b4471f1fc802f68722fc517d25718bff94b",
+      "after": "4bedad218d35eddc96d732afecede02687aeb827e73aab56674278943b3a0684"
+    },
+    {
+      "file": "integration-validation.json",
+      "before": "0cfe9a2bec993448dedb0d4135696cc9744f15d47c63c2769c8788e63a8a7366",
+      "after": "0dca99fee43ddca8e6d401e5cd1769f28d9e176bc7f2cf40f716ae43de8edc10"
+    },
+    {
+      "file": "runtime-validation.json",
+      "before": "cb31f55fccc19d76e12f292959a36b415fb3faf1be547652abcd3d8389342f2e",
+      "after": "845e7e8e875e1f97d53b9f5904436d0d8b589f72db754c9bce257eab0928fb39"
+    },
+    {
+      "file": "status-labels-validation.json",
+      "before": "09b2540488380d583876ac6186ba70ae58dc8c7053644d292e2c189745ad3edc",
+      "after": "1307375cf7c8c62adda31fe534a4b836e130ac1ee0ddc673db94f2e5974d9385"
+    },
+    {
+      "file": "natives/NRHex.dll",
+      "before": "5f82e934c90697890ea5be311ed240fa921cd308c5a6349abdb42111f50585b0",
+      "after": "a0a584595cc9e7ae5bad61507944a8eca59a3c2ef2b4f77ec4a5614efaa43d85"
+    }
+  ],
+  "runtimeLogChanges": [
+    {
+      "file": "natives/NRHex.log",
+      "before": "7fc589d9e0cc77072b5bad385f164e554f07793b87c965e46decd6ccdf4b5876",
+      "after": "650093f919f5c4114bf4df1ff07c4cb1dd3f63ad7424a551fc7d3228308cf843"
+    },
+    {
+      "file": "testmods/DeepUnlocker/DeepUnlocker.log",
+      "before": "520f366268b08b15c480a8428f22f1b02cd1a24e7de93070ff977a8401a61362",
+      "after": "31226c146b318e9e4d35efd0d9ce211b9d697336efb3d435f365ecde1e71cdcc"
+    },
+    {
+      "file": "testmods/StormControl/StormControl_no_gui/log.txt",
+      "before": "a7118a2131fe8f3f0c709edeccc98bc8d4bd564738674994f5dd75bdf793bbdc",
+      "after": "174bb3e6bab21c491a67714915369027fdaef2d1b72dec3ed334395c33fc75ae"
+    }
+  ],
+  "newReports": [
+    "status-routing-validation.json"
+  ],
+  "onlyDetailedStatusUiRoutingChanged": true,
+  "regulationEventsMapsHksTaeAndTextBindersUnchanged": true,
+  "userSwordCsvPreserved": true,
+  "gameUiVerified": false,
+  "multiplayerVerified": false
+}

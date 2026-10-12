@@ -1,0 +1,31 @@
+{
+  "sourceRegulationVersion": "10350000",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "notes": "Original-game reference fixtures retained from validated research. Attack/throw and critical TAE dumps contain only fields consumed by checks.",
+  "files": {
+    "actions/attack-throw.json": "829b51ca17a2fa082e53338d197bdd8e027b0b146ba186f1fe4ab62f9490d55e",
+    "actions/critical-tae.json": "94ad2f94403f3570becbd50c8662b486386363981ee6ac7366f0917f922526f2",
+    "actions/exec-jump.lua": "8317f2f6b1ff1b2418508309a8a7a493ad3d26ddb63d4dbb308fa0cf9eda31e2",
+    "actions/spiritspring.json": "522f2e9638685e943e1bc72d93382b5becbbb9fbfcdcff777dc1194007a56024",
+    "actions/swordarts-enable.lua": "a4589f46805b73112ddee611db4977ae24c4d8ef83cacb488d2195f66e83b8f4",
+    "combat/effect-7006600.param": "b66eb79be04451ebf31ba652b6b94a629e4bfc7251cad70ea6a58893538ba78e",
+    "combat/effect-7006700.param": "87c742956fcaff182a693002b612249f0b5c2d6482618be002b46ee0c25de45a",
+    "combat/effect-8000000.param": "0743c2219f700483dccfd27b3431cb50b0d9579fe7e62b69a1682b7addebeec9",
+    "combat/effect-8320500.param": "ebb179c04d9fba4847fb2867e3f318f05c3985af2e2081e82877a7069bd3ba09",
+    "combat/effect-8350000.param": "f686746c4206534a10dbe48813596b485b8fe37fd0283a3e84230b00da3600bf",
+    "combat/jump-parameters.json": "f721d6ad99d34468dd0953a269511f4d98d4a6f3ed040dde8e0ab39b415c94e1",
+    "combat/shell-chain.json": "a15675d88d194cd250a93ba7099d356996c26ce2748ab62c3340c9394eb62302",
+    "combat/sword-categories.json": "da92a20bf0164af1bc8ff0fba7e7d10a2438dd68511612e16bd5e6be47b757dc",
+    "combat/sword-graph.json": "05204b7deb7d02212abbc923462925fd33325114031000415eb0a2a4354ce67b",
+    "rewards/deployment-events.json": "02b1f678c05fa6055ffb71fb0d02fc167e659f41bfcc697e1b62a29505ea1585",
+    "rewards/flask-events.json": "7d85a20532adbfbc4307f5082a23105867469f5090e283f960299c79d9813030",
+    "ui/icon-ids.json": "0228acb6bdfc2a623edf74bb9e45b8b0545c5b005ec6b4aaf836bc6727a9ac45",
+    "world/cage-bosses.json": "1eb09fc1132ebcf9f2ff69422a3abe7de42a67c787d4ff4d0a8e6824c9feb822",
+    "world/cage-opcodes.json": "65c7eb9fe9b7bfe43aad17cc074f411cdee96518ed32ca5a52fb863121270eac",
+    "world/map-flag-storage.json": "726330d199899de66a838300b62f43f286aba5b339f11d05dd014a4f767cc9db",
+    "world/cage-birth.json": "c598de368f7e8ab5927d21ca94ce96038d14ea5c01759fd09c5b710030360a15",
+    "world/cage-selector-0179.json": "c26dcf82b975ddc66bd444b006d8dee9a0e529d0124de107be44567aa054ebdf",
+    "world/cage-encounters.json": "de51de33b270dd12948bd0bc435e8b57eae2f64dffd3b69c4caa18e4817b96ef",
+    "ui/status-route.bin": "827555a33774fa7945b999327a95d54417d5457984ed8443da802745d8e19366"
+  }
+}

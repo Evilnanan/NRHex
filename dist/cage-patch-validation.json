@@ -1,0 +1,135 @@
+{
+  "version": "0.17.19",
+  "incrementalBuildPassed": true,
+  "scope": "Cage native mutation and seven tower weapon reward overrides; retired live diagnostics; previous lifecycle/HUD fixes retained",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "signatureCount": 54,
+  "dllSha256": "a279964d9bbfc99fd3800d0ce45d27be9b980bf7cbd53dff34084d309a812f27",
+  "installedDllSha256": "a279964d9bbfc99fd3800d0ce45d27be9b980bf7cbd53dff34084d309a812f27",
+  "changedAssets": [
+    "mod/event/m46_50_00_00.emevd.dcx",
+    "mod/event/m46_60_00_00.emevd.dcx",
+    "mod/event/m46_70_00_00.emevd.dcx",
+    "mod/event/m46_80_00_00.emevd.dcx",
+    "mod/regulation.bin",
+    "natives/NRHex.dll",
+    "support/cage-health-reference.json",
+    "support/cage_snapshot.py",
+    "记录刷怪笼状态.ps1"
+  ],
+  "assetSha256": {
+    "mod/event/m46_50_00_00.emevd.dcx": "0be69392de59efd279509c2c2885ae8b0a71ff1cd7003626087808cb1451aad4",
+    "mod/event/m46_60_00_00.emevd.dcx": "c7e46be4f3e84242fa03e78e6da56f28f58a4ec01443db5f2876d50f80fc0836",
+    "mod/event/m46_70_00_00.emevd.dcx": "0c0c44acaae6ba7c1373b60a3158018c219f8b2dfd946c1797b0fb1c5aae6e1d",
+    "mod/event/m46_80_00_00.emevd.dcx": "2e261a4a00993fa9bf8e29a02f9c90486cb592519b6dc04e8909b615633ff95f",
+    "mod/regulation.bin": "7abf55f83c0f745277a402c8e77f2a95b6bccba93633c4b53b622ae1042cea8a",
+    "natives/NRHex.dll": "a279964d9bbfc99fd3800d0ce45d27be9b980bf7cbd53dff34084d309a812f27"
+  },
+  "unrelatedAssetsAndUserConfigsUnchanged": true,
+  "cageChecks": "cage-validation.json",
+  "mutationChecks": "cage-mutation-validation.json",
+  "parameterChecks": {
+    "combatFieldsPreserved": 37,
+    "towerRewardOverrides": [
+      {
+        "map": "m48_10_00_00",
+        "sourceNpc": 78200010,
+        "cloneNpc": 95300030,
+        "entity": 48100800,
+        "entityOffset": 5272,
+        "firstFlag": 48100300,
+        "firstLot": 6850000,
+        "secondFlag": 48100301,
+        "secondLot": 6851000,
+        "alternateThink": 78200010
+      },
+      {
+        "map": "m48_30_00_00",
+        "sourceNpc": 79200010,
+        "cloneNpc": 95300031,
+        "entity": 48300800,
+        "entityOffset": 4464,
+        "firstFlag": 48300300,
+        "firstLot": 6850000,
+        "secondFlag": 48300301,
+        "secondLot": 6851000,
+        "alternateThink": 79200010
+      },
+      {
+        "map": "m48_40_00_00",
+        "sourceNpc": 21300510,
+        "cloneNpc": 95300032,
+        "entity": 48400800,
+        "entityOffset": 2112,
+        "firstFlag": 48400300,
+        "firstLot": 6851000,
+        "secondFlag": 48400301,
+        "secondLot": 6852000,
+        "alternateThink": 21300510
+      },
+      {
+        "map": "m49_10_00_00",
+        "sourceNpc": 47509010,
+        "cloneNpc": 95300033,
+        "entity": 49100800,
+        "entityOffset": 6760,
+        "firstFlag": 49100300,
+        "firstLot": 6850000,
+        "secondFlag": 49100301,
+        "secondLot": 6851000,
+        "alternateThink": 47500020
+      },
+      {
+        "map": "m49_17_00_00",
+        "sourceNpc": 47700020,
+        "cloneNpc": 95300034,
+        "entity": 49170800,
+        "entityOffset": 8208,
+        "firstFlag": 49170300,
+        "firstLot": 6850000,
+        "secondFlag": 49170301,
+        "secondLot": 6851000,
+        "alternateThink": 47700030
+      },
+      {
+        "map": "m49_18_00_00",
+        "sourceNpc": 49110010,
+        "cloneNpc": 95300035,
+        "entity": 49180800,
+        "entityOffset": 7208,
+        "firstFlag": 49180300,
+        "firstLot": 6851000,
+        "secondFlag": 49180301,
+        "secondLot": 6852000,
+        "alternateThink": 49100030
+      },
+      {
+        "map": "m49_20_00_00",
+        "sourceNpc": 46809010,
+        "cloneNpc": 95300036,
+        "entity": 49200800,
+        "entityOffset": 6776,
+        "firstFlag": 49200300,
+        "firstLot": 6851000,
+        "secondFlag": 49200301,
+        "secondLot": 6852000,
+        "alternateThink": 46800030
+      }
+    ],
+    "addedMarker": 95001602,
+    "unrelatedRowsAndTablesPreserved": true,
+    "outputRegulationSha256": "7ABF55F83C0F745277A402C8E77F2A95B6BCCBA93633C4B53B622AE1042CEA8A"
+  },
+  "diagnosticToolsRemoved": true,
+  "me3ProfileChecked": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "reportedFailure": "0.17.9 HUD fix failed: opener sees HUD, peers intermittently do not but can attack; ordinary solo after dozens of openings can stall until day/map reload; bosses reported fragile in Deep Night",
+  "pendingChecks": [
+    "Opener and peers see HUD/intro; reverse opener roles",
+    "Repeated immediate reopening beyond dozens of rounds",
+    "Deep Night depth 1 never red; depth 2..5 red visual/combat/runes and rewards",
+    "Seven tower archetypes offer weapons in normal and red rewards",
+    "Simultaneous nearby bosses and unload/reload"
+  ]
+}

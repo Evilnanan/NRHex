@@ -1,0 +1,71 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "DD8201A3D143FDCCCAFA3E02A3CB7BC50356D1D73ED1A1AA2FEF6F7738EBF2C0",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "25F4E7690E50C9DA647282FDD33ADB9E9BD83999A06C042AB13623A368B84011",
+      "outputSha256": "279E0255BD26C53EEB8EAB862F74024CE6C0D7EBEA14CD69D514759019A81904",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001100,
+          "before": "\u63D0\u5347\u51B2\u51FB\u529B\uFF0C\u8FDC\u7A0B\u5F39\u4E38\u9664\u5916",
+          "after": "\u63D0\u5347\u653B\u51FB\u6210\u529F\u65F6\u7684\u51B2\u51FB\u529B"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001100,
+          "before": "\u63D0\u5347\u51B2\u51FB\u529B\uFF0C\u8FDC\u7A0B\u5F39\u4E38\u9664\u5916",
+          "after": "\u63D0\u5347\u653B\u51FB\u6210\u529F\u65F6\u7684\u51B2\u51FB\u529B"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001100,
+          "before": "\u63D0\u5347\u51B2\u51FB\u529B\uFF0C\u8FDC\u7A0B\u5F39\u4E38\u9664\u5916",
+          "after": "\u63D0\u5347\u653B\u51FB\u6210\u529F\u65F6\u7684\u51B2\u51FB\u529B"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "AD533638373C8897A50AAB2429A609C0010B0FD447C0A36A48683B92803DC1F1",
+      "outputSha256": "08E127399738736670027BF454DDAE67442F9E32D4815930831CD57F355BBB89",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001100,
+          "before": "Your attacks cause stronger impact, except ranged projectiles.",
+          "after": "Increases impact when attacks connect."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001100,
+          "before": "Your attacks cause stronger impact, except ranged projectiles.",
+          "after": "Increases impact when attacks connect."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001100,
+          "before": "Your attacks cause stronger impact, except ranged projectiles.",
+          "after": "Increases impact when attacks connect."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

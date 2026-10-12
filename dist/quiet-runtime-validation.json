@@ -1,0 +1,15 @@
+{
+  "version": "0.13.0",
+  "gameplayInfoLoggingAbsent": true,
+  "diagnosticCountersAndOwnershipTraversalRemoved": true,
+  "debuggerMirroringRemoved": true,
+  "removedWallDiagnosticPulses": [
+    95000808,
+    95000816,
+    95000824,
+    95000832
+  ],
+  "functionalFlaskCapacityAndUltimateConfirmationAndCastingHeartbeatPresent": true,
+  "wallOwnerGroundAcceptedBranchesVerified": true,
+  "performanceMeasured": false
+}

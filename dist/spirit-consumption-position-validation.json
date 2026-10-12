@@ -1,0 +1,15 @@
+{
+  "version": "0.17.38",
+  "previousVersionUserConfirmedSummon": true,
+  "tests": 187,
+  "consumeOnSuccessfulCreation": true,
+  "retainOnFailedCreation": true,
+  "spawnForwardMetres": 5,
+  "rotationGetter": "3CEB20",
+  "slotTeleportPacketCoordinatesConsistent": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "signatureChecks": 82,
+  "loadingVerified": true,
+  "pid": 33556
+}

@@ -1,0 +1,24 @@
+{
+  "version": "0.17.47",
+  "excludedHeroIds": [
+    6,
+    7
+  ],
+  "excludedHeroes": [
+    "Revenant",
+    "Recluse"
+  ],
+  "hexId": 95001100,
+  "description": "提升攻击成功时的冲击力",
+  "rustTestsPassed": 203,
+  "signatureChecksPassed": 89,
+  "regulationUnchanged": true,
+  "projectileMechanicsUnchanged": true,
+  "files": {
+    "natives\\NRHex.dll": "7C4C0A1278454FE6137B1BCEB00F710DDF166AC2E7518E4A1A701E74C6BA4421",
+    "mod\\msg\\zhocn\\item_dlc01.msgbnd.dcx": "279E0255BD26C53EEB8EAB862F74024CE6C0D7EBEA14CD69D514759019A81904",
+    "mod\\msg\\engus\\item_dlc01.msgbnd.dcx": "08E127399738736670027BF454DDAE67442F9E32D4815930831CD57F355BBB89"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

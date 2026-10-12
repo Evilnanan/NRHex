@@ -1,0 +1,41 @@
+{
+  "version": "0.17.37",
+  "rustTestsPassed": 184,
+  "signaturesPassed": 81,
+  "nativeFamilyStateCases": 768,
+  "cageModelsMapped": 84,
+  "sourceVersion": "0.17.36",
+  "observedStoredSoul": {
+    "npc": 46400010,
+    "think": 46400020,
+    "charaInit": -1
+  },
+  "observedFamilyHp": [
+    461,
+    768,
+    1094
+  ],
+  "observedFamilyStates": [
+    0,
+    0,
+    0
+  ],
+  "observedRecallMarker": 6999911,
+  "correction": "Use env380 native presence getter and map private NPC IDs to original models",
+  "dllSha256": "0ec437caf7ae85efe719e19384037a65b3f711eb3fec2f202db367a5381137ef",
+  "installedDllSha256": "0ec437caf7ae85efe719e19384037a65b3f711eb3fec2f202db367a5381137ef",
+  "parameterFilesChanged": false,
+  "hksChanged": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "loadingVerified": true,
+  "balloonFeedback": {
+    "version": "0.17.36",
+    "deathShockwaveVisible": true,
+    "damageVerified": false,
+    "nearDeathVerified": false
+  },
+  "pid": 4816,
+  "active": 1,
+  "installedHooksSampled": 19
+}

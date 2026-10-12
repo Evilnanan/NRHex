@@ -1,0 +1,9 @@
+{
+  "version": "0.17.44",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "wrapper": "DB0B80",
+  "worker": "DB04A0 mocked",
+  "cases": 16,
+  "gameplayVerified": false,
+  "scope": "Actual wrapper/12-argument ABI/output widths, no real physics or gameplay"
+}

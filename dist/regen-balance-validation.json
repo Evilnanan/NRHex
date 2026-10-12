@@ -1,0 +1,34 @@
+{
+  "version": "0.17.20",
+  "inputRegulationSha256": "537CA1A06B7B8C0805918FECF76C6E518873EAB94348470141BDDE10ABA554A8",
+  "outputRegulationSha256": "784B5C25DC5AFA4D4AF32A73B782160966F2FD30852FF274C8408B8345FE870D",
+  "effectId": 95000601,
+  "changes": [
+    {
+      "field": "changeHpPoint",
+      "before": -20,
+      "after": -16
+    },
+    {
+      "field": "changeMpPoint",
+      "before": 5,
+      "after": 4
+    }
+  ],
+  "fpCost": 4,
+  "hpRestore": 16,
+  "fpToHpRatio": "1:4",
+  "unrelatedRowsAndFieldsUnchanged": true,
+  "unrelatedTablesUnchanged": true,
+  "encryptedRegulationReadbackPassed": true,
+  "intervalSeconds": 0.25,
+  "changedAssets": [
+    "mod/regulation.bin",
+    "natives/NRHex.dll"
+  ],
+  "runtimeMinimumFp": 4,
+  "rustTestsPassed": 158,
+  "eventsTextsAndUserConfigurationUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

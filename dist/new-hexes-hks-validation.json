@@ -1,0 +1,42 @@
+{
+  "version": "0.17.33",
+  "inputSha256": "33fb5c451fe87403e2730deac1e1a96785b4b5cad5d1c37aa4c48f57cf74d26a",
+  "outputSha256": "ca2dcbf95573cadd988cad3efddcb978a93f4dd347f0d31792304d45feb0890c",
+  "functions": [
+    {
+      "id": 108,
+      "name": "ExecSummon",
+      "at": 51,
+      "prefixInstructions": 21
+    },
+    {
+      "id": 350,
+      "name": "Death_Activate",
+      "at": 0,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 353,
+      "name": "NearDeath_Activate",
+      "at": 0,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 360,
+      "name": "NearDeathRevival_onActivate",
+      "at": 0,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 362,
+      "name": "Item_NearDeathRevival_onActivate",
+      "at": 0,
+      "prefixInstructions": 14
+    }
+  ],
+  "predicateCases": 52,
+  "inverseRestoresInput": true,
+  "originalBranchesAndRegistersPreserved": true,
+  "ordinaryFamilyRecallExcluded": true,
+  "gameplayVerified": false
+}

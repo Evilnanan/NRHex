@@ -1,0 +1,26 @@
+{
+  "version": "0.16.2",
+  "sampledDllSha256": "36c428a25637ad2f991c18bbe82e62e6bc0ba263169bf3fcc479a2236af06074",
+  "temporaryTraceBuild": true,
+  "mode": "single player",
+  "damageSamples": 136,
+  "factors": {
+    "5.5": 108,
+    "1.6": 12,
+    "1.0": 16
+  },
+  "allDamageMatchesFrozenStacks": true,
+  "finalCleanupRearms": 8,
+  "allRearmsAfterFinalCleanup": true,
+  "sampledBaseFireAttack": {
+    "explosion": 100,
+    "burning": 20
+  },
+  "latestBaseFireAttack": {
+    "explosion": 200,
+    "burning": 40
+  },
+  "latestBaseValuesGameplayVerified": false,
+  "visualAppearanceVerified": false,
+  "multiplayerVerified": false
+}

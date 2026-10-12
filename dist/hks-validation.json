@@ -1,0 +1,230 @@
+{
+  "version": "0.9.0",
+  "method": "Owner-only airborne retry after Act_Jump and before animation-phase early return; preserve R0/R1/R2 and original safety path",
+  "originalSha256": "2ec9f8ad913a8a6f1cf4a6f4794692a59e1fecda156bc9a87b3068f226c0dc1d",
+  "patchedSha256": "05cdc22d8369259962e231c28bd109fe892962224f21e9ce9e28bb119fe57847",
+  "addedBytes": 7920,
+  "functions": [
+    {
+      "name": "JumpCommonFunction",
+      "functionId": 1508,
+      "originalInstructions": 1072,
+      "patchedInstructions": 1111,
+      "argumentRegistersPreserved": 1,
+      "earlyRetryAfterOriginalInstruction": 55,
+      "earlyRetryLiveRegistersPreserved": [
+        0,
+        1,
+        2
+      ],
+      "relocatedBranches": 0
+    },
+    {
+      "name": "ExecWallJump",
+      "functionId": 1514,
+      "originalInstructions": 119,
+      "patchedInstructions": 131,
+      "argumentRegistersPreserved": 0,
+      "earlyRetryAfterOriginalInstruction": null,
+      "earlyRetryLiveRegistersPreserved": [],
+      "relocatedBranches": 0
+    },
+    {
+      "name": "WallJumpCancelEarly_onUpdate",
+      "functionId": 1579,
+      "originalInstructions": 27,
+      "patchedInstructions": 52,
+      "argumentRegistersPreserved": 0,
+      "earlyRetryAfterOriginalInstruction": null,
+      "earlyRetryLiveRegistersPreserved": [],
+      "relocatedBranches": 0
+    },
+    {
+      "name": "WallJumpCancelLate_onUpdate",
+      "functionId": 1581,
+      "originalInstructions": 27,
+      "patchedInstructions": 52,
+      "argumentRegistersPreserved": 0,
+      "earlyRetryAfterOriginalInstruction": null,
+      "earlyRetryLiveRegistersPreserved": [],
+      "relocatedBranches": 0
+    },
+    {
+      "name": "MagicLaunchRight_Upper_onUpdate",
+      "functionId": 799,
+      "originalInstructions": 80,
+      "patchedInstructions": 110,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicLoopRight_Upper_onUpdate",
+      "functionId": 800,
+      "originalInstructions": 199,
+      "patchedInstructions": 229,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicFireRight_Upper_onUpdate",
+      "functionId": 801,
+      "originalInstructions": 334,
+      "patchedInstructions": 364,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicLaunchLeft_Upper_onUpdate",
+      "functionId": 803,
+      "originalInstructions": 79,
+      "patchedInstructions": 109,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicLoopLeft_Upper_onUpdate",
+      "functionId": 804,
+      "originalInstructions": 141,
+      "patchedInstructions": 171,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicFireRight2_Upper_onUpdate",
+      "functionId": 806,
+      "originalInstructions": 211,
+      "patchedInstructions": 241,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicFireRight3_Upper_onUpdate",
+      "functionId": 807,
+      "originalInstructions": 211,
+      "patchedInstructions": 241,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicFireLeft_Upper_onUpdate",
+      "functionId": 808,
+      "originalInstructions": 234,
+      "patchedInstructions": 264,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicFireLeft2_Upper_onUpdate",
+      "functionId": 812,
+      "originalInstructions": 199,
+      "patchedInstructions": 229,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicFireLeft3_Upper_onUpdate",
+      "functionId": 814,
+      "originalInstructions": 199,
+      "patchedInstructions": 229,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireRightDash_Upper_onUpdate",
+      "functionId": 815,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireRightStep_Upper_onUpdate",
+      "functionId": 816,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireRightBackStep_Upper_onUpdate",
+      "functionId": 817,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireRightAttackLeft_Upper_onUpdate",
+      "functionId": 818,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireRightAttackRight_Upper_onUpdate",
+      "functionId": 819,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireLeftDash_Upper_onUpdate",
+      "functionId": 820,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireLeftStep_Upper_onUpdate",
+      "functionId": 821,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireLeftBackStep_Upper_onUpdate",
+      "functionId": 822,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireLeftAttackRight_Upper_onUpdate",
+      "functionId": 823,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "QuickMagicFireLeftAttackLeft_Upper_onUpdate",
+      "functionId": 824,
+      "originalInstructions": 59,
+      "patchedInstructions": 89,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicFireRightJump_Upper_onUpdate",
+      "functionId": 825,
+      "originalInstructions": 182,
+      "patchedInstructions": 212,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "MagicFireLeftJump_Upper_onUpdate",
+      "functionId": 827,
+      "originalInstructions": 139,
+      "patchedInstructions": 169,
+      "castOwnerGuardPathsVerified": true
+    },
+    {
+      "name": "RideMagicLaunch_Upper_onUpdate",
+      "functionId": 1298,
+      "originalInstructions": 72,
+      "patchedInstructions": 102,
+      "castOwnerGuardPathsVerified": true
+    }
+  ],
+  "otherPrototypesUnchanged": 1607,
+  "inversePatchReconstructsOriginal": true,
+  "ownerAndNonownerPathsVerified": true,
+  "serializedDebugLineCountMatchesInstructions": true,
+  "argumentRegistersPreserved": true,
+  "removedWallDiagnosticPulses": [
+    95000808,
+    95000816,
+    95000824,
+    95000832
+  ],
+  "ownerGroundRequestAcceptedPathsVerified": true,
+  "earlyRetryOwnerGroundAcceptedPathsVerified": true,
+  "gameplayVerified": false,
+  "independentDecompilerReadbackPassed": true,
+  "decompiledSourceDiff": "Only Cat wall guards plus Sword casting prefixes; no weapon-skill/cancel/recovery protection. All remaining decompiled source identical."
+}

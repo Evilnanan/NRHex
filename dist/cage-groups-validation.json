@@ -1,0 +1,30 @@
+{
+  "version": "0.17.27",
+  "encounters": 50,
+  "singleEncounters": 37,
+  "groupEncounters": 13,
+  "actors": 84,
+  "combatMembers": 41,
+  "supportMounts": 6,
+  "eventCases": 960,
+  "opcodeAbiDecoded": true,
+  "forwardGotosOnly": true,
+  "allMembersDeadBeforeVictory": true,
+  "atomicHudReservation": true,
+  "deadMemberRejoinPassed": true,
+  "delayedLoadingPassed": true,
+  "cleanupPreservesNextEncounter": true,
+  "rewardClaimRearmedOnlyAfterAllNewActorsAlive": true,
+  "nativeGroupRewardsCopied": true,
+  "towerWeaponOverridesCopied": true,
+  "nativeNpcStatsAndScalingPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pendingChecks": [
+    "All new combinations spawn and move correctly",
+    "Repeated group reward drops, including day/map reload",
+    "Mounted enemies dismount and abilities",
+    "Host/client late loading and HUD",
+    "Deep/night/co-op final HP"
+  ]
+}

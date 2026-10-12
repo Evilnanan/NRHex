@@ -1,0 +1,25 @@
+{
+  "version": "0.17.51",
+  "excludedHeroes": {
+    "95001300": [
+      2,
+      4,
+      6
+    ],
+    "95000400": [
+      2,
+      6
+    ]
+  },
+  "heroNames": {
+    "2": "守护者",
+    "4": "女爵",
+    "6": "复仇者"
+  },
+  "entryPoint": "reward_choices::role_exclusions through unavailable_hexes, shared by random and preferred rewards",
+  "rustTests": 212,
+  "nativeSignatures": 91,
+  "installedDllSha256": "b0a72b4aa0e93f35d5878e1508310220507217659e91b63209dee52d82032d71",
+  "gameStarted": false,
+  "gameplayVerified": false
+}

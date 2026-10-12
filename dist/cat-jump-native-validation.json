@@ -1,0 +1,51 @@
+{
+  "version": "0.17.12",
+  "nativeJumpCategory": 102,
+  "nativeFallHeightGetter": "0x442070",
+  "scriptEnvironmentId": 224,
+  "worldMetresToScriptCentimetres": 100,
+  "isolatedNativeHeightCases": [
+    {
+      "apex": 100.0,
+      "current": 100.0,
+      "returnedMetres": 0.0
+    },
+    {
+      "apex": 103.75,
+      "current": 100.0,
+      "returnedMetres": 3.75
+    },
+    {
+      "apex": 107.5,
+      "current": 100.0,
+      "returnedMetres": 7.5
+    },
+    {
+      "apex": 115.0,
+      "current": 100.0,
+      "returnedMetres": 15.0
+    },
+    {
+      "apex": 130.0,
+      "current": 100.0,
+      "returnedMetres": 30.0
+    },
+    {
+      "apex": -40.0,
+      "current": -100.0,
+      "returnedMetres": 60.0
+    }
+  ],
+  "heightBaselineMetres": 1,
+  "formula": "max(0, 1.00 * (1 + log2(h / 1)))",
+  "nativeHeightOnlyOutsideSpiritspring": true,
+  "spiritspringUsesActualTrackedApex": true,
+  "landingGraceMilliseconds": 250,
+  "groundedSamplesRenewGrace": false,
+  "multiHitUsesFirstConnectedHitHeight": false,
+  "eachHitUsesCurrentHeight": true,
+  "currentGroundFlagOffset": "0x92",
+  "previousGroundFlagOffset": "0x93",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

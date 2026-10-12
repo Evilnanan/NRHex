@@ -1,0 +1,29 @@
+{
+  "version": "0.17.45",
+  "rustTestsPassed": 202,
+  "signatureChecksPassed": 89,
+  "spiritDamageMultiplier": 0.25,
+  "chantStaminaPerSecond": 15,
+  "retiredOwner": 95001900,
+  "activeAbilities": 18,
+  "activeChoices": 4896,
+  "historicalRewardGroups": 5814,
+  "swordRange": "source world position to native hit+1F0 world contact; same damage and lifesteal predicate",
+  "swordDefaultDistance": 6,
+  "ctrlF9": [
+    "Keep Chanting",
+    "Draw Your Sword",
+    "filler"
+  ],
+  "files": {
+    "natives/NRHex.dll": "4620686F23DE4EAC55C8841892B770E9AF20EF091172968F75B35FD4EEE33A22",
+    "mod/regulation.bin": "65DC3A1B9B0860903EFD074D3BDC864A16A02D4BE9235DA942D7BB076A2D460E",
+    "README.md": "F466615C0A31C8059821BCBF4B3CCC630D0E5C7B46BEC39C22804AA7BBBE9B8B",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "AC586B946AAEEA10F651D0A4A937980E8250DB2A9B0CBD65E4C199737A7B77E8",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "D8D58F605E05276FA2A4D4A9C6D3FCFEB2D3E18713514270CE8BDFF34117FBE5",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

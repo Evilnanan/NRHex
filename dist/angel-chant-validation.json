@@ -1,0 +1,31 @@
+{
+  "version": "0.17.40",
+  "rustTests": 199,
+  "signatureChecks": 85,
+  "nativeIsolatedCases": 7680,
+  "hksGateCases": 288,
+  "mechanics": {
+    "angelWindowSeconds": 0.06666666666666667,
+    "angelBeforeCrystal": true,
+    "nativeNullifyVfx": true,
+    "chantHeroes": [
+      4,
+      6,
+      7
+    ],
+    "chantStaminaPerSecond": 69,
+    "chantOnlyHeldCharge": true,
+    "nativeInterruptedReleaseChecksPreserved": true
+  },
+  "files": {
+    "natives/NRHex.dll": "37CF8F957B7E8879BF98B2B9BA7500FDF319A1A4C33A3C117579B2E2FA83FDC5",
+    "mod/regulation.bin": "E8D57F82510DA4EA99AD04ECA0CF4FD3994743F45F64BB5ED0737C5CA12130D5",
+    "mod/action/script/c0000.hks": "D88A38693F0017ED961A6EA1F9664CBE82828B57EE462C22A0DE4FE512D8534B",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "E5054916390CB604228E10E7E21A08B32977F71B3E6625842779689C23A4BEAB",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "4034C1F709B618E37D257C3E4E2DC085B69A98A00BE8ABA74E14C22FA2021DA8"
+  },
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameLaunched": false
+}

@@ -1,0 +1,40 @@
+{
+  "version": "0.17.34",
+  "birthEvents": 336,
+  "hostBattleEvents": 200,
+  "lifecycleSimulationCases": 2328,
+  "rewardScalingAndEntranceInstructionsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "rustTests": 180,
+  "signatureCount": 79,
+  "fullBuildBirthsEqualStagedEvents": true,
+  "existingHksSha256": "ca2dcbf95573cadd988cad3efddcb978a93f4dd347f0d31792304d45feb0890c",
+  "existingHksCases": 52,
+  "hksNotRebuiltThisAudit": true,
+  "existingRegulationAndMapFilesUnchanged": true,
+  "changedBaselineFiles": [
+    "src/lib.rs",
+    "dist/README.md",
+    "tools/HexBuild/Program.cs",
+    "tools/HexBuild/Cages.cs",
+    "dist/mod/event/m46_80_00_00.emevd.dcx",
+    "dist/natives/NRHex.dll",
+    "tools/cage_local_events.py",
+    "Cargo.lock",
+    "Cargo.toml",
+    "dist/mod/event/m46_60_00_00.emevd.dcx",
+    "src/new_hexes.rs",
+    "docs/implementation.md",
+    "tools/HexBuild/CageEncounters.cs",
+    "dist/mod/event/m46_70_00_00.emevd.dcx",
+    "dist/mod/event/m46_50_00_00.emevd.dcx"
+  ],
+  "sourceEvidence": "docs/research/coop-new-hexes-audit-01734.md",
+  "pending": [
+    "Coop cage host/client visibility, one encounter/reward, repeated opening and HP scaling",
+    "Reforged skill export scheduling before first post-reforge action",
+    "Balloon near-death/dead-source collision acceptance and actual enemy HP; ally rescue remains intact",
+    "Boss soul AI, white visuals, HP drain and both peer views"
+  ]
+}

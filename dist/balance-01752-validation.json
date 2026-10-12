@@ -1,0 +1,33 @@
+{
+  "version": "0.17.52",
+  "excludedHeroes": {
+    "95001300": [
+      2,
+      4,
+      6
+    ]
+  },
+  "allowedHeroes": {
+    "95000400": [
+      1,
+      3,
+      5,
+      7,
+      8
+    ]
+  },
+  "swordLifestealScale": 2,
+  "heroNames": {
+    "1": "追踪者",
+    "3": "铁眼",
+    "5": "无赖",
+    "7": "隐士",
+    "8": "执行者"
+  },
+  "entryPoint": "reward_choices::role_exclusions through unavailable_hexes, shared by random and preferred rewards",
+  "rustTests": 212,
+  "nativeSignatures": 91,
+  "installedDllSha256": "9343ac840535bcf37d1ee556a027a42d0dd75798fb1ffb5de33d34cfc595a57e",
+  "gameStarted": false,
+  "gameplayVerified": false
+}

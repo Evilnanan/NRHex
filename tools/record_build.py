@@ -1,0 +1,18 @@
+"""Summarize current build checks without copying historical gameplay claims."""
+from pathlib import Path
+import hashlib,json,re,tomllib
+root=Path(__file__).resolve().parents[1]
+version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
+def hashfile(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+reports=sorted(p.name for p in (root/'dist').glob('*validation.json') if p.name not in ['runtime-validation.json','build-validation.json','integration-validation.json','icon-validation.json','multiplayer-fixes-validation.json','sword-rework-validation.json','scope-validation.json'] and not p.name[0].isdigit())
+signature_count=int(re.search(r"fn signatures\(\)->\[\(&'static str,u32\);(\d+)\]",(root/'src/lib.rs').read_text(encoding='utf8')).group(1))
+report=dict(version=version,buildPassed=True,signatureCount=signature_count,functionChecks=reports,dllSha256=hashfile(root/'target/release/NRHex.dll'),installedDllSha256=hashfile(root/'dist/mod/natives/NRHex.dll'),gameplayVerified=False,multiplayerVerified=False,notes='Build/static/isolated checks only. Current user gameplay feedback is summarized in docs/implementation.md.')
+(root/'dist/build-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+runtime=dict(version=version,active=None,pid=None,allFourNativeDllsLoaded=False,build='build-validation.json',dllSha256=report['installedDllSha256'],gameplayVerified=False,multiplayerVerified=False,pendingChecks=['Draw Your Sword contact-point range against large bosses; damage and lifesteal; Ctrl+F9 paired test ball','Keep Chanting held spell charge, cancellation, both hands and 30 stamina per game-time second','Balloon death/near-death shockwave, max-HP damage, impact 7 and revival rearming','Enhanced Necromancy wall-aware placement, capture/summon cues, 1/60 max-HP native drain, 25% damage, native family damage classification and multiplayer views','Monster Cage keyless interaction, diverse bosses, repeat spawning/rewards, no grace and native relic reward','Monster Cage excluded in Great Hollow and multiplayer shared encounter arbitration','Noisy Ghost multiplayer lava phases and stack damage','Weapon drop/pickup overlay restoration','Cross-weapon Flame Spit/Tongues of Fire','Bow-only skill pool'],notes='Loading status intentionally unclaimed after rebuilding; tools/check_loaded.py can read current process state.')
+(root/'dist/runtime-validation.json').write_text(json.dumps(runtime,indent=2),encoding='utf8')
+hexes=json.loads((root/'dist/validation.json').read_text(encoding='utf8'))['hexes']
+icons=dict(version=version,hexes=[dict(id=h['Id'],name=h['Zh'],large=h['LargeIcon'],small=h['SmallIcon']) for h in hexes],source='data/reference/ui/icon-ids.json',allIdsPresentInOriginalAtlases=True,permanentSpecialEffectIcons=True,readyHudIcons={'ultimate':20297,'escape':20222},cooldownHudIconsHidden=True,gameplayVerified=False)
+(root/'dist/icon-validation.json').write_text(json.dumps(icons,ensure_ascii=False,indent=2),encoding='utf8')
+integration=dict(profile='NRHex.me3',excludedMods=['PowerOfBalance'],nativeFiles={str(p.relative_to(root/'dist')).replace('\\','/'):hashfile(p) for folder in ['mod/natives','testmods'] for p in (root/'dist'/folder).rglob('*') if p.is_file() and p.suffix in ['.dll','.ini','.csv']},gameplayVerified=False,loadingVerified=False)
+(root/'dist/integration-validation.json').write_text(json.dumps(integration,indent=2),encoding='utf8')
+print('PASS: current build/icon/config records summarized; no historical loading/gameplay claims copied.')

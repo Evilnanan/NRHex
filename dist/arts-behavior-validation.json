@@ -1,0 +1,14 @@
+{
+  "resolverRva": "668b30",
+  "actorVirtualOffset": "328",
+  "behaviorLookupRva": "e6fcb0",
+  "nativeRepositoryIndex": 13,
+  "sameSourceDecoderForWeaponHandleAndBase": true,
+  "attackAndBulletUseSameResolver": true,
+  "canonicalSkillCount": 183,
+  "nativeBehaviorRows": 10855,
+  "ordinaryAttacksUseNativeResult": true,
+  "localOwnedOverlayOnly": true,
+  "nativeInventoryAndParametersUnchanged": true,
+  "gameplayVerified": false
+}

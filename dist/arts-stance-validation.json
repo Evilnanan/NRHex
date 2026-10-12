@@ -1,0 +1,56 @@
+{
+  "version": "0.17.27",
+  "functions": [
+    {
+      "id": 536,
+      "name": "DrawStanceRightStart_Upper_onUpdate",
+      "cases": 28,
+      "prefixInstructions": 46,
+      "endEvent": "Event_DrawStanceRightEnd"
+    },
+    {
+      "id": 537,
+      "name": "DrawStanceRightLoop_Upper_onUpdate",
+      "cases": 28,
+      "prefixInstructions": 46,
+      "endEvent": "Event_DrawStanceRightEnd"
+    },
+    {
+      "id": 538,
+      "name": "DrawStanceNoSyncLoop_Upper_onUpdate",
+      "cases": 28,
+      "prefixInstructions": 46,
+      "endEvent": "Event_DrawStanceRightEnd"
+    },
+    {
+      "id": 539,
+      "name": "DrawStanceNoSyncLoopMax_Upper_onUpdate",
+      "cases": 28,
+      "prefixInstructions": 46,
+      "endEvent": "Event_DrawStanceRightEnd"
+    },
+    {
+      "id": 581,
+      "name": "SwordArtsArrowStanceStart_Upper_onUpdate",
+      "cases": 28,
+      "prefixInstructions": 32,
+      "endEvent": "Event_SwordArtsArrowStanceEnd"
+    },
+    {
+      "id": 584,
+      "name": "SwordArtsArrowStanceLoop_Upper_onUpdate",
+      "cases": 28,
+      "prefixInstructions": 32,
+      "endEvent": "Event_SwordArtsArrowStanceEnd"
+    }
+  ],
+  "inverseRestoresInput": true,
+  "originalBranchesUnchanged": true,
+  "originalArgumentsPreserved": true,
+  "preparationWithoutUseUnchanged": true,
+  "continuousAttackStancesUnchanged": true,
+  "sourceSha256": "0ee347e182767fb3360a2d9102484e7fdee5a52b2e0e69b903b81fc61c77c3f3",
+  "outputSha256": "33fb5c451fe87403e2730deac1e1a96785b4b5cad5d1c37aa4c48f57cf74d26a",
+  "gameplayVerified": false,
+  "independentDecompilePassed": true
+}

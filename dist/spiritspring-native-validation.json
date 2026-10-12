@@ -1,0 +1,69 @@
+{
+  "version": "0.10.10",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "scriptEnvironmentId": 366,
+  "regionContextRva": "0x3C17D48",
+  "nativeGetterRva": "0xBA7000",
+  "normalRegionType": 46,
+  "sealableRegionType": 60,
+  "isolatedOriginalMachineCodeCases": [
+    {
+      "primaryType": null,
+      "fallbackType": null,
+      "configuredHeight": 48.0,
+      "nativeResult": 0.0,
+      "springAvailable": false
+    },
+    {
+      "primaryType": 46,
+      "fallbackType": null,
+      "configuredHeight": 48.0,
+      "nativeResult": 48.0,
+      "springAvailable": true
+    },
+    {
+      "primaryType": null,
+      "fallbackType": 60,
+      "configuredHeight": 47.0,
+      "nativeResult": 47.0,
+      "springAvailable": true
+    },
+    {
+      "primaryType": 52,
+      "fallbackType": null,
+      "configuredHeight": 48.0,
+      "nativeResult": 0.0,
+      "springAvailable": false
+    },
+    {
+      "primaryType": null,
+      "fallbackType": 46,
+      "configuredHeight": 47.0,
+      "nativeResult": 0.0,
+      "springAvailable": false
+    },
+    {
+      "primaryType": 52,
+      "fallbackType": 60,
+      "configuredHeight": 47.0,
+      "nativeResult": 0.0,
+      "springAvailable": false
+    },
+    {
+      "primaryType": 46,
+      "fallbackType": null,
+      "configuredHeight": 0.0,
+      "nativeResult": 0.0,
+      "springAvailable": false
+    },
+    {
+      "primaryType": 46,
+      "fallbackType": null,
+      "configuredHeight": -5.0,
+      "nativeResult": -5.0,
+      "springAvailable": false
+    }
+  ],
+  "configuredHeightUsedOnlyForLaunchDetection": true,
+  "liveSpiritspringFlightVerified": false
+}

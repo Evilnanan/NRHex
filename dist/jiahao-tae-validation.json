@@ -1,0 +1,309 @@
+{
+  "version": "0.14.8",
+  "sourceSha256": "610F553520E5127DA7366FE6C619683ACAC11B7AEE6F6B2450B8186AF0B573E1",
+  "sha256": "8354441F82F22A6098747BFAB6D08692A84059ECBB25A17FD0B8FF6490DD0FD2",
+  "ownerMarker": 6999700,
+  "ownerState": 25013,
+  "sourceDuchessClip": 27060,
+  "nativeJumpTableFlag": 8,
+  "nativeGroupType": 0,
+  "allNewEventsHaveSerializedGroupMembership": true,
+  "originalGroupAssociationsUnchanged": true,
+  "motionSeconds": 0.36666667,
+  "frames": 11,
+  "referenceFps": 30,
+  "originalEventsAndAnimationHeadersUnchanged": true,
+  "unrelatedBinderMembersUnchanged": true,
+  "duchessAnimationsUnchanged": true,
+  "changes": [
+    {
+      "file": "a00.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a00.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a00.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a00.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a02.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a02.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a02.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a02.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a03.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a03.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a03.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a03.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a10.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a10.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a10.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a10.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a12.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a12.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a12.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a12.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a13.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a13.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a13.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a13.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a14.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a14.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a14.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a14.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a15.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a15.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a15.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a15.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a16.tae",
+      "ID": 27000,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a16.tae",
+      "ID": 27010,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a16.tae",
+      "ID": 27020,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    },
+    {
+      "file": "a16.tae",
+      "ID": 27030,
+      "start": 0,
+      "end": 0.36666667,
+      "flag": 8,
+      "state": 25013
+    }
+  ],
+  "gameplayVerified": false
+}

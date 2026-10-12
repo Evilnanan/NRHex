@@ -1,0 +1,10 @@
+{
+  "version": "0.17.48",
+  "rustTestsPassed": 206,
+  "signatureChecksPassed": 90,
+  "dllSha256": "DC87EA511078CAA567E293A2759FB89BF4F41BC0B18C27EE5D229818F232556D",
+  "regulationUnchanged": true,
+  "regulationSha256": "ACD0EB1FB1381496B61451EFF47D3A174651543449D58936085DE0E29DEB62BC",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -1,0 +1,11 @@
+{
+  "version": "0.17.56",
+  "rustTests": 212,
+  "recipient": "current local owner",
+  "trigger": "accepted soul capture or higher maximum HP replacement only",
+  "durationSeconds": 1.5,
+  "sfx": 461351,
+  "dllSha256": "921f3e3858838f5a68ad36ee00812011b395ced40dc8b17739ba2a30976af947",
+  "gameplayVerified": false,
+  "gameStarted": false
+}

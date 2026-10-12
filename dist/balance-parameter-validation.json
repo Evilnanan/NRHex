@@ -1,0 +1,4814 @@
+{
+  "version": "0.17.45",
+  "hexes": [
+    {
+      "Id": 95000100,
+      "Zh": "\u7EA2\u5305",
+      "En": "Red Envelope",
+      "ZhInfo": "\u83B7\u5F9788888\u5362\u6069",
+      "EnInfo": "Gain 88,888 runes.",
+      "LargeIcon": 21267,
+      "SmallIcon": 22267
+    },
+    {
+      "Id": 95000200,
+      "Zh": "\u661F\u754C\u8EAF\u4F53",
+      "En": "Astral Body",
+      "ZhInfo": "\u964D\u4F4E25%\u653B\u51FB\u529B\u3002\u5168\u5C5E\u6027\u63D0\u534710\u70B9",
+      "EnInfo": "Deal 25% less damage. All attributes \u002B10.",
+      "LargeIcon": 21208,
+      "SmallIcon": 22208
+    },
+    {
+      "Id": 95000300,
+      "Zh": "\u73BB\u7483\u5927\u70AE",
+      "En": "Glass Cannon",
+      "ZhInfo": "\u627F\u53D710\u500D\u4F24\u5BB3\u3002\u63D0\u534740%\u653B\u51FB\u529B",
+      "EnInfo": "Take 10 times normal damage. Deal 40% more damage.",
+      "LargeIcon": 21206,
+      "SmallIcon": 22206
+    },
+    {
+      "Id": 95000400,
+      "Zh": "\u7EC8\u6781\u5237\u65B0",
+      "En": "Ultimate Refresh",
+      "ZhInfo": "\u65BD\u653E\u7EDD\u62DB\u540E\uFF0C\u56DE\u590D100%\u7EDD\u62DB\u91CF\u8868\uFF0C45\u79D2\u51B7\u5374",
+      "EnInfo": "Restore 100% of the ultimate gauge after using an ultimate. 45s cooldown.",
+      "LargeIcon": 21297,
+      "SmallIcon": 22297
+    },
+    {
+      "Id": 95000500,
+      "Zh": "\u8C6A\u996E",
+      "En": "Heavy Drinking",
+      "ZhInfo": "\u4F60\u7684\u5723\u676F\u74F6\u6570\u91CF\u7FFB\u500D\uFF0C\u4F46\u56DE\u590D\u91CF\u51CF\u534A\u3002\u4F7F\u7528\u5723\u676F\u74F6\u540E\uFF0C\u63D0\u53475%\u653B\u51FB\u529B\uFF0C\u6301\u7EED15\u79D2",
+      "EnInfo": "Double your flask capacity, but halve flask healing. Using a flask increases damage by 5% for 15s.",
+      "LargeIcon": 21291,
+      "SmallIcon": 22291
+    },
+    {
+      "Id": 95000600,
+      "Zh": "\u518D\u751F\u672F",
+      "En": "Regeneration",
+      "ZhInfo": "\u8840\u91CF\u4E0D\u6EE1\u65F6\uFF0C\u6301\u7EED\u6D88\u8017\u4E13\u6CE8\u503C\u6765\u56DE\u590D\u8840\u91CF\u3002\u8840\u91CF\u5168\u6EE1\u65F6\uFF0C\u4F7F\u7528\u5723\u676F\u74F6\u4F1A\u56DE\u590D50%\u4E13\u6CE8\u503C",
+      "EnInfo": "When below full HP, continuously spend FP to restore HP. At full HP, using a flask restores 50% FP.",
+      "LargeIcon": 21291,
+      "SmallIcon": 22291
+    },
+    {
+      "Id": 95000700,
+      "Zh": "\u7ED3\u6676\u5916\u58F3",
+      "En": "Crystal Shell",
+      "ZhInfo": "\u53D7\u5230\u653B\u51FB\u65F6\uFF0C\u7531\u7ED3\u6676\u5916\u58F3\u4EE3\u4E3A\u627F\u53D7\u5E76\u7834\u788E\u3002\u7ED3\u6676\u5916\u58F3\u7834\u788E\u540E\u9700\u898140\u79D2\u6765\u91CD\u65B0\u751F\u6210",
+      "EnInfo": "A crystal shell takes the hit for you and shatters. It regenerates after 40s.",
+      "LargeIcon": 21208,
+      "SmallIcon": 22208
+    },
+    {
+      "Id": 95000800,
+      "Zh": "\u4EBA\u662F\u732B",
+      "En": "Human Is Cat",
+      "ZhInfo": "\u83B7\u5F97\u65E0\u9650\u6500\u722C\u80FD\u529B\u3002\u4F60\u7684\u8DF3\u8DC3\u653B\u51FB\u968F\u4E0B\u843D\u9AD8\u5EA6\u63D0\u5347\u4F24\u5BB3\u3002\u6D88\u9664\u811A\u6B65\u58F0\u3002\u53D7\u5230\u653B\u51FB\u65F6\uFF0C\u9690\u8EAB1\u79D2",
+      "EnInfo": "Gain unlimited climbing. Your jump attacks deal more damage with greater fall height. Silence footsteps. Become invisible for 1s when hit.",
+      "LargeIcon": 21222,
+      "SmallIcon": 22222
+    },
+    {
+      "Id": 95000900,
+      "Zh": "\u4EAE\u51FA\u4F60\u7684\u5251",
+      "En": "Draw Your Sword",
+      "ZhInfo": "\u4F60\u7684\u9B54\u6CD5\u3001\u7977\u544A\u8FD8\u4F1A\u88AB\u89C6\u4E3A\u8FD1\u6218\u653B\u51FB\uFF0C\u4F46\u53EA\u80FD\u547D\u4E2D\u8FD1\u8EAB\u654C\u4EBA\uFF0C\u5E76\u57FA\u4E8E\u8BE5\u6CD5\u672F\u7684\u5C04\u7A0B\u63D0\u4F9B\u5438\u8840\u3001\u589E\u4F24\u3001\u548F\u5531\u65F6\u51CF\u4F24\u7387\u3002\u4F60\u7684\u6CD5\u672F\u548F\u5531\u53D8\u5F97\u4E0D\u6613\u88AB\u6253\u65AD\u3002\u63D0\u534715%\u8FD1\u6218\u653B\u51FB\u529B",
+      "EnInfo": "Spells also count as melee attacks, but only hit nearby enemies. Gain lifesteal, bonus damage and casting damage reduction based on spell range. Spellcasting is harder to interrupt. Gain 15% melee attack power.",
+      "LargeIcon": 21206,
+      "SmallIcon": 22206
+    },
+    {
+      "Id": 95001100,
+      "Zh": "\u5927\u529B",
+      "En": "Mighty",
+      "ZhInfo": "\u63D0\u5347\u51B2\u51FB\u529B",
+      "EnInfo": "Your attacks cause stronger impact.",
+      "LargeIcon": 21206,
+      "SmallIcon": 22206
+    },
+    {
+      "Id": 95001200,
+      "Zh": "\u9003\u8DD1\u8BA1\u5212",
+      "En": "Escape Plan",
+      "ZhInfo": "\u8840\u91CF\u504F\u4F4E\u65F6\uFF0C\u572810\u79D2\u5185\u52A0\u5FEB\u884C\u52A8\u5E76\u63D0\u534760%\u51CF\u4F24\u7387\uFF0C60\u79D2\u51B7\u5374",
+      "EnInfo": "At low HP, double action speed and gain 60% damage negation for 10s. 60s cooldown.",
+      "LargeIcon": 21222,
+      "SmallIcon": 22222
+    },
+    {
+      "Id": 95001300,
+      "Zh": "\u5609\u8C6A\u8EAB\u6CD5",
+      "En": "Jiahao Footwork",
+      "ZhInfo": "\u5F3A\u5316\u540E\u8DC3\u7684\u95EA\u907F\u80FD\u529B\u3002\u540E\u8DC3\u653B\u51FB\u8FDB\u884C\u53CD\u51FB\u6216\u6B63\u9762\u5904\u51B3\u654C\u4EBA\u65F6\uFF0C\u56DE\u590D25%\u7EDD\u62DB\u91CF\u8868\u3002\u7FFB\u6EDA\u6216\u53D7\u5230\u635F\u4F24\u65F6\uFF0C\u635F\u593130%\u7EDD\u62DB\u91CF\u8868\u3002\u4F60\u7684\u540E\u8DC3\u653B\u51FB\u968F\u7EDD\u62DB\u91CF\u8868\u63D0\u5347\u6700\u591A200%\u4F24\u5BB3",
+      "EnInfo": "Enhance backstep evasion. Other dodges cost 30% Art gauge. Backstep attacks that hit enemies whose stance is not broken restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage.",
+      "LargeIcon": 21222,
+      "SmallIcon": 22222
+    },
+    {
+      "Id": 95001400,
+      "Zh": "\u767E\u822C\u6B66\u827A",
+      "En": "Master of Arms",
+      "ZhInfo": "\u4F60\u7684\u6218\u6280\u4E0D\u6D88\u8017\u4E13\u6CE8\u503C\u3002\u6BCF\u6B21\u65BD\u653E\u6218\u6280\u540E\uFF0C\u91CD\u94F8\u8BE5\u6B66\u5668\u7684\u6218\u6280",
+      "EnInfo": "Your skills cost no FP. After using a skill, reforge that weapon\u0027s skill.",
+      "LargeIcon": 21295,
+      "SmallIcon": 22295
+    },
+    {
+      "Id": 95001500,
+      "Zh": "\u5435\u95F9\u9B3C",
+      "En": "Noisy Ghost",
+      "ZhInfo": "\u6807\u8BB0\u81EA\u5DF1\u4F4D\u7F6E\u65F6\uFF0C\u5F62\u6210\u7194\u5CA9\uFF0C\u671F\u95F4\u4F60\u6BCF\u6B21\u6807\u8BB0\u81EA\u5DF1\u90FD\u4F1A\u4E3A\u8FD9\u9897\u7194\u5CA9\u63D0\u5347\u4F24\u5BB3",
+      "EnInfo": "Mark your own position to form lava. Mark yourself again before it erupts to empower that lava",
+      "LargeIcon": 21229,
+      "SmallIcon": 22229
+    },
+    {
+      "Id": 95001600,
+      "Zh": "\u5237\u602A\u7B3C",
+      "En": "Monster Cage",
+      "ZhInfo": "\u4F60\u65E0\u9700\u94A5\u5319\u5C31\u80FD\u6253\u5F00\u76D1\u7262\uFF0C\u4E14\u91CA\u653E\u7684\u654C\u4EBA\u66F4\u52A0\u591A\u6837\u3002\u653B\u7565\u76D1\u7262\u540E\uFF0C\u4E0D\u4F1A\u751F\u6210\u8D50\u798F\uFF0C\u4F46\u4F60\u53EF\u4EE5\u91CD\u590D\u6253\u5F00\u540C\u4E00\u4E2A\u76D1\u7262",
+      "EnInfo": "Open evergaols without keys and release a wider variety of enemies. Defeating them creates no Site of Grace, but lets you reopen the same evergaol",
+      "LargeIcon": 21267,
+      "SmallIcon": 22267
+    },
+    {
+      "Id": 95001700,
+      "Zh": "\u6C14\u7403",
+      "En": "Balloon",
+      "ZhInfo": "\u8840\u91CF\u4E0A\u9650\u63D0\u534750%\u3002\u51CF\u4F24\u7387\u964D\u4F4E30%\u3002\u7A81\u523A\u6297\u6027\u964D\u4F4E100%\u3002\u9635\u4EA1\u6216\u6FD2\u6B7B\u65F6\u7206\u70B8\uFF0C\u5BF9\u9644\u8FD1\u654C\u4EBA\u9020\u6210\u7B49\u540C\u4E8E\u4F60\u8840\u91CF\u4E0A\u9650\u7684\u4F24\u5BB3",
+      "EnInfo": "Maximum HP \u002B50%. Take 30% more damage and twice as much piercing damage. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies.",
+      "LargeIcon": 21208,
+      "SmallIcon": 22208
+    },
+    {
+      "Id": 95001800,
+      "Zh": "\u5F3A\u5316\u3010\u6B7B\u7075\u672F\u3011",
+      "En": "Enhanced Necromancy",
+      "ZhInfo": "\u50A8\u5B58\u4E00\u4E2A\u6700\u8FD1\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\uFF0C\u77ED\u65F6\u95F4\u5185\u4E3A\u4F60\u4F5C\u6218",
+      "EnInfo": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+      "LargeIcon": 21267,
+      "SmallIcon": 22267
+    },
+    {
+      "Id": 95002000,
+      "Zh": "\u522B\u505C\u6B62\u548F\u5531",
+      "En": "Keep Chanting",
+      "ZhInfo": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D15\u70B9\u7CBE\u529B\u503C",
+      "EnInfo": "Restore 15 stamina per second while charging a sorcery or incantation.",
+      "LargeIcon": 21222,
+      "SmallIcon": 22222
+    }
+  ],
+  "activeChoices": 4896,
+  "legacyRewardGroups": 5814,
+  "retired": 95001900,
+  "spiritDamageMultiplier": 0.25,
+  "chantStaminaPerSecond": 15,
+  "inputSha256": "7B7D62656F403C6564BB9C9AEDD3A26E0E913091A9A2DD213E637C4884820789",
+  "outputSha256": "65DC3A1B9B0860903EFD074D3BDC864A16A02D4BE9235DA942D7BB076A2D460E",
+  "changedFields": [
+    {
+      "Table": "SpEffectParam",
+      "Id": 95001801,
+      "Field": "physicsAttackRate"
+    },
+    {
+      "Table": "SpEffectParam",
+      "Id": 95001801,
+      "Field": "magicAttackRate"
+    },
+    {
+      "Table": "SpEffectParam",
+      "Id": 95001801,
+      "Field": "fireAttackRate"
+    },
+    {
+      "Table": "SpEffectParam",
+      "Id": 95001801,
+      "Field": "thunderAttackRate"
+    },
+    {
+      "Table": "SpEffectParam",
+      "Id": 95001801,
+      "Field": "darkAttackRate"
+    },
+    {
+      "Table": "SpEffectParam",
+      "Id": 95001900,
+      "Field": "iconId"
+    },
+    {
+      "Table": "SpEffectParam",
+      "Id": 95001900,
+      "Field": "spEffectTextId_1"
+    },
+    {
+      "Table": "AttachEffectParam",
+      "Id": 95001900,
+      "Field": "attachTextId"
+    },
+    {
+      "Table": "AttachEffectParam",
+      "Id": 95001900,
+      "Field": "statusIconId"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240802,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240822,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240842,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240862,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240882,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240902,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240922,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240942,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240962,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95240982,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241002,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241022,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241042,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241062,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241082,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241102,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241121,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241131,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241141,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241151,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241161,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241171,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241181,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241191,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241201,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241211,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241221,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241231,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241241,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241251,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241261,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241271,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241281,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241452,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241462,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241482,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241502,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241522,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241542,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241562,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241582,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241602,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241622,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241642,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241662,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241682,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241702,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241722,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241742,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241762,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241781,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241791,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241801,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241811,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241821,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241831,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241841,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241851,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241861,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241871,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241881,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241891,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241901,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241911,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241921,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241931,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95241941,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242112,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242122,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242142,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242162,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242182,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242202,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242222,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242242,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242262,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242282,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242302,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242322,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242342,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242362,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242382,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242402,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242422,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242441,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242451,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242461,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242471,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242481,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242491,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242501,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242511,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242521,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242531,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242541,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242551,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242561,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242571,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242581,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242591,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242601,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242772,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242782,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242802,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242822,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242842,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242862,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242882,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242902,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242922,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242942,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242962,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95242982,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243002,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243022,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243042,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243062,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243082,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243101,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243111,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243121,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243131,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243141,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243151,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243161,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243171,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243181,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243191,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243201,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243211,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243221,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243231,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243241,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243251,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243261,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243432,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243442,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243462,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243482,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243502,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243522,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243542,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243562,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243582,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243602,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243622,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243642,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243662,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243682,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243702,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243722,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243742,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243761,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243771,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243781,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243791,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243801,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243811,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243821,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243831,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243841,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243851,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243861,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243871,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243881,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243891,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243901,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243911,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95243921,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244092,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244102,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244122,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244142,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244162,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244182,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244202,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244222,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244242,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244262,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244282,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244302,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244322,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244342,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244362,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244382,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244402,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244421,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244431,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244441,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244451,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244461,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244471,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244481,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244491,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244501,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244511,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244521,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244531,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244541,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244551,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244561,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244571,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244581,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244752,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244762,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244782,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244802,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244822,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244842,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244862,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244882,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244902,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244922,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244942,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244962,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95244982,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245002,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245022,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245042,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245062,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245081,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245091,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245101,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245111,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245121,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245131,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245141,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245151,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245161,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245171,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245181,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245191,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245201,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245211,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245221,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245231,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245241,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245412,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245422,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245442,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245462,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245482,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245502,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245522,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245542,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245562,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245582,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245602,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245622,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245642,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245662,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245682,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245702,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245722,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245741,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245751,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245761,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245771,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245781,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245791,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245801,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245811,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245821,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245831,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245841,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245851,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245861,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245871,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245881,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245891,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95245901,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246072,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246082,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246102,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246122,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246142,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246162,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246182,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246202,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246222,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246242,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246262,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246282,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246302,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246322,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246342,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246362,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246382,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246401,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246411,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246421,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246431,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246441,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246451,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246461,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246471,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246481,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246491,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246501,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246511,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246521,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246531,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246541,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246551,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246561,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246732,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246742,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246762,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246782,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246802,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246822,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246842,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246862,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246882,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246902,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246922,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246942,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246962,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95246982,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247002,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247022,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247042,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247061,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247071,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247081,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247091,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247101,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247111,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247121,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247131,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247141,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247151,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247161,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247171,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247181,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247191,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247201,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247211,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247221,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247392,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247402,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247422,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247442,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247462,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247482,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247502,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247522,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247542,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247562,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247582,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247602,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247622,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247642,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247662,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247682,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247702,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247721,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247731,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247741,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247751,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247761,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247771,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247781,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247791,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247801,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247811,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247821,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247831,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247841,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247851,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247861,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247871,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95247881,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248052,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248062,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248082,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248102,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248122,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248142,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248162,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248182,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248202,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248222,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248242,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248262,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248282,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248302,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248322,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248342,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248362,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248381,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248391,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248401,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248411,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248421,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248431,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248441,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248451,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248461,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248471,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248481,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248491,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248501,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248511,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248521,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248531,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248541,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248712,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248722,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248742,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248762,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248782,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248802,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248822,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248842,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248862,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248882,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248902,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248922,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248942,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248962,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95248982,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249002,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249022,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249041,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249051,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249061,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249071,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249081,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249091,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249101,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249111,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249121,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249131,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249141,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249151,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249161,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249171,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249181,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249191,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249201,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249372,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249382,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249402,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249422,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249442,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249462,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249482,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249502,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249522,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249542,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249562,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249582,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249602,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249622,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249642,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249662,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249682,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249701,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249711,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249721,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249731,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249741,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249751,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249761,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249771,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249781,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249791,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249801,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249811,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249821,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249831,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249841,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249851,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95249861,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250032,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250042,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250062,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250082,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250102,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250122,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250142,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250162,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250182,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250202,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250222,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250242,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250262,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250282,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250302,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250322,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250342,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250361,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250371,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250381,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250391,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250401,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250411,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250421,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250431,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250441,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250451,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250461,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250471,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250481,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250491,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250501,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250511,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250521,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250692,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250702,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250722,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250742,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250762,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250782,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250802,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250822,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250842,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250862,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250882,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250902,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250922,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250942,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250962,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95250982,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251002,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251021,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251031,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251041,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251051,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251061,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251071,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251081,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251091,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251101,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251111,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251121,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251131,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251141,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251151,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251161,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251171,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251181,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251352,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251362,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251382,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251402,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251422,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251442,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251462,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251482,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251502,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251522,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251542,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251562,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251582,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251602,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251622,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251642,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251662,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251681,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251691,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251701,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251711,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251721,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251731,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251741,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251751,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251761,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251771,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251781,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251791,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251801,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251811,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251821,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251831,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95251841,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252012,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252020,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252030,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252040,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252050,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252060,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252070,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252080,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252090,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252100,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252110,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252120,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252130,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252140,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252150,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252160,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252170,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252180,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252190,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252200,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252210,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252220,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252230,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252240,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252250,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252260,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252270,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252280,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252290,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252300,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252310,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252320,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252330,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252340,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252350,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252360,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252370,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252380,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252390,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252400,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252410,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252420,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252430,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252440,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252450,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252460,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252470,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252480,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252490,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252500,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252510,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252520,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252530,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252540,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252550,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252560,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252570,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252580,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252590,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252600,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252610,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252620,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252630,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252640,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252650,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252660,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252670,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252680,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252690,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252700,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252710,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252720,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252730,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252740,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252750,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252760,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252770,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252780,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252790,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252800,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252810,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252820,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252830,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252840,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252850,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252860,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252870,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252880,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252890,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252900,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252910,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252920,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252930,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252940,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252950,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252960,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252970,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252980,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95252990,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253000,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253010,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253020,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253030,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253040,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253050,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253060,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253070,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253080,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253090,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253100,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253110,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253120,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253130,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253140,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253150,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253160,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253170,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253180,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253190,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253200,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253210,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253220,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253230,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253240,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253250,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253260,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253270,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253280,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253290,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253300,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253310,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253320,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253330,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253340,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253350,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253360,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253370,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253380,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253390,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253400,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253410,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253420,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253430,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253440,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253450,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253460,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253470,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253480,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253490,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253500,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253510,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253520,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253530,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253540,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253550,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253560,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253570,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253580,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253590,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253600,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253610,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253620,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253630,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253640,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253650,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253660,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253670,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253680,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253690,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253700,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253710,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253720,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253730,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253740,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253750,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253760,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253770,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253780,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253790,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253800,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253810,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253820,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253830,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253840,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253850,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253860,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253870,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253880,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253890,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253900,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253910,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253920,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253930,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253940,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253950,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253960,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253970,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253980,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95253990,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254000,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254010,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254020,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254030,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254040,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254050,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254060,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254070,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254080,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254090,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254100,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254110,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254120,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254130,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254140,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254150,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254160,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254170,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254180,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254190,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254200,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254210,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254220,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254230,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254240,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254250,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254260,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254270,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254280,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254290,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254300,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254310,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254320,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254330,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254340,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254350,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254360,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254370,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254380,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254390,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254400,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254410,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254420,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254430,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254440,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254450,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254460,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254470,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254480,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254490,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254500,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254510,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254520,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254530,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254540,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254550,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254560,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254570,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254580,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254590,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254600,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254610,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254620,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254630,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254640,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254650,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254660,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254670,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254680,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254690,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254700,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254710,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254720,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254730,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254740,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254750,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254760,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254770,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254780,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254790,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254800,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254810,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254820,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254830,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254840,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254850,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254860,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254870,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254880,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254890,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254900,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254910,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254920,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254930,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254940,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254950,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254960,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254970,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254980,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95254990,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255000,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255010,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255020,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255030,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255040,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255050,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255060,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255070,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255242,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255412,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255582,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255752,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95255922,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95256092,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95256262,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95256432,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95256602,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95256772,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95256942,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257112,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257282,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257452,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257622,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257792,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257962,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257971,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257981,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95257991,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258001,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258011,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258021,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258031,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258041,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258051,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258061,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258071,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258081,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258091,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258101,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258111,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258121,
+      "Field": "lotItemId01"
+    },
+    {
+      "Table": "ItemLotParam_enemy",
+      "Id": 95258131,
+      "Field": "lotItemId01"
+    }
+  ],
+  "allLegacyRewardsExcludeRetired": true,
+  "otherTablesAndFieldsUnchanged": true,
+  "gameplayVerified": false
+}

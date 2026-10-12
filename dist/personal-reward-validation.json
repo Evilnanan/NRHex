@@ -1,0 +1,282 @@
+{
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "gameVersion": null,
+  "existingSpawnLoopsPartySlots": true,
+  "slotCount": 3,
+  "personalVisibilityAndPickupGuardConfirmed": true,
+  "descriptorVisibleBit": "descriptor+0xAA bit6",
+  "descriptorOwner": "descriptor+0xAA bits7..8",
+  "descriptorNetworkFlag": "descriptor+0x58 bit4",
+  "nativeVisibilityMatrix": [
+    {
+      "viewer": 1,
+      "owner": 0,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 1,
+      "owner": 0,
+      "enabled": true,
+      "visibleAndPickupEligible": true
+    },
+    {
+      "viewer": 1,
+      "owner": 1,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 1,
+      "owner": 1,
+      "enabled": true,
+      "visibleAndPickupEligible": true
+    },
+    {
+      "viewer": 1,
+      "owner": 2,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 1,
+      "owner": 2,
+      "enabled": true,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 1,
+      "owner": 3,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 1,
+      "owner": 3,
+      "enabled": true,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 2,
+      "owner": 0,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 2,
+      "owner": 0,
+      "enabled": true,
+      "visibleAndPickupEligible": true
+    },
+    {
+      "viewer": 2,
+      "owner": 1,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 2,
+      "owner": 1,
+      "enabled": true,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 2,
+      "owner": 2,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 2,
+      "owner": 2,
+      "enabled": true,
+      "visibleAndPickupEligible": true
+    },
+    {
+      "viewer": 2,
+      "owner": 3,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 2,
+      "owner": 3,
+      "enabled": true,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 3,
+      "owner": 0,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 3,
+      "owner": 0,
+      "enabled": true,
+      "visibleAndPickupEligible": true
+    },
+    {
+      "viewer": 3,
+      "owner": 1,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 3,
+      "owner": 1,
+      "enabled": true,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 3,
+      "owner": 2,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 3,
+      "owner": 2,
+      "enabled": true,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 3,
+      "owner": 3,
+      "enabled": false,
+      "visibleAndPickupEligible": false
+    },
+    {
+      "viewer": 3,
+      "owner": 3,
+      "enabled": true,
+      "visibleAndPickupEligible": true
+    }
+  ],
+  "nativeNonNetworkDispatchExecutedInIsolation": true,
+  "networkCallsNotReachedOnLocalBranch": true,
+  "localPickupAndRemovalBranchesStaticallyConfirmed": true,
+  "actualGameStateChanged": false,
+  "gameplayOrMultiplayerVerified": false,
+  "implementationCandidate": "Filter only the local slot during our custom spawn; clear only its descriptor network bit; keep native lottery, owner, visuals and pickup.",
+  "evidence": {
+    "partyLoop": [
+      "00576A6F xor al, al",
+      "00576A71 mov byte ptr [rsp + 0x31], al",
+      "00576A75 mov rbx, qword ptr [rbx + 8]",
+      "00576A79 call 0x1401fe4f0",
+      "00576A7E mov ecx, 3",
+      "00576A83 mov edx, 1",
+      "00576A88 cmp al, dl",
+      "00576A8A cmove ecx, edx",
+      "00576A8D mov dword ptr [rsp + 0x50], ecx",
+      "00576A91 mov r14d, edx",
+      "00576A94 mov dword ptr [rsp + 0x4c], edx",
+      "00576A98 nop dword ptr [rax + rax]",
+      "00576AA0 mov dil, 1",
+      "00576AA3 mov ecx, r14d",
+      "00576AA6 call 0x1401fe7b0",
+      "00576AAB test rax, rax",
+      "00576AAE je 0x140576ab7",
+      "00576AB0 movzx edi, byte ptr [rax + 0xc7]",
+      "00576AB7 mov rcx, qword ptr [rip + 0x36985ea]"
+    ],
+    "ownerBits": [
+      "00576B90 movzx r12d, byte ptr [rbp + 0x120]",
+      "00576B98 shl r12w, 6",
+      "00576B9D and r14w, 3",
+      "00576BA2 movzx eax, r14w",
+      "00576BA6 shl ax, 7",
+      "00576BAA mov word ptr [rsp + 0x40], ax",
+      "00576BAF shl r14w, 9"
+    ],
+    "visibility": [
+      "00572CB3 movzx edx, word ptr [rbx + 0xaa]",
+      "00572CBA mov eax, 0x180",
+      "00572CBF test ax, dx",
+      "00572CC2 jbe 0x140572ceb",
+      "00572CC4 mov rax, qword ptr [rip + 0x3694c05]",
+      "00572CCB mov rcx, qword ptr [rax + 8]",
+      "00572CCF test rcx, rcx",
+      "00572CD2 je 0x140572cf8",
+      "00572CD4 mov eax, dword ptr [rcx + 8]",
+      "00572CD7 mov ecx, 1",
+      "00572CDC cmp eax, ecx",
+      "00572CDE cmovg ecx, eax",
+      "00572CE1 shr edx, 7",
+      "00572CE4 and edx, 3",
+      "00572CE7 cmp edx, ecx",
+      "00572CE9 jne 0x140572cf8",
+      "00572CEB mov al, 1",
+      "00572CED mov rbx, qword ptr [rsp + 0x30]",
+      "00572CF2 add rsp, 0x20",
+      "00572CF6 pop rdi",
+      "00572CF7 ret ",
+      "00572CF8 mov rbx, qword ptr [rsp + 0x30]",
+      "00572CFD xor al, al",
+      "00572CFF add rsp, 0x20",
+      "00572D03 pop rdi"
+    ],
+    "dispatch": [
+      "005759E0 mov qword ptr [rsp + 8], rbx",
+      "005759E5 push rdi",
+      "005759E6 sub rsp, 0x20",
+      "005759EA mov rdi, rdx",
+      "005759ED mov rbx, rcx",
+      "005759F0 lea rcx, [rdx + 0x58]",
+      "005759F4 call 0x1406a1ba0",
+      "005759F9 test al, al",
+      "005759FB je 0x140575b2e"
+    ],
+    "localDispatchTail": [
+      "00575B2E mov rdx, rdi",
+      "00575B31 mov rcx, rbx",
+      "00575B34 call 0x14057d0a0",
+      "00575B39 mov rbx, qword ptr [rsp + 0x30]",
+      "00575B3E add rsp, 0x20",
+      "00575B42 pop rdi",
+      "00575B43 ret "
+    ],
+    "pickupOwnerGuard": [
+      "005754CE call 0x140582680",
+      "005754D3 test rax, rax",
+      "005754D6 je 0x1405757d8",
+      "005754DC lea rdi, [rax + 0x20]",
+      "005754E0 mov rcx, rdi",
+      "005754E3 call 0x140572c10",
+      "005754E8 test al, al",
+      "005754EA je 0x1405757d8"
+    ],
+    "pickupNetworkBranch": [
+      "005755F4 lea rcx, [rdi + 0x58]",
+      "005755F8 call 0x1406a1ba0",
+      "005755FD test al, al",
+      "005755FF je 0x1405757a3"
+    ],
+    "localPickup": [
+      "005757A3 lea rax, [rdi + 0x78]",
+      "005757A7 lea r9, [rdi + 0x74]",
+      "005757AB lea r8, [rdi + 0xac]",
+      "005757B2 mov dword ptr [rsp + 0x30], esi",
+      "005757B6 mov byte ptr [rsp + 0x28], 0",
+      "005757BB mov qword ptr [rsp + 0x20], rax",
+      "005757C0 mov rdx, rdi",
+      "005757C3 mov rcx, r15",
+      "005757C6 call 0x14057ca60",
+      "005757CB mov r8b, 1",
+      "005757CE mov edx, ebx",
+      "005757D0 mov rcx, r15",
+      "005757D3 call 0x14057d400"
+    ],
+    "localRemoval": [
+      "005759BE mov rdx, rsi",
+      "005759C1 mov rcx, rdi",
+      "005759C4 call 0x14057cf30",
+      "005759C9 mov rbx, qword ptr [rsp + 0x30]",
+      "005759CE mov rsi, qword ptr [rsp + 0x48]",
+      "005759D3 add rsp, 0x20",
+      "005759D7 pop rdi",
+      "005759D8 ret "
+    ]
+  }
+}

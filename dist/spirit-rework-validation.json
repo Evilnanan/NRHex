@@ -1,0 +1,29 @@
+{
+  "version": "0.17.43",
+  "rustTestsPassed": 198,
+  "signatureChecksPassed": 88,
+  "mechanics": {
+    "trigger": "Ultimate Art",
+    "nativeDrainMaxHpFractionPerSecond": 0.016666666666666666,
+    "damageMultiplier": 0.1,
+    "forcedExpiry": false,
+    "captureSfx": 461351,
+    "summonSfx": 460801,
+    "placementHelpers": [
+      "3886A0",
+      "385410"
+    ],
+    "nativeSlotSelector": "3922C0",
+    "failedPlacementPreservesSoul": true
+  },
+  "files": {
+    "natives/NRHex.dll": "A2B8F71FF1ECB17CD2F92A93BFDB8AFD2753EF6C18AD75F97899C2D8B5A02577",
+    "mod/regulation.bin": "1DE5270C839B9B104CFB7944BDC0146906CBB37E77092DDB7B9FA22A96BAB5A5",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "B59FB16D4454078458946A8E60DE4BFA1ADB2B3B1A890E496F37B9C7E9BD9245",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "900D88AF0B41851EAF0B8B1CF54D8B864677A5A0FDC23EA7C1CAF987AEA38C70"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameLaunched": false,
+  "limitations": "Placement ABI tested with controlled geometry callbacks; full geometry, visible cues and damage need in-game testing. Native HP loss obeys native healing/immunity rules."
+}

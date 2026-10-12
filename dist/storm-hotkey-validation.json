@@ -1,0 +1,11 @@
+{
+  "version": "0.17.59",
+  "removed": true,
+  "removedKey": "Ctrl+F10",
+  "removedSetting": "StormTestVirtualKey",
+  "normalRandomReforgeRestored": true,
+  "focusedCodeTestsPassed": 21,
+  "buildPassed": true,
+  "resourceBytesUnchanged": true,
+  "gameplayVerified": false
+}

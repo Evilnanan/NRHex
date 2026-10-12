@@ -1,0 +1,1516 @@
+{
+  "fogSfx": 690031,
+  "nativeDummy": 960,
+  "towerFogDefault": 690047,
+  "towerFogDancer": 690046,
+  "towerDummy": 900,
+  "towerWaitSeconds": 4,
+  "idleResets": [
+    {
+      "npc": 71000010,
+      "model": "c7100",
+      "animation": 0
+    }
+  ],
+  "nativeOverrides": [
+    {
+      "npc": 25001020,
+      "model": "c2500",
+      "animation": 20025,
+      "loop": true,
+      "cancelled": true,
+      "map": "m46_70_00_00",
+      "entity": 46700840,
+      "eventId": 90045001
+    }
+  ],
+  "models": [
+    {
+      "model": "c2100",
+      "sourceSha256": "42f7d5caca02b0ec305bca6212ac46e048068df6e2636c660b760a42998dff0d",
+      "modelSourceSha256": "463618adf31cc844b988ae44acd7a20e6b7c688392a15b87cafbeb1102a08480",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c2130",
+      "sourceSha256": "708d410609298d980ae7a9f63d92c5ab8deeda5a12257ab00661181c242d238e",
+      "modelSourceSha256": "01243907bf12f21fc247c64a7ac70bdb54e3020e4d86f800a2f7cc986605dea0",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 1,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 1,
+              "EndTime": 1.2333333,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 1,
+              "EndTime": 4,
+              "hex": "007B090084030000FFFFFFFF0001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 0.8333333,
+              "hex": "007B0900D30000000D0000000100010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 1,
+              "EndTime": 3.2666667,
+              "hex": "F77A09004A0100000D0000000001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 2.7666667,
+              "EndTime": 3.4333334,
+              "hex": "FC7A09004A010000FFFFFFFF0001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 1.7,
+              "EndTime": 1.9333333,
+              "hex": "047B090023000000FFFFFFFF0001010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.6666667,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.6666667,
+              "EndTime": 3,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 8.233334,
+              "hex": "7A870A0089030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c2140",
+      "sourceSha256": "8ca7a6a817207f61761f7e2e8abcf9576e769c2095004f8d1635f047b556bbd4",
+      "modelSourceSha256": "0efe3637f010068b0219358e97d3869a8e537ddfc25bef9d23df9979a78e415e",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "6F870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 0.96666664,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.96666664,
+              "EndTime": 1.3333334,
+              "hex": "9A99193F0000803F0100000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7A870A0089030000010000000101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": true,
+      "towerWalk": true
+    },
+    {
+      "model": "c2500",
+      "sourceSha256": "01bce32df1c054ad237a80d672b1023d6700b5cefb370d258f47b3be3ca1f50a",
+      "modelSourceSha256": "1f2beccae5a7e353b4953290babded9ccc9e4fce65cc787fc49da558f65ae221",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 0.96666664,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.96666664,
+              "EndTime": 1.3333334,
+              "hex": "9A99193F0000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "6F870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7A870A0089030000010000000101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            }
+          ]
+        },
+        {
+          "id": 1020026,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 5.133333,
+              "EndTime": 5.633333,
+              "hex": "CD4903000C000000FFFFFFFF0001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 7.7,
+              "EndTime": 8.2,
+              "hex": "90D00300CC000000FFFFFFFF0001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 5.133333,
+              "EndTime": 5.633333,
+              "hex": "85D203000C000000FFFFFFFF0001010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": true,
+      "towerWalk": true
+    },
+    {
+      "model": "c3100",
+      "sourceSha256": "5338033189363c9c0cf76e4e6b42fbb7a17316c0dff2f6d77759f98910651e81",
+      "modelSourceSha256": "99e303d170c7d886b7dfb8fb020254b3ca096b95f349e95de7df6a5192fb55f3",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.76666665,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.76666665,
+              "EndTime": 1.4333333,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 1.4333333,
+              "EndTime": 1.7333333,
+              "hex": "9A99193F0000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "6F870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7A870A0089030000010000000101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": true,
+      "towerWalk": true
+    },
+    {
+      "model": "c3181",
+      "sourceSha256": "1ad06051097f70c5c029621105cfa896b1ad22c3771a17a8d256ed9600418990",
+      "modelSourceSha256": "9fa0656396f71fb04046a103d77f7ad694266dfb41bfb03f857a9ce96217dfa7",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c3250",
+      "sourceSha256": "8b1081837fab26753c67d4e8ce50e7ea44ef1b26635814b75f8d20e885a2ad1e",
+      "modelSourceSha256": "78fe7318cefe64219f85d4d18e97176501b539cf712e3bef277e49579d679389",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.7,
+              "hex": "7A870A0089030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c3251",
+      "sourceSha256": "a58082fb65bbc6382b079ddc4c624fed4592da861fa8b43edd9882df68aa0e41",
+      "modelSourceSha256": "4e830fc220fc468f0a46651dc385cfeb33d58c424fbde329fcc0dd7862821df5",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 1.2333333,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.7,
+              "hex": "7A870A0089030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c3252",
+      "sourceSha256": "b07b842a380ffc0bc41a68d929d44bf389fb12d18ddadd89ff3f9e2be1f78362",
+      "modelSourceSha256": "e5ccbea02fa7b40b1c167a373d87e39476bd86197bf46121c54d69baf2ae2dc9",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c3400",
+      "sourceSha256": "e47a912859c690a8863fd3090b214cae8d80184775884c045cdea098d48db918",
+      "modelSourceSha256": "c9743a5811a3cb05d2de493b1e90eb965fe06c931dca0409d6e44ef725eef027",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "79870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 1020025,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "6F870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 0.96666664,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.96666664,
+              "EndTime": 1.3333334,
+              "hex": "9A99193F0000803F0100000000000000"
+            }
+          ]
+        },
+        {
+          "id": 1020026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "79870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": true,
+      "towerWalk": true
+    },
+    {
+      "model": "c3460",
+      "sourceSha256": "8af960755ace953da15e26656846c88fb042839222b495d6dc09a2c40011ac41",
+      "modelSourceSha256": "77967ac16e40b88e0557e120359154abe605119cabdbb9c97454e193a63c52d0",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "79870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c3560",
+      "sourceSha256": "181a21bb8c6242621db3d979fcaf87bcef62bb7241004f5dfc71c1d99eb3711a",
+      "modelSourceSha256": "d49fe069e0e2e8552446c6a342b79146a69ec1a493deb7b63f0b694022cd8d9e",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.76666665,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.76666665,
+              "EndTime": 1.4333333,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 1.4333333,
+              "EndTime": 1.7333333,
+              "hex": "9A99193F0000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "6F870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "79870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": true,
+      "towerWalk": true
+    },
+    {
+      "model": "c3570",
+      "sourceSha256": "64fd7c8d64a355799fa8b488097d1f81809a039a88c9a5b1732dc37f7b3697b8",
+      "modelSourceSha256": "e9861be9f0c8918853f87455ad6a4e1c4761b364a1d01e21ab492f64ba7a4958",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "70870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 0.96666664,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.96666664,
+              "EndTime": 1.3333334,
+              "hex": "9A99193F0000803F0100000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7A870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4021",
+      "sourceSha256": "e4bea7cf763c9ce96ed07f94a709457c4bc7b95248f2a8bc0f5c52cc4d406e81",
+      "modelSourceSha256": "603a814f4255d432e761a6819fde12a4665e67939ebeef588fde6d59b66945e2",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c4130",
+      "sourceSha256": "d0b519e62a0fcdc291a10affdb1e9a7503c9e3ee90ef30dbf153a5fe6568a603",
+      "modelSourceSha256": "74af356c68297168774f3fdef67d7244059fefd20e82731419ca3d4e54eded54",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 2,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 2.3666666,
+              "hex": "7A870A0089030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4270",
+      "sourceSha256": "f7e6700a19a2edb73bd480ad306d0570e494e2a9d028e26bc97e8dd6ff22114e",
+      "modelSourceSha256": "c34bdf4f5fbf96a0e75d513fbb949af3205c7354f309f8157c10dd71adbfdc09",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7A870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4290",
+      "sourceSha256": "ff1715c404788a3ecaa6022bd707663d9b2766e6af69f01f485001f51f5eaf0a",
+      "modelSourceSha256": "b58775206e0634ef99e659eee0cc19273b15cbd75f167f18d055545fa8220084",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 0.96666664,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.96666664,
+              "EndTime": 1.3333334,
+              "hex": "9A99193F0000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "6F870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": true,
+      "towerWalk": false
+    },
+    {
+      "model": "c4480",
+      "sourceSha256": "3421c5cff00d4d575673dc3673caf227377fa0ff82ff9e2563698ae0ca6c2c29",
+      "modelSourceSha256": "08abb0459e3ceb6aae34f2961065e38103ce0017fb803f1865d2ae1b6adf76d5",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c4500",
+      "sourceSha256": "2b64f93df498372cb0f39ae5b9c75d18c675c9771dfa29e5689fcd473266f921",
+      "modelSourceSha256": "aa0c0a5a97aea90e8c4c88e3bdb92b6d1845db2d4b6b8c8383cc5d90ccb1f75b",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": []
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.8333333,
+              "hex": "000000000000000001000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.8333333,
+              "EndTime": 2.5333333,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0.5,
+              "EndTime": 2.5,
+              "hex": "66770900C0030000FFFFFFFF0001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0.5,
+              "EndTime": 2.5,
+              "hex": "68770900DC000000FFFFFFFF0001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 1,
+              "EndTime": 3.8666666,
+              "hex": "88D709000A000000FFFFFFFF0001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 6.4,
+              "EndTime": 7.4,
+              "hex": "88D709000A000000FFFFFFFF0001010000000000000000000000000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 3.8666666,
+              "EndTime": 6.4,
+              "hex": "89D709000A000000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 2020026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7B870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4510",
+      "sourceSha256": "18b2e698139bb846c065e2956c53a0674eb2474254c9693ff96f994e435c513c",
+      "modelSourceSha256": "984641695e489cb449ce0f3a3cbeb4a750afd342cf41e81411de9895fe416e1f",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.5,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.5,
+              "EndTime": 0.96666664,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.96666664,
+              "EndTime": 1.3333334,
+              "hex": "9A99193F0000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "71870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7C870A0089030000010000000101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.6666667,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.6666667,
+              "EndTime": 1.6666666,
+              "hex": "000000000000803F0100000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4640",
+      "sourceSha256": "7a1dfe41a5c2f163fde20553c1adbd200d8177295e19e8d11f9936e4ee4d1def",
+      "modelSourceSha256": "cca790a3eed3240f00447a33ea58c90adefd654195f594812674e2588e930aa8",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.46666667,
+              "hex": "000000000000000001000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.46666667,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7C870A0005000000010000000101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.1,
+              "EndTime": 0.2,
+              "hex": "000000000000803F0100000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4650",
+      "sourceSha256": "b16baf86bf85e4381a8bcfe4005fe8b60730d0c5cdbf61825559b12e20fd147b",
+      "modelSourceSha256": "f0a0ce1106e5aecf586c2e4d58e45e7fec449ad549052215c0084dc562dc577d",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.6333333,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.6333333,
+              "EndTime": 1.4,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 1.4,
+              "EndTime": 1.7666667,
+              "hex": "9A99193F0000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "71870A00C1030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.6666667,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.6666667,
+              "EndTime": 1.6666666,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7C870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4670",
+      "sourceSha256": "f8208caaee90b880c4c3dc8c7c6d8966af6d78fa015c24994da2ce27241a12ad",
+      "modelSourceSha256": "5b43c9bcdc381e8d91804df75a646f37104be1a7859a3cc50ab3901466d7c845",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c4680",
+      "sourceSha256": "6574457f3ccb8af5bb6d7a0c6de02de816e08fd4cde7343be2abe7f3ddb80a78",
+      "modelSourceSha256": "6d3724b518a0f03e863ba025c50eed74e6cfa0d6a19c61414eb64a510b646cbd",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7B870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4690",
+      "sourceSha256": "c95c47a4bc33ef6a838387a003a27c01976ce1db3ac59b94472955def3a9bf5b",
+      "modelSourceSha256": "c3937a2dfc906990f6bbf027ec094e3e98107440422b5cb6c0baab1aa2a67e23",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c4750",
+      "sourceSha256": "591c69faaeda7c4f090f109245c06b0878e7efcffc10cafaf339dde200b9e4bc",
+      "modelSourceSha256": "4dd7711401677141eb313dbc10ac1fe974aff0c1557fb5495f5d801bcb8e3882",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7A870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4770",
+      "sourceSha256": "494a08712639d87ba49caf65febee1280c3914fe1b80dafc8a4a0f93d76826b7",
+      "modelSourceSha256": "c685914784cee5de69183a0f8af2559382c0487e1704ef3653f1465dbaa522e1",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 1.7666667,
+              "EndTime": 2.7333333,
+              "hex": "67870A0032000000FFFFFFFF0001010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7B870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 1020025,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 1.7666667,
+              "EndTime": 2.7333333,
+              "hex": "67870A0032000000FFFFFFFF0001010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 1020026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7B870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4810",
+      "sourceSha256": "bbf21c24e01c52b0225297f8f3e28f1cb438cae87962db21e7b102cf155d9ad3",
+      "modelSourceSha256": "b1c4f18ca74dcb28ce3f59ac6f17121267b11f196d6b9afad6e95695aa32b06e",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7B870A0089030000010000000101010000000000000000000000000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4910",
+      "sourceSha256": "e2cae345651836610884b0407f211c0f3915e889d694db34fe2dfb14935ed983",
+      "modelSourceSha256": "5ea0be44ba5c4090b90947baad0e6d51ced89ba1008ddc0a4f3cf6d7bd287a7a",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7B870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c4911",
+      "sourceSha256": "4d9b8c62330ae900e42feb31b41fa1c6dfa9dcddbec854eb4a5fee6599596164",
+      "modelSourceSha256": "bf17187f0e181ee304fe548412edffb857100a9a987de4c8ade6f55d15c949c8",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c4980",
+      "sourceSha256": "6323a79ee2e3603c08f2592f816ebc2acd01f8d6472e5b3698c898a5f8b9d7bb",
+      "modelSourceSha256": "8117506f728b6e514cca05ac8d8d16105eed945762472ae506609b24a4fd4290",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20025,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.93333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.93333334,
+              "EndTime": 1.6666666,
+              "hex": "000000009A99193F0100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 1.6666666,
+              "EndTime": 2.0333333,
+              "hex": "9A99193F0000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "70870A00C0030000FFFFFFFF0101010000000000000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7B870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c5011",
+      "sourceSha256": "c89d57c8e626578f4450ef6e60a93538e5ad19f9b8288602d903c4b98cea1c9e",
+      "modelSourceSha256": "6be1ea5c6a46bf2dc5ab3db02b97e28b9c46c25437fbc09eed20292c87570ff7",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c7100",
+      "sourceSha256": "0ecca7d7c6ae02a44fc91ab0c2aff53fb790e40207aa500c1e5b6b36ccead4db",
+      "modelSourceSha256": "7c9c5d8990fb8e69376a3baca4950647013a7eda5aa050b823a7f1dff89768b4",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 0,
+          "events": []
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": false
+    },
+    {
+      "model": "c7820",
+      "sourceSha256": "c722641294c31ef6c3352401d1ed8490e6dd6f5091ce5365501721137fc95ccd",
+      "modelSourceSha256": "4525ca7e69a1de1c0e3ade4c750625223a1768a4fbed9b96c6ea69900a952cd9",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.2333333,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.3333334,
+              "hex": "7A870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    },
+    {
+      "model": "c7920",
+      "sourceSha256": "e75ab67f394ae1e9baed08b2d6122752125e6280e694908150f4688a4aa7c94f",
+      "modelSourceSha256": "24167fec9705e2f40a0ba752f3a1dea790cdd83918494a639312a0e15108fb12",
+      "fogDummies": [
+        900,
+        905
+      ],
+      "animations": [
+        {
+          "id": 20026,
+          "events": [
+            {
+              "Type": 193,
+              "StartTime": 0,
+              "EndTime": 0.33333334,
+              "hex": "00000000000000000100000000000000"
+            },
+            {
+              "Type": 193,
+              "StartTime": 0.33333334,
+              "EndTime": 1.3333334,
+              "hex": "000000000000803F0100000000000000"
+            },
+            {
+              "Type": 96,
+              "StartTime": 0,
+              "EndTime": 1.9,
+              "hex": "7A870A0089030000010000000101010000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "nativeFog": false,
+      "towerWalk": true
+    }
+  ]
+}

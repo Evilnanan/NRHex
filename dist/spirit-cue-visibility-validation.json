@@ -1,0 +1,27 @@
+{
+  "version": "0.17.55",
+  "parameters": {
+    "version": "0.17.55",
+    "inputSha256": "F4C3EB0F6FA6648B0E5F101551E50212900ADFAFD2CE669FD5B5FE9234D47ED0",
+    "outputSha256": "E648BDC29084B16FB30F5E2138A32D5856238C0A24EC58E2A4FBFBF9C4BA4DA5",
+    "table": "SpEffectVfxParam",
+    "rowId": 95001803,
+    "field": "isVisibleDeadChr",
+    "before": 0,
+    "after": 1,
+    "effectId": 95001802,
+    "sfxId": 461351,
+    "dummyId": 220,
+    "durationSeconds": 1.5,
+    "unrelatedRowsAndFieldsPreserved": true,
+    "gameplayVerified": false
+  },
+  "buildPassed": true,
+  "parameterReadbackPassed": true,
+  "installedFiles": {
+    "natives/NRHex.dll": "52AC48E076DCA447D60CCA966B23293A137996B1478E49861A65ADDAC5E504B0",
+    "mod/regulation.bin": "E648BDC29084B16FB30F5E2138A32D5856238C0A24EC58E2A4FBFBF9C4BA4DA5"
+  },
+  "gameStarted": false,
+  "gameplayVerified": false
+}

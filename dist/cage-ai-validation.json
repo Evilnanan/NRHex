@@ -1,0 +1,2027 @@
+{
+  "installed": true,
+  "inputRegulationSha256": "784b5c25dc5afa4d4af32a73b782160966f2fd30852ff274c8408b8345fe870d",
+  "outputRegulationSha256": "5777c378087c370dfe51bf445aa2c01373f5a494deb0d5f75d10b9fb69ebf85f",
+  "limits": {
+    "eye_dist": 30,
+    "searchEye_dist": 20,
+    "ear_dist": 30,
+    "nose_dist": 0,
+    "BattleStartDist": 30,
+    "battleEye_updateDist": 30,
+    "backhomeDist": 40,
+    "maxBackhomeDist": 60,
+    "backhomeBattleDist": 20,
+    "SightTargetForgetTime": 8,
+    "MemoryTargetForgetTime": 5
+  },
+  "rows": [
+    {
+      "name": "恶兆之子",
+      "map": "m46_50_00_00",
+      "sourceThink": 21400020,
+      "cloneThink": 95300000,
+      "fields": {
+        "eye_dist": {
+          "before": 12,
+          "after": 12
+        },
+        "searchEye_dist": {
+          "before": 8,
+          "after": 8
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 20,
+          "after": 20
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 30,
+          "after": 30
+        },
+        "maxBackhomeDist": {
+          "before": 60,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 5,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "守墓斗士",
+      "map": "m46_50_00_00",
+      "sourceThink": 34001010,
+      "cloneThink": 95300001,
+      "fields": {
+        "eye_dist": {
+          "before": 16,
+          "after": 16
+        },
+        "searchEye_dist": {
+          "before": 8,
+          "after": 8
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 15,
+          "after": 15
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 30,
+          "after": 30
+        },
+        "maxBackhomeDist": {
+          "before": 60,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 5,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "红狼",
+      "map": "m46_51_00_00",
+      "sourceThink": 31810010,
+      "cloneThink": 95300002,
+      "fields": {
+        "eye_dist": {
+          "before": 25,
+          "after": 25
+        },
+        "searchEye_dist": {
+          "before": 15,
+          "after": 15
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 20,
+          "after": 20
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "龙装",
+      "map": "m46_52_00_00",
+      "sourceThink": 32500010,
+      "cloneThink": 95300003,
+      "fields": {
+        "eye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "searchEye_dist": {
+          "before": 10,
+          "after": 10
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 20,
+          "after": 20
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "大树守卫",
+      "map": "m46_53_00_00",
+      "sourceThink": 32510010,
+      "cloneThink": 95300004,
+      "fields": {
+        "eye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "searchEye_dist": {
+          "before": 10,
+          "after": 10
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 20,
+          "after": 20
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "罗蕾塔",
+      "map": "m46_54_00_00",
+      "sourceThink": 32520010,
+      "cloneThink": 95300005,
+      "fields": {
+        "eye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "searchEye_dist": {
+          "before": 10,
+          "after": 10
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 20,
+          "after": 20
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "狮子混种",
+      "map": "m46_55_00_00",
+      "sourceThink": 34600020,
+      "cloneThink": 95300006,
+      "fields": {
+        "eye_dist": {
+          "before": 22,
+          "after": 22
+        },
+        "searchEye_dist": {
+          "before": 18,
+          "after": 18
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 15,
+          "after": 15
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 40,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 55,
+          "after": 55
+        },
+        "backhomeBattleDist": {
+          "before": 10,
+          "after": 10
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "铃珠",
+      "map": "m46_56_00_00",
+      "sourceThink": 31000020,
+      "cloneThink": 95300007,
+      "fields": {
+        "eye_dist": {
+          "before": 24,
+          "after": 24
+        },
+        "searchEye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 15,
+          "after": 15
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 40,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 55,
+          "after": 55
+        },
+        "backhomeBattleDist": {
+          "before": 10,
+          "after": 10
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "老狮子",
+      "map": "m46_57_00_00",
+      "sourceThink": 42700010,
+      "cloneThink": 95300008,
+      "fields": {
+        "eye_dist": {
+          "before": 32,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 1,
+          "after": 1
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 40,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "飞龙",
+      "map": "m46_58_00_00",
+      "sourceThink": 45000010,
+      "cloneThink": 95300009,
+      "fields": {
+        "eye_dist": {
+          "before": 60,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 4,
+          "after": 4
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 25,
+          "after": 25
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 135,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "王室幽魂",
+      "map": "m46_59_00_00",
+      "sourceThink": 40210020,
+      "cloneThink": 95300010,
+      "fields": {
+        "eye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "searchEye_dist": {
+          "before": 12,
+          "after": 12
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 15,
+          "after": 15
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "猎犬骑士",
+      "map": "m46_60_00_00",
+      "sourceThink": 42900010,
+      "cloneThink": 95300011,
+      "fields": {
+        "eye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "searchEye_dist": {
+          "before": 1,
+          "after": 1
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 40,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 30,
+          "after": 30
+        },
+        "maxBackhomeDist": {
+          "before": 40,
+          "after": 40
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 5,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "树灵",
+      "map": "m46_63_00_00",
+      "sourceThink": 46400020,
+      "cloneThink": 95300012,
+      "fields": {
+        "eye_dist": {
+          "before": 32,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 40,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "祖灵",
+      "map": "m46_64_00_00",
+      "sourceThink": 46700010,
+      "cloneThink": 95300013,
+      "fields": {
+        "eye_dist": {
+          "before": 30,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 30,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "接肢贵族",
+      "map": "m46_65_00_00",
+      "sourceThink": 46900010,
+      "cloneThink": 95300014,
+      "fields": {
+        "eye_dist": {
+          "before": 32,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 8,
+          "after": 8
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 40,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 40,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 55,
+          "after": 55
+        },
+        "backhomeBattleDist": {
+          "before": 10,
+          "after": 10
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "黑剑",
+      "map": "m46_66_00_00",
+      "sourceThink": 47706010,
+      "cloneThink": 95300015,
+      "fields": {
+        "eye_dist": {
+          "before": 30,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 30,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "黄金树化身",
+      "map": "m46_67_00_00",
+      "sourceThink": 48100010,
+      "cloneThink": 95300016,
+      "fields": {
+        "eye_dist": {
+          "before": 28,
+          "after": 28
+        },
+        "searchEye_dist": {
+          "before": 12,
+          "after": 12
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 100,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "熔岩土龙",
+      "map": "m46_68_00_00",
+      "sourceThink": 49100020,
+      "cloneThink": 95300017,
+      "fields": {
+        "eye_dist": {
+          "before": 30,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 0,
+          "after": 0
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "萨米尔",
+      "map": "m46_69_00_00",
+      "sourceThink": 71000020,
+      "cloneThink": 95300018,
+      "fields": {
+        "eye_dist": {
+          "before": 32,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 15,
+          "after": 15
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 40,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 55,
+          "after": 55
+        },
+        "backhomeBattleDist": {
+          "before": 10,
+          "after": 10
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "剑盾熔炉",
+      "map": "m46_70_00_00",
+      "sourceThink": 25000010,
+      "cloneThink": 95300019,
+      "fields": {
+        "eye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "searchEye_dist": {
+          "before": 5,
+          "after": 5
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 20,
+          "after": 20
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 30,
+          "after": 30
+        },
+        "maxBackhomeDist": {
+          "before": 60,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 5,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "树熔炉",
+      "map": "m46_70_00_00",
+      "sourceThink": 25001010,
+      "cloneThink": 95300020,
+      "fields": {
+        "eye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "searchEye_dist": {
+          "before": 5,
+          "after": 5
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 20,
+          "after": 20
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 30,
+          "after": 30
+        },
+        "maxBackhomeDist": {
+          "before": 60,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 5,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "神皮使徒",
+      "map": "m46_70_00_00",
+      "sourceThink": 35600010,
+      "cloneThink": 95300021,
+      "fields": {
+        "eye_dist": {
+          "before": 30,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 5,
+          "after": 5
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 30,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 30,
+          "after": 30
+        },
+        "maxBackhomeDist": {
+          "before": 60,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 5,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "神皮贵族",
+      "map": "m46_70_00_00",
+      "sourceThink": 35700010,
+      "cloneThink": 95300022,
+      "fields": {
+        "eye_dist": {
+          "before": 30,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 5,
+          "after": 5
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 30,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 30,
+          "after": 30
+        },
+        "maxBackhomeDist": {
+          "before": 60,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 5,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "龙人士兵",
+      "map": "m46_70_00_00",
+      "sourceThink": 46500210,
+      "cloneThink": 95300023,
+      "fields": {
+        "eye_dist": {
+          "before": 35,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 5,
+          "after": 5
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 35,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 60,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 50,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 10,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 10,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "米兰达",
+      "map": "m46_71_00_00",
+      "sourceThink": 44800010,
+      "cloneThink": 95300024,
+      "fields": {
+        "eye_dist": {
+          "before": 25,
+          "after": 25
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 15,
+          "after": 15
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 40,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 55,
+          "after": 55
+        },
+        "backhomeBattleDist": {
+          "before": 10,
+          "after": 10
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "河马",
+      "map": "m46_72_00_00",
+      "sourceThink": 50110010,
+      "cloneThink": 95300025,
+      "fields": {
+        "eye_dist": {
+          "before": 17,
+          "after": 17
+        },
+        "searchEye_dist": {
+          "before": 15,
+          "after": 15
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 50,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 4,
+          "after": 4
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "死鸟",
+      "map": "m46_74_00_00",
+      "sourceThink": 49800010,
+      "cloneThink": 95300026,
+      "fields": {
+        "eye_dist": {
+          "before": 30,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 100,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "亚人女王",
+      "map": "m46_77_00_00",
+      "sourceThink": 41300010,
+      "cloneThink": 95300027,
+      "fields": {
+        "eye_dist": {
+          "before": 18,
+          "after": 18
+        },
+        "searchEye_dist": {
+          "before": 10,
+          "after": 10
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 25,
+          "after": 25
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 70,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "古龙",
+      "map": "m46_80_00_00",
+      "sourceThink": 45100010,
+      "cloneThink": 95300028,
+      "fields": {
+        "eye_dist": {
+          "before": 70,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 10,
+          "after": 10
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 20,
+          "after": 20
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 60,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 90,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 50,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 10,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 10,
+          "after": 5
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "黑刀",
+      "map": "m46_81_00_00",
+      "sourceThink": 21000020,
+      "cloneThink": 95300029,
+      "fields": {
+        "eye_dist": {
+          "before": 24,
+          "after": 24
+        },
+        "searchEye_dist": {
+          "before": 16,
+          "after": 16
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 50,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 30,
+          "after": 30
+        },
+        "maxBackhomeDist": {
+          "before": 40,
+          "after": 40
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 2,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "熔铁恶魔",
+      "map": "m48_10_00_00",
+      "sourceThink": 78200000,
+      "cloneThink": 95300030,
+      "fields": {
+        "eye_dist": {
+          "before": 40,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 999,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 60,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 9999,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 9999,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 9999,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 9999,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 9999,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "舞娘",
+      "map": "m48_30_00_00",
+      "sourceThink": 79200000,
+      "cloneThink": 95300031,
+      "fields": {
+        "eye_dist": {
+          "before": 100,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 999,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 50,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 9999,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 9999,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 9999,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 9999,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 9999,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "恶兆王",
+      "map": "m48_40_00_00",
+      "sourceThink": 21300500,
+      "cloneThink": 95300032,
+      "fields": {
+        "eye_dist": {
+          "before": 60,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 99,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 10,
+          "after": 10
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 9999,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 9999,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 9999,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 500,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 600,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "小葛",
+      "map": "m49_10_00_00",
+      "sourceThink": 47500000,
+      "cloneThink": 95300033,
+      "fields": {
+        "eye_dist": {
+          "before": 100,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 999,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 40,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 9999,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 9999,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 9999,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 9999,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 9999,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "石像鬼",
+      "map": "m49_17_00_00",
+      "sourceThink": 47700010,
+      "cloneThink": 95300034,
+      "fields": {
+        "eye_dist": {
+          "before": 30,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 20,
+          "after": 20
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 200,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 30,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 85,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 200,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 20,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 10,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "大土龙",
+      "map": "m49_18_00_00",
+      "sourceThink": 49100010,
+      "cloneThink": 95300035,
+      "fields": {
+        "eye_dist": {
+          "before": 52,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 200,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 0,
+          "after": 0
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 85,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 200,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 8,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 5,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    },
+    {
+      "name": "牛牛",
+      "map": "m49_20_00_00",
+      "sourceThink": 46800090,
+      "cloneThink": 95300036,
+      "fields": {
+        "eye_dist": {
+          "before": 40,
+          "after": 30
+        },
+        "searchEye_dist": {
+          "before": 0,
+          "after": 0
+        },
+        "ear_dist": {
+          "before": 0.1,
+          "after": 0.1
+        },
+        "nose_dist": {
+          "before": 200,
+          "after": 0
+        },
+        "BattleStartDist": {
+          "before": 60,
+          "after": 30
+        },
+        "battleEye_updateDist": {
+          "before": 0,
+          "after": 0
+        },
+        "backhomeDist": {
+          "before": 85,
+          "after": 40
+        },
+        "maxBackhomeDist": {
+          "before": 200,
+          "after": 60
+        },
+        "backhomeBattleDist": {
+          "before": 20,
+          "after": 20
+        },
+        "SightTargetForgetTime": {
+          "before": 9999,
+          "after": 8
+        },
+        "MemoryTargetForgetTime": {
+          "before": 9999,
+          "after": 2
+        }
+      },
+      "combatScriptPreserved": true
+    }
+  ],
+  "maps": [
+    {
+      "name": "m46_50_00_00.msb.dcx",
+      "inputSha256": "9ed28d361b8071b9a1aa8f023856ef7523e01b5efadf9ad5d66662d3c97d530a",
+      "outputSha256": "dade2e00a93ab56d902021a8ae553790e822f6da52d592e0ca3d01f6e123a26c",
+      "changedThinkReferences": 37,
+      "unrelatedMapContentPreserved": true
+    },
+    {
+      "name": "m46_60_00_00.msb.dcx",
+      "inputSha256": "a7711337f843d494178aa5003e9c562bcf39973b3e8f63ffd347fb7ce23d2896",
+      "outputSha256": "d30152295e9691a2c81bac8a70e3aa6b942ff603c1f6b3f88403aec19b17c097",
+      "changedThinkReferences": 37,
+      "unrelatedMapContentPreserved": true
+    },
+    {
+      "name": "m46_70_00_00.msb.dcx",
+      "inputSha256": "77d3f1166e85339dd6b6f4af7bb512d28d4fa16b919f67ccdf305da0e849b573",
+      "outputSha256": "0da944fe3d98a5068fcd944fa08e86d4d6e8c6fcbe9384f56cf317e5a4b07fd1",
+      "changedThinkReferences": 37,
+      "unrelatedMapContentPreserved": true
+    },
+    {
+      "name": "m46_80_00_00.msb.dcx",
+      "inputSha256": "f740c659b01f58638dde2feb016242c07077821e14cf87504c18affb7cf35030",
+      "outputSha256": "b028ecc7831781e390ba3beae0e31312b832702d52e6a9c400e843f976b73835",
+      "changedThinkReferences": 37,
+      "unrelatedMapContentPreserved": true
+    }
+  ],
+  "originalThinkRowsPreserved": true,
+  "unrelatedParameterTablesPreserved": true,
+  "all37CombatScriptsPreserved": true,
+  "version": "0.17.24",
+  "changedAssets": [
+    "mod/map/mapstudio/m46_50_00_00.msb.dcx",
+    "mod/map/mapstudio/m46_60_00_00.msb.dcx",
+    "mod/map/mapstudio/m46_70_00_00.msb.dcx",
+    "mod/map/mapstudio/m46_80_00_00.msb.dcx",
+    "mod/regulation.bin",
+    "natives/NRHex.dll"
+  ],
+  "unrelatedAssetsAndUserConfigsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "scope": "37 cage-only Think rows and 148 references; combat scripts preserved"
+}

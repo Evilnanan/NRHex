@@ -1,0 +1,387 @@
+{
+  "version": "0.14.8",
+  "baseSha256": "05cdc22d8369259962e231c28bd109fe892962224f21e9ce9e28bb119fe57847",
+  "sha256": "709560dc3032c37ae530e0812e62f1834330f9ab43e7909eb2213f9c0a4789cc",
+  "functions": [
+    {
+      "id": 141,
+      "name": "ExecEvasion",
+      "insertions": {
+        "320": 14,
+        "1373": 14,
+        "1457": 18
+      },
+      "originalInstructions": 1461,
+      "patchedInstructions": 1507
+    },
+    {
+      "id": 269,
+      "name": "DefaultBackStep_onActivate",
+      "insertions": {
+        "0": 14
+      },
+      "originalInstructions": 4,
+      "patchedInstructions": 18
+    },
+    {
+      "id": 272,
+      "name": "LadyBackStep_onActivate",
+      "insertions": {
+        "0": 14
+      },
+      "originalInstructions": 4,
+      "patchedInstructions": 18
+    },
+    {
+      "id": 275,
+      "name": "LadyBackStep2_onActivate",
+      "insertions": {
+        "0": 14
+      },
+      "originalInstructions": 4,
+      "patchedInstructions": 18
+    }
+  ],
+  "inverseRestoresValidatedBase": true,
+  "ownerAndNonownerPathsVerified": true,
+  "successfulDodgesOnly": true,
+  "backstepExcludedFromGaugeLoss": true,
+  "guardBackstepOwnerTaeRestored": true,
+  "nonownerGuardBackstepTaeDisablePreserved": true,
+  "upperGuardLayerPreserved": true,
+  "unrelatedFunctionsUnchanged": true,
+  "removedUnusedActionPulses": [
+    6999702,
+    6999703,
+    6999704
+  ],
+  "gameplayVerified": false,
+  "independentDecompilerReadbackPassed": true,
+  "originalCriticalMarker": 7030801,
+  "originalCriticalClips": 118,
+  "criticalRequiresKill": false,
+  "criticalNativeEffectUnmodified": true,
+  "backstepIframesMotionSeconds": 0.36666666666666664,
+  "backstepIframesAt30Fps": 11,
+  "iframeMechanism": "Duchess JumpTable 8 copied onto 36 normal backstep clips; private owner state 25013; animation time controls lifetime",
+  "backstepHitCategory": 129,
+  "frontalCriticalOnly": true,
+  "frontalCriticalGaugePercent": 25,
+  "damageGaugePercent": -30,
+  "removedIncorrectHitKindGate": true,
+  "nativeBackstepTae": {
+    "version": "0.14.8",
+    "sourceSha256": "610F553520E5127DA7366FE6C619683ACAC11B7AEE6F6B2450B8186AF0B573E1",
+    "sha256": "8354441F82F22A6098747BFAB6D08692A84059ECBB25A17FD0B8FF6490DD0FD2",
+    "ownerMarker": 6999700,
+    "ownerState": 25013,
+    "sourceDuchessClip": 27060,
+    "nativeJumpTableFlag": 8,
+    "nativeGroupType": 0,
+    "allNewEventsHaveSerializedGroupMembership": true,
+    "originalGroupAssociationsUnchanged": true,
+    "motionSeconds": 0.36666667,
+    "frames": 11,
+    "referenceFps": 30,
+    "originalEventsAndAnimationHeadersUnchanged": true,
+    "unrelatedBinderMembersUnchanged": true,
+    "duchessAnimationsUnchanged": true,
+    "changes": [
+      {
+        "file": "a00.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a00.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a00.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a00.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a02.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a02.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a02.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a02.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a03.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a03.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a03.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a03.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a10.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a10.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a10.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a10.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a12.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a12.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a12.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a12.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a13.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a13.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a13.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a13.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a14.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a14.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a14.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a14.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a15.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a15.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a15.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a15.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a16.tae",
+        "ID": 27000,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a16.tae",
+        "ID": 27010,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a16.tae",
+        "ID": 27020,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      },
+      {
+        "file": "a16.tae",
+        "ID": 27030,
+        "start": 0,
+        "end": 0.36666667,
+        "flag": 8,
+        "state": 25013
+      }
+    ],
+    "gameplayVerified": false
+  },
+  "nativeBackstepAttackRows": 173,
+  "originalBackstabRowsExcluded": 90,
+  "originalRiposteRowsAccepted": 113,
+  "nativeThrowGetterRva": "0x490890",
+  "oldJiahaoHitNullificationRemoved": true,
+  "timedIframeBuffRemoved": true
+}

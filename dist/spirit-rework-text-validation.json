@@ -1,0 +1,79 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "D5997693DDF0E6533D6BA136CBEBBF0C296191F87803E950869157C31E1F918E",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "E5054916390CB604228E10E7E21A08B32977F71B3E6625842779689C23A4BEAB",
+      "outputSha256": "B59FB16D4454078458946A8E60DE4BFA1ADB2B3B1A890E496F37B9C7E9BD9245",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u4E00\u4E2A\u5F3A\u654C\u7684\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2",
+          "after": "\u50A8\u5B58\u6700\u8FD1\u4E00\u4E2A\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\u3002\u7075\u9B42\u6BCF\u79D2\u6D41\u59311/60\u7684\u8840\u91CF\u4E0A\u9650\uFF0C\u9020\u6210\u539F\u672C10%\u7684\u4F24\u5BB3"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u4E00\u4E2A\u5F3A\u654C\u7684\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2",
+          "after": "\u50A8\u5B58\u6700\u8FD1\u4E00\u4E2A\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\u3002\u7075\u9B42\u6BCF\u79D2\u6D41\u59311/60\u7684\u8840\u91CF\u4E0A\u9650\uFF0C\u9020\u6210\u539F\u672C10%\u7684\u4F24\u5BB3"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u4E00\u4E2A\u5F3A\u654C\u7684\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2",
+          "after": "\u50A8\u5B58\u6700\u8FD1\u4E00\u4E2A\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\u3002\u7075\u9B42\u6BCF\u79D2\u6D41\u59311/60\u7684\u8840\u91CF\u4E0A\u9650\uFF0C\u9020\u6210\u539F\u672C10%\u7684\u4F24\u5BB3"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "4034C1F709B618E37D257C3E4E2DC085B69A98A00BE8ABA74E14C22FA2021DA8",
+      "outputSha256": "900D88AF0B41851EAF0B8B1CF54D8B864677A5A0FDC23EA7C1CAF987AEA38C70",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you for 15 seconds.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 10% of its original damage."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you for 15 seconds.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 10% of its original damage."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you for 15 seconds.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 10% of its original damage."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "outputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

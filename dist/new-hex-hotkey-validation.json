@@ -1,0 +1,24 @@
+{
+  "version": "0.17.35",
+  "activeHotkeys": {
+    "Ctrl+F6": "random",
+    "Ctrl+F7": [
+      "Monster Cage",
+      "Crystal Shell",
+      "Versatile Arts"
+    ],
+    "Ctrl+F8": [
+      "Balloon",
+      "Enhanced Spirit Summoning",
+      "eligible filler"
+    ]
+  },
+  "spiritRevenantOnly": true,
+  "ownedChoicesExcluded": true,
+  "sharedCooldownMs": 3000,
+  "unclaimedBallGuardPreserved": true,
+  "rustTestsPassed": 180,
+  "signatureCount": 79,
+  "dllSha256": "b8b3c8c2b1ac1d13ba8d408ffd7b99ed72b3a527c110f8d8d9f9d2b0dea7bb98",
+  "gameplayVerified": false
+}

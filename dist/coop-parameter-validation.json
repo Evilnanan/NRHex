@@ -1,0 +1,2261 @@
+{
+  "inputSha256": "8327FAAF9896BB86FF2931853898A0E55AD681E5CB8EC4E998EB981B8DD14C77",
+  "outputSha256": "03397C8ACD9BF21D918F0FFF58C5CF7C7D28EB400C2061348A0E3FEAB26AC2FE",
+  "addedEffects": [
+    6999804,
+    6999805
+  ],
+  "originalRowsAndOtherTablesPreserved": true,
+  "nativeMultiplayerEvent": {
+    "ID": 90015022,
+    "RestBehavior": 0,
+    "Parameters": [
+      {
+        "InstructionIndex": 2,
+        "TargetStartByte": 4,
+        "SourceStartByte": 0,
+        "ByteCount": 4,
+        "UnkID": 1
+      },
+      {
+        "InstructionIndex": 3,
+        "TargetStartByte": 0,
+        "SourceStartByte": 0,
+        "ByteCount": 4,
+        "UnkID": 1
+      },
+      {
+        "InstructionIndex": 4,
+        "TargetStartByte": 0,
+        "SourceStartByte": 0,
+        "ByteCount": 4,
+        "UnkID": 1
+      },
+      {
+        "InstructionIndex": 1,
+        "TargetStartByte": 4,
+        "SourceStartByte": 4,
+        "ByteCount": 4,
+        "UnkID": 2
+      }
+    ],
+    "instructions": [
+      {
+        "Bank": 2000,
+        "ID": 2,
+        "hex": "00000000"
+      },
+      {
+        "Bank": 3,
+        "ID": 0,
+        "hex": "0001000000000000"
+      },
+      {
+        "Bank": 4,
+        "ID": 5,
+        "hex": "00000000000000003F1F0000000400000000803F"
+      },
+      {
+        "Bank": 2009,
+        "ID": 4,
+        "hex": "00000000"
+      },
+      {
+        "Bank": 2004,
+        "ID": 8,
+        "hex": "000000003F1F0000"
+      },
+      {
+        "Bank": 1000,
+        "ID": 4,
+        "hex": "01000000"
+      }
+    ]
+  },
+  "corrections": [
+    {
+      "index": 0,
+      "source": 21400210,
+      "npc": 95300000,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "source": 34001010,
+      "npc": 95300001,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "source": 31810010,
+      "npc": 95300002,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "source": 32500090,
+      "npc": 95300003,
+      "correction": 7758,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "source": 32510020,
+      "npc": 95300004,
+      "correction": 7753,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "source": 32520010,
+      "npc": 95300005,
+      "correction": 7758,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "source": 34600020,
+      "npc": 95300006,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "source": 31000010,
+      "npc": 95300007,
+      "correction": 7753,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "source": 42700020,
+      "npc": 95300008,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "source": 45000010,
+      "npc": 95300009,
+      "correction": 7753,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "source": 40210010,
+      "npc": 95300010,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "source": 42900010,
+      "npc": 95300011,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "source": 46400010,
+      "npc": 95300012,
+      "correction": 7753,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "source": 46700010,
+      "npc": 95300013,
+      "correction": 7753,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "source": 46900010,
+      "npc": 95300014,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "source": 47701210,
+      "npc": 95300015,
+      "correction": 7758,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "source": 48100010,
+      "npc": 95300016,
+      "correction": 7753,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "source": 49100190,
+      "npc": 95300017,
+      "correction": 7753,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "source": 71000010,
+      "npc": 95300018,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "source": 25000030,
+      "npc": 95300019,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 20,
+      "source": 25001020,
+      "npc": 95300020,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 21,
+      "source": 35600020,
+      "npc": 95300021,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "source": 35700020,
+      "npc": 95300022,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "source": 46500210,
+      "npc": 95300023,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "source": 44800020,
+      "npc": 95300024,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "source": 50110010,
+      "npc": 95300025,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "source": 49801020,
+      "npc": 95300026,
+      "correction": 7758,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7853,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7953,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 27,
+      "source": 41300020,
+      "npc": 95300027,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 28,
+      "source": 45102010,
+      "npc": 95300028,
+      "correction": 7754,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7854,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7954,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 29,
+      "source": 21000030,
+      "npc": 95300029,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 30,
+      "source": 78200010,
+      "npc": 95300030,
+      "correction": 7755,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7855,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7955,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 31,
+      "source": 79200010,
+      "npc": 95300031,
+      "correction": 7756,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7856,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7956,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 32,
+      "source": 21300510,
+      "npc": 95300032,
+      "correction": 7756,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7856,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7956,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 33,
+      "source": 47509010,
+      "npc": 95300033,
+      "correction": 7755,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7855,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7955,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 34,
+      "source": 47700020,
+      "npc": 95300034,
+      "correction": 7755,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7855,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7955,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 35,
+      "source": 49110010,
+      "npc": 95300035,
+      "correction": 7756,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7856,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7956,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 36,
+      "source": 46809010,
+      "npc": 95300036,
+      "correction": 7756,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7856,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7956,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 37,
+      "source": 39701110,
+      "npc": 95300037,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 38,
+      "source": 39703010,
+      "npc": 95300038,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 39,
+      "source": 39703010,
+      "npc": 95300039,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 40,
+      "source": 39702310,
+      "npc": 95300040,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 41,
+      "source": 39701110,
+      "npc": 95300041,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 42,
+      "source": 39701110,
+      "npc": 95300042,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 43,
+      "source": 34500040,
+      "npc": 95300043,
+      "correction": 7714,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7814,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7914,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 44,
+      "source": 34500040,
+      "npc": 95300044,
+      "correction": 7714,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7814,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7914,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 45,
+      "source": 34501040,
+      "npc": 95300045,
+      "correction": 7714,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7814,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7914,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 46,
+      "source": 34500040,
+      "npc": 95300046,
+      "correction": 7714,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7814,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7914,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 47,
+      "source": 34510040,
+      "npc": 95300047,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 48,
+      "source": 34510040,
+      "npc": 95300048,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 49,
+      "source": 34510040,
+      "npc": 95300049,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 50,
+      "source": 33501010,
+      "npc": 95300050,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 51,
+      "source": 33500010,
+      "npc": 95300051,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 52,
+      "source": 33502010,
+      "npc": 95300052,
+      "correction": 7724,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7824,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7924,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 53,
+      "source": 36000020,
+      "npc": 95300053,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 54,
+      "source": 36001020,
+      "npc": 95300054,
+      "correction": 7744,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7844,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7944,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 55,
+      "source": 30100190,
+      "npc": 95300055,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 56,
+      "source": 30101110,
+      "npc": 95300056,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 57,
+      "source": 30102130,
+      "npc": 95300057,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 58,
+      "source": 33000020,
+      "npc": 95300058,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 59,
+      "source": 33001020,
+      "npc": 95300059,
+      "correction": 7734,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7834,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7934,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 60,
+      "source": 35600110,
+      "npc": 95300060,
+      "correction": 7754,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7854,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7954,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 61,
+      "source": 35700110,
+      "npc": 95300061,
+      "correction": 7754,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7854,
+          "hpMultiplier": 1.74,
+          "attackMultiplier": 1.1
+        },
+        {
+          "count": 2,
+          "effect": 7954,
+          "hpMultiplier": 2.48,
+          "attackMultiplier": 1.2
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 62,
+      "source": 32500110,
+      "npc": 95300062,
+      "correction": 7756,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7856,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7956,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 63,
+      "source": 43531110,
+      "npc": 95300063,
+      "correction": 7736,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7836,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7936,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 64,
+      "source": 43531110,
+      "npc": 95300064,
+      "correction": 7736,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7836,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7936,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 65,
+      "source": 43630010,
+      "npc": 95300065,
+      "correction": 7736,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7836,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7936,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 66,
+      "source": 43630010,
+      "npc": 95300066,
+      "correction": 7736,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7836,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7936,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 67,
+      "source": 32510110,
+      "npc": 95300067,
+      "correction": 7756,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7856,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7956,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 68,
+      "source": 43531110,
+      "npc": 95300068,
+      "correction": 7736,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7836,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7936,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 69,
+      "source": 43531110,
+      "npc": 95300069,
+      "correction": 7736,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7836,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7936,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 70,
+      "source": 43630010,
+      "npc": 95300070,
+      "correction": 7736,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7836,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7936,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 71,
+      "source": 43630010,
+      "npc": 95300071,
+      "correction": 7736,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7836,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7936,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 72,
+      "source": 31500020,
+      "npc": 95300072,
+      "correction": 7745,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7845,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7945,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 73,
+      "source": 31501020,
+      "npc": 95300073,
+      "correction": 7745,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7845,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7945,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 74,
+      "source": 31600020,
+      "npc": 95300074,
+      "correction": 7745,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7845,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7945,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 75,
+      "source": 31600020,
+      "npc": 95300075,
+      "correction": 7745,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7845,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7945,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 76,
+      "source": 41301010,
+      "npc": 95300076,
+      "correction": 7745,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7845,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7945,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 77,
+      "source": 58100910,
+      "npc": 95300077,
+      "correction": 7745,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7845,
+          "hpMultiplier": 2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7945,
+          "hpMultiplier": 3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 78,
+      "source": 46020030,
+      "npc": 95300078,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 79,
+      "source": 46020030,
+      "npc": 95300079,
+      "correction": 7743,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7843,
+          "hpMultiplier": 1.3,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7943,
+          "hpMultiplier": 1.6,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 80,
+      "source": 31700020,
+      "npc": 95300080,
+      "correction": 7730,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7830,
+          "hpMultiplier": 1.1,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7930,
+          "hpMultiplier": 1.2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 81,
+      "source": 31700020,
+      "npc": 95300081,
+      "correction": 7730,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7830,
+          "hpMultiplier": 1.1,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7930,
+          "hpMultiplier": 1.2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 82,
+      "source": 31800020,
+      "npc": 95300082,
+      "correction": 7730,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7830,
+          "hpMultiplier": 1.1,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7930,
+          "hpMultiplier": 1.2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    },
+    {
+      "index": 83,
+      "source": 31800020,
+      "npc": 95300083,
+      "correction": 7730,
+      "clients": [
+        {
+          "count": 1,
+          "effect": 7830,
+          "hpMultiplier": 1.1,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 2,
+          "effect": 7930,
+          "hpMultiplier": 1.2,
+          "attackMultiplier": 1
+        },
+        {
+          "count": 3,
+          "effect": -1,
+          "hpMultiplier": null,
+          "attackMultiplier": null
+        }
+      ]
+    }
+  ]
+}

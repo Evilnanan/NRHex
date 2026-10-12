@@ -1,0 +1,11 @@
+{
+  "version": "0.17.39",
+  "inputSha256": "ca2dcbf95573cadd988cad3efddcb978a93f4dd347f0d31792304d45feb0890c",
+  "outputSha256": "e476ce175d9ecf6c8b1bf3f727280ebd8636221cf537133c7f01def17b406fc9",
+  "restoredFunction": "ExecSummon",
+  "nativeRecallByteExact": true,
+  "unrelatedFunctionsUnchanged": true,
+  "inverseRestoresInput": true,
+  "ultimateTrigger": "Native successful SpEffect 6999615; no custom recall pulse",
+  "gameplayVerified": false
+}

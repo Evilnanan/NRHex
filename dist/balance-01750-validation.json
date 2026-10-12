@@ -1,0 +1,144 @@
+{
+  "version": "0.17.50",
+  "rustTests": 212,
+  "nativeSignatures": 91,
+  "parameters": {
+    "version": "0.17.50",
+    "inputSha256": "548A6106A165122327DA073C5A2179B29FE3759D06CCDF2B9EE38561DC62A714",
+    "outputSha256": "8D6D40EB7B701E5440B4F001C88C6B0DF2A6D4DFAE367BD6EC8722C261BEBFA1",
+    "icons": [
+      {
+        "table": "SpEffectParam",
+        "field": "iconId",
+        "value": 22229
+      },
+      {
+        "table": "AttachEffectParam",
+        "field": "statusIconId",
+        "value": 22229
+      },
+      {
+        "table": "PermanentBuffParam",
+        "field": "iconId",
+        "value": 21229
+      },
+      {
+        "table": "EquipParamGoods",
+        "field": "iconId",
+        "value": 20229
+      }
+    ],
+    "unrelatedRowsAndFieldsPreserved": true,
+    "hexes": [
+      {
+        "Id": 95001700,
+        "Zh": "气球",
+        "En": "Balloon",
+        "ZhInfo": "血量上限提升50%。减伤率降低30%。突刺抗性降低100%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害",
+        "EnInfo": "Maximum HP +50%. Take 30% more damage and twice as much piercing damage. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies.",
+        "LargeIcon": 21229,
+        "SmallIcon": 22229
+      },
+      {
+        "Id": 95001800,
+        "Zh": "强化【死灵术】",
+        "En": "Enhanced Necromancy",
+        "ZhInfo": "储存打倒的强敌的灵魂，优先保留血量上限更高的灵魂。施放绝招时，同时释放出储存的灵魂，短时间内为你作战",
+        "EnInfo": "Store the soul of a powerful enemy defeated by your team, replacing it only with one that had higher maximum HP. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+        "LargeIcon": 21267,
+        "SmallIcon": 22267
+      }
+    ],
+    "gameplayVerified": false
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "2F1BEAEE8CD752378DFB5DF84A624DB3D36F67D895D9F3ED179511721C558445",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "279E0255BD26C53EEB8EAB862F74024CE6C0D7EBEA14CD69D514759019A81904",
+        "outputSha256": "55AA6155033A58AF390CE85579149F4DCAD02A9726DC1DE37CD4A510B5CC0BBA",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001800,
+            "before": "储存一个最近打倒的强大灵魂。施放绝招时，同时释放出储存的灵魂，短时间内为你作战",
+            "after": "储存打倒的强敌的灵魂，优先保留血量上限更高的灵魂。施放绝招时，同时释放出储存的灵魂，短时间内为你作战"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001800,
+            "before": "储存一个最近打倒的强大灵魂。施放绝招时，同时释放出储存的灵魂，短时间内为你作战",
+            "after": "储存打倒的强敌的灵魂，优先保留血量上限更高的灵魂。施放绝招时，同时释放出储存的灵魂，短时间内为你作战"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001800,
+            "before": "储存一个最近打倒的强大灵魂。施放绝招时，同时释放出储存的灵魂，短时间内为你作战",
+            "after": "储存打倒的强敌的灵魂，优先保留血量上限更高的灵魂。施放绝招时，同时释放出储存的灵魂，短时间内为你作战"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+        "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "08E127399738736670027BF454DDAE67442F9E32D4815930831CD57F355BBB89",
+        "outputSha256": "C973CE94C643AA334FEFBFD56DA75DFFA3639E27EBBDD2BB93C4AB6B7DF7BE77",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001800,
+            "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+            "after": "Store the soul of a powerful enemy defeated by your team, replacing it only with one that had higher maximum HP. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001800,
+            "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+            "after": "Store the soul of a powerful enemy defeated by your team, replacing it only with one that had higher maximum HP. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001800,
+            "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+            "after": "Store the soul of a powerful enemy defeated by your team, replacing it only with one that had higher maximum HP. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+        "outputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "installedFiles": {
+    "natives/NRHex.dll": "13A7DF9B8964F8EBDA962A10A0403C218C527FE2E03D03C835DF85FCDE6B10FE",
+    "mod/regulation.bin": "8D6D40EB7B701E5440B4F001C88C6B0DF2A6D4DFAE367BD6EC8722C261BEBFA1",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "55AA6155033A58AF390CE85579149F4DCAD02A9726DC1DE37CD4A510B5CC0BBA",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "C973CE94C643AA334FEFBFD56DA75DFFA3639E27EBBDD2BB93C4AB6B7DF7BE77",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameStarted": false
+}

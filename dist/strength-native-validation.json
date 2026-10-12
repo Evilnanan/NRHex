@@ -1,0 +1,21 @@
+{
+  "version": "0.9.1",
+  "ownerEffect": 95001100,
+  "attackParamDmgLevelOffset": "0x72",
+  "hitInputOffset": "0x24",
+  "mapping": {
+    "0": 1,
+    "1": 2,
+    "2": 3,
+    "3": 7,
+    "8": 2
+  },
+  "hookRva": "0xe70350",
+  "abi": "RCX hit; RDX detail; R8 source context; R9B flag; stack int, pointer, float",
+  "sourceContextOwnerOffset": "0x0",
+  "nativeDefensesAndReactionsRetained": true,
+  "boostedInputRetainedForReplayAndCopies": true,
+  "sevenArgumentAbiUnitTested": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -1,0 +1,50 @@
+{
+  "stagedOnly": false,
+  "installed": true,
+  "gameMemoryWritten": false,
+  "distAssetsUnchanged": false,
+  "nativeLookup": "Nightreign current EXE 0x5943a9..0x5943fd: scans labels from PC+1 only",
+  "cases": [
+    {
+      "mapName": "m46_50_00_00",
+      "legacyCoolingDrawFailuresReproduced": 37,
+      "fixedCoolingRetryCases": 37,
+      "consecutiveReopenCases": 200,
+      "reloadCases": 1
+    },
+    {
+      "mapName": "m46_60_00_00",
+      "legacyCoolingDrawFailuresReproduced": 37,
+      "fixedCoolingRetryCases": 37,
+      "consecutiveReopenCases": 200,
+      "reloadCases": 1
+    },
+    {
+      "mapName": "m46_70_00_00",
+      "legacyCoolingDrawFailuresReproduced": 37,
+      "fixedCoolingRetryCases": 37,
+      "consecutiveReopenCases": 200,
+      "reloadCases": 1
+    },
+    {
+      "mapName": "m46_80_00_00",
+      "legacyCoolingDrawFailuresReproduced": 37,
+      "fixedCoolingRetryCases": 37,
+      "consecutiveReopenCases": 200,
+      "reloadCases": 1
+    }
+  ],
+  "scope": "Only four selector events; map/NPC/regulation/DLL/birth/HUD/rewards preserved",
+  "offlineVerificationPassed": true,
+  "gameplayFixVerified": false,
+  "multiplayerFixVerified": false,
+  "version": "0.17.23",
+  "changedAssets": [
+    "mod/event/m46_50_00_00.emevd.dcx",
+    "mod/event/m46_60_00_00.emevd.dcx",
+    "mod/event/m46_70_00_00.emevd.dcx",
+    "mod/event/m46_80_00_00.emevd.dcx",
+    "natives/NRHex.dll"
+  ],
+  "unrelatedAssetsAndUserConfigsUnchanged": true
+}

@@ -1,0 +1,22 @@
+{
+  "version": "0.17.44",
+  "rustTestsPassed": 204,
+  "signatureChecksPassed": 89,
+  "originalSweepWrapperCases": 16,
+  "retryGameSeconds": 0.5,
+  "requestSurvivesPlacementFailure": true,
+  "requestCancelledOnDeath": true,
+  "consumeOnlyAfterCreation": true,
+  "captureCueTarget": "defeated NPC handle",
+  "groundProbeRadius": 0.4,
+  "destinationRadius": "unchanged NpcParam.hitRadius",
+  "searchDirections": 8,
+  "searchRings": 2,
+  "files": {
+    "natives/NRHex.dll": "6A3327663D1C778F89FC8B114A00E68151D5680D8C6A1659BC131649CE4DD2D2",
+    "mod/regulation.bin": "7B7D62656F403C6564BB9C9AEDD3A26E0E913091A9A2DD213E637C4884820789",
+    "README.md": "07C7C9ACCEAB61E69772610AC3D72ED9EAB90239A6E2A5E9B9C5AF000B86E53C"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -1,0 +1,18 @@
+{
+  "version": "0.17.25",
+  "installed": true,
+  "changedAssets": [
+    "mod/event/m46_50_00_00.emevd.dcx",
+    "mod/event/m46_60_00_00.emevd.dcx",
+    "mod/event/m46_70_00_00.emevd.dcx",
+    "mod/event/m46_80_00_00.emevd.dcx",
+    "natives/NRHex.dll"
+  ],
+  "removedAnimation": 20025,
+  "bossNpc": 25001020,
+  "onlyOneBirthEventPerMapChanged": true,
+  "fogAndVisibilityAndOtherEventsPreserved": true,
+  "unrelatedAssetsAndUserConfigsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

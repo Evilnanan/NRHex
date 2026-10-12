@@ -1,0 +1,11 @@
+{
+  "version": "0.17.44",
+  "inputSha256": "1DE5270C839B9B104CFB7944BDC0146906CBB37E77092DDB7B9FA22A96BAB5A5",
+  "outputSha256": "7B7D62656F403C6564BB9C9AEDD3A26E0E913091A9A2DD213E637C4884820789",
+  "changes": 1,
+  "changedRow": 95001802,
+  "changedField": "dontDeleteOnDead",
+  "value": 1,
+  "otherFieldsAndTablesUnchanged": true,
+  "gameplayVerified": false
+}

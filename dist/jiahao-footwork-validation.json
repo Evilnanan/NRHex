@@ -1,0 +1,107 @@
+{
+  "version": "0.17.31",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "name": "嘉豪身法",
+  "description": "强化后跃的闪避能力。使用后跃攻击进行反击或正面处决敌人时，回复25%绝招量表。翻滚或受到损伤时，损失30%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害",
+  "backstepRestorePercent": 25,
+  "frontalCriticalRestorePercent": 25,
+  "rollLossPercent": 30,
+  "damageLossPercent": 30,
+  "excludesStanceBrokenBackstepTargets": true,
+  "nativeStateInfo": 434,
+  "nativeOpenCriticalEffect": 36,
+  "nativeStateCases": 33,
+  "textReadback": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "3699EC039F9CA3048631A75890B3534AEF0B5423D997C3C331CF26771D310C59",
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "F15C499B18F32606A3E59E9ACF7C33964D8BFACBE0B11E99993D9182F0D79DA0",
+        "outputSha256": "9B1BA9D777011825DC8064D3D0305EFE5475C7CE30CACE0C37E4349681F8ACEB",
+        "changes": [
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95001300,
+            "before": "嘉豪身段",
+            "after": "嘉豪身法"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001300,
+            "before": "强化后跃的闪避能力。翻滚/受到损伤时，损失25%/30%绝招量表。后跃攻击命中/正面处决敌人时，回复25%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害",
+            "after": "强化后跃的闪避能力。使用后跃攻击进行反击或正面处决敌人时，回复25%绝招量表。翻滚或受到损伤时，损失30%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害"
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95001300,
+            "before": "嘉豪身段",
+            "after": "嘉豪身法"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001300,
+            "before": "强化后跃的闪避能力。翻滚/受到损伤时，损失25%/30%绝招量表。后跃攻击命中/正面处决敌人时，回复25%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害",
+            "after": "强化后跃的闪避能力。使用后跃攻击进行反击或正面处决敌人时，回复25%绝招量表。翻滚或受到损伤时，损失30%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001300,
+            "before": "强化后跃的闪避能力。翻滚/受到损伤时，损失25%/30%绝招量表。后跃攻击命中/正面处决敌人时，回复25%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害",
+            "after": "强化后跃的闪避能力。使用后跃攻击进行反击或正面处决敌人时，回复25%绝招量表。翻滚或受到损伤时，损失30%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "286AB190C5E715CD323E2C307D719DAF65F898BC3181809326D377E769072A4E",
+        "outputSha256": "286AB190C5E715CD323E2C307D719DAF65F898BC3181809326D377E769072A4E",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "9A7120A7DA3798F89652A0BC892C7574BEBEDC3B99ED5A4A03F34771E21199E0",
+        "outputSha256": "910780B47CAA593187BCB7298A08600B2A520138586CF396CC5417736CC2AA1D",
+        "changes": [
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95001300,
+            "before": "Jiahao Stance",
+            "after": "Jiahao Footwork"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001300,
+            "before": "Enhance backstep evasion. Other dodges cost 25% Art gauge. Backstep attack hits restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage.",
+            "after": "Enhance backstep evasion. Other dodges cost 30% Art gauge. Backstep attacks that hit enemies whose stance is not broken restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage."
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95001300,
+            "before": "Jiahao Stance",
+            "after": "Jiahao Footwork"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001300,
+            "before": "Enhance backstep evasion. Other dodges cost 25% Art gauge. Backstep attack hits restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage.",
+            "after": "Enhance backstep evasion. Other dodges cost 30% Art gauge. Backstep attacks that hit enemies whose stance is not broken restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001300,
+            "before": "Enhance backstep evasion. Other dodges cost 25% Art gauge. Backstep attack hits restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage.",
+            "after": "Enhance backstep evasion. Other dodges cost 30% Art gauge. Backstep attacks that hit enemies whose stance is not broken restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "version": "0.13.0",
+  "originalSpeedGetterIsolatedExecutionPassed": true,
+  "originalLowHpComparisonIsolatedExecutionPassed": true,
+  "hpCases": [
+    {
+      "hp": 399,
+      "maxHp": 1000,
+      "native": true
+    },
+    {
+      "hp": 400,
+      "maxHp": 1000,
+      "native": false
+    },
+    {
+      "hp": 401,
+      "maxHp": 1000,
+      "native": false
+    },
+    {
+      "hp": 1,
+      "maxHp": 1000,
+      "native": true
+    },
+    {
+      "hp": 500,
+      "maxHp": 1000,
+      "native": false
+    },
+    {
+      "hp": 800,
+      "maxHp": 2000,
+      "native": false
+    }
+  ],
+  "ctPointerChain": "player+1B8 -> module+28 -> controller+1800 -> rate+18",
+  "onlyLocalActiveOwner": true,
+  "noSpeedFieldWrites": true,
+  "readyHudIcon": 20222,
+  "ultimateReadyHudIcon": 20297,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

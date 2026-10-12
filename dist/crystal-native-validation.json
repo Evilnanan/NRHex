@@ -1,0 +1,68 @@
+{
+  "version": "0.17.10",
+  "referenceEffect": 8610702,
+  "referenceVisual": 5867,
+  "customVisual": 5866,
+  "deleteCriteriaDamage": 1,
+  "isolatedNativeTests": [
+    {
+      "damage": 0.0,
+      "criteria": 0,
+      "remaining": [
+        123.0,
+        123.0,
+        123.0
+      ]
+    },
+    {
+      "damage": 0.0,
+      "criteria": 1,
+      "remaining": [
+        123.0,
+        123.0,
+        123.0
+      ]
+    },
+    {
+      "damage": 1.0,
+      "criteria": 0,
+      "remaining": [
+        123.0,
+        123.0,
+        123.0
+      ]
+    },
+    {
+      "damage": 1.0,
+      "criteria": 1,
+      "remaining": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "damage": 100.0,
+      "criteria": 0,
+      "remaining": [
+        123.0,
+        123.0,
+        123.0
+      ]
+    },
+    {
+      "damage": 100.0,
+      "criteria": 1,
+      "remaining": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "allMatchingCopiesExpireOnNativePositiveDamage": true,
+  "viewerReplicaCleanupRemoved": true,
+  "renewalValidation": "effect-sync-validation.json",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

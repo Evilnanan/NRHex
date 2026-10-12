@@ -1,0 +1,15 @@
+{
+  "version": "0.17.60",
+  "nativeDirectory": "mod/natives",
+  "developmentHotkeys": true,
+  "productionHotkeys": false,
+  "productionKeyboardPollingImportAbsent": true,
+  "productionDestination": "E:\\Projects\\me3-manager\\nightreign-mods\\NRHex",
+  "developmentDllSha256": "9dd054707f5c507be747d136c3736b02ec161ac10348fd7576d31ce2dc6bc93f",
+  "productionDllSha256": "5852451d8cb43c914dcc5011d7c7eaa8b6af2bad57101d661ff4b702ee7581d2",
+  "swordNearDistance": 5.0,
+  "swordRangeConfigurable": false,
+  "focusedTestsPassed": 23,
+  "managerProfileSettingsPreserved": true,
+  "gameplayVerified": false
+}

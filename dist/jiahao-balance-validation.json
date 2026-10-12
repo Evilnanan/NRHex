@@ -1,0 +1,53 @@
+{
+  "version": "0.17.17",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "nativeAnchorsPassed": true,
+  "backstepCategory": 129,
+  "nativeBackstepAttackRows": 173,
+  "backstepGaugeRestorePercent": 25,
+  "frontalCriticalGaugeRestorePercent": 25,
+  "nonBackstepDodgeGaugeLossPercent": 25,
+  "backstepDamageDescriptionLast": true,
+  "bonusFormula": "1 + 2 * clamp(current Art gauge percentage, 0, 100) / 100",
+  "gaugeSample": "Per resolved hit, before that hit queues its gauge reward",
+  "fullGaugeBonusPercent": 200,
+  "fullGaugeDamageMultiplier": 3,
+  "rustTestsPassed": 157,
+  "descriptionReadback": [
+    {
+      "language": "zhocn",
+      "outputSha256": "CD84ADEBA5842A1DEAE01506751689B552D15FA50BA56275F1990BBB46214DF3",
+      "effectId": 95001300,
+      "description": "强化后跃的闪避能力。非后跃闪避时，损失25%绝招量表。后跃攻击命中时，回复25%绝招量表。正面处决敌人时，回复25%绝招量表。受到损伤时，损失30%绝招量表。后跃攻击的伤害增幅当前绝招量表百分比的两倍",
+      "changedFiles": [
+        "AttachEffectInfo.fmg",
+        "PermanentBuffInfo.fmg",
+        "PermanentBuffCaption.fmg"
+      ],
+      "unrelatedEntriesUnchanged": true,
+      "unrelatedMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "outputSha256": "9A7120A7DA3798F89652A0BC892C7574BEBEDC3B99ED5A4A03F34771E21199E0",
+      "effectId": 95001300,
+      "description": "Enhance backstep evasion. Other dodges cost 25% Art gauge. Backstep attack hits restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage.",
+      "changedFiles": [
+        "AttachEffectInfo.fmg",
+        "PermanentBuffInfo.fmg",
+        "PermanentBuffCaption.fmg"
+      ],
+      "unrelatedEntriesUnchanged": true,
+      "unrelatedMembersUnchanged": true
+    }
+  ],
+  "changedAssets": [
+    "mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "natives/NRHex.dll"
+  ],
+  "regulationUnchanged": true,
+  "previousSyncCageAssetsAndUserConfigurationUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

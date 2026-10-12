@@ -1,0 +1,61 @@
+{
+  "version": "0.17.49",
+  "rustTests": 210,
+  "nativeSignatures": 91,
+  "eventValidation": {
+    "version": "0.17.49",
+    "birthEvents": 336,
+    "independentReplicaCases": 4008,
+    "hostSelectionDeathRewardsUnchanged": true,
+    "replicaPresentationDoesNotWaitForPositiveHp": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "parameters": {
+    "inputSha256": "ACD0EB1FB1381496B61451EFF47D3A174651543449D58936085DE0E29DEB62BC",
+    "outputSha256": "548A6106A165122327DA073C5A2179B29FE3759D06CCDF2B9EE38561DC62A714",
+    "localOnlyMarkers": [
+      6999801,
+      6999802,
+      6999803,
+      6999804,
+      6999805
+    ],
+    "before": [
+      {
+        "id": 6999801,
+        "isDisableNetSync": 0
+      },
+      {
+        "id": 6999802,
+        "isDisableNetSync": 0
+      },
+      {
+        "id": 6999803,
+        "isDisableNetSync": 0
+      },
+      {
+        "id": 6999804,
+        "isDisableNetSync": 0
+      },
+      {
+        "id": 6999805,
+        "isDisableNetSync": 0
+      }
+    ],
+    "onlyChangedField": "isDisableNetSync",
+    "unrelatedRowsAndTablesPreserved": true
+  },
+  "installedFiles": {
+    "natives/NRHex.dll": "CF0B4E8604396CB3E858DCD5E4F6E46617894C87CC245D456F69A1B26E55368B",
+    "mod/regulation.bin": "548A6106A165122327DA073C5A2179B29FE3759D06CCDF2B9EE38561DC62A714",
+    "mod/event/m46_50_00_00.emevd.dcx": "CF49054FD979E1DE12E06326D3D99C6E415D734B35A71E3A5115501ED941C426",
+    "mod/event/m46_60_00_00.emevd.dcx": "068528F31C2902AB0858219E1F65B1242283251C2F1A5264850524ABDFAB1AE2",
+    "mod/event/m46_70_00_00.emevd.dcx": "91EB2B8EB4B1B44C77EBCB58DB9D882EABC3EFF5A6881AFCD6C03FDB4FF22D8C",
+    "mod/event/m46_80_00_00.emevd.dcx": "305E30F7C17112CC9ABEA680192AC37CAFC8AF94CD7AA970B23687A6F39B331B",
+    "ability-buffs-validation.json": "517636077188A58F69D8C433CD1B49F0EE150F74ABCD237DAD74284F8BE4F2AF"
+  },
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

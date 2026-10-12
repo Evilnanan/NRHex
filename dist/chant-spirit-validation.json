@@ -1,0 +1,21 @@
+{
+  "version": "0.17.46",
+  "rustTestsPassed": 202,
+  "signatureChecksPassed": 89,
+  "nativeClassificationCases": 516,
+  "chantStaminaPerSecond": 30,
+  "spiritDamageMultiplier": 0.25,
+  "spiritClassification": "native family/player-side damage",
+  "privateNpcRows": 3100,
+  "files": {
+    "natives/NRHex.dll": "FADD1080CDACB0106AE16A442B282F6D134977EF66D4238A248B402072DB717A",
+    "mod/regulation.bin": "ACD0EB1FB1381496B61451EFF47D3A174651543449D58936085DE0E29DEB62BC",
+    "README.md": "BC0B13D91DC5FEA842120BC6F29F96F7C08A2935A5B39D862C51B221609538D5",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "01EDA081F02FDA70AE931D98312C72B3D9B2F8DBE29EBDCCCB0F03134C163C31",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "B0AAA0C6EC8867F6FBC981290B6C8DA13C10D2D61A20AEAC1139840D91C10359",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

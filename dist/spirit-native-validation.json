@@ -1,0 +1,45 @@
+{
+  "version": "0.17.37",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "nativeModelCases": [
+    {
+      "npc": -1,
+      "nativeModel": -1
+    },
+    {
+      "npc": 0,
+      "nativeModel": 0
+    },
+    {
+      "npc": 32500090,
+      "nativeModel": 3250
+    },
+    {
+      "npc": 46400010,
+      "nativeModel": 4640
+    },
+    {
+      "npc": 137030000,
+      "nativeModel": 3703
+    },
+    {
+      "npc": 95400000,
+      "nativeModel": 9540
+    },
+    {
+      "npc": 95403099,
+      "nativeModel": 9540
+    }
+  ],
+  "env380Getter": "460AC0",
+  "familyStateCases": 768,
+  "familyPresentStates": [
+    10,
+    11,
+    20,
+    21
+  ],
+  "nullFamilyModuleReturnsFalse": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -1,0 +1,163 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "5571FF98BCF035BC0FEA39A043EAF311CB139D30543FBA573BE0B768E7DEBA5F",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "44C49D4B79D64A401CF69887BC84AE978435801639AE27EA03E4F358B81796D4",
+      "outputSha256": "E5054916390CB604228E10E7E21A08B32977F71B3E6625842779689C23A4BEAB",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "\u5929\u4F7F\u7684\u6DFB\u7FFC"
+        },
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "\u522B\u505C\u6B62\u548F\u5531"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "\u4F60\u548C\u654C\u4EBA\u540C\u65F6\u653B\u51FB\u65F6\uFF0C\u8BA9\u654C\u4EBA\u7684\u653B\u51FB\u5931\u6548"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u7CBE\u529B\u503C"
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "\u5929\u4F7F\u7684\u6DFB\u7FFC"
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "\u522B\u505C\u6B62\u548F\u5531"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "\u4F60\u548C\u654C\u4EBA\u540C\u65F6\u653B\u51FB\u65F6\uFF0C\u8BA9\u654C\u4EBA\u7684\u653B\u51FB\u5931\u6548"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u7CBE\u529B\u503C"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "\u4F60\u548C\u654C\u4EBA\u540C\u65F6\u653B\u51FB\u65F6\uFF0C\u8BA9\u654C\u4EBA\u7684\u653B\u51FB\u5931\u6548"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u7CBE\u529B\u503C"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "0545C63564A61AED8D9751C34DA51AD41F86A0EF9F3C6FE5E0AEB2381EE24E89",
+      "outputSha256": "4034C1F709B618E37D257C3E4E2DC085B69A98A00BE8ABA74E14C22FA2021DA8",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "Angel Wings"
+        },
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "Keep Chanting"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "For 1/15 second after your attack hits an enemy, nullify incoming enemy attacks."
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "Continuously restore stamina while charging a sorcery or incantation."
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "Angel Wings"
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "Keep Chanting"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "For 1/15 second after your attack hits an enemy, nullify incoming enemy attacks."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "Continuously restore stamina while charging a sorcery or incantation."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001900,
+          "before": null,
+          "after": "For 1/15 second after your attack hits an enemy, nullify incoming enemy attacks."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002000,
+          "before": null,
+          "after": "Continuously restore stamina while charging a sorcery or incantation."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "outputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

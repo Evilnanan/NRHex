@@ -1,0 +1,62 @@
+{
+  "version": "0.17.16",
+  "eligibleHeroes": {
+    "Duchess": 4,
+    "Revenant": 6,
+    "Recluse": 7
+  },
+  "currentHeroSource": "GameDataMan+8 -> PlayerGameData+C7",
+  "nativeHeroReadRva": "B61462",
+  "nativeParamHeroGetterRva": "E87DF0",
+  "originalNativeParamHeroGetterExecuted": true,
+  "roleAndUnknownIdentityTestsPassed": true,
+  "rewardEntries": [
+    "level rewards",
+    "random hotkey",
+    "all preferred test hotkeys"
+  ],
+  "nativeSerializedChoicePoolUnchanged": true,
+  "ownedAndTerrainExclusionsRetained": true,
+  "lifestealScale": 1.5,
+  "damageAndCastingReductionScale": 1,
+  "fractionalBonusAndNullifiedHitAndHealingCapTestsPassed": true,
+  "chineseDescription": "伤害 replaced with 增伤",
+  "texts": [
+    {
+      "language": "zhocn",
+      "outputSha256": "0A4A5091D7BB004CA2A4DD51BD31403AEF9D6563CF288C9200B92BA2422472EC",
+      "effectId": 95000900,
+      "description": "你的魔法、祷告还会被视为近战攻击，但只能命中近身敌人，并基于该法术的射程提供吸血、增伤、咏唱时减伤率。你的法术咏唱变得不易被打断。提升15%近战攻击力",
+      "changedFiles": [
+        "AttachEffectInfo.fmg",
+        "PermanentBuffInfo.fmg",
+        "PermanentBuffCaption.fmg"
+      ],
+      "unrelatedEntriesUnchanged": true,
+      "unrelatedMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "outputSha256": "224D942CBED1CB559A546F087EBCB2F32916C01D333E69D08DEB72CF14D469FB",
+      "effectId": 95000900,
+      "description": "Spells also count as melee attacks, but only hit nearby enemies. Gain lifesteal, bonus damage and casting damage reduction based on spell range. Spellcasting is harder to interrupt. Gain 15% melee attack power.",
+      "changedFiles": [
+        "AttachEffectInfo.fmg",
+        "PermanentBuffInfo.fmg",
+        "PermanentBuffCaption.fmg"
+      ],
+      "unrelatedEntriesUnchanged": true,
+      "unrelatedMembersUnchanged": true
+    }
+  ],
+  "changedAssets": [
+    "mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "natives/NRHex.dll"
+  ],
+  "originalRegulationAndUserEditedCsvUnchanged": true,
+  "csvSha256": "13738aa159a8db7015531bb97c2a95a4e4f2e5584bee8de3fc4caf7ab8381ef1",
+  "rustTestsPassed": 157,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

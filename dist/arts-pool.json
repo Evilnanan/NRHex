@@ -1,0 +1,2285 @@
+{
+  "poolCount": 183,
+  "ordinaryPoolCount": 176,
+  "bowPoolCount": 7,
+  "bowSkills": [
+    400,
+    401,
+    402,
+    404,
+    405,
+    406,
+    1169
+  ],
+  "bowWeapons": [
+    40000000,
+    40010000,
+    40020000,
+    40030000,
+    40050000,
+    41000000,
+    41010000,
+    41020000,
+    41030000,
+    41040000,
+    41060000,
+    41070000,
+    41750000,
+    41990000,
+    42000000,
+    42010000,
+    42030000,
+    42040000,
+    74104000,
+    74203000,
+    99040000
+  ],
+  "bowWeaponTypes": [
+    50,
+    51,
+    53
+  ],
+  "excludedUnusableSkills": [
+    0,
+    1,
+    2,
+    10,
+    117,
+    9999
+  ],
+  "skills": [
+    {
+      "id": 100,
+      "textId": 100,
+      "name": "Lion's Claw",
+      "chineseName": "狮子斩",
+      "alias": "[Standard] Lion's Claw",
+      "animationType": 0
+    },
+    {
+      "id": 101,
+      "textId": 101,
+      "name": "Impaling Thrust",
+      "chineseName": "贯穿",
+      "alias": "[Standard] Impaling Thrust",
+      "animationType": 1
+    },
+    {
+      "id": 102,
+      "textId": 102,
+      "name": "Piercing Fang",
+      "chineseName": "突刺",
+      "alias": "[Standard] Piercing Fang",
+      "animationType": 2
+    },
+    {
+      "id": 103,
+      "textId": 103,
+      "name": "Spinning Slash",
+      "chineseName": "回旋斩",
+      "alias": "[Standard] Spinning Slash",
+      "animationType": 3
+    },
+    {
+      "id": 105,
+      "textId": 105,
+      "name": "Charge Forth",
+      "chineseName": "突击",
+      "alias": "[Standard] Charge Forth",
+      "animationType": 5
+    },
+    {
+      "id": 106,
+      "textId": 106,
+      "name": "Stamp (Upward Cut)",
+      "chineseName": "箭步（上砍）",
+      "alias": "[Standard] Stamp (Upward Cut)",
+      "animationType": 6
+    },
+    {
+      "id": 107,
+      "textId": 107,
+      "name": "Stamp (Sweep)",
+      "chineseName": "箭步（回旋斩）",
+      "alias": "[Standard] Stamp (Sweep)",
+      "animationType": 7
+    },
+    {
+      "id": 108,
+      "textId": 108,
+      "name": "Blood Tax",
+      "chineseName": "鲜血征收",
+      "alias": "[Blood] Blood Tax",
+      "animationType": 8
+    },
+    {
+      "id": 109,
+      "textId": 109,
+      "name": "Repeating Thrust",
+      "chineseName": "连击",
+      "alias": "[Standard] Repeating Thrust",
+      "animationType": 9
+    },
+    {
+      "id": 110,
+      "textId": 110,
+      "name": "Wild Strikes",
+      "chineseName": "盲击",
+      "alias": "[Standard] Wild Strikes",
+      "animationType": 10
+    },
+    {
+      "id": 111,
+      "textId": 111,
+      "name": "Spinning Strikes",
+      "chineseName": "回旋击",
+      "alias": "[Standard] Spinning Strikes",
+      "animationType": 11
+    },
+    {
+      "id": 112,
+      "textId": 112,
+      "name": "Double Slash",
+      "chineseName": "二连斩",
+      "alias": "[Standard] Double Slash",
+      "animationType": 12
+    },
+    {
+      "id": 113,
+      "textId": 113,
+      "name": "Prelate's Charge",
+      "chineseName": "主教冲锋",
+      "alias": "[Fire] Prelate's Charge",
+      "animationType": 13
+    },
+    {
+      "id": 114,
+      "textId": 114,
+      "name": "Unsheathe",
+      "chineseName": "居合",
+      "alias": "[Standard] Unsheathe",
+      "animationType": 14
+    },
+    {
+      "id": 115,
+      "textId": 115,
+      "name": "Square Off",
+      "chineseName": "准备架式",
+      "alias": "[Standard] Square Off",
+      "animationType": 15
+    },
+    {
+      "id": 116,
+      "textId": 116,
+      "name": "Giant Hunt",
+      "chineseName": "狩猎巨人",
+      "alias": "[Standard] Giant Hunt",
+      "animationType": 16
+    },
+    {
+      "id": 118,
+      "textId": 118,
+      "name": "Loretta's Slash",
+      "chineseName": "罗蕾塔的斩击",
+      "alias": "[Magic] Loretta's Slash",
+      "animationType": 18
+    },
+    {
+      "id": 119,
+      "textId": 119,
+      "name": "Poison Moth Flight",
+      "chineseName": "双吻毒蛾",
+      "alias": "[Poison] Poison Moth Flight",
+      "animationType": 19
+    },
+    {
+      "id": 120,
+      "textId": 120,
+      "name": "Spinning Weapon",
+      "chineseName": "转啊转",
+      "alias": "[Magic] Spinning Weapon",
+      "animationType": 20
+    },
+    {
+      "id": 122,
+      "textId": 122,
+      "name": "Storm Assault",
+      "chineseName": "风暴袭击",
+      "alias": "[Standard] Storm Assault",
+      "animationType": 22
+    },
+    {
+      "id": 123,
+      "textId": 123,
+      "name": "Stormcaller",
+      "chineseName": "唤起风暴",
+      "alias": "[Standard] Stormcaller",
+      "animationType": 23
+    },
+    {
+      "id": 124,
+      "textId": 124,
+      "name": "Sword Dance",
+      "chineseName": "剑舞",
+      "alias": "[Standard] Sword Dance",
+      "animationType": 24
+    },
+    {
+      "id": 125,
+      "textId": 125,
+      "name": "Spinning Chain",
+      "chineseName": "回旋锁链",
+      "alias": "[Standard] Spinning Chain",
+      "animationType": 25
+    },
+    {
+      "id": 200,
+      "textId": 200,
+      "name": "Glintblade Phalanx",
+      "chineseName": "辉剑圆阵",
+      "alias": "[Magic] Glintblade Phalanx",
+      "animationType": 50
+    },
+    {
+      "id": 201,
+      "textId": 201,
+      "name": "Sacred Blade",
+      "chineseName": "神圣刀刃",
+      "alias": "[Holy] Sacred Blade",
+      "animationType": 51
+    },
+    {
+      "id": 202,
+      "textId": 202,
+      "name": "Ice Spear",
+      "chineseName": "冰枪",
+      "alias": "[Frost] Ice Spear",
+      "animationType": 52
+    },
+    {
+      "id": 203,
+      "textId": 203,
+      "name": "Glintstone Pebble",
+      "chineseName": "辉石魔砾",
+      "alias": "[Magic] Glintstone Pebble",
+      "animationType": 53
+    },
+    {
+      "id": 204,
+      "textId": 204,
+      "name": "Bloody Slash",
+      "chineseName": "鲜血斩击",
+      "alias": "[Blood] Bloody Slash",
+      "animationType": 54
+    },
+    {
+      "id": 205,
+      "textId": 205,
+      "name": "Lifesteal Fist",
+      "chineseName": "夺命拳",
+      "alias": "[Blood] Lifesteal Fist",
+      "animationType": 55
+    },
+    {
+      "id": 207,
+      "textId": 207,
+      "name": "Eruption",
+      "chineseName": "熔岩火浆",
+      "alias": "[Fire] Eruption",
+      "animationType": 56
+    },
+    {
+      "id": 208,
+      "textId": 208,
+      "name": "Prayerful Strike",
+      "chineseName": "祈祷一击",
+      "alias": "[Holy] Prayerful Strike",
+      "animationType": 57
+    },
+    {
+      "id": 209,
+      "textId": 209,
+      "name": "Gravitas",
+      "chineseName": "重力",
+      "alias": "[Magic] Gravitas",
+      "animationType": 58
+    },
+    {
+      "id": 210,
+      "textId": 210,
+      "name": "Storm Blade",
+      "chineseName": "风暴刃",
+      "alias": "[Standard] Storm Blade",
+      "animationType": 59
+    },
+    {
+      "id": 212,
+      "textId": 212,
+      "name": "Earthshaker",
+      "chineseName": "撼地",
+      "alias": "[Standard] Earthshaker",
+      "animationType": 61
+    },
+    {
+      "id": 213,
+      "textId": 213,
+      "name": "Golden Land",
+      "chineseName": "黄金大地",
+      "alias": "[Holy] Golden Land",
+      "animationType": 62
+    },
+    {
+      "id": 214,
+      "textId": 214,
+      "name": "Flaming Strike",
+      "chineseName": "炎击",
+      "alias": "[Fire] Flaming Strike",
+      "animationType": 63
+    },
+    {
+      "id": 216,
+      "textId": 216,
+      "name": "Thunderbolt",
+      "chineseName": "落雷",
+      "alias": "[Lightning] Thunderbolt",
+      "animationType": 64
+    },
+    {
+      "id": 217,
+      "textId": 217,
+      "name": "Lightning Slash",
+      "chineseName": "雷击斩",
+      "alias": "[Lightning] Lightning Slash",
+      "animationType": 65
+    },
+    {
+      "id": 218,
+      "textId": 218,
+      "name": "Carian Grandeur",
+      "chineseName": "伟哉卡利亚",
+      "alias": "[Magic] Carian Grandeur",
+      "animationType": 66
+    },
+    {
+      "id": 219,
+      "textId": 219,
+      "name": "Carian Greatsword",
+      "chineseName": "卡利亚大剑",
+      "alias": "[Magic] Carian Greatsword",
+      "animationType": 67
+    },
+    {
+      "id": 220,
+      "textId": 220,
+      "name": "Vacuum Slice",
+      "chineseName": "真空斩",
+      "alias": "[Standard] Vacuum Slice",
+      "animationType": 68
+    },
+    {
+      "id": 221,
+      "textId": 221,
+      "name": "Black Flame Tornado",
+      "chineseName": "黑焰漩涡",
+      "alias": "[Fire] Black Flame Tornado",
+      "animationType": 69
+    },
+    {
+      "id": 222,
+      "textId": 222,
+      "name": "Sacred Ring of Light",
+      "chineseName": "神圣光环",
+      "alias": "[Holy] Sacred Ring of Light",
+      "animationType": 70
+    },
+    {
+      "id": 223,
+      "textId": 223,
+      "name": "Firebreather",
+      "chineseName": "喷火",
+      "alias": "[Specific] Firebreather",
+      "animationType": 71
+    },
+    {
+      "id": 224,
+      "textId": 224,
+      "name": "Blood Blade",
+      "chineseName": "血刃",
+      "alias": "[Blood] Blood Blade",
+      "animationType": 72
+    },
+    {
+      "id": 225,
+      "textId": 225,
+      "name": "Phantom Slash",
+      "chineseName": "幻影共击",
+      "alias": "[Standard] Phantom Slash",
+      "animationType": 73
+    },
+    {
+      "id": 226,
+      "textId": 226,
+      "name": "Spectral Lance",
+      "chineseName": "幻影枪",
+      "alias": "[Standard] Spectral Lance",
+      "animationType": 74
+    },
+    {
+      "id": 227,
+      "textId": 227,
+      "name": "Chilling Mist",
+      "chineseName": "寒气冻雾",
+      "alias": "[Frost] Chilling Mist",
+      "animationType": 75
+    },
+    {
+      "id": 228,
+      "textId": 228,
+      "name": "Poisonous Mist",
+      "chineseName": "毒雾",
+      "alias": "[Poison] Poisonous Mist",
+      "animationType": 76
+    },
+    {
+      "id": 300,
+      "textId": 300,
+      "name": "Shield Bash",
+      "chineseName": "盾牌冲击",
+      "alias": "[Standard] Shield Bash",
+      "animationType": 90
+    },
+    {
+      "id": 301,
+      "textId": 301,
+      "name": "Barricade Shield",
+      "chineseName": "铁壁盾防",
+      "alias": "[Standard] Barricade Shield",
+      "animationType": 91
+    },
+    {
+      "id": 302,
+      "textId": 302,
+      "name": "Parry",
+      "chineseName": "格挡",
+      "alias": "[Standard] Parry",
+      "animationType": 92
+    },
+    {
+      "id": 303,
+      "textId": 303,
+      "name": "Buckler Parry",
+      "chineseName": "小圆盾格挡",
+      "alias": "[Standard] Buckler Parry",
+      "animationType": 93
+    },
+    {
+      "id": 305,
+      "textId": 305,
+      "name": "Carian Retaliation",
+      "chineseName": "卡利亚式奉还",
+      "alias": "[Magic] Carian Retaliation",
+      "animationType": 95
+    },
+    {
+      "id": 306,
+      "textId": 306,
+      "name": "Storm Wall",
+      "chineseName": "风暴障壁",
+      "alias": "[Standard] Storm Wall",
+      "animationType": 96
+    },
+    {
+      "id": 307,
+      "textId": 307,
+      "name": "Golden Parry",
+      "chineseName": "黄金格挡",
+      "alias": "[Holy] Golden Parry",
+      "animationType": 97
+    },
+    {
+      "id": 308,
+      "textId": 308,
+      "name": "Shield Crash",
+      "chineseName": "突进冲击",
+      "alias": "[Standard] Shield Crash",
+      "animationType": 98
+    },
+    {
+      "id": 309,
+      "textId": 309,
+      "name": "Thops's Barrier",
+      "chineseName": "托普斯的力场",
+      "alias": "[Magic] Thops's Barrier",
+      "animationType": 99
+    },
+    {
+      "id": 400,
+      "textId": 400,
+      "name": "Through and Through",
+      "chineseName": "贯穿射击",
+      "alias": "[Standard] Through and Through",
+      "animationType": 100
+    },
+    {
+      "id": 401,
+      "textId": 401,
+      "name": "Barrage",
+      "chineseName": "连续射击",
+      "alias": "[Standard] Barrage",
+      "animationType": 101
+    },
+    {
+      "id": 402,
+      "textId": 402,
+      "name": "Mighty Shot",
+      "chineseName": "拉满弓",
+      "alias": "[Standard] Mighty Shot",
+      "animationType": 102
+    },
+    {
+      "id": 404,
+      "textId": 404,
+      "name": "Enchanted Shot",
+      "chineseName": "宿灵射击",
+      "alias": "[Standard] Enchanted Shot",
+      "animationType": 103
+    },
+    {
+      "id": 405,
+      "textId": 405,
+      "name": "Sky Shot",
+      "chineseName": "对空射击",
+      "alias": "[Standard] Sky Shot",
+      "animationType": 108
+    },
+    {
+      "id": 406,
+      "textId": 406,
+      "name": "Rain of Arrows",
+      "chineseName": "箭雨",
+      "alias": "[Standard] Rain of Arrows",
+      "animationType": 105
+    },
+    {
+      "id": 501,
+      "textId": 501,
+      "name": "Hoarfrost Stomp",
+      "chineseName": "冻霜踏地",
+      "alias": "[Frost] Hoarfrost Stomp",
+      "animationType": 110
+    },
+    {
+      "id": 502,
+      "textId": 502,
+      "name": "Storm Stomp",
+      "chineseName": "风暴足",
+      "alias": "[Standard] Storm Stomp",
+      "animationType": 111
+    },
+    {
+      "id": 503,
+      "textId": 503,
+      "name": "Kick",
+      "chineseName": "踢击",
+      "alias": "[Standard] Kick",
+      "animationType": 112
+    },
+    {
+      "id": 504,
+      "textId": 504,
+      "name": "Lightning Ram",
+      "chineseName": "雷电羊球",
+      "alias": "[Lightning] Lightning Ram",
+      "animationType": 113
+    },
+    {
+      "id": 505,
+      "textId": 505,
+      "name": "Flame of the Redmanes",
+      "chineseName": "红狮子火焰",
+      "alias": "[Fire] Flame of the Redmanes",
+      "animationType": 114
+    },
+    {
+      "id": 506,
+      "textId": 506,
+      "name": "Ground Slam",
+      "chineseName": "坠落震击",
+      "alias": "[Standard] Ground Slam",
+      "animationType": 115
+    },
+    {
+      "id": 507,
+      "textId": 507,
+      "name": "Golden Slam",
+      "chineseName": "黄金坠落震击",
+      "alias": "[Holy] Golden Slam",
+      "animationType": 116
+    },
+    {
+      "id": 508,
+      "textId": 508,
+      "name": "Waves of Darkness",
+      "chineseName": "黑暗波动",
+      "alias": "[Magic] Waves of Darkness",
+      "animationType": 117
+    },
+    {
+      "id": 509,
+      "textId": 509,
+      "name": "Hoarah Loux's Earthshaker",
+      "chineseName": "荷莱·露的撼地",
+      "alias": "[Standard] Hoarah Loux's Earthshaker",
+      "animationType": 118
+    },
+    {
+      "id": 600,
+      "textId": 600,
+      "name": "Determination",
+      "chineseName": "决心",
+      "alias": "[Standard] Determination",
+      "animationType": 130
+    },
+    {
+      "id": 601,
+      "textId": 601,
+      "name": "Royal Knight's Resolve",
+      "chineseName": "侍王骑士的决心",
+      "alias": "[Standard] Royal Knight's Resolve",
+      "animationType": 131
+    },
+    {
+      "id": 602,
+      "textId": 602,
+      "name": "Assassin's Gambit",
+      "chineseName": "暗杀办法",
+      "alias": "[Standard] Assassin's Gambit",
+      "animationType": 132
+    },
+    {
+      "id": 603,
+      "textId": 603,
+      "name": "Golden Vow",
+      "chineseName": "黄金树立誓",
+      "alias": "[Holy] Golden Vow",
+      "animationType": 133
+    },
+    {
+      "id": 604,
+      "textId": 604,
+      "name": "Sacred Order",
+      "chineseName": "圣律",
+      "alias": "[Holy] Sacred Order",
+      "animationType": 134
+    },
+    {
+      "id": 605,
+      "textId": 605,
+      "name": "Shared Order",
+      "chineseName": "共享圣律",
+      "alias": "[Holy] Shared Order",
+      "animationType": 135
+    },
+    {
+      "id": 606,
+      "textId": 606,
+      "name": "Seppuku",
+      "chineseName": "切腹",
+      "alias": "[Blood] Seppuku",
+      "animationType": 136
+    },
+    {
+      "id": 607,
+      "textId": 607,
+      "name": "Cragblade",
+      "chineseName": "岩石剑",
+      "alias": "[Standard] Cragblade",
+      "animationType": 137
+    },
+    {
+      "id": 650,
+      "textId": 650,
+      "name": "Barbaric Roar",
+      "chineseName": "野蛮咆哮",
+      "alias": "[Standard] Barbaric Roar",
+      "animationType": 140
+    },
+    {
+      "id": 651,
+      "textId": 651,
+      "name": "War Cry",
+      "chineseName": "战吼",
+      "alias": "[Standard] War Cry",
+      "animationType": 141
+    },
+    {
+      "id": 652,
+      "textId": 652,
+      "name": "Beast's Roar",
+      "chineseName": "野兽咆哮",
+      "alias": "[Standard] Beast's Roar",
+      "animationType": 142
+    },
+    {
+      "id": 653,
+      "textId": 653,
+      "name": "Troll's Roar",
+      "chineseName": "山妖咆哮",
+      "alias": "[Standard] Troll's Roar",
+      "animationType": 143
+    },
+    {
+      "id": 654,
+      "textId": 654,
+      "name": "Braggart's Roar",
+      "chineseName": "夸耀咆哮",
+      "alias": "[Standard] Braggart's Roar",
+      "animationType": 144
+    },
+    {
+      "id": 700,
+      "textId": 700,
+      "name": "Endure",
+      "chineseName": "忍耐",
+      "alias": "[Standard] Endure",
+      "animationType": 150
+    },
+    {
+      "id": 701,
+      "textId": 701,
+      "name": "Vow of the Indomitable",
+      "chineseName": "无敌",
+      "alias": "[Holy] Vow of the Indomitable",
+      "animationType": 151
+    },
+    {
+      "id": 702,
+      "textId": 702,
+      "name": "Holy Ground",
+      "chineseName": "圣域",
+      "alias": "[Holy] Holy Ground",
+      "animationType": 152
+    },
+    {
+      "id": 800,
+      "textId": 800,
+      "name": "Quickstep",
+      "chineseName": "碎步",
+      "alias": "[Standard] Quickstep",
+      "animationType": 155
+    },
+    {
+      "id": 801,
+      "textId": 801,
+      "name": "Bloodhound's Step",
+      "chineseName": "猎犬步法",
+      "alias": "[Standard] Bloodhound's Step",
+      "animationType": 156
+    },
+    {
+      "id": 802,
+      "textId": 802,
+      "name": "Raptor of the Mists",
+      "chineseName": "潜雾猛禽",
+      "alias": "[Standard] Raptor of the Mists",
+      "animationType": 157
+    },
+    {
+      "id": 850,
+      "textId": 850,
+      "name": "White Shadow's Lure",
+      "chineseName": "白影诱惑",
+      "alias": "[Standard] White Shadow's Lure",
+      "animationType": 160
+    },
+    {
+      "id": 1000,
+      "textId": 1000,
+      "name": "Surge of Faith",
+      "chineseName": "信仰喷发",
+      "alias": "[Specific] Surge of Faith",
+      "animationType": 200
+    },
+    {
+      "id": 1001,
+      "textId": 1001,
+      "name": "Flame Spit",
+      "chineseName": "火焰唾球",
+      "alias": "[Specific] Flame Spit",
+      "animationType": 201
+    },
+    {
+      "id": 1002,
+      "textId": 1002,
+      "name": "Tongues of Fire",
+      "chineseName": "火焰舌柱",
+      "alias": "[Specific] Tongues of Fire",
+      "animationType": 202
+    },
+    {
+      "id": 1003,
+      "textId": 1003,
+      "name": "Oracular Bubble",
+      "chineseName": "神谕泡泡",
+      "alias": "[Specific] Oracular Bubble",
+      "animationType": 203
+    },
+    {
+      "id": 1004,
+      "textId": 1004,
+      "name": "Bubble Shower",
+      "chineseName": "倾注泡泡",
+      "alias": "[Specific] Bubble Shower",
+      "animationType": 204
+    },
+    {
+      "id": 1005,
+      "textId": 1005,
+      "name": "Great Oracular Bubble",
+      "chineseName": "神谕大泡泡",
+      "alias": "[Specific] Great Oracular Bubble",
+      "animationType": 205
+    },
+    {
+      "id": 1006,
+      "textId": 1006,
+      "name": "Sea of Magma",
+      "chineseName": "熔岩海",
+      "alias": "[Specific] Sea of Magma",
+      "animationType": 206
+    },
+    {
+      "id": 1007,
+      "textId": 1007,
+      "name": "Viper Bite",
+      "chineseName": "毒蛇咬杀",
+      "alias": "[Specific] Viper Bite",
+      "animationType": 207
+    },
+    {
+      "id": 1008,
+      "textId": 1008,
+      "name": "Moonlight Greatsword",
+      "chineseName": "月光剑",
+      "alias": "[Specific] Moonlight Greatsword",
+      "animationType": 208
+    },
+    {
+      "id": 1009,
+      "textId": 1009,
+      "name": "Siluria's Woe",
+      "chineseName": "志留亚的漩涡",
+      "alias": "[Specific] Siluria's Woe",
+      "animationType": 209
+    },
+    {
+      "id": 1010,
+      "textId": 1010,
+      "name": "Rallying Standard",
+      "chineseName": "归于麾下",
+      "alias": "[Specific] Rallying Standard",
+      "animationType": 210
+    },
+    {
+      "id": 1011,
+      "textId": 1011,
+      "name": "Bear Witness!",
+      "chineseName": "敬请见证！",
+      "alias": "[Specific] Bear Witness!",
+      "animationType": 211
+    },
+    {
+      "id": 1012,
+      "textId": 1012,
+      "name": "Eochaid's Dancing Blade",
+      "chineseName": "欧赫剑舞",
+      "alias": "[Specific] Eochaid's Dancing Blade (Marais Executioner's Sword)",
+      "animationType": 212
+    },
+    {
+      "id": 1013,
+      "textId": 1013,
+      "name": "Soul Stifler",
+      "chineseName": "恶意气息",
+      "alias": "[Specific] Soul Stifler",
+      "animationType": 213
+    },
+    {
+      "id": 1014,
+      "textId": 1014,
+      "name": "Taker's Flames",
+      "chineseName": "掠夺火焰",
+      "alias": "[Specific] Taker's Flames",
+      "animationType": 214
+    },
+    {
+      "id": 1015,
+      "textId": 1015,
+      "name": "Shriek of Milos",
+      "chineseName": "灭洛斯的狂嚎",
+      "alias": "[Specific] Shriek of Milos",
+      "animationType": 215
+    },
+    {
+      "id": 1016,
+      "textId": 1016,
+      "name": "Reduvia Blood Blade",
+      "chineseName": "逆刺血刃",
+      "alias": "[Specific] Reduvia Blood Blade",
+      "animationType": 216
+    },
+    {
+      "id": 1017,
+      "textId": 1017,
+      "name": "Glintstone Dart",
+      "chineseName": "辉石彗砾",
+      "alias": "[Specific] Glintstone Dart",
+      "animationType": 217
+    },
+    {
+      "id": 1018,
+      "textId": 1018,
+      "name": "Flowing Form",
+      "chineseName": "流体化",
+      "alias": "[Specific] Flowing Form (Nox Flowing Sword)",
+      "animationType": 218
+    },
+    {
+      "id": 1019,
+      "textId": 1019,
+      "name": "Night-and-Flame Stance",
+      "chineseName": "夜与火的架式",
+      "alias": "[Specific] Night-and-Flame Stance",
+      "animationType": 219
+    },
+    {
+      "id": 1020,
+      "textId": 1020,
+      "name": "Wave of Gold",
+      "chineseName": "黄金波动",
+      "alias": "[Specific] Wave of Gold",
+      "animationType": 220
+    },
+    {
+      "id": 1021,
+      "textId": 1021,
+      "name": "Ruinous Ghostflame",
+      "chineseName": "毁灭灵火",
+      "alias": "[Specific] Ruinous Ghostflame",
+      "animationType": 221
+    },
+    {
+      "id": 1022,
+      "textId": 1022,
+      "name": "Establish Order",
+      "chineseName": "高举黄金律法",
+      "alias": "[Specific] Establish Order",
+      "animationType": 222
+    },
+    {
+      "id": 1023,
+      "textId": 1023,
+      "name": "Mists of Slumber",
+      "chineseName": "催眠烟雾",
+      "alias": "[Specific] Mists of Slumber",
+      "animationType": 223
+    },
+    {
+      "id": 1024,
+      "textId": 1024,
+      "name": "Spearcall Ritual",
+      "chineseName": "唤矛仪式",
+      "alias": "[Specific] Spearcall Ritual",
+      "animationType": 224
+    },
+    {
+      "id": 1025,
+      "textId": 1025,
+      "name": "Wolf's Assault",
+      "chineseName": "狼袭",
+      "alias": "[Specific] Wolf's Assault",
+      "animationType": 225
+    },
+    {
+      "id": 1026,
+      "textId": 1026,
+      "name": "Thundercloud Form",
+      "chineseName": "雷云化身",
+      "alias": "[Specific] Thundercloud Form",
+      "animationType": 226
+    },
+    {
+      "id": 1027,
+      "textId": 1027,
+      "name": "Cursed-Blood Slice",
+      "chineseName": "咒血斩击",
+      "alias": "[Specific] Cursed-Blood Slice",
+      "animationType": 227
+    },
+    {
+      "id": 1028,
+      "textId": 1028,
+      "name": "Waterfowl Dance",
+      "chineseName": "水鸟乱舞",
+      "alias": "[Specific] Waterfowl Dance",
+      "animationType": 228
+    },
+    {
+      "id": 1029,
+      "textId": 1029,
+      "name": "Gold Breaker",
+      "chineseName": "黄金碎击",
+      "alias": "[Specific] Gold Breaker",
+      "animationType": 229
+    },
+    {
+      "id": 1030,
+      "textId": 1030,
+      "name": "I Command Thee, Kneel!",
+      "chineseName": "跪下吧！",
+      "alias": "[Specific] I Command Thee, Kneel!",
+      "animationType": 230
+    },
+    {
+      "id": 1031,
+      "textId": 1031,
+      "name": "Regal Roar",
+      "chineseName": "王者嘶吼",
+      "alias": "[Specific] Regal Roar",
+      "animationType": 231
+    },
+    {
+      "id": 1032,
+      "textId": 1032,
+      "name": "Starcaller Cry",
+      "chineseName": "唤星",
+      "alias": "[Specific] Starcaller Cry",
+      "animationType": 232
+    },
+    {
+      "id": 1033,
+      "textId": 1033,
+      "name": "Wave of Destruction",
+      "chineseName": "崩坏波",
+      "alias": "[Specific] Wave of Destruction",
+      "animationType": 233
+    },
+    {
+      "id": 1034,
+      "textId": 1034,
+      "name": "Bloodboon Ritual",
+      "chineseName": "授血仪式",
+      "alias": "[Specific] Bloodboon Ritual",
+      "animationType": 234
+    },
+    {
+      "id": 1035,
+      "textId": 1035,
+      "name": "Flowing Form",
+      "chineseName": "流体化",
+      "alias": "[Specific] Flowing Form (Nox Flowing Hammer)",
+      "animationType": 235
+    },
+    {
+      "id": 1036,
+      "textId": 1036,
+      "name": "Blade of Death",
+      "chineseName": "死亡刀刃",
+      "alias": "[Specific] Blade of Death",
+      "animationType": 236
+    },
+    {
+      "id": 1037,
+      "textId": 1037,
+      "name": "Blade of Gold",
+      "chineseName": "黄金刀刃",
+      "alias": "[Specific] Blade of Gold",
+      "animationType": 237
+    },
+    {
+      "id": 1038,
+      "textId": 1038,
+      "name": "Destined Death",
+      "chineseName": "命定之死",
+      "alias": "[Specific] Destined Death",
+      "animationType": 238
+    },
+    {
+      "id": 1039,
+      "textId": 1039,
+      "name": "Spinning Wheel",
+      "chineseName": "旋转刺轮",
+      "alias": "[Specific] Spinning Wheel",
+      "animationType": 239
+    },
+    {
+      "id": 1040,
+      "textId": 1040,
+      "name": "Alabaster Lords' Pull",
+      "chineseName": "白王引力波",
+      "alias": "[Specific] Alabaster Lords' Pull",
+      "animationType": 240
+    },
+    {
+      "id": 1041,
+      "textId": 1041,
+      "name": "Onyx Lords' Repulsion",
+      "chineseName": "黑王推力波",
+      "alias": "[Specific] Onyx Lords' Repulsion",
+      "animationType": 241
+    },
+    {
+      "id": 1042,
+      "textId": 1042,
+      "name": "Oath of Vengeance",
+      "chineseName": "复仇誓言",
+      "alias": "[Specific] Oath of Vengeance",
+      "animationType": 242
+    },
+    {
+      "id": 1043,
+      "textId": 1043,
+      "name": "Ice Lightning Sword",
+      "chineseName": "冰雷剑",
+      "alias": "[Specific] Ice Lightning Sword",
+      "animationType": 243
+    },
+    {
+      "id": 1044,
+      "textId": 1044,
+      "name": "Regal Beastclaw",
+      "chineseName": "兽王爪",
+      "alias": "[Specific] Regal Beastclaw",
+      "animationType": 244
+    },
+    {
+      "id": 1045,
+      "textId": 1045,
+      "name": "Flame Dance",
+      "chineseName": "火焰舞",
+      "alias": "[Specific] Flame Dance",
+      "animationType": 245
+    },
+    {
+      "id": 1046,
+      "textId": 1046,
+      "name": "Claw Flick",
+      "chineseName": "弹指",
+      "alias": "[Specific] Claw Flick",
+      "animationType": 246
+    },
+    {
+      "id": 1047,
+      "textId": 1047,
+      "name": "Nebula",
+      "chineseName": "星云",
+      "alias": "[Specific] Nebula (Bastard's Stars)",
+      "animationType": 247
+    },
+    {
+      "id": 1048,
+      "textId": 1048,
+      "name": "Ghostflame Ignition",
+      "chineseName": "点燃灵火",
+      "alias": "[Specific] Ghostflame Ignition",
+      "animationType": 248
+    },
+    {
+      "id": 1049,
+      "textId": 1049,
+      "name": "Ancient Lightning Spear",
+      "chineseName": "古雷电枪",
+      "alias": "[Specific] Ancient Lightning Spear",
+      "animationType": 249
+    },
+    {
+      "id": 1050,
+      "textId": 1050,
+      "name": "Frenzyflame Thrust",
+      "chineseName": "癫火突击",
+      "alias": "[Specific] Frenzyflame Thrust",
+      "animationType": 250
+    },
+    {
+      "id": 1051,
+      "textId": 1051,
+      "name": "Miquella's Ring of Light",
+      "chineseName": "米凯拉的光环",
+      "alias": "[Specific] Miquella's Ring of Light",
+      "animationType": 251
+    },
+    {
+      "id": 1052,
+      "textId": 1052,
+      "name": "Golden Tempering",
+      "chineseName": "黄金剑技",
+      "alias": "[Specific] Golden Tempering",
+      "animationType": 252
+    },
+    {
+      "id": 1053,
+      "textId": 1053,
+      "name": "Last Rites",
+      "chineseName": "哀悼墓碑",
+      "alias": "[Specific] Last Rites",
+      "animationType": 253
+    },
+    {
+      "id": 1054,
+      "textId": 1054,
+      "name": "Unblockable Blade",
+      "chineseName": "不可挡之刃",
+      "alias": "[Specific] Unblockable Blade (Coded Sword)",
+      "animationType": 254
+    },
+    {
+      "id": 1055,
+      "textId": 1055,
+      "name": "Eochaid's Dancing Blade",
+      "chineseName": "欧赫剑舞",
+      "alias": "[Specific] Eochaid's Dancing Blade (Regalia of Eochaid)",
+      "animationType": 212
+    },
+    {
+      "id": 1056,
+      "textId": 1056,
+      "name": "Magic Dagger",
+      "chineseName": "魔力之短剑",
+      "alias": "[Specific] Magic Dagger",
+      "animationType": 256
+    },
+    {
+      "id": 1165,
+      "textId": 118,
+      "name": "Loretta's Slash",
+      "chineseName": "罗蕾塔的斩击",
+      "alias": "[Specific] Loretta's Slash (Loretta's War Sickle)",
+      "animationType": 165
+    },
+    {
+      "id": 1166,
+      "textId": 103,
+      "name": "Spinning Slash",
+      "chineseName": "回旋斩",
+      "alias": "[Specific] Spinning Slash (Dragon Halberd)",
+      "animationType": 166
+    },
+    {
+      "id": 1167,
+      "textId": 1167,
+      "name": "Corpse Wax Cutter",
+      "chineseName": "尸蜡斩击",
+      "alias": "[Specific] Corpse Wax Cutter",
+      "animationType": 167
+    },
+    {
+      "id": 1168,
+      "textId": 1168,
+      "name": "Zamor Ice Storm",
+      "chineseName": "萨米尔冰风暴",
+      "alias": "[Specific] Zamor Ice Storm",
+      "animationType": 168
+    },
+    {
+      "id": 1169,
+      "textId": 1169,
+      "name": "Radahn's Rain",
+      "chineseName": "拉塔恩的骤雨",
+      "alias": "[Specific] Radahn's Rain",
+      "animationType": 169
+    },
+    {
+      "id": 1170,
+      "textId": 1170,
+      "name": "The Queen's Black Flame",
+      "chineseName": "女王黑焰",
+      "alias": "[Specific] The Queen's Black Flame",
+      "animationType": 170
+    },
+    {
+      "id": 1171,
+      "textId": 1171,
+      "name": "Dynast's Finesse",
+      "chineseName": "王朝剑技",
+      "alias": "[Specific] Dynast's Finesse",
+      "animationType": 171
+    },
+    {
+      "id": 1172,
+      "textId": 1172,
+      "name": "Magma Shower",
+      "chineseName": "泼洒熔岩",
+      "alias": "[Specific] Magma Shower",
+      "animationType": 172
+    },
+    {
+      "id": 1173,
+      "textId": 1173,
+      "name": "Nebula",
+      "chineseName": "星云",
+      "alias": "[Specific] Nebula (Wing of Astel)",
+      "animationType": 173
+    },
+    {
+      "id": 1174,
+      "textId": 1174,
+      "name": "Death Flare",
+      "chineseName": "死亡闪焰",
+      "alias": "[Specific] Death Flare",
+      "animationType": 174
+    },
+    {
+      "id": 1175,
+      "textId": 1175,
+      "name": "Bloodhound's Finesse",
+      "chineseName": "猎犬剑技",
+      "alias": "[Specific] Bloodhound's Finesse",
+      "animationType": 175
+    },
+    {
+      "id": 1176,
+      "textId": 1176,
+      "name": "Magma Guillotine",
+      "chineseName": "熔岩断首",
+      "alias": "[Specific] Magma Guillotine",
+      "animationType": 176
+    },
+    {
+      "id": 1177,
+      "textId": 1177,
+      "name": "Corpse Piler",
+      "chineseName": "尸横遍野",
+      "alias": "[Specific] Corpse Piler",
+      "animationType": 177
+    },
+    {
+      "id": 1178,
+      "textId": 1178,
+      "name": "Transient Moonlight",
+      "chineseName": "隙间月影",
+      "alias": "[Specific] Transient Moonlight",
+      "animationType": 178
+    },
+    {
+      "id": 1179,
+      "textId": 1179,
+      "name": "Bloodblade Dance",
+      "chineseName": "血刃乱舞",
+      "alias": "[Specific] Bloodblade Dance",
+      "animationType": 179
+    },
+    {
+      "id": 1182,
+      "textId": 1182,
+      "name": "Knowledge Above All",
+      "chineseName": "百智的世界",
+      "alias": "[Specific] Knowledge Above All",
+      "animationType": 182
+    },
+    {
+      "id": 1183,
+      "textId": 1183,
+      "name": "Devourer of Worlds",
+      "chineseName": "吞世",
+      "alias": "[Specific] Devourer of Worlds",
+      "animationType": 183
+    },
+    {
+      "id": 1184,
+      "textId": 1184,
+      "name": "Familial Rancor",
+      "chineseName": "家族怨魂",
+      "alias": "[Specific] Familial Rancor",
+      "animationType": 184
+    },
+    {
+      "id": 1185,
+      "textId": 1185,
+      "name": "Rosus's Summons",
+      "chineseName": "罗泽司的唤声",
+      "alias": "[Specific] Rosus's Summons",
+      "animationType": 185
+    },
+    {
+      "id": 1186,
+      "textId": 1186,
+      "name": "Thunderstorm",
+      "chineseName": "雷电风暴",
+      "alias": "[Specific] Thunderstorm",
+      "animationType": 186
+    },
+    {
+      "id": 1187,
+      "textId": 1187,
+      "name": "Sacred Phalanx",
+      "chineseName": "圣矛障壁",
+      "alias": "[Specific] Sacred Phalanx",
+      "animationType": 187
+    },
+    {
+      "id": 1188,
+      "textId": 1188,
+      "name": "Great-Serpent Hunt",
+      "chineseName": "狩猎大蛇",
+      "alias": "[Specific] Great-Serpent Hunt",
+      "animationType": 188
+    },
+    {
+      "id": 1189,
+      "textId": 1189,
+      "name": "Angel's Wings",
+      "chineseName": "天使羽翼",
+      "alias": "[Specific] Angel's Wings",
+      "animationType": 189
+    },
+    {
+      "id": 1190,
+      "textId": 1190,
+      "name": "Storm Kick",
+      "chineseName": "风暴踢击",
+      "alias": "[Specific] Storm Kick",
+      "animationType": 190
+    },
+    {
+      "id": 1191,
+      "textId": 1191,
+      "name": "Unblockable Blade",
+      "chineseName": "不可挡之刃",
+      "alias": "[Specific] Unblockable Blade (Cipher Pata)",
+      "animationType": 191
+    },
+    {
+      "id": 1192,
+      "textId": 1192,
+      "name": "Sorcery of the Crozier",
+      "chineseName": "锡杖魔法",
+      "alias": "[Specific] Sorcery of the Crozier",
+      "animationType": 192
+    },
+    {
+      "id": 1193,
+      "textId": 1193,
+      "name": "Erdtree Slam",
+      "chineseName": "黄金树坠落震击",
+      "alias": "[Specific] Erdtree Slam",
+      "animationType": 193
+    },
+    {
+      "id": 1194,
+      "textId": 1194,
+      "name": "Gravity Bolt",
+      "chineseName": "重力雷电",
+      "alias": "[Specific] Gravity Bolt",
+      "animationType": 194
+    },
+    {
+      "id": 1195,
+      "textId": 1195,
+      "name": "Fires of Slumber",
+      "chineseName": "催眠火焰",
+      "alias": "[Specific] Fires of Slumber",
+      "animationType": 195
+    },
+    {
+      "id": 1196,
+      "textId": 1196,
+      "name": "Golden Retaliation",
+      "chineseName": "黄金式奉还",
+      "alias": "[Specific] Golden Retaliation",
+      "animationType": 196
+    },
+    {
+      "id": 1197,
+      "textId": 1197,
+      "name": "Contagious Fury",
+      "chineseName": "共鸣愤怒",
+      "alias": "[Specific] Contagious Fury",
+      "animationType": 197
+    },
+    {
+      "id": 1198,
+      "textId": 1198,
+      "name": "Ordovis's Vortex",
+      "chineseName": "奥陶琵斯的漩涡",
+      "alias": "[Specific] Ordovis's Vortex",
+      "animationType": 198
+    },
+    {
+      "id": 1200,
+      "textId": 1200,
+      "name": "Storm Ruler",
+      "chineseName": "风暴管束者",
+      "alias": "[Legendary] Storm Ruler",
+      "animationType": 260
+    }
+  ],
+  "protectedOriginalSkills": [
+    1200,
+    303
+  ],
+  "excludedUnnamedSkills": [
+    0,
+    104,
+    121,
+    407,
+    1180,
+    1181
+  ],
+  "actualNameTextChecked": true,
+  "textSources": [
+    {
+      "lang": "zhocn",
+      "sha256": "AF2BF756DC99B500B0D0A9B4CD9811E3055798D4BCB7E18E910B188D440D838B",
+      "members": [
+        "ArtsName.fmg",
+        "ArtsName_dlc01.fmg"
+      ]
+    },
+    {
+      "lang": "engus",
+      "sha256": "A4F14491D8D3F34BAAF9CC57ECE763BA433B3647C40B2817068F36B926ADA0F2",
+      "members": [
+        "ArtsName.fmg",
+        "ArtsName_dlc01.fmg"
+      ]
+    }
+  ],
+  "includesUniqueSkills": true,
+  "compatibilityFiltering": "bows_only",
+  "canonicalSkillBehaviorVariations": [
+    {
+      "skill": 100,
+      "variation": 300
+    },
+    {
+      "skill": 101,
+      "variation": 500
+    },
+    {
+      "skill": 102,
+      "variation": 900
+    },
+    {
+      "skill": 103,
+      "variation": 700
+    },
+    {
+      "skill": 105,
+      "variation": 1700
+    },
+    {
+      "skill": 106,
+      "variation": 300
+    },
+    {
+      "skill": 107,
+      "variation": 300
+    },
+    {
+      "skill": 108,
+      "variation": 500
+    },
+    {
+      "skill": 109,
+      "variation": 500
+    },
+    {
+      "skill": 110,
+      "variation": 1400
+    },
+    {
+      "skill": 111,
+      "variation": 1801
+    },
+    {
+      "skill": 112,
+      "variation": 700
+    },
+    {
+      "skill": 113,
+      "variation": 1200
+    },
+    {
+      "skill": 114,
+      "variation": 900
+    },
+    {
+      "skill": 115,
+      "variation": 200
+    },
+    {
+      "skill": 116,
+      "variation": 1700
+    },
+    {
+      "skill": 118,
+      "variation": 1000
+    },
+    {
+      "skill": 119,
+      "variation": 100
+    },
+    {
+      "skill": 120,
+      "variation": 200
+    },
+    {
+      "skill": 122,
+      "variation": 1801
+    },
+    {
+      "skill": 123,
+      "variation": 1801
+    },
+    {
+      "skill": 124,
+      "variation": 200
+    },
+    {
+      "skill": 125,
+      "variation": 1300
+    },
+    {
+      "skill": 200,
+      "variation": 200
+    },
+    {
+      "skill": 201,
+      "variation": 200
+    },
+    {
+      "skill": 202,
+      "variation": 1600
+    },
+    {
+      "skill": 203,
+      "variation": 200
+    },
+    {
+      "skill": 204,
+      "variation": 900
+    },
+    {
+      "skill": 205,
+      "variation": 2102
+    },
+    {
+      "skill": 207,
+      "variation": 1200
+    },
+    {
+      "skill": 208,
+      "variation": 1200
+    },
+    {
+      "skill": 209,
+      "variation": 800
+    },
+    {
+      "skill": 210,
+      "variation": 200
+    },
+    {
+      "skill": 212,
+      "variation": 1200
+    },
+    {
+      "skill": 213,
+      "variation": 1200
+    },
+    {
+      "skill": 214,
+      "variation": 200
+    },
+    {
+      "skill": 216,
+      "variation": 1600
+    },
+    {
+      "skill": 217,
+      "variation": 900
+    },
+    {
+      "skill": 218,
+      "variation": 200
+    },
+    {
+      "skill": 219,
+      "variation": 200
+    },
+    {
+      "skill": 220,
+      "variation": 200
+    },
+    {
+      "skill": 221,
+      "variation": 1000
+    },
+    {
+      "skill": 222,
+      "variation": 1901
+    },
+    {
+      "skill": 223,
+      "variation": 2400
+    },
+    {
+      "skill": 224,
+      "variation": 900
+    },
+    {
+      "skill": 225,
+      "variation": 1801
+    },
+    {
+      "skill": 226,
+      "variation": 1600
+    },
+    {
+      "skill": 227,
+      "variation": 200
+    },
+    {
+      "skill": 228,
+      "variation": 200
+    },
+    {
+      "skill": 300,
+      "variation": 3200
+    },
+    {
+      "skill": 301,
+      "variation": 3100
+    },
+    {
+      "skill": 302,
+      "variation": 3100
+    },
+    {
+      "skill": 303,
+      "variation": 3000
+    },
+    {
+      "skill": 305,
+      "variation": 3100
+    },
+    {
+      "skill": 306,
+      "variation": 3100
+    },
+    {
+      "skill": 307,
+      "variation": 3100
+    },
+    {
+      "skill": 308,
+      "variation": 3200
+    },
+    {
+      "skill": 309,
+      "variation": 3100
+    },
+    {
+      "skill": 400,
+      "variation": 4200
+    },
+    {
+      "skill": 401,
+      "variation": 4100
+    },
+    {
+      "skill": 402,
+      "variation": 4100
+    },
+    {
+      "skill": 404,
+      "variation": 4100
+    },
+    {
+      "skill": 405,
+      "variation": 4100
+    },
+    {
+      "skill": 406,
+      "variation": 4100
+    },
+    {
+      "skill": 501,
+      "variation": 200
+    },
+    {
+      "skill": 502,
+      "variation": 200
+    },
+    {
+      "skill": 503,
+      "variation": 200
+    },
+    {
+      "skill": 504,
+      "variation": 200
+    },
+    {
+      "skill": 505,
+      "variation": 700
+    },
+    {
+      "skill": 506,
+      "variation": 200
+    },
+    {
+      "skill": 507,
+      "variation": 200
+    },
+    {
+      "skill": 508,
+      "variation": 1200
+    },
+    {
+      "skill": 509,
+      "variation": 200
+    },
+    {
+      "skill": 600,
+      "variation": 200
+    },
+    {
+      "skill": 601,
+      "variation": 200
+    },
+    {
+      "skill": 602,
+      "variation": 100
+    },
+    {
+      "skill": 603,
+      "variation": 200
+    },
+    {
+      "skill": 604,
+      "variation": 200
+    },
+    {
+      "skill": 605,
+      "variation": 200
+    },
+    {
+      "skill": 606,
+      "variation": 900
+    },
+    {
+      "skill": 607,
+      "variation": 401
+    },
+    {
+      "skill": 650,
+      "variation": 1400
+    },
+    {
+      "skill": 651,
+      "variation": 1400
+    },
+    {
+      "skill": 652,
+      "variation": 1400
+    },
+    {
+      "skill": 653,
+      "variation": 401
+    },
+    {
+      "skill": 654,
+      "variation": 200
+    },
+    {
+      "skill": 700,
+      "variation": 1102
+    },
+    {
+      "skill": 701,
+      "variation": 3100
+    },
+    {
+      "skill": 702,
+      "variation": 3000
+    },
+    {
+      "skill": 800,
+      "variation": 200
+    },
+    {
+      "skill": 801,
+      "variation": 2200
+    },
+    {
+      "skill": 802,
+      "variation": 2200
+    },
+    {
+      "skill": 850,
+      "variation": 100
+    },
+    {
+      "skill": 1000,
+      "variation": 1217
+    },
+    {
+      "skill": 1001,
+      "variation": 3215
+    },
+    {
+      "skill": 1002,
+      "variation": 3216
+    },
+    {
+      "skill": 1003,
+      "variation": 1110
+    },
+    {
+      "skill": 1004,
+      "variation": 1216
+    },
+    {
+      "skill": 1005,
+      "variation": 2306
+    },
+    {
+      "skill": 1006,
+      "variation": 2003
+    },
+    {
+      "skill": 1007,
+      "variation": 3020
+    },
+    {
+      "skill": 1008,
+      "variation": 301
+    },
+    {
+      "skill": 1009,
+      "variation": 1702
+    },
+    {
+      "skill": 1010,
+      "variation": 1804
+    },
+    {
+      "skill": 1011,
+      "variation": 2106
+    },
+    {
+      "skill": 1012,
+      "variation": 315
+    },
+    {
+      "skill": 1013,
+      "variation": 1511
+    },
+    {
+      "skill": 1014,
+      "variation": 314
+    },
+    {
+      "skill": 1015,
+      "variation": 302
+    },
+    {
+      "skill": 1016,
+      "variation": 104
+    },
+    {
+      "skill": 1017,
+      "variation": 107
+    },
+    {
+      "skill": 1018,
+      "variation": 702
+    },
+    {
+      "skill": 1019,
+      "variation": 214
+    },
+    {
+      "skill": 1020,
+      "variation": 310
+    },
+    {
+      "skill": 1021,
+      "variation": 319
+    },
+    {
+      "skill": 1022,
+      "variation": 317
+    },
+    {
+      "skill": 1023,
+      "variation": 205
+    },
+    {
+      "skill": 1024,
+      "variation": 1612
+    },
+    {
+      "skill": 1025,
+      "variation": 406
+    },
+    {
+      "skill": 1026,
+      "variation": 601
+    },
+    {
+      "skill": 1027,
+      "variation": 810
+    },
+    {
+      "skill": 1028,
+      "variation": 902
+    },
+    {
+      "skill": 1029,
+      "variation": 1115
+    },
+    {
+      "skill": 1030,
+      "variation": 1504
+    },
+    {
+      "skill": 1031,
+      "variation": 2305
+    },
+    {
+      "skill": 1032,
+      "variation": 405
+    },
+    {
+      "skill": 1033,
+      "variation": 403
+    },
+    {
+      "skill": 1034,
+      "variation": 1711
+    },
+    {
+      "skill": 1035,
+      "variation": 1112
+    },
+    {
+      "skill": 1036,
+      "variation": 101
+    },
+    {
+      "skill": 1037,
+      "variation": 116
+    },
+    {
+      "skill": 1038,
+      "variation": 408
+    },
+    {
+      "skill": 1039,
+      "variation": 2309
+    },
+    {
+      "skill": 1040,
+      "variation": 303
+    },
+    {
+      "skill": 1041,
+      "variation": 805
+    },
+    {
+      "skill": 1042,
+      "variation": 407
+    },
+    {
+      "skill": 1043,
+      "variation": 910
+    },
+    {
+      "skill": 1044,
+      "variation": 1201
+    },
+    {
+      "skill": 1045,
+      "variation": 2006
+    },
+    {
+      "skill": 1046,
+      "variation": 1113
+    },
+    {
+      "skill": 1047,
+      "variation": 1301
+    },
+    {
+      "skill": 1048,
+      "variation": 309
+    },
+    {
+      "skill": 1049,
+      "variation": 1602
+    },
+    {
+      "skill": 1050,
+      "variation": 1705
+    },
+    {
+      "skill": 1051,
+      "variation": 1902
+    },
+    {
+      "skill": 1052,
+      "variation": 211
+    },
+    {
+      "skill": 1053,
+      "variation": 207
+    },
+    {
+      "skill": 1054,
+      "variation": 204
+    },
+    {
+      "skill": 1055,
+      "variation": 215
+    },
+    {
+      "skill": 1056,
+      "variation": 117
+    },
+    {
+      "skill": 1165,
+      "variation": 1810
+    },
+    {
+      "skill": 1166,
+      "variation": 1811
+    },
+    {
+      "skill": 1167,
+      "variation": 311
+    },
+    {
+      "skill": 1168,
+      "variation": 801
+    },
+    {
+      "skill": 1169,
+      "variation": 4201
+    },
+    {
+      "skill": 1170,
+      "variation": 404
+    },
+    {
+      "skill": 1171,
+      "variation": 602
+    },
+    {
+      "skill": 1172,
+      "variation": 703
+    },
+    {
+      "skill": 1173,
+      "variation": 707
+    },
+    {
+      "skill": 1174,
+      "variation": 710
+    },
+    {
+      "skill": 1175,
+      "variation": 804
+    },
+    {
+      "skill": 1176,
+      "variation": 803
+    },
+    {
+      "skill": 1177,
+      "variation": 906
+    },
+    {
+      "skill": 1178,
+      "variation": 905
+    },
+    {
+      "skill": 1179,
+      "variation": 1005
+    },
+    {
+      "skill": 1182,
+      "variation": 1116
+    },
+    {
+      "skill": 1183,
+      "variation": 1202
+    },
+    {
+      "skill": 1184,
+      "variation": 1302
+    },
+    {
+      "skill": 1185,
+      "variation": 1412
+    },
+    {
+      "skill": 1186,
+      "variation": 1414
+    },
+    {
+      "skill": 1187,
+      "variation": 1604
+    },
+    {
+      "skill": 1188,
+      "variation": 1703
+    },
+    {
+      "skill": 1189,
+      "variation": 1906
+    },
+    {
+      "skill": 1190,
+      "variation": 2112
+    },
+    {
+      "skill": 1191,
+      "variation": 2113
+    },
+    {
+      "skill": 1192,
+      "variation": 2301
+    },
+    {
+      "skill": 1193,
+      "variation": 2307
+    },
+    {
+      "skill": 1194,
+      "variation": 2308
+    },
+    {
+      "skill": 1195,
+      "variation": 2404
+    },
+    {
+      "skill": 1196,
+      "variation": 3208
+    },
+    {
+      "skill": 1197,
+      "variation": 3200
+    },
+    {
+      "skill": 1198,
+      "variation": 306
+    },
+    {
+      "skill": 1200,
+      "variation": 200
+    }
+  ],
+  "nativeBehaviorRows": 10855,
+  "genericBehaviorMapping": true
+}

@@ -1,0 +1,96 @@
+{
+  "version": "0.10.10",
+  "originalHksSha256": "2ec9f8ad913a8a6f1cf4a6f4794692a59e1fecda156bc9a87b3068f226c0dc1d",
+  "originalRegulationSha256": "876A3CA279A4561D0C69F81FE5E510C75C59AB9A8A201694F8CF4A42C91E0268",
+  "nativeExecJumpUnchanged": true,
+  "nativeEligibilityEffect": 98215,
+  "nativeSuperJumpVariant": 7,
+  "region": {
+    "file": "m60_44_37_40.msb.dcx",
+    "sourceSha256": "E501C71FDD0EF83DA1BD06A5E4FDA641C230B7B91370E1D4FBA940393FCD7D8A",
+    "type": "SoulsFormats.MSB_NR+Region+Other",
+    "Name": "疑似霊気流 m60_44_37_40 000",
+    "RegionID": 20,
+    "Common_EntityID": 1047402502,
+    "position": [
+      -61.955,
+      -796.219,
+      -9.916
+    ],
+    "fields": {}
+  },
+  "event": {
+    "file": "m60_44_37_40.emevd.dcx",
+    "sourceSha256": "58AC5243DC8B792ABFA43568B8B8D58CCD5863D9B2DAEF4DF7061A5BED90FE38",
+    "ID": 1047402505,
+    "RestBehavior": 0,
+    "Parameters": [
+      {
+        "InstructionIndex": 2,
+        "TargetStartByte": 8,
+        "SourceStartByte": 0,
+        "ByteCount": 4,
+        "UnkID": 1
+      }
+    ],
+    "instructions": [
+      {
+        "Bank": 2000,
+        "ID": 2,
+        "hex": "00000000",
+        "values": [
+          0
+        ]
+      },
+      {
+        "Bank": 3,
+        "ID": 0,
+        "hex": "01010000EB230000",
+        "values": [
+          257,
+          9195
+        ]
+      },
+      {
+        "Bank": 3,
+        "ID": 2,
+        "hex": "01010000204E00000000000001000000",
+        "values": [
+          257,
+          20000,
+          0,
+          1
+        ]
+      },
+      {
+        "Bank": 0,
+        "ID": 0,
+        "hex": "00010100",
+        "values": [
+          65792
+        ]
+      },
+      {
+        "Bank": 2004,
+        "ID": 8,
+        "hex": "204E0000A77F0100",
+        "values": [
+          20000,
+          98215
+        ]
+      },
+      {
+        "Bank": 1000,
+        "ID": 4,
+        "hex": "01000000",
+        "values": [
+          1
+        ]
+      }
+    ]
+  },
+  "interpretation": "Great Hollow pseudo-stream eligibility is independent of env366 region height; track the flight apex from this launch hint.",
+  "centralCrystalGameplayVerified": false,
+  "ordinarySpiritspringUserConfirmedForVersion": "0.10.9",
+  "multiplayerVerified": false
+}

@@ -1,0 +1,103 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "F748F71D22ABCC4270E6B5A18BF032694979A8F9D9A2F0C1FB054131493DC570",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "2DD11F97C2C928DC94FAC32BACBBAE748067853575FACA4A91A38056EE404930",
+      "outputSha256": "44C49D4B79D64A401CF69887BC84AE978435801639AE27EA03E4F358B81796D4",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95001800,
+          "before": "\u5F3A\u5316\u3010\u53EC\u5524\u7075\u9B42\u3011",
+          "after": "\u5F3A\u5316\u3010\u6B7B\u7075\u672F\u3011"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u5F3A\u654C\u7075\u9B42\u3002\u672A\u53EC\u5524\u5BB6\u4EBA\u65F6\uFF0C\u4F7F\u7528\u6280\u827A\u53EC\u56DE\u53EF\u53EC\u5524\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2",
+          "after": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u4E00\u4E2A\u5F3A\u654C\u7684\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2"
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95001800,
+          "before": "\u5F3A\u5316\u3010\u53EC\u5524\u7075\u9B42\u3011",
+          "after": "\u5F3A\u5316\u3010\u6B7B\u7075\u672F\u3011"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u5F3A\u654C\u7075\u9B42\u3002\u672A\u53EC\u5524\u5BB6\u4EBA\u65F6\uFF0C\u4F7F\u7528\u6280\u827A\u53EC\u56DE\u53EF\u53EC\u5524\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2",
+          "after": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u4E00\u4E2A\u5F3A\u654C\u7684\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u5F3A\u654C\u7075\u9B42\u3002\u672A\u53EC\u5524\u5BB6\u4EBA\u65F6\uFF0C\u4F7F\u7528\u6280\u827A\u53EC\u56DE\u53EF\u53EC\u5524\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2",
+          "after": "\u50A8\u5B58\u6700\u8FD1\u6253\u5012\u7684\u4E00\u4E2A\u5F3A\u654C\u7684\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\uFF0C\u6301\u7EED15\u79D2"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "6C61945DDFBCFE6B9DF6E2EB9ED9E9D97134ABC8BCE1FA58DFE181F174076AFF",
+      "outputSha256": "0545C63564A61AED8D9751C34DA51AD41F86A0EF9F3C6FE5E0AEB2381EE24E89",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95001800,
+          "before": "Enhanced Spirit Summoning",
+          "after": "Enhanced Necromancy"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. With no family summoned, use the skill\u0027s recall to summon its spirit to fight for you. The spirit loses 1/15 of its maximum HP each second.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you for 15 seconds."
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95001800,
+          "before": "Enhanced Spirit Summoning",
+          "after": "Enhanced Necromancy"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. With no family summoned, use the skill\u0027s recall to summon its spirit to fight for you. The spirit loses 1/15 of its maximum HP each second.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you for 15 seconds."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. With no family summoned, use the skill\u0027s recall to summon its spirit to fight for you. The spirit loses 1/15 of its maximum HP each second.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you for 15 seconds."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "outputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

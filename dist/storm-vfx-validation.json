@@ -1,0 +1,283 @@
+{
+  "version": "0.17.58",
+  "resourceRevision": "compact-common-dlc01",
+  "resourcePath": "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx",
+  "commonInputSha256": "0DFD146F6CF246F8A9C2763730FAB2941BA2943E9644A460C7854CB4AA436269",
+  "sharedInputSha256": "F2306FC8657E6785B05DDD57251C3B5BAF985CCBE553B6256076FBF4FCE5ABE9",
+  "bossInputSha256": "77066E5E105C2924D937A41FB0CFF7648D3F30A9594D29E941BBC929A8F879CF",
+  "outputSha256": "8B937177C56946336C11B2EF351C3DC2FB9958C50DD6C2CFA9FF89612D9CC932",
+  "outputBytes": 2687440,
+  "replacedLargePackageBytes": 80602304,
+  "effects": [
+    450940,
+    450941,
+    450945,
+    450946,
+    450950,
+    450951,
+    450954,
+    450955,
+    450956,
+    450957,
+    450958,
+    450959,
+    450960,
+    450961,
+    450962,
+    450963,
+    450965
+  ],
+  "dependencies": [
+    "s00001_a.tif",
+    "s00002_m.tif",
+    "s00003_r.tif",
+    "s00007_em.tif",
+    "s00008_n.tif",
+    "s10011_a.tif",
+    "s10020_a.tif",
+    "s10030_a.tif",
+    "s10091_a.tif",
+    "s21011_a.tif",
+    "s21012_n.tif",
+    "s21021_a.tif",
+    "s26001_a.tif",
+    "s26011_a.tif",
+    "s26041_a.tif",
+    "s31041_a.tif",
+    "s31231_a.tif",
+    "s31261_a.tif",
+    "s31271_a.tif",
+    "s31281_a.tif",
+    "s31411_a.tif",
+    "s31421_a.tif",
+    "s33025_a.tif",
+    "s34010_a.tif",
+    "s34020_a.tif",
+    "s34030_a.tif",
+    "s34031_a.tif",
+    "s34041_a.tif",
+    "s34050_a.tif",
+    "s43011_a.tif",
+    "s43012_n.tif",
+    "s64002_n.tif",
+    "s64012_n.tif",
+    "s82080.sib",
+    "s82081.sib",
+    "s83020.SIB",
+    "s83021.SIB",
+    "s83063.sib",
+    "s84170_a.tif",
+    "s84170_n.tif",
+    "s84170.sib",
+    "s84171.sib",
+    "s88280_3m.tif",
+    "s88300_a.tif",
+    "s88300_em.tif",
+    "s88350.sib"
+  ],
+  "added": [
+    {
+      "ID": 428,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450940.fxr",
+      "bytes": 40208
+    },
+    {
+      "ID": 400428,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450940.ffxreslist",
+      "bytes": 84
+    },
+    {
+      "ID": 429,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450941.fxr",
+      "bytes": 8784
+    },
+    {
+      "ID": 400429,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450941.ffxreslist",
+      "bytes": 42
+    },
+    {
+      "ID": 430,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450945.fxr",
+      "bytes": 131456
+    },
+    {
+      "ID": 400430,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450945.ffxreslist",
+      "bytes": 178
+    },
+    {
+      "ID": 431,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450946.fxr",
+      "bytes": 142656
+    },
+    {
+      "ID": 400431,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450946.ffxreslist",
+      "bytes": 357
+    },
+    {
+      "ID": 432,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450950.fxr",
+      "bytes": 36032
+    },
+    {
+      "ID": 400432,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450950.ffxreslist",
+      "bytes": 98
+    },
+    {
+      "ID": 433,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450951.fxr",
+      "bytes": 47824
+    },
+    {
+      "ID": 400433,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450951.ffxreslist",
+      "bytes": 112
+    },
+    {
+      "ID": 434,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450954.fxr",
+      "bytes": 35040
+    },
+    {
+      "ID": 400434,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450954.ffxreslist",
+      "bytes": 125
+    },
+    {
+      "ID": 435,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450955.fxr",
+      "bytes": 75344
+    },
+    {
+      "ID": 400435,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450955.ffxreslist",
+      "bytes": 208
+    },
+    {
+      "ID": 436,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450956.fxr",
+      "bytes": 33664
+    },
+    {
+      "ID": 400436,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450956.ffxreslist",
+      "bytes": 180
+    },
+    {
+      "ID": 437,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450957.fxr",
+      "bytes": 11184
+    },
+    {
+      "ID": 400437,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450957.ffxreslist",
+      "bytes": 28
+    },
+    {
+      "ID": 438,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450958.fxr",
+      "bytes": 8464
+    },
+    {
+      "ID": 400438,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450958.ffxreslist",
+      "bytes": 42
+    },
+    {
+      "ID": 439,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450959.fxr",
+      "bytes": 8464
+    },
+    {
+      "ID": 400439,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450959.ffxreslist",
+      "bytes": 42
+    },
+    {
+      "ID": 440,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450960.fxr",
+      "bytes": 78240
+    },
+    {
+      "ID": 400440,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450960.ffxreslist",
+      "bytes": 235
+    },
+    {
+      "ID": 441,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450961.fxr",
+      "bytes": 3296
+    },
+    {
+      "ID": 400441,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450961.ffxreslist",
+      "bytes": 0
+    },
+    {
+      "ID": 442,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450962.fxr",
+      "bytes": 3296
+    },
+    {
+      "ID": 400442,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450962.ffxreslist",
+      "bytes": 0
+    },
+    {
+      "ID": 443,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450963.fxr",
+      "bytes": 3296
+    },
+    {
+      "ID": 400443,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450963.ffxreslist",
+      "bytes": 0
+    },
+    {
+      "ID": 444,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000450965.fxr",
+      "bytes": 39296
+    },
+    {
+      "ID": 400444,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000450965.ffxreslist",
+      "bytes": 98
+    },
+    {
+      "ID": 200016,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\model\\s82080.flver",
+      "bytes": 8016
+    },
+    {
+      "ID": 200017,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\model\\s82081.flver",
+      "bytes": 4720
+    },
+    {
+      "ID": 200018,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\model\\s84170.flver",
+      "bytes": 3728
+    },
+    {
+      "ID": 200019,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\model\\s84171.flver",
+      "bytes": 2560
+    },
+    {
+      "ID": 200020,
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\model\\s88350.flver",
+      "bytes": 24592
+    }
+  ],
+  "originalCommonMembers": 890,
+  "originalCommonMembersUnchanged": true,
+  "originalResourceBytesPreserved": true,
+  "attacksAnimationsAndStateConditionsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "userReportedVisualTestPassed": true,
+  "userVerificationNote": "用户在重启加载精简包后反馈测试成功；未明确联机范围，不扩展为联机验证。"
+}

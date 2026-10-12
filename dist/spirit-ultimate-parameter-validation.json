@@ -1,0 +1,11 @@
+{
+  "version": "0.17.39",
+  "inputSha256": "4C2DA63670FECD5CC001E4F006672F37B87AF0328E217B0913F78D9A6D030A8A",
+  "outputSha256": "677915E9EF6BED3C164FCD753500B781E7BF7B68D93EFB9995BD666EBC357438",
+  "changedEffect": 95001801,
+  "changedField": "changeHpRate",
+  "value": 0,
+  "originalPassive705200Unchanged": true,
+  "otherRowsAndTablesUnchanged": true,
+  "gameplayVerified": false
+}

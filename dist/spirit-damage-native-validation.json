@@ -1,0 +1,10 @@
+{
+  "version": "0.17.46",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "function": "6C2210",
+  "cases": 516,
+  "field": "NpcParam +15D bit 3 / isCalculatePvPDamage",
+  "nativeCodeExecuted": true,
+  "virtualGettersMocked": true,
+  "gameplayVerified": false
+}

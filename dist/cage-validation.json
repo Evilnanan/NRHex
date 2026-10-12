@@ -1,0 +1,134 @@
+{
+  "version": "0.17.27",
+  "nativeBossCount": 37,
+  "mapTemplates": [
+    "m46_50_00_00",
+    "m46_60_00_00",
+    "m46_70_00_00",
+    "m46_80_00_00"
+  ],
+  "openBranchCases": [
+    {
+      "owner": false,
+      "keys": 0,
+      "spawnRequested": false,
+      "keysConsumed": 0
+    },
+    {
+      "owner": false,
+      "keys": 1,
+      "spawnRequested": false,
+      "keysConsumed": 1
+    },
+    {
+      "owner": true,
+      "keys": 0,
+      "spawnRequested": true,
+      "keysConsumed": 0
+    },
+    {
+      "owner": true,
+      "keys": 1,
+      "spawnRequested": true,
+      "keysConsumed": 0
+    }
+  ],
+  "opcodeArgumentsDecoded": true,
+  "originalMapReconstructionPassed": true,
+  "originalEventsPreserved": true,
+  "flagStorage": {
+    "nativeSetterRva": "0x60d330",
+    "isolatedExactNativeCode": true,
+    "old6000RequestSilentlyIgnored": true,
+    "new7000StatesSetAndClear": true,
+    "gameProcessAccessed": false
+  },
+  "relicNativeCounter": 8145,
+  "relicNativeStackCap": 7,
+  "greatHollowFlag": 7604,
+  "birthFacing": "baked part and generator yaw toward each local stone, corrected by 180 degrees",
+  "victoryDelaySeconds": 5,
+  "cleanupDelaySeconds": 20,
+  "reopenDelaySeconds": 5,
+  "difficultyEffects": [
+    {
+      "ID": 99150,
+      "maxHpRate": 0.55,
+      "attackPowerRate": 0.53,
+      "replaceSpEffectId": 99154
+    },
+    {
+      "ID": 99152,
+      "maxHpRate": 0.75,
+      "attackPowerRate": 0.8,
+      "replaceSpEffectId": 99157
+    },
+    {
+      "ID": 99153,
+      "maxHpRate": 1,
+      "attackPowerRate": 1,
+      "replaceSpEffectId": 99158
+    }
+  ],
+  "nativeProgressionEvent": 90045004,
+  "progressionCasesPassed": true,
+  "deathTimelineVerified": true,
+  "cleanupExclusionVerified": true,
+  "selectorAcknowledgesReadyInsteadOfRequestOff": true,
+  "oldMissedEdgeReproduced": true,
+  "consecutiveImmediateReopenRoundsPerTemplate": 200,
+  "healthBarWaitsForLocalReveal": true,
+  "nativeHealthBarAssociationRestored": true,
+  "combinedDelayedPeerRevealCases": 444,
+  "healthBarLocal": true,
+  "healthBarShowRadius": 50,
+  "healthBarFarHideRadius": 100,
+  "healthBarPredicateCasesPassed": true,
+  "healthBarRequiresReplicaAI": false,
+  "healthBarNativeLocalSlots": [
+    0,
+    1
+  ],
+  "healthBarSlotFlags": [
+    5000,
+    5001
+  ],
+  "perPeerBirthPlayback": true,
+  "peerBirthReplayAndLateLoadCasesPassed": true,
+  "nativeFogModels": 6,
+  "towerFog": [
+    690047,
+    690046
+  ],
+  "towerAnimation": 20026,
+  "nativeAnimationOverrides": [
+    {
+      "npc": 25001020,
+      "model": "c2500",
+      "animation": 20025,
+      "loop": true,
+      "cancelled": true,
+      "map": "m46_70_00_00",
+      "entity": 46700840,
+      "eventId": 90045001
+    }
+  ],
+  "idleResets": [
+    {
+      "npc": 71000010,
+      "model": "c7100",
+      "animation": 0
+    }
+  ],
+  "towerWaitSeconds": 4,
+  "towerWalkModels": 24,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pendingChecks": [
+    "Birth facing and fog for field enemies",
+    "Native private-server coop: client opens cage, host/client fog and HUD; reverse opener roles; late loading and repeat boss",
+    "Native rune/latent reward repeat drops",
+    "No grace and native relic stack",
+    "Coop authority and visibility"
+  ]
+}

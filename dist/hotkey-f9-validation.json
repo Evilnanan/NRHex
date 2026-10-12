@@ -1,0 +1,21 @@
+{
+  "version": "0.17.41",
+  "hotkey": "Ctrl+F9",
+  "preferredHexes": [
+    95001900,
+    95002000
+  ],
+  "chantHeroIds": [
+    4,
+    6,
+    7
+  ],
+  "alreadyOwnedChoicesReplaced": true,
+  "existingHotkeysPreserved": true,
+  "focusedConfigAndRewardTestPassed": true,
+  "buildPassed": true,
+  "dllSha256": "940c3f8e56bcaf55ee1207f27b99a21ed2ae47c8528a584e6e5b2c7c1d940bd1",
+  "configSha256": "2ba48ea421c33342c0b88bd2ecffeedc8a54d4ffa15f37116780e29ba6edba20",
+  "gameLaunched": false,
+  "gameplayVerified": false
+}

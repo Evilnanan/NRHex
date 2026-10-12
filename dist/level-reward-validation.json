@@ -1,0 +1,74 @@
+{
+  "version": "0.14.6",
+  "levels": [
+    2,
+    7,
+    10,
+    13
+  ],
+  "nativePlayerLevelOffset": "GameDataMan+8 -> +68",
+  "nativeLocalSlotOffset": "GameDataMan+8 -> +8",
+  "rarity": 3,
+  "nativeRarityEnum": {
+    "Key": "RARITY",
+    "Names": [
+      {
+        "Language": "English",
+        "Text": "RARITY"
+      }
+    ],
+    "Options": [
+      {
+        "Key": "0",
+        "Names": [
+          {
+            "Language": "English",
+            "Text": "Common / White"
+          }
+        ]
+      },
+      {
+        "Key": "1",
+        "Names": [
+          {
+            "Language": "English",
+            "Text": "Uncommon / Blue"
+          }
+        ]
+      },
+      {
+        "Key": "2",
+        "Names": [
+          {
+            "Language": "English",
+            "Text": "Rare / Purple"
+          }
+        ]
+      },
+      {
+        "Key": "3",
+        "Names": [
+          {
+            "Language": "English",
+            "Text": "Legendary / Gold"
+          }
+        ]
+      },
+      {
+        "Key": "9",
+        "Names": [
+          {
+            "Language": "English",
+            "Text": "Unique / Red"
+          }
+        ]
+      }
+    ]
+  },
+  "localEventsReadBack": true,
+  "nativeFreshDeploymentGuardAndResetReadBack": true,
+  "returnToHubClearsOnlyCustomReceipts": true,
+  "nativeIntegerReturnAndDescriptorOffsetsVerified": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

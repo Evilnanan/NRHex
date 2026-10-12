@@ -1,0 +1,211 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "30F46C391E5EEE07580A50A07DE5ACFBBBF25BFCA7B82C1C72C983F299E26CD4",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "B59FB16D4454078458946A8E60DE4BFA1ADB2B3B1A890E496F37B9C7E9BD9245",
+      "outputSha256": "AC586B946AAEEA10F651D0A4A937980E8250DB2A9B0CBD65E4C199737A7B77E8",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95001900,
+          "before": "\u5929\u4F7F\u7684\u6DFB\u7FFC",
+          "after": ""
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001300,
+          "before": "\u5F3A\u5316\u540E\u8DC3\u7684\u95EA\u907F\u80FD\u529B\u3002\u4F7F\u7528\u540E\u8DC3\u653B\u51FB\u8FDB\u884C\u53CD\u51FB\u6216\u6B63\u9762\u5904\u51B3\u654C\u4EBA\u65F6\uFF0C\u56DE\u590D25%\u7EDD\u62DB\u91CF\u8868\u3002\u7FFB\u6EDA\u6216\u53D7\u5230\u635F\u4F24\u65F6\uFF0C\u635F\u593130%\u7EDD\u62DB\u91CF\u8868\u3002\u4F60\u7684\u540E\u8DC3\u653B\u51FB\u968F\u7EDD\u62DB\u91CF\u8868\u63D0\u5347\u6700\u591A200%\u4F24\u5BB3",
+          "after": "\u5F3A\u5316\u540E\u8DC3\u7684\u95EA\u907F\u80FD\u529B\u3002\u540E\u8DC3\u653B\u51FB\u8FDB\u884C\u53CD\u51FB\u6216\u6B63\u9762\u5904\u51B3\u654C\u4EBA\u65F6\uFF0C\u56DE\u590D25%\u7EDD\u62DB\u91CF\u8868\u3002\u7FFB\u6EDA\u6216\u53D7\u5230\u635F\u4F24\u65F6\uFF0C\u635F\u593130%\u7EDD\u62DB\u91CF\u8868\u3002\u4F60\u7684\u540E\u8DC3\u653B\u51FB\u968F\u7EDD\u62DB\u91CF\u8868\u63D0\u5347\u6700\u591A200%\u4F24\u5BB3"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001700,
+          "before": "\u8840\u91CF\u4E0A\u9650\u63D0\u534750%\u3002\u51CF\u4F24\u7387\u964D\u4F4E30%\u3002\u7A81\u523A\u6297\u6027\u964D\u4F4E100%\u3002\u9635\u4EA1\u6216\u6FD2\u6B7B\u65F6\u5F15\u53D1\u81EA\u7206\uFF0C\u5BF9\u5468\u56F4\u654C\u4EBA\u9020\u6210\u7B49\u540C\u4E8E\u4F60\u8840\u91CF\u4E0A\u9650\u7684\u4F24\u5BB3",
+          "after": "\u8840\u91CF\u4E0A\u9650\u63D0\u534750%\u3002\u51CF\u4F24\u7387\u964D\u4F4E30%\u3002\u7A81\u523A\u6297\u6027\u964D\u4F4E100%\u3002\u9635\u4EA1\u6216\u6FD2\u6B7B\u65F6\u7206\u70B8\uFF0C\u5BF9\u9644\u8FD1\u654C\u4EBA\u9020\u6210\u7B49\u540C\u4E8E\u4F60\u8840\u91CF\u4E0A\u9650\u7684\u4F24\u5BB3"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u4E00\u4E2A\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\u3002\u7075\u9B42\u6BCF\u79D2\u6D41\u59311/60\u7684\u8840\u91CF\u4E0A\u9650\uFF0C\u9020\u6210\u539F\u672C10%\u7684\u4F24\u5BB3",
+          "after": "\u50A8\u5B58\u4E00\u4E2A\u6700\u8FD1\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\uFF0C\u77ED\u65F6\u95F4\u5185\u4E3A\u4F60\u4F5C\u6218"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002000,
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u7CBE\u529B\u503C",
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D15\u70B9\u7CBE\u529B\u503C"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001900,
+          "before": "\u4F60\u548C\u654C\u4EBA\u540C\u65F6\u653B\u51FB\u65F6\uFF0C\u8BA9\u654C\u4EBA\u7684\u653B\u51FB\u5931\u6548",
+          "after": ""
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95001900,
+          "before": "\u5929\u4F7F\u7684\u6DFB\u7FFC",
+          "after": ""
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001300,
+          "before": "\u5F3A\u5316\u540E\u8DC3\u7684\u95EA\u907F\u80FD\u529B\u3002\u4F7F\u7528\u540E\u8DC3\u653B\u51FB\u8FDB\u884C\u53CD\u51FB\u6216\u6B63\u9762\u5904\u51B3\u654C\u4EBA\u65F6\uFF0C\u56DE\u590D25%\u7EDD\u62DB\u91CF\u8868\u3002\u7FFB\u6EDA\u6216\u53D7\u5230\u635F\u4F24\u65F6\uFF0C\u635F\u593130%\u7EDD\u62DB\u91CF\u8868\u3002\u4F60\u7684\u540E\u8DC3\u653B\u51FB\u968F\u7EDD\u62DB\u91CF\u8868\u63D0\u5347\u6700\u591A200%\u4F24\u5BB3",
+          "after": "\u5F3A\u5316\u540E\u8DC3\u7684\u95EA\u907F\u80FD\u529B\u3002\u540E\u8DC3\u653B\u51FB\u8FDB\u884C\u53CD\u51FB\u6216\u6B63\u9762\u5904\u51B3\u654C\u4EBA\u65F6\uFF0C\u56DE\u590D25%\u7EDD\u62DB\u91CF\u8868\u3002\u7FFB\u6EDA\u6216\u53D7\u5230\u635F\u4F24\u65F6\uFF0C\u635F\u593130%\u7EDD\u62DB\u91CF\u8868\u3002\u4F60\u7684\u540E\u8DC3\u653B\u51FB\u968F\u7EDD\u62DB\u91CF\u8868\u63D0\u5347\u6700\u591A200%\u4F24\u5BB3"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001700,
+          "before": "\u8840\u91CF\u4E0A\u9650\u63D0\u534750%\u3002\u51CF\u4F24\u7387\u964D\u4F4E30%\u3002\u7A81\u523A\u6297\u6027\u964D\u4F4E100%\u3002\u9635\u4EA1\u6216\u6FD2\u6B7B\u65F6\u5F15\u53D1\u81EA\u7206\uFF0C\u5BF9\u5468\u56F4\u654C\u4EBA\u9020\u6210\u7B49\u540C\u4E8E\u4F60\u8840\u91CF\u4E0A\u9650\u7684\u4F24\u5BB3",
+          "after": "\u8840\u91CF\u4E0A\u9650\u63D0\u534750%\u3002\u51CF\u4F24\u7387\u964D\u4F4E30%\u3002\u7A81\u523A\u6297\u6027\u964D\u4F4E100%\u3002\u9635\u4EA1\u6216\u6FD2\u6B7B\u65F6\u7206\u70B8\uFF0C\u5BF9\u9644\u8FD1\u654C\u4EBA\u9020\u6210\u7B49\u540C\u4E8E\u4F60\u8840\u91CF\u4E0A\u9650\u7684\u4F24\u5BB3"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u4E00\u4E2A\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\u3002\u7075\u9B42\u6BCF\u79D2\u6D41\u59311/60\u7684\u8840\u91CF\u4E0A\u9650\uFF0C\u9020\u6210\u539F\u672C10%\u7684\u4F24\u5BB3",
+          "after": "\u50A8\u5B58\u4E00\u4E2A\u6700\u8FD1\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\uFF0C\u77ED\u65F6\u95F4\u5185\u4E3A\u4F60\u4F5C\u6218"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002000,
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u7CBE\u529B\u503C",
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D15\u70B9\u7CBE\u529B\u503C"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001900,
+          "before": "\u4F60\u548C\u654C\u4EBA\u540C\u65F6\u653B\u51FB\u65F6\uFF0C\u8BA9\u654C\u4EBA\u7684\u653B\u51FB\u5931\u6548",
+          "after": ""
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001300,
+          "before": "\u5F3A\u5316\u540E\u8DC3\u7684\u95EA\u907F\u80FD\u529B\u3002\u4F7F\u7528\u540E\u8DC3\u653B\u51FB\u8FDB\u884C\u53CD\u51FB\u6216\u6B63\u9762\u5904\u51B3\u654C\u4EBA\u65F6\uFF0C\u56DE\u590D25%\u7EDD\u62DB\u91CF\u8868\u3002\u7FFB\u6EDA\u6216\u53D7\u5230\u635F\u4F24\u65F6\uFF0C\u635F\u593130%\u7EDD\u62DB\u91CF\u8868\u3002\u4F60\u7684\u540E\u8DC3\u653B\u51FB\u968F\u7EDD\u62DB\u91CF\u8868\u63D0\u5347\u6700\u591A200%\u4F24\u5BB3",
+          "after": "\u5F3A\u5316\u540E\u8DC3\u7684\u95EA\u907F\u80FD\u529B\u3002\u540E\u8DC3\u653B\u51FB\u8FDB\u884C\u53CD\u51FB\u6216\u6B63\u9762\u5904\u51B3\u654C\u4EBA\u65F6\uFF0C\u56DE\u590D25%\u7EDD\u62DB\u91CF\u8868\u3002\u7FFB\u6EDA\u6216\u53D7\u5230\u635F\u4F24\u65F6\uFF0C\u635F\u593130%\u7EDD\u62DB\u91CF\u8868\u3002\u4F60\u7684\u540E\u8DC3\u653B\u51FB\u968F\u7EDD\u62DB\u91CF\u8868\u63D0\u5347\u6700\u591A200%\u4F24\u5BB3"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001700,
+          "before": "\u8840\u91CF\u4E0A\u9650\u63D0\u534750%\u3002\u51CF\u4F24\u7387\u964D\u4F4E30%\u3002\u7A81\u523A\u6297\u6027\u964D\u4F4E100%\u3002\u9635\u4EA1\u6216\u6FD2\u6B7B\u65F6\u5F15\u53D1\u81EA\u7206\uFF0C\u5BF9\u5468\u56F4\u654C\u4EBA\u9020\u6210\u7B49\u540C\u4E8E\u4F60\u8840\u91CF\u4E0A\u9650\u7684\u4F24\u5BB3",
+          "after": "\u8840\u91CF\u4E0A\u9650\u63D0\u534750%\u3002\u51CF\u4F24\u7387\u964D\u4F4E30%\u3002\u7A81\u523A\u6297\u6027\u964D\u4F4E100%\u3002\u9635\u4EA1\u6216\u6FD2\u6B7B\u65F6\u7206\u70B8\uFF0C\u5BF9\u9644\u8FD1\u654C\u4EBA\u9020\u6210\u7B49\u540C\u4E8E\u4F60\u8840\u91CF\u4E0A\u9650\u7684\u4F24\u5BB3"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001800,
+          "before": "\u50A8\u5B58\u6700\u8FD1\u4E00\u4E2A\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\u4E3A\u4F60\u4F5C\u6218\u3002\u7075\u9B42\u6BCF\u79D2\u6D41\u59311/60\u7684\u8840\u91CF\u4E0A\u9650\uFF0C\u9020\u6210\u539F\u672C10%\u7684\u4F24\u5BB3",
+          "after": "\u50A8\u5B58\u4E00\u4E2A\u6700\u8FD1\u6253\u5012\u7684\u5F3A\u5927\u7075\u9B42\u3002\u65BD\u653E\u7EDD\u62DB\u65F6\uFF0C\u540C\u65F6\u91CA\u653E\u51FA\u50A8\u5B58\u7684\u7075\u9B42\uFF0C\u77ED\u65F6\u95F4\u5185\u4E3A\u4F60\u4F5C\u6218"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002000,
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u7CBE\u529B\u503C",
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D15\u70B9\u7CBE\u529B\u503C"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001900,
+          "before": "\u4F60\u548C\u654C\u4EBA\u540C\u65F6\u653B\u51FB\u65F6\uFF0C\u8BA9\u654C\u4EBA\u7684\u653B\u51FB\u5931\u6548",
+          "after": ""
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "900D88AF0B41851EAF0B8B1CF54D8B864677A5A0FDC23EA7C1CAF987AEA38C70",
+      "outputSha256": "D8D58F605E05276FA2A4D4A9C6D3FCFEB2D3E18713514270CE8BDFF34117FBE5",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95001900,
+          "before": "Angel Wings",
+          "after": ""
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 10% of its original damage.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage."
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002000,
+          "before": "Continuously restore stamina while charging a sorcery or incantation.",
+          "after": "Restore 15 stamina per second while charging a sorcery or incantation."
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001900,
+          "before": "For 1/15 second after your attack hits an enemy, nullify incoming enemy attacks.",
+          "after": ""
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95001900,
+          "before": "Angel Wings",
+          "after": ""
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 10% of its original damage.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002000,
+          "before": "Continuously restore stamina while charging a sorcery or incantation.",
+          "after": "Restore 15 stamina per second while charging a sorcery or incantation."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001900,
+          "before": "For 1/15 second after your attack hits an enemy, nullify incoming enemy attacks.",
+          "after": ""
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001800,
+          "before": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 10% of its original damage.",
+          "after": "Store the soul of the last powerful enemy defeated by your team. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002000,
+          "before": "Continuously restore stamina while charging a sorcery or incantation.",
+          "after": "Restore 15 stamina per second while charging a sorcery or incantation."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001900,
+          "before": "For 1/15 second after your attack hits an enemy, nullify incoming enemy attacks.",
+          "after": ""
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "outputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

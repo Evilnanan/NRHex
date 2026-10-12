@@ -1,0 +1,159 @@
+{
+  "version": "0.17.10",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "originalCategoryPredicatesExecuted": true,
+  "originalGameplayQueryExecuted": true,
+  "nativeMatchingCases": [
+    {
+      "category": 10,
+      "sameIdReused": false,
+      "differentIdReused": false
+    },
+    {
+      "category": 20,
+      "sameIdReused": true,
+      "differentIdReused": false
+    }
+  ],
+  "repeatedNativeReceiveModelAnnouncements": 600,
+  "viewerReplicaRebuildModelPassed": true,
+  "parameterReadbackPassed": true,
+  "changes": [
+    {
+      "id": 95000100,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000200,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000300,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000400,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000403,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000403,
+      "field": "effectEndurance",
+      "before": -1,
+      "after": 2
+    },
+    {
+      "id": 95000500,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000600,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000700,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000701,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000701,
+      "field": "effectEndurance",
+      "before": -1,
+      "after": 2
+    },
+    {
+      "id": 95000800,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95000900,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95001100,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95001200,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95001203,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95001203,
+      "field": "effectEndurance",
+      "before": -1,
+      "after": 2
+    },
+    {
+      "id": 95001300,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95001400,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95001500,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    },
+    {
+      "id": 95001600,
+      "field": "spCategory",
+      "before": 10,
+      "after": 20
+    }
+  ],
+  "ownerRefreshSeconds": 5,
+  "readyRefreshSeconds": 0.75,
+  "readyLeaseSeconds": 2,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pendingChecks": [
+    "Both teammate detail list and HUD after owner and viewer revival",
+    "Repeated Escape and Ultimate cooldown transitions",
+    "Crystal one-hit consumption, 40-second cooldown and aura continuity"
+  ]
+}

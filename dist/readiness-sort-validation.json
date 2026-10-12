@@ -1,0 +1,33 @@
+{
+  "version": "0.17.28",
+  "originalExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "nativeHudComparatorRva": "7df110",
+  "nativeMenuComparatorRva": "82ba40",
+  "nativeEntryBytes": 20,
+  "readinessEffects": {
+    "95000403": 20297,
+    "95000701": 20408,
+    "95001203": 20222
+  },
+  "sortKeyRemaining": -1,
+  "nativeHudCases": 1761,
+  "originalHudSwapReproduced": true,
+  "allCustomIconRowsAudited": true,
+  "temporaryStealthAndDrinkingUnchanged": true,
+  "realLeasesAndTimersUnchanged": true,
+  "nativeHudIndexZeroFixture": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "previousUserFeedback": {
+    "artsStance": "fixed",
+    "jiahaoRanged": "fixed",
+    "menuReadinessOrder": "fixed",
+    "hudReadinessOrder": "still swapping in 0.17.27"
+  },
+  "menuNativeComparatorWithExplicitRegistryStubPassed": true,
+  "rustUnitTestsPassed": 159,
+  "signatureGuardsPassed": 56,
+  "actualHudAndListRenderingVerified": false,
+  "pluginLoadingVerified": true,
+  "runtimeEvidence": "runtime-validation.json"
+}

@@ -1,0 +1,308 @@
+{
+  "version": "0.10.3",
+  "effectFilterRva": "0x511010",
+  "attackRateCalculationRva": "0x502830",
+  "sourceMaskOffset": "0x14",
+  "cachedRateOffsets": [
+    "0x90",
+    "0xa4",
+    "0xa8",
+    "0xac",
+    "0xb0"
+  ],
+  "nativeAttackRateTests": [
+    {
+      "applyType": 0,
+      "effects": [],
+      "before": 1.0,
+      "after": 1.0
+    },
+    {
+      "applyType": 0,
+      "effects": [
+        8320500
+      ],
+      "before": 1.0,
+      "after": 1.090000033378601
+    },
+    {
+      "applyType": 0,
+      "effects": [
+        8350000
+      ],
+      "before": 1.0,
+      "after": 1.0
+    },
+    {
+      "applyType": 0,
+      "effects": [
+        8320500,
+        8350000
+      ],
+      "before": 1.0,
+      "after": 1.090000033378601
+    },
+    {
+      "applyType": 1,
+      "effects": [],
+      "before": 1.0,
+      "after": 1.0
+    },
+    {
+      "applyType": 1,
+      "effects": [
+        8320500
+      ],
+      "before": 1.0,
+      "after": 1.090000033378601
+    },
+    {
+      "applyType": 1,
+      "effects": [
+        8350000
+      ],
+      "before": 1.0,
+      "after": 1.0
+    },
+    {
+      "applyType": 1,
+      "effects": [
+        8320500,
+        8350000
+      ],
+      "before": 1.0,
+      "after": 1.090000033378601
+    },
+    {
+      "applyType": 2,
+      "effects": [],
+      "before": 1.0,
+      "after": 1.0
+    },
+    {
+      "applyType": 2,
+      "effects": [
+        8320500
+      ],
+      "before": 1.0,
+      "after": 1.090000033378601
+    },
+    {
+      "applyType": 2,
+      "effects": [
+        8350000
+      ],
+      "before": 1.0,
+      "after": 1.0
+    },
+    {
+      "applyType": 2,
+      "effects": [
+        8320500,
+        8350000
+      ],
+      "before": 1.0,
+      "after": 1.090000033378601
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        7006600
+      ],
+      "before": 1.0,
+      "after": 1.059999942779541
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        7006700
+      ],
+      "before": 1.0,
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        7006600,
+        7006700
+      ],
+      "before": 1.0,
+      "after": 1.059999942779541
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320500,
+        8350000
+      ],
+      "before": 1.0,
+      "after": 1.090000033378601
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        7006600,
+        7006600,
+        7006700,
+        7006700
+      ],
+      "before": 1.0,
+      "after": 1.123599886894226
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        7006600
+      ],
+      "before": 1.0,
+      "after": 1.059999942779541
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        7006700
+      ],
+      "before": 1.0,
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        7006600,
+        7006700
+      ],
+      "before": 1.0,
+      "after": 1.059999942779541
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320500,
+        8350000
+      ],
+      "before": 1.0,
+      "after": 1.090000033378601
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        7006600,
+        7006600,
+        7006700,
+        7006700
+      ],
+      "before": 1.0,
+      "after": 1.123599886894226
+    }
+  ],
+  "isolatedFixtureLookupStub": "E6D630 absent PARAM row; additive melee filter retry at 511010 calls original native predicate; fixture assumes eligible Sword owner",
+  "nativeCategoryPredicateRva": "0xea1b00",
+  "hitMaskOffset": "0x124",
+  "maskBytes": 32,
+  "additionalCategories": [
+    130
+  ],
+  "removedAddedCategories": [
+    111,
+    112
+  ],
+  "nativeCategoryTests": [
+    {
+      "original": 1,
+      "effect": 8320500,
+      "before": false,
+      "after": true
+    },
+    {
+      "original": 1,
+      "effect": 8350000,
+      "before": false,
+      "after": false
+    },
+    {
+      "original": 6,
+      "effect": 8320500,
+      "before": false,
+      "after": true
+    },
+    {
+      "original": 6,
+      "effect": 8350000,
+      "before": false,
+      "after": false
+    },
+    {
+      "original": 7,
+      "effect": 8320500,
+      "before": false,
+      "after": true
+    },
+    {
+      "original": 7,
+      "effect": 8350000,
+      "before": false,
+      "after": false
+    },
+    {
+      "original": 12,
+      "effect": 8320500,
+      "before": false,
+      "after": true
+    },
+    {
+      "original": 12,
+      "effect": 8350000,
+      "before": false,
+      "after": false
+    },
+    {
+      "original": 30,
+      "effect": 8320500,
+      "before": false,
+      "after": true
+    },
+    {
+      "original": 30,
+      "effect": 8350000,
+      "before": false,
+      "after": false
+    },
+    {
+      "original": 129,
+      "effect": 8320500,
+      "before": false,
+      "after": true
+    },
+    {
+      "original": 129,
+      "effect": 8350000,
+      "before": false,
+      "after": false
+    },
+    {
+      "original": 200,
+      "effect": 8320500,
+      "before": false,
+      "after": true
+    },
+    {
+      "original": 200,
+      "effect": 8350000,
+      "before": false,
+      "after": false
+    }
+  ],
+  "originalCategoriesRetained": true,
+  "originalSkillCategoryChecksPassed": 4,
+  "unrelatedFiltersExcluded": true,
+  "originalSpellApplicationRetained": true,
+  "nativeWeaponRestrictionsRetained": true,
+  "originalEligibleEffectsNotDoubled": true,
+  "activeMagicGetter": "ChrIns+1b8 -> module+60 -> virtual+18 -> i32 MagicID",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "healingUsesCompletedDamage": true,
+  "healingRequiresRecipientHpLoss": false,
+  "nullifiedHitsExcludedFromHealing": true,
+  "lockedHpGameplayVerified": false
+}

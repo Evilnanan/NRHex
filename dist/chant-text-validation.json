@@ -1,0 +1,79 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "BD98DF202C62358D0A6A784AEA150B36EABDE82889A822250E949471FC071897",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "AC586B946AAEEA10F651D0A4A937980E8250DB2A9B0CBD65E4C199737A7B77E8",
+      "outputSha256": "01EDA081F02FDA70AE931D98312C72B3D9B2F8DBE29EBDCCCB0F03134C163C31",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002000,
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D15\u70B9\u7CBE\u529B\u503C",
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D30\u70B9\u7CBE\u529B\u503C"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002000,
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D15\u70B9\u7CBE\u529B\u503C",
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D30\u70B9\u7CBE\u529B\u503C"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002000,
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D15\u70B9\u7CBE\u529B\u503C",
+          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u84C4\u529B\u65F6\uFF0C\u6BCF\u79D2\u56DE\u590D30\u70B9\u7CBE\u529B\u503C"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "D8D58F605E05276FA2A4D4A9C6D3FCFEB2D3E18713514270CE8BDFF34117FBE5",
+      "outputSha256": "B0AAA0C6EC8867F6FBC981290B6C8DA13C10D2D61A20AEAC1139840D91C10359",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002000,
+          "before": "Restore 15 stamina per second while charging a sorcery or incantation.",
+          "after": "Restore 30 stamina per second while charging a sorcery or incantation."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002000,
+          "before": "Restore 15 stamina per second while charging a sorcery or incantation.",
+          "after": "Restore 30 stamina per second while charging a sorcery or incantation."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002000,
+          "before": "Restore 15 stamina per second while charging a sorcery or incantation.",
+          "after": "Restore 30 stamina per second while charging a sorcery or incantation."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "outputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

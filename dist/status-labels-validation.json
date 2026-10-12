@@ -1,0 +1,706 @@
+{
+  "version": "0.17.31",
+  "textRevision": 1,
+  "source": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "6630A17982198D6ADDD812100DCAFB53101609B005A3EB61AEAB40DD3C07F1B0",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "4197728866893F595367F65B0C16F5FDDCF20BF198B54C334D0E3E39D942E0DD",
+    "statusOnly": true,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "286AB190C5E715CD323E2C307D719DAF65F898BC3181809326D377E769072A4E",
+        "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95000701,
+            "before": "结晶外壳（已生成）",
+            "after": "结晶外壳"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95000403,
+            "before": "终极刷新（可用）",
+            "after": "终极刷新"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95001203,
+            "before": "逃跑计划（可用）",
+            "after": "逃跑计划"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95001201,
+            "before": "逃跑计划（生效）",
+            "after": "逃跑计划"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95000500,
+            "before": null,
+            "after": "豪饮"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95000800,
+            "before": null,
+            "after": "隐身"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000701,
+            "before": "受到攻击时，由结晶外壳代为承受并破碎。结晶外壳破碎后需要40秒来重新生成",
+            "after": "可以抵挡一次攻击"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000403,
+            "before": "施放绝招后，回复100%绝招量表，45秒冷却",
+            "after": "施放绝招后，回复100%绝招量表"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001203,
+            "before": "血量偏低时，在10秒内加快行动并提升60%减伤率，60秒冷却",
+            "after": "血量偏低时，触发加速和60%减伤"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001201,
+            "before": "血量偏低时，在10秒内加快行动并提升60%减伤率，60秒冷却",
+            "after": "行动加快，减伤率提升60%"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001202,
+            "before": "血量偏低时，在10秒内加快行动并提升60%减伤率，60秒冷却",
+            "after": "逃跑计划暂时无法触发"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000500,
+            "before": null,
+            "after": "每层提升5%攻击力，持续15秒"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000800,
+            "before": null,
+            "after": "隐藏身形"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "47815545B7BCA737C27DDEC90047F0FE555EA80D1F3FACD2FE0B8A36C35805CC",
+        "outputSha256": "BA821AAC8EB9804334CC9ADA55C28EDF5A4C5C5FEE999F304950EAC951C83D9C",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95000701,
+            "before": "Crystal Shell (Ready)",
+            "after": "Crystal Shell"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95000403,
+            "before": "Ultimate Refresh (Ready)",
+            "after": "Ultimate Refresh"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95001203,
+            "before": "Escape Plan (Ready)",
+            "after": "Escape Plan"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95001201,
+            "before": "Escape Plan (Active)",
+            "after": "Escape Plan"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95000500,
+            "before": null,
+            "after": "Heavy Drinking"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95000800,
+            "before": null,
+            "after": "Invisibility"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000701,
+            "before": "A crystal shell takes the hit for you and shatters. It regenerates after 40s.",
+            "after": "Blocks one attack."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000403,
+            "before": "Restore 100% of the ultimate gauge after using an ultimate. 45s cooldown.",
+            "after": "Using your Ultimate Art restores 100% of the Art gauge."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001203,
+            "before": "At low HP, double action speed and gain 60% damage negation for 10s. 60s cooldown.",
+            "after": "Low HP triggers faster movement and 60% damage reduction."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001201,
+            "before": "At low HP, double action speed and gain 60% damage negation for 10s. 60s cooldown.",
+            "after": "Move faster and gain 60% damage reduction."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001202,
+            "before": "At low HP, double action speed and gain 60% damage negation for 10s. 60s cooldown.",
+            "after": "Escape Plan cannot trigger while on cooldown."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000500,
+            "before": null,
+            "after": "Each stack increases attack power by 5% for 15 seconds."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000800,
+            "before": null,
+            "after": "Conceals your appearance."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "displayRegistrationAudit": [
+    {
+      "effectId": 95000701,
+      "iconId": 20408,
+      "textId": 95000701,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95000403,
+      "iconId": 20297,
+      "textId": 95000403,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95001203,
+      "iconId": 20222,
+      "textId": 95001203,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95000501,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95000801,
+      "iconId": 20422,
+      "textId": 95000800,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005001,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005002,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005003,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005004,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005005,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005006,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005007,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005008,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005009,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005010,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005011,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005012,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005013,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005014,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005015,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005016,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005017,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005018,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005019,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005020,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005021,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005022,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005023,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005024,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005025,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005026,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005027,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005028,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005029,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005030,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005031,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005032,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005033,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005034,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005035,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005036,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005037,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005038,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005039,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005040,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005041,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005042,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005043,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005044,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005045,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005046,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005047,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005048,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005049,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005050,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005051,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005052,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005053,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005054,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005055,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005056,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005057,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005058,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005059,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005060,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005061,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005062,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005063,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005064,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005065,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005066,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005067,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005068,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005069,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005070,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005071,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005072,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005073,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005074,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005075,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005076,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005077,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005078,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    },
+    {
+      "effectId": 95005079,
+      "iconId": 20006,
+      "textId": 95000500,
+      "hasAttachAbilityMapping": false
+    }
+  ],
+  "abilityRegistrationsPreserved": true,
+  "existingNativeAdditionalEffectRegistrationRetained": false,
+  "drinkingAll80StackRowsRetainSharedTextAndNativeCount": true,
+  "oneSecondInvisibilityHasOwnStateDescription": true,
+  "hiddenEscapeActiveAndCooldownStatusesRemainHidden": true,
+  "regulationDllEventsMapsHksTaeAndAbilityTextBindersUnchanged": true,
+  "runtimeMechanismsUnchanged": true,
+  "requiresGameRestartForCachedText": true,
+  "gameUiVerified": false,
+  "multiplayerVerified": false,
+  "routingClaimWithdrawn": true,
+  "routingCorrection": "status-routing-validation.json",
+  "routingCorrectionReason": "User confirmed both independent entries appeared in Special Effects; icon/text registration alone did not route either state into Passive Effects."
+}
