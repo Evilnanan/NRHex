@@ -83,6 +83,8 @@ if(args.Contains("--red-envelope-only")){RedEnvelope.Stage(root,Parse);return;}
 if(args.Contains("--ultimate-vfx-probe")){UltimateRefreshVfx.Probe(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-vfx-only")){UltimateRefreshVfx.Stage(root,Parse);return;}
 if(args.Contains("--escape-duchess-probe")){EscapeVfx.Probe(root,bnd,Parse);return;}
+if(args.Contains("--escape-resource-probe")){EscapeVfx.ResourceProbe(root);return;}
+if(args.Contains("--escape-audio-probe")){EscapeVfx.AudioProbe(root,game);return;}
 if(args.Contains("--escape-duchess-only")){EscapeVfx.Stage(root,Parse);return;}
 if(args.Contains("--coop-01749-probe")){CoopAudit.Probe(root,Parse,Parse("NpcParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="NpcParam.param").Bytes),Hash(source));return;}
 if(args.Contains("--coop-01749-stage")){CoopAudit.Stage(root,Parse);return;}

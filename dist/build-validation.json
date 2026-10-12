@@ -1,53 +1,21 @@
 {
-  "version": "0.17.69",
+  "version": "0.17.70",
   "buildPassed": true,
-  "scope": "Glass Cannon attack x1.2, damage taken x10, native source-owned defense/negation/guard penetration",
-  "dllSha256": "a18bc1e9a4c58e0ab402fd3c0c1231b54a4503acdd8a78a14a19fb08a78dd05c",
-  "installedDllSha256": "a18bc1e9a4c58e0ab402fd3c0c1231b54a4503acdd8a78a14a19fb08a78dd05c",
+  "scope": "Escape Plan Restage audio: include Duchess bank in native scene-owned hero bank set",
+  "dllSha256": "e7aa222f43480cef43879e51a81b2c6292a7fda63d2ecd0104f7f32da6e6bf58",
+  "installedDllSha256": "e7aa222f43480cef43879e51a81b2c6292a7fda63d2ecd0104f7f32da6e6bf58",
   "changedAssets": [
-    "mod/natives/NRHex.dll",
-    "mod/regulation.bin",
-    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
-    "mod/msg/engus/item_dlc01.msgbnd.dcx"
+    "mod/natives/NRHex.dll"
   ],
   "otherAssetsAndSettingsPreserved": true,
-  "rustTestsPassed": 221,
-  "gameplayVerified": false,
-  "multiplayerVerified": false,
-  "gameStarted": false,
-  "parameterValidation": ".work/glass-cannon-01769/staged/parameters.json",
-  "textValidation": ".work/glass-cannon-01769/staged/texts/validation.json",
-  "iconUpdate": {
-    "hexId": 95002000,
-    "largeIcon": 21207,
-    "smallIcon": 22207,
-    "inputSha256": "B12F26D13FB6A3039228F50A3ED91A58472E25EBE39A1BF0315124194F615FB1",
-    "outputSha256": "0743D3B0B383E834C99CC09F6EB199EE82600DC1D5BC5F38303E5D8D356D0E7F",
-    "nativeAtlasEntriesPresent": true,
-    "onlyFourIconFieldsChanged": true,
-    "gameplayVerified": false
-  },
-  "nativeCasesPassed": 47,
-  "nativeValidation": ".work/glass-cannon-01769/native-validation.json",
+  "rustTestsPassed": 223,
+  "runtimeSignaturesVerified": 94,
+  "nativeAudioValidation": "escape-audio-validation.json",
   "me3ProfilesValid": true,
   "groupPackageUpdated": true,
-  "redEnvelopeVfxUpdate": {
-    "validation": "red-envelope-validation.json",
-    "installed": true,
-    "gameplayVerified": false,
-    "groupPackageUpdated": true
-  },
-  "ultimateRefreshVfxUpdate": {
-    "validation": "ultimate-vfx-validation.json",
-    "installed": true,
-    "gameplayVerified": false,
-    "groupPackageUpdated": true
-  },
-  "escapeVfxUpdate": {
-    "validation": "escape-vfx-validation.json",
-    "installed": true,
-    "gameplayVerified": false,
-    "groupPackageUpdated": true
-  },
-  "latestTextSourcesVerified": true
+  "groupDllSha256": "2d76e62fd8893fe28d58db001fca1107f235bc2a7cfad6ac5584367f20e1301f",
+  "groupTestHotkeys": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameStarted": false
 }

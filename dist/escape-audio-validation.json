@@ -1,0 +1,18 @@
+{
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "hookRva": "EED260",
+  "nativeSelectorRva": "EF8B20",
+  "nativeDirectCallers": [
+    "0xef8bd0",
+    "0xef8c5d",
+    "0xef8c68",
+    "0xef8d5d"
+  ],
+  "nativeEvent": "Play_s000407000",
+  "eventId": 676254778,
+  "nativeSoundBank": "hero04.bnk",
+  "nativeSoundBankBytes": 987074,
+  "nativeSoundBankSha256": "79f3f5f3a38f22887aa0ee3baba2341528ce0f0e6fae4558342a39691aa81ac3",
+  "staticChecksPassed": true,
+  "gameplayVerified": false
+}

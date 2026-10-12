@@ -3,6 +3,28 @@ using System.Text.Json;
 using System.Security.Cryptography;
 
 static class EscapeVfx {
+ public static void AudioProbe(string root,string game){
+  // Refresh/decrypt the archive header using the existing verified extractor.
+  StormVfx.Extract(root,Environment.GetEnvironmentVariable("NRHEX_SMITHBOX")??Path.Combine(Path.GetPathRoot(root)!,"Program Files/Smithbox"),game);
+  var headers=BHD5.Read(File.ReadAllBytes(Path.Combine(root,".work/storm-vfx-01757/data0.bhd")),BHD5.Game.EldenRing).Buckets.SelectMany(b=>b).ToDictionary(h=>h.FileNameHash);
+  ulong PathHash(string name){ulong h=0;foreach(char c in name.ToLowerInvariant())h=unchecked(h*0x85+c);return h;}
+  string dir=Path.Combine(root,".work/escape-audio/extracted/sound");Directory.CreateDirectory(dir);
+  using var bdt=File.OpenRead(Path.Combine(game,"data0.bdt"));
+  foreach(string name in new[]{"eventinfo.eib","soundbanksinfo.mobnkinfo","additionaleventinfo.moaeibnd.dcx"}){
+   var data=headers[PathHash("/sound/"+name)].ReadFile(bdt);File.WriteAllBytes(Path.Combine(dir,name),data);
+   Console.WriteLine($"Extracted {name}: {data.Length} bytes");
+  }
+ }
+ public static void ResourceProbe(string root){
+  string input=Path.Combine(root,".work/storm-vfx-01757/extracted/sfx/sfxbnd_commoneffects.ffxbnd.dcx");
+  string output=Path.Combine(root,".work/escape-duchess-resource");Directory.CreateDirectory(output);
+  var bnd=BND4.Read(input);
+  foreach(var file in bnd.Files.Where(f=>Path.GetFileName(f.Name).StartsWith("f00046082")||Path.GetFileName(f.Name)=="f000000043.fxr")){
+   string name=Path.GetFileName(file.Name);File.WriteAllBytes(Path.Combine(output,name),file.Bytes.ToArray());
+   if(name.EndsWith(".ffxreslist"))Console.WriteLine(name+": "+System.Text.Encoding.UTF8.GetString(file.Bytes.Span));
+  }
+  File.WriteAllText(Path.Combine(output,"source.json"),JsonSerializer.Serialize(new{input,sha256=Hash(input)}));
+ }
  public const int Visual=95001204;
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
