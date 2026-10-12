@@ -1,5 +1,5 @@
 """Isolated original greatshield comparison and attacker recoil, no game writes."""
-import ctypes as c, hashlib, json, struct, tomllib
+import ctypes as c, hashlib, json, re, struct, tomllib
 from pathlib import Path
 import pefile
 from local_paths import GAME,ROOT
@@ -11,6 +11,22 @@ weapons=json.loads((work/'native-weapons.json').read_text())
 shield=next(r for r in weapons if r['ID']==32000000)
 assert shield['fields']['wepType']==69 and shield['fields']['guardBaseRepel']==70
 pe=pefile.PE(data=raw)
+# Independently bind the Rust lookup to current native code and RTTI. The old
+# test passed a hand-made damage object directly and missed the wrong slot.
+source=(ROOT/'src/lib.rs').read_text()
+slot=int(re.search(r'const DAMAGE_MODULE_SLOT: usize = (0x[0-9a-f]+);',source)[1],16)
+damage_vtable_rva=int(re.search(r'const DAMAGE_MODULE_VTABLE_RVA: usize = (0x[0-9a-f]+);',source)[1],16)
+assert pe.get_data(0x3f5f85,7)==bytes.fromhex('48 8b 88 b8 01 00 00')
+assert pe.get_data(0x3f5f8c,7)==b'\x48\x8b\x89'+struct.pack('<I',slot)
+assert 0x3f5f98+struct.unpack('<i',pe.get_data(0x3f5f94,4))[0]==0x431550
+def module_name(vt):
+ col=struct.unpack('<Q',pe.get_data(vt-8,8))[0]-pe.OPTIONAL_HEADER.ImageBase
+ td=struct.unpack('<I',pe.get_data(col+12,4))[0]
+ return pe.get_data(td+16,100).split(b'\0')[0].decode()
+assert module_name(damage_vtable_rva)=='.?AVCSChrDamageModule@CS@@'
+assert module_name(0x2c12320)=='.?AVCSChrHitStopModule@CS@@'
+# Native hit-stop deleting destructor frees a 0x30-byte object.
+assert pe.get_data(0x444378,5)==bytes.fromhex('ba 30 00 00 00')
 k=c.WinDLL('kernel32');k.VirtualAlloc.argtypes=[c.c_void_p,c.c_size_t,c.c_uint,c.c_uint];k.VirtualAlloc.restype=c.c_void_p
 k.VirtualFree.argtypes=[c.c_void_p,c.c_size_t,c.c_uint]
 memory=k.VirtualAlloc(None,pe.OPTIONAL_HEADER.SizeOfImage,0x3000,0x40);assert memory
@@ -80,11 +96,26 @@ try:
    assert motion==([expected] if gate in ['valid','nullified_hp'] else []),(weapon,gate,motion)
    assert len(notifications)==1
    dispatch_cases.append(dict(weapon=weapon,gate=gate,motion=motion.copy()))
+ # Model the old 0x30-byte object with a generously allocated, checked tail.
+ # Execute the real recoil writer: it must demonstrate the out-of-object
+ # +74 write, without corrupting this test process or any game memory.
+ wrong=c.create_string_buffer(bytes([0xa5])*0x100)
+ put(wrong,8,'<Q',ptr(actor));before=wrong.raw
+ hit=c.create_string_buffer(0x2c8);put(hit,0,'<f',100.0)
+ hit[0x2be]=1;put(hit,0x2a8,'<i',60);put(hit,0x2ac,'<i',70)
+ dispatch(ptr(wrong),ptr(actor),ptr(hit))
+ overwritten=[i for i,(a,b) in enumerate(zip(before,wrong.raw)) if a!=b]
+ assert overwritten==list(range(0x74,0x78)),overwritten
+ wrong_rate=struct.unpack_from('<f',wrong,0x74)[0]
+ assert wrong_rate==0.25 # same high 32 bits seen in the invalid crash pointer
 finally:assert k.VirtualFree(memory,0,0x8000)
 version=tomllib.loads((ROOT/'Cargo.toml').read_text())['package']['version']
 report=dict(version=version,nativeGreatshield=shield,nativeHardnessRva='439d50',nativeRecoilRva='436e50',
+ damageModuleSlot=slot,damageModuleVtable=hex(damage_vtable_rva),damageModuleRtti=module_name(damage_vtable_rva),
+ wrongModuleSize=0x30,oldWrongModuleOverwrite=overwritten,oldWrongModuleWrittenFloat=wrong_rate,
  comparisonCases=comparison,recoilCases=dispatch_cases,isolatedNativeCases=len(comparison)+len(dispatch_cases),
  nativeHpNullifyAndRecoilIndependent=True,dependenciesStubbed=['recipient identity','effect hardness override','module lookup','direction handle','motion and notification sinks'],
  originalExeSha256=hashlib.sha256(raw).hexdigest(),gameMemoryWritten=False,gameplayVerified=False,multiplayerVerified=False)
 (work/'native-validation.json').write_text(json.dumps(report,indent=2))
 print(f'PASS: {len(comparison)} native hardness comparisons; {len(dispatch_cases)} native recoil/weapon/cancellation cases; no game writes.')
+print(f'PASS: native damage slot {slot:#x}, RTTI identity, old wrong-module overwrite at +0x74 reproduced ({wrong_rate}).')

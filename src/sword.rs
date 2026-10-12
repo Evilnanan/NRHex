@@ -7,6 +7,12 @@ include!(concat!(env!("OUT_DIR"), "/sword_bonuses.rs"));
 pub const OWNER:i32=95000900;
 pub const CAST_OWNER:i32=95000912; // HKS f32 IDs must be divisible by eight.
 pub const CAST_PULSE:i32=95000904;
+pub const CAST_RIGHT:i32=95000944;
+pub const CAST_LEFT:i32=95000952;
+pub const RECOVERY_RIGHT:i32=95000960;
+pub const RECOVERY_LEFT:i32=95000968;
+pub const WEAPON_RIGHT:i32=95000940;
+pub const WEAPON_LEFT:i32=95000941;
 pub const GUARD:i32=95000908; // Native int only; not passed through HKS f32.
 pub const POISE:i32=95000916; // Native category 1001 reaction override.
 pub const HEAL_VISUAL:i32=95000910;
@@ -14,7 +20,7 @@ pub const HEAL_BASE:i32=95000920;
 pub const HEAL_BITS:usize=16;
 pub const GLANCE_RATE:f32=0.01; // Native 8821000's five AttackRate fields.
 pub const LIFESTEAL_SCALE:f64=2.;
-pub const NEAR_DISTANCE:f32=5.;
+pub const NEAR_DISTANCE:f32=4.;
 
 pub struct Bonuses {percentages:BTreeMap<i32,f32>}
 impl Bonuses {
@@ -73,6 +79,15 @@ pub fn heal_amount(damage:i32,percentage:f32,nullified:bool)->u32{
 pub fn casting(player:usize,owned:bool,alive:bool,pulse_player:usize,last:u64,now:u64)->bool{
  owned&&alive&&player!=0&&player==pulse_player&&last!=0&&now>=last&&now-last<100
 }
+pub fn casting_effect(id:i32,casting:bool,hand:i32)->bool{
+ casting&&match id {WEAPON_RIGHT=>hand==1,WEAPON_LEFT=>hand==0,GUARD|POISE=>true,_=>false}
+}
+// Recovery getters may already expose the queued spell or no active spell.
+// Retain the spell that actually cast; never revive an expired/other actor cast.
+pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Option<i32>{
+ if recovery{return (continuous&&previous>=0).then_some(previous);}
+ Some(if current>=0 {current} else if continuous {previous} else {-1})
+}
 #[derive(Default)]
 pub struct Healing {player:usize,stats:usize,pending:u32}
 impl Healing {
@@ -87,6 +102,27 @@ impl Healing {
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn recovery_retains_cast_spell_without_reviving_stale_protection(){
+  assert_eq!(pulse_magic(true,true,4000,5000),Some(4000));
+  assert_eq!(pulse_magic(true,true,4000,-1),Some(4000));
+  assert_eq!(pulse_magic(true,false,4000,4000),None);
+  assert_eq!(pulse_magic(true,true,-1,4000),None);
+  assert_eq!(pulse_magic(false,true,4000,-1),Some(4000));
+  assert_eq!(pulse_magic(false,true,4000,5000),Some(5000));
+  assert_eq!(pulse_magic(false,false,4000,-1),Some(-1));
+ }
+ #[test]fn catalyst_visual_tracks_hand_and_expires_with_casting(){
+  for hand in [-1,0,1] {
+   for (owned,alive,player,last,now) in [(true,true,1,100,199),(false,true,1,100,199),(true,false,1,100,199),(true,true,2,100,199),(true,true,1,100,200)]{
+    let active=casting(player,owned,alive,1,last,now);
+    assert_eq!(casting_effect(WEAPON_RIGHT,active,hand),active&&hand==1);
+    assert_eq!(casting_effect(WEAPON_LEFT,active,hand),active&&hand==0);
+    assert_eq!(casting_effect(GUARD,active,hand),active);
+    assert_eq!(casting_effect(POISE,active,hand),active);
+    assert!(!casting_effect(OWNER,active,hand));
+   }
+  }
+ }
  #[test]fn reduction_curve_reference_points_and_monotonicity(){
   // Independent rational reference points for 0%, 25%, 50%, 100%, 200%.
   for (p,expected) in [(0.,100000),(25.,60000),(50.,44055),(100.,29577),(200.,18367)] {

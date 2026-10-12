@@ -27,7 +27,7 @@ Reduces attack power by 25%. Raises all attributes by 10.
 <!-- hex:95000300 -->
 ## Glass Cannon
 
-Increases damage taken tenfold. Boosts attack power by 40%.
+Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy resistances, defenses, and damage negation.
 
 <!-- hex:95000400 -->
 ## Ultimate Revolution
@@ -92,7 +92,7 @@ Allows evergaols to be opened without a Stonesword Key, releasing a wider variet
 <!-- hex:95001700 -->
 ## Balloon
 
-Raises maximum HP by 50%. Reduces damage negation by 30%, with a further 50% reduction against piercing attacks. Triggers an explosion upon death or entering near-death, dealing damage equal to maximum HP to nearby enemies.
+Raises maximum HP by 50%. Reduces damage negation by 30%. Reduces resistance to piercing attacks by 100%. Triggers an explosion upon death or entering near-death, dealing damage equal to maximum HP to nearby enemies.
 
 <!-- hex:95001800 -->
 ## Enhanced [Necromancy]

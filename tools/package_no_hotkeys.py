@@ -46,7 +46,7 @@ if profile.exists():
 else:
  text='profileVersion = "v1"\nstart_online = false\ndisable_arxan = true\n\n[[supports]]\ngame = "nightreign"\n\n[[natives]]\npath = "mod/natives/NRHex.dll"\n\n[[packages]]\nid = "nrhex"\nsource = "mod"\n'
 write('NRHex.me3',text.encode('utf-8'))
-write('NRHex-README.md',f'# NRHex {version} 群友测试版\n\nDLL与配置位于mod/natives。编译时移除全部测试快捷键发球入口，修改INI无法开启。保留正常升级发球及海克斯机制。亮出你的剑近身判定固定5米，INI不能修改。保留目标ME3联机／其他Mod配置。未启动游戏，当前目录实际加载待验证。\n'.encode('utf-8'))
+write('NRHex-README.md',f'# NRHex {version} 群友测试版\n\nDLL与配置位于mod/natives。编译时移除全部测试快捷键发球入口，修改INI无法开启。保留正常升级发球及海克斯机制。亮出你的剑近身判定固定4米，INI不能修改。保留目标ME3联机／其他Mod配置。未启动游戏，当前目录实际加载待验证。\n'.encode('utf-8'))
 assert sha(dist/'mod/natives/NRHex.dll')==baseline_dll
-write('NRHex-build.json',json.dumps(dict(version=version,testHotkeys=False,keyboardPollingImportAbsent=True,swordNearDistance=5.0,swordRangeConfigurable=False,dllSha256=sha(dll),files=files.copy(),gameplayVerified=False,loadingVerified=False),ensure_ascii=False,indent=2).encode('utf-8'))
+write('NRHex-build.json',json.dumps(dict(version=version,testHotkeys=False,keyboardPollingImportAbsent=True,swordNearDistance=4.0,swordRangeConfigurable=False,dllSha256=sha(dll),files=files.copy(),gameplayVerified=False,loadingVerified=False),ensure_ascii=False,indent=2).encode('utf-8'))
 print(f'PASS: {version} no-hotkeys package installed in {destination}; {len(files)} files verified; existing non-test settings preserved')

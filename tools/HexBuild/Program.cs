@@ -68,6 +68,11 @@ if(args.Contains("--cage-group-npcs")){
 }
 if(args.Contains("--spirit-placement-probe")){SpiritPlacement.Probe(root,Parse);return;}
 if(args.Contains("--storm-vfx-probe")){StormVfx.Probe(root,bnd,Parse);return;}
+if(args.Contains("--sword-vfx-probe")){SwordVfx.Probe(root,bnd,Parse);return;}
+if(args.Contains("--sword-model-probe")){SwordVfx.ModelProbe(root,smith,game);return;}
+if(args.Contains("--sword-vfx-stage")){SwordVfx.Stage(root,Parse);return;}
+if(args.Contains("--sword-storm-probe")){SwordVfx.StormProbe(root);return;}
+if(args.Contains("--sword-fxr-stage")){SwordVfx.StageFxr(root);return;}
 if(args.Contains("--storm-archive-probe")){StormVfx.ArchiveProbe(smith);return;}
 if(args.Contains("--storm-extract")){StormVfx.Extract(root,smith,game);return;}
 if(args.Contains("--storm-resources")){StormVfx.Resources(root);return;}
@@ -587,7 +592,9 @@ if(args.Contains("--export-descriptions")){
  Console.WriteLine("Exported 15 current Chinese descriptions from the working Mod package.");return;
 }
 var hexes=HexCatalog.Load(root);
-if(args.Contains("--balloon-01754-only")){BalloonBalance.Stage(root,Parse,hexes);return;}
+if(args.Contains("--hex-icons-only")){HexIcons.Stage(root,Parse,hexes.Single(h=>h.Id==int.Parse(args[Array.IndexOf(args,"--hex-icons-only")+1])));return;}
+if(args.Contains("--glass-cannon-only")){GlassCannon.Stage(root,Parse,HexCatalog.Load(root));return;}
+if((args.Contains("--balloon-balance-only")||args.Contains("--balloon-resistance-only")||args.Contains("--balloon-01754-only"))){BalloonBalance.Stage(root,Parse,hexes);return;}
 if(args.Contains("--balance-01750-only")){Balance1750.Stage(root,Parse,hexes);return;}
 if(args.Contains("--chant-01746-only")){SpiritDamageProbe.Stage(root,Parse,hexes);return;}
 if(args.Contains("--spirit-damage-probe")){SpiritDamageProbe.Run(root,Parse);return;}
@@ -640,7 +647,7 @@ foreach(var h in hexes){
  var s=Clone("SpEffectParam",8000000,h.Id);
  Set(s,"maxHpRate",1f);Set(s,"spCategory",20);Set(s,"iconId",h.SmallIcon);Set(s,"spEffectTextId_1",h.Id);Set(s,"displayIconForPermamentEffect",0);
  if(h.Id==95000200){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,.75f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"addLifeForceStatus","addWillpowerStatus","addEndureStatus","addStrengthStatus","addDexterityStatus","addMagicStatus","addFaithStatus","addLuckStatus"})Set(s,f,10);}
- if(h.Id==95000300){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,1.4f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,f,10f);}
+ if(h.Id==95000300){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,1.2f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,f,10f);}
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
@@ -769,6 +776,7 @@ var invisible=Clone("SpEffectParam",703500,95000801);Set(invisible,"effectEndura
 var castOwner=Clone("SpEffectParam",8000000,95000912);Set(castOwner,"maxHpRate",1f);Set(castOwner,"saveCategory",-1);Set(castOwner,"iconId",-1);Set(castOwner,"spEffectTextId_1",-1);
 var castPulse=Clone("SpEffectParam",8000000,95000904);
 Set(castPulse,"maxHpRate",1f);Set(castPulse,"effectEndurance",0f);Set(castPulse,"saveCategory",-1);Set(castPulse,"iconId",-1);Set(castPulse,"spEffectTextId_1",-1);
+SwordVfx.Build(Clone);
 var castGuard=Clone("SpEffectParam",8330902,95000908);
 Set(castGuard,"effectEndurance",-1f);Set(castGuard,"saveCategory",-1);Set(castGuard,"categoryPriority",0);Set(castGuard,"iconId",-1);Set(castGuard,"secondaryIconId",-1);Set(castGuard,"spEffectTextId_1",-1);
 foreach(var field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(castGuard,field,1f);
@@ -868,7 +876,7 @@ foreach(var f in drinkingPowerRates)Require(Convert.ToSingle(Effect(95000200)[f]
 foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Require(Convert.ToInt32(Effect(95000200)[f].Value)==1,"Astral Body spell applicability mismatch");
 foreach(var f in new[]{"addLifeForceStatus","addWillpowerStatus","addEndureStatus","addStrengthStatus","addDexterityStatus","addMagicStatus","addFaithStatus","addLuckStatus"})Require(Convert.ToInt32(Effect(95000200)[f].Value)==10,"Astral Body must grant all eight attributes +10");
 foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Require(Convert.ToSingle(Effect(95000300)[f].Value)==10f,"Glass Cannon must take 1000% of normal damage, not +1000%");
-foreach(var f in drinkingRates)Require(Convert.ToSingle(Effect(95000300)[f].Value)==1.4f,"Glass Cannon damage multiplier must be 1.4");
+foreach(var f in drinkingRates)Require(Convert.ToSingle(Effect(95000300)[f].Value)==1.2f,"Glass Cannon damage multiplier must be 1.2");
 foreach(var f in drinkingPowerRates)Require(Convert.ToSingle(Effect(95000300)[f].Value)==1f,"Glass Cannon must not also change pre-defense attack power");
 foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Require(Convert.ToInt32(Effect(95000300)[f].Value)==1,"Glass Cannon spell applicability mismatch");
 Require(Convert.ToSingle(Effect(95000401)["ultimateArtGauge"].Value)==100f&&Convert.ToSingle(Effect(95000401)["effectEndurance"].Value)==0f,"Ultimate pulse is not an instant +100 refill");
@@ -921,7 +929,7 @@ File.WriteAllText(Path.Combine(root,".work/arts/serialized.json"),JsonSerializer
 var dest=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(Path.GetDirectoryName(dest)!);SFUtil.EncryptNightreignRegulation(dest,bnd,bnd.Compression);
 var reread=SFUtil.DecryptNightreignRegulation(dest);Require(reread.Version==bnd.Version&&reread.Files.Count==bnd.Files.Count,"Binder metadata mismatch");
 foreach(var f in reread.Files)Require(f.Bytes.Span.SequenceEqual(bnd.Files.Single(v=>v.ID==f.ID).Bytes.Span),"Binder readback mismatch "+f.Name);
-var changed=reread.Files.Where(f=>!f.Bytes.Span.SequenceEqual(original[f.ID])).Select(f=>Path.GetFileNameWithoutExtension(f.Name)).Order().ToArray();Require(changed.SequenceEqual(names.Where(n=>n is not "SpEffectVfxParam").Order()),"Unexpected changed parameter files");
+var changed=reread.Files.Where(f=>!f.Bytes.Span.SequenceEqual(original[f.ID])).Select(f=>Path.GetFileNameWithoutExtension(f.Name)).Order().ToArray();Require(changed.SequenceEqual(names.Order()),"Unexpected changed parameter files");
 var textReports=new List<object>();
 foreach(var lang in new[]{"zhocn","engus"}){
  var input=Path.Combine(root,"assets/original/msg",lang,"item_dlc01.msgbnd.dcx");var tb=BND4.Read(input);var originals=tb.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());

@@ -2,9 +2,8 @@
 use crate::native_actor::stats;
 use crate::{
     balloon, has_effect, is_local, read_i32, read_ptr, ArtsBulletFn, APPLY_SELF_RVA,
-    ARTS_BULLET_RVA, BALLOON, BALLOON_DAMAGE, BALLOON_SOURCE, REMOVE_EFFECT_RVA,
+    ARTS_BULLET_RVA, BALLOON, REMOVE_EFFECT_RVA,
 };
-use std::sync::atomic::Ordering;
 
 pub(crate) unsafe fn flush_balloon(player: usize, base: usize) {
     // Emit after the native death/effect callback has completed, with no mutex
@@ -30,8 +29,7 @@ pub(crate) unsafe fn flush_balloon(player: usize, base: usize) {
 }
 
 unsafe fn emit_balloon(player: usize, damage: i32, base: usize) {
-    BALLOON_DAMAGE.store(damage, Ordering::Release);
-    BALLOON_SOURCE.store(player, Ordering::Release);
+    debug_assert!(damage > 0); // Stored base HP is read during native hit construction.
     // Native 3E0E30 skips state-275 emitters once HP is zero. Applying
     // 95001701 therefore creates an effect node but never creates a bullet.
     // Use the same native behavior emitter and descriptor as 50AA20 directly.
@@ -64,7 +62,6 @@ pub(crate) unsafe fn notify(player: usize, effect: i32, base: usize, stats: usiz
     let owned = has_effect(player, balloon::OWNER, base);
     // A native death callback arrives before its effect cleanup. HKS can
     // arrive later; retain the last living snapshot when ownership was removed.
-    let buffs=owned.then(||crate::ability_damage::balloon_buffs(player,base));
     let hp = read_i32(stats + 0x144);
     if let Some(state) = BALLOON.get() {
         if let Ok(mut b) = state.lock() {
@@ -75,7 +72,6 @@ pub(crate) unsafe fn notify(player: usize, effect: i32, base: usize, stats: usiz
                 hp
             };
             b.synchronize(player, stats, owned || retained);
-            if let Some(buffs)=buffs {b.remember_buffs(buffs);}
             b.remember_max(hp);
             b.marker(effect, hp);
         }
@@ -83,7 +79,6 @@ pub(crate) unsafe fn notify(player: usize, effect: i32, base: usize, stats: usiz
 }
 pub(crate) unsafe fn update(player: usize, base: usize, stats: usize, incapacitated: bool) {
     let balloon = has_effect(player, balloon::OWNER, base);
-    let buffs=(balloon&&!incapacitated).then(||crate::ability_damage::balloon_buffs(player,base));
     let apply: unsafe extern "system" fn(usize, i32, u8) -> u8 =
         std::mem::transmute(base + APPLY_SELF_RVA);
     let remove: unsafe extern "system" fn(usize, i32) -> u8 =
@@ -102,7 +97,6 @@ pub(crate) unsafe fn update(player: usize, base: usize, stats: usize, incapacita
             b.synchronize_life(player, stats, balloon, incapacitated);
             if balloon && !incapacitated {
                 b.remember_max(read_i32(stats + 0x144));
-                if let Some(buffs)=buffs {b.remember_buffs(buffs);}
             }
             pending
         })

@@ -1,8 +1,8 @@
 {
   "version": "0.17.60",
-  "active": null,
-  "pid": null,
-  "allFourNativeDllsLoaded": false,
+  "active": 1,
+  "pid": 42080,
+  "allFourNativeDllsLoaded": true,
   "build": "build-validation.json",
   "dllSha256": "9dd054707f5c507be747d136c3736b02ec161ac10348fd7576d31ce2dc6bc93f",
   "gameplayVerified": false,

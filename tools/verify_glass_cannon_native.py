@@ -1,0 +1,103 @@
+"""Execute the untouched native damage combiner in an isolated PE image."""
+import ctypes as c
+import hashlib
+import json
+import struct
+from pathlib import Path
+import pefile
+from local_paths import GAME, ROOT
+
+raw = (GAME / 'nightreign.exe').read_bytes()
+assert hashlib.sha256(raw).hexdigest() == '9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a'
+pe = pefile.PE(data=raw, fast_load=True)
+pe.parse_data_directories(directories=[5])
+k = c.WinDLL('kernel32')
+k.VirtualAlloc.argtypes = [c.c_void_p, c.c_size_t, c.c_uint, c.c_uint]
+k.VirtualAlloc.restype = c.c_void_p
+k.VirtualFree.argtypes = [c.c_void_p, c.c_size_t, c.c_uint]
+memory = k.VirtualAlloc(None, pe.OPTIONAL_HEADER.SizeOfImage, 0x3000, 0x40)
+assert memory
+reports = []
+try:
+ c.memmove(memory, raw[:pe.OPTIONAL_HEADER.SizeOfHeaders], pe.OPTIONAL_HEADER.SizeOfHeaders)
+ for section in pe.sections:
+  c.memmove(memory + section.VirtualAddress, section.get_data(), section.SizeOfRawData)
+ delta = memory - pe.OPTIONAL_HEADER.ImageBase
+ for block in pe.DIRECTORY_ENTRY_BASERELOC:
+  for rel in block.entries:
+   if rel.type == 10:
+    value = c.c_uint64.from_address(memory + rel.rva)
+    value.value = (value.value + delta) & 0xffffffffffffffff
+   else:
+    assert rel.type == 0
+ # No dependency stubs. Keep disabled-case total >= 1 to avoid the protected
+ # subunit rounding helper, which is unrelated to defensive penetration.
+ calculate = c.WINFUNCTYPE(c.c_float, *([c.c_void_p] * 8 + [c.c_float] * 7))(memory + 0x6c5fc0)
+ array = c.c_float * 5
+ attack = array(100, 200, 300, 400, 500)
+ rates = array(1.2, 1.5, 2, .5, 1)
+ neutral = array(*([1.] * 5))
+ scalar = [.25, .5, .25, 2., 1.5, .5, .75]
+ for bypass in [False, True]:
+  for layer in range(5):
+   for cut in [.2, .5, 2.]:
+    coefficients = [array(*([1.] * 5)) for _ in range(5)]
+    coefficients[layer] = array(*([cut] * 5))
+    before = [bytes(a) for a in coefficients]
+    output = array()
+    args = [neutral] * 5 if bypass else coefficients
+    scalars = [1., scalar[1], 1., scalar[3], scalar[4], 1., scalar[6]] if bypass else scalar
+    total = calculate(c.addressof(output), c.addressof(attack), c.addressof(rates),
+                      *map(c.addressof, args), *scalars)
+    factor = 1.
+    for v in scalars:
+     factor *= v
+    expected = [float(attack[i]) * float(rates[i]) * (1. if bypass else cut) * factor for i in range(5)]
+    for got, wanted in zip(output, expected):
+     assert abs(got - wanted) < .002, (layer, cut, bypass, got, wanted)
+    assert abs(total - sum(expected)) < .005, (total, expected)
+    assert before == [bytes(a) for a in coefficients]
+    reports.append(dict(bypass=bypass, layer=layer, cut=cut, output=list(output), total=total))
+ # Immunity expressed as a numerical defensive coefficient, including a 100%
+ # shield. Collision invulnerability/attack-nullification flags remain separate.
+ out = array()
+ total = calculate(c.addressof(out), c.addressof(attack), c.addressof(rates),
+                   *([c.addressof(neutral)] * 5), 1., .5, 1., 2., 1.5, 1., .75)
+ assert total > 0 and all(v > 0 for v in out)
+ # Native pre-combiner object-defense aggregation reads +318 only from
+ # valid effect nodes. The Rust manager guard is tested separately.
+ manager = c.create_string_buffer(0x10)
+ node = c.create_string_buffer(0x70)
+ effect = c.create_string_buffer(0x320)
+ c.c_void_p.from_buffer(manager, 8).value = c.addressof(node)
+ c.c_void_p.from_buffer(node, 0).value = c.addressof(effect)
+ object_defense = c.WINFUNCTYPE(c.c_float, c.c_void_p)(memory + 0x506700)
+ object_cases = []
+ for flags in [0, 1, 0x40000, 0x80000000]:
+  for value in [0., .2, .5, 2.]:
+   c.c_uint32.from_buffer(node, 0x68).value = flags
+   c.c_float.from_buffer(effect, 0x318).value = value
+   actual = object_defense(c.addressof(manager))
+   expected = value if flags == 0 else 1.
+   assert abs(actual - expected) < .000001
+   object_cases.append(dict(flags=flags, factor=value, nativeFactor=actual))
+ # Verify the resolved-owner argument and placement before generic NPC dispatch.
+ def call(site):
+  data = pe.get_data(site, 5)
+  assert data[0] == 0xe8
+  return site + 5 + struct.unpack('<i', data[1:])[0]
+ assert call(0x43d4be) == 0x439e80
+ assert pe.get_data(0x43d4b8, 6) == bytes.fromhex('4c 8b c6 49 8b d4')
+ assert pe.get_data(0x43d2bf, 11) == bytes.fromhex('83 f8 01 4c 8b e3 74 03 4d 8b e5')
+ assert pe.get_data(0x2c16f10 + 0x3d8, 8) == struct.pack('<Q', 0x1404da660)
+ assert pe.get_data(0x2c307f8 + 0x3d8, 8) == struct.pack('<Q', 0x1406695a0)
+finally:
+ assert k.VirtualFree(memory, 0, 0x8000)
+work = ROOT / '.work/glass-cannon-01769'
+work.mkdir(exist_ok=True)
+(work / 'native-validation.json').write_text(json.dumps(dict(
+ cases=reports, objectDefenseCases=object_cases, nativeCasesPassed=len(reports)+1+len(object_cases), dependencyStubs=[],
+ fiveElementsAndFiveDefenseLayersVerified=True, originalInputsPreserved=True,
+ sourceResolvedByNative=True, originalFlagsPreserved=True,
+ gameMemoryWritten=False, gameplayVerified=False, multiplayerVerified=False), indent=2), encoding='utf-8')
+print(f'PASS: {len(reports)+1+len(object_cases)} native cases; five damage elements, five defensive layers, shield and source resolution; no game writes')

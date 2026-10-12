@@ -17,6 +17,7 @@ mod arts_network;
 mod noisy;
 mod balloon;
 mod ability_damage;
+mod glass_cannon;
 mod spirit;
 mod spirit_placement;
 mod spirit_npcs;
@@ -99,6 +100,9 @@ const THROW_ANIM_PATTERN:&str="48 8B 49 10 E9 27 2A 00 00 6A 18 E9 E4 EB F4 00";
 const GAUGE_ADD_PERCENT_RVA: usize = 0x48bc60;
 const NULLIFY_SITE_RVA: usize = 0x43d5ee;
 const REBOUND_RVA: usize = 0x436e50;
+// Current EXE RTTI: CSChrDamageModule, not CSChrHitStopModule at slot 0x90.
+const DAMAGE_MODULE_SLOT: usize = 0x98;
+const DAMAGE_MODULE_VTABLE_RVA: usize = 0x2c11710;
 const REBOUND_PATTERN: &str = "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 20 57 48 83 EC 20 49 8B D8 48 8B EA 48 8B F1 49 8B C8 E8 ? ? ? ? 84 C0";
 const NULLIFY_SITE_PATTERN: &str = "F6 86 C3 02 00 00 02 74 53 48 8D 4C 24 48 E8 ? ? ? ? 48 8B 08 48 85 C9 74 08";
 const REMOVE_EFFECT_RVA: usize = 0x504e80;
@@ -160,6 +164,7 @@ static SWORD_BONUSES: OnceLock<sword::Bonuses> = OnceLock::new();
 static SWORD_CAST_PLAYER: AtomicUsize = AtomicUsize::new(0);
 static SWORD_LAST_CAST: AtomicU64 = AtomicU64::new(0);
 static SWORD_CAST_MAGIC: AtomicI32 = AtomicI32::new(-1);
+static SWORD_CAST_HAND: AtomicI32 = AtomicI32::new(-1);
 static SHELL: OnceLock<Mutex<crystal::Shell>> = OnceLock::new();
 static STATUS_REFRESH: OnceLock<Mutex<status_sync::Refresh>> = OnceLock::new();
 static ESCAPE: OnceLock<Mutex<escape::Escape>> = OnceLock::new();
@@ -169,8 +174,6 @@ static JIAHAO:OnceLock<Mutex<jiahao::Stance>>=OnceLock::new();
 static ARTS:OnceLock<Mutex<arts::Arts>>=OnceLock::new();
 static NOISY:OnceLock<Mutex<noisy::Lava>>=OnceLock::new();
 static BALLOON:OnceLock<Mutex<balloon::Balloon>>=OnceLock::new();
-static BALLOON_DAMAGE:AtomicI32=AtomicI32::new(0);
-static BALLOON_SOURCE:AtomicUsize=AtomicUsize::new(0);
 static SPIRITS:OnceLock<Mutex<spirit::Spirits>>=OnceLock::new();
 static SPIRIT_MODEL_ORIG:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 const SPIRIT_MODEL_RVA:usize=0xe94990;
@@ -315,7 +318,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);91] {
+fn signatures()->[(&'static str,u32);93] {
  [(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -324,7 +327,7 @@ fn signatures()->[(&'static str,u32);91] {
   (NULLIFY_SITE_PATTERN,NULLIFY_SITE_RVA as u32),(REMOVE_EFFECT_PATTERN,REMOVE_EFFECT_RVA as u32),
   (REBOUND_PATTERN,REBOUND_RVA as u32),
   (HIT_COMPLETE_PATTERN,HIT_COMPLETE_RVA as u32),(HAS_STATE_PATTERN,HAS_STATE_RVA as u32),
-  (DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
+  (glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
   (ACTION_REQUEST_PATTERN,ACTION_REQUEST_RVA as u32),
   (FLASK_COUNT_PATTERN,FLASK_COUNT_RVA as u32),
   (GAME_DATA_PATTERN,0x1fd598),(REWARD_CREATE_PATTERN,REWARD_CREATE_RVA as u32),
@@ -332,7 +335,7 @@ fn signatures()->[(&'static str,u32);91] {
   (status_display::ROUTE_PATTERN,status_display::ROUTE_RVA as u32),
   (STATUS_SORT_PATTERN,STATUS_SORT_RVA as u32),(HUD_SORT_PATTERN,HUD_SORT_RVA as u32),(SPEED_PATTERN,SPEED_RVA as u32),(HIT_BUILD_PATTERN,HIT_BUILD_RVA as u32),(MAGIC_ANIM_PATTERN,0x456870),
   (ATTACK_RATES_PATTERN,ATTACK_RATES_RVA as u32),(EFFECT_FILTER_PATTERN,EFFECT_FILTER_RVA as u32),
-  (ability_damage::CONTEXT_PATTERN,ability_damage::CONTEXT_RVA as u32),
+  (ability_damage::BASE_PATTERN,ability_damage::BASE_RVA as u32),
   (FALL_HEIGHT_PATTERN,FALL_HEIGHT_RVA as u32),
   (SPRING_HEIGHT_PATTERN,SPRING_HEIGHT_RVA as u32),(SPRING_CONTEXT_PATTERN,0x3fa4c0),
   (CHR_POSITION_PATTERN,CHR_POSITION_RVA as u32),(CHR_ROTATION_PATTERN,CHR_ROTATION_RVA as u32),(MAP_POSITION_PATTERN,MAP_POSITION_RVA as u32),
@@ -470,6 +473,13 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let nullify_target=base.add(NULLIFY_SITE_RVA) as *mut u8;
   let nullify_prepared=hook::prepare(nullify_target,crystal_detour as *const u8,64)?;
   if nullify_prepared.stolen!=7 {return Err("Nullify site must relocate exactly its 7-byte test instruction".into());}
+  let balloon_target=base.add(ability_damage::BASE_RVA) as *mut u8;
+  let balloon_prepared=hook::prepare(balloon_target,ability_damage::base_detour as *const u8,64)?;
+  if balloon_prepared.stolen!=5{return Err("Balloon base site must relocate MOVD XMM8,ECX (5 bytes)".into());}
+  ability_damage::ORIGINAL.store(balloon_prepared.trampoline,Ordering::Release);
+  let glass_target=base.add(glass_cannon::RVA) as *mut u8;
+  let glass_prepared=hook::prepare(glass_target,glass_cannon::detour as *const u8,64)?;
+  glass_cannon::ORIGINAL.store(glass_prepared.trampoline,Ordering::Release);
   let hit_target=base.add(HIT_COMPLETE_RVA) as *mut u8;
   let hit_prepared=hook::prepare(hit_target,cat_detour as *const u8,64)?;
   if hit_prepared.stolen!=7 {return Err("Hit completion site must relocate exactly two instructions (7 bytes)".into());}
@@ -505,6 +515,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (LAVA_SFX_UPDATE_RVA,lava_sfx_update_detour as *const u8,&LAVA_SFX_UPDATE_ORIG),
    (SFX_MATRIX_RVA,sfx_matrix_detour as *const u8,&SFX_MATRIX_ORIG),
    (LAVA_CLEANUP_RVA,lava_cleanup_detour as *const u8,&LAVA_CLEANUP_ORIG),
+   (glass_cannon::OBJECT_RVA,glass_cannon::object_detour as *const u8,&glass_cannon::OBJECT_ORIGINAL),
    (DEATH_RVA,death_detour as *const u8,&DEATH_ORIG),
    (SPIRIT_MODEL_RVA,spirit_runtime::spirit_model_detour as *const u8,&SPIRIT_MODEL_ORIG)];
   let mut arts_transfer_prepared=Vec::new();
@@ -536,6 +547,8 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
     .and_then(|_|hook::write_code(hud_sort_target,&hud_sort_prepared.patch))
     .and_then(|_|hook::write_code(status_route_target,&status_route_prepared.patch))
     .and_then(|_|hook::write_code(nullify_target,&nullify_prepared.patch))
+    .and_then(|_|hook::write_code(balloon_target,&balloon_prepared.patch))
+    .and_then(|_|hook::write_code(glass_target,&glass_prepared.patch))
     .and_then(|_|hook::write_code(hit_target,&hit_prepared.patch))
     .and_then(|_|hook::write_code(damage_target,&damage_prepared.patch))
     .and_then(|_|hook::write_code(request_target,&request_prepared.patch))
@@ -737,6 +750,11 @@ unsafe extern "system" fn strength_detour() {
   "movdqu [rsp+0xc0],xmm4",
   "movdqu [rsp+0xd0],xmm5",
   "mov [rsp+0xe0],rcx", "mov [rsp+0xe8],r8",
+  "mov rcx,r8", "call {before}",
+  "mov rcx,[rsp+0x48]", "mov rdx,[rsp+0x50]", "mov r8,[rsp+0x58]",
+  "mov r9,[rsp+0x60]", "mov r10,[rsp+0x68]", "mov r11,[rsp+0x70]",
+  "movdqu xmm0,[rsp+0x80]", "movdqu xmm1,[rsp+0x90]", "movdqu xmm2,[rsp+0xa0]",
+  "movdqu xmm3,[rsp+0xb0]", "movdqu xmm4,[rsp+0xc0]", "movdqu xmm5,[rsp+0xd0]",
   "mov rax,[rsp+0x130]", "mov [rsp+0x20],rax",
   "mov rax,[rsp+0x138]", "mov [rsp+0x28],rax",
   "mov rax,[rsp+0x140]", "mov [rsp+0x30],rax",
@@ -769,7 +787,7 @@ unsafe extern "system" fn strength_detour() {
   "mov r10,[rsp+0x68]",
   "mov r11,[rsp+0x70]",
   "add rsp,0x108", "ret",
-  after=sym on_strength_constructed,original=sym HIT_BUILD_ORIG
+  before=sym ability_damage::before_construct,after=sym on_strength_constructed,original=sym HIT_BUILD_ORIG
  );
 }
 unsafe fn strengthen_constructed_hit(hit:usize) {
@@ -803,6 +821,7 @@ unsafe fn position(player:usize,base:usize)->[f32;4] {
 // Receiver-side native category calculation also covers bullet/network contexts
 // whose original construction did not expose the player's source pointer.
 unsafe extern "system" fn on_sword_before_calculation(module:usize,source:usize,hit:usize){
+ glass_cannon::enter(module,source,hit);
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);
  if !is_local(source,base)||!has_effect(source,sword::OWNER,base)||spell_percentage(hit).is_none(){return;}
@@ -811,6 +830,7 @@ unsafe extern "system" fn on_sword_before_calculation(module:usize,source:usize,
  ptr::write_unaligned((hit+0x124) as *mut [u32;8],categories);
 }
 unsafe extern "system" fn on_rear_calculated(module:usize,source:usize,hit:usize) {
+ glass_cannon::leave();
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0 {return;}
  let base=BASE.load(Ordering::Acquire);
  if ptr::read((hit+0x2c1) as *const u8)&8!=0 {
@@ -821,17 +841,6 @@ unsafe extern "system" fn on_rear_calculated(module:usize,source:usize,hit:usize
  let world=read_ptr(base+WORLD_RVA);if world==0{return;}
  let local=read_ptr(world+0x174e8);if local==0{return;}
  let target=read_ptr(module+8);
- // HP-based physical explosion with native outgoing buff modifiers captured
- // before death cleanup. It has no held-weapon, spell or jump scaling.
- // Change the native calculated hit before it is consumed/serialized. Peer
- // copies use the same source player's synchronized maximum HP.
- if read_i32(hit+0x40)==balloon::ATTACK&&read_i32(hit+0x44)==1&&source!=0&&source!=target{
-  let modules=read_ptr(source+0x1b8);if modules!=0{let stats=read_ptr(modules);if stats!=0{
-   let captured=(source==local&&BALLOON_SOURCE.load(Ordering::Acquire)==source).then(||BALLOON_DAMAGE.load(Ordering::Acquire));
-   let value=captured.unwrap_or_else(||ability_damage::balloon_buffs(source,base).apply(read_i32(stats+0x144)));
-   ptr::write_unaligned((hit+0x280) as *mut i32,value.max(0));
-  }}return;
- }
  let mut damage=read_i32(hit+0x280);
  if target==local&&damage>0&&has_effect(local,sword::OWNER,base)&&sword_casting(local,true,true){
   if let Some(percentage)=SWORD_BONUSES.get().and_then(|values|values.for_magic(SWORD_CAST_MAGIC.load(Ordering::Acquire))){
@@ -1294,11 +1303,12 @@ unsafe fn update_sword(player:usize,base:usize){
   for id in [sword::CAST_OWNER,sword::GUARD,sword::POISE]{if has_effect(player,id,base){remove(read_ptr(player+0x190),id);}}
  }
  let casting=sword_casting(player,owned,alive);
- for id in [sword::GUARD,sword::POISE]{
+ for id in [sword::GUARD,sword::POISE,sword::WEAPON_RIGHT,sword::WEAPON_LEFT]{
+  let desired=sword::casting_effect(id,casting,SWORD_CAST_HAND.load(Ordering::Acquire));
   let present=has_effect(player,id,base);
-  if casting&&!present {
+  if desired&&!present {
    apply(player,id,0);
-  }else if !casting&&present {
+  }else if !desired&&present {
    remove(read_ptr(player+0x190),id);
   }
  }
@@ -1394,9 +1404,15 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  if ACTIVE.load(Ordering::Acquire)&&effect==cage_mutation::MARKER {
   promote_cage_mutation(player,base,true);
  }
- if result!=0&&ACTIVE.load(Ordering::Acquire)&&effect==sword::CAST_PULSE&&is_local(player,base)&&has_effect(player,sword::OWNER,base){
-  SWORD_CAST_MAGIC.store(active_magic(player),Ordering::Release);
-  SWORD_CAST_PLAYER.store(player,Ordering::Release);SWORD_LAST_CAST.store(GetTickCount64(),Ordering::Release);
+ if result!=0&&ACTIVE.load(Ordering::Acquire)&&matches!(effect,sword::CAST_PULSE|sword::CAST_RIGHT|sword::CAST_LEFT|sword::RECOVERY_RIGHT|sword::RECOVERY_LEFT)&&is_local(player,base)&&has_effect(player,sword::OWNER,base){
+  let now=GetTickCount64();
+  let continuous=sword::casting(player,true,true,SWORD_CAST_PLAYER.load(Ordering::Acquire),SWORD_LAST_CAST.load(Ordering::Acquire),now);
+  let recovery=matches!(effect,sword::RECOVERY_RIGHT|sword::RECOVERY_LEFT);
+  if let Some(magic)=sword::pulse_magic(recovery,continuous,SWORD_CAST_MAGIC.load(Ordering::Acquire),if recovery{-1}else{active_magic(player)}){
+   SWORD_CAST_HAND.store(match effect {sword::CAST_RIGHT|sword::RECOVERY_RIGHT=>1,sword::CAST_LEFT|sword::RECOVERY_LEFT=>0,_=>-1},Ordering::Release);
+   SWORD_CAST_MAGIC.store(magic,Ordering::Release);
+   SWORD_CAST_PLAYER.store(player,Ordering::Release);SWORD_LAST_CAST.store(now,Ordering::Release);
+  }
  }
  if result!=0&&ACTIVE.load(Ordering::Acquire) {
   let base=BASE.load(Ordering::Acquire);
@@ -1744,8 +1760,10 @@ unsafe fn crystal_rebound(player:usize,source:usize,hit:usize,base:usize) {
  // owner. The damage module getter used by native recoil is module+8.
  if source==0||source==player||read_ptr(hit+0x228)!=source {return;}
  let modules=read_ptr(source+0x1b8);if modules==0{return;}
- let damage_module=read_ptr(modules+0x90);
- if damage_module==0||read_ptr(damage_module+8)!=source {return;}
+ let damage_module=read_ptr(modules+DAMAGE_MODULE_SLOT);
+ // Both module types have the same owner at +8. Recoil writes +48/+4C/+74,
+ // beyond the hit-stop object's 0x30 bytes; ownership alone is not a type check.
+ if damage_module==0||read_ptr(damage_module)!=base+DAMAGE_MODULE_VTABLE_RVA||read_ptr(damage_module+8)!=source {return;}
  // Native 439D50 has already resolved attack hardness (including attacker
  // effects) into +2A8. Work on a copy so absorption and later hit consumers
  // retain their original flags, damage, guard state and notification result.
@@ -2072,7 +2090,7 @@ mod tests {
    ptr::write_unaligned(hit.as_mut_ptr().add(offset) as *mut [f32;4],v);
   }
   let player=[0f32,0.,0.,1.];
-  for (point,expected) in [([3.,1.,0.,1.],true),([5.,0.,0.,1.],true),([5.001,0.,0.,1.],false),([0.,7.,0.,1.],false),([f32::NAN,0.,0.,1.],false)]{
+  for (point,expected) in [([2.,1.,0.,1.],true),([4.,0.,0.,1.],true),([4.001,0.,0.,1.],false),([0.,4.001,0.,1.],false),([f32::NAN,0.,0.,1.],false)]{
    ptr::write_unaligned(hit.as_mut_ptr().add(0x1f0) as *mut [f32;4],point);
    assert_eq!(sword::near(sword::distance(player,sword_hit_point(hit.as_ptr() as usize)),sword::NEAR_DISTANCE),expected);
   }
@@ -2086,17 +2104,27 @@ mod tests {
  }
  #[test] fn shell_rebound_dispatches_only_direct_character_source_with_private_hit(){unsafe{
   let mut actor=[0usize;0x200/8];let mut modules=[0usize;0x200/8];let mut damage=[0usize;0x100/8];
+  let mut hit_stop=[0usize;0x30/8];
   let source=actor.as_ptr() as usize;let mut hit=[0u8;crystal::HIT_SIZE];
-  actor[0x1b8/8]=modules.as_ptr() as usize;modules[0x90/8]=damage.as_ptr() as usize;damage[1]=source;
+  actor[0x1b8/8]=modules.as_ptr() as usize;
+  modules[0x90/8]=hit_stop.as_ptr() as usize;hit_stop[1]=source;
+  modules[0x98/8]=damage.as_ptr() as usize;damage[1]=source;
   hit[..4].copy_from_slice(&100f32.to_le_bytes());hit[0x2c3]=2;
   hit[0x228..0x230].copy_from_slice(&source.to_le_bytes());
   let base=capture_crystal_rebound as *const () as usize-REBOUND_RVA;
+  damage[0]=base+DAMAGE_MODULE_VTABLE_RVA;
+  hit_stop[0]=base+0x2c12320;
   let input=hit.as_ptr() as usize;let original=hit;
   CRYSTAL_REBOUND_CALL.with(|c|c.set((0,0,0)));
   crystal_rebound(1,0,input,base);crystal_rebound(source,source,input,base);
   crystal_rebound(1,source,input,base);
   CRYSTAL_REBOUND_CALL.with(|c|assert_eq!(c.get(),(damage.as_ptr() as usize,1,1)));
   assert_eq!(hit,original);
+  // A same-owner hit-stop module in the damage slot must also be rejected.
+  modules[0x98/8]=hit_stop.as_ptr() as usize;crystal_rebound(1,source,input,base);
+  modules[0x98/8]=0;crystal_rebound(1,source,input,base);
+  modules[0x98/8]=damage.as_ptr() as usize;
+  assert_eq!(hit_stop[0],base+0x2c12320);assert_eq!(hit_stop[1],source);
   // Projectile-owned/indirect sources and mismatched modules cannot recoil.
   hit[0x228..0x230].copy_from_slice(&0usize.to_le_bytes());crystal_rebound(1,source,input,base);
   hit[0x228..0x230].copy_from_slice(&source.to_le_bytes());damage[1]=0;crystal_rebound(1,source,input,base);
@@ -2244,9 +2272,9 @@ mod tests {
  }
  #[test] fn legacy_sword_distance_cannot_override_compiled_range(){
   for value in ["0","5","6","7.5","NaN","inf","101"]{assert!(Config::read(&format!("SwordNearDistance={value}")).is_ok());}
-  assert_eq!(sword::NEAR_DISTANCE,5.);
-  assert!(sword::near(Some(5.),sword::NEAR_DISTANCE));
-  assert!(!sword::near(Some(5.001),sword::NEAR_DISTANCE));
+  assert_eq!(sword::NEAR_DISTANCE,4.);
+  assert!(sword::near(Some(4.),sword::NEAR_DISTANCE));
+  assert!(!sword::near(Some(4.001),sword::NEAR_DISTANCE));
  }
  #[test] fn constructed_impact_stays_boosted_for_shared_and_network_copies(){unsafe{
   for original in [0,1,2,3,8,7] {

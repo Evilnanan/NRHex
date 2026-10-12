@@ -88,6 +88,13 @@ try {
     } # Clean builds retain the checked-in boss catalogue guarded by the EXE/regulation versions.
     & python -X utf8 tools/build_new_hexes_hks.py --inplace
     if ($LASTEXITCODE -ne 0) { throw 'Balloon and Revenant action notifications failed.' }
+    & python -X utf8 tools/build_sword_vfx_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Sword casting-hand visual patch failed.' }
+    & python -X utf8 tools/build_sword_recovery_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Sword spell recovery patch failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-fxr-stage
+    if ($LASTEXITCODE -ne 0) { throw 'Sword private visual resource patch failed.' }
+    Copy-Item -LiteralPath '.work/sword-vfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Destination 'dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Force
     cargo build --release --lib
     if ($LASTEXITCODE -ne 0) { throw 'DLL build failed.' }
     cargo run --release --bin scancheck -- $gameExe

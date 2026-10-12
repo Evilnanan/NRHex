@@ -2,7 +2,9 @@
 
 本页保留构建用法。历次增量修改记录见 [历史变更](../CHANGELOG.md)；限定旧输入哈希的增量工具只用于相应历史基线。
 
-DLL和INI位于`dist/mod/natives`；ME3的原生DLL条目也指向`mod/natives/NRHex.dll`。亮剑近身判定固定在`src/sword.rs`的`NEAR_DISTANCE=5.0`，INI不再控制该数值。
+DLL和INI位于`dist/mod/natives`；ME3的原生DLL条目也指向`mod/natives/NRHex.dll`。亮剑近身判定固定在`src/sword.rs`的`NEAR_DISTANCE=4.0`，INI不再控制该数值。
+
+亮剑触媒特效可通过 `./build-sword-vfx.ps1` 增量构建：沿当前资源添加左右手视觉与施法手标记，检查后仅替换 DLL、参数包及动作脚本，保留其他资源与配置。完整构建也包含相同改动。该命令不启动游戏。
 
 默认构建启用Cargo的`test-hotkeys`功能，保留自测快捷键。已有最新dist游戏资源后，可运行`./build-no-hotkeys.ps1`，以`--no-default-features`单独编译不含快捷键的DLL，并将当前资源复制到`E:\Projects\me3-manager\nightreign-mods\NRHex`。可用`-Destination`指定其他目录。此脚本复用当前dist资源，不重建参数、地图或文本；修改这些内容时先完成正常构建。独立DLL产物保存在`.work/no-hotkeys-target`，不会覆盖自测DLL。
 
@@ -106,4 +108,6 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 
 ## 当前调试快捷键
 
-自测版保留 Ctrl+F6～F9，说明见 [发行包用法](../dist/README.md)。群友版编译时移除测试按键入口。亮剑距离固定5米，不属于INI配置。
+亮剑施法保护／光效的增量更新使用 `./build-sword-vfx.ps1`，会生成参数、手持与后摇动作标记、检查风暴管束者架势幻化剑资源并运行Rust测试。游戏需退出后才能安装DLL，群友版随后运行 `./build-no-hotkeys.ps1`。直接复用现有公共特效包中的450955及其模型／纹理，无需Node依赖或新特效副本。资源检查会移除已知的旧罗蕾塔放大副本，并验证其余成员保持原样。
+
+自测版保留 Ctrl+F6～F9，说明见 [发行包用法](../dist/README.md)。群友版编译时移除测试按键入口。亮剑距离固定4米，不属于INI配置。
