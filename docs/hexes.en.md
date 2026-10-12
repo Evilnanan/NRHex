@@ -97,7 +97,7 @@ Raises maximum HP by 50%. Reduces damage negation by 30%. Reduces resistance to 
 <!-- hex:95001800 -->
 ## Enhanced [Necromancy]
 
-Stores the soul of a powerful enemy defeated by the party, replacing it only with a soul of higher maximum HP. Using an Ultimate Art consumes the stored soul to summon a spirit that fights alongside the summoner. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.
+Stores the soul of a powerful enemy defeated by the party, replacing it only with a soul of higher maximum HP. Using [Immortal March] consumes the stored soul to summon a spirit that fights alongside the summoner. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.
 
 <!-- hex:95002000 -->
 ## Don't Change the Channel
