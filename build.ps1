@@ -18,6 +18,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Sword range table build failed.' }
     dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot
     if ($LASTEXITCODE -ne 0) { throw 'Parameter/event/text build failed.' }
+    & python -X utf8 tools/verify_cage_network_native.py --full-build
+    if ($LASTEXITCODE -ne 0) { throw 'Monster Cage native network packet regression failed.' }
     & python -X utf8 tools/verify_cage_flag_storage.py
     if ($LASTEXITCODE -ne 0) { throw 'Monster Cage native flag storage validation failed.' }
     & python -X utf8 tools/verify_cage_mutation.py
@@ -118,6 +120,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Slingshot request HKS build failed' }
     python -X utf8 tools/verify_slingshot_requests_hks.py
     if ($LASTEXITCODE -ne 0) { throw 'Slingshot request HKS verification failed' }
+    python -X utf8 tools/verify_archmage_secondary_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Archmage secondary FP native verification failed' }
     python -X utf8 tools/verify_slingshot_native.py
     if ($LASTEXITCODE -ne 0) { throw 'Slingshot native impulse verification failed.' }
     cargo build --release --lib

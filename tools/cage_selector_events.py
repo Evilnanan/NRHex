@@ -13,6 +13,7 @@ class Selector:
         self.missing_labels = []
         self.client = client
         self.random_calls = 0
+        self.network_writes = []
 
     def step(self):
         if self.ended:
@@ -44,14 +45,19 @@ class Selector:
             elif n == 'SkipIfEventFlag':
                 if bool(self.flags.get(a[3], False)) == bool(a[1]):
                     self.pc += a[0]
-            elif n == 'BatchSetNetworkconnectedEventFlags':
+            elif n in ('BatchSetNetworkconnectedEventFlags', 'BatchSetEventFlags'):
                 for flag in range(a[0], a[1] + 1):
                     self.flags[flag] = bool(a[2])
-            elif n == 'RandomlySetNetworkconnectedEventFlagInRange':
+                    if n == 'BatchSetNetworkconnectedEventFlags':
+                        self.network_writes.append((flag, bool(a[2])))
+            elif n in ('RandomlySetNetworkconnectedEventFlagInRange', 'RandomlySetEventFlagInRange'):
                 self.random_calls += 1
                 self.flags[a[0] + self.draw] = True
+                if n == 'RandomlySetNetworkconnectedEventFlagInRange':
+                    self.network_writes.append((a[0] + self.draw, True))
             elif n == 'SetNetworkconnectedEventFlag':
                 self.flags[a[1]] = bool(a[2])
+                self.network_writes.append((a[1], bool(a[2])))
                 if a[1] == self.report['ready'] and a[2]:
                     self.commits.append(self.draw)
             elif n == 'EndUnconditionally':
@@ -74,6 +80,8 @@ class Selector:
         # can then set request before the selector observes its brief OFF state.
         self.flags[self.report['request']] = False
         self.flags[self.report['ready']] = False
+        for flag in range(self.report['choices'], self.report['choices'] + self.report.get('encounterCount', 37)):
+            self.flags[flag] = False
         self.flags[self.report['request']] = True
 
 

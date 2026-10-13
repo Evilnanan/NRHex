@@ -4,16 +4,15 @@
     "PowerOfBalance"
   ],
   "nativeFiles": {
-    "mod/natives/NRHex.dll": "9dd054707f5c507be747d136c3736b02ec161ac10348fd7576d31ce2dc6bc93f",
-    "mod/natives/NRHex.ini": "61c0e8fb2d51b160e292b0d098742756ba7b727298e95d27176276b9ffa0560f",
+    "mod/natives/NRHex.dll": "e2d9ed3a3d48a8533afe4b9bee83e1b32117c95347d0fd1bfa5acbbec50ced88",
+    "mod/natives/NRHex.ini": "d19670c59afc92762ecb6274a06f0fa331644cac7f4f2a1d2987ef339bcb4178",
     "testmods/DeepUnlocker/DeepUnlocker.dll": "89c6b195d51c4ecd45039243c2edda2ac3e9c5950b22a3888c718b6c6775b51e",
     "testmods/DeepUnlocker/DeepUnlocker.ini": "9551c3974a8f9f05c75e66d41852039d5aeb89babb340fedd585c22b27243126",
     "testmods/derandomizer/derandomizer.dll": "42e014f21afa3f6d1b312f61f4707e76d88a7ac84788f41a485144f629a25228",
-    "testmods/derandomizer/derandomizer.ini": "9f07e0e2f42b7c300e15d1eac60479361ab1e427d88bd13c7b40153350e0404b",
+    "testmods/derandomizer/derandomizer.ini": "b1b624d4e887ebecd77d1e080232c83b5b043886511efc2bd3aae1428220fef3",
     "testmods/StormControl/StormControl_no_gui.dll": "3f115dcb038c2ca61c9ea929907e31fb3463cb6b822248cba8688f2da1dd3ac7",
     "testmods/StormControl/StormControl_no_gui/config.ini": "3eb81e36bf65ed51022209ce157dae9d47a17eabacfdf405e0e9d992d80ee381"
   },
   "gameplayVerified": false,
-  "loadingVerified": false,
-  "version": "0.17.60"
+  "loadingVerified": false
 }

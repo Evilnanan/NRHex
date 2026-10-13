@@ -17,7 +17,7 @@ unsafe extern "system" fn detour(reference:usize,slot:u32,caller:usize)->u64{
  let result=original(reference,slot);
  // Serialization remains original; only the exact public equipment exports
  // are patched after native serialization. No inventory/drop/save contamination.
- if slot>=2||!ACTIVE.load(Ordering::Acquire)||caller.wrapping_sub(BASE.load(Ordering::Acquire))==0x6c180b{return result;}
+ if slot!=1||!ACTIVE.load(Ordering::Acquire)||caller.wrapping_sub(BASE.load(Ordering::Acquire))==0x6c180b{return result;}
  let base=BASE.load(Ordering::Acquire);
  let Some(player)=local_owner(base) else{return result;};
  let Some(c)=catalyst_reference(reference) else{return result;};
@@ -66,6 +66,7 @@ pub unsafe fn update(player:usize,base:usize){
  let stats=read_ptr(modules);if stats==0{return;}
  let owned=crate::has_effect(player,archmage::OWNER,base);let alive=read_i32(stats+0x140)>0;
  let context=read_ptr(base+0x3c131c8);
+ if !owned||!alive{crate::archmage_cost::clear();}
  let pending={let Ok(mut s)=state.lock() else{return;};s.synchronize(context,owned,alive);s.tick()};
  reroll(pending);
  let marker=crate::has_effect(player,archmage::MARKER,base);

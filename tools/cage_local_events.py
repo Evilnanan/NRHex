@@ -129,6 +129,8 @@ def verify_hud(decoded, report, entity, name, choice):
     assert not any(n == 'IfCharacterAIState' for n, _ in decoded)
     bars = [a for n, a in decoded if n == 'DisplayBossHealthBar']
     assert bars == [[1, entity, 0, name], [1, entity, 1, name], [0, entity, 0, name], [0, entity, 1, name]]
+    two_phase=sum(n=='SpawnOneshotSFX' for n,_ in birth_code)==2
+    duration=6.5 if two_phase else 4
     shown = report['shown'] + entity % 10000 - 9000
     flags = {report['spawned']: True, choice: True, shown: True}
     assert ('LinkToBossHealthBar', [1, name, entity]) in decoded
@@ -205,7 +207,10 @@ def verify_hud(decoded, report, entity, name, choice):
 def verify_birth(decoded, report, entity, choice, animation, fog):
     assert decoded[0] == ('SetNetworkSyncState', [0])
     flags = {report['ready']: True, choice: True}
-    assert [a for n, a in decoded if n == 'SpawnOneshotSFX'] == [[2, entity, 900, fog]]
+    effects=[a for n,a in decoded if n=='SpawnOneshotSFX']
+    two_phase=len(effects)==2
+    duration=6.5 if two_phase else 4
+    assert effects == ([[2,entity,900,690050],[2,entity,900,690047]] if two_phase else [[2,entity,900,fog]])
     assert [a[1:3] for n, a in decoded if n == 'ForceAnimationPlayback'] == animation
     assert not any(n in ('SetNetworkconnectedEventFlag', 'SetCharacterAIState', 'IncrementNetworkconnectedEventValue') for n, _ in decoded)
     generators=[a for n,a in decoded if n=='InvokeEnemyGenerator']
@@ -222,25 +227,26 @@ def verify_birth(decoded, report, entity, choice, animation, fog):
                 peer.flags[report['spawned']] = True
             peer.state['loaded'] = True
             peer.step(delay)
-        assert peer.calls('SpawnOneshotSFX') == [(delay, [2, entity, 900, fog])]
+        assert peer.calls('SpawnOneshotSFX') == [(delay,effects[0])]
+        if two_phase:peer.step(delay+2.5)
         assert peer.calls('ChangeCharacterEnableState') == [(delay, [entity, 0])]
-        peer.step(delay + 3.99)
+        peer.step(delay + duration - .01)
         assert not peer.calls('ForceAnimationPlayback')
-        peer.step(delay + 4)
-        assert peer.calls('ChangeCharacterEnableState')[-1] == (delay + 4, [entity, 1])
+        peer.step(delay + duration)
+        assert peer.calls('ChangeCharacterEnableState')[-1] == (delay + duration, [entity, 1])
         assert len(peer.calls('ForceAnimationPlayback')) == len(animation)
         peer.flags[report['spawned']] = True
-        peer.step(10)
-        assert len(peer.calls('SpawnOneshotSFX')) == 1
+        peer.step(delay+duration+1)
+        assert len(peer.calls('SpawnOneshotSFX')) == len(effects)
         assert len(peer.calls('ActivateMultiplayerdependantBuffs')) == 1
         peer.flags[choice] = False
-        peer.step(11)
-        peer.step(12)
+        peer.step(delay+duration+2)
+        peer.step(delay+duration+3)
         peer.flags[choice] = True
         peer.flags[report['spawned']] = False
         peer.effects.clear()  # A new generated actor has a new native marker.
-        peer.step(13)
-        assert len(peer.calls('SpawnOneshotSFX')) == 2
+        peer.step(delay+duration+4)
+        assert len(peer.calls('SpawnOneshotSFX')) == len(effects)+1
         assert len(peer.calls('ActivateMultiplayerdependantBuffs')) == 2
     # Loading an already active fight reveals its actor without replaying an
     # intro or disabling its AI. This includes unload/reload with choice held.
@@ -259,6 +265,8 @@ def verify_birth(decoded, report, entity, choice, animation, fog):
 
 
 def verify_peer_reveal(birth_code, hud_code, report, entity, name, choice):
+    two_phase=sum(n=='SpawnOneshotSFX' for n,_ in birth_code)==2
+    duration=6.5 if two_phase else 4
     shown = report['shown'] + entity % 10000 - 9000
     for delay in (0.25, 2.0, 5.0):
         flags = {report['ready']: True, choice: True}
@@ -275,10 +283,11 @@ def verify_peer_reveal(birth_code, hud_code, report, entity, name, choice):
         hud.step(delay)
         assert not hud.calls('DisplayBossHealthBar')
         # Shared completion arrives while this peer is still in its own fog.
-        hud.step(delay + 3.99)
+        hud.step(delay + duration - .01)
         assert not hud.calls('DisplayBossHealthBar')
-        birth.step(delay + 4)
+        if two_phase:birth.step(delay+2.5)
+        birth.step(delay + duration)
         assert flags[shown]
-        hud.step(delay + 4)
-        assert hud.calls('DisplayBossHealthBar') == [(delay + 4, [1, entity, 0, name])]
-        assert hud.calls('LinkToBossHealthBar') == [(delay + 4, [1, name, entity])]
+        hud.step(delay + duration)
+        assert hud.calls('DisplayBossHealthBar') == [(delay + duration, [1, entity, 0, name])]
+        assert hud.calls('LinkToBossHealthBar') == [(delay + duration, [1, name, entity])]

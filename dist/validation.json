@@ -15952,8 +15952,8 @@
       "Id": 95001600,
       "Zh": "刷怪笼",
       "En": "Monster Cage",
-      "ZhInfo": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢",
-      "EnInfo": "Open evergaols without keys and release a wider variety of enemies. Defeating them creates no Site of Grace, but lets you reopen the same evergaol",
+      "ZhInfo": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢。每座封印监牢最多开启5次",
+      "EnInfo": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times.",
       "LargeIcon": 21267,
       "SmallIcon": 22267
     },

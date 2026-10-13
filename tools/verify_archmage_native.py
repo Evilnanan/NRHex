@@ -25,15 +25,15 @@ source=(ROOT/'src/archmage_runtime.rs').read_text(encoding='utf-8')
 assert '==0x6c180b' in source and 'if !transfer&&!equipped' in source
 catalog=json.loads((ROOT/'.work/archmage/native-parameters.json').read_text())
 magic={r['ID']:r['fields'] for r in catalog['Magic']}
-eligible={r['fields']['magicId'] for r in catalog['MagicTableParam'] if r['fields']['chanceWeight']>0 and r['fields']['disableParam_NT']==0}
-spells=sorted((i,magic[i]['ezStateBehaviorType']) for i in eligible if i in magic and magic[i]['ezStateBehaviorType'] in (0,1))
+eligible={r['fields']['magicId'] for r in catalog['MagicTableParam'] if r['fields']['chanceWeight']>0}
+spells=sorted((i,f['ezStateBehaviorType']) for i,f in magic.items() if f['ezStateBehaviorType'] in (0,1))
 compiled=[(int(i),int(k)) for i,k in re.findall(r'\((\d+),(\d+)\)',(ROOT/'src/archmage_data.rs').read_text())]
-assert compiled==spells and len(spells)==79
-random=sorted(i for i,_ in spells if not magic[i]['isEnchant'] and not magic[i]['isShieldEnchant'])
+assert compiled==spells and len(spells)==178
+random=sorted(i for i,_ in spells if i in eligible and not magic[i]['isEnchant'] and not magic[i]['isShieldEnchant'])
 random_text=(ROOT/'src/archmage_data.rs').read_text().split('pub const RANDOM_SPELLS:&[i32]=&[',1)[1].split('];',1)[0]
-assert [int(i) for i in random_text.split(',') if i]==random and len(random)==71
-excluded=sorted(set(i for i,_ in spells)-set(random))
-assert excluded==[4460,4470,4490,6320,6740,6770,6960,7230]
+assert [int(i) for i in random_text.split(',') if i]==random and len(random)==151
+excluded=sorted((set(i for i,_ in spells)&eligible)-set(random))
+assert excluded==[4460,4470,4490,6250,6320,6740,6770,6960,7230]
 
 
 k=c.WinDLL('kernel32',use_last_error=True)
@@ -58,6 +58,6 @@ try:
  empty=c.create_string_buffer(24)
  assert native(c.addressof(empty),0)==0xffffffff
 finally:k.VirtualFree(memory,0,0x8000)
-report=dict(exeSha256=hashlib.sha256(raw).hexdigest(),getterRva='6A1E10',instanceMagicOffsets=['2C','30'],serializedMagicOffsets=['14','18'],nativeCases=cases,emptyReferenceReturnsMinusOne=True,sorceries=28,incantations=43,excludedEnchantmentIds=excluded,gameplayVerified=False,multiplayerVerified=False)
+report=dict(exeSha256=hashlib.sha256(raw).hexdigest(),getterRva='6A1E10',instanceMagicOffsets=['2C','30'],serializedMagicOffsets=['14','18'],nativeCases=cases,emptyReferenceReturnsMinusOne=True,knownSpellTypes=178,sorceries=64,incantations=87,excludedEnchantmentIds=excluded,gameplayVerified=False,multiplayerVerified=False)
 (ROOT/'.work/archmage/native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
-print('PASS: native spell getter execution, both slot offsets, spell assignment/bullet/serialization callers and 71-spell pools without weapon/shield enchantments')
+print('PASS: native spell getter execution, both slot offsets, spell assignment/bullet/serialization callers and 151-spell pools without weapon/shield enchantments')

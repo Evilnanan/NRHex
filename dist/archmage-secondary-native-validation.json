@@ -1,0 +1,184 @@
+{
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "selectionCases": [
+    {
+      "hand": 0,
+      "slot": 0,
+      "activeSpell": 4100
+    },
+    {
+      "hand": 0,
+      "slot": 1,
+      "activeSpell": 4101
+    },
+    {
+      "hand": 1,
+      "slot": 0,
+      "activeSpell": 4200
+    },
+    {
+      "hand": 1,
+      "slot": 1,
+      "activeSpell": 4201
+    }
+  ],
+  "skillBypassesCatalystSlots": true,
+  "costCases": [
+    {
+      "kind": 0,
+      "rate": 0.0,
+      "charged": 0,
+      "cost": 0
+    },
+    {
+      "kind": 0,
+      "rate": 0.0,
+      "charged": 1,
+      "cost": 0
+    },
+    {
+      "kind": 0,
+      "rate": 0.5,
+      "charged": 0,
+      "cost": 10
+    },
+    {
+      "kind": 0,
+      "rate": 0.5,
+      "charged": 1,
+      "cost": 15
+    },
+    {
+      "kind": 0,
+      "rate": 1.0,
+      "charged": 0,
+      "cost": 20
+    },
+    {
+      "kind": 0,
+      "rate": 1.0,
+      "charged": 1,
+      "cost": 30
+    },
+    {
+      "kind": 0,
+      "rate": 2.0,
+      "charged": 0,
+      "cost": 40
+    },
+    {
+      "kind": 0,
+      "rate": 2.0,
+      "charged": 1,
+      "cost": 60
+    },
+    {
+      "kind": 1,
+      "rate": 0.0,
+      "charged": 0,
+      "cost": 0
+    },
+    {
+      "kind": 1,
+      "rate": 0.0,
+      "charged": 1,
+      "cost": 0
+    },
+    {
+      "kind": 1,
+      "rate": 0.5,
+      "charged": 0,
+      "cost": 10
+    },
+    {
+      "kind": 1,
+      "rate": 0.5,
+      "charged": 1,
+      "cost": 15
+    },
+    {
+      "kind": 1,
+      "rate": 1.0,
+      "charged": 0,
+      "cost": 20
+    },
+    {
+      "kind": 1,
+      "rate": 1.0,
+      "charged": 1,
+      "cost": 30
+    },
+    {
+      "kind": 1,
+      "rate": 2.0,
+      "charged": 0,
+      "cost": 40
+    },
+    {
+      "kind": 1,
+      "rate": 2.0,
+      "charged": 1,
+      "cost": 60
+    },
+    {
+      "kind": 2,
+      "rate": 0.0,
+      "charged": 0,
+      "cost": 0
+    },
+    {
+      "kind": 2,
+      "rate": 0.0,
+      "charged": 1,
+      "cost": 0
+    },
+    {
+      "kind": 2,
+      "rate": 0.5,
+      "charged": 0,
+      "cost": 10
+    },
+    {
+      "kind": 2,
+      "rate": 0.5,
+      "charged": 1,
+      "cost": 15
+    },
+    {
+      "kind": 2,
+      "rate": 1.0,
+      "charged": 0,
+      "cost": 20
+    },
+    {
+      "kind": 2,
+      "rate": 1.0,
+      "charged": 1,
+      "cost": 30
+    },
+    {
+      "kind": 2,
+      "rate": 2.0,
+      "charged": 0,
+      "cost": 40
+    },
+    {
+      "kind": 2,
+      "rate": 2.0,
+      "charged": 1,
+      "cost": 60
+    }
+  ],
+  "normalFpOffset": "0x10",
+  "chargedFpOffset": "0x5c",
+  "gameplayCostCallersVerified": true,
+  "stubs": [
+    "equipment references",
+    "magic virtuals and network refresh",
+    "effect multiplier queries",
+    "ceil"
+  ],
+  "gameMemoryWritten": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

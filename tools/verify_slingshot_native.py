@@ -52,7 +52,7 @@ try:
     for row_id,horizontal_speed in [(100,0.),(101,1.8),(111,4.3),(121,7.),(131,8.)]:
         baseline=None
         for stacks in range(4):
-            rate=1.+.25*stacks if row_id==131 else 1.
+            rate=1.+.5*stacks if row_id==131 else 1.
             struct.pack_into('<fffff',row,0,0.,0.,horizontal_speed,9.,0.)
             put(velocity,0x10,'<i',-1);put(velocity,0x14,'<i',row_id)
             launch(ptr(velocity),ptr(output),ptr(initial),ptr(dt))

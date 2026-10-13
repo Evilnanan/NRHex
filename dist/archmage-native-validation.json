@@ -60,12 +60,14 @@
     }
   ],
   "emptyReferenceReturnsMinusOne": true,
-  "sorceries": 28,
-  "incantations": 43,
+  "knownSpellTypes": 178,
+  "sorceries": 64,
+  "incantations": 87,
   "excludedEnchantmentIds": [
     4460,
     4470,
     4490,
+    6250,
     6320,
     6740,
     6770,

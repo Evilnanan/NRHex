@@ -1,0 +1,27 @@
+{
+  "version": "0.17.97",
+  "identifiedSpellTypes": 178,
+  "randomSorceries": 64,
+  "randomIncantations": 87,
+  "excludedEnchantments": [
+    4460,
+    4470,
+    4490,
+    6250,
+    6320,
+    6740,
+    6770,
+    6960,
+    7230
+  ],
+  "originalRecognitionIndependentOfLottery": true,
+  "ignoreNetworkTestFlag": true,
+  "testsPassed": 14,
+  "liveEvidence": "Right-hand Lightning Spear ID 6900 produced secondary pulse 6999941; old catalog omitted this native spell",
+  "updatedModFiles": [
+    "mod/natives/NRHex.dll"
+  ],
+  "dllSha256": "e2d9ed3a3d48a8533afe4b9bee83e1b32117c95347d0fd1bfa5acbbec50ced88",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

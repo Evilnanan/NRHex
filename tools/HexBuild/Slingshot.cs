@@ -14,8 +14,25 @@ static class Slingshot {
    var row=clone(321800,Owner+layer);
    Check(Convert.ToInt32(row["magicSubCategoryChange1"].Value)==102,"Native jump category changed");
    Set(row,"saveCategory",-1);Set(row,"iconId",-1);Set(row,"spEffectTextId_1",-1);Set(row,"effectEndurance",-1f);
-   foreach(string f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(row,f,1f+.3f*layer);
+   foreach(string f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(row,f,1f+.5f*layer);
   }
+ }
+ public static void Tune(string root,Func<string,Memory<byte>,PARAM> parse){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,".work/slingshot-01793");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var member=binder.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param");var table=parse("SpEffectParam",member.Bytes);var expected=parse("SpEffectParam",member.Bytes);
+  for(int layer=1;layer<=3;layer++){
+   var row=table.Rows.Single(r=>r.ID==Owner+layer);Check(Convert.ToInt32(row["magicSubCategoryChange1"].Value)==102,"Jump category changed");
+   foreach(string f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"}){
+    Check(Math.Abs(Convert.ToSingle(row[f].Value)-(1f+.3f*layer))<.00001f,"Unexpected installed Slingshot bonus");
+    Set(row,f,1f+.5f*layer);Set(expected.Rows.Single(r=>r.ID==Owner+layer),f,1f+.5f*layer);
+   }
+  }
+  member.Bytes=table.Write();string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Files.Count==binder.Files.Count,"Member count changed");foreach(var f in final.Files){var wanted=binder.Files.Single(v=>v.ID==f.ID);Check(f.Name==wanted.Name&&f.Flags==wanted.Flags&&f.Bytes.Span.SequenceEqual(wanted.Bytes.Span),"Readback mismatch");if(f.ID!=member.ID)Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated table changed");}
+  var actual=parse("SpEffectParam",final.Files.Single(f=>f.ID==member.ID).Bytes);Check(actual.Rows.Count==expected.Rows.Count&&actual.Rows.Zip(expected.Rows).All(v=>CageAI.Same(v.First,v.Second)),"Unrelated effect field changed");
+  File.WriteAllText(Path.Combine(directory,"parameter-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),onlyFifteenAttackRateFieldsChanged=true,damageMultipliers=new[]{1.5,2.0,2.5},gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Slingshot three-layer five-attribute attack bonuses updated; all other parameter fields preserved");
  }
  public static void Stage(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string directory=Path.Combine(root,".work/slingshot/staged"),input=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(directory);
@@ -45,7 +62,7 @@ static class Slingshot {
   foreach(var f in final.Files){var intended=binder.Files.Single(v=>v.ID==f.ID);Check(f.Name==intended.Name&&f.Flags==intended.Flags&&f.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Readback mismatch");if(!names.Contains(Path.GetFileNameWithoutExtension(f.Name)))Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated member changed");}
   foreach(string n in names){var actual=parse(n,final.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes);Check(actual.Rows.Count==baseline[n].Rows.Count+added[n].Count,"Row count mismatch");var old=baseline[n].Rows.OrderBy(r=>r.ID).ToArray();var retained=actual.Rows.Where(r=>!added[n].Contains(r.ID)).OrderBy(r=>r.ID).ToArray();Check(old.Length==retained.Length&&old.Zip(retained).All(p=>CageAI.Same(p.First,p.Second)),"Preexisting row changed");}
   HexTexts.Stage(root,hexes,Path.Combine(directory,"texts"),allRewards:true);
-  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(destination),abilityCount=hexes.Length,added=added.ToDictionary(k=>k.Key,k=>k.Value.Order().ToArray()),originalRowsUnchanged=true,sprintWindowSeconds=1,maxStacks=3,horizontalBonusPerStack=.5,attackBonusPerStack=.3,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(destination),abilityCount=hexes.Length,added=added.ToDictionary(k=>k.Key,k=>k.Value.Order().ToArray()),originalRowsUnchanged=true,sprintWindowSeconds=1,maxStacks=3,horizontalBonusPerStack=.5,attackBonusPerStack=.5,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: Slingshot sprint/jump parameters, stable rewards and bilingual texts staged/read back");
  }
 }

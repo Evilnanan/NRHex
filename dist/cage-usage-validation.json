@@ -1,0 +1,45 @@
+{
+  "version": "0.17.95",
+  "personalLimit": 5,
+  "counterCategory": 5,
+  "openingBranchCases": 1224,
+  "openingInitializers": 17,
+  "localBirthCases": 1344,
+  "bossIntroEffects": [
+    690047
+  ],
+  "introSeconds": 4,
+  "originalOtherEventsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pendingChecks": [
+    "Each player and each physical gaol retains five independent opens",
+    "Sixth interaction uses native keys/conditions; move away and return",
+    "Native opening popup and main fog on both peers; no prelude"
+  ],
+  "preludeRemoved": true,
+  "removedGaolEntrySound": 999997300,
+  "allOtherModAssetsUnchanged": true,
+  "files": {
+    "mod/event/m46_50_00_00.emevd.dcx": {
+      "before": "24ae11ca752778ab1ab514df065dbe310e97a5c65cc17a90975e851f36578b17",
+      "after": "9136c3e966caca9499c2dd9d27d1629944935a673784bcca80f8178a0edec21b"
+    },
+    "mod/event/m46_60_00_00.emevd.dcx": {
+      "before": "fed1f3b5612db4b2ca151b91a3d40f0f7ec152f27726e548fc0b94fde4fd738e",
+      "after": "453606212124ee68007ca78f0eca6c6ca6cc0892b0374a9a40133f60c5ab0f63"
+    },
+    "mod/event/m46_70_00_00.emevd.dcx": {
+      "before": "59e826dbeef4a56286080f2b51512ee75224e04f56eeb332f949ac8c67a4c3ef",
+      "after": "43d3a98ad39487874e0df1af8055005ce8e9ac6959294e22a91c42c4a12baa89"
+    },
+    "mod/event/m46_80_00_00.emevd.dcx": {
+      "before": "1b95ad83d2d6e06fb89043e010c9947154a7fe4bb47e05989db884dcff789aed",
+      "after": "937aad622ab4c1c7008de9a145b2d496cc40287edfb2e5e8670df8482ad39852"
+    },
+    "mod/natives/NRHex.dll": {
+      "before": "d2b436100ce2e6e7f265187b6443ebcbdf2603ef16281b283df2b29387b1b34b",
+      "after": "7fc3bffcfc0953bcda07624d03f7f7984817f5c8ad65f953e3981b313c482bda"
+    }
+  }
+}

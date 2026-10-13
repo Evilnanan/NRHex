@@ -1,0 +1,34 @@
+{
+  "version": "0.17.93",
+  "horizontalBonusPerStack": 0.5,
+  "attackBonusPerStack": 0.5,
+  "threeStackMultiplier": 2.5,
+  "rustTestsPassed": 273,
+  "nativeImpulseCases": 20,
+  "parameterValidation": {
+    "inputSha256": "0A893B4A33DFB1F82B2439E577906C6110BC868A7836F942C0DB5D233029FA9B",
+    "outputSha256": "8F3CC2FC1468255AE107E6B3B31BB93B607280AE00CEC6AFB0C2E6458CF66C51",
+    "onlyFifteenAttackRateFieldsChanged": true,
+    "damageMultipliers": [
+      1.5,
+      2,
+      2.5
+    ],
+    "gameplayVerified": false
+  },
+  "artsElementRequirements": {
+    "1014": "weapon attackBaseFire > 0",
+    "1184": "weapon attackBaseMagic > 0"
+  },
+  "textSourcesVerified": true,
+  "changedModFiles": {
+    "mod/regulation.bin": "8f3cc2fc1468255ae107e6b3b31bb93b607280ae00cec6afb0c2e6458cf66c51",
+    "mod/natives/NRHex.dll": "877692d170ddba0c16c010239447863c5cea4d4802a9490461ea8e1ea216d7c1",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "300b9202939f817ee4210826f159552a8684b6f32b750ab11f554a6c35515e8e",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "e611174dcfe75c85643a2ef2e120956d9562890f0d9ebbee5acf0e098ee225a2"
+  },
+  "otherModFilesUnchanged": true,
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

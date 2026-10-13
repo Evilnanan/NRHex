@@ -1,0 +1,18 @@
+{
+  "version": "0.17.90",
+  "secondarySlot": 1,
+  "primarySlot": 0,
+  "ownerFpRatesNeutral": true,
+  "changedAssets": {
+    "mod/natives/NRHex.dll": "c7670d1ad362daad9d07210c6a687ee310bf2512b09872197c64432017cc8cf1",
+    "mod/regulation.bin": "88bf4c7e86448de13377cfebf4bc7e81ad67894ed8fbf8ad7caec3de085073ad",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "a8a83409241e62face33ab81b7f6f5b23ea5ddfacd9c5b351643ce2e31288894",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "f1e7bfb691ac11718d43117492b24114dfe19290e30bc19dcfce1394c4423b3f",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "b8917f4b981391dcf9ad05f1ee0ed824263be9f3b840c19fc5851d0cac9fa640",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "c7ba8688c8000f385605e97950ab502c326e754020f899bb592b8297861f6c0a"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

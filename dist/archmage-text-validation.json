@@ -1,8 +1,8 @@
 {
   "source": "docs/hexes.md",
-  "sourceSha256": "DE21ABF28965C2B51BD26849ED3458A60AD7C892584FA09B00FAE4A5E33BF7BB",
+  "sourceSha256": "D4072B127139872ABB431CFED64C2F547EF25D962DBC328F399F489BEF49E3D2",
   "englishSource": "docs/hexes.en.md",
-  "englishSourceSha256": "C6B8495BBACD288574B598BC95A7125477B5DEA075AE158C493FA6D3D28152EA",
+  "englishSourceSha256": "66FC0B3B260EF441C2538DCDAEDD03879F0FB510C8454A7E0521CBEE2A53AD83",
   "statusSource": "data/text/status-effects.json",
   "statusSourceSha256": "7A40AD39F82E0A75FCBBA184F4D0B3580215AF19CFA7E32C9792FE47B21DC1F6",
   "statusOnly": false,
@@ -10,26 +10,26 @@
     {
       "language": "zhocn",
       "file": "item_dlc01.msgbnd.dcx",
-      "inputSha256": "4018F3F9E6D79D504D88465F4A0D521E83EC79FBD358337009CFF76C1559B8AA",
-      "outputSha256": "9E47A49DD55B2FA63BCB6FA50FC156F7DF3BA3F905E8A24AE6FEE4484E955B79",
+      "inputSha256": "7A29552B4EA486D1FD2EE9D5286CA14C015FC15E6A51167F1D3D68C948CDAABB",
+      "outputSha256": "A8A83409241E62FACE33AB81B7F6F5B23EA5DDFACD9C5B351643CE2E31288894",
       "changes": [
         {
           "fmg": "AttachEffectInfo.fmg",
           "id": 95002100,
-          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u8FDE\u9501\u7ED3\u675F\u540E\uFF0C\u5C06\u89E6\u5A92\u4E0A\u4F7F\u7528\u8FC7\u7684\u6CD5\u672F\u69FD\u968F\u673A\u66FF\u6362\u4E3A\u540C\u7C7B\u6CD5\u672F",
-          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u7ED3\u675F\u540E\uFF0C\u5C06\u4F7F\u7528\u7684\u6CD5\u672F\u968F\u673A\u66FF\u6362\u4E3A\u5176\u4ED6\u6CD5\u672F"
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u7ED3\u675F\u540E\uFF0C\u5C06\u4F7F\u7528\u7684\u6CD5\u672F\u968F\u673A\u66FF\u6362\u4E3A\u5176\u4ED6\u6CD5\u672F",
+          "after": "\u89E6\u5A92\u7684\u526F\u6CD5\u672F\u6D88\u8017\u964D\u4F4E100%\uFF0C\u5E76\u4E14\u65BD\u6CD5\u540E\u53D8\u4E3A\u968F\u673A\u65B0\u6CD5\u672F"
         },
         {
           "fmg": "PermanentBuffInfo.fmg",
           "id": 95002100,
-          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u8FDE\u9501\u7ED3\u675F\u540E\uFF0C\u5C06\u89E6\u5A92\u4E0A\u4F7F\u7528\u8FC7\u7684\u6CD5\u672F\u69FD\u968F\u673A\u66FF\u6362\u4E3A\u540C\u7C7B\u6CD5\u672F",
-          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u7ED3\u675F\u540E\uFF0C\u5C06\u4F7F\u7528\u7684\u6CD5\u672F\u968F\u673A\u66FF\u6362\u4E3A\u5176\u4ED6\u6CD5\u672F"
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u7ED3\u675F\u540E\uFF0C\u5C06\u4F7F\u7528\u7684\u6CD5\u672F\u968F\u673A\u66FF\u6362\u4E3A\u5176\u4ED6\u6CD5\u672F",
+          "after": "\u89E6\u5A92\u7684\u526F\u6CD5\u672F\u6D88\u8017\u964D\u4F4E100%\uFF0C\u5E76\u4E14\u65BD\u6CD5\u540E\u53D8\u4E3A\u968F\u673A\u65B0\u6CD5\u672F"
         },
         {
           "fmg": "PermanentBuffCaption.fmg",
           "id": 95002100,
-          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u8FDE\u9501\u7ED3\u675F\u540E\uFF0C\u5C06\u89E6\u5A92\u4E0A\u4F7F\u7528\u8FC7\u7684\u6CD5\u672F\u69FD\u968F\u673A\u66FF\u6362\u4E3A\u540C\u7C7B\u6CD5\u672F",
-          "after": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u7ED3\u675F\u540E\uFF0C\u5C06\u4F7F\u7528\u7684\u6CD5\u672F\u968F\u673A\u66FF\u6362\u4E3A\u5176\u4ED6\u6CD5\u672F"
+          "before": "\u9B54\u6CD5\u3001\u7977\u544A\u7684\u4E13\u6CE8\u503C\u6D88\u8017\u964D\u4F4E100%\u3002\u65BD\u6CD5\u7ED3\u675F\u540E\uFF0C\u5C06\u4F7F\u7528\u7684\u6CD5\u672F\u968F\u673A\u66FF\u6362\u4E3A\u5176\u4ED6\u6CD5\u672F",
+          "after": "\u89E6\u5A92\u7684\u526F\u6CD5\u672F\u6D88\u8017\u964D\u4F4E100%\uFF0C\u5E76\u4E14\u65BD\u6CD5\u540E\u53D8\u4E3A\u968F\u673A\u65B0\u6CD5\u672F"
         }
       ],
       "unrelatedEntriesAndMembersUnchanged": true
@@ -45,9 +45,28 @@
     {
       "language": "engus",
       "file": "item_dlc01.msgbnd.dcx",
-      "inputSha256": "B289E3803DCF3D636891B96A160AD2956EA556FC26CBF8D31A9AB4BCC66D689C",
-      "outputSha256": "B289E3803DCF3D636891B96A160AD2956EA556FC26CBF8D31A9AB4BCC66D689C",
-      "changes": [],
+      "inputSha256": "EEA05710A1C1FEEF89E4BBBA79C8B5851D2AF28EF31B3468C0F141D50AEF565F",
+      "outputSha256": "B8917F4B981391DCF9AD05F1EE0ED824263BE9F3B840C19FC5851D0CAC9FA640",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002100,
+          "before": "Reduces FP consumption of sorceries and incantations by 100%. When consecutive casts end, replaces the spell used in each catalyst slot with a random spell of the same type.",
+          "after": "Reduces FP consumption of a catalyst\u2019s secondary spell by 100%. After casting, replaces it with a random new spell."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002100,
+          "before": "Reduces FP consumption of sorceries and incantations by 100%. When consecutive casts end, replaces the spell used in each catalyst slot with a random spell of the same type.",
+          "after": "Reduces FP consumption of a catalyst\u2019s secondary spell by 100%. After casting, replaces it with a random new spell."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002100,
+          "before": "Reduces FP consumption of sorceries and incantations by 100%. When consecutive casts end, replaces the spell used in each catalyst slot with a random spell of the same type.",
+          "after": "Reduces FP consumption of a catalyst\u2019s secondary spell by 100%. After casting, replaces it with a random new spell."
+        }
+      ],
       "unrelatedEntriesAndMembersUnchanged": true
     },
     {

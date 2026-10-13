@@ -162,7 +162,7 @@ static class Cages {
   else if(birth.nativeFog)e.Instructions.Add(Anim(entity,20025,true));
   e.Instructions[skip]=I(1000,7,(byte)(e.Instructions.Count-skip-1),(byte)1,(sbyte)5);
   e.Instructions.AddRange([I(2004,5,entity,(byte)1),LocalFlag(shown,true),Flag(-2,choice,false),I(4,7,(sbyte)-2,entity,(byte)0,(sbyte)0,1f),Wait(-2),LocalFlag(shown,false),I(1001,1,1),Restart()]);
-  if(stableSnapshot){StabilizeBirth(e);LocalGeneration(e,entity,entity-5200,entity-1100);}
+  if(stableSnapshot){StabilizeBirth(e);LocalGeneration(e,entity,entity-5200,entity-1100);CageUsage.Intro(e);}
   return e;
  }
  // Native condition results can latch while the main wait is still false.
@@ -344,13 +344,17 @@ static class Cages {
  public static bool Same(EMEVD.Event a,EMEVD.Event b)=>a.ID==b.ID&&a.RestBehavior==b.RestBehavior&&a.Name==b.Name&&a.Instructions.Count==b.Instructions.Count&&a.Instructions.Zip(b.Instructions).All(p=>p.First.Bank==p.Second.Bank&&p.First.ID==p.Second.ID&&p.First.Layer==p.Second.Layer&&p.First.ArgData.SequenceEqual(p.Second.ArgData))&&JsonSerializer.Serialize(a.Parameters)==JsonSerializer.Serialize(b.Parameters);
  public static object Dump(EMEVD.Event e)=>new{e.ID,e.RestBehavior,e.Parameters,instructions=e.Instructions.Select(i=>new{i.Bank,i.ID,hex=Convert.ToHexString(i.ArgData)})};
  public static EMEVD.Event Selector(uint prefix,int count){
-  uint request=prefix+7402,ready=prefix+7403,choices=prefix+7500,cooling=prefix+7550;
+  uint request=prefix+7402,ready=prefix+7403,choices=prefix+7500,cooling=prefix+7550,draft=prefix+7100;
   var selector=new EMEVD.Event(prefix+9700,EMEVD.Event.RestBehaviorType.Restart);
-  // A committed selection survives reload. No encounter sees rejected draws.
-  selector.Instructions.AddRange([I(2000,2,(byte)0),HostOnly(),Flag(0,request,true),I(1003,101,(byte)0,(byte)1,(byte)0,ready),SetFlag(prefix+7400,true),SetFlag(prefix+7401,true),I(1001,1,1),I(2003,63,choices,choices+(uint)count-1,(byte)0),I(2003,96,choices,choices+(uint)count-1,(byte)1)]);
+  // Native E0D9B0 encodes all ON writes before all OFF writes. Clearing the
+  // shared choice range and selecting within it in one batch makes the peer
+  // clear the selected flag last. Draw locally; publish ONLY the accepted ON.
+  // The finished encounter owns its shared OFF, never the next lottery.
+  selector.Instructions.AddRange([I(2000,2,(byte)0),HostOnly(),Flag(0,request,true),I(1003,101,(byte)0,(byte)1,(byte)0,ready),SetFlag(prefix+7400,true),SetFlag(prefix+7401,true),I(1001,1,1),I(2003,22,draft,draft+(uint)count-1,(byte)0),I(2003,17,draft,draft+(uint)count-1,(byte)1)]);
   // Native goto searches only AFTER the current instruction (0x5943b4).
   // Reject cooling actors by jumping forward to a restart, never backwards.
-  for(uint index=0;index<count;index++)selector.Instructions.AddRange([I(1003,1,(byte)1,(byte)0,(byte)0,choices+index),I(1003,101,(byte)1,(byte)1,(byte)0,cooling+index)]);
+  for(uint index=0;index<count;index++)selector.Instructions.AddRange([I(1003,1,(byte)1,(byte)0,(byte)0,draft+index),I(1003,101,(byte)1,(byte)1,(byte)0,cooling+index)]);
+  for(uint index=0;index<count;index++)selector.Instructions.AddRange([I(1003,1,(byte)1,(byte)0,(byte)0,draft+index),SetFlag(choices+index,true)]);
   selector.Instructions.AddRange([SetFlag(ready,true),I(1014,0),Flag(0,ready,false),Restart(),I(1014,1),Restart()]);
   return selector;
  }
@@ -452,23 +456,7 @@ static class Cages {
   // Clone only the native open event. Other mods/nonowners retain the original.
   var native=common.Events.Single(e=>e.ID==90045000);
   Check(native.Instructions.Count==26&&native.Parameters.Count==9&&native.Instructions[10].Bank==3&&native.Instructions[10].ID==4&&native.Instructions[21].Bank==2003&&native.Instructions[21].ID==24,"Unsupported native gaol open control flow");
-  var open=new EMEVD.Event(OpenEvent,EMEVD.Event.RestBehaviorType.Restart);
-  open.Instructions.AddRange(native.Instructions.Select(i=>new EMEVD.Instruction(i.Bank,i.ID,i.ArgData.ToArray()){Layer=i.Layer}));
-  open.Instructions.InsertRange(10,[I(1003,101,(byte)8,(byte)1,(byte)0,0u),I(1004,0,(byte)1,20000u,Owner,(byte)0,(sbyte)0,1),I(1000,103,(byte)8)]);
-  foreach(var p in native.Parameters)open.Parameters.Add(new EMEVD.Parameter{InstructionIndex=p.InstructionIndex>=10?p.InstructionIndex+3:p.InstructionIndex,TargetStartByte=p.TargetStartByte,SourceStartByte=p.SourceStartByte,ByteCount=p.ByteCount,UnkID=p.UnkID});
-  open.Parameters.Add(new EMEVD.Parameter{InstructionIndex=10,TargetStartByte=4,SourceStartByte=16,ByteCount=4,UnkID=5});
-  void Param(int instruction,int target,int source)=>open.Parameters.Add(new EMEVD.Parameter{InstructionIndex=instruction,TargetStartByte=target,SourceStartByte=source,ByteCount=4,UnkID=source/4+1});
-  open.Instructions.Add(I(1014,8));
-  // Once used by this hex, a teammate cannot turn it into a normal grace.
-  open.Instructions.Add(I(1004,2,(byte)1,20000u,Owner,(byte)0,(sbyte)0,1));
-  int busyCheck=open.Instructions.Count;open.Instructions.Add(I(1003,2,(byte)1,(byte)1,(byte)0,0u));Param(busyCheck,4,20);
-  // Preserve native client arbitration before reserving the shared encounter.
-  open.Instructions.AddRange([I(1004,6,(byte)1,(byte)2,(byte)0),I(1,0,(sbyte)0,.1f),I(1004,6,(byte)1,(byte)3,(byte)0),I(1,0,(sbyte)0,.2f)]);
-  busyCheck=open.Instructions.Count;open.Instructions.Add(I(1003,2,(byte)1,(byte)1,(byte)0,0u));Param(busyCheck,4,20);
-  // Any local owner may request. Only the host selector reserves and draws;
-  // repeated peer requests collapse into this single shared bit.
-  foreach(int source in new[]{24}){int index=open.Instructions.Count;open.Instructions.Add(SetFlag(0,true));Param(index,4,source);}
-  open.Instructions.AddRange([I(2003,114,(byte)6,(byte)1),Anim(20000,60810),I(1001,1,1),Restart()]);
+  var open=CageUsage.Open(native);
   common.Events.Add(open);common.Write(Output("common_func"));
   var checkCommon=EMEVD.Read(Output("common_func"));
   Check(checkCommon.Events.Count==before.Events.Count+1&&before.Events.All(e=>Same(e,checkCommon.Events.Single(v=>v.ID==e.ID)))&&Same(open,checkCommon.Events.Single(e=>e.ID==OpenEvent)),"Cage open clone changed unrelated common events");
@@ -495,9 +483,11 @@ static class Cages {
    Check(!eventMap.Events.Any(e=>e.ID>=prefix+9700&&e.ID<prefix+9970),"Cage map event collision");
    foreach(var ins in ctor.Instructions.Where(i=>i.Bank==2000&&i.ID==6&&BitConverter.ToInt32(i.ArgData,4)==90045000)){
     var bytes=ins.ArgData.ToArray();Check(bytes.Length==24,"Unexpected native gaol initializer");
-    var extra=new byte[36];bytes.CopyTo(extra,0);BitConverter.GetBytes(OpenEvent).CopyTo(extra,4);BitConverter.GetBytes(used).CopyTo(extra,24);BitConverter.GetBytes(busy).CopyTo(extra,28);BitConverter.GetBytes(request).CopyTo(extra,32);ins.ArgData=extra;
+    var extra=new byte[40];bytes.CopyTo(extra,0);BitConverter.GetBytes(OpenEvent).CopyTo(extra,4);BitConverter.GetBytes(used).CopyTo(extra,24);BitConverter.GetBytes(busy).CopyTo(extra,28);BitConverter.GetBytes(request).CopyTo(extra,32);BitConverter.GetBytes(prefix+CageUsage.CounterOffset).CopyTo(extra,36);ins.ArgData=extra;
    }
+   CageUsage.CheckCounter(originalEvents,prefix);
    var selector=Selector(prefix,bosses.Length);
+   CageNetwork.CheckDraftFlags(originalEvents,prefix,bosses.Length);
    eventMap.Events.Add(selector);ctor.Instructions.Insert(0,I(2000,0,0,(uint)selector.ID,0));
    for(int index=0;index<bosses.Length;index++){
     var b=bosses[index];uint entity=prefix+9000+(uint)index,generator=prefix+3800+(uint)index,choice=choices+(uint)index,actorCooling=cooling+(uint)index;
@@ -514,8 +504,8 @@ static class Cages {
     Multiplayer(encounter,entity);
     Difficulty(encounter,entity,b.entity);
     Mutate(encounter,entity,serialized["NpcParam"].Rows.Single(r=>r.ID==95300000+index),serialized,mutationMaps,red+(uint)index,decided+(uint)index);
-    encounter.Instructions.AddRange([I(2004,1,entity,(byte)0),I(2004,34,entity,(byte)1,(sbyte)0),I(1001,0,births.towerWaitSeconds),I(2004,39,entity,(byte)1)]);
-    encounter.Instructions.AddRange([I(2004,1,entity,(byte)1),SetFlag(spawned,true),I(2010,12,28u,(byte)0),Anim(prefix+1200,110,true),Anim(prefix+1210,1,true),I(2010,2,entity,1,999997300),I(4,14,(sbyte)0,entity,(sbyte)0,0,(sbyte)0,1f),I(1001,0,VictoryDelaySeconds),I(2010,2,entity,5,888880000),I(2007,19,1030),I(2003,101,1)]);
+    encounter.Instructions.AddRange([I(2004,1,entity,(byte)0),I(2004,34,entity,(byte)1,(sbyte)0),I(1001,0,CageUsage.IntroSeconds),I(2004,39,entity,(byte)1)]);
+    encounter.Instructions.AddRange([I(2004,1,entity,(byte)1),SetFlag(spawned,true),I(2010,12,28u,(byte)0),Anim(prefix+1200,110,true),Anim(prefix+1210,1,true),I(4,14,(sbyte)0,entity,(sbyte)0,0,(sbyte)0,1f),I(1001,0,VictoryDelaySeconds),I(2010,2,entity,5,888880000),I(2007,19,1030),I(2003,101,1)]);
     // Dispatch the original 8145 -> common 1400 -> 7060000 relic reward chain,
     // including its native seven-stack cap and per-player reward bookkeeping.
     encounter.Instructions.Add(I(2003,31,8145u,4u,7u));

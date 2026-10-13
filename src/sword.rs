@@ -87,8 +87,9 @@ pub fn heal_amount(damage:i32,percentage:f32,nullified:bool)->u32{
 pub fn casting(player:usize,owned:bool,alive:bool,pulse_player:usize,last:u64,now:u64)->bool{
  owned&&alive&&player!=0&&player==pulse_player&&last!=0&&now>=last&&now-last<100
 }
-pub fn casting_effect(id:i32,casting:bool,hand:i32)->bool{
- casting&&match id {WEAPON_RIGHT=>hand==1,WEAPON_LEFT=>hand==0,GUARD|POISE=>true,_=>false}
+pub fn casting_effect(id:i32,casting:bool,_hand:i32)->bool{
+ // Retired hand visuals stay in the runtime cleanup list, but are never applied.
+ casting&&matches!(id,GUARD|POISE)
 }
 // Recovery getters may already expose the queued spell or no active spell.
 // Retain the spell that actually cast; never revive an expired/other actor cast.
@@ -119,12 +120,12 @@ impl Healing {
   assert_eq!(pulse_magic(false,true,4000,5000),Some(5000));
   assert_eq!(pulse_magic(false,false,4000,-1),Some(-1));
  }
- #[test]fn catalyst_visual_tracks_hand_and_expires_with_casting(){
+ #[test]fn casting_keeps_protection_without_either_retired_hand_visual(){
   for hand in [-1,0,1] {
    for (owned,alive,player,last,now) in [(true,true,1,100,199),(false,true,1,100,199),(true,false,1,100,199),(true,true,2,100,199),(true,true,1,100,200)]{
     let active=casting(player,owned,alive,1,last,now);
-    assert_eq!(casting_effect(WEAPON_RIGHT,active,hand),active&&hand==1);
-    assert_eq!(casting_effect(WEAPON_LEFT,active,hand),active&&hand==0);
+    assert!(!casting_effect(WEAPON_RIGHT,active,hand));
+    assert!(!casting_effect(WEAPON_LEFT,active,hand));
     assert_eq!(casting_effect(GUARD,active,hand),active);
     assert_eq!(casting_effect(POISE,active,hand),active);
     assert!(!casting_effect(OWNER,active,hand));

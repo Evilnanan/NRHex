@@ -1,0 +1,11 @@
+{
+  "sourceSha256": "FCD1EE3445001B60662677BD610FB89B11DA8BB41209BAC726591E14605AAE5D",
+  "outputSha256": "88BF4C7E86448DE13377CFEBF4BC7E81AD67894ED8FBF8AD7CAEC3DE085073AD",
+  "effectId": 95002100,
+  "neutralOwnerFpRates": true,
+  "onlySecondarySlotRuntimeCostIsFree": true,
+  "otherParameterRowsAndFieldsUnchanged": true,
+  "otherTablesUnchanged": true,
+  "readbackPassed": true,
+  "gameplayVerified": false
+}

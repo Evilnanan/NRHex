@@ -39,7 +39,7 @@ static class DevilsGaze {
    for(int part=0;part<3;part++){
     var bullet=add("Bullet",7560366+part,start+part);
     HitPhases(bullet,part);
-    Set(bullet,"HitBulletID",part==2?-1:start+part+1);
+    Set(bullet,"HitBulletID",part==2?7560369:start+part+1);
     if(part==2)Set(bullet,"atkId_Bullet",attackId);
    }
   }
@@ -53,7 +53,7 @@ static class DevilsGaze {
   var changes=new List<object>();var rows=new List<object>();
   for(int depth=0;depth<=5;depth++)for(int part=0;part<3;part++){
    int id=FirstBullet+depth*10+part;var row=table.Rows.Single(r=>r.ID==id);var old=baseline.Rows.Single(r=>r.ID==id);
-   Check(Convert.ToInt32(row["HitBulletID"].Value)==(part==2?-1:id+1),"Unexpected circle chain");
+   Check(part==2?Convert.ToInt32(row["HitBulletID"].Value) is -1 or 7560369:Convert.ToInt32(row["HitBulletID"].Value)==id+1,"Unexpected circle chain");
    Check(Convert.ToInt32(row["atkId_Bullet"].Value)==(part==2?95002200+depth:1)||part<2&&Convert.ToInt32(row["atkId_Bullet"].Value)==-1,"Unexpected circle attack");
    HitPhases(row,part);
    foreach(string field in new[]{"atkId_Bullet","isHitBothTeam","isUseSharedHitList"}){
@@ -124,7 +124,7 @@ static class DevilsGaze {
   foreach(var f in final.Files){var intended=binder.Files.Single(v=>v.ID==f.ID);Check(f.Name==intended.Name&&f.Flags==intended.Flags&&f.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Readback mismatch");if(!names.Contains(Path.GetFileNameWithoutExtension(f.Name)))Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated member changed");}
   foreach(string n in names){var actual=parse(n,final.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes);Check(actual.Rows.Count==baseline[n].Rows.Count+added[n].Count,"Row count mismatch");var old=baseline[n].Rows.OrderBy(r=>r.ID).ToArray();var retained=actual.Rows.Where(r=>!added[n].Contains(r.ID)).OrderBy(r=>r.ID).ToArray();Check(old.Length==retained.Length&&old.Zip(retained).All(p=>CageAI.Same(p.First,p.Second)),"Preexisting row changed");}
   HexTexts.Stage(root,hexes,Path.Combine(directory,"texts"),allRewards:true);
-  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(destination),abilityCount=hexes.Length,added=added.ToDictionary(k=>k.Key,k=>k.Value.Order().ToArray()),originalRowsUnchanged=true,delaySeconds=4.45,holyDamage=tables["AtkParam_Npc"].Rows.Where(r=>r.ID>=95002200&&r.ID<=95002205).Select(r=>new{r.ID,damage=r["atkDark"].Value}),madnessEffectsUnchanged=true,originalLingeringNonDamageFieldOmitted=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(destination),abilityCount=hexes.Length,added=added.ToDictionary(k=>k.Key,k=>k.Value.Order().ToArray()),originalRowsUnchanged=true,delaySeconds=4.45,holyDamage=tables["AtkParam_Npc"].Rows.Where(r=>r.ID>=95002200&&r.ID<=95002205).Select(r=>new{r.ID,damage=r["atkDark"].Value}),madnessEffectsUnchanged=true,nativePickupChild=7560369,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: Demon gaze native slow circle/depth attacks, stable rewards and bilingual texts staged/read back");
  }
  public static void StageResources(string root){
@@ -133,7 +133,7 @@ static class DevilsGaze {
   var shared=BND4.Read(Path.Combine(root,".work/storm-vfx-01757/extracted/sfx/sfxbnd_commoneffects.ffxbnd.dcx")).Files.Select(f=>Path.GetFileName(f.Name)).ToHashSet(StringComparer.OrdinalIgnoreCase);
   var byName=common.Files.ToDictionary(f=>Path.GetFileName(f.Name),StringComparer.OrdinalIgnoreCase);var added=new List<BinderFile>();
   void Add(string name,int group){if(byName.ContainsKey(name))return;Check(boss.ContainsKey(name),"Missing dependency: "+name);var src=boss[name];int id=common.Files.Where(f=>f.ID>=group&&f.ID<group+100000).Select(f=>f.ID).DefaultIfEmpty(group-1).Max()+1;Check(id<group+100000,"Binder ID overflow");var f=new BinderFile(src.Flags,id,src.Name,src.Bytes.ToArray());common.Files.Add(f);byName.Add(name,f);added.Add(f);}
-  foreach(int id in new[]{675685,675687,675683}){
+  foreach(int id in new[]{675685,675687,675683,675600,675601,675602,675603}){
    string stem=$"f{id:000000000}";Add(stem+".fxr",0);Add(stem+".ffxreslist",400000);
    foreach(var reference in System.Text.Encoding.UTF8.GetString(boss[stem+".ffxreslist"].Bytes.Span).Split(['\r','\n'],StringSplitOptions.RemoveEmptyEntries)){
     string r=reference.Trim(),ext=Path.GetExtension(r).ToLowerInvariant();Check(ext is ".tif" or ".sib","Unknown dependency type");string name=Path.GetFileNameWithoutExtension(r)+(ext==".tif"?".tpf":".flver");if(!shared.Contains(name))Add(name,ext==".tif"?100000:200000);
@@ -154,7 +154,7 @@ static class DevilsGaze {
   var bytes=entry.ReadFile(bdt);File.WriteAllBytes(Path.Combine(dir,"sfxbnd_c7560.ffxbnd.dcx"),bytes);
   var bnd=BND4.Read(bytes);
   File.WriteAllText(Path.Combine(dir,"members.json"),JsonSerializer.Serialize(bnd.Files.Select(f=>new{f.ID,f.Name,size=f.Bytes.Length})));
-  foreach(int id in new[]{675578,675579,675683,675685,675686,675687,675688}){
+  foreach(int id in new[]{675578,675579,675600,675683,675685,675686,675687,675688}){
    var stem=$"f{id:000000000}";
    foreach(var file in bnd.Files.Where(f=>Path.GetFileName(f.Name).StartsWith(stem)))File.WriteAllBytes(Path.Combine(dir,Path.GetFileName(file.Name)),file.Bytes.ToArray());
   }
@@ -163,12 +163,12 @@ static class DevilsGaze {
  public static void Probe(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse){
   var directory=Path.Combine(root,".work/devils-gaze");Directory.CreateDirectory(directory);
   object Dump(PARAM.Row row)=>new{row.ID,fields=row.Cells.ToDictionary(c=>c.Def.InternalName,c=>c.Value)};
-  var names=new[]{"Bullet","AtkParam_Npc","BehaviorParam","NpcParam","SpEffectParam","ChaosMatchingCorrectParam"};
+  var names=new[]{"Bullet","AtkParam_Npc","BehaviorParam","NpcParam","SpEffectParam","SpEffectVfxParam","ChaosMatchingCorrectParam"};
   foreach(var name in names)if(!original.Files.Any(f=>Path.GetFileName(f.Name)==name+".param"))throw new InvalidDataException("Missing native table: "+name+"; available "+string.Join(",",original.Files.Select(f=>Path.GetFileName(f.Name)).Where(n=>n.Contains("Behavior")||n.Contains("AtkParam")||n.Contains("ChaosMatching"))));
   var tables=names.ToDictionary(n=>n,n=>parse(n,original.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes));
   var corrections=tables["ChaosMatchingCorrectParam"].Rows.Select(Dump).ToArray();
-  var effects=tables["SpEffectParam"].Rows.Where(row=>row.ID is >=48000 and <50000||row.ID is >=4800000 and <4800200||row.ID is >=877601 and <=877605||row.ID is 26010 or 26013 or 7760).Select(Dump).ToArray();
-  var data=tables.Where(k=>k.Key!="SpEffectParam"&&k.Key!="ChaosMatchingCorrectParam").ToDictionary(k=>k.Key,k=>k.Value.Rows.Where(row=>row.ID.ToString().StartsWith("7560")||(k.Key=="Bullet"&&row.ID is >=7560000 and <7563000)||(k.Key=="BehaviorParam"&&row.ID/1000==275600)||(k.Key=="Bullet"&&Convert.ToInt32(row["sfxId_Bullet"].Value) is >=675570 and <=675589)).Select(Dump).ToArray());
+  var effects=tables["SpEffectParam"].Rows.Where(row=>row.ID is >=45890 and <=45899||row.ID is >=48000 and <50000||row.ID is >=4800000 and <4800200||row.ID is >=877601 and <=877605||row.ID is 26010 or 26013 or 7760).Select(Dump).ToArray();
+  var data=tables.Where(k=>k.Key!="SpEffectParam"&&k.Key!="ChaosMatchingCorrectParam").ToDictionary(k=>k.Key,k=>k.Value.Rows.Where(row=>row.ID.ToString().StartsWith("7560")||(k.Key=="SpEffectVfxParam"&&row.ID is >=54460 and <=54468)||(k.Key=="Bullet"&&row.ID is >=7560000 and <7563000)||(k.Key=="BehaviorParam"&&row.ID/1000==275600)||(k.Key=="Bullet"&&Convert.ToInt32(row["sfxId_Bullet"].Value) is >=675570 and <=675589)).Select(Dump).ToArray());
   var dummy=tables["AtkParam_Npc"].Rows.Where(row=>row.ID is 0 or 1).Select(Dump).ToArray();
   var visualOnly=tables["Bullet"].Rows.Where(row=>Convert.ToInt32(row["atkId_Bullet"].Value)==-1&&Convert.ToInt32(row["HitBulletID"].Value)>0).Take(15).Select(Dump).ToArray();
   File.WriteAllText(Path.Combine(directory,"native.json"),JsonSerializer.Serialize(new{data,effects,corrections,dummy,visualOnly}));

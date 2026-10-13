@@ -20,7 +20,7 @@ impl Gaze {
         if !enabled || !dt.is_finite() || !(0. ..=1.).contains(&dt) {
             return false;
         }
-        let interval = 6. + (random as f64 / u32::MAX as f64 * 20.) as f32;
+        let interval = 6. + (random as f64 / u32::MAX as f64 * 10.) as f32;
         if !self.armed {
             self.armed = true;
             self.remaining = interval;
@@ -79,7 +79,7 @@ mod tests {
             assert!(!s.tick((1, 2), true, 1., 0));
         }
         assert!(s.tick((1, 2), true, 1., u32::MAX));
-        for _ in 0..25 {
+        for _ in 0..15 {
             assert!(!s.tick((1, 2), true, 1., 0));
         }
         assert!(s.tick((1, 2), true, 1., 0));

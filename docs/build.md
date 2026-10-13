@@ -108,10 +108,12 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 
 ## 当前调试快捷键
 
-亮剑施法保护／光效的增量更新使用 `./build-sword-vfx.ps1`，会生成参数、手持与后摇动作标记、检查风暴管束者架势幻化剑资源并运行Rust测试。游戏需退出后才能安装DLL，群友版随后运行 `./build-no-hotkeys.ps1`。直接复用现有公共特效包中的450955及其模型／纹理，无需Node依赖或新特效副本。资源检查会移除已知的旧罗蕾塔放大副本，并验证其余成员保持原样。
+亮剑施法保护与历史视觉资产的增量更新使用 `./build-sword-vfx.ps1`，会生成参数、手持与后摇动作标记、检查风暴管束者架势幻化剑资源并运行Rust测试。游戏需退出后才能安装DLL，群友版随后运行 `./build-no-hotkeys.ps1`。当前DLL不再添加亮剑幻剑特效；450955及其模型／纹理保留供原生战技与百般武艺使用，无需Node依赖或新特效副本。资源检查会移除已知的旧罗蕾塔放大副本，并验证其余成员保持原样。
 
 自测版保留 Ctrl+F6～F10，说明见 [发行包用法](../dist/README.md)。群友版编译时移除测试按键入口。亮剑距离固定4米，不属于INI配置。
 
 ## 大法师
 
 `HexBuild --archmage-stage`从尚未包含大法师的发行参数包生成新增能力与奖励行，产物及读回报告在`.work/archmage/staged`。`tools/build_archmage_hks.py`从当前动作组合增加34个施法回调通知，默认暂存到`.work/archmage`，`--inplace`用于完整构建。独立检查为`verify_archmage_native.py`与`verify_archmage_decompile.py --decompiler <DSLuaDecompiler.dll>`。`install_archmage.py`校验所有当前输入和暂存哈希，安装前需要退出游戏。中文、英文文案仍在两份海克斯Markdown中维护。
+
+大法师副槽限定的增量构建使用`HexBuild --archmage-secondary`，暂存于`.work/archmage-secondary/staged`，保留其余参数字段。`verify_archmage_secondary_native.py`检查原生选槽、耗蓝与对应调用点；完整构建的拥有行也保持中性耗蓝倍率，由DLL按实际选槽处理。

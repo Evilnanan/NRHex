@@ -11,6 +11,8 @@ validation_root=Path(os.environ.get('NRHEX_VALIDATION_ROOT',root/'.work/cage-gro
 stage=Path(built['output'])
 schema={(o['bank'],o['id']):(o['name'],[t for t,_ in o['args']]) for o in read(root/'data/reference/world/cage-opcodes.json')['opcodes']}
 schema.update({(2003,102):('LinkToBossHealthBar',['sbyte','int','uint']),
+ (2003,17):('RandomlySetEventFlagInRange',['uint','uint','byte']),
+ (2003,22):('BatchSetEventFlags',['uint','uint','byte']),
  (4,23):('IfCharacterRatioHPValue',['sbyte','uint','sbyte','int','sbyte','float']),
  (3,42):('IfEventFlagAndRandomCondition',['sbyte','uint','float']),
  (1003,13):('GotoIfPlayerIsInWorldType',['byte','byte']),
@@ -240,11 +242,11 @@ for r in built['reports']:
   # Cancellation while slots are busy must preserve their current owners.
   blocked=VM(hud,ww,True);blocked.flags=peer.flags|{5000:True,5001:True};blocked.step();assert not blocked.calls('DisplayBossHealthBar')
   ww.flags[p+7500+g['choice']]=False;blocked.step(1);blocked.step(1.1);assert blocked.flag(5000) and blocked.flag(5001) and not blocked.calls('DisplayBossHealthBar')
-  # Births produce one local fog, skip replay when joining an active battle.
+  # Births produce the main fog without the extra prelude, skip replay when joining an active battle.
   for m in g['members']:
    code=event(r,p+9900+m['index']);fresh=World(p,g);birth=VM(code,fresh,True);birth.step();assert len(birth.calls('SpawnOneshotSFX'))==1;birth.step(4);assert birth.flag(shown(p,m))
    active=World(p,g);active.flags[p+7404]=True;birth=VM(code,active,True);birth.step();assert not birth.calls('SpawnOneshotSFX') and birth.flag(shown(p,m))
-   # This peer observed the selection before the host's four-second intro,
+   # This peer observed the selection before the host's intro,
    # but its model loads nine seconds late: its local fog must still play.
    slow=World(p,g);slow.actors[entity(p,m)]['loaded']=False;birth=VM(code,slow,True);birth.step()
    slow.flags[p+7404]=True;slow.actors[entity(p,m)]['loaded']=True;birth.step(9)

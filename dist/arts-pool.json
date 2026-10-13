@@ -1538,7 +1538,7 @@
     }
   ],
   "includesUniqueSkills": true,
-  "compatibilityFiltering": "bows_and_exclude_model_dependent_viper_bite",
+  "compatibilityFiltering": "bows_model_dependencies_and_weapon_base_elemental_attack",
   "canonicalSkillBehaviorVariations": [
     {
       "skill": 100,
@@ -2270,5 +2270,13 @@
     }
   ],
   "nativeBehaviorRows": 10855,
-  "genericBehaviorMapping": true
+  "genericBehaviorMapping": true,
+  "elementRequirements": {
+    "1014": "attackBaseFire > 0",
+    "1184": "attackBaseMagic > 0"
+  },
+  "elementWeaponCounts": {
+    "FIRE_WEAPONS": 310,
+    "MAGIC_WEAPONS": 543
+  }
 }

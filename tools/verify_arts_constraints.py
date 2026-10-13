@@ -1,12 +1,19 @@
 """Verify usable/bow pools and owner-scoped cross-weapon fire emission."""
 from pathlib import Path
-import json,runpy,sys,struct,hashlib
+import json,runpy,sys,struct,hashlib,re,tomllib
 root=Path(__file__).resolve().parents[1]
 p=json.loads((root/'.work/arts/parameters.json').read_text())
 pool=json.loads((root/'dist/arts-pool.json').read_text(encoding='utf8'))
 assert pool['poolCount']==182 and pool['ordinaryPoolCount']==175 and pool['bowPoolCount']==7
 assert pool['bowSkills']==[400,401,402,404,405,406,1169]
 weapons={x['ID']:x['fields'] for x in p['weapons']};skills={x['ID']:x['fields'] for x in p['arts']}
+generated=(root/'src/arts_data.rs').read_text()
+element_counts={}
+for name,field,skill in [('FIRE_WEAPONS','attackBaseFire',1014),('MAGIC_WEAPONS','attackBaseMagic',1184)]:
+ ids=json.loads(re.search(r'pub const '+name+r': \[i32; \d+\] = (\[[^;]+\]);',generated).group(1))
+ assert ids==sorted(i for i,w in weapons.items() if w[field]>0)
+ assert pool['elementRequirements'][str(skill)]==field+' > 0'
+ element_counts[field]=len(ids)
 assert pool['bowWeapons']==sorted(i for i,w in weapons.items() if w['wepType'] in [50,51,53])
 assert all(weapons[skills[i]['sparringGroundsWeaponId']]['wepType'] in [50,51,53] for i in pool['bowSkills'])
 assert {0,1,2,10,117,1007,9999}.isdisjoint(x['id'] for x in pool['skills'])
@@ -27,8 +34,9 @@ assert 0x3976f1+struct.unpack('<i',d['read'](0x3976ed,4))[0]==0x3842c0
 source=(root/'src/lib.rs').read_text(encoding='utf8')
 assert 'type ArtsBulletFn=unsafe extern "system" fn(usize,i32,i32,usize,i32,i32,u8,u8,u8,usize)->u8' in source
 assert 'arts::pool(w.base)' in source and 'arts::emitter_dummy(selected,w.base,behavior,read_i32(descriptor))' in source
+assert '!arts::roll_allowed(w.base,id)' in source
 assert 'shadow[..4].copy_from_slice(&dummy.to_le_bytes())' in source
-report=dict(version='0.17.79',poolCount=182,ordinaryPoolCount=175,bowPoolCount=7,bowSkills=pool['bowSkills'],
+report=dict(version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version'],poolCount=182,ordinaryPoolCount=175,bowPoolCount=7,bowSkills=pool['bowSkills'],elementRequirements=pool['elementRequirements'],elementWeaponCounts=element_counts,
  bowWeaponTypes=[50,51,53],bowWeaponCount=len(pool['bowWeapons']),excludedUnusableSkills=pool['excludedUnusableSkills'],
  torchNativeAnimationTypeDisabled=17,allOtherNamedSkillsRetained=True,
  projectileCreationRva='3975D0',nativeArgumentCount=10,nativeReturn='AL/u8',

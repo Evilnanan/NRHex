@@ -1,0 +1,81 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "9CF978FFF47B2B09F4301C04A4F3AF970A29427754AC0AFF4EDE6EE7EA859951",
+  "englishSource": "docs/hexes.en.md",
+  "englishSourceSha256": "5CD92C679F46B7D92C20DE2F31264CB783A26D41C63F24B1AC207069E1BDC199",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "7A40AD39F82E0A75FCBBA184F4D0B3580215AF19CFA7E32C9792FE47B21DC1F6",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "300B9202939F817EE4210826F159552A8684B6F32B750AB11F554A6C35515E8E",
+      "outputSha256": "184588907679F5C168871148C473269CD46EBF9697C51917A84B8FA722ED7687",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001600,
+          "before": "\u4F60\u65E0\u9700\u94A5\u5319\u5C31\u80FD\u6253\u5F00\u76D1\u7262\uFF0C\u4E14\u91CA\u653E\u7684\u654C\u4EBA\u66F4\u52A0\u591A\u6837\u3002\u653B\u7565\u76D1\u7262\u540E\uFF0C\u4E0D\u4F1A\u751F\u6210\u8D50\u798F\uFF0C\u4F46\u4F60\u53EF\u4EE5\u91CD\u590D\u6253\u5F00\u540C\u4E00\u4E2A\u76D1\u7262",
+          "after": "\u4F60\u65E0\u9700\u94A5\u5319\u5C31\u80FD\u6253\u5F00\u76D1\u7262\uFF0C\u4E14\u91CA\u653E\u7684\u654C\u4EBA\u66F4\u52A0\u591A\u6837\u3002\u653B\u7565\u76D1\u7262\u540E\uFF0C\u4E0D\u4F1A\u751F\u6210\u8D50\u798F\uFF0C\u4F46\u4F60\u53EF\u4EE5\u91CD\u590D\u6253\u5F00\u540C\u4E00\u4E2A\u76D1\u7262\u3002\u6BCF\u5EA7\u5C01\u5370\u76D1\u7262\u6700\u591A\u5F00\u542F5\u6B21"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001600,
+          "before": "\u4F60\u65E0\u9700\u94A5\u5319\u5C31\u80FD\u6253\u5F00\u76D1\u7262\uFF0C\u4E14\u91CA\u653E\u7684\u654C\u4EBA\u66F4\u52A0\u591A\u6837\u3002\u653B\u7565\u76D1\u7262\u540E\uFF0C\u4E0D\u4F1A\u751F\u6210\u8D50\u798F\uFF0C\u4F46\u4F60\u53EF\u4EE5\u91CD\u590D\u6253\u5F00\u540C\u4E00\u4E2A\u76D1\u7262",
+          "after": "\u4F60\u65E0\u9700\u94A5\u5319\u5C31\u80FD\u6253\u5F00\u76D1\u7262\uFF0C\u4E14\u91CA\u653E\u7684\u654C\u4EBA\u66F4\u52A0\u591A\u6837\u3002\u653B\u7565\u76D1\u7262\u540E\uFF0C\u4E0D\u4F1A\u751F\u6210\u8D50\u798F\uFF0C\u4F46\u4F60\u53EF\u4EE5\u91CD\u590D\u6253\u5F00\u540C\u4E00\u4E2A\u76D1\u7262\u3002\u6BCF\u5EA7\u5C01\u5370\u76D1\u7262\u6700\u591A\u5F00\u542F5\u6B21"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001600,
+          "before": "\u4F60\u65E0\u9700\u94A5\u5319\u5C31\u80FD\u6253\u5F00\u76D1\u7262\uFF0C\u4E14\u91CA\u653E\u7684\u654C\u4EBA\u66F4\u52A0\u591A\u6837\u3002\u653B\u7565\u76D1\u7262\u540E\uFF0C\u4E0D\u4F1A\u751F\u6210\u8D50\u798F\uFF0C\u4F46\u4F60\u53EF\u4EE5\u91CD\u590D\u6253\u5F00\u540C\u4E00\u4E2A\u76D1\u7262",
+          "after": "\u4F60\u65E0\u9700\u94A5\u5319\u5C31\u80FD\u6253\u5F00\u76D1\u7262\uFF0C\u4E14\u91CA\u653E\u7684\u654C\u4EBA\u66F4\u52A0\u591A\u6837\u3002\u653B\u7565\u76D1\u7262\u540E\uFF0C\u4E0D\u4F1A\u751F\u6210\u8D50\u798F\uFF0C\u4F46\u4F60\u53EF\u4EE5\u91CD\u590D\u6253\u5F00\u540C\u4E00\u4E2A\u76D1\u7262\u3002\u6BCF\u5EA7\u5C01\u5370\u76D1\u7262\u6700\u591A\u5F00\u542F5\u6B21"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "E611174DCFE75C85643A2EF2E120956D9562890F0D9EBBEE5ACF0E098EE225A2",
+      "outputSha256": "83E777763DCE59C1AE3105399DADA9F18CA4266BD166CC287518E53D731B6624",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001600,
+          "before": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again.",
+          "after": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001600,
+          "before": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again.",
+          "after": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001600,
+          "before": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again.",
+          "after": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "outputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

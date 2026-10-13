@@ -1,0 +1,27 @@
+{
+  "version": "0.17.91",
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "nativeEncoderRva": "0xe0d9b0",
+  "nativeDecoderRva": "0xe0d7e0",
+  "oldHostPeerMismatchCases": 200,
+  "newPacketCases": 800,
+  "repeatedRounds": 800,
+  "selectorLifecycleRegressionPassed": true,
+  "privateRejectedDraws": true,
+  "hostOnlySelection": true,
+  "reloadPreservesCommittedSelection": true,
+  "onlyFourSelectorsChanged": true,
+  "fixtures": [
+    "packet buffer",
+    "transport send/receive",
+    "decoded event interpreter"
+  ],
+  "gameMemoryAccessed": false,
+  "multiplayerVerified": false,
+  "eventFiles": {
+    "m46_50_00_00": "dc4a4f3ed7f0da00ed37e2b12de3ebf491e472c3c985e497ec8a7a41e58778c7",
+    "m46_60_00_00": "bb81347cccac2836aa49b6d3426ee90261395af63c30ab2bea5a669a2a62f2ed",
+    "m46_70_00_00": "86e2a5bbc4d9f7fd9b704f456d69d8675bc49e01bb98db60faa5e7906b8d220c",
+    "m46_80_00_00": "47f3d8fed34ea8a30e05c88f229ec6f88d437574691be54dae5169835a5c3d16"
+  }
+}

@@ -78,6 +78,15 @@ pub fn original(base:i32,override_id:i32)->Option<i32>{
 pub fn pool(base:i32)->&'static [i32]{
  if crate::arts_data::BOW_WEAPONS.binary_search(&base).is_ok(){&crate::arts_data::BOW_POOL}else{&crate::arts_data::POOL}
 }
+/// Projectile attacks use the weapon's corresponding elemental attack power.
+/// Check the actual weapon variant, not its name, original art or AR sum.
+pub fn roll_allowed(base:i32,skill:i32)->bool{
+ match skill {
+  1014=>crate::arts_data::FIRE_WEAPONS.binary_search(&base).is_ok(),
+  1184=>crate::arts_data::MAGIC_WEAPONS.binary_search(&base).is_ok(),
+  _=>true,
+ }
+}
 /// Fire shields fire from a muzzle that most other weapon models lack.
 /// Body dummy58 is the native shared arrow/projectile origin; change only the
 /// random cross-weapon overlay, leaving original fire shields' muzzles intact.
@@ -96,6 +105,19 @@ pub fn behavior(judge:i32,skill:i32)->Option<i32>{
  use super::*;
  fn w(handle:u32,original:i32)->Weapon{Weapon{handle,original,base:2000000}}
  fn state()->Arts{let mut a=Arts::default();a.synchronize(1,true,true);a}
+ #[test]fn elemental_projectile_arts_require_the_weapons_matching_attack_component(){
+  for (weapon,fire,magic) in [(2000000,false,false),(3140000,true,false),(13020000,false,true),(2150000,false,true),(-1,false,false)]{
+   assert_eq!(roll_allowed(weapon,1014),fire);
+   assert_eq!(roll_allowed(weapon,1184),magic);
+   for &id in pool(weapon){if !matches!(id,1014|1184){assert!(roll_allowed(weapon,id));}}
+  }
+ }
+ #[test]fn elemental_filter_never_empties_weapon_pool_or_changes_bow_choices(){
+  for &(weapon,_) in crate::arts_data::DEFAULTS.iter(){
+   let choices=pool(weapon);assert!(choices.iter().filter(|&&id|roll_allowed(weapon,id)).count()>=choices.len()-2);
+   if crate::arts_data::BOW_WEAPONS.binary_search(&weapon).is_ok(){assert!(choices.iter().all(|&id|roll_allowed(weapon,id)));}
+  }
+ }
  #[test]fn peer_snapshot_changes_only_selected_instance_skill_fields(){
   let mut data=[0x67;0x48];data[..4].copy_from_slice(&2000000i32.to_le_bytes());
   let before=data;let mut expected=before;

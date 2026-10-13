@@ -1,0 +1,16 @@
+{
+  "version": "0.17.96",
+  "castingVisualEnabled": false,
+  "retiredVisualEffects": [
+    95000940,
+    95000941
+  ],
+  "oldVisualCleanupRetained": true,
+  "guardAndPoiseUnchanged": true,
+  "swordTestsPassed": 20,
+  "sharedStormRulerResourcesPreserved": true,
+  "allOtherModAssetsUnchanged": true,
+  "dllSha256": "c58323fa11ace91722beba239d81d344c862a6e3c3e2b7d9db8b295d68efbf80",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

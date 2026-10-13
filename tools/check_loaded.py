@@ -19,7 +19,7 @@ try:
  md=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_64);md.detail=True
  load=next(i for i in md.disasm(read(address,24),address) if i.mnemonic=='movzx' and '[rip' in i.op_str)
  assert read(load.address+load.size+load.operands[1].mem.disp,1)==b'\x01'
- hooks={hex(r):read(modules['nightreign.exe']['base']+r,5).hex() for r in [0x6a20b0,0x6a2180,0x6a2240,0x668b30,0x7e91a0,0x6c16f0,0x570410,0x57ca60,0x57b490,0x3975d0,0xb9ea10,0x353590,0x355d20,0xed60c0,0x353cb0,0x82ba40,0x7df110,0xa89a93,0xe94990,0x33c120]}
+ hooks={hex(r):read(modules['nightreign.exe']['base']+r,5).hex() for r in [0x6a20b0,0x6a2180,0x6a2240,0x668b30,0x7e91a0,0x6c16f0,0x570410,0x57ca60,0x57b490,0x3975d0,0xb9ea10,0x353590,0x355d20,0xed60c0,0x353cb0,0x82ba40,0x7df110,0xa89a93,0xe94990,0x33c120,0x66ab90,0x6c5ec0]}
  assert all(v.startswith('e9') for v in hooks.values())
  # This HUD function already starts with a native Arxan JMP on disk. An E9
  # alone would falsely report it as patched; require a different destination.
@@ -29,4 +29,4 @@ finally:k.CloseHandle(h)
 report=json.loads((root/'dist/runtime-validation.json').read_text())
 report.update(active=1,pid=info['pid'],allFourNativeDllsLoaded=True,installedHooks=hooks)
 (root/'dist/runtime-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
-print('PASS: current installed DLL ACTIVE=1; twenty sampled hook entries including spirit model mapping, detailed status routing and both comparators; four native Mods loaded. Gameplay not inferred.')
+print('PASS: current installed DLL ACTIVE=1; twenty-two sampled hook entries including spirit model mapping, detailed status routing and both comparators; four native Mods loaded. Gameplay not inferred.')

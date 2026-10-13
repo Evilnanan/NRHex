@@ -6,9 +6,15 @@ root=Path(__file__).resolve().parents[1]
 registrations=json.loads((root/'data/reference/world/map-flag-storage.json').read_text())
 assert registrations['flagGroupSize']==1000
 assert all(6 not in categories and 7 in categories for kind in ['legacyMapGroups','openMapGroups'] for categories in registrations[kind].values())
+assert all(5 in categories for kind in ['legacyMapGroups','openMapGroups'] for categories in registrations[kind].values())
 raw=(GAME/'nightreign.exe').read_bytes()
 assert hashlib.sha256(raw).hexdigest()=='9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a'
 pe=pefile.PE(data=raw,fast_load=True)
+# Native 0x5e8fb0 permits these categories into map-flag network packets.
+def table(start,end):return struct.unpack('<'+'I'*((end-start)//4),raw[pe.get_offset_from_rva(start):pe.get_offset_from_rva(end)])
+assert table(0x2c29c18,0x2c29c28)==(0,7,8,9)
+assert table(0x2c29c28,0x2c29c40)==(0,1,3,7,8,9)
+assert not set((block*10+5) for block in (50,60,70,80)) & set(table(0x2c29bc0,0x2c29c18))
 code=raw[pe.get_offset_from_rva(0x60d330):][:0xb3]
 assert code[:9]==bytes.fromhex('48 89 5C 24 08 44 8B 49 1C') and code[-1]==0xc3
 k=c.WinDLL('kernel32',use_last_error=True)
@@ -33,6 +39,15 @@ try:
         setter(c.addressof(manager),id,1);assert flag(id)
         setter(c.addressof(manager),id,0);assert not flag(id)
     assert bits.raw==before
+    # Same native setter, allocated personal category 5, all template and
+    # instance prefixes. These bits never use the shared category-7 bucket.
+    for p in (46500000,46600000,46700000,46800000,1042360000):
+        struct.pack_into('<I',node,0x20,(p+5700)//1000)
+        for count in range(6):
+            for bit in range(3):setter(c.addressof(manager),p+5700+bit,(count>>bit)&1)
+            assert sum(int(flag(p+5700+bit))<<bit for bit in range(3))==count
+        for bit in range(3):setter(c.addressof(manager),p+5700+bit,0)
+        assert bits.raw==before
 finally:k.VirtualFree(address,0,0x8000)
-(root/'.work/cage/flag-storage-test.json').write_text(json.dumps(dict(nativeSetterRva='0x60d330',isolatedExactNativeCode=True,old6000RequestSilentlyIgnored=True,new7000StatesSetAndClear=True,gameProcessAccessed=False),indent=2),encoding='utf8')
+(root/'.work/cage/flag-storage-test.json').write_text(json.dumps(dict(nativeSetterRva='0x60d330',isolatedExactNativeCode=True,old6000RequestSilentlyIgnored=True,new7000StatesSetAndClear=True,personal5000CountersSetAndClear=True,personalCategoryExcludedFromNativeNetworkTables=True,gameProcessAccessed=False),indent=2),encoding='utf8')
 print('PASS: exact native setter discards unallocated 6000-group flags; cage state/choice/cleanup/mutation flags set and clear in isolated storage.')

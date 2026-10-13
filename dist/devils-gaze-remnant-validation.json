@@ -1,0 +1,85 @@
+{
+  "version": "0.17.92",
+  "intervalSeconds": [
+    6,
+    16
+  ],
+  "outerRadius": 16,
+  "parameterValidation": {
+    "inputSha256": "88BF4C7E86448DE13377CFEBF4BC7E81AD67894ED8FBF8AD7CAEC3DE085073AD",
+    "outputSha256": "0A893B4A33DFB1F82B2439E577906C6110BC868A7836F942C0DB5D233029FA9B",
+    "changedExplosionIds": [
+      95002252,
+      95002262,
+      95002272,
+      95002282,
+      95002292,
+      95002302
+    ],
+    "onlySixChildLinksChanged": true,
+    "nativePickup": 7560369,
+    "pickupLifetimeSeconds": 12,
+    "pickupRadius": 1,
+    "pickupEffects": [
+      45890,
+      45891,
+      45893
+    ],
+    "nativePickupRowsUnchanged": true,
+    "pickupHasNoDamageOrStagger": true,
+    "pickupConsumedOnContact": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "resourceValidation": {
+    "inputSha256": "884B123C9349A5312E7B24375E771DD877EB8A5FDA1498461A5D9AFC27803EFA",
+    "outputSha256": "C8081BE2DCD176ED9411C9A7C2605201AD85C282F5BAD59F5DC4AB4F9F57DC26",
+    "added": [
+      {
+        "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000675600.fxr",
+        "bytes": 46784
+      },
+      {
+        "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000675600.ffxreslist",
+        "bytes": 124
+      },
+      {
+        "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000675601.fxr",
+        "bytes": 59408
+      },
+      {
+        "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000675601.ffxreslist",
+        "bytes": 70
+      },
+      {
+        "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000675602.fxr",
+        "bytes": 17920
+      },
+      {
+        "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000675602.ffxreslist",
+        "bytes": 42
+      },
+      {
+        "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000675603.fxr",
+        "bytes": 11984
+      },
+      {
+        "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000675603.ffxreslist",
+        "bytes": 42
+      }
+    ],
+    "outputBytes": 2805216,
+    "existingResourcesPreserved": true
+  },
+  "rustTestsPassed": 271,
+  "resourceCompressedBytesAdded": 8224,
+  "changedModFiles": {
+    "mod/regulation.bin": "0a893b4a33dfb1f82b2439e577906c6110bc868a7836f942c0db5d233029fa9b",
+    "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "c8081be2dcd176ed9411c9a7c2605201ad85c282f5bad59f5dc4ab4f9f57dc26",
+    "mod/natives/NRHex.dll": "83a988682bda90af62890a51c035e36c8d29e867ea2d711f4168da14d001fe9b"
+  },
+  "otherModFilesPreserved": true,
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

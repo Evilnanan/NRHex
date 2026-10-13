@@ -96,7 +96,7 @@ static class CageEncounters {
   e.Instructions.AddRange([I(2004,5,actor,(byte)0),I(2006,3,2,actor,900,690047),I(1001,0,4f)]);
   if(g.birthAnimation.HasValue&&m.combat)e.Instructions.Add(Anim(actor,g.birthAnimation.Value,true));
   e.Instructions[skip]=I(1000,7,(byte)(e.Instructions.Count-skip-1),(byte)1,(sbyte)5);
-  e.Instructions.AddRange([I(2004,5,actor,(byte)1),Local(shown,true),Flag(-2,choice,false),I(4,7,(sbyte)-2,actor,(byte)0,(sbyte)0,1f),Wait(-2),Local(shown,false),I(1001,1,1),Restart()]);if(stableSnapshot){Cages.StabilizeBirth(e);Cages.LocalGeneration(e,actor,p+3800+(uint)m.index,m.combat?Dead(p,m):null);}return e;
+  e.Instructions.AddRange([I(2004,5,actor,(byte)1),Local(shown,true),Flag(-2,choice,false),I(4,7,(sbyte)-2,actor,(byte)0,(sbyte)0,1f),Wait(-2),Local(shown,false),I(1001,1,1),Restart()]);if(stableSnapshot){Cages.StabilizeBirth(e);Cages.LocalGeneration(e,actor,p+3800+(uint)m.index,m.combat?Dead(p,m):null);CageUsage.Intro(e);}return e;
  }
  static EMEVD.Event Death(uint p,Group g,Member m){
   var e=new EMEVD.Event(p+9100+(uint)m.index,EMEVD.Event.RestBehaviorType.Restart);
@@ -119,8 +119,8 @@ static class CageEncounters {
   e.Instructions.Add(I(1003,1,(byte)(g.members.Length-1),(byte)0,(byte)0,red));
   foreach(var m in g.members.Where(m=>m!=first))e.Instructions.Add(I(2004,8,Actor(p,m),Cages.Mutation));
   foreach(var m in g.members)e.Instructions.AddRange([I(2004,1,Actor(p,m),(byte)0),I(2004,34,Actor(p,m),(byte)1,(sbyte)0)]);
-  e.Instructions.Add(I(1001,0,4f));foreach(var m in g.members)e.Instructions.AddRange([I(2004,39,Actor(p,m),(byte)1),I(2004,1,Actor(p,m),(byte)1)]);
-  e.Instructions.AddRange([Shared(p+7404,true),I(2010,12,28u,(byte)0),Anim(p+1200,110,true),Anim(p+1210,1,true),I(2010,2,Target(p,g),1,999997300),I(4,23,(sbyte)0,Target(p,g),(sbyte)5,0,(sbyte)0,1f),I(1001,0,Cages.VictoryDelaySeconds),I(2010,2,Target(p,g),5,888880000),I(2007,19,1030),I(2003,101,1),I(2003,31,8145u,4u,7u),Shared(cooling,true),Anim(p+1210,10,true),I(2003,114,(byte)6,(byte)0),Shared(red,false),Shared(decided,false),Shared(p+7404,false),Shared(choice,false),Shared(p+7403,false),Shared(p+7402,false),Shared(p+7401,false),I(1001,0,Cages.CleanupDelaySeconds-Cages.VictoryDelaySeconds)]);
+  e.Instructions.Add(I(1001,0,CageUsage.IntroSeconds));foreach(var m in g.members)e.Instructions.AddRange([I(2004,39,Actor(p,m),(byte)1),I(2004,1,Actor(p,m),(byte)1)]);
+  e.Instructions.AddRange([Shared(p+7404,true),I(2010,12,28u,(byte)0),Anim(p+1200,110,true),Anim(p+1210,1,true),I(4,23,(sbyte)0,Target(p,g),(sbyte)5,0,(sbyte)0,1f),I(1001,0,Cages.VictoryDelaySeconds),I(2010,2,Target(p,g),5,888880000),I(2007,19,1030),I(2003,101,1),I(2003,31,8145u,4u,7u),Shared(cooling,true),Anim(p+1210,10,true),I(2003,114,(byte)6,(byte)0),Shared(red,false),Shared(decided,false),Shared(p+7404,false),Shared(choice,false),Shared(p+7403,false),Shared(p+7402,false),Shared(p+7401,false),I(1001,0,Cages.CleanupDelaySeconds-Cages.VictoryDelaySeconds)]);
   foreach(var m in g.members)e.Instructions.AddRange([I(2004,29,Actor(p,m),(byte)1),I(2004,5,Actor(p,m),(byte)0)]);
   e.Instructions.AddRange([Shared(cooling,false),I(1001,1,1),Restart()]);return e;
  }
@@ -141,6 +141,7 @@ static class CageEncounters {
    var singleBosses=JsonSerializer.Deserialize<Cages.Boss[]>(File.ReadAllText(Path.Combine(root,"data/reference/world/cage-bosses.json")))!;
    foreach(var (boss,index) in singleBosses.Select((b,i)=>(b,i))){var hud=events.Events.Single(e=>e.ID==p+9800+(uint)index);var link=hud.Instructions.Single(i=>i.Bank==2003&&i.ID==102);int old=BitConverter.ToInt32(link.ArgData,4);Check(old==-1||old==boss.healthBarName,"Unexpected single HUD association");BitConverter.GetBytes(boss.healthBarName).CopyTo(link.ArgData,4);}
    var originalFlags=EMEVD.Read(Path.Combine(root,"assets/original/event",name+".emevd.dcx"));var flags=c.groups.SelectMany(g=>new[]{p+7500+(uint)g.choice,p+7550+(uint)g.choice,p+7650+(uint)g.choice,p+7700+(uint)g.choice,RewardFlag(p,g)}.Concat(g.members.SelectMany(m=>new[]{Shown(p,m),Dead(p,m)}))).ToHashSet();
+   CageNetwork.CheckDraftFlags(originalFlags,p,c.encounterCount);
    Check(flags.All(f=>f/1000%10==7)&&!originalFlags.Events.Any(e=>flags.Contains((uint)e.ID)||e.Instructions.Any(i=>Enumerable.Range(0,i.ArgData.Length/4).Any(n=>flags.Contains(BitConverter.ToUInt32(i.ArgData,n*4))))),"Group state collides with original events or unallocated flags");
    var addedEvents=new List<EMEVD.Event>();var actorReports=new List<object>();var rewardReports=new List<object>();
    float yaw=map.Regions.GetEntries().Single(r=>r.Name=="NRHex_cage_spawn_0").Rotation.Y;

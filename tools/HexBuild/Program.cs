@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -20,6 +20,9 @@ if(args.Contains("--check-descriptions")){
  HexTexts.Verify(root,HexCatalog.Load(root));return;
 }
 
+if(args.Contains("--cage-network-selector")){CageNetwork.Stage(root);return;}
+if(args.Contains("--cage-usage")){CageUsage.Stage(root);return;}
+if(args.Contains("--cage-without-prelude")){CageUsage.StageWithoutPrelude(root);return;}
 if(args.Contains("--audit-peer-lifecycle")){Cages.StagePeerLifecycle(root);return;}
 if(args.Contains("--cage-peer-generation-only")){Cages.StagePeerGeneration(root);return;}
 if(args.Contains("--cage-group-metadata")){CageGroups.ExportMetadata(root);return;}
@@ -63,6 +66,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  p.ApplyParamdef(d);return p;
 }
 if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
+if(args.Contains("--archmage-secondary")){Archmage.StageSecondary(root,Parse);return;}
 if(args.Contains("--archmage-probe")){Archmage.Probe(root,bnd,Parse);return;}
 if(args.Contains("--cage-group-npcs")){
  CageGroups.ExportNpcs(root,Parse("NpcParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="NpcParam.param").Bytes),Hash(source));
@@ -80,6 +84,8 @@ if(args.Contains("--storm-extract")){StormVfx.Extract(root,smith,game);return;}
 if(args.Contains("--storm-resources")){StormVfx.Resources(root);return;}
 if(args.Contains("--storm-vfx-stage")){StormVfx.Stage(root);return;}
 if(args.Contains("--devils-gaze-resources")){DevilsGaze.Resources(root,smith,game);return;}
+if(args.Contains("--devils-gaze-remnant")){DevilsGazeRemnant.Stage(root,bnd,Parse);return;}
+if(args.Contains("--slingshot-tune")){Slingshot.Tune(root,Parse);return;}
 if(args.Contains("--devils-gaze-tune")){DevilsGaze.Tune(root,Parse);return;}
 if(args.Contains("--devils-gaze-hitfix")){DevilsGaze.StageHitFix(root,Parse);return;}
 if(args.Contains("--devils-gaze-probe")){DevilsGaze.Probe(root,bnd,Parse);return;}
@@ -672,7 +678,7 @@ foreach(var h in hexes){
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
- if(h.Id==95002100){Set(s,"magicConsumptionRate",0f);Set(s,"miracleConsumptionRate",0f);}
+ if(h.Id==95002100){Set(s,"magicConsumptionRate",1f);Set(s,"miracleConsumptionRate",1f);}
  if(h.Id==95000900){
   var nativeMelee=pars["SpEffectParam"].Rows.Single(r=>r.ID==8320500);
   Require(Convert.ToInt32(nativeMelee["magicSubCategoryChange1"].Value)==130,"Native melee category changed");
@@ -951,6 +957,7 @@ foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCut
 Require(Convert.ToInt32(Effect(95001203)["iconId"].Value)==20222&&Convert.ToInt32(Effect(95001203)["displayIconForPermamentEffect"].Value)==1&&Convert.ToInt32(Effect(95001203)["saveCategory"].Value)==-1,"Escape ready HUD icon mismatch");
 File.WriteAllText(Path.Combine(root,".work/effects/escape-serialized.json"),JsonSerializer.Serialize(escapeIds.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));
 File.WriteAllText(Path.Combine(root,".work/actions/jiahao-serialized.json"),JsonSerializer.Serialize(new[]{95001300,6999700,6999701,6999705}.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));
+Require(Convert.ToSingle(Effect(95002100)["magicConsumptionRate"].Value)==1f&&Convert.ToSingle(Effect(95002100)["miracleConsumptionRate"].Value)==1f,"Archmage owner must leave primary spell FP consumption unchanged");
 Require(Convert.ToSingle(Effect(95001400)["artsConsumptionRate"].Value)==0f&&Convert.ToSingle(Effect(95001400)["magicConsumptionRate"].Value)==1f,"Free skills must not affect spells");
 File.WriteAllText(Path.Combine(root,".work/arts/serialized.json"),JsonSerializer.Serialize(new[]{95001400,6999800,6999801,6999802,6999803}.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));
 var dest=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(Path.GetDirectoryName(dest)!);SFUtil.EncryptNightreignRegulation(dest,bnd,bnd.Compression);

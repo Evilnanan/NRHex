@@ -87,7 +87,7 @@ Marking one's own position generates roiling lava. Further marks of one's own po
 <!-- hex:95001600 -->
 ## Spawner
 
-Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again.
+Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times.
 
 <!-- hex:95001700 -->
 ## Balloon
@@ -107,7 +107,7 @@ Restores 30 stamina per second while charging sorceries or incantations.
 <!-- hex:95002100 -->
 ## Archmage
 
-Reduces FP consumption of sorceries and incantations by 100%. When consecutive casts end, replaces the spell used in each catalyst slot with a random spell of the same type.
+Reduces FP consumption of a catalyst’s secondary spell by 100%. After casting, replaces it with a random new spell.
 
 <!-- hex:95002200 -->
 ## Demon's Gaze
@@ -117,4 +117,4 @@ Periodically creates golden magic circles nearby that erupt after a brief delay,
 <!-- hex:95002300 -->
 ## Slingshot
 
-Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 30%.
+Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%.

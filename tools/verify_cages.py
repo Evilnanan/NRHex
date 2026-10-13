@@ -3,6 +3,7 @@ from pathlib import Path
 import hashlib,json,struct,tomllib,math,os
 from cage_local_events import verify_hud, verify_birth, verify_peer_reveal
 from cage_selector_events import verify_selector
+from cage_usage_events import OPS as usage_ops, verify_open
 root=Path(__file__).resolve().parents[1]
 data=json.loads(Path(os.environ.get('NRHEX_CAGE_REPORT',root/'.work/cage/built.json')).read_text(encoding='utf8'))
 mod_root=Path(os.environ.get('NRHEX_CAGE_MOD_ROOT',root/'dist/mod'))
@@ -11,6 +12,8 @@ boss_count=len(data['bosses'])
 assert boss_count==37
 schema=json.loads((root/'data/reference/world/cage-opcodes.json').read_text(encoding='utf8'))
 ops={(o['bank'],o['id']):o for o in schema['opcodes']}
+for op,name in [(17,'RandomlySetEventFlagInRange'),(22,'BatchSetEventFlags')]:
+    ops[2003,op]=dict(name=name,args=[['uint','startFlagId'],['uint','endFlagId'],['byte','flagState']])
 # Current NR EMEDF 2003[102], also present in original 90015000.
 ops[2003,102]=dict(name='LinkToBossHealthBar',args=[['sbyte','disabledEnabled'],['int','healthBarNameId'],['uint','entityId']])
 ops[3,42]=dict(name='IfEventFlagAndRandomCondition',args=[['sbyte','resultConditionGroup'],['uint','targetEventFlagId'],['float','targetProbability']])
@@ -19,6 +22,8 @@ ops[1003,14]=dict(name='EndIfPlayerIsInWorldType',args=[['byte','executionEndTyp
 ops[2009,4]=dict(name='ActivateMultiplayerdependantBuffs',args=[['uint','entityId']])
 ops[2004,28]=dict(name='SetNetworkUpdateAuthority',args=[['uint','entityId'],['int','authorityLevel']])
 for label in (6,8,9):ops[1014,label]=dict(name=f'Label{label}',args=[])
+for key in [(3,12),(2003,127),(1000,101),(1014,0)]:
+    name,types=usage_ops[key];ops[key]=dict(name=name,args=[[t,'argument'] for t in types])
 births=json.loads((root/'data/reference/world/cage-birth.json').read_text(encoding='utf8'))
 birth_by_model={m['model']:m for m in births['models']}
 birth_overrides={o['npc']:o for o in births['nativeOverrides']}
@@ -56,13 +61,14 @@ for r in data['reports']:
     assert all(abs(p['yaw']-expected_yaw)<1e-4 and abs(p['spawnYaw']-expected_yaw)<1e-4 for p in r['birthLayouts'])
     assert all(f//1000%10==7 for f in [r['used'],r['busy'],r['request'],r['ready'],r['spawned'],r['choices'],r['choices']+boss_count-1,r['cooling'],r['cooling']+boss_count-1,r['shown'],r['shown']+boss_count-1]),'Map flag category 6000 has no storage'
     for i in r['openInitializers']:
-        words=struct.unpack('<9I',bytes.fromhex(i['hex']))
-        assert words[1]==9100961 and words[-3:]==(r['used'],r['busy'],r['request'])
+        words=struct.unpack('<10I',bytes.fromhex(i['hex']))
+        assert words[1]==9100961 and words[-4:]==(r['used'],r['busy'],r['request'],r['used']//10000*10000+5700)
     for e in r['events']:
         decoded=[decode(i) for i in e['instructions']]
         if e['ID']%10000==9700:
             verify_selector(decoded,r,decode)
-            assert sum(n=='RandomlySetNetworkconnectedEventFlagInRange' for n,_ in decoded)==1
+            assert sum(n=='RandomlySetEventFlagInRange' for n,_ in decoded)==1
+            assert not any(n in ('BatchSetNetworkconnectedEventFlags','RandomlySetNetworkconnectedEventFlagInRange') for n,_ in decoded)
             labels={int(n[5:]):i for i,(n,_) in enumerate(decoded) if n.startswith('Label')}
             def select(draws,cooling_indices=(),already_ready=False):
                 flags={r['request']:True,r['ready']:already_ready}
@@ -78,10 +84,10 @@ for r in data['reports']:
                             pc=labels[a[0]]+1
                     elif n=='SkipIfEventFlag':
                         if bool(flags.get(a[3],False))==bool(a[1]):pc+=a[0]
-                    elif n=='BatchSetNetworkconnectedEventFlags':
+                    elif n in ('BatchSetNetworkconnectedEventFlags','BatchSetEventFlags'):
                         for flag in range(a[0],a[1]+1):flags[flag]=bool(a[2])
-                    elif n=='RandomlySetNetworkconnectedEventFlagInRange':
-                        draw=next(draws);seen.append(draw);flags[r['choices']+draw]=True
+                    elif n in ('RandomlySetNetworkconnectedEventFlagInRange','RandomlySetEventFlagInRange'):
+                        draw=next(draws);seen.append(draw);flags[a[0]+draw]=True
                     elif n=='SetNetworkconnectedEventFlag':
                         flags[a[1]]=bool(a[2])
                         if a[1]==r['ready'] and a[2]:committed.append(seen[-1])
@@ -107,7 +113,7 @@ for r in data['reports']:
             override=birth_overrides.get(boss['npc']);reset=idle_resets.get(boss['npc'])
             animation=([[0,0]] if reset else ([] if override.get('cancelled',False) else [[override['animation'],int(override['loop'])]]) if override else [[20026,0]] if birth['towerWalk'] else [[20025,1]] if birth['nativeFog'] else [])
             if animation:assert any(a['id']%1000000==animation[0][0] for a in birth['animations'])
-            verify_birth(decoded,r,entity,r['choices']+index,animation,690046 if boss['model']=='c7920' else 690047)
+            verify_birth(decoded,r,entity,r['choices']+index,animation,690047)
             hud_event=next(event for event in r['events'] if event['ID']%10000==9800+index)
             verify_peer_reveal(decoded,[decode(i) for i in hud_event['instructions']],r,entity,boss['healthBarName'],r['choices']+index)
         elif e['ID']%10000>=9800:
@@ -194,72 +200,12 @@ for b,n in zip(data['bosses'],data['npcs']):
     assert (b['map'].startswith('m46_') and int(b['map'][4:6])>=50) or b['map'] in ['m48_10_00_00','m48_30_00_00','m48_40_00_00','m49_10_00_00','m49_17_00_00','m49_18_00_00','m49_20_00_00']
 assert all(data[k] for k in ['originalMapEntriesReconstructed','originalCommonFunctionEventsPreserved','originalMapNonconstructorEventsPreserved'])
 
-# Bind the actual common-event parameter mappings, then interpret only the
-# native interaction path. No game process, generator or loot API is called.
-open_flag,stone,variation,log,used,busy,request=12340200,12341200,2,10000,12347400,12347401,12347402
-parameters=struct.pack('<7I',open_flag,stone,variation,log,used,busy,request)
-instructions=[]
-for index,ins in enumerate(data['open']['instructions']):
-    raw=bytearray.fromhex(ins['hex'])
-    for p in data['open']['Parameters']:
-        if p['InstructionIndex']==index:
-            t,s,count=p['TargetStartByte'],p['SourceStartByte'],p['ByteCount']
-            raw[t:t+count]=parameters[s:s+count]
-    instructions.append(decode(dict(ins,hex=raw.hex())))
-labels={int(n[5:]):i for i,(n,_) in enumerate(instructions) if n.startswith('Label')}
-def opening(owner,keys,used_before=False,busy_before=False,normal_open=False,night=False):
-    flags={used:used_before,busy:busy_before,open_flag:normal_open,7509:night}
-    groups={};pc=0;removed=0
-    def group(g,v):groups[g]=(groups.get(g,False) or v) if g<0 else (groups.get(g,True) and v)
-    def state(g):return groups.get(g,False)
-    for _ in range(100):
-        n,a=instructions[pc];pc+=1
-        if n=='IfIsMapVariation':group(a[0],a[1]==1 and a[2]==variation)
-        elif n=='IfActionButtonInArea':group(a[0],True)
-        elif n=='IfEventFlag':group(a[0],bool(flags.get(a[3],False))==bool(a[1]))
-        elif n=='IfConditionGroup':
-            v=state(a[2])==bool(a[1])
-            if a[0]==0:
-                if not v:return flags,removed
-            else:group(a[0],v)
-        elif n=='EndIfConditionGroupStateUncompiled':
-            if state(a[2])==bool(a[1]):return flags,removed
-        elif n=='EndIfEventFlag':
-            if bool(flags.get(a[3],False))==bool(a[1]):return flags,removed
-        elif n=='GotoIfEventFlag':
-            if bool(flags.get(a[3],False))==bool(a[1]):pc=labels[a[0]]+1
-        elif n=='SkipIfCharacterHasSpEffect':
-            if owner==bool(a[3]):pc+=a[0]
-        elif n=='EndIfCharacterHasSpEffect':
-            if owner==bool(a[3]):return flags,removed
-        elif n=='GotoUnconditionally':pc=labels[a[0]]+1
-        elif n=='IfPlayerHasdoesntHaveItem':group(a[0],keys>0)
-        elif n=='SkipIfConditionGroupStateUncompiled':
-            if state(a[2])==bool(a[1]):pc+=a[0]
-        elif n=='SkipIfIsPlayerNo':
-            if a[2]==0:pc+=a[0] # Host fixture is player1.
-        elif n=='SetNetworkconnectedEventFlag':flags[a[1]]=bool(a[2])
-        elif n=='RemoveItemFromPlayer':removed+=a[2]
-        elif n=='EndUnconditionally':return flags,removed
-        elif n in ['SetNetworkSyncState','RecordUserDispLog','WaitFixedTimeSeconds','SetWorldMapPointFlag','ForceAnimationPlayback','WaitFixedTimeFrames'] or n.startswith('Label'):pass
-        else:raise AssertionError(n)
-    raise AssertionError('Open branch failed to terminate')
-cases=[]
-for owner in (False,True):
-    for keys in (0,1):
-        flags,removed=opening(owner,keys)
-        assert bool(flags.get(request))==owner
-        assert bool(flags.get(open_flag))==(not owner and keys==1)
-        assert removed==(1 if not owner and keys else 0)
-        cases.append(dict(owner=owner,keys=keys,spawnRequested=bool(flags.get(request)),keysConsumed=removed))
-for kwargs in [dict(busy_before=True),dict(normal_open=True),dict(night=True)]:
-    flags,removed=opening(True,1,**kwargs);assert not flags.get(request) and removed==0
-flags,removed=opening(False,1,used_before=True);assert not flags.get(request) and not flags.get(open_flag) and removed==0
-flags,removed=opening(True,0,used_before=True);assert flags[request] and removed==0
-assert data['open']['RestBehavior']==1
+# Exercise actual serialized personal-quota/key branches.
+parameters=struct.pack('<8I',12340200,12341200,2,10000,12347400,12347401,12347402,12345700)
+cases=verify_open(data['open'],parameters)
 version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
 storage=json.loads((root/'.work/cage/flag-storage-test.json').read_text())
 assert storage['old6000RequestSilentlyIgnored'] and storage['new7000StatesSetAndClear']
-report=dict(version=version,nativeBossCount=boss_count,mapTemplates=[r['mapName'] for r in data['reports']],openBranchCases=cases,opcodeArgumentsDecoded=True,originalMapReconstructionPassed=True,originalEventsPreserved=True,flagStorage=storage,relicNativeCounter=8145,relicNativeStackCap=7,greatHollowFlag=7604,birthFacing='baked part and generator yaw toward each local stone, corrected by 180 degrees',victoryDelaySeconds=5,cleanupDelaySeconds=20,reopenDelaySeconds=5,difficultyEffects=data['difficultyEffects'],nativeProgressionEvent=90045004,progressionCasesPassed=True,deathTimelineVerified=True,cleanupExclusionVerified=True,selectorAcknowledgesReadyInsteadOfRequestOff=True,oldMissedEdgeReproduced=True,consecutiveImmediateReopenRoundsPerTemplate=200,healthBarWaitsForLocalReveal=True,nativeHealthBarAssociationRestored=True,combinedDelayedPeerRevealCases=444,healthBarLocal=True,healthBarShowRadius=50,healthBarFarHideRadius=100,healthBarPredicateCasesPassed=True,healthBarRequiresReplicaAI=False,healthBarNativeLocalSlots=[0,1],healthBarSlotFlags=[5000,5001],perPeerBirthPlayback=True,peerBirthReplayAndLateLoadCasesPassed=True,nativeFogModels=sum(m['nativeFog'] for m in births['models']),towerFog=[690047,690046],towerAnimation=20026,nativeAnimationOverrides=births['nativeOverrides'],idleResets=births['idleResets'],towerWaitSeconds=4,towerWalkModels=sum(m['towerWalk'] for m in births['models']),gameplayVerified=False,multiplayerVerified=False,pendingChecks=['Birth facing and fog for field enemies','Native private-server coop: client opens cage, host/client fog and HUD; reverse opener roles; late loading and repeat boss','Native rune/latent reward repeat drops','No grace and native relic stack','Coop authority and visibility'])
+report=dict(version=version,nativeBossCount=boss_count,mapTemplates=[r['mapName'] for r in data['reports']],openBranchCases=cases,opcodeArgumentsDecoded=True,originalMapReconstructionPassed=True,originalEventsPreserved=True,flagStorage=storage,relicNativeCounter=8145,relicNativeStackCap=7,greatHollowFlag=7604,birthFacing='baked part and generator yaw toward each local stone, corrected by 180 degrees',victoryDelaySeconds=5,cleanupDelaySeconds=20,reopenDelaySeconds=5,difficultyEffects=data['difficultyEffects'],nativeProgressionEvent=90045004,progressionCasesPassed=True,deathTimelineVerified=True,cleanupExclusionVerified=True,selectorAcknowledgesReadyInsteadOfRequestOff=True,oldMissedEdgeReproduced=True,consecutiveImmediateReopenRoundsPerTemplate=200,healthBarWaitsForLocalReveal=True,nativeHealthBarAssociationRestored=True,combinedDelayedPeerRevealCases=444,healthBarLocal=True,healthBarShowRadius=50,healthBarFarHideRadius=100,healthBarPredicateCasesPassed=True,healthBarRequiresReplicaAI=False,healthBarNativeLocalSlots=[0,1],healthBarSlotFlags=[5000,5001],perPeerBirthPlayback=True,peerBirthReplayAndLateLoadCasesPassed=True,nativeFogModels=sum(m['nativeFog'] for m in births['models']),towerFog=[690047],towerAnimation=20026,nativeAnimationOverrides=births['nativeOverrides'],idleResets=births['idleResets'],towerWaitSeconds=4,towerWalkModels=sum(m['towerWalk'] for m in births['models']),gameplayVerified=False,multiplayerVerified=False,pendingChecks=['Birth facing and fog for field enemies','Native private-server coop: client opens cage, host/client fog and HUD; reverse opener roles; late loading and repeat boss','Native rune/latent reward repeat drops','No grace and native relic stack','Coop authority and visibility'])
 (validation_root/'cage-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
 print('PASS: 37 native boss identities/rewards, four map reconstructions, decoded opcode ABI and owner/key/busy/reopen branches; gameplay remains unverified.')
