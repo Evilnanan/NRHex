@@ -1,0 +1,40 @@
+{
+  "inputSha256": "60575EA03B6D7597C5F3F4CCCF10A510D2B691F73235412359695DAD419481C4",
+  "outputSha256": "A48E4CF44BBE01BDA363B79B2E11484CBA85BFDD57BAD8F425CE126A36191C98",
+  "fraction": 0.25,
+  "changes": [
+    {
+      "id": 95002200,
+      "old": 504,
+      "next": 252
+    },
+    {
+      "id": 95002201,
+      "old": 655,
+      "next": 328
+    },
+    {
+      "id": 95002202,
+      "old": 780,
+      "next": 390
+    },
+    {
+      "id": 95002203,
+      "old": 928,
+      "next": 464
+    },
+    {
+      "id": 95002204,
+      "old": 1280,
+      "next": 640
+    },
+    {
+      "id": 95002205,
+      "old": 1485,
+      "next": 743
+    }
+  ],
+  "onlySixHolyAttackFieldsChanged": true,
+  "bulletVisualRadiusMadnessUnchanged": true,
+  "gameplayVerified": false
+}

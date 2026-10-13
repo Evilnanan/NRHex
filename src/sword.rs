@@ -21,6 +21,7 @@ pub const HEAL_BITS:usize=16;
 pub const GLANCE_RATE:f32=0.01; // Native 8821000's five AttackRate fields.
 pub const LIFESTEAL_SCALE:f64=2.;
 pub const NEAR_DISTANCE:f32=4.;
+pub const CASTER_HEIGHT:f32=1.; // Range origin at the torso, in metres above the physics root.
 
 pub struct Bonuses {percentages:BTreeMap<i32,f32>}
 impl Bonuses {
@@ -42,6 +43,13 @@ impl Bonuses {
 pub fn distance(a:[f32;4],b:[f32;4])->Option<f32>{
  let d=(0..3).map(|i|(a[i]-b[i]).powi(2)).sum::<f32>().sqrt();
  d.is_finite().then_some(d)
+}
+// The physics root is at the feet. Measure from the torso so an elevated
+// contact does not spend part of the melee range on the caster's own height.
+// Keep world-space height and the real contact point; do not flatten the range.
+pub fn hit_distance(mut feet:[f32;4],contact:[f32;4])->Option<f32>{
+ feet[1]+=CASTER_HEIGHT;
+ distance(feet,contact)
 }
 pub fn near(distance:Option<f32>,limit:f32)->bool{distance.is_some_and(|d|d<=limit)}
 pub fn glancing_display(damage:i32)->i32{
@@ -153,6 +161,26 @@ impl Healing {
  #[test]fn shared_percentage_headers_are_unambiguous(){for name in ["加成","吸血百分比","效果百分比","增伤百分比"]{assert!(Bonuses::read(&table(4021,"30").replace("增伤百分比",name)).is_ok());}assert!(Bonuses::read("MagicID,吸血百分比,增伤百分比\n4021,20,30").is_err());assert!(Bonuses::read("MagicID,加成,吸血百分比\n4021,20,30").is_err());}
  #[test]fn incoming_reduction_uses_requested_curve_and_preserves_non_damage(){assert_eq!(reduced(65,30.),36);assert_eq!(reduced(100,0.),100);assert_eq!(reduced(100,100.),29);assert_eq!(reduced(-5,50.),-5);assert_eq!(reduced(100,12.5),74);}
  #[test]fn queued_healing_dropped_on_owner_death_or_object_change(){let mut h=Healing::default();h.queue(1,2,40);assert_eq!(h.take(1,2,true,true),40);assert_eq!(h.take(1,2,true,true),0);for (p,s,alive,owned) in [(1,2,false,true),(1,2,true,false),(2,3,true,true)]{h.queue(1,2,40);assert_eq!(h.take(p,s,alive,owned),0);}}
+ #[test]fn torso_range_handles_elevated_contacts_without_expanding_horizontal_range(){
+  let feet=[10.,20.,30.,1.];
+  // A hit 3.8 m forward and 2 m above the feet was incorrectly out of range.
+  let elevated=[13.8,22.,30.,1.];
+  assert!(!near(distance(feet,elevated),NEAR_DISTANCE));
+  assert!(near(hit_distance(feet,elevated),NEAR_DISTANCE));
+  assert!(near(hit_distance(feet,[14.,21.,30.,1.]),NEAR_DISTANCE));
+  assert!(!near(hit_distance(feet,[14.001,21.,30.,1.]),NEAR_DISTANCE));
+  // Retain height limits above and below the torso, rather than a cylinder.
+  assert_eq!(hit_distance(feet,[10.,25.,30.,1.]),Some(4.));
+  assert!(!near(hit_distance(feet,[10.,25.001,30.,1.]),NEAR_DISTANCE));
+  assert!(!near(hit_distance(feet,[10.,16.999,30.,1.]),NEAR_DISTANCE));
+  assert!(near(hit_distance(feet,[10.,20.,30.,1.]),NEAR_DISTANCE));
+  for invalid in [f32::NAN,f32::INFINITY,f32::NEG_INFINITY]{
+   for axis in 0..3{
+    let mut p=feet;p[axis]=invalid;assert_eq!(hit_distance(p,elevated),None);
+    let mut p=elevated;p[axis]=invalid;assert_eq!(hit_distance(feet,p),None);
+   }
+  }
+ }
  #[test]fn range_is_three_dimensional_and_rejects_nan(){assert_eq!(distance([0.;4],[0.,3.,4.,0.]),Some(5.));assert_eq!(distance([f32::NAN;4],[0.;4]),None);}
  #[test]fn near_boundary_includes_limit_but_rejects_far_and_unknown(){assert!(near(distance([0.;4],[0.,0.,5.,0.]),5.));assert!(!near(distance([0.;4],[0.,0.,5.001,0.]),5.));assert!(!near(distance([0.;4],[0.,5.001,0.,0.]),5.));assert!(!near(distance([f32::NAN;4],[0.;4]),5.));assert!(!near(None,5.));}
  #[test]fn distant_display_uses_native_glance_ratio_without_forcing_single_digits(){for (d,n) in [(-1,0),(0,0),(1,1),(99,1),(100,1),(199,1),(500,5),(999,9),(1000,10)]{assert_eq!(glancing_display(d),n);}}

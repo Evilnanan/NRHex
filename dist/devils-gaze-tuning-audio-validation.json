@@ -1,0 +1,18 @@
+{
+  "nativeBank": "cs_c7560",
+  "bankSha256": "ef46b78051aef0cf134768cb65ea0ac45c1b15a8e104ebca6de86ef144f926e4",
+  "events": [
+    675683,
+    675685,
+    675687
+  ],
+  "absentFromSharedBanks": true,
+  "nativeRequestAbiVerified": true,
+  "dependencyFixtures": [
+    "model string formatter",
+    "allocator free",
+    "bank request capture"
+  ],
+  "newSoundFiles": 0,
+  "gameplayVerified": false
+}

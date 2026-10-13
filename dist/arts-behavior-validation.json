@@ -5,7 +5,7 @@
   "nativeRepositoryIndex": 13,
   "sameSourceDecoderForWeaponHandleAndBase": true,
   "attackAndBulletUseSameResolver": true,
-  "canonicalSkillCount": 183,
+  "canonicalSkillCount": 182,
   "nativeBehaviorRows": 10855,
   "ordinaryAttacksUseNativeResult": true,
   "localOwnedOverlayOnly": true,

@@ -1,0 +1,36 @@
+{
+  "inputSha256": "8B937177C56946336C11B2EF351C3DC2FB9958C50DD6C2CFA9FF89612D9CC932",
+  "outputSha256": "884B123C9349A5312E7B24375E771DD877EB8A5FDA1498461A5D9AFC27803EFA",
+  "added": [
+    {
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000675685.fxr",
+      "bytes": 65152
+    },
+    {
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000675685.ffxreslist",
+      "bytes": 84
+    },
+    {
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\tex\\s60680_a.tpf",
+      "bytes": 349754
+    },
+    {
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000675687.fxr",
+      "bytes": 22480
+    },
+    {
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000675687.ffxreslist",
+      "bytes": 56
+    },
+    {
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\effect\\f000675683.fxr",
+      "bytes": 89152
+    },
+    {
+      "Name": "W:\\CL\\data\\Target\\INTERROOT_win64\\sfx\\ResourceList\\f000675683.ffxreslist",
+      "bytes": 168
+    }
+  ],
+  "outputBytes": 2796992,
+  "existingResourcesPreserved": true
+}

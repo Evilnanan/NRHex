@@ -19,6 +19,7 @@
 | 潜在能力链、私人奖励、升级排队、圣杯瓶 | [奖励与生命周期](research/rewards-and-lifecycle.md) |
 | HKS 字节码、输入、跳跃高度、原生 ABI | [动作脚本与运行时](research/hks-and-native.md) |
 | 战技随机、子弹行为、武器丢拾身份 | [战技与武器](research/skills-and-weapons.md) |
+| Libra慢版法阵、环境来源与深度伤害 | [恶魔的注视](research/devils-gaze.md) |
 | 当前 EXE 的地址、模块与关键字段 | [版本锚点](research/native-anchors.md) |
 | 事件控制流、合并和验证边界 | [行为与验证](research/behavior-and-validation.md) |
 | 大／小图标及原版用途 | [图标资料](icons/README.md) |

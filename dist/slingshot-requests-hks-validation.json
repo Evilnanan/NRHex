@@ -1,0 +1,29 @@
+{
+  "inputSha256": "4f300e83cf02e39c389c9d454e6df5a094f8a611e6a6215ee7809bd88a3e4b70",
+  "outputSha256": "d727a9c0aa969b5f5cead9d0af7d1bff33446577e3a81366c01b4e8d352a5199",
+  "functions": [
+    {
+      "id": 9,
+      "name": "ExecEventAllBody",
+      "token": 6999967,
+      "prefixInstructions": 36
+    },
+    {
+      "id": 1255,
+      "name": "Update",
+      "token": 6999965,
+      "prefixInstructions": 28
+    }
+  ],
+  "gateCases": 48,
+  "inverseRestoresInput": true,
+  "originalBranchesUnchanged": true,
+  "entryArgumentsPreserved": true,
+  "nativeArgumentsPreserved": true,
+  "nativeSprintToggleUnchanged": true,
+  "acceptedSprintRequestOnly": true,
+  "inputEdgesSampledBeforeRequest": true,
+  "originalStaminaAndMovementCallsUnchanged": true,
+  "gameplayVerified": false,
+  "independentDecompilerReadbackPassed": true
+}

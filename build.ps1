@@ -1,4 +1,4 @@
-param([switch]$NoInstall)
+﻿param([switch]$NoInstall)
 $ErrorActionPreference = 'Stop'
 $buildDrive = [IO.Path]::GetPathRoot($PSScriptRoot)
 $me3 = Join-Path $buildDrive 'Program Files/me3/bin/me3.exe'
@@ -95,10 +95,38 @@ try {
     dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-fxr-stage
     if ($LASTEXITCODE -ne 0) { throw 'Sword private visual resource patch failed.' }
     Copy-Item -LiteralPath '.work/sword-vfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Destination 'dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Force
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --devils-gaze-resources
+    if ($LASTEXITCODE -ne 0) { throw 'Native Libra resource extraction failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --devils-gaze-resources-stage
+    if ($LASTEXITCODE -ne 0) { throw 'Libra resource merge failed.' }
+    Copy-Item -LiteralPath '.work/devils-gaze/staged/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Destination 'dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Force
+    python -X utf8 tools/build_archmage_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Archmage spell-slot script validation failed.' }
+    python -X utf8 tools/build_slingshot_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot action notification validation failed.' }
+    python -X utf8 tools/verify_slingshot_hks.py
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot independent decompiler verification failed.' }
+    python -X utf8 tools/build_slingshot_cancel_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot cancellation HKS build failed' }
+    python -X utf8 tools/verify_slingshot_cancel_hks.py
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot cancellation HKS verification failed' }
+    python -X utf8 tools/build_slingshot_landing_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot falling attack HKS build failed' }
+    python -X utf8 tools/verify_slingshot_landing_hks.py
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot falling attack HKS verification failed' }
+    python -X utf8 tools/build_slingshot_requests_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot request HKS build failed' }
+    python -X utf8 tools/verify_slingshot_requests_hks.py
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot request HKS verification failed' }
+    python -X utf8 tools/verify_slingshot_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Slingshot native impulse verification failed.' }
     cargo build --release --lib
     if ($LASTEXITCODE -ne 0) { throw 'DLL build failed.' }
     cargo run --release --bin scancheck -- $gameExe
     if ($LASTEXITCODE -ne 0) { throw 'EXE signature check failed.' }
+    python -X utf8 tools/verify_devils_gaze_immunity.py
+    if ($LASTEXITCODE -ne 0) { throw 'Native bullet contact immunity validation failed.' }
+    Copy-Item -LiteralPath '.work/devils-gaze-iframes/native-validation.json' -Destination 'dist/devils-gaze-immunity-validation.json' -Force
     if (-not $NoInstall) {
         New-Item -ItemType Directory -Path "$PSScriptRoot\dist\mod\natives" -Force | Out-Null
         Copy-Item -LiteralPath "$PSScriptRoot\target\release\NRHex.dll" -Destination "$PSScriptRoot\dist\mod\natives\NRHex.dll" -Force

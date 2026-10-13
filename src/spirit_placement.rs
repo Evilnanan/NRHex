@@ -57,7 +57,7 @@ fn clearance_start(position: [f32; 4], radius: f32) -> Vector {
 }
 // DB0B80 verified at 385668/3858E9: arguments 5..12 are on the stack,
 // including f32 radius. Returns the collision-ID output pointer.
-type Sweep = unsafe extern "system" fn(
+pub(crate) type Sweep = unsafe extern "system" fn(
     usize,
     *mut u32,
     u32,
@@ -71,7 +71,7 @@ type Sweep = unsafe extern "system" fn(
     *mut f32,
     *mut f32,
 ) -> *mut u32;
-unsafe fn clear_destination(
+pub(crate) unsafe fn clear_destination(
     sweep: Sweep,
     geometry: usize,
     position: [f32; 4],

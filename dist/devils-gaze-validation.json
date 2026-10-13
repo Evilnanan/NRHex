@@ -1,0 +1,16 @@
+{
+  "version": "0.17.75",
+  "changedAssets": {
+    "mod/regulation.bin": "60575ea03b6d7597c5f3f4cccf10a510d2b691f73235412359695dad419481c4",
+    "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "884b123c9349a5312e7b24375e771dd877eb8a5fda1498461a5d9afc27803efa",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "e043e4fcdf589c1e562a13eca9bf6c2ad339e04e42e52f995908fdf41e85c214",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "f1e7bfb691ac11718d43117492b24114dfe19290e30bc19dcfce1394c4423b3f",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "b2e136ae93cb249b9f0ec4c733360a696ce1c6167c822b0b7b244a671a3a5485",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "c7ba8688c8000f385605e97950ab502c326e754020f899bb592b8297861f6c0a",
+    "mod/natives/NRHex.dll": "b39f2d6684880d11793b5ea64769559b8333ec0379f62c52184abdabf28416fd"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

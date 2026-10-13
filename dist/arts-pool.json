@@ -1,6 +1,6 @@
 {
-  "poolCount": 183,
-  "ordinaryPoolCount": 176,
+  "poolCount": 182,
+  "ordinaryPoolCount": 175,
   "bowPoolCount": 7,
   "bowSkills": [
     400,
@@ -45,6 +45,7 @@
     2,
     10,
     117,
+    1007,
     9999
   ],
   "skills": [
@@ -849,14 +850,6 @@
       "animationType": 206
     },
     {
-      "id": 1007,
-      "textId": 1007,
-      "name": "Viper Bite",
-      "chineseName": "毒蛇咬杀",
-      "alias": "[Specific] Viper Bite",
-      "animationType": 207
-    },
-    {
       "id": 1008,
       "textId": 1008,
       "name": "Moonlight Greatsword",
@@ -1545,7 +1538,7 @@
     }
   ],
   "includesUniqueSkills": true,
-  "compatibilityFiltering": "bows_only",
+  "compatibilityFiltering": "bows_and_exclude_model_dependent_viper_bite",
   "canonicalSkillBehaviorVariations": [
     {
       "skill": 100,
@@ -1946,10 +1939,6 @@
     {
       "skill": 1006,
       "variation": 2003
-    },
-    {
-      "skill": 1007,
-      "variation": 3020
     },
     {
       "skill": 1008,

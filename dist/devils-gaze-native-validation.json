@@ -1,0 +1,21 @@
+{
+  "nativeNpcDamageCases": [
+    504.0,
+    655.0,
+    780.0,
+    928.0,
+    1280.0,
+    1485.0
+  ],
+  "nativeEnvironmentRegistryVerified": true,
+  "environmentOwnerBypassesCharacterDamage": true,
+  "nativeNetworkFieldChecksPassed": true,
+  "dependenciesStubbed": [
+    "parameter row lookup",
+    "environment handle absent from Chr manager",
+    "valid external map/target fixtures"
+  ],
+  "gameMemoryWritten": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

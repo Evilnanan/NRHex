@@ -1,0 +1,204 @@
+{
+  "cases": [
+    {
+      "quarterBase": 252,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 126.0,
+      "nativeTotal": 126.0
+    },
+    {
+      "quarterBase": 252,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 31.5,
+      "nativeTotal": 31.5
+    },
+    {
+      "quarterBase": 252,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 504.0,
+      "nativeTotal": 504.0
+    },
+    {
+      "quarterBase": 252,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 126.0,
+      "nativeTotal": 126.0
+    },
+    {
+      "quarterBase": 328,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 164.0,
+      "nativeTotal": 164.0
+    },
+    {
+      "quarterBase": 328,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 41.0,
+      "nativeTotal": 41.0
+    },
+    {
+      "quarterBase": 328,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 656.0,
+      "nativeTotal": 656.0
+    },
+    {
+      "quarterBase": 328,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 164.0,
+      "nativeTotal": 164.0
+    },
+    {
+      "quarterBase": 390,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 195.0,
+      "nativeTotal": 195.0
+    },
+    {
+      "quarterBase": 390,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 48.75,
+      "nativeTotal": 48.75
+    },
+    {
+      "quarterBase": 390,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 780.0,
+      "nativeTotal": 780.0
+    },
+    {
+      "quarterBase": 390,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 195.0,
+      "nativeTotal": 195.0
+    },
+    {
+      "quarterBase": 464,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 232.0,
+      "nativeTotal": 232.0
+    },
+    {
+      "quarterBase": 464,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 58.0,
+      "nativeTotal": 58.0
+    },
+    {
+      "quarterBase": 464,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 928.0,
+      "nativeTotal": 928.0
+    },
+    {
+      "quarterBase": 464,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 232.0,
+      "nativeTotal": 232.0
+    },
+    {
+      "quarterBase": 640,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 320.0,
+      "nativeTotal": 320.0
+    },
+    {
+      "quarterBase": 640,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 80.0,
+      "nativeTotal": 80.0
+    },
+    {
+      "quarterBase": 640,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 1280.0,
+      "nativeTotal": 1280.0
+    },
+    {
+      "quarterBase": 640,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 320.0,
+      "nativeTotal": 320.0
+    },
+    {
+      "quarterBase": 743,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 371.5,
+      "nativeTotal": 371.5
+    },
+    {
+      "quarterBase": 743,
+      "playerScale": 1.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 92.875,
+      "nativeTotal": 92.875
+    },
+    {
+      "quarterBase": 743,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 1.0,
+      "holyOutput": 1486.0,
+      "nativeTotal": 1486.0
+    },
+    {
+      "quarterBase": 743,
+      "playerScale": 4.0,
+      "defense": 0.5,
+      "guard": 0.25,
+      "holyOutput": 371.5,
+      "nativeTotal": 371.5
+    }
+  ],
+  "nativeDefensiveCoefficientsPreserved": true,
+  "gameMemoryWritten": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "version": "0.17.84",
+  "nativePartyMembershipRequired": true,
+  "hostilePlayerInsExcluded": true,
+  "nativePartyLookupCases": 7
+}

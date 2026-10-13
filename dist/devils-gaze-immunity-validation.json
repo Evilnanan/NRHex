@@ -1,0 +1,92 @@
+{
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "nativeContactRva": "0x33c120",
+  "nativeCharacterFilterRva": "0x436370",
+  "nativePlayerImmunityRva": "0x66d3e0",
+  "nativePredicateAndCharacterFilterExecuted": true,
+  "environmentSkipsImmunityReproduced": true,
+  "cases": [
+    {
+      "state": "ordinary",
+      "nativeImmune": false,
+      "contactBySourceKind": {
+        "1": [
+          "damage/reaction",
+          "bullet effects/Madness"
+        ],
+        "6": [
+          "damage/reaction",
+          "bullet effects/Madness"
+        ]
+      }
+    },
+    {
+      "state": "TAE full immunity",
+      "nativeImmune": true,
+      "contactBySourceKind": {
+        "1": [],
+        "6": [
+          "damage/reaction",
+          "bullet effects/Madness"
+        ]
+      }
+    },
+    {
+      "state": "TAE standard immunity",
+      "nativeImmune": true,
+      "contactBySourceKind": {
+        "1": [],
+        "6": [
+          "damage/reaction",
+          "bullet effects/Madness"
+        ]
+      }
+    },
+    {
+      "state": "character immunity",
+      "nativeImmune": true,
+      "contactBySourceKind": {
+        "1": [],
+        "6": [
+          "damage/reaction",
+          "bullet effects/Madness"
+        ]
+      }
+    },
+    {
+      "state": "player invulnerability timer",
+      "nativeImmune": true,
+      "contactBySourceKind": {
+        "1": [],
+        "6": [
+          "damage/reaction",
+          "bullet effects/Madness"
+        ]
+      }
+    },
+    {
+      "state": "unrelated guard flag",
+      "nativeImmune": false,
+      "contactBySourceKind": {
+        "1": [
+          "damage/reaction",
+          "bullet effects/Madness"
+        ],
+        "6": [
+          "damage/reaction",
+          "bullet effects/Madness"
+        ]
+      }
+    }
+  ],
+  "stubbedDependencies": [
+    "source/parameter lookup",
+    "team eligibility",
+    "damage/reaction sink",
+    "bullet-effect sink",
+    "contact bookkeeping"
+  ],
+  "gameMemoryWritten": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

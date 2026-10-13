@@ -91,6 +91,24 @@ try:
  assert pe.get_data(0x43d2bf, 11) == bytes.fromhex('83 f8 01 4c 8b e3 74 03 4d 8b e5')
  assert pe.get_data(0x2c16f10 + 0x3d8, 8) == struct.pack('<Q', 0x1404da660)
  assert pe.get_data(0x2c307f8 + 0x3d8, 8) == struct.pack('<Q', 0x1406695a0)
+ # Gaze uses the same combiner with a per-recipient copied holy component.
+ # The native PlayerIns predicate is identity-based, not the local-PC getter.
+ assert pe.get_data(0x2c307f8 + 0x118,8)==struct.pack('<Q',0x1404d2f00)
+ assert pe.get_data(0x2c18120 + 0x118,8)==struct.pack('<Q',0x1403d45c0)
+ player_query=c.WINFUNCTYPE(c.c_ubyte,c.c_void_p)(memory+0x4d2f00)
+ enemy_query=c.WINFUNCTYPE(c.c_ubyte,c.c_void_p)(memory+0x3d45c0)
+ assert player_query(0x111)==1 and player_query(0x222)==1 and enemy_query(0x333)==0
+ gaze_cases=[]
+ for damage in [252,328,390,464,640,743]:
+  for scale in [1.,4.]:
+   for guard_rate in [1.,.25]:
+    incoming=array(0,0,0,0,damage*scale);defense=array(*([.5]*5));guard=array(*([guard_rate]*5));output=array()
+    total=calculate(c.addressof(output),c.addressof(incoming),c.addressof(neutral),c.addressof(neutral),
+      c.addressof(defense),c.addressof(guard),c.addressof(neutral),c.addressof(neutral),*([1.]*7))
+    expected=damage*scale*.5*guard_rate
+    assert abs(output[4]-expected)<.001 and list(output)[:4]==[0.]*4
+    assert list(incoming)==[0.,0.,0.,0.,damage*scale]
+    gaze_cases.append(dict(quarterBase=damage,playerScale=scale,defense=.5,guard=guard_rate,holyOutput=output[4],nativeTotal=total))
 finally:
  assert k.VirtualFree(memory, 0, 0x8000)
 work = ROOT / '.work/glass-cannon-01769'
@@ -101,3 +119,7 @@ work.mkdir(exist_ok=True)
  sourceResolvedByNative=True, originalFlagsPreserved=True,
  gameMemoryWritten=False, gameplayVerified=False, multiplayerVerified=False), indent=2), encoding='utf-8')
 print(f'PASS: {len(reports)+1+len(object_cases)} native cases; five damage elements, five defensive layers, shield and source resolution; no game writes')
+gaze_work=ROOT/'.work/devils-gaze-player-damage';gaze_work.mkdir(exist_ok=True)
+(gaze_work/'native-validation.json').write_text(json.dumps(dict(cases=gaze_cases,playerPredicateCoversLocalAndRemoteInstances=True,
+ nativeDefensiveCoefficientsPreserved=True,gameMemoryWritten=False,gameplayVerified=False,multiplayerVerified=False),indent=2),encoding='utf8')
+print('PASS: 24 gaze damage cases; player versus enemy identity and native defense/guard coefficients preserved.')

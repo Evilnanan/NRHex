@@ -4,12 +4,12 @@ import json,runpy,sys,struct,hashlib
 root=Path(__file__).resolve().parents[1]
 p=json.loads((root/'.work/arts/parameters.json').read_text())
 pool=json.loads((root/'dist/arts-pool.json').read_text(encoding='utf8'))
-assert pool['poolCount']==183 and pool['ordinaryPoolCount']==176 and pool['bowPoolCount']==7
+assert pool['poolCount']==182 and pool['ordinaryPoolCount']==175 and pool['bowPoolCount']==7
 assert pool['bowSkills']==[400,401,402,404,405,406,1169]
 weapons={x['ID']:x['fields'] for x in p['weapons']};skills={x['ID']:x['fields'] for x in p['arts']}
 assert pool['bowWeapons']==sorted(i for i,w in weapons.items() if w['wepType'] in [50,51,53])
 assert all(weapons[skills[i]['sparringGroundsWeaponId']]['wepType'] in [50,51,53] for i in pool['bowSkills'])
-assert {0,1,2,10,117,9999}.isdisjoint(x['id'] for x in pool['skills'])
+assert {0,1,2,10,117,1007,9999}.isdisjoint(x['id'] for x in pool['skills'])
 assert skills[117]['swordArtsType']==17 and skills[117]['isGrayOutRightHand']==skills[117]['isGrayOutBothHand']==1
 for i in [1,10]:assert skills[i]['swordArtsType']==255
 full=(root/'data/reference/actions/swordarts-enable.lua').read_text(encoding='utf8')
@@ -28,7 +28,7 @@ source=(root/'src/lib.rs').read_text(encoding='utf8')
 assert 'type ArtsBulletFn=unsafe extern "system" fn(usize,i32,i32,usize,i32,i32,u8,u8,u8,usize)->u8' in source
 assert 'arts::pool(w.base)' in source and 'arts::emitter_dummy(selected,w.base,behavior,read_i32(descriptor))' in source
 assert 'shadow[..4].copy_from_slice(&dummy.to_le_bytes())' in source
-report=dict(version='0.15.5',poolCount=183,ordinaryPoolCount=176,bowPoolCount=7,bowSkills=pool['bowSkills'],
+report=dict(version='0.17.79',poolCount=182,ordinaryPoolCount=175,bowPoolCount=7,bowSkills=pool['bowSkills'],
  bowWeaponTypes=[50,51,53],bowWeaponCount=len(pool['bowWeapons']),excludedUnusableSkills=pool['excludedUnusableSkills'],
  torchNativeAnimationTypeDisabled=17,allOtherNamedSkillsRetained=True,
  projectileCreationRva='3975D0',nativeArgumentCount=10,nativeReturn='AL/u8',
@@ -37,4 +37,4 @@ report=dict(version='0.15.5',poolCount=183,ordinaryPoolCount=176,bowPoolCount=7,
  originalFireShieldMuzzlesUnchanged=True,nativeParametersAndTaeUnchanged=True,
  nativeMappingVerified=True,gameplayVerified=False,multiplayerVerified=False)
 (root/'dist/arts-constraints-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
-print('PASS: 176 general / 7 bow skills, unusable skills excluded, fire emitter forwards ten native arguments with a private origin copy.')
+print('PASS: 175 general / 7 bow skills, unusable skills excluded, fire emitter forwards ten native arguments with a private origin copy.')

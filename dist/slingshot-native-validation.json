@@ -1,0 +1,214 @@
+{
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "nativeLaunch": "0x4739f0",
+  "horizontalGetter": "0xe737b0",
+  "nativeCases": [
+    {
+      "row": 100,
+      "stacks": 0,
+      "velocity": [
+        0.0,
+        9.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "row": 100,
+      "stacks": 1,
+      "velocity": [
+        0.0,
+        9.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "row": 100,
+      "stacks": 2,
+      "velocity": [
+        0.0,
+        9.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "row": 100,
+      "stacks": 3,
+      "velocity": [
+        0.0,
+        9.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "row": 101,
+      "stacks": 0,
+      "velocity": [
+        0.0,
+        9.0,
+        -1.7999999523162842,
+        0.0
+      ]
+    },
+    {
+      "row": 101,
+      "stacks": 1,
+      "velocity": [
+        0.0,
+        9.0,
+        -1.7999999523162842,
+        0.0
+      ]
+    },
+    {
+      "row": 101,
+      "stacks": 2,
+      "velocity": [
+        0.0,
+        9.0,
+        -1.7999999523162842,
+        0.0
+      ]
+    },
+    {
+      "row": 101,
+      "stacks": 3,
+      "velocity": [
+        0.0,
+        9.0,
+        -1.7999999523162842,
+        0.0
+      ]
+    },
+    {
+      "row": 111,
+      "stacks": 0,
+      "velocity": [
+        0.0,
+        9.0,
+        -4.300000190734863,
+        0.0
+      ]
+    },
+    {
+      "row": 111,
+      "stacks": 1,
+      "velocity": [
+        0.0,
+        9.0,
+        -4.300000190734863,
+        0.0
+      ]
+    },
+    {
+      "row": 111,
+      "stacks": 2,
+      "velocity": [
+        0.0,
+        9.0,
+        -4.300000190734863,
+        0.0
+      ]
+    },
+    {
+      "row": 111,
+      "stacks": 3,
+      "velocity": [
+        0.0,
+        9.0,
+        -4.300000190734863,
+        0.0
+      ]
+    },
+    {
+      "row": 121,
+      "stacks": 0,
+      "velocity": [
+        0.0,
+        9.0,
+        -7.0,
+        0.0
+      ]
+    },
+    {
+      "row": 121,
+      "stacks": 1,
+      "velocity": [
+        0.0,
+        9.0,
+        -7.0,
+        0.0
+      ]
+    },
+    {
+      "row": 121,
+      "stacks": 2,
+      "velocity": [
+        0.0,
+        9.0,
+        -7.0,
+        0.0
+      ]
+    },
+    {
+      "row": 121,
+      "stacks": 3,
+      "velocity": [
+        0.0,
+        9.0,
+        -7.0,
+        0.0
+      ]
+    },
+    {
+      "row": 131,
+      "stacks": 0,
+      "velocity": [
+        0.0,
+        9.0,
+        -8.0,
+        0.0
+      ]
+    },
+    {
+      "row": 131,
+      "stacks": 1,
+      "velocity": [
+        0.0,
+        9.0,
+        -10.0,
+        0.0
+      ]
+    },
+    {
+      "row": 131,
+      "stacks": 2,
+      "velocity": [
+        0.0,
+        9.0,
+        -12.0,
+        0.0
+      ]
+    },
+    {
+      "row": 131,
+      "stacks": 3,
+      "velocity": [
+        0.0,
+        9.0,
+        -14.0,
+        0.0
+      ]
+    }
+  ],
+  "sprintJumpRow": 131,
+  "ordinaryJumpRowsUnchanged": true,
+  "verticalVelocityUnchanged": true,
+  "oneShotRowConsumedByNative": true,
+  "parameterRowsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

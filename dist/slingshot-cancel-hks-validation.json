@@ -1,0 +1,26 @@
+{
+  "inputSha256": "43c2522b4c1eca2cc054820696aeab1db6be5ed45534c4107762ecc6822e993d",
+  "outputSha256": "36883360fe8751743323d5d4cd7e287082582254b1daa8c47dc853f1f6cfc408",
+  "functions": [
+    {
+      "id": 1245,
+      "name": "SpeedUpdate",
+      "token": 6999964,
+      "insertedInstructions": 14,
+      "insertionPc": 426,
+      "relocatedBranches": 91
+    }
+  ],
+  "gateCases": 2,
+  "inverseRestoresInput": true,
+  "originalBranchesUnchanged": true,
+  "entryArgumentsPreserved": true,
+  "nativeArgumentsPreserved": true,
+  "nativeSprintToggleUnchanged": true,
+  "onlyAcceptedToggleCancellationClearsStacks": true,
+  "originalStaminaAndMovementCallsUnchanged": true,
+  "gameplayVerified": false,
+  "independentDecompilerReadbackPassed": true,
+  "nativeCancellationGuardCases": 12,
+  "liveRegistersPreserved": true
+}

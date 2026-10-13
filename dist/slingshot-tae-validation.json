@@ -1,0 +1,368 @@
+{
+  "originalAnibndSha256": "610f553520e5127da7366fe6c619683acac11b7aee6f6b2450b8186af0b573e1",
+  "playerAnimationSets": 9,
+  "nativeVelocityEvents": [
+    {
+      "file": "a00.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a00.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a00.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a00.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a00.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    },
+    {
+      "file": "a02.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a02.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a02.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a02.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a02.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    },
+    {
+      "file": "a03.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a03.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a03.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a03.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a03.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    },
+    {
+      "file": "a10.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a10.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a10.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a10.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a10.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    },
+    {
+      "file": "a12.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a12.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a12.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a12.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a12.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    },
+    {
+      "file": "a13.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a13.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a13.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a13.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a13.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    },
+    {
+      "file": "a14.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a14.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a14.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a14.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a14.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    },
+    {
+      "file": "a15.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a15.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a15.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a15.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a15.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    },
+    {
+      "file": "a16.tae",
+      "animation": 202000,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "64000000000000000000000000000000"
+    },
+    {
+      "file": "a16.tae",
+      "animation": 202010,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "65000000000000000000000000000000"
+    },
+    {
+      "file": "a16.tae",
+      "animation": 202020,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "6F000000000000000000000000000000"
+    },
+    {
+      "file": "a16.tae",
+      "animation": 202030,
+      "Type": 530,
+      "StartTime": 0.2,
+      "EndTime": 0.3,
+      "bytes": "79000000000000000000000000000000"
+    },
+    {
+      "file": "a16.tae",
+      "animation": 202050,
+      "Type": 530,
+      "StartTime": 0.16666667,
+      "EndTime": 0.26666668,
+      "bytes": "83000000000000000000000000000000"
+    }
+  ],
+  "sprintJumpRow": 131,
+  "gameplayVerified": false
+}

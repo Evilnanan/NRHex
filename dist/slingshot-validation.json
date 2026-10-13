@@ -1,0 +1,25 @@
+{
+  "version": "0.17.88",
+  "changedAssets": {
+    "mod/regulation.bin": "fcd1ee3445001b60662677bd610fb89b11da8bb41209bac726591e14605aae5d",
+    "mod/action/script/c0000.hks": "d727a9c0aa969b5f5cead9d0af7d1bff33446577e3a81366c01b4e8d352a5199",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "7a29552b4ea486d1fd2ee9d5286ca14c015fc15e6a51167f1d3d68c948cdaabb",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "f1e7bfb691ac11718d43117492b24114dfe19290e30bc19dcfce1394c4423b3f",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "eea05710a1c1feef89e4bbba79c8b5851d2af28ef31b3468c0f141d50aef565f",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "c7ba8688c8000f385605e97950ab502c326e754020f899bb592b8297861f6c0a",
+    "mod/natives/NRHex.dll": "ad457699e71f8632b5f9979bbdffcd59c728eeb7466bc055d8a90d9f9bb2460f"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "sprintJumpRow": 131,
+  "ordinaryJumpsUnchanged": true,
+  "acceptedCancellationClearsPending": true,
+  "transientGroundFlagDoesNotRejectStart": true,
+  "earlyLandingAttackCallbacksCovered": true,
+  "repeatedJumpNotificationPreservesLayers": true,
+  "newNativeTakeoffClearsPreviousBonus": true,
+  "sprintRequestPerInputPress": true,
+  "horizontalSpeedPerStack": 0.25
+}

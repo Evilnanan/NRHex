@@ -33,7 +33,7 @@ for p in (dist/'mod').rglob('*'):
 write('mod/natives/NRHex.dll',dll.read_bytes())
 ini=destination/'mod/natives/NRHex.ini'
 config=(ini if ini.exists() else dist/'mod/natives/NRHex.ini').read_text(encoding='utf-8-sig')
-retired={'VirtualKey','TestVirtualKey','NewHexVirtualKey','ChantVirtualKey','AngelChantVirtualKey','StormTestVirtualKey','RequireControl','CooldownMs','SwordNearDistance'}
+retired={'VirtualKey','TestVirtualKey','NewHexVirtualKey','ChantVirtualKey','GazeVirtualKey','AngelChantVirtualKey','StormTestVirtualKey','RequireControl','CooldownMs','SwordNearDistance'}
 config='\n'.join(line for line in config.splitlines() if not line.startswith(('; Ctrl+','; Test reward hotkeys are disabled')) and line.split('=',1)[0].strip() not in retired)
 config=config.replace('[TestSpawn]','[Settings]')
 write('mod/natives/NRHex.ini',('; Test reward hotkeys are disabled at compile time.\n'+config+'\n').encode('utf-8'))

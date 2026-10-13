@@ -114,10 +114,11 @@ pub fn behavior(judge:i32,skill:i32)->Option<i32>{
  #[test]fn bows_and_other_weapons_have_disjoint_usable_pools(){
   assert_eq!(pool(41000000),&[400,401,402,404,405,406,1169]);
   assert_eq!(pool(42000000),pool(41000000));
-  let ordinary=pool(2000000);assert_eq!(ordinary.len(),176);
-  for id in [0,1,2,10,117,9999,400,401,402,404,405,406,1169]{assert!(!ordinary.contains(&id));}
+  let ordinary=pool(2000000);assert_eq!(ordinary.len(),175);
+  for id in [0,1,2,10,117,1007,9999,400,401,402,404,405,406,1169]{assert!(!ordinary.contains(&id));}
   for id in pool(41000000){assert!(!ordinary.contains(id));}
   assert!(ordinary.contains(&1001)&&ordinary.contains(&1002));
+  assert_eq!(original(30200000,-1),Some(1007)); // Native Coil Shield remains intact.
  }
  #[test]fn fire_shield_muzzles_use_body_origin_only_for_random_cross_weapon_skill(){
   for (id,family,point) in [(1001,3215,141),(1002,3216,142)]{

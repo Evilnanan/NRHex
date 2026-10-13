@@ -1,0 +1,16 @@
+{
+  "version": "0.17.89",
+  "intervalSeconds": [
+    6,
+    26
+  ],
+  "outerRadiusMetres": 16,
+  "triangleEdgeMetres": 27.712812921102035,
+  "targetedTestsPassed": 3,
+  "onlyModAssetChanged": "mod/natives/NRHex.dll",
+  "dllSha256": "797cde1bfcd9e78cfd34660942c913322b99e853cd9f124eb7e9a731aae00a76",
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

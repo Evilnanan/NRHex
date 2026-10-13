@@ -38,9 +38,9 @@ storm=[x for x in params['custom'] if x['fields']['swordArtsTableId'] in stormTa
 assert len(storm)==10
 pool=json.loads((root/'dist/arts-pool.json').read_text(encoding='utf8'))
 texts=json.loads((root/'.work/arts/arts-names.json').read_text())
-assert pool['poolCount']==183 and pool['protectedOriginalSkills']==[1200,303]
-assert pool['ordinaryPoolCount']==176 and pool['bowPoolCount']==7
-assert {0,1,2,10,117,9999}.isdisjoint(s['id'] for s in pool['skills'])
+assert pool['poolCount']==182 and pool['protectedOriginalSkills']==[1200,303]
+assert pool['ordinaryPoolCount']==175 and pool['bowPoolCount']==7
+assert {0,1,2,10,117,1007,9999}.isdisjoint(s['id'] for s in pool['skills'])
 assert {104,121,407,1180,1181}.isdisjoint(s['id'] for s in pool['skills'])
 assert {100,303,1200}.issubset(s['id'] for s in pool['skills'])
 for skill in pool['skills']:

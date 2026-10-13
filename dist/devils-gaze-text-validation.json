@@ -1,0 +1,105 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "E711E3075F5A04ED96944D35871CBF92336F761521466F6D5EB900A9A383761D",
+  "englishSource": "docs/hexes.en.md",
+  "englishSourceSha256": "33DE7595114D1C1860DFE9A0B0428F6CA69B17462240CBDAFF36B4984ABEEBA0",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "7A40AD39F82E0A75FCBBA184F4D0B3580215AF19CFA7E32C9792FE47B21DC1F6",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "9E47A49DD55B2FA63BCB6FA50FC156F7DF3BA3F905E8A24AE6FEE4484E955B79",
+      "outputSha256": "E043E4FCDF589C1E562A13ECA9BF6C2AD339E04E42E52F995908FDF41E85C214",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "\u6076\u9B54\u7684\u6CE8\u89C6"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "\u65F6\u4E0D\u65F6\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\uFF0C\u4E0D\u5206\u654C\u6211"
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "\u6076\u9B54\u7684\u6CE8\u89C6"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "\u65F6\u4E0D\u65F6\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\uFF0C\u4E0D\u5206\u654C\u6211"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "\u65F6\u4E0D\u65F6\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\uFF0C\u4E0D\u5206\u654C\u6211"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "B289E3803DCF3D636891B96A160AD2956EA556FC26CBF8D31A9AB4BCC66D689C",
+      "outputSha256": "B2E136AE93CB249B9F0EC4C733360A696CE1C6167C822B0B7B244A671A3A5485",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "Demon\u0027s Gaze"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "Periodically creates golden magic circles nearby that erupt after a brief delay, harming friend and foe alike."
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "Demon\u0027s Gaze"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "Periodically creates golden magic circles nearby that erupt after a brief delay, harming friend and foe alike."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002200,
+          "before": null,
+          "after": "Periodically creates golden magic circles nearby that erupt after a brief delay, harming friend and foe alike."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "outputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

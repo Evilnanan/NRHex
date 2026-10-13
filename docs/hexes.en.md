@@ -103,3 +103,18 @@ Stores the soul of a powerful enemy defeated by the party, replacing it only wit
 ## Don't Change the Channel
 
 Restores 30 stamina per second while charging sorceries or incantations.
+
+<!-- hex:95002100 -->
+## Archmage
+
+Reduces FP consumption of sorceries and incantations by 100%. When consecutive casts end, replaces the spell used in each catalyst slot with a random spell of the same type.
+
+<!-- hex:95002200 -->
+## Demon's Gaze
+
+Periodically creates golden magic circles nearby that erupt after a brief delay, harming friend and foe alike.
+
+<!-- hex:95002300 -->
+## Slingshot
+
+Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 30%.

@@ -26,6 +26,7 @@
 | 刷怪笼 | `HexBuild/Cages.cs`、`verify_cages.py`、`cage_local_events.py`、`build-cages.ps1`、`data/reference/world/cage-bosses.json` |
 | 百般武艺 | `arts.rs`、`arts_data.rs`、`build_arts_data.py`、`build_arts_hks.py` |
 | 气球、强化【死灵术】、别停止咏唱 | `balloon.rs`／`balloon_runtime.rs`／`ability_damage.rs`（只提供基础攻击值，余下由原生结算）、`spirit.rs`／`spirit_runtime.rs`、`chant.rs` |
+| 大法师：法术槽随机、丢拾与装备同步 | `archmage.rs`、`archmage_runtime.rs`、`archmage_data.rs`、`HexBuild/Archmage.cs`、`build_archmage_hks.py` |
 | PE／特征／挂钩 | `pe.rs`、`pattern.rs`、`hook.rs`、`win.rs` |
 
 再生术蓝血转换比为1:4：血量不满时，每0.25秒消耗4FP、回复16HP。数值由 `HexBuild/Program.cs` 的95000601参数行生成，运行时仅管理触发间隔与资源条件；满血喝瓶回复50%FP沿用原逻辑。增量回读证据见 `dist/regen-balance-validation.json`。
@@ -47,3 +48,5 @@
 ## 已知的验证边界
 
 用户已确认精简风暴管束者特效包的测试成功。两份构建的快捷键差异、4米固定距离及目录布局经过构建和相关检查；未将这些检查视为新版本实机或联机验收。其他玩法与联机状态以对应研究记录和用户反馈为准。
+
+恶魔的注视：`src/devils_gaze.rs`负责周期和三角分布，`src/devils_gaze_runtime.rs`负责地面／障碍检测、环境来源和原生弹丸发射；`src/devils_gaze_hit.rs`在私有法阵接触角色时补回场景来源分支缺失的原生攻击免疫筛选，统一阻止免疫时的伤害、受击和发狂；`src/devils_gaze_audio.rs`负责原生Libra声音包的一次性引用；`tools/HexBuild/DevilsGaze.cs`负责原生慢版法阵、深度伤害、精简资源包及参数回读。

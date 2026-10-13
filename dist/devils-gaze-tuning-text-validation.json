@@ -1,0 +1,62 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "7933B6C277CBA4AE044A6B6BCA540FEFD91ED7D029A047949816C5602ABFC3A7",
+  "englishSource": "docs/hexes.en.md",
+  "englishSourceSha256": "33DE7595114D1C1860DFE9A0B0428F6CA69B17462240CBDAFF36B4984ABEEBA0",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "7A40AD39F82E0A75FCBBA184F4D0B3580215AF19CFA7E32C9792FE47B21DC1F6",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "E043E4FCDF589C1E562A13ECA9BF6C2AD339E04E42E52F995908FDF41E85C214",
+      "outputSha256": "A5878932EEE06895CC4EF4DF68A094F44FFB0B0132F6182ECEA459546FDCC887",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95001500,
+          "before": "\u6807\u8BB0\u81EA\u5DF1\u65F6\uFF0C\u5F62\u6210\u7194\u5CA9\uFF0C\u77ED\u6682\u5EF6\u8FDF\u540E\u7206\u53D1\u3002\u671F\u95F4\u6BCF\u6B21\u6807\u8BB0\u81EA\u5DF1\u90FD\u4F1A\u4E3A\u8FD9\u9897\u7194\u5CA9\u63D0\u5347\u4F24\u5BB3",
+          "after": "\u6807\u8BB0\u81EA\u5DF1\u65F6\uFF0C\u5F62\u6210\u7194\u5CA9\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\u3002\u671F\u95F4\u6BCF\u6B21\u6807\u8BB0\u81EA\u5DF1\u90FD\u4F1A\u4E3A\u8FD9\u9897\u7194\u5CA9\u63D0\u5347\u4F24\u5BB3"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95001500,
+          "before": "\u6807\u8BB0\u81EA\u5DF1\u65F6\uFF0C\u5F62\u6210\u7194\u5CA9\uFF0C\u77ED\u6682\u5EF6\u8FDF\u540E\u7206\u53D1\u3002\u671F\u95F4\u6BCF\u6B21\u6807\u8BB0\u81EA\u5DF1\u90FD\u4F1A\u4E3A\u8FD9\u9897\u7194\u5CA9\u63D0\u5347\u4F24\u5BB3",
+          "after": "\u6807\u8BB0\u81EA\u5DF1\u65F6\uFF0C\u5F62\u6210\u7194\u5CA9\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\u3002\u671F\u95F4\u6BCF\u6B21\u6807\u8BB0\u81EA\u5DF1\u90FD\u4F1A\u4E3A\u8FD9\u9897\u7194\u5CA9\u63D0\u5347\u4F24\u5BB3"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95001500,
+          "before": "\u6807\u8BB0\u81EA\u5DF1\u65F6\uFF0C\u5F62\u6210\u7194\u5CA9\uFF0C\u77ED\u6682\u5EF6\u8FDF\u540E\u7206\u53D1\u3002\u671F\u95F4\u6BCF\u6B21\u6807\u8BB0\u81EA\u5DF1\u90FD\u4F1A\u4E3A\u8FD9\u9897\u7194\u5CA9\u63D0\u5347\u4F24\u5BB3",
+          "after": "\u6807\u8BB0\u81EA\u5DF1\u65F6\uFF0C\u5F62\u6210\u7194\u5CA9\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\u3002\u671F\u95F4\u6BCF\u6B21\u6807\u8BB0\u81EA\u5DF1\u90FD\u4F1A\u4E3A\u8FD9\u9897\u7194\u5CA9\u63D0\u5347\u4F24\u5BB3"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "B2E136AE93CB249B9F0EC4C733360A696CE1C6167C822B0B7B244A671A3A5485",
+      "outputSha256": "B2E136AE93CB249B9F0EC4C733360A696CE1C6167C822B0B7B244A671A3A5485",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "outputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

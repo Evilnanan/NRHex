@@ -1,0 +1,88 @@
+{
+  "inputSha256": "3786fd662fdac7188ae312796802e36bb0d4bbeebc347874439e9205ac5448b5",
+  "outputSha256": "43c2522b4c1eca2cc054820696aeab1db6be5ed45534c4107762ecc6822e993d",
+  "functions": [
+    {
+      "id": 259,
+      "name": "SprintStart_onActivate",
+      "token": 6999961,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1508,
+      "name": "JumpCommonFunction",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1518,
+      "name": "Jump_N_onActivate",
+      "token": 6999962,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1521,
+      "name": "Jump_F_onActivate",
+      "token": 6999962,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1524,
+      "name": "Jump_D_onActivate",
+      "token": 6999962,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1527,
+      "name": "Jump_S_onActivate",
+      "token": 6999962,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1543,
+      "name": "Jump_Loop_onUpdate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1546,
+      "name": "Power_JumpHardAttack_Loop_onUpdate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1549,
+      "name": "Jump_LandAttack_Normal_onUpdate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1552,
+      "name": "Jump_LandAttack_Hard_onUpdate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1554,
+      "name": "JumpLandCommonFunction",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1561,
+      "name": "Power_JumpHardAttack_Land_onUpdate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    }
+  ],
+  "gateCases": 24,
+  "inverseRestoresInput": true,
+  "originalBranchesUnchanged": true,
+  "entryArgumentsPreserved": true,
+  "nativeArgumentsPreserved": true,
+  "nativeSprintToggleUnchanged": true,
+  "onlyActualSprintActivationGrantsStacks": true,
+  "multiHitLandingCallbacksIncluded": true,
+  "gameplayVerified": false,
+  "independentDecompilerReadbackPassed": true
+}

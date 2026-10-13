@@ -1,0 +1,37 @@
+{
+  "version": "0.17.73",
+  "buildPassed": true,
+  "scope": "Archmage excludes native weapon/shield enchantments; latest user text rebuilt",
+  "rustTestsPassed": 234,
+  "runtimeSignaturesVerified": 95,
+  "abilityCount": 19,
+  "orderedChoices": 5814,
+  "sorceryPool": 28,
+  "incantationPool": 43,
+  "excludedEnchantmentIds": [
+    4460,
+    4470,
+    4490,
+    6320,
+    6740,
+    6770,
+    6960,
+    7230
+  ],
+  "originalSpellTypesPreserved": true,
+  "dllSha256": "ac7a7a87d6e802c68dcfc17e4eedb9427f452a829342d04ac71fec7711b9b544",
+  "installedDllSha256": "ac7a7a87d6e802c68dcfc17e4eedb9427f452a829342d04ac71fec7711b9b544",
+  "groupDllSha256": "12442614c8f143557c1b6f1c3d4144f9f7a19331d5feed0a23d04628974a274d",
+  "changedAssets": [
+    "mod/natives/NRHex.dll",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx"
+  ],
+  "otherAssetsAndSettingsPreserved": true,
+  "latestTextSourcesVerified": true,
+  "me3ProfilesValid": true,
+  "groupPackageUpdated": true,
+  "groupTestHotkeys": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameStarted": false
+}

@@ -62,6 +62,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
+if(args.Contains("--archmage-probe")){Archmage.Probe(root,bnd,Parse);return;}
 if(args.Contains("--cage-group-npcs")){
  CageGroups.ExportNpcs(root,Parse("NpcParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="NpcParam.param").Bytes),Hash(source));
  return;
@@ -77,6 +79,13 @@ if(args.Contains("--storm-archive-probe")){StormVfx.ArchiveProbe(smith);return;}
 if(args.Contains("--storm-extract")){StormVfx.Extract(root,smith,game);return;}
 if(args.Contains("--storm-resources")){StormVfx.Resources(root);return;}
 if(args.Contains("--storm-vfx-stage")){StormVfx.Stage(root);return;}
+if(args.Contains("--devils-gaze-resources")){DevilsGaze.Resources(root,smith,game);return;}
+if(args.Contains("--devils-gaze-tune")){DevilsGaze.Tune(root,Parse);return;}
+if(args.Contains("--devils-gaze-hitfix")){DevilsGaze.StageHitFix(root,Parse);return;}
+if(args.Contains("--devils-gaze-probe")){DevilsGaze.Probe(root,bnd,Parse);return;}
+if(args.Contains("--devils-gaze-resources-stage")){DevilsGaze.StageResources(root);return;}
+if(args.Contains("--balloon-attribute-probe")){BalloonAttribute.Probe(root,Parse);return;}
+if(args.Contains("--balloon-attribute-stage")){BalloonAttribute.Stage(root,Parse);return;}
 if(args.Contains("--ability-buffs-probe")){AbilityBuffs.Probe(root,Parse);return;}
 if(args.Contains("--red-envelope-probe")){RedEnvelope.Probe(root,bnd,Parse);return;}
 if(args.Contains("--red-envelope-only")){RedEnvelope.Stage(root,Parse);return;}
@@ -90,7 +99,7 @@ if(args.Contains("--coop-01749-probe")){CoopAudit.Probe(root,Parse,Parse("NpcPar
 if(args.Contains("--coop-01749-stage")){CoopAudit.Stage(root,Parse);return;}
 if(args.Contains("--spirit-corpse-cue-only")){SpiritPlacement.Stage(root,Parse);return;}
 if(args.Contains("--spirit-cue-visibility-only")){SpiritPlacement.StageVisibility(root,Parse);return;}
-var names=new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods","ItemTableParam","ItemLotParam_enemy","Bullet","AtkParam_Pc","BehaviorParam_PC","SpEffectVfxParam","NpcParam","NpcThinkParam","ChaosMatchingCorrectParam","ChaosMatchingMutationCategoryParam","ChaosMatchingMutationEnemyTableParam","SpEffectSetParam","LotBaseMapPatternFlag"};
+var names=new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods","ItemTableParam","ItemLotParam_enemy","Bullet","AtkParam_Pc","AtkParam_Npc","BehaviorParam_PC","SpEffectVfxParam","NpcParam","NpcThinkParam","ChaosMatchingCorrectParam","ChaosMatchingMutationCategoryParam","ChaosMatchingMutationEnemyTableParam","SpEffectSetParam","LotBaseMapPatternFlag"};
 var files=names.ToDictionary(n=>n,n=>bnd.Files.Single(f=>Path.GetFileName(f.Name)==n+".param"));
 var pars=files.ToDictionary(k=>k.Key,k=>Parse(k.Key,k.Value.Bytes));
 if(args.Contains("--spirit-rework-probe")){SpiritRework.Probe(root,bnd,Parse);return;}
@@ -600,6 +609,9 @@ if(args.Contains("--export-descriptions")){
  Console.WriteLine("Exported 15 current Chinese descriptions from the working Mod package.");return;
 }
 var hexes=HexCatalog.Load(root);
+if(args.Contains("--slingshot-stage")){Slingshot.Stage(root,bnd,Parse,hexes);return;}
+if(args.Contains("--archmage-stage")){Archmage.Stage(root,bnd,Parse,hexes);return;}
+if(args.Contains("--devils-gaze-stage")){DevilsGaze.Stage(root,bnd,Parse,hexes);return;}
 if(args.Contains("--hex-icons-only")){HexIcons.Stage(root,Parse,hexes.Single(h=>h.Id==int.Parse(args[Array.IndexOf(args,"--hex-icons-only")+1])));return;}
 if(args.Contains("--glass-cannon-only")){GlassCannon.Stage(root,Parse,HexCatalog.Load(root));return;}
 if((args.Contains("--balloon-balance-only")||args.Contains("--balloon-resistance-only")||args.Contains("--balloon-01754-only"))){BalloonBalance.Stage(root,Parse,hexes);return;}
@@ -649,6 +661,7 @@ if(args.Contains("--jiahao-only")||args.Contains("--sword-only")){
 // Native dormant powers are goods of type 11. ItemTable category 1 resolves
 // EquipParamGoods first; vagrantItemLotId then references PermanentBuffParam.
 // Without this wrapper the reward UI falls back to an unknown ordinary good.
+Archmage.WriteData(root,bnd,Parse);
 var nativeGood=pars["EquipParamGoods"].Rows.Single(r=>r.ID==8000001);
 Require(Convert.ToInt32(nativeGood["goodsType"].Value)==11&&Convert.ToInt32(nativeGood["vagrantItemLotId"].Value)==8000001&&Convert.ToInt32(nativeGood["isEquip"].Value)==0,"Native permanent-buff goods template changed");
 foreach(var h in hexes){
@@ -659,6 +672,7 @@ foreach(var h in hexes){
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
+ if(h.Id==95002100){Set(s,"magicConsumptionRate",0f);Set(s,"miracleConsumptionRate",0f);}
  if(h.Id==95000900){
   var nativeMelee=pars["SpEffectParam"].Rows.Single(r=>r.ID==8320500);
   Require(Convert.ToInt32(nativeMelee["magicSubCategoryChange1"].Value)==130,"Native melee category changed");
@@ -679,6 +693,8 @@ foreach(var h in hexes){
  var good=Clone("EquipParamGoods",8000001,h.Id);Set(good,"vagrantItemLotId",h.Id);Set(good,"iconId",h.LargeIcon-1000);Set(good,"rarity",3);
  var table=Clone("ItemTableParam",4200000,RewardCatalog.Table(h.Id));Set(table,"disableParam_NT",0);Set(table,"itemId",h.Id);Set(table,"chanceWeight",1000);
 }
+Archmage.Markers((source,id)=>Clone("SpEffectParam",source,id));
+Slingshot.Mechanics((source,id)=>Clone("SpEffectParam",source,id));
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
 Cages.MutationParameters(pars,Cages.TowerSources(root,cageBosses));
@@ -821,6 +837,7 @@ for(int i=0;i<8;i++){
  Set(bullet,"HitBulletID",i==7?-1:95001551+i);
 }
 NewHexes.AddMechanics(pars,Clone,Path.Combine(root,"src"));
+DevilsGaze.Mechanics(pars,Clone);
 foreach(int id in new[]{6999920,6999921}){
  var row=Clone("SpEffectParam",8000000,id);Set(row,"maxHpRate",1f);Set(row,"saveCategory",-1);Set(row,"spCategory",20);Set(row,"iconId",-1);Set(row,"spEffectTextId_1",-1);Set(row,"displayIconForPermamentEffect",0);Set(row,"effectEndurance",id==6999920?-1f:.001f);
 }

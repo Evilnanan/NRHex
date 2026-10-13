@@ -32,6 +32,16 @@ use native_actor::npc_id;
 use actor_lifecycle::{on_effect,death_detour};
 use balloon_runtime::flush_balloon;
 mod arts_data;
+mod archmage;
+mod archmage_data;
+mod archmage_runtime;
+mod slingshot;
+mod slingshot_runtime;
+mod devils_gaze;
+mod devils_gaze_runtime;
+mod devils_gaze_audio;
+mod devils_gaze_hit;
+static MAGE:OnceLock<Mutex<archmage::Archmage>>=OnceLock::new();
 mod runtime;
 mod crystal;
 mod chant;
@@ -242,7 +252,7 @@ const ARTS_ITEM_CREATE_PATTERN:&str="48 89 5C 24 08 48 89 54 24 10 57 48 83 EC 4
 #[derive(Clone,Copy)]
 struct ArtsDrop {weapon:arts::Weapon,payload:[u8;0x48]}
 #[derive(Clone,Copy,Default)]
-struct ArtsTransfer {active:bool,drop:Option<ArtsDrop>,pickup_uid:u32,pickup_payload:usize}
+struct ArtsTransfer {active:bool,drop:Option<ArtsDrop>,pickup_uid:u32,pickup_payload:usize,mage_drop:Option<archmage_runtime::Drop>}
 thread_local! {static ARTS_TRANSFER:Cell<ArtsTransfer>=Cell::new(ArtsTransfer::default());}
 // Nested native calls must not replace the enclosing pickup's incoming UID.
 struct ArtsTransferGuard(ArtsTransfer);
@@ -273,13 +283,17 @@ static TEST_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
 static NEW_HEX_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
 #[cfg(feature="test-hotkeys")]
 static CHANT_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
+#[cfg(feature="test-hotkeys")]
+static GAZE_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
 // Current development focus: Monster Cage, Crystal Shell, Versatile Arts.
 #[cfg(any(feature="test-hotkeys",test))]
 const TEST_REWARD: [usize;3] = [14,6,12];
 #[cfg(any(feature="test-hotkeys",test))]
 const NEW_HEX_REWARD: [usize;3] = [15,16,0];
 #[cfg(any(feature="test-hotkeys",test))]
-const CHANT_REWARD: [usize;3] = [17,8,0];
+const CHANT_REWARD: [usize;3] = [17,8,18];
+#[cfg(any(feature="test-hotkeys",test))]
+const GAZE_REWARD: [usize;3] = [20,19,7];
 #[cfg(feature="test-hotkeys")]
 static LAST_SPAWN: AtomicU64 = AtomicU64::new(0);
 static CALLBACK_LOCK: AtomicBool = AtomicBool::new(false);
@@ -319,8 +333,8 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);94] {
- [(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
+fn signatures()->[(&'static str,u32);102] {
+ [(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
   (NEAR_DEATH_STATE_PATTERN,0x66d700),
@@ -328,7 +342,8 @@ fn signatures()->[(&'static str,u32);94] {
   (NULLIFY_SITE_PATTERN,NULLIFY_SITE_RVA as u32),(REMOVE_EFFECT_PATTERN,REMOVE_EFFECT_RVA as u32),
   (REBOUND_PATTERN,REBOUND_RVA as u32),
   (HIT_COMPLETE_PATTERN,HIT_COMPLETE_RVA as u32),(HAS_STATE_PATTERN,HAS_STATE_RVA as u32),
-  (hero_audio::PATTERN,hero_audio::RVA as u32),(glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
+  (hero_audio::PATTERN,hero_audio::RVA as u32),
+  (archmage_runtime::PATTERN,archmage_runtime::RVA as u32),(glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
   (ACTION_REQUEST_PATTERN,ACTION_REQUEST_RVA as u32),
   (FLASK_COUNT_PATTERN,FLASK_COUNT_RVA as u32),
   (GAME_DATA_PATTERN,0x1fd598),(REWARD_CREATE_PATTERN,REWARD_CREATE_RVA as u32),
@@ -371,10 +386,10 @@ extern "system" { fn GetTickCount64()->u64; }
 extern "system" { fn BCryptGenRandom(handle:*mut c_void,buffer:*mut u8,len:u32,flags:u32)->i32; }
 
 #[derive(Debug)]
-struct Config { key:i32, test_key:i32, new_hex_key:i32, chant_key:i32, ctrl:bool, cooldown:u64 }
+struct Config { key:i32, test_key:i32, new_hex_key:i32, chant_key:i32, gaze_key:i32, ctrl:bool, cooldown:u64 }
 impl Config {
  fn read(text:&str)->Result<Self,String> {
-  let mut c=Self{key:0x75,test_key:0x76,new_hex_key:0x77,chant_key:0x78,ctrl:true,cooldown:3000};
+  let mut c=Self{key:0x75,test_key:0x76,new_hex_key:0x77,chant_key:0x78,gaze_key:0x79,ctrl:true,cooldown:3000};
   for line in text.lines().map(str::trim).filter(|s|!s.is_empty()&&!s.starts_with([';','#','['])) {
    let (k,v)=line.split_once('=').ok_or("Expected key=value in NRHex.ini")?;
    match k.trim() {
@@ -382,6 +397,7 @@ impl Config {
     "TestVirtualKey"=>{let v=v.trim();c.test_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid TestVirtualKey")?;},
     "NewHexVirtualKey"=>{let v=v.trim();c.new_hex_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid NewHexVirtualKey")?;},
     "ChantVirtualKey"|"AngelChantVirtualKey"=>{let v=v.trim();c.chant_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid ChantVirtualKey")?;},
+    "GazeVirtualKey"=>{let v=v.trim();c.gaze_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid GazeVirtualKey")?;},
     // Older INIs remain loadable, but cannot override the compiled range.
     "SwordNearDistance"=>{},
     "RequireControl"=>c.ctrl=v.trim().parse().map_err(|_|"RequireControl must be true/false")?,
@@ -389,7 +405,7 @@ impl Config {
     _=>return Err(format!("Unknown setting {k}"))
    }
   }
-  let keys=[c.key,c.test_key,c.new_hex_key,c.chant_key];
+  let keys=[c.key,c.test_key,c.new_hex_key,c.chant_key,c.gaze_key];
   if keys.iter().any(|k|!(1..=254).contains(k))||keys.iter().enumerate().any(|(i,k)|keys[i+1..].contains(k))||c.cooldown<1000 {return Err("Hotkeys must be distinct and 1..254; CooldownMs >=1000".into());}
   Ok(c)
  }
@@ -441,6 +457,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   JIAHAO.set(Mutex::new(jiahao::Stance::default())).map_err(|_|"Jiahao already initialized")?;
   NOISY.set(Mutex::new(noisy::Lava::default())).map_err(|_|"Noisy already initialized")?;
   ARTS.set(Mutex::new(arts::Arts::default())).map_err(|_|"Arts already initialized")?;
+  MAGE.set(Mutex::new(archmage::Archmage::default())).map_err(|_|"Archmage already initialized")?;
   ESCAPE.set(Mutex::new(escape::Escape::default())).map_err(|_|"Escape already initialized")?;
   RUNTIME.set(Mutex::new(runtime::Runtime::default())).map_err(|_|"Runtime already initialized")?;
   BALLOON.set(Mutex::new(balloon::Balloon::default())).map_err(|_|"Balloon already initialized")?;
@@ -505,6 +522,9 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let arts_behavior_target=base.add(ARTS_BEHAVIOR_RVA) as *mut u8;
   let arts_behavior_prepared=hook::prepare(arts_behavior_target,arts_behavior_detour as *const u8,64)?;
   let arts_transfer_targets=[
+   (slingshot_runtime::RVA,slingshot_runtime::detour as *const u8,&slingshot_runtime::ORIGINAL),
+   (slingshot_runtime::HORIZONTAL_RVA,slingshot_runtime::horizontal as *const u8,&slingshot_runtime::HORIZONTAL_ORIGINAL),
+   (devils_gaze_hit::RVA,devils_gaze_hit::detour as *const u8,&devils_gaze_hit::ORIGINAL),
    (ARTS_DROP_RVA,arts_drop_detour as *const u8,&ARTS_DROP_ORIG),
    (ARTS_SERIALIZE_RVA,arts_serialize_wrapper as *const u8,&ARTS_SERIALIZE_ORIG),
    (ARTS_REWARD_COPY_RVA,arts_reward_copy_detour as *const u8,&ARTS_REWARD_COPY_ORIG),
@@ -518,6 +538,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (LAVA_CLEANUP_RVA,lava_cleanup_detour as *const u8,&LAVA_CLEANUP_ORIG),
    (glass_cannon::OBJECT_RVA,glass_cannon::object_detour as *const u8,&glass_cannon::OBJECT_ORIGINAL),
    (hero_audio::RVA,hero_audio::detour as *const u8,&hero_audio::ORIGINAL),
+   (archmage_runtime::RVA,archmage_runtime::wrapper as *const u8,&archmage_runtime::ORIGINAL),
    (DEATH_RVA,death_detour as *const u8,&DEATH_ORIG),
    (SPIRIT_MODEL_RVA,spirit_runtime::spirit_model_detour as *const u8,&SPIRIT_MODEL_ORIG)];
   let mut arts_transfer_prepared=Vec::new();
@@ -970,7 +991,7 @@ unsafe fn arts_transfers_enabled()->bool{
  if !ACTIVE.load(Ordering::Acquire){return false;}
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);
  if world==0{return false;}let player=read_ptr(world+0x174e8);
- player!=0&&has_effect(player,arts::OWNER,base)
+ player!=0&&(has_effect(player,arts::OWNER,base)||has_effect(player,archmage::OWNER,base))
 }
 unsafe extern "system" fn arts_drop_detour(menu:usize,quantity:i32,flag:u8)->usize{
  let original:unsafe extern "system" fn(usize,i32,u8)->usize=std::mem::transmute(ARTS_DROP_ORIG.load(Ordering::Acquire));
@@ -993,6 +1014,8 @@ unsafe extern "system" fn arts_serialize_detour(payload:usize,handle:usize,calle
   })
  }else{None};
  let result=arts_serialize_call(original,payload,handle,selected);
+ let mage_drop=if ACTIVE.load(Ordering::Acquire){archmage_runtime::serialized(payload,handle,caller,ARTS_TRANSFER.with(|c|c.get().active))}else{None};
+ if ARTS_TRANSFER.with(|c|c.get().active){ARTS_TRANSFER.with(|c|{let mut s=c.get();s.mage_drop=mage_drop;c.set(s);});}
  if payload==0||handle==0||!ARTS_TRANSFER.with(|c|c.get().active){return result;}
  let Some(w)=arts_weapon_handle(handle as *const u32,BASE.load(Ordering::Acquire)) else{return result;};
  let selected=ARTS.get().and_then(|s|s.lock().ok()?.selected(w));
@@ -1009,6 +1032,7 @@ unsafe fn arts_serialize_call(original:unsafe extern "system" fn(usize,usize)->u
  }}result
 }
 unsafe fn arts_bind_drop(descriptor:usize){
+ archmage_runtime::bind_drop(descriptor);
  let scope=ARTS_TRANSFER.with(Cell::get);
  let Some(drop)=scope.drop.filter(|_|scope.active) else{return;};
  if descriptor==0{return;}
@@ -1037,7 +1061,7 @@ unsafe fn arts_pickup_call(original:ArtsPickupFn,manager:usize,descriptor:usize,
  let single=ptr::read_unaligned(descriptor as *const u8)==1;
  let _scope=ArtsTransferGuard::enter(ArtsTransfer{active:true,drop:None,
   pickup_uid:if single{read_i32(descriptor+0x5c) as u32}else{0},
-  pickup_payload:if single{descriptor+8}else{0}});
+  pickup_payload:if single{descriptor+8}else{0},mage_drop:None});
  // This native routine always adds to the local inventory. A replacement
  // pickup may also serialize/drop the previous weapon within this scope.
  original(manager,descriptor,source,out,position,flag,slot)
@@ -1047,6 +1071,7 @@ unsafe extern "system" fn arts_item_create_detour(manager:usize,out:usize,payloa
  let result=original(manager,out,payload);let scope=ARTS_TRANSFER.with(Cell::get);
  if !scope.active||scope.pickup_uid==0||payload!=scope.pickup_payload||out==0{return result;}
  // The factory writes a new generation-bearing handle before equip/addition.
+ archmage_runtime::picked_up(out,scope.pickup_uid,BASE.load(Ordering::Acquire));
  if let Some(w)=arts_weapon_handle(out as *const u32,BASE.load(Ordering::Acquire)){
   if let Some(state)=ARTS.get(){if let Ok(mut s)=state.lock(){s.picked_up(scope.pickup_uid,w);}}
  }
@@ -1136,7 +1161,7 @@ unsafe fn arts_behavior_call(original:ArtsBehaviorFn,player:usize,judge:i32,sour
   assert_eq!(arts_bullet_call(untouched,11,303215900,33,descriptor.as_ptr() as usize,-1,-2,0x81,0x82,0xff,0,None),0x92);
  }}
  #[test]fn nested_transfer_scope_restores_incoming_pickup_identity(){
-  let outer=ArtsTransferGuard::enter(ArtsTransfer{active:true,pickup_uid:123,pickup_payload:456,drop:None});
+  let outer=ArtsTransferGuard::enter(ArtsTransfer{active:true,pickup_uid:123,pickup_payload:456,drop:None,mage_drop:None});
   {let _inner=ArtsTransferGuard::enter(ArtsTransfer::default());assert!(!ARTS_TRANSFER.with(|c|c.get().active));}
   assert_eq!(ARTS_TRANSFER.with(|c|(c.get().pickup_uid,c.get().pickup_payload)),(123,456));
   drop(outer);assert!(!ARTS_TRANSFER.with(|c|c.get().active));
@@ -1289,7 +1314,7 @@ unsafe fn sword_hit_distance(source:usize,hit:usize,base:usize)->Option<f32>{
  // 5363A0 writes the collision point at +1F0; 434FA0 reconstructs the same
  // world-space point from the network packet. +1E0 is the attack origin.
  // Never substitute the target pivot: large bosses can be hit far from it.
- sword::distance(position(source,base),sword_hit_point(hit))
+ sword::hit_distance(position(source,base),sword_hit_point(hit))
 }
 unsafe fn sword_hit_point(hit:usize)->[f32;4]{ptr::read_unaligned((hit+0x1f0) as *const [f32;4])}
 unsafe fn update_sword(player:usize,base:usize){
@@ -1375,12 +1400,14 @@ unsafe extern "system" fn action_request_detour(input:usize,mode:i32,action:i32)
 unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize,a4:usize,a5:usize,a6:u8,a7:u8,a8:u8,a9:u8,a10:u8,a11:i32)->u8 {
  let original:ApplyEffect=std::mem::transmute(APPLY_ORIG.load(Ordering::Acquire));
  let base=BASE.load(Ordering::Acquire);
+ if ACTIVE.load(Ordering::Acquire)&&slingshot_runtime::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&effect==spirit::NATIVE_DRAIN&&npc_id(player,base).is_some_and(spirit::is_private_npc){effect=spirit::PASSIVE;}
  if ACTIVE.load(Ordering::Acquire)&&effect==102100&&is_local(player,base){on_effect(player,balloon::DOWN,base);}
  if ACTIVE.load(Ordering::Acquire)&&matches!(effect,balloon::DOWN|balloon::REVIVED)&&is_local(player,base){
   on_effect(player,effect,base);
  }
  if ACTIVE.load(Ordering::Acquire)&&effect==chant::PULSE&&is_local(player,base){chant_pulse(player,base);}
+ if ACTIVE.load(Ordering::Acquire){archmage_runtime::pulse(player,effect,base);}
  // Capture before native healing can change HP; never hold a lock across it.
  if ACTIVE.load(Ordering::Acquire)&&matches!(effect,arts::BUSY|arts::USE_LEFT|arts::USE_RIGHT)&&is_local(player,base)&&has_effect(player,arts::OWNER,base){
   let w=if effect==arts::BUSY{None}else{arts_hand_weapon(player,if effect==arts::USE_LEFT{0}else{1},base)};
@@ -2036,11 +2063,15 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  if world==0{return;}
  if read_ptr(world+0x174e8)!=player {return;}
  if !dt.is_finite()||dt<=0.0||dt>1.0{return;}
+ slingshot_runtime::update(player,base,dt);
  update_chant(player,base,dt);
  update_runtime(player,base,dt);
  update_sword(player,base);
  update_escape(player,base,dt);
  update_jiahao(player,base,dt);
+ archmage_runtime::update(player,base);
+ devils_gaze_audio::update(base);
+ devils_gaze_runtime::update(player,base,dt);
  update_arts(player,base);
  update_noisy(player,base,dt);
  actor_lifecycle::update(player,base,dt);
@@ -2059,7 +2090,8 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
  let test_pressed=pressed_edge(&TEST_KEY_WAS_DOWN,GetAsyncKeyState(cfg.test_key)<0);
  let new_hex_pressed=pressed_edge(&NEW_HEX_KEY_WAS_DOWN,GetAsyncKeyState(cfg.new_hex_key)<0);
  let chant_pressed=pressed_edge(&CHANT_KEY_WAS_DOWN,GetAsyncKeyState(cfg.chant_key)<0);
- if !pressed&&!test_pressed&&!new_hex_pressed&&!chant_pressed{return;}
+ let gaze_pressed=pressed_edge(&GAZE_KEY_WAS_DOWN,GetAsyncKeyState(cfg.gaze_key)<0);
+ if !pressed&&!test_pressed&&!new_hex_pressed&&!chant_pressed&&!gaze_pressed{return;}
  if cfg.ctrl&&GetAsyncKeyState(0x11)>=0{return;}
  let mut pid=0;GetWindowThreadProcessId(GetForegroundWindow(),&mut pid);
  if pid!=win::GetCurrentProcessId(){return;}
@@ -2070,7 +2102,7 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
  if unclaimed_hex_ball(base){return;}
  if CALLBACK_LOCK.swap(true,Ordering::AcqRel){return;}
  let owned=unavailable_hexes(player,base);
- let preferred=if chant_pressed {Some(CHANT_REWARD)}else if new_hex_pressed {Some(NEW_HEX_REWARD)}else if test_pressed {Some(TEST_REWARD)}else{None};
+ let preferred=if gaze_pressed {Some(GAZE_REWARD)}else if chant_pressed {Some(CHANT_REWARD)}else if new_hex_pressed {Some(NEW_HEX_REWARD)}else if test_pressed {Some(TEST_REWARD)}else{None};
  let choice=preferred.and_then(|o|reward_choices::preferred(o,owned)).or_else(||random_order(owned));
  let Some(chosen)=choice else{CALLBACK_LOCK.store(false,Ordering::Release);return;};
  LAST_SPAWN.store(now,Ordering::Relaxed);
@@ -2096,6 +2128,24 @@ mod tests {
    ptr::write_unaligned(hit.as_mut_ptr().add(0x1f0) as *mut [f32;4],point);
    assert_eq!(sword::near(sword::distance(player,sword_hit_point(hit.as_ptr() as usize)),sword::NEAR_DISTANCE),expected);
   }
+ }}
+ #[test] fn sword_runtime_range_uses_torso_and_contact_for_both_damage_and_healing(){unsafe{
+  let mut actor=[0u8;0x1c0];let mut modules=[0usize;0x20];let mut physics=[0u8;0x80];let mut hit=[0u8;0x2d0];
+  ptr::write_unaligned(actor.as_mut_ptr().add(0x60) as *mut usize,1);
+  ptr::write_unaligned(actor.as_mut_ptr().add(0x1b8) as *mut usize,modules.as_mut_ptr() as usize);
+  ptr::write_unaligned(modules.as_mut_ptr().cast::<u8>().add(0x68) as *mut usize,physics.as_mut_ptr() as usize);
+  ptr::write_unaligned(physics.as_mut_ptr().add(0x70) as *mut [f32;4],[10.,20.,30.,1.]);
+  // Unrelated origin/direction cannot turn a distant hit into a near one.
+  ptr::write_unaligned(hit.as_mut_ptr().add(0x1e0) as *mut [f32;4],[10.,21.,30.,1.]);
+  let source=actor.as_ptr() as usize;let hit_ptr=hit.as_mut_ptr() as usize;
+  for (point,expected) in [([13.8,22.,30.,1.],true),([14.,21.,30.,1.],true),([14.001,21.,30.,1.],false),([10.,25.001,30.,1.],false),([f32::NAN,0.,0.,1.],false)]{
+   ptr::write_unaligned((hit_ptr+0x1f0) as *mut [f32;4],point);
+   assert_eq!(sword::near(sword_hit_distance(source,hit_ptr,0),sword::NEAR_DISTANCE),expected);
+  }
+  assert_eq!(sword_hit_distance(source,0,0),None);
+  assert_eq!(sword_hit_distance(0,hit_ptr,0),None);
+  ptr::write_unaligned(actor.as_mut_ptr().add(0x1b8) as *mut usize,0);
+  assert_eq!(sword_hit_distance(source,hit_ptr,0),None);
  }}
  thread_local!{static CRYSTAL_REBOUND_CALL:Cell<(usize,usize,usize)>=const{Cell::new((0,0,0))};}
  unsafe extern "system" fn capture_crystal_rebound(module:usize,recipient:usize,hit:usize){
@@ -2242,19 +2292,23 @@ mod tests {
  #[test] fn key_config_rejects_invalid_input(){assert!(Config::read("VirtualKey=0").is_err());assert!(Config::read("TestVirtualKey=255").is_err());assert!(Config::read("VirtualKey=0x76").is_err());assert!(Config::read("CooldownMs=999").is_err());assert!(Config::read("Unknown=true").is_err());}
  #[test] fn random_and_focused_hotkeys_are_configurable(){
   for c in [Config::read("").unwrap(),Config::read(include_str!("../dist/mod/natives/NRHex.ini")).unwrap()] {
-   assert_eq!((c.key,c.test_key,c.new_hex_key,c.chant_key,c.ctrl,c.cooldown),(0x75,0x76,0x77,0x78,true,3000));
+   assert_eq!((c.key,c.test_key,c.new_hex_key,c.chant_key,c.gaze_key,c.ctrl,c.cooldown),(0x75,0x76,0x77,0x78,0x79,true,3000));
   }
   let c=Config::read("VirtualKey=0x70\nTestVirtualKey=0x71\nNewHexVirtualKey=0x72\nAngelChantVirtualKey=0x73").unwrap();
   assert_eq!((c.key,c.test_key,c.new_hex_key,c.chant_key),(0x70,0x71,0x72,0x73));
   for value in ["0","255","0x75","0x76"]{assert!(Config::read(&format!("NewHexVirtualKey={value}")).is_err());}
   for value in ["0","255","0x75","0x76","0x77"]{assert!(Config::read(&format!("AngelChantVirtualKey={value}")).is_err());}
-  assert_eq!(CHANT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[chant::OWNER,sword::OWNER,95000100]);
+  for value in ["0","255","0x75","0x76","0x77","0x78"]{assert!(Config::read(&format!("GazeVirtualKey={value}")).is_err());}
+  assert_eq!(Config::read("GazeVirtualKey=0x7a").unwrap().gaze_key,0x7a);
+  assert_eq!(hex_pool::OWNER_IDS[GAZE_REWARD[0]],slingshot::OWNER);
+  assert_eq!(ORDERS[reward_choices::preferred(GAZE_REWARD,0).unwrap()][0],GAZE_REWARD[0]);
+  assert_eq!(CHANT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[chant::OWNER,sword::OWNER,archmage::OWNER]);
   for hero in [4,6,7]{
    assert_eq!(ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(0,Some(hero))).unwrap()],CHANT_REWARD);
    let next=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(1<<17,Some(hero))).unwrap()];assert_eq!(next[0],8);assert!(!next.contains(&17));
    let next=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(1<<8,Some(hero))).unwrap()];assert_eq!(next[0],17);assert!(!next.contains(&8));
   }
-  let excluded=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(0,Some(1))).unwrap()];assert_eq!(excluded[0],0);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
+  let excluded=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(0,Some(1))).unwrap()];assert_eq!(excluded[0],18);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
   assert_eq!(NEW_HEX_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[balloon::OWNER,spirit::OWNER,95000100]);
   let both=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(0,Some(6))).unwrap()];
   assert_eq!(both,NEW_HEX_REWARD);

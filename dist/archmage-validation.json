@@ -1,0 +1,27 @@
+{
+  "version": "0.17.73",
+  "changedAssets": {
+    "mod/natives/NRHex.dll": "ac7a7a87d6e802c68dcfc17e4eedb9427f452a829342d04ac71fec7711b9b544",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "9e47a49dd55b2fa63bcb6fa50fc156f7df3ba3f905e8a24ae6fee4484e955b79"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "parameterValidation": "archmage-parameter-validation.json",
+  "actionValidation": "archmage-hks-validation.json",
+  "textValidation": "archmage-text-validation.json",
+  "nativeValidation": "archmage-native-validation.json",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameStarted": false,
+  "sorceryPool": 28,
+  "incantationPool": 43,
+  "excludedEnchantmentIds": [
+    4460,
+    4470,
+    4490,
+    6320,
+    6740,
+    6770,
+    6960,
+    7230
+  ]
+}

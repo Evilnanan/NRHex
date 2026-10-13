@@ -1,0 +1,19 @@
+{
+  "inputSha256": "046D2DC4B700009F71337334728576844D810751D5BF191D35A4DB0B7A964D8B",
+  "outputSha256": "9704B792A94D57D65D3B649667580E54973F76D693768565A63842B86FAF3573",
+  "changes": [
+    {
+      "table": "AtkParam_Pc",
+      "id": 95001760,
+      "field": "spAttribute",
+      "before": 13,
+      "after": 0
+    }
+  ],
+  "physicalSubtype": 3,
+  "specialAttribute": 0,
+  "impactLevel": 7,
+  "unrelatedRowsAndFieldsPreserved": true,
+  "otherTablesPreserved": true,
+  "gameplayVerified": false
+}

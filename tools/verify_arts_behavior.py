@@ -30,13 +30,13 @@ arts={x['ID']:x['fields'] for x in p['arts']}
 behaviors={x['ID']:x['fields'] for x in p['behaviors']}
 for row in pool['canonicalSkillBehaviorVariations']:
  assert row['variation']==weapons[arts[row['skill']]['sparringGroundsWeaponId']]['behaviorVariationId']
-assert len(pool['canonicalSkillBehaviorVariations'])==183
+assert len(pool['canonicalSkillBehaviorVariations'])==182
 assert behaviors[300707900]['refId']==2770 and behaviors[300707900]['refType']==1
 assert behaviors[301301901]['refId']==2360 and behaviors[301301901]['refType']==1
 assert behaviors[301301900]['refId']==303400900 and behaviors[301301900]['refType']==0
 report=dict(resolverRva='668b30',actorVirtualOffset='328',behaviorLookupRva='e6fcb0',nativeRepositoryIndex=13,
- sameSourceDecoderForWeaponHandleAndBase=True,attackAndBulletUseSameResolver=True,canonicalSkillCount=183,
+ sameSourceDecoderForWeaponHandleAndBase=True,attackAndBulletUseSameResolver=True,canonicalSkillCount=182,
  nativeBehaviorRows=len(behaviors),ordinaryAttacksUseNativeResult=True,localOwnedOverlayOnly=True,
  nativeInventoryAndParametersUnchanged=True,gameplayVerified=False)
 (root/'dist/arts-behavior-validation.json').write_text(json.dumps(report,indent=2))
-print('PASS: true PC behavior resolver, five native arguments, exact weapon source, attack/bullet mapping for 183 skills.')
+print('PASS: true PC behavior resolver, five native arguments, exact weapon source, attack/bullet mapping for 182 skills.')

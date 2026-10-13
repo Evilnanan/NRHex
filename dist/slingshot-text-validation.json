@@ -1,0 +1,105 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "14BF62F6FB99131BFFEC6B381114B9FEBFF60B86C2096D839AF894C7FE30D249",
+  "englishSource": "docs/hexes.en.md",
+  "englishSourceSha256": "81E3E52A8762F40690A4279E55F01E521E1688015DF995817A37C41A88EB3FD2",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "7A40AD39F82E0A75FCBBA184F4D0B3580215AF19CFA7E32C9792FE47B21DC1F6",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "A5878932EEE06895CC4EF4DF68A094F44FFB0B0132F6182ECEA459546FDCC887",
+      "outputSha256": "7A29552B4EA486D1FD2EE9D5286CA14C015FC15E6A51167F1D3D68C948CDAABB",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "\u5F39\u5C04\u8D77\u6B65"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "\u63D0\u5347\u51B2\u523A\u540E\u7684\u8DF3\u8DC3\u8DDD\u79BB\u3002\u53EF\u4EE5\u53E0\u52A0\u6700\u591A\u4E09\u5C42\u3002\u6BCF\u5C42\u63D0\u534730%\u8DF3\u8DC3\u653B\u51FB\u529B"
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "\u5F39\u5C04\u8D77\u6B65"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "\u63D0\u5347\u51B2\u523A\u540E\u7684\u8DF3\u8DC3\u8DDD\u79BB\u3002\u53EF\u4EE5\u53E0\u52A0\u6700\u591A\u4E09\u5C42\u3002\u6BCF\u5C42\u63D0\u534730%\u8DF3\u8DC3\u653B\u51FB\u529B"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "\u63D0\u5347\u51B2\u523A\u540E\u7684\u8DF3\u8DC3\u8DDD\u79BB\u3002\u53EF\u4EE5\u53E0\u52A0\u6700\u591A\u4E09\u5C42\u3002\u6BCF\u5C42\u63D0\u534730%\u8DF3\u8DC3\u653B\u51FB\u529B"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "B2E136AE93CB249B9F0EC4C733360A696CE1C6167C822B0B7B244A671A3A5485",
+      "outputSha256": "EEA05710A1C1FEEF89E4BBBA79C8B5851D2AF28EF31B3468C0F141D50AEF565F",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "Slingshot"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 30%."
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "Slingshot"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 30%."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002300,
+          "before": null,
+          "after": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 30%."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "outputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

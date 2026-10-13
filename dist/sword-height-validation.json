@@ -1,0 +1,24 @@
+{
+  "version": "0.17.71",
+  "buildPassed": true,
+  "scope": "Draw Your Sword torso origin: physics feet + 1 metre; shared damage and healing contact range",
+  "rangeMetres": 4.0,
+  "casterHeightMetres": 1.0,
+  "rangeConfigurable": false,
+  "rustTestsPassed": 225,
+  "runtimeSignaturesVerified": 94,
+  "changedAssets": [
+    "mod/natives/NRHex.dll"
+  ],
+  "otherAssetsAndSettingsPreserved": true,
+  "dllSha256": "4776d61566220b1ce179cd3c3f6834f276eae2771a110cda8c8a8b3b5779e5e1",
+  "installedDllSha256": "4776d61566220b1ce179cd3c3f6834f276eae2771a110cda8c8a8b3b5779e5e1",
+  "groupDllSha256": "afdf7d75415bf2c373fe11e86e37dab3a9e20c77724d01341a0a6e797b17663e",
+  "groupPackageUpdated": true,
+  "groupTestHotkeys": false,
+  "me3ProfilesValid": true,
+  "latestTextSourcesVerified": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "gameStarted": false
+}

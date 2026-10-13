@@ -1,0 +1,52 @@
+{
+  "inputSha256": "36883360fe8751743323d5d4cd7e287082582254b1daa8c47dc853f1f6cfc408",
+  "outputSha256": "4f300e83cf02e39c389c9d454e6df5a094f8a611e6a6215ee7809bd88a3e4b70",
+  "functions": [
+    {
+      "id": 1502,
+      "name": "JumpAttack_Start_Falling_onActivate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1503,
+      "name": "JumpAttack_Start_Falling_onUpdate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1504,
+      "name": "JumpAttack_Start_Falling_F_onActivate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1505,
+      "name": "JumpAttack_Start_Falling_F_onUpdate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1506,
+      "name": "JumpAttack_Start_Falling_D_onActivate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    },
+    {
+      "id": 1507,
+      "name": "JumpAttack_Start_Falling_D_onUpdate",
+      "token": 6999963,
+      "prefixInstructions": 14
+    }
+  ],
+  "gateCases": 12,
+  "inverseRestoresInput": true,
+  "originalBranchesUnchanged": true,
+  "entryArgumentsPreserved": true,
+  "nativeArgumentsPreserved": true,
+  "nativeSprintToggleUnchanged": true,
+  "fallingAttackAllThreeVariantsCovered": true,
+  "multiHitLandingCallbacksIncluded": true,
+  "gameplayVerified": false,
+  "independentDecompilerReadbackPassed": true
+}

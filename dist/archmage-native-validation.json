@@ -1,0 +1,77 @@
+{
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "getterRva": "6A1E10",
+  "instanceMagicOffsets": [
+    "2C",
+    "30"
+  ],
+  "serializedMagicOffsets": [
+    "14",
+    "18"
+  ],
+  "nativeCases": [
+    {
+      "slots": [
+        4000,
+        4001
+      ],
+      "slot": 0,
+      "result": 4000
+    },
+    {
+      "slots": [
+        4000,
+        4001
+      ],
+      "slot": 1,
+      "result": 4001
+    },
+    {
+      "slots": [
+        6000,
+        6000
+      ],
+      "slot": 0,
+      "result": 6000
+    },
+    {
+      "slots": [
+        6000,
+        6000
+      ],
+      "slot": 1,
+      "result": 6000
+    },
+    {
+      "slots": [
+        4000,
+        6000
+      ],
+      "slot": 0,
+      "result": 4000
+    },
+    {
+      "slots": [
+        4000,
+        6000
+      ],
+      "slot": 1,
+      "result": 6000
+    }
+  ],
+  "emptyReferenceReturnsMinusOne": true,
+  "sorceries": 28,
+  "incantations": 43,
+  "excludedEnchantmentIds": [
+    4460,
+    4470,
+    4490,
+    6320,
+    6740,
+    6770,
+    6960,
+    7230
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

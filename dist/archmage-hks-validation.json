@@ -1,0 +1,254 @@
+{
+  "inputSha256": "f3810cc9e38642a41cd334e04a79b7c35a4d36b16cebedb91aee69bf74639ecc",
+  "outputSha256": "3786fd662fdac7188ae312796802e36bb0d4bbeebc347874439e9205ac5448b5",
+  "functions": [
+    {
+      "id": 799,
+      "name": "MagicLaunchRight_Upper_onUpdate",
+      "used": false,
+      "left": false,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 800,
+      "name": "MagicLoopRight_Upper_onUpdate",
+      "used": false,
+      "left": false,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 801,
+      "name": "MagicFireRight_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 802,
+      "name": "MagicFireRightCancel_Upper_onUpdate",
+      "used": false,
+      "left": false,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 803,
+      "name": "MagicLaunchLeft_Upper_onUpdate",
+      "used": false,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 804,
+      "name": "MagicLoopLeft_Upper_onUpdate",
+      "used": false,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 805,
+      "name": "MagicFireLeftCancel_Upper_onUpdate",
+      "used": false,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 806,
+      "name": "MagicFireRight2_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 807,
+      "name": "MagicFireRight3_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 808,
+      "name": "MagicFireLeft_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 809,
+      "name": "MagicFireRightCancel2_Upper_onUpdate",
+      "used": false,
+      "left": false,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 810,
+      "name": "MagicFireRightCancel3_Upper_onUpdate",
+      "used": false,
+      "left": false,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 811,
+      "name": "MagicFireLeftCancel2_Upper_onUpdate",
+      "used": false,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 812,
+      "name": "MagicFireLeft2_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 813,
+      "name": "MagicFireLeftCancel3_Upper_onUpdate",
+      "used": false,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 814,
+      "name": "MagicFireLeft3_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 815,
+      "name": "QuickMagicFireRightDash_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 816,
+      "name": "QuickMagicFireRightStep_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 817,
+      "name": "QuickMagicFireRightBackStep_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 818,
+      "name": "QuickMagicFireRightAttackLeft_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 819,
+      "name": "QuickMagicFireRightAttackRight_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 820,
+      "name": "QuickMagicFireLeftDash_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 821,
+      "name": "QuickMagicFireLeftStep_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 822,
+      "name": "QuickMagicFireLeftBackStep_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 823,
+      "name": "QuickMagicFireLeftAttackRight_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 824,
+      "name": "QuickMagicFireLeftAttackLeft_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 825,
+      "name": "MagicFireRightJump_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 826,
+      "name": "MagicFireRightJumpCancel_Upper_onUpdate",
+      "used": false,
+      "left": false,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 827,
+      "name": "MagicFireLeftJump_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 828,
+      "name": "MagicFireLeftJumpCancel_Upper_onUpdate",
+      "used": false,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 829,
+      "name": "StealthMagicRightLaunch_Upper_onUpdate",
+      "used": false,
+      "left": false,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 830,
+      "name": "StealthMagicRightFire_Upper_onUpdate",
+      "used": true,
+      "left": false,
+      "prefixInstructions": 44
+    },
+    {
+      "id": 831,
+      "name": "StealthMagicLeftLaunch_Upper_onUpdate",
+      "used": false,
+      "left": true,
+      "prefixInstructions": 30
+    },
+    {
+      "id": 832,
+      "name": "StealthMagicLeftFire_Upper_onUpdate",
+      "used": true,
+      "left": true,
+      "prefixInstructions": 30
+    }
+  ],
+  "gateCases": 1360,
+  "inverseRestoresInput": true,
+  "originalBranchesUnchanged": true,
+  "entryArgumentsPreserved": true,
+  "nativeCallbacksHaveZeroParameters": true,
+  "bothHandsBothSlotsAndTwoHandedLeftChecked": true,
+  "chargeWithoutReleaseDoesNotCount": true,
+  "weaponSkillsExcluded": true,
+  "gameplayVerified": false,
+  "independentDecompilerVerified": true
+}

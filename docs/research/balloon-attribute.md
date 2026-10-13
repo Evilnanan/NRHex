@@ -1,0 +1,9 @@
+# 气球自爆的攻击属性表达
+
+气球使用原生黄金冲击波的私有AtkParam_Pc 95001760与Bullet 95001750。此前生成器只把伤害分量改为物理，仍继承了模板12064105的spAttribute=13（圣）。伤害分量与属性标记分开，清空atkDark并不会清除spAttribute。
+
+当前发行包回读：气球atkPhys=1（运行时换成触发时最大HP），其他四类伤害分量均为0；atkAttribute=3为普通物理，spAttribute=13。模板和私有Bullet的atkAttribute／spAttribute均为254，无额外属性覆盖；攻击行spAttributeMixcraft=0，未残留另一处圣属性。Smithbox当前NR枚举将13命名为Holy、0命名为None，物理类型3为Standard。以上原生参数与枚举共同确认修复应针对攻击行spAttribute，而非再次覆写伤害数值。
+
+BalloonAttribute.Configure将攻击行spAttribute设为0，若弹丸显式覆盖13也清除；当前弹丸254保留。NewHexes.AddMechanics完整构建也调用该配置。增量入口HexBuild --balloon-attribute-stage以当前发行参数为基线，只允许私有气球攻击／弹丸的spAttribute从13改0，重新加密并解密后比较所有表、行和字段。当前仅攻击行一处改变。
+
+物理伤害计算仍由原生流程处理；减伤、防御、格挡、适用增益与最大HP基础攻击未更改。黄金冲击波的sfxId_Bullet 334116、冲击力7、物理类型3保留。没有新增原生hook或动作脚本。本次字段修正和包回读不等于敌人属性克制等场景已实测。

@@ -57,6 +57,7 @@ static class NewHexes {
   var attack=Add("AtkParam_Pc",12064105,95001760);
   foreach(string f in new[]{"atkPhys","atkMag","atkFire","atkThun","atkDark","atkSuperArmor"})Set(attack,f,f=="atkPhys"?1:f=="atkSuperArmor"?16.8f:0);
   Set(attack,"isAddBaseAtk",0);Set(attack,"dmgLevel",7);Set(attack,"selfTarget",0);Set(attack,"friendlyTarget",0);
+  BalloonAttribute.Configure(attack,bullet);
   // Retain native Necromancy AI/death semantics with a private drain/rate.
   var drain=Add("SpEffectParam",705200,95001801);Set(drain,"changeHpRate",0f);Set(drain,"motionInterval",1f);Set(drain,"saveCategory",-1);Set(drain,"iconId",-1);Set(drain,"spEffectTextId_1",-1);
   SpiritRework.Configure(Add,drain);

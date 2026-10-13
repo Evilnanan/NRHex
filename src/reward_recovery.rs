@@ -23,7 +23,7 @@ impl Recovery {
 pub fn eligible(kind:u32,owner:u16,lot:i32,good:u32,slot:u8)->bool {
     (1..=3).contains(&slot) && kind&31==2 && owner&0x40!=0 && owner&0x800!=0
         && ((owner>>7)&3)==slot as u16
-        && (95200000..95200000+crate::hex_pool::ORDERS.len() as i32*10).contains(&lot)
+        && (95200000..crate::hex_pool::LEGACY_LOT_END).contains(&lot)
         && crate::reward_choices::is_hex_good(good)
 }
 
@@ -71,6 +71,8 @@ mod tests {
         for slot in 1..=3 {
             let owner=0x843|((slot as u16)<<7);
             assert!(eligible(0x2022,owner,95200000,good,slot));
+            for &lot in &crate::hex_pool::LOT_IDS{assert!(eligible(0x2022,owner,lot,good,slot));}
+            assert!(!eligible(0x2022,owner,crate::hex_pool::LEGACY_LOT_END,good,slot));
             for other in 1..=3 {assert_eq!(eligible(0x2022,owner,95200000,good,other),other==slot);}
             assert!(!eligible(0x2032,owner,95200000,good,slot));
             assert!(!eligible(0x2022,owner&!0x40,95200000,good,slot));

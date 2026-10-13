@@ -10,21 +10,23 @@ pub static ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub const OBJECT_RVA:usize=0x506700;
 pub const OBJECT_PATTERN:&str="48 8B 41 08 F3 0F 10 15 ? ? ? ? 0F 28 CA 48 85 C0 74 2B F7 40 68 03 00 0C 80 75 19 48 8B 08 48 85 C9 74 0A F3 0F 10 81 18 03 00 00";
 pub static OBJECT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-thread_local!{static SCOPES:RefCell<Vec<(bool,usize)>>=const{RefCell::new(Vec::new())};}
+// Shared native calculator scope: defense bypass, recipient manager, gaze holy scale.
+thread_local!{static SCOPES:RefCell<Vec<(bool,usize,f32)>>=const{RefCell::new(Vec::new())};}
 
 pub unsafe extern "system" fn enter(module:usize,source:usize,hit:usize){
  // 43D4BE supplies a resolved ChrIns or zero, including bullet owners.
  // Never interpret a generic hit source/bullet as a character.
  let active=ACTIVE.load(Ordering::Acquire);
- let target=if active&&module!=0&&source!=0&&hit!=0{read_ptr(module+8)}else{0};
+ let target=if active&&module!=0&&hit!=0{read_ptr(module+8)}else{0};
  let bypass=eligible(active,source,target,hit,
   |actor|has_effect(actor,OWNER,BASE.load(Ordering::Acquire)));
- SCOPES.with(|s|s.borrow_mut().push((bypass,if bypass{read_ptr(target+0x190)}else{0})));
+ let holy=crate::devils_gaze_hit::player_damage_multiplier(target,hit,BASE.load(Ordering::Acquire));
+ SCOPES.with(|s|s.borrow_mut().push((bypass,if bypass{read_ptr(target+0x190)}else{0},holy)));
 }
 fn eligible(active:bool,source:usize,target:usize,hit:usize,owns:impl FnOnce(usize)->bool)->bool{
  active&&source!=0&&target!=0&&source!=target&&hit!=0&&owns(source)
 }
-#[cfg(test)]fn push(enabled:bool){SCOPES.with(|s|s.borrow_mut().push((enabled,0)));}
+#[cfg(test)]fn push(enabled:bool){SCOPES.with(|s|s.borrow_mut().push((enabled,0,1.)));}
 pub unsafe extern "system" fn leave(){SCOPES.with(|s|{s.borrow_mut().pop();});}
 fn enabled()->bool{SCOPES.with(|s|s.borrow().last().map(|v|v.0).unwrap_or(false))}
 pub unsafe extern "system" fn object_detour(manager:usize)->f32{
@@ -49,6 +51,16 @@ pub unsafe extern "system" fn detour(out:*mut f32,attack:*const f32,rates:*const
 unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f32,rates:*const f32,
  effects:*const f32,armor:*const f32,guard:*const f32,conditional:*const f32,additional:*const f32,
  deflection:f32,repeated:f32,rebound:f32,attack_rate:f32,positional:f32,target_state:f32,balance:f32)->f32{
+ // 439E80 passes a local five-element attack vector. For environment sources
+ // its earlier steps are multiplicative; restore the quartered holy component
+ // for player recipients here, retaining every native defensive coefficient.
+ // Copy instead of modifying shared hit/bullet data: mixed targets and repeated
+ // native evaluations must never compound or leak this recipient's multiplier.
+ let holy=SCOPES.with(|s|s.borrow().last().map_or(1.,|v|v.2));
+ let mut scaled;
+ let attack=if holy!=1.&&!attack.is_null(){
+  scaled=ptr::read_unaligned(attack as *const [f32;5]);scaled[4]*=holy;scaled.as_ptr()
+ }else{attack};
  if !bypass{return original(out,attack,rates,effects,armor,guard,conditional,additional,
   deflection,repeated,rebound,attack_rate,positional,target_state,balance);}
  // Neutralize all five recipient coefficients for all five damage elements.
@@ -94,7 +106,7 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
  #[test]fn pre_combiner_defense_query_changes_only_current_recipient_and_restores_nested_scope(){unsafe{
   unsafe extern "system" fn fixture(_:usize)->f32{0.2}
   let old=OBJECT_ORIGINAL.swap(fixture as *const () as *mut u8,Ordering::AcqRel);
-  SCOPES.with(|s|s.borrow_mut().push((true,123)));
+  SCOPES.with(|s|s.borrow_mut().push((true,123,1.)));
   assert_eq!(object_detour(123),1.);assert_eq!(object_detour(456),0.2);
   push(false);assert_eq!(object_detour(123),0.2);leave();assert_eq!(object_detour(123),1.);
   leave();assert_eq!(object_detour(123),0.2);OBJECT_ORIGINAL.store(old,Ordering::Release);
@@ -111,5 +123,15 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
   assert_eq!(detour(11 as *mut f32,22 as *const f32,33 as *const f32,44 as *const f32,
    55 as *const f32,66 as *const f32,77 as *const f32,88 as *const f32,1.25,2.5,3.75,4.,5.25,6.5,7.75),1234.5);
   leave();ORIGINAL.store(old,Ordering::Release);
+ }}
+ #[test]fn gaze_player_scale_preserves_native_defenses_and_cannot_leak_to_nested_enemies(){unsafe{
+  let attack=[0.,0.,0.,0.,252.];let one=[1.;5];let defense=[0.5;5];let guard=[0.25;5];let mut out=[0.;5];
+  let evaluate=|out:&mut [f32;5]|calculate(native,false,out.as_mut_ptr(),attack.as_ptr(),one.as_ptr(),one.as_ptr(),defense.as_ptr(),guard.as_ptr(),one.as_ptr(),one.as_ptr(),1.,1.,1.,1.,1.,1.,1.);
+  SCOPES.with(|s|s.borrow_mut().push((false,0,4.)));
+  assert_eq!(evaluate(&mut out),126.);assert_eq!(out,[0.,0.,0.,0.,126.]);
+  assert_eq!(evaluate(&mut out),126.); // No multiplication on cached/repeated calculation.
+  push(false);assert_eq!(evaluate(&mut out),31.5);leave();
+  assert_eq!(evaluate(&mut out),126.);leave();assert_eq!(evaluate(&mut out),31.5);
+  assert_eq!(attack,[0.,0.,0.,0.,252.]);
  }}
 }

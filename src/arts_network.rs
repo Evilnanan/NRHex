@@ -2,7 +2,7 @@
 //! 669D70 -> 20CA00 -> 4F2710 uses packet 29, subtype 4, actor network ID,
 //! followed by the native PlayerGameData snapshot. Do not deserialize it locally:
 //! that would replace local instance handles and invalidate the overlay cache.
-use crate::{read_ptr, ARTS};
+use crate::{read_ptr, ARTS, MAGE};
 #[cfg(test)] use crate::arts;
 pub const SNAPSHOT_RVA: usize = 0x20ca00;
 pub const SNAPSHOT_PATTERN: &str = "48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 41 54 41 55 41 56 41 57 48 81 EC B0 00 00 00 48 8B 05 42 95 8D 03 48 33";
@@ -28,7 +28,7 @@ unsafe fn send(serialize: Serialize, broadcast: Broadcast, data: usize, network:
 
 pub(crate) unsafe fn update(player: usize, base: usize) {
     let Some(state) = ARTS.get() else { return; };
-    if !state.lock().is_ok_and(|s| s.network_pending()) { return; }
+    if !state.lock().is_ok_and(|s| s.network_pending()) && !MAGE.get().is_some_and(|state|state.lock().is_ok_and(|s|s.network_pending())) { return; }
     let data = read_ptr(player + 0x5a0);
     let network = read_ptr(base + 0x3c21ec8);
     // Exact native 669D70 send prerequisites; defer across join/loading.
@@ -38,7 +38,8 @@ pub(crate) unsafe fn update(player: usize, base: usize) {
     if identity == u64::MAX { return; }
     if send(std::mem::transmute(base + SNAPSHOT_RVA), std::mem::transmute(base + 0xdf24d0), data, network, identity) {
         if let Ok(mut s) = state.lock() { s.network_sent(); }
-        crate::nlog_info!("Arts equipment snapshot sent: actor={identity}");
+        if let Some(state)=MAGE.get(){if let Ok(mut s)=state.lock(){s.network_sent();}}
+        crate::nlog_info!("Equipment overlay snapshot sent: actor={identity}");
     }
 }
 
