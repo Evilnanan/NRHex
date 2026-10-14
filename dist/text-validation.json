@@ -1,8 +1,8 @@
 {
   "source": "docs/hexes.md",
-  "sourceSha256": "A9D58AB62861F979E9272E8E04E70E0A8A26B4F3189A667DF6AF9B2CAEEFA05A",
+  "sourceSha256": "DD4676306306E294617BB305D0DFF79620D51D0E684B5BFC6410B9A8729A15F8",
   "englishSource": "docs/hexes.en.md",
-  "englishSourceSha256": "C79151052D3D6A780789ADFB1FD40BD363C444CBA18E0D91FB049E8CA82232E5",
+  "englishSourceSha256": "1BA032F7BE02A6D295CB8B75933633C8F6BC8E76A88D8400D09B37B6AE50E6F5",
   "statusSource": "data/text/status-effects.json",
   "statusSourceSha256": "467BDC4D3789D14494A36CE527338CB137CE7EA6643F7CD619924F29BCFCBEC7",
   "statusOnly": false,
@@ -10,74 +10,20 @@
     {
       "language": "zhocn",
       "file": "item_dlc01.msgbnd.dcx",
-      "inputSha256": "6857AF4FB3370D02375D21A3294FB613F0328AF3ADC2D19FEFC7D087505C4C3A",
-      "outputSha256": "A5C97809D020B2DFE3EAB62CEB709F74BA40EB7EE58B446C1A3B6C29EAD61262",
+      "inputSha256": "3F660792C840658B77F78613DEF7C5C40BC758838ED9E4CBF0BAE291DDEF8790",
+      "outputSha256": "A9CBABE74F8C0BA5AA707CEED6575DC127BDAD93EF4EE2FBAC6216DC054F5FD1",
       "changes": [
         {
           "fmg": "AttachEffectName.fmg",
           "id": 95002400,
-          "before": "\u62DB\u67B6",
-          "after": "\u653B\u5B88\u517C\u5907"
-        },
-        {
-          "fmg": "AttachEffectInfo.fmg",
-          "id": 95002200,
-          "before": "\u65F6\u4E0D\u65F6\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\uFF0C\u4E0D\u5206\u654C\u6211",
-          "after": "\u5076\u5C14\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635"
-        },
-        {
-          "fmg": "AttachEffectInfo.fmg",
-          "id": 95002400,
-          "before": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u65F6\uFF0C\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%",
-          "after": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u7684\u653B\u51FB\u53EF\u4EE5\u62DB\u67B6\u654C\u4EBA\u7684\u653B\u51FB\u3002\u6210\u529F\u62DB\u67B6\u65F6\u7684\u9632\u5FA1\u53CD\u51FB\u4F24\u5BB3\u63D0\u5347100%"
-        },
-        {
-          "fmg": "AttachEffectInfo.fmg",
-          "id": 95002500,
-          "before": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u7EF4\u63015\u79D2\u540E\uFF0C\u56DE\u8840\u5728\u9000\u51FA\u59FF\u52BF\u540E\u6301\u7EED15\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF1B\u79BB\u5F00\u591C\u96E8\u65F6\uFF0C\u653B\u51FB\u529B\u63D0\u5347\u6548\u679C\u7ED3\u675F\uFF0C\u5269\u4F59\u56DE\u8840\u65F6\u95F4\u4FDD\u7559\u3002\n\u56DE\u8840\u91CF\u4E3A\u591C\u96E8\u57FA\u7840\u4F24\u5BB3\u7684\u4E24\u500D\u3002\u9000\u51FA\u59FF\u52BF\u540E\u51B7\u537460\u79D2\uFF0C\u89E6\u78B0\u8D50\u798F\u53EF\u91CD\u7F6E\u51B7\u5374\u3002",
-          "after": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u5B8C\u6574\u6446\u51FA\u59FF\u52BF\u540E\uFF0C\u56DE\u8840\u6548\u679C\u53EF\u4EE5\u5728\u59FF\u52BF\u9000\u51FA\u540E\u7EE7\u7EED\u7EF4\u630115\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF0C\u6301\u7EED\u81F3\u79BB\u5F00\u591C\u96E8\u300260\u79D2\u51B7\u5374"
+          "before": "\u653B\u5B88\u517C\u5907",
+          "after": "\u4EA4\u950B"
         },
         {
           "fmg": "PermanentBuffName.fmg",
           "id": 95002400,
-          "before": "\u62DB\u67B6",
-          "after": "\u653B\u5B88\u517C\u5907"
-        },
-        {
-          "fmg": "PermanentBuffInfo.fmg",
-          "id": 95002200,
-          "before": "\u65F6\u4E0D\u65F6\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\uFF0C\u4E0D\u5206\u654C\u6211",
-          "after": "\u5076\u5C14\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635"
-        },
-        {
-          "fmg": "PermanentBuffInfo.fmg",
-          "id": 95002400,
-          "before": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u65F6\uFF0C\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%",
-          "after": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u7684\u653B\u51FB\u53EF\u4EE5\u62DB\u67B6\u654C\u4EBA\u7684\u653B\u51FB\u3002\u6210\u529F\u62DB\u67B6\u65F6\u7684\u9632\u5FA1\u53CD\u51FB\u4F24\u5BB3\u63D0\u5347100%"
-        },
-        {
-          "fmg": "PermanentBuffInfo.fmg",
-          "id": 95002500,
-          "before": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u7EF4\u63015\u79D2\u540E\uFF0C\u56DE\u8840\u5728\u9000\u51FA\u59FF\u52BF\u540E\u6301\u7EED15\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF1B\u79BB\u5F00\u591C\u96E8\u65F6\uFF0C\u653B\u51FB\u529B\u63D0\u5347\u6548\u679C\u7ED3\u675F\uFF0C\u5269\u4F59\u56DE\u8840\u65F6\u95F4\u4FDD\u7559\u3002\n\u56DE\u8840\u91CF\u4E3A\u591C\u96E8\u57FA\u7840\u4F24\u5BB3\u7684\u4E24\u500D\u3002\u9000\u51FA\u59FF\u52BF\u540E\u51B7\u537460\u79D2\uFF0C\u89E6\u78B0\u8D50\u798F\u53EF\u91CD\u7F6E\u51B7\u5374\u3002",
-          "after": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u5B8C\u6574\u6446\u51FA\u59FF\u52BF\u540E\uFF0C\u56DE\u8840\u6548\u679C\u53EF\u4EE5\u5728\u59FF\u52BF\u9000\u51FA\u540E\u7EE7\u7EED\u7EF4\u630115\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF0C\u6301\u7EED\u81F3\u79BB\u5F00\u591C\u96E8\u300260\u79D2\u51B7\u5374"
-        },
-        {
-          "fmg": "PermanentBuffCaption.fmg",
-          "id": 95002200,
-          "before": "\u65F6\u4E0D\u65F6\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635\uFF0C\u77ED\u6682\u5EF6\u65F6\u540E\u7206\u53D1\uFF0C\u4E0D\u5206\u654C\u6211",
-          "after": "\u5076\u5C14\u5728\u5468\u56F4\u751F\u6210\u9EC4\u91D1\u6CD5\u9635"
-        },
-        {
-          "fmg": "PermanentBuffCaption.fmg",
-          "id": 95002400,
-          "before": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u65F6\uFF0C\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%",
-          "after": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u7684\u653B\u51FB\u53EF\u4EE5\u62DB\u67B6\u654C\u4EBA\u7684\u653B\u51FB\u3002\u6210\u529F\u62DB\u67B6\u65F6\u7684\u9632\u5FA1\u53CD\u51FB\u4F24\u5BB3\u63D0\u5347100%"
-        },
-        {
-          "fmg": "PermanentBuffCaption.fmg",
-          "id": 95002500,
-          "before": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u7EF4\u63015\u79D2\u540E\uFF0C\u56DE\u8840\u5728\u9000\u51FA\u59FF\u52BF\u540E\u6301\u7EED15\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF1B\u79BB\u5F00\u591C\u96E8\u65F6\uFF0C\u653B\u51FB\u529B\u63D0\u5347\u6548\u679C\u7ED3\u675F\uFF0C\u5269\u4F59\u56DE\u8840\u65F6\u95F4\u4FDD\u7559\u3002\n\u56DE\u8840\u91CF\u4E3A\u591C\u96E8\u57FA\u7840\u4F24\u5BB3\u7684\u4E24\u500D\u3002\u9000\u51FA\u59FF\u52BF\u540E\u51B7\u537460\u79D2\uFF0C\u89E6\u78B0\u8D50\u798F\u53EF\u91CD\u7F6E\u51B7\u5374\u3002",
-          "after": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u5B8C\u6574\u6446\u51FA\u59FF\u52BF\u540E\uFF0C\u56DE\u8840\u6548\u679C\u53EF\u4EE5\u5728\u59FF\u52BF\u9000\u51FA\u540E\u7EE7\u7EED\u7EF4\u630115\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF0C\u6301\u7EED\u81F3\u79BB\u5F00\u591C\u96E8\u300260\u79D2\u51B7\u5374"
+          "before": "\u653B\u5B88\u517C\u5907",
+          "after": "\u4EA4\u950B"
         }
       ],
       "unrelatedEntriesAndMembersUnchanged": true
@@ -93,74 +39,20 @@
     {
       "language": "engus",
       "file": "item_dlc01.msgbnd.dcx",
-      "inputSha256": "6A0FDF501B87293E0706230C7FDDD0489C8FCC9A648AA9E45FCE58421A23F4A2",
-      "outputSha256": "C8A1C11C02395DA61F5E5D742536E879DCA36C21C0E194702C8C8C788385D1E4",
+      "inputSha256": "73A02CE34F81AF3727066014E795893417EB705A369A92E40224AAC2ADD49796",
+      "outputSha256": "A4732B84F7F7A9EF880C5D6A6F8ECDABBE792A6CFF622212A891AB22E3706BFC",
       "changes": [
         {
           "fmg": "AttachEffectName.fmg",
           "id": 95002400,
-          "before": "Parry",
-          "after": "Offense and Defense"
-        },
-        {
-          "fmg": "AttachEffectInfo.fmg",
-          "id": 95002200,
-          "before": "Periodically creates golden magic circles nearby that erupt after a brief delay, harming friend and foe alike.",
-          "after": "Occasionally creates golden magic circles nearby."
-        },
-        {
-          "fmg": "AttachEffectInfo.fmg",
-          "id": 95002400,
-          "before": "Attacks grant a guarding effect while two-handing a weapon. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect.",
-          "after": "Attacks grant a guarding effect while two-handing a weapon. Guard counters deal 100% more damage after successfully guarding with this effect."
-        },
-        {
-          "fmg": "AttachEffectInfo.fmg",
-          "id": 95002500,
-          "before": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. After 5 seconds, HP restoration persists for 15 seconds after ending the gesture, and attack power rises by 25%. Leaving the Night\u2019s Tide ends the attack power boost, but HP restoration continues for its remaining duration.\nRestores twice the HP lost to the Night\u2019s Tide\u2019s base damage. Ending the gesture incurs a 60-second cooldown. Touching a site of grace resets the cooldown.",
-          "after": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. Completing the gesture allows HP restoration to persist for 15 seconds after ending it, and raises attack power by 25% until leaving the Night\u2019s Tide. 60-second cooldown."
+          "before": "Offense and Defense",
+          "after": "Clash"
         },
         {
           "fmg": "PermanentBuffName.fmg",
           "id": 95002400,
-          "before": "Parry",
-          "after": "Offense and Defense"
-        },
-        {
-          "fmg": "PermanentBuffInfo.fmg",
-          "id": 95002200,
-          "before": "Periodically creates golden magic circles nearby that erupt after a brief delay, harming friend and foe alike.",
-          "after": "Occasionally creates golden magic circles nearby."
-        },
-        {
-          "fmg": "PermanentBuffInfo.fmg",
-          "id": 95002400,
-          "before": "Attacks grant a guarding effect while two-handing a weapon. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect.",
-          "after": "Attacks grant a guarding effect while two-handing a weapon. Guard counters deal 100% more damage after successfully guarding with this effect."
-        },
-        {
-          "fmg": "PermanentBuffInfo.fmg",
-          "id": 95002500,
-          "before": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. After 5 seconds, HP restoration persists for 15 seconds after ending the gesture, and attack power rises by 25%. Leaving the Night\u2019s Tide ends the attack power boost, but HP restoration continues for its remaining duration.\nRestores twice the HP lost to the Night\u2019s Tide\u2019s base damage. Ending the gesture incurs a 60-second cooldown. Touching a site of grace resets the cooldown.",
-          "after": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. Completing the gesture allows HP restoration to persist for 15 seconds after ending it, and raises attack power by 25% until leaving the Night\u2019s Tide. 60-second cooldown."
-        },
-        {
-          "fmg": "PermanentBuffCaption.fmg",
-          "id": 95002200,
-          "before": "Periodically creates golden magic circles nearby that erupt after a brief delay, harming friend and foe alike.",
-          "after": "Occasionally creates golden magic circles nearby."
-        },
-        {
-          "fmg": "PermanentBuffCaption.fmg",
-          "id": 95002400,
-          "before": "Attacks grant a guarding effect while two-handing a weapon. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect.",
-          "after": "Attacks grant a guarding effect while two-handing a weapon. Guard counters deal 100% more damage after successfully guarding with this effect."
-        },
-        {
-          "fmg": "PermanentBuffCaption.fmg",
-          "id": 95002500,
-          "before": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. After 5 seconds, HP restoration persists for 15 seconds after ending the gesture, and attack power rises by 25%. Leaving the Night\u2019s Tide ends the attack power boost, but HP restoration continues for its remaining duration.\nRestores twice the HP lost to the Night\u2019s Tide\u2019s base damage. Ending the gesture incurs a 60-second cooldown. Touching a site of grace resets the cooldown.",
-          "after": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. Completing the gesture allows HP restoration to persist for 15 seconds after ending it, and raises attack power by 25% until leaving the Night\u2019s Tide. 60-second cooldown."
+          "before": "Offense and Defense",
+          "after": "Clash"
         }
       ],
       "unrelatedEntriesAndMembersUnchanged": true

@@ -1,10 +1,10 @@
 {
-  "version": "0.17.113",
+  "version": "0.17.116",
   "active": null,
   "pid": null,
   "allFourNativeDllsLoaded": false,
   "build": "build-validation.json",
-  "dllSha256": "3fbfbdda6dbcc99104da609b42e9913fee9cb302ace9bce0687f33176624f2e7",
+  "dllSha256": "dda9b9a99423edc8f05b9e5df0ca0b7cc898165750f595649bfc63170686f38b",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "pendingChecks": [

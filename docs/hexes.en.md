@@ -120,9 +120,9 @@ Occasionally creates golden magic circles nearby.
 Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%.
 
 <!-- hex:95002400 -->
-## Offense and Defense
+## Clash
 
-Attacks grant a guarding effect while two-handing a weapon. Guard counters deal 100% more damage after successfully guarding with this effect.
+Attacks grant a guarding effect while two-handing a weapon. After successfully guarding with this effect, guard counters consume no stamina and deal 100% more damage.
 
 <!-- hex:95002500 -->
 ## Night’s Blessing

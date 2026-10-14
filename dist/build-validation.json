@@ -1,7 +1,7 @@
 {
-  "version": "0.17.113",
+  "version": "0.17.116",
   "buildPassed": true,
-  "signatureCount": 112,
+  "signatureCount": 114,
   "functionChecks": [
     "ability-buffs-validation.json",
     "angel-chant-hks-validation.json",
@@ -100,6 +100,7 @@
     "noisy-gameplay-validation.json",
     "noisy-validation.json",
     "parry-actions-validation.json",
+    "parry-attachment-validation.json",
     "parry-counter-parameter-validation.json",
     "parry-counter-validation.json",
     "parry-feedback-validation.json",
@@ -107,6 +108,7 @@
     "parry-ground-validation.json",
     "parry-guard-validation.json",
     "parry-icon-validation.json",
+    "parry-milliseconds-validation.json",
     "parry-motion-validation.json",
     "parry-native-validation.json",
     "parry-onset-validation.json",
@@ -175,8 +177,8 @@
     "ultimate-vfx-validation.json",
     "validation.json"
   ],
-  "dllSha256": "3fbfbdda6dbcc99104da609b42e9913fee9cb302ace9bce0687f33176624f2e7",
-  "installedDllSha256": "3fbfbdda6dbcc99104da609b42e9913fee9cb302ace9bce0687f33176624f2e7",
+  "dllSha256": "dda9b9a99423edc8f05b9e5df0ca0b7cc898165750f595649bfc63170686f38b",
+  "installedDllSha256": "dda9b9a99423edc8f05b9e5df0ca0b7cc898165750f595649bfc63170686f38b",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "notes": "Build/static/isolated checks only. Current user gameplay feedback is summarized in docs/implementation.md."

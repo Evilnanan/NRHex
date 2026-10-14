@@ -1,6 +1,6 @@
 {
   "version": "0.17.60",
-  "codeVersion": "0.17.113",
+  "codeVersion": "0.17.116",
   "gameTested": false,
   "sourceRegulationSha256": "876A3CA279A4561D0C69F81FE5E510C75C59AB9A8A201694F8CF4A42C91E0268",
   "outputRegulationSha256": "E648BDC29084B16FB30F5E2138A32D5856238C0A24EC58E2A4FBFBF9C4BA4DA5",
@@ -16013,10 +16013,10 @@
     },
     {
       "Id": 95002400,
-      "Zh": "攻守兼备",
-      "En": "Offense and Defense",
-      "ZhInfo": "双手共持武器的攻击可以招架敌人的攻击。成功招架时的防御反击伤害提升100%",
-      "EnInfo": "Attacks grant a guarding effect while two-handing a weapon. Guard counters deal 100% more damage after successfully guarding with this effect.",
+      "Zh": "交锋",
+      "En": "Clash",
+      "ZhInfo": "双手共持武器的攻击可以招架敌人的攻击。成功招架时的防御反击不消耗精力，且伤害提升100%",
+      "EnInfo": "Attacks grant a guarding effect while two-handing a weapon. After successfully guarding with this effect, guard counters consume no stamina and deal 100% more damage.",
       "LargeIcon": 21206,
       "SmallIcon": 22206
     },
@@ -16072,7 +16072,7 @@
     }
   },
   "validation": "Mighty excludes Revenant/Recluse from random and preferred rewards. Texts updated; runtime projectile handling and regulation unchanged. Gameplay pending.",
-  "currentIncrementalValidation": "parry-onset-validation.json",
+  "currentIncrementalValidation": "parry-counter-validation.json",
   "currentStatusTextValidation": "text-validation.json",
   "legacyRewardGroups": 5814,
   "gameplayVerified": false,

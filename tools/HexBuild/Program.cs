@@ -66,6 +66,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  p.ApplyParamdef(d);return p;
 }
 if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
+if(args.Contains("--parry-counter-probe")){Parry.ProbeCounterCost(root,bnd,Parse);return;}
 if(args.Contains("--archmage-secondary")){Archmage.StageSecondary(root,Parse);return;}
 if(args.Contains("--archmage-probe")){Archmage.Probe(root,bnd,Parse);return;}
 if(args.Contains("--cage-group-npcs")){

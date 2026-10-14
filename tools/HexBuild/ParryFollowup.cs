@@ -2,7 +2,7 @@ using SoulsFormats;
 using System.Text.Json;
 static class ParryFollowup {
  public const int Marker=95002405;
- public const short Right=24000,Left=24001,Sound=24002;
+ public const short Right=24000,Left=24001,Sound=24002,WeaponRight=24003,WeaponLeft=24004;
  // Follow the native guard-recoil clip, not a fixed animation-time cooldown.
  // GuardStart/GuardOn/GuardEnd are different clips and never get this marker.
  // Zero-endurance TAE effects stop when their owning clip exits or is cancelled.
@@ -38,8 +38,9 @@ static class ParryFollowup {
   File.WriteAllText(Path.Combine(dir,"parameters.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),added=Marker,originalRowsUnchanged=true},new JsonSerializerOptions{WriteIndented=true}));
   Actions(root,old);
  }
+ static int SparkDummy(short state)=>state switch{Right=>20,Left=>21,WeaponRight=>20110,WeaponLeft=>10110,_=>throw new InvalidDataException("Not a spark condition")};
  static bool IsMarker(TAE.Event e)=>e.Type==67&&BitConverter.ToInt32(e.GetParameterBytes(false))==Marker;
- static bool IsFeedback(TAE.Event e)=>e.Type is 96 or 129&&e.GetParameterBytes(false).Length>=18&&BitConverter.ToInt16(e.GetParameterBytes(false),16) is >=Right and <=Sound;
+ static bool IsFeedback(TAE.Event e)=>e.Type is 96 or 129&&e.GetParameterBytes(false).Length>=18&&BitConverter.ToInt16(e.GetParameterBytes(false),16) is >=Right and <=WeaponLeft;
  static bool Generated(TAE.Event e)=>IsMarker(e)||IsFeedback(e);
  static bool Same(TAE.Event a,TAE.Event b){
   if(a.Type!=b.Type||a.StartTime!=b.StartTime||a.EndTime!=b.EndTime)return false;
@@ -50,7 +51,7 @@ static class ParryFollowup {
   int n=Math.Min(x.Length,y.Length);return x.Take(n).SequenceEqual(y.Take(n))&&x.Skip(n).Concat(y.Skip(n)).All(v=>v==0);
  }
  public static void Actions(string root,PARAM effects){
-  Check(!effects.Rows.Any(r=>Convert.ToInt32(r["stateInfo"].Value) is >=Right and <=Sound),"Feedback state range collides with parameter effects");
+  Check(!effects.Rows.Any(r=>Convert.ToInt32(r["stateInfo"].Value) is >=Right and <=WeaponLeft),"Feedback state range collides with parameter effects");
   string dir=Path.Combine(root,".work/parry-fix/staged");Directory.CreateDirectory(dir);
   var native=BND4.Read(Path.Combine(root,"assets/original/chr/c0000.anibnd.dcx"));
   bool Counter(TAE.Event e)=>e.Type==67&&BitConverter.ToInt32(e.GetParameterBytes(false)) is 173 or 174;
@@ -95,7 +96,7 @@ static class ParryFollowup {
      a.Events.Add(new TAE.Event(source.StartTime,source.EndTime,source.Type,source.Unk04,raw,false){Group=group});addedFeedback++;
     }
     // Executor's own reaction already contains these; preserve it once.
-    if(!a.Events.Any(Spark)){Add(spark,Right,20);Add(spark,Left,21);}
+    if(!a.Events.Any(Spark)){Add(spark,Right,20);Add(spark,Left,21);Add(spark,WeaponRight,20110);Add(spark,WeaponLeft,10110);}
     if(!a.Events.Any(Audio))Add(sound,Sound,null);
    }
    f.Bytes=t.Write();
@@ -113,13 +114,13 @@ static class ParryFollowup {
     foreach(var e in pair.Second.Events.Where(IsMarker))Check(e.StartTime==0&&e.EndTime==reactionEnds[Path.GetFileName(f.Name)][pair.Second.ID],"Wrong follow-up timing");
     bool target=targets[Path.GetFileName(f.Name)].Contains(pair.Second.ID);
     var feedback=pair.Second.Events.Where(IsFeedback).ToArray();
-    Check(feedback.Length==(target?(x.Any(Spark)?0:2)+(x.Any(Audio)?0:1):0),"Wrong feedback count");
+    Check(feedback.Length==(target?(x.Any(Spark)?0:4)+(x.Any(Audio)?0:1):0),"Wrong feedback count");
     foreach(var e in feedback){var raw=e.GetParameterBytes(false);short state=BitConverter.ToInt16(raw,16);
      Check(e.StartTime==0&&e.EndTime==(e.Type==96?spark.EndTime:sound.EndTime),"Feedback timing changed");
-     Check(e.Type==96?Spark(e)&&state is Right or Left&&BitConverter.ToInt32(raw,4)==(state==Left?21:20):Audio(e)&&state==Sound,"Wrong feedback condition/hand");
+     Check(e.Type==96?Spark(e)&&state is Right or Left or WeaponRight or WeaponLeft&&BitConverter.ToInt32(raw,4)==SparkDummy(state):Audio(e)&&state==Sound,"Wrong feedback condition/hand");
      var expected=(e.Type==96?spark:sound).GetParameterBytes(false).ToArray();
      BitConverter.GetBytes(state).CopyTo(expected,16);
-     if(e.Type==96){BitConverter.GetBytes(state==Left?21:20).CopyTo(expected,4);expected[14]=0;}
+     if(e.Type==96){BitConverter.GetBytes(SparkDummy(state)).CopyTo(expected,4);expected[14]=0;}
      Check(raw.SequenceEqual(expected),"Unexpected feedback parameter change");
     }
    }
@@ -134,7 +135,7 @@ static class ParryFollowup {
    }
   }
   Check(manualClips>0,"Native manual guard catalogue missing");
-  File.WriteAllText(Path.Combine(dir,"actions.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),targets,reactionEnds,followupUntilNativeReactionExit=true,manualGuardClipsWithoutMarker=manualClips,nativeExecutorSeconds=timing.EndTime,markersWithinNativeGuard=true,originalEventsPreserved=true,addedFeedback,spark=462800,sound=809000,feedbackStates=new[]{Right,Left,Sound},sparkFreshInstanceOnStart=true,sparkTimingUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(dir,"actions.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),targets,reactionEnds,followupUntilNativeReactionExit=true,manualGuardClipsWithoutMarker=manualClips,nativeExecutorSeconds=timing.EndTime,markersWithinNativeGuard=true,originalEventsPreserved=true,addedFeedback,spark=462800,sound=809000,feedbackStates=new[]{Right,Left,Sound,WeaponRight,WeaponLeft},weaponDummyRight=20110,weaponDummyLeft=10110,missingWeaponPointFallsBackToHand=true,sparkFreshInstanceOnStart=true,sparkTimingUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine($"PASS: 57 guard reactions; {addedFeedback} conditional native spark/sound events; original events preserved");
  }
 }

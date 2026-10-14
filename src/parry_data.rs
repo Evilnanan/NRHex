@@ -1,6 +1,6 @@
 // Generated from guarded original parameters and installed TAE; do not edit.
 pub const FIRST:u16=14000;
-pub const MIN_FRAMES:usize=2;
+pub const MIN_TIER:usize=2;
 pub const TIERS:usize=7;
 pub const CONDITIONS:&[(i32,u8,u16,u8)]=&[
  (0,0,0,0),

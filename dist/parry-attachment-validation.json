@@ -1,0 +1,349 @@
+{
+  "version": "0.17.115",
+  "testsPassed": 20,
+  "nativeCases": 103,
+  "attachment": {
+    "nativeCases": 26,
+    "cases": [
+      {
+        "style": 0,
+        "dummy": 20110,
+        "pointPresent": true,
+        "count": 1
+      },
+      {
+        "style": 0,
+        "dummy": 20110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 0,
+        "dummy": 10110,
+        "pointPresent": true,
+        "count": 2
+      },
+      {
+        "style": 0,
+        "dummy": 10110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 0,
+        "dummy": 5110,
+        "pointPresent": true,
+        "count": 3
+      },
+      {
+        "style": 0,
+        "dummy": 5110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 1,
+        "dummy": 20110,
+        "pointPresent": true,
+        "count": 1
+      },
+      {
+        "style": 1,
+        "dummy": 20110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 1,
+        "dummy": 10110,
+        "pointPresent": true,
+        "count": 2
+      },
+      {
+        "style": 1,
+        "dummy": 10110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 1,
+        "dummy": 5110,
+        "pointPresent": true,
+        "count": 3
+      },
+      {
+        "style": 1,
+        "dummy": 5110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 2,
+        "dummy": 20110,
+        "pointPresent": true,
+        "count": 1
+      },
+      {
+        "style": 2,
+        "dummy": 20110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 2,
+        "dummy": 10110,
+        "pointPresent": true,
+        "count": 1
+      },
+      {
+        "style": 2,
+        "dummy": 10110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 2,
+        "dummy": 5110,
+        "pointPresent": true,
+        "count": 3
+      },
+      {
+        "style": 2,
+        "dummy": 5110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 3,
+        "dummy": 20110,
+        "pointPresent": true,
+        "count": 1
+      },
+      {
+        "style": 3,
+        "dummy": 20110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 3,
+        "dummy": 10110,
+        "pointPresent": true,
+        "count": 2
+      },
+      {
+        "style": 3,
+        "dummy": 10110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "style": 3,
+        "dummy": 5110,
+        "pointPresent": true,
+        "count": 3
+      },
+      {
+        "style": 3,
+        "dummy": 5110,
+        "pointPresent": false,
+        "count": 0
+      },
+      {
+        "dummy": 20110,
+        "unloadedModel": true,
+        "count": 0
+      },
+      {
+        "dummy": 10110,
+        "unloadedModel": true,
+        "count": 0
+      }
+    ],
+    "actualModelRoutingExecuted": true,
+    "dummyTableStubbed": true,
+    "gameMemoryWritten": false,
+    "gameplayVerified": false
+  },
+  "actions": {
+    "inputSha256": "94AC2A53EAAF0E02A2D31855B66091046D8247A1C7E71D79A2AF0370132CCAB8",
+    "outputSha256": "82D85DF52FED1DF4F84A5E29F88975B6AD752A3CECB7E9DE486996FCBDC4935C",
+    "targets": {
+      "a00.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410,
+        19450,
+        19460,
+        19470,
+        19480,
+        19481,
+        19482,
+        19483,
+        19484,
+        19485,
+        19486,
+        19487,
+        19489,
+        19490,
+        19491,
+        19492,
+        19493,
+        19494,
+        19495
+      ],
+      "a02.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410
+      ],
+      "a03.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410
+      ],
+      "a10.tae": [
+        19200,
+        19210
+      ],
+      "a12.tae": [
+        19200,
+        19210
+      ],
+      "a13.tae": [
+        19200,
+        19210
+      ],
+      "a15.tae": [
+        19200,
+        19210,
+        19300,
+        19310,
+        19400,
+        19410,
+        19450,
+        19460,
+        19470
+      ]
+    },
+    "reactionEnds": {
+      "a00.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667,
+        "19250": 1.3333334,
+        "19260": 2.1666667,
+        "19300": 1.3333334,
+        "19310": 2.1666667,
+        "19400": 1.3333334,
+        "19410": 2.1666667,
+        "19450": 100,
+        "19460": 100,
+        "19470": 100,
+        "19480": 1.3333334,
+        "19481": 1.3333334,
+        "19482": 1.3333334,
+        "19483": 1.3333334,
+        "19484": 1.3333334,
+        "19485": 1.3333334,
+        "19486": 100,
+        "19487": 1.3333334,
+        "19489": 1.3333334,
+        "19490": 1.3333334,
+        "19491": 1.3333334,
+        "19492": 1.3333334,
+        "19493": 1.3333334,
+        "19494": 1.3333334,
+        "19495": 1.3333334
+      },
+      "a02.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667,
+        "19250": 1.3333334,
+        "19260": 2.1666667,
+        "19300": 1.3333334,
+        "19310": 2.1666667,
+        "19400": 1.3333334,
+        "19410": 2.1666667
+      },
+      "a03.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667,
+        "19250": 1.3333334,
+        "19260": 2.1666667,
+        "19300": 1.3333334,
+        "19310": 2.1666667,
+        "19400": 1.3333334,
+        "19410": 2.1666667
+      },
+      "a10.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667
+      },
+      "a12.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667
+      },
+      "a13.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667
+      },
+      "a15.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667,
+        "19300": 1.3333334,
+        "19310": 2.1666667,
+        "19400": 1.3333334,
+        "19410": 2.1666667,
+        "19450": 100,
+        "19460": 100,
+        "19470": 100
+      }
+    },
+    "followupUntilNativeReactionExit": true,
+    "manualGuardClipsWithoutMarker": 126,
+    "nativeExecutorSeconds": 0.16666667,
+    "markersWithinNativeGuard": true,
+    "originalEventsPreserved": true,
+    "addedFeedback": 241,
+    "spark": 462800,
+    "sound": 809000,
+    "feedbackStates": [
+      24000,
+      24001,
+      24002,
+      24003,
+      24004
+    ],
+    "weaponDummyRight": 20110,
+    "weaponDummyLeft": 10110,
+    "missingWeaponPointFallsBackToHand": true,
+    "sparkFreshInstanceOnStart": true,
+    "sparkTimingUnchanged": true,
+    "gameplayVerified": false
+  },
+  "handFallback": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "changedAssets": {
+    "mod/natives/NRHex.dll": "3D4AFFE286F75EE0CE456393912800E6BBD04C1032042043BE6D3FD3400A4FC4",
+    "mod/chr/c0000.anibnd.dcx": "82D85DF52FED1DF4F84A5E29F88975B6AD752A3CECB7E9DE486996FCBDC4935C"
+  },
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "runtimeSignaturesVerified": 113
+}

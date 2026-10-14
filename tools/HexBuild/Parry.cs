@@ -31,6 +31,25 @@ static class Parry {
   }
   Set(row,"spCategory",20);
  }
+ public static void ProbeCounterCost(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse){
+  PARAM Table(string n)=>parse(n,original.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes);
+  var a=Table("AtkParam_Pc");var b=Table("BehaviorParam_PC");
+  var ids=a.Rows.Where(r=>Enumerable.Range(1,5).Any(i=>Convert.ToInt32(r["subCategory"+i].Value)==103)).Select(r=>r.ID).ToHashSet();
+  var counters=b.Rows.Where(r=>Convert.ToInt32(r["refType"].Value)==0&&ids.Contains(Convert.ToInt32(r["refId"].Value))).Select(r=>new{r.ID,judge=r["behaviorJudgeId"].Value,attack=r["refId"].Value,stamina=r["stamina"].Value}).ToArray();
+  // Verify actual serialized field offsets, not an unversioned XML layout.
+  var row=a.Rows[0];a.Rows=new(){row};row["hit0_Radius"].Value=BitConverter.Int32BitsToSingle(0x3f123456);
+  var before=a.Write();var marker=BitConverter.GetBytes(0x3f123456);
+  int start=Enumerable.Range(0,before.Length-4).Single(i=>before.AsSpan(i,4).SequenceEqual(marker));
+  var offsets=new List<int>();foreach(int i in Enumerable.Range(1,5)){
+   var cell=row["subCategory"+i];var old=cell.Value;cell.Value=(byte)(Convert.ToByte(old)^0xff);var after=a.Write();
+   offsets.Add(Enumerable.Range(0,before.Length).Single(j=>before[j]!=after[j])-start);cell.Value=old;
+  }
+  Check(offsets.SequenceEqual(new[]{0x4e,0x4f,0x1c8,0x1c9,0x1ca}),"Counter attack categories moved");
+  Check(ids.Count>0&&counters.Length>0,"No native counter behaviors found");
+  string directory=Path.Combine(root,".work/parry-counter");Directory.CreateDirectory(directory);
+  File.WriteAllText(Path.Combine(directory,"parameters.json"),JsonSerializer.Serialize(new{offsets,attackCount=ids.Count,counters,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine($"PASS: native counter categories / serialized offsets; {ids.Count} attacks and {counters.Length} behaviors");
+ }
  public static void StageCounter(string root,Func<string,Memory<byte>,PARAM> parse){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,".work/parry/staged");Directory.CreateDirectory(dir);
   var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
@@ -107,7 +126,8 @@ static class Parry {
   Console.WriteLine("PASS: Parry attack guard parameters, stable rewards and bilingual texts staged/read back");
  }
  public static void BuildActions(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse){
-  const int first=14000,minFrames=2,tiers=7,last=24000;
+  const int first=14000,minTier=2,tiers=7,last=24000;
+  int[] totalMilliseconds={67,100,133,167,200,233,267};
   var work=Path.Combine(root,".work/parry/staged");Directory.CreateDirectory(work);
   PARAM Table(string n)=>parse(n,original.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes);
   Check(!Table("SpEffectParam").Rows.Any(r=>Convert.ToInt32(r["stateInfo"].Value)>=first&&Convert.ToInt32(r["stateInfo"].Value)<last),"Private state range collides with native state");
@@ -145,11 +165,10 @@ static class Parry {
    var group=a.EventGroups.FirstOrDefault(g=>g.GroupType==0);
    if(group==null){group=new TAE.EventGroup(guardTemplate.Group!.GroupType){GroupData=guardTemplate.Group!.GroupData};a.EventGroups.Add(group);}
    foreach(var e in selected)for(int index=0;index<tiers;index++){
-    // The total window is 2..8 animation frames, anchored to attack onset,
-    // never to its duration. Round one third to a whole 1/30-second unit.
-    int frames=minFrames+index,beforeFrames=(frames+1)/3,afterFrames=frames-beforeFrames;
+    // Configure offsets in milliseconds, without frame-unit quantization.
+    int totalMs=totalMilliseconds[index],beforeMs=(totalMs+1)/3,afterMs=totalMs-beforeMs;
     var b=guardTemplate.GetParameterBytes(false).ToArray();BitConverter.GetBytes(GuardJudge).CopyTo(b,8);BitConverter.GetBytes((short)(first+indices[Key(e)]*tiers+index)).CopyTo(b,14);
-    a.Events.Add(new TAE.Event(Math.Max(0,e.StartTime-beforeFrames/30f),e.StartTime+afterFrames/30f,0,guardTemplate.Unk04,b,false){Group=group});added++;
+    a.Events.Add(new TAE.Event(Math.Max(0,e.StartTime-beforeMs/1000f),e.StartTime+afterMs/1000f,0,guardTemplate.Unk04,b,false){Group=group});added++;
    }
   }f.Bytes=t.Write();}
   string output=Path.Combine(work,"c0000.anibnd.dcx");binder.Write(output);var readback=BND4.Read(output);
@@ -158,16 +177,16 @@ static class Parry {
    else{var old=TAE.Read(before[f.ID]);var now=TAE.Read(f.Bytes);Check(old.Animations.Count==now.Animations.Count,"Animation count changed");foreach(var pair in old.Animations.Zip(now.Animations)){var a=pair.First;var b=pair.Second;Check(a.ID==b.ID&&a.AnimFileName==b.AnimFileName,"Animation identity changed");var ae=a.Events.Where(e=>!Generated(e)).ToArray();var be=b.Events.Where(e=>!Generated(e)).ToArray();Check(ae.Length==be.Length&&ae.Zip(be).Select((v,i)=>SameEvent(v.First,v.Second,i==0)).All(v=>v),"Preexisting animation event changed");}}
   }
   // Independent readback: enumerate original attack onsets, not newly written
-  // windows. Explicit frame splits also catch duration-based and unit errors.
+  // windows. Explicit millisecond splits catch duration-based and unit errors.
   int verifiedWindows=0;
-  int[] pre={1,1,1,2,2,2,3},post={1,2,3,3,4,5,5};
+  int[] pre={22,33,44,56,67,78,89},post={45,67,89,111,133,155,178};
   foreach(var f in readback.Files.Where(f=>parsed.ContainsKey(f.ID))){
    var old=TAE.Read(before[f.ID]);var current=TAE.Read(f.Bytes);
    foreach(var pair in old.Animations.Zip(current.Animations)){
     var originalEvents=pair.First.Events.Where(e=>!Generated(e)).ToArray();
     var expected=new List<(int State,float Start,float End)>();
     if(!originalEvents.Any(Guard))foreach(var e in originalEvents.Where(Weapon))for(int i=0;i<pre.Length;i++)
-     expected.Add((first+indices[Key(e)]*tiers+i,Math.Max(0,e.StartTime-pre[i]/30f),e.StartTime+post[i]/30f));
+     expected.Add((first+indices[Key(e)]*tiers+i,Math.Max(0,e.StartTime-pre[i]/1000f),e.StartTime+post[i]/1000f));
     var actual=pair.Second.Events.Where(Generated).Select(e=>(State:(int)BitConverter.ToInt16(e.GetParameterBytes(false),14),Start:e.StartTime,End:e.EndTime));
     var want=expected.OrderBy(e=>e.State).ThenBy(e=>e.Start).ThenBy(e=>e.End).ToArray();
     var got=actual.OrderBy(e=>e.State).ThenBy(e=>e.Start).ThenBy(e=>e.End).ToArray();
@@ -178,11 +197,11 @@ static class Parry {
   Check(verifiedWindows==added,"Not all guard windows verified");
   string Float(object v)=>Convert.ToSingle(v).ToString("R",System.Globalization.CultureInfo.InvariantCulture)+"f32";
   var text="// Generated from guarded original parameters and installed TAE; do not edit.\n"+
-   $"pub const FIRST:u16={first};\npub const MIN_FRAMES:usize={minFrames};\npub const TIERS:usize={tiers};\npub const CONDITIONS:&[(i32,u8,u16,u8)]=&[\n"+string.Join("\n",keys.Select(k=>$" ({k.Judge},{k.Source},{unchecked((ushort)k.Required)},{k.Extra}),"))+"\n];\n"+
+   $"pub const FIRST:u16={first};\npub const MIN_TIER:usize={minTier};\npub const TIERS:usize={tiers};\npub const CONDITIONS:&[(i32,u8,u16,u8)]=&[\n"+string.Join("\n",keys.Select(k=>$" ({k.Judge},{k.Source},{unchecked((ushort)k.Required)},{k.Extra}),"))+"\n];\n"+
    "pub const WEAPONS:&[(i32,f32)]=&[\n"+string.Join("\n",weapons.Select(r=>$" ({r.ID},{Float(r["saWeaponDamage"].Value)}),"))+"\n];\n"+
    "pub const BEHAVIORS:&[(i32,f32)]=&[\n"+string.Join("\n",behaviors.Select(r=>$" ({r.ID},{Float(attacks[Convert.ToInt32(r["refId"].Value)]["atkSuperArmorCorrection"].Value)}),"))+"\n];\n";
   File.WriteAllText(Path.Combine(work,"parry_data.rs"),text);
-  File.WriteAllText(Path.Combine(work,"actions-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),clips,added,verifiedWindows,alignmentOnlyChanges,conditionCount=keys.Length,firstState=first,endState=first+keys.Length*tiers,minFrames,tiers,framesPerSecond=30,anchor="each weapon attack event start",beforeFrames="round(totalFrames/3)",totalFrames="clamp(ceil(basePoise/2),2,8)",weaponRows=weapons.Length,behaviorRows=behaviors.Length,guardJudge=GuardJudge,nativeGuardJudge=460,guardEventType=0,guardFlag=3,onlyWeaponBehaviorEvents=true,originalGuardClipsUntouched=true,originalEventsPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(work,"actions-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),clips,added,verifiedWindows,alignmentOnlyChanges,conditionCount=keys.Length,firstState=first,endState=first+keys.Length*tiers,minTier,tiers,timeUnit="milliseconds",totalMilliseconds,beforeMilliseconds=pre,afterMilliseconds=post,anchor="each weapon attack event start",tier="clamp(ceil(basePoise/2),2,8)",weaponRows=weapons.Length,behaviorRows=behaviors.Length,guardJudge=GuardJudge,nativeGuardJudge=460,guardEventType=0,guardFlag=3,onlyWeaponBehaviorEvents=true,originalGuardClipsUntouched=true,originalEventsPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine($"PASS: {clips} attack clips, {added} conditional guard windows, {keys.Length} attack conditions; original events preserved");
  }
 

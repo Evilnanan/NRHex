@@ -338,7 +338,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);112] {
+fn signatures()->[(&'static str,u32);114] {
  [(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -366,6 +366,8 @@ fn signatures()->[(&'static str,u32);112] {
   (parry_turn::SET_ROTATION_PATTERN,parry_turn::SET_ROTATION_RVA as u32),
   (parry::HAND_STYLE_PATTERN,parry::HAND_STYLE_RVA as u32),
   (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
+  (parry::DUMMY_COUNT_PATTERN,parry::DUMMY_COUNT_RVA as u32),
+  (parry::COUNTER_COST_PATTERN,parry::COUNTER_COST_RVA as u32),
   (REWARD_HIDE_PATTERN,REWARD_HIDE_RVA as u32),(REWARD_SHOW_PATTERN,REWARD_SHOW_RVA as u32),
   (ARTS_ID_PATTERN,ARTS_ID_RVA as u32),(ARTS_PARAM_PATTERN,ARTS_PARAM_RVA as u32),(ARTS_REF_PATTERN,ARTS_REF_RVA as u32),
   (ARTS_RAW_PATTERN,ARTS_RAW_RVA as u32),
@@ -536,6 +538,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let arts_transfer_targets=[
    (parry::NOTIFY_RVA,parry::notify_detour as *const u8,&parry::NOTIFY_ORIGINAL),
    (parry::COST_RVA,parry::cost_detour as *const u8,&parry::COST_ORIGINAL),
+   (parry::COUNTER_COST_RVA,parry::counter_cost_detour as *const u8,&parry::COUNTER_COST_ORIGINAL),
    (parry::REPEL_RVA,parry::repel as *const u8,&parry::REPEL_ORIGINAL),
    (parry::RVA,parry::detour as *const u8,&parry::ORIGINAL),
    (slingshot_runtime::RVA,slingshot_runtime::detour as *const u8,&slingshot_runtime::ORIGINAL),
@@ -564,6 +567,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    let p=hook::prepare(base.add(rva) as *mut u8,detour,64)?;
    if rva==parry::RVA&&p.stolen!=7{return Err("Parry state query must relocate its two 7-byte MOV instructions".into());}
    if rva==parry::COST_RVA&&p.stolen!=9{return Err("Parry cost gate must relocate the nine-byte MOVSS".into());}
+   if rva==parry::COUNTER_COST_RVA&&p.stolen!=5{return Err("Parry counter cost must relocate MOV RCX,RSI / MOV EBX,EAX".into());}
    original.store(p.trampoline,Ordering::Release);arts_transfer_prepared.push((rva,p));
   }
   if arts_param_prepared.stolen!=5{return Err("Arts param entry must relocate its five-byte native jump".into());}

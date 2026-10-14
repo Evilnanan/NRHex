@@ -1,15 +1,667 @@
 {
-  "version": "0.17.101",
+  "version": "0.17.116",
+  "testsPassed": 21,
+  "native": {
+    "nativeCases": 10,
+    "cases": [
+      {
+        "behaviorPresent": false,
+        "baseCost": 0,
+        "finalDebit": 3
+      },
+      {
+        "behaviorPresent": true,
+        "baseCost": 0,
+        "finalDebit": 3
+      },
+      {
+        "behaviorPresent": false,
+        "baseCost": 0,
+        "finalDebit": 3
+      },
+      {
+        "behaviorPresent": true,
+        "baseCost": 1,
+        "finalDebit": 5
+      },
+      {
+        "behaviorPresent": false,
+        "baseCost": 0,
+        "finalDebit": 3
+      },
+      {
+        "behaviorPresent": true,
+        "baseCost": 20,
+        "finalDebit": 43
+      },
+      {
+        "behaviorPresent": false,
+        "baseCost": 0,
+        "finalDebit": 3
+      },
+      {
+        "behaviorPresent": true,
+        "baseCost": 35,
+        "finalDebit": 73
+      },
+      {
+        "behaviorPresent": false,
+        "baseCost": 0,
+        "finalDebit": 3
+      },
+      {
+        "behaviorPresent": true,
+        "baseCost": 100,
+        "finalDebit": 203
+      }
+    ],
+    "parameters": {
+      "offsets": [
+        78,
+        79,
+        456,
+        457,
+        458
+      ],
+      "attackCount": 89,
+      "counters": [
+        {
+          "ID": 100000180,
+          "judge": 180,
+          "attack": 90180,
+          "stamina": 20
+        },
+        {
+          "ID": 100000380,
+          "judge": 380,
+          "attack": 90380,
+          "stamina": 20
+        },
+        {
+          "ID": 100000381,
+          "judge": 381,
+          "attack": 90381,
+          "stamina": 0
+        },
+        {
+          "ID": 100100180,
+          "judge": 180,
+          "attack": 100180,
+          "stamina": 14
+        },
+        {
+          "ID": 100100380,
+          "judge": 380,
+          "attack": 100380,
+          "stamina": 17
+        },
+        {
+          "ID": 100150180,
+          "judge": 180,
+          "attack": 150180,
+          "stamina": 14
+        },
+        {
+          "ID": 100150380,
+          "judge": 380,
+          "attack": 150380,
+          "stamina": 17
+        },
+        {
+          "ID": 100200180,
+          "judge": 180,
+          "attack": 200180,
+          "stamina": 20
+        },
+        {
+          "ID": 100200380,
+          "judge": 380,
+          "attack": 200380,
+          "stamina": 24
+        },
+        {
+          "ID": 100211380,
+          "judge": 380,
+          "attack": 212380,
+          "stamina": 20
+        },
+        {
+          "ID": 100300180,
+          "judge": 180,
+          "attack": 300180,
+          "stamina": 25
+        },
+        {
+          "ID": 100300380,
+          "judge": 380,
+          "attack": 300380,
+          "stamina": 30
+        },
+        {
+          "ID": 100350180,
+          "judge": 180,
+          "attack": 350180,
+          "stamina": 25
+        },
+        {
+          "ID": 100350380,
+          "judge": 380,
+          "attack": 350380,
+          "stamina": 30
+        },
+        {
+          "ID": 100400180,
+          "judge": 180,
+          "attack": 400180,
+          "stamina": 30
+        },
+        {
+          "ID": 100400380,
+          "judge": 380,
+          "attack": 400380,
+          "stamina": 36
+        },
+        {
+          "ID": 100500180,
+          "judge": 180,
+          "attack": 500180,
+          "stamina": 20
+        },
+        {
+          "ID": 100500380,
+          "judge": 380,
+          "attack": 500380,
+          "stamina": 20
+        },
+        {
+          "ID": 100600180,
+          "judge": 180,
+          "attack": 600180,
+          "stamina": 24
+        },
+        {
+          "ID": 100600380,
+          "judge": 380,
+          "attack": 600380,
+          "stamina": 24
+        },
+        {
+          "ID": 100700180,
+          "judge": 180,
+          "attack": 700180,
+          "stamina": 20
+        },
+        {
+          "ID": 100700380,
+          "judge": 380,
+          "attack": 700380,
+          "stamina": 24
+        },
+        {
+          "ID": 100800180,
+          "judge": 180,
+          "attack": 800180,
+          "stamina": 20
+        },
+        {
+          "ID": 100800380,
+          "judge": 380,
+          "attack": 800380,
+          "stamina": 25
+        },
+        {
+          "ID": 100900180,
+          "judge": 180,
+          "attack": 900180,
+          "stamina": 12
+        },
+        {
+          "ID": 100900380,
+          "judge": 380,
+          "attack": 900380,
+          "stamina": 13
+        },
+        {
+          "ID": 100950180,
+          "judge": 180,
+          "attack": 950180,
+          "stamina": 12
+        },
+        {
+          "ID": 100950380,
+          "judge": 380,
+          "attack": 950380,
+          "stamina": 13
+        },
+        {
+          "ID": 100960380,
+          "judge": 380,
+          "attack": 960380,
+          "stamina": 4
+        },
+        {
+          "ID": 101000180,
+          "judge": 180,
+          "attack": 1000180,
+          "stamina": 24
+        },
+        {
+          "ID": 101000380,
+          "judge": 380,
+          "attack": 1000380,
+          "stamina": 14
+        },
+        {
+          "ID": 101000381,
+          "judge": 381,
+          "attack": 1000381,
+          "stamina": 14
+        },
+        {
+          "ID": 101100180,
+          "judge": 180,
+          "attack": 1100180,
+          "stamina": 20
+        },
+        {
+          "ID": 101100380,
+          "judge": 380,
+          "attack": 1100380,
+          "stamina": 24
+        },
+        {
+          "ID": 101200180,
+          "judge": 180,
+          "attack": 1200180,
+          "stamina": 26
+        },
+        {
+          "ID": 101200380,
+          "judge": 380,
+          "attack": 1200380,
+          "stamina": 32
+        },
+        {
+          "ID": 101205180,
+          "judge": 180,
+          "attack": 1203180,
+          "stamina": 26
+        },
+        {
+          "ID": 101205380,
+          "judge": 380,
+          "attack": 1203380,
+          "stamina": 32
+        },
+        {
+          "ID": 101300180,
+          "judge": 180,
+          "attack": 1300180,
+          "stamina": 23
+        },
+        {
+          "ID": 101300380,
+          "judge": 380,
+          "attack": 1300380,
+          "stamina": 28
+        },
+        {
+          "ID": 101400180,
+          "judge": 180,
+          "attack": 1400180,
+          "stamina": 20
+        },
+        {
+          "ID": 101400380,
+          "judge": 380,
+          "attack": 1400380,
+          "stamina": 25
+        },
+        {
+          "ID": 101500180,
+          "judge": 180,
+          "attack": 1500180,
+          "stamina": 26
+        },
+        {
+          "ID": 101500380,
+          "judge": 380,
+          "attack": 1500380,
+          "stamina": 32
+        },
+        {
+          "ID": 101505180,
+          "judge": 180,
+          "attack": 1504180,
+          "stamina": 21
+        },
+        {
+          "ID": 101505380,
+          "judge": 380,
+          "attack": 1504380,
+          "stamina": 23
+        },
+        {
+          "ID": 101600180,
+          "judge": 180,
+          "attack": 1600180,
+          "stamina": 24
+        },
+        {
+          "ID": 101600380,
+          "judge": 380,
+          "attack": 1600380,
+          "stamina": 28
+        },
+        {
+          "ID": 101700180,
+          "judge": 180,
+          "attack": 1700180,
+          "stamina": 27
+        },
+        {
+          "ID": 101700380,
+          "judge": 380,
+          "attack": 1700380,
+          "stamina": 33
+        },
+        {
+          "ID": 101703180,
+          "judge": 180,
+          "attack": 1700180,
+          "stamina": 27
+        },
+        {
+          "ID": 101703380,
+          "judge": 380,
+          "attack": 1700380,
+          "stamina": 33
+        },
+        {
+          "ID": 101800180,
+          "judge": 180,
+          "attack": 1800180,
+          "stamina": 25
+        },
+        {
+          "ID": 101800380,
+          "judge": 380,
+          "attack": 1800380,
+          "stamina": 30
+        },
+        {
+          "ID": 101850180,
+          "judge": 180,
+          "attack": 1850180,
+          "stamina": 25
+        },
+        {
+          "ID": 101850185,
+          "judge": 185,
+          "attack": 1850185,
+          "stamina": 5
+        },
+        {
+          "ID": 101850186,
+          "judge": 186,
+          "attack": 1850186,
+          "stamina": 25
+        },
+        {
+          "ID": 101850380,
+          "judge": 380,
+          "attack": 1850380,
+          "stamina": 30
+        },
+        {
+          "ID": 101850385,
+          "judge": 385,
+          "attack": 1850385,
+          "stamina": 5
+        },
+        {
+          "ID": 101850386,
+          "judge": 386,
+          "attack": 1850386,
+          "stamina": 25
+        },
+        {
+          "ID": 101900180,
+          "judge": 180,
+          "attack": 1900180,
+          "stamina": 25
+        },
+        {
+          "ID": 101900380,
+          "judge": 380,
+          "attack": 1900380,
+          "stamina": 30
+        },
+        {
+          "ID": 102000180,
+          "judge": 180,
+          "attack": 2000180,
+          "stamina": 25
+        },
+        {
+          "ID": 102000380,
+          "judge": 380,
+          "attack": 2000380,
+          "stamina": 30
+        },
+        {
+          "ID": 102100180,
+          "judge": 180,
+          "attack": 2100180,
+          "stamina": 13
+        },
+        {
+          "ID": 102100380,
+          "judge": 380,
+          "attack": 2100380,
+          "stamina": 12
+        },
+        {
+          "ID": 102100381,
+          "judge": 381,
+          "attack": 2100381,
+          "stamina": 12
+        },
+        {
+          "ID": 102101180,
+          "judge": 180,
+          "attack": 2101180,
+          "stamina": 13
+        },
+        {
+          "ID": 102101380,
+          "judge": 380,
+          "attack": 2101380,
+          "stamina": 12
+        },
+        {
+          "ID": 102101381,
+          "judge": 381,
+          "attack": 2101381,
+          "stamina": 12
+        },
+        {
+          "ID": 102112180,
+          "judge": 180,
+          "attack": 2101180,
+          "stamina": 13
+        },
+        {
+          "ID": 102112380,
+          "judge": 380,
+          "attack": 2101380,
+          "stamina": 12
+        },
+        {
+          "ID": 102112381,
+          "judge": 381,
+          "attack": 2101381,
+          "stamina": 12
+        },
+        {
+          "ID": 102113180,
+          "judge": 180,
+          "attack": 2101180,
+          "stamina": 13
+        },
+        {
+          "ID": 102113380,
+          "judge": 380,
+          "attack": 2101380,
+          "stamina": 12
+        },
+        {
+          "ID": 102113381,
+          "judge": 381,
+          "attack": 2101381,
+          "stamina": 12
+        },
+        {
+          "ID": 102150180,
+          "judge": 180,
+          "attack": 2150180,
+          "stamina": 13
+        },
+        {
+          "ID": 102150380,
+          "judge": 380,
+          "attack": 2150380,
+          "stamina": 12
+        },
+        {
+          "ID": 102150381,
+          "judge": 381,
+          "attack": 2150381,
+          "stamina": 12
+        },
+        {
+          "ID": 102151180,
+          "judge": 180,
+          "attack": 2151180,
+          "stamina": 13
+        },
+        {
+          "ID": 102151380,
+          "judge": 380,
+          "attack": 2151380,
+          "stamina": 12
+        },
+        {
+          "ID": 102151381,
+          "judge": 381,
+          "attack": 2151381,
+          "stamina": 12
+        },
+        {
+          "ID": 102200180,
+          "judge": 180,
+          "attack": 2200180,
+          "stamina": 13
+        },
+        {
+          "ID": 102200380,
+          "judge": 380,
+          "attack": 2200380,
+          "stamina": 12
+        },
+        {
+          "ID": 102200381,
+          "judge": 381,
+          "attack": 2200381,
+          "stamina": 12
+        },
+        {
+          "ID": 102300180,
+          "judge": 180,
+          "attack": 2300180,
+          "stamina": 30
+        },
+        {
+          "ID": 102300380,
+          "judge": 380,
+          "attack": 2300380,
+          "stamina": 36
+        },
+        {
+          "ID": 102350180,
+          "judge": 180,
+          "attack": 2350180,
+          "stamina": 30
+        },
+        {
+          "ID": 102350380,
+          "judge": 380,
+          "attack": 2350380,
+          "stamina": 36
+        },
+        {
+          "ID": 102400180,
+          "judge": 180,
+          "attack": 2400180,
+          "stamina": 14
+        },
+        {
+          "ID": 102400380,
+          "judge": 380,
+          "attack": 2400380,
+          "stamina": 17
+        },
+        {
+          "ID": 103000180,
+          "judge": 180,
+          "attack": 3000180,
+          "stamina": 14
+        },
+        {
+          "ID": 103000380,
+          "judge": 380,
+          "attack": 3000380,
+          "stamina": 17
+        },
+        {
+          "ID": 103100180,
+          "judge": 180,
+          "attack": 3100180,
+          "stamina": 20
+        },
+        {
+          "ID": 103100380,
+          "judge": 380,
+          "attack": 3100380,
+          "stamina": 24
+        },
+        {
+          "ID": 103200180,
+          "judge": 180,
+          "attack": 3200180,
+          "stamina": 24
+        },
+        {
+          "ID": 103200380,
+          "judge": 380,
+          "attack": 3200380,
+          "stamina": 28
+        }
+      ],
+      "gameplayVerified": false
+    },
+    "hookAfterNativeCalculator": true,
+    "staminaSetterStubbed": true,
+    "gameplayVerified": false
+  },
   "changedAssets": {
-    "mod/natives/NRHex.dll": "4f48fd7146b8fe2576a0b7887b1fa9b854b431a36f977a68128a78dd4a16c161",
-    "mod/regulation.bin": "42cdf12c28df73ab3d28079d48fd1d42c02766a1deef0df961c0ec4244572175",
-    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "79c1d108e63062b93fceff9081f847a995441206a40fa9a9595969d5d6228a4c",
-    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "f1e7bfb691ac11718d43117492b24114dfe19290e30bc19dcfce1394c4423b3f",
-    "mod/msg/engus/item_dlc01.msgbnd.dcx": "20b8d19973ce3c94a5af56a6e2e0ff68877e150967e26e1fd7196ad5f48e1744",
-    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "c7ba8688c8000f385605e97950ab502c326e754020f899bb592b8297861f6c0a"
+    "mod/natives/NRHex.dll": "DDA9B9A99423EDC8F05B9E5DF0CA0B7CC898165750F595649BFC63170686F38B",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "3F660792C840658B77F78613DEF7C5C40BC758838ED9E4CBF0BAE291DDEF8790",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "73A02CE34F81AF3727066014E795893417EB705A369A92E40224AAC2ADD49796"
   },
   "otherAssetsAndSettingsPreserved": true,
-  "gameStarted": false,
   "gameplayVerified": false,
-  "multiplayerVerified": false
+  "multiplayerVerified": false,
+  "loadingVerified": true,
+  "loadedVersion": "0.17.116"
 }

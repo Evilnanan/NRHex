@@ -36,6 +36,28 @@ pub unsafe fn two_handed(player:usize)->bool{
 pub const FEEDBACK_RIGHT:u16=24000;
 pub const FEEDBACK_LEFT:u16=24001;
 pub const FEEDBACK_SOUND:u16=24002;
+pub const FEEDBACK_WEAPON_RIGHT:u16=24003;
+pub const FEEDBACK_WEAPON_LEFT:u16=24004;
+// Native PlayerIns vtable +4D0 counts actual dummy points on the resolved
+// model (+4A0), without the FFX transform provider's body-model fallback.
+pub const DUMMY_COUNT_RVA:usize=0x3c9660;
+pub const DUMMY_COUNT_PATTERN:&str="40 53 56 57 48 83 EC 50 49 8B D8 48 8B F2 48 8D 44 24 70 48 89 44 24 78 8B 02";
+unsafe fn feedback_spark_state(player:usize)->Option<u16>{
+ if player==0{return None;}
+ let equipment=read_ptr(player+0x670);if equipment==0{return None;}
+ let (dummy,weapon,hand)=match crate::read_i32(equipment){
+  2=>(20110,FEEDBACK_WEAPON_RIGHT,FEEDBACK_RIGHT),
+  3=>(10110,FEEDBACK_WEAPON_LEFT,FEEDBACK_LEFT),
+  _=>return None,
+ };
+ // Query the current model each time: no inventory-slot, actor or weapon
+ // pointer cache to become stale on hand/weapon swaps or network replicas.
+ let vt=read_ptr(player);
+ if vt==0||read_ptr(player+0x680)==0{return Some(hand);}
+ let address=read_ptr(vt+0x4d0);if address==0{return Some(hand);}
+ let count:unsafe extern "system" fn(usize,*const i32,*const i32)->i32=std::mem::transmute(address);
+ Some(if count(player,&dummy,&dummy)>0{weapon}else{hand})
+}
 pub const NOTIFY_RVA:usize=0x4381f0;
 pub const NOTIFY_PATTERN:&str="48 89 5C 24 08 55 56 57 41 56 41 57 48 83 EC 40 45 8B F0 48 8B FA 48 8B E9 4C 89 4C 24 20 F6 82 C1 02 00 00 08";
 pub static NOTIFY_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
@@ -52,6 +74,46 @@ pub const REPEL_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41
 pub static COST_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static COST_RESUME:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static REPEL_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+// Weapon-behavior execution, immediately after the native stamina calculator.
+// RSI is the attack module; [RSP+58] is its resolved BehaviorParam row.
+pub const COUNTER_COST_RVA:usize=0x434768;
+pub const COUNTER_COST_PATTERN:&str="48 8B CE 8B D8 E8 AE 79 FF FF F7 DB 45 33 C0 8B D3 48 8B 88 B8 01 00 00 48 8B 09 E8 48 1A FF FF";
+pub static COUNTER_COST_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+const COUNTER_CATEGORIES:[usize;5]=[0x4e,0x4f,0x1c8,0x1c9,0x1ca];
+#[repr(C)]struct CounterAttackRef{id:i32,cache:u32,kind:i32,padding:u32,row:usize}
+type CounterLookup=unsafe extern "system" fn(*mut CounterAttackRef,i32,i32);
+unsafe fn counter_cost_with(module:usize,behavior:usize,cost:i32,lookup:CounterLookup)->i32{
+ let Some(base)=active_base() else{return cost;};
+ if cost<=0||module==0||behavior==0||ptr::read((behavior+9) as *const u8)!=0{return cost;}
+ let player=read_ptr(module+8);
+ if owned_action(player).is_none()||!has_effect(player,COUNTER,base){return cost;}
+ let id=crate::read_i32(behavior+0xc);if id<0{return cost;}
+ let mut attack=CounterAttackRef{id:-1,cache:0,kind:1,padding:0,row:0};
+ lookup(&mut attack,1,id); // native table kind 1 = PC, 0 = NPC
+ if attack.row!=0&&COUNTER_CATEGORIES.iter().any(|offset|ptr::read((attack.row+offset) as *const u8)==103){0}else{cost}
+}
+unsafe extern "system" fn counter_cost(module:usize,behavior:usize,cost:i32)->i32{
+ let Some(base)=active_base() else{return cost;};
+ counter_cost_with(module,behavior,cost,std::mem::transmute(base+crate::devils_gaze_hit::LOOKUP_RVA))
+}
+// Preserve the full surrounding native frame. Only the final positive debit
+// changes; no refill, shared parameter mutation, actor flag or cached pointer.
+#[unsafe(naked)]pub unsafe extern "system" fn counter_cost_detour(){
+ core::arch::naked_asm!(
+  "pushfq","sub rsp,0xc8",
+  "mov [rsp+0x20],rax","mov [rsp+0x28],rcx","mov [rsp+0x30],rdx",
+  "mov [rsp+0x38],r8","mov [rsp+0x40],r9","mov [rsp+0x48],r10","mov [rsp+0x50],r11",
+  "movdqu [rsp+0x60],xmm0","movdqu [rsp+0x70],xmm1","movdqu [rsp+0x80],xmm2",
+  "movdqu [rsp+0x90],xmm3","movdqu [rsp+0xa0],xmm4","movdqu [rsp+0xb0],xmm5",
+  "mov r8d,eax","mov rcx,rsi","mov rdx,[rsp+0x128]","call {callback}","mov [rsp+0x20],eax",
+  "movdqu xmm0,[rsp+0x60]","movdqu xmm1,[rsp+0x70]","movdqu xmm2,[rsp+0x80]",
+  "movdqu xmm3,[rsp+0x90]","movdqu xmm4,[rsp+0xa0]","movdqu xmm5,[rsp+0xb0]",
+  "mov rax,[rsp+0x20]","mov rcx,[rsp+0x28]","mov rdx,[rsp+0x30]",
+  "mov r8,[rsp+0x38]","mov r9,[rsp+0x40]","mov r10,[rsp+0x48]","mov r11,[rsp+0x50]",
+  "add rsp,0xc8","popfq","jmp qword ptr [rip+{original}]",
+  callback=sym counter_cost,original=sym COUNTER_COST_ORIGINAL
+ );
+}
 pub fn native_guard_judge(judge:i32)->i32{if judge==GUARD_JUDGE{460}else{judge}}
 thread_local!{static GUARD_SCOPES:RefCell<Vec<Option<(usize,u8,i32)>>>=const{RefCell::new(Vec::new())};}
 #[cfg(test)]thread_local!{static TEST_CONTEXT:std::cell::Cell<Option<(bool,usize)>>=const{std::cell::Cell::new(None)};}
@@ -144,15 +206,13 @@ unsafe fn on_guard_notification(module:usize,hit:usize,kind:i32)->(usize,bool){
  (read_ptr(read_ptr(player+0x1b8)+8),continuing)
 }
 unsafe fn feedback_query(manager:usize,state:u16)->Option<u8>{
- if !(FEEDBACK_RIGHT..=FEEDBACK_SOUND).contains(&state){return None;}
+ if !(FEEDBACK_RIGHT..=FEEDBACK_WEAPON_LEFT).contains(&state){return None;}
  let Some(base)=active_base() else{return Some(0);};
  if manager==0{return Some(0);}
  let player=read_ptr(manager+0x10);
  if player==0||read_ptr(player+0x190)!=manager||owned_action(player).is_none()||!two_handed(player)||!has_effect(player,COUNTER,base){return Some(0);}
  if state==FEEDBACK_SOUND{return Some(1);}
- let get_source:unsafe extern "system" fn(usize)->i32=std::mem::transmute(read_ptr(read_ptr(player)+0x260));
- let left=get_source(player)==-2;
- Some(u8::from((state==FEEDBACK_LEFT)==left))
+ Some(u8::from(feedback_spark_state(player)==Some(state)))
 }
 // HKS env(237) maps action +1C (resolved impact) and +20 (weapon guard
 // motion class) through native 6C8970. Impact zero maps to no guard reaction,
@@ -220,13 +280,13 @@ type Query=unsafe extern "system" fn(usize,u16)->u8;
 const TIERS:usize=data::TIERS;
 fn condition(state:u16)->Option<((i32,u8,u16,u8),u8)>{
  let index=state.checked_sub(data::FIRST)? as usize;
- data::CONDITIONS.get(index/TIERS).copied().map(|v|(v,(index%TIERS+data::MIN_FRAMES) as u8))
+ data::CONDITIONS.get(index/TIERS).copied().map(|v|(v,(index%TIERS+data::MIN_TIER) as u8))
 }
 fn lookup(table:&[(i32,f32)],id:i32)->Option<f32>{table.binary_search_by_key(&id,|v|v.0).ok().map(|i|table[i].1)}
 fn tier(weapon:f32,correction:f32)->Option<u8>{
  let poise=weapon*(correction*0.01);
  if !weapon.is_finite()||weapon<=0.||!correction.is_finite()||correction<0.||!poise.is_finite(){return None;}
- Some((poise/2.).ceil().clamp(data::MIN_FRAMES as f32,(data::MIN_FRAMES+TIERS-1) as f32) as u8)
+ Some((poise/2.).ceil().clamp(data::MIN_TIER as f32,(data::MIN_TIER+TIERS-1) as f32) as u8)
 }
 // TAE uses 0=current attack hand, 1=right, 2=left. Equipment sources -1/-2
 // select the currently equipped slots; using fixed slots 0/1 would be wrong.
@@ -258,6 +318,60 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
 #[cfg(test)]mod tests{
  use super::*;
  static NOTIFY_TEST:std::sync::Mutex<()>=std::sync::Mutex::new(());
+ thread_local!{static COUNTER_ROW:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
+ unsafe extern "system" fn counter_lookup(out:*mut CounterAttackRef,kind:i32,id:i32){
+  assert_eq!(kind,1);assert_eq!((*out).id,-1);assert_eq!((*out).cache,0);
+  (*out).row=if id==99{0}else{COUNTER_ROW.with(|r|r.get())};
+ }
+ unsafe extern "system" fn counter_owns(manager:usize,id:i32)->u8{
+  u8::from((manager==1||manager==2)&&id==OWNER||manager==2&&id==COUNTER)
+ }
+ // Enter with the real call-site alignment, no extra return address atop its
+ // stack locals. The continuation checks preserved flags/registers/SIMD.
+ #[unsafe(naked)]unsafe extern "system" fn run_counter(_module:usize,_behavior:usize,_cost:i32)->i32{
+  core::arch::naked_asm!("push rsi","push rbx","sub rsp,0x88","mov rsi,rcx",
+   "mov [rsp+0x58],rdx","mov eax,r8d","mov edx,0x12345678","movd xmm0,edx","stc",
+   "jmp {detour}",detour=sym counter_cost_detour);
+ }
+ #[unsafe(naked)]unsafe extern "system" fn counter_continuation(){
+  core::arch::naked_asm!("jnc 2f","cmp edx,0x12345678","jne 2f","movd r10d,xmm0","cmp r10d,edx","jne 2f",
+   "mov rcx,rsi","mov ebx,eax","jmp 3f","2:","mov eax,0xdeadbeef",
+   "3:","add rsp,0x88","pop rbx","pop rsi","ret");
+ }
+ #[test]fn counter_stamina_is_scoped_to_native_counter_category_and_earned_guard(){unsafe{
+  let base=crate::win::VirtualAlloc(ptr::null_mut(),0xe70000,0x3000,0x40) as usize;assert_ne!(base,0);
+  for(rva,address)in[(crate::HAS_EFFECT_RVA,counter_owns as *const () as usize),(crate::devils_gaze_hit::LOOKUP_RVA,counter_lookup as *const () as usize)]{
+   let mut jump=vec![0x48,0xb8];jump.extend_from_slice(&address.to_le_bytes());jump.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(jump.as_ptr(),(base+rva) as *mut u8,jump.len());
+  }
+  TEST_CONTEXT.with(|s|s.set(Some((true,base))));
+  let previous=COUNTER_COST_ORIGINAL.swap(counter_continuation as *const () as *mut u8,Ordering::AcqRel);
+  let mut actor=vec![0u8;0x718];let mut vt=vec![0usize;0x120/8];let mut stats=vec![0u8;0x168];let mut action=[0u8;0x260];
+  let modules=[stats.as_mut_ptr() as usize,action.as_mut_ptr() as usize];let player=actor.as_mut_ptr() as usize;
+  vt[0x118/8]=base+0x4d2f00;ptr::write_unaligned(player as *mut usize,vt.as_ptr() as usize);
+  ptr::write_unaligned((player+0x1b8) as *mut usize,modules.as_ptr() as usize);
+  stats[0x140..0x144].copy_from_slice(&100i32.to_le_bytes());stats[0x15c..0x160].copy_from_slice(&37i32.to_le_bytes());
+  let module=[0usize,player];let m=module.as_ptr() as usize;
+  let mut behavior=[0u8;0x20];behavior[0xc..0x10].copy_from_slice(&123i32.to_le_bytes());let b=behavior.as_ptr() as usize;
+  let mut row=[0u8;0x1d0];COUNTER_ROW.with(|r|r.set(row.as_mut_ptr() as usize));
+  for manager in [0usize,1,2]{ptr::write_unaligned((player+0x190) as *mut usize,manager);
+   for category in [0u8,101,102,103,129]{for offset in COUNTER_CATEGORIES{
+    row.fill(0);row[offset]=category;
+    for cost in [-20,0,1,35,200]{assert_eq!(run_counter(m,b,cost),if manager==2&&category==103&&cost>0{0}else{cost});}
+   }}
+  }
+  row.fill(0);row[0x4e]=103;
+  for kind in [1u8,2,255]{behavior[9]=kind;assert_eq!(run_counter(m,b,35),35);}behavior[9]=0;
+  for id in [-1i32,99]{behavior[0xc..0x10].copy_from_slice(&id.to_le_bytes());assert_eq!(run_counter(m,b,35),35);}
+  behavior[0xc..0x10].copy_from_slice(&123i32.to_le_bytes());
+  actor[0x710]=1;assert_eq!(run_counter(m,b,35),35);actor[0x710]=0;
+  stats[0x140..0x144].copy_from_slice(&0i32.to_le_bytes());assert_eq!(run_counter(m,b,35),35);
+  stats[0x140..0x144].copy_from_slice(&100i32.to_le_bytes());
+  assert_eq!(run_counter(0,b,35),35);assert_eq!(run_counter(m,0,35),35);
+  TEST_CONTEXT.with(|s|s.set(Some((false,base))));assert_eq!(run_counter(m,b,35),35);
+  assert_eq!(crate::read_i32(stats.as_ptr() as usize+0x15c),37); // no refill or mutation
+  COUNTER_COST_ORIGINAL.store(previous,Ordering::Release);COUNTER_ROW.with(|r|r.set(0));TEST_CONTEXT.with(|s|s.set(None));
+  assert_ne!(crate::win::VirtualFree(base as *mut _,0,0x8000),0);
+ }}
  unsafe extern "system" fn fixture_airborne(physics:usize)->u8{u8::from(ptr::read((physics+0x92) as *const u8)==0)}
  // Exercise the real accepted-hit callback with isolated native API stubs.
  #[test]fn counter_arms_only_on_accepted_attack_guards_and_ordinary_guard_clears_it(){unsafe{
@@ -286,7 +400,7 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   let mut physics=[0u8;0x98];physics[0x92]=1;
   let mut modules=[0usize;0x70/8];modules[0]=stats.as_mut_ptr() as usize;modules[1]=action.as_mut_ptr() as usize;modules[0x68/8]=physics.as_mut_ptr() as usize;
   let a=actor.as_mut_ptr() as usize;vt[0x118/8]=base+0x4d2f00;vt[0x260/8]=source as *const () as usize;
-  let equipment=2i32;ptr::write_unaligned((a+0x670) as *mut usize,&equipment as *const i32 as usize);
+  let mut equipment=2i32;ptr::write_unaligned((a+0x670) as *mut usize,&equipment as *const i32 as usize);
   effects.owner=a;
   ptr::write_unaligned(a as *mut usize,vt.as_ptr() as usize);
   ptr::write_unaligned((a+0x190) as *mut usize,&mut effects as *mut Effects as usize);
@@ -312,6 +426,7 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   assert_eq!(feedback_query(manager,FEEDBACK_SOUND),Some(1));
   unsafe extern "system" fn left_source(_:usize)->i32{-2}
   vt[0x260/8]=left_source as *const () as usize;
+  ptr::write_volatile(&mut equipment,3);
   assert_eq!(feedback_query(manager,FEEDBACK_LEFT),Some(1));assert_eq!(feedback_query(manager,FEEDBACK_RIGHT),Some(0));
   assert_eq!(feedback_query(0,FEEDBACK_SOUND),Some(0));assert_eq!(feedback_query(manager,606),None);
   for _ in 0..5{on_guard_notification(m,h,3);}assert_eq!(effects.counter_applies,1);
@@ -495,8 +610,8 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   assert_eq!(call(0x1234,0x5678,3,0xabcdef1234567890),0xfedcba9876543210);
   NOTIFY_ORIGINAL.store(old,Ordering::Release);TEST_CONTEXT.with(|s|s.set(None));
  }}
- #[test]fn onset_window_scales_from_two_to_eight_total_frames(){
-  assert_eq!((data::MIN_FRAMES,TIERS),(2,7));
+ #[test]fn onset_window_selects_seven_millisecond_tiers(){
+  assert_eq!((data::MIN_TIER,TIERS),(2,7));
   assert_eq!(tier(3.,110.),Some(2)); // two-hand dagger: 3.3 poise -> 67 ms
   assert_eq!(tier(5.,110.),Some(3)); // two-hand straight sword: 5.5 -> 100 ms
   assert_eq!(tier(5.5,203.),Some(6)); // two-hand greatsword: 11.165 -> 200 ms
@@ -509,6 +624,28 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   }
   for (a,b) in [(0.,100.),(5.,-100.),(f32::NAN,1.),(5.,f32::INFINITY)]{assert_eq!(tier(a,b),None);}
  }
+ #[test]fn spark_follows_actual_two_hand_model_and_missing_point_falls_back(){unsafe{
+  unsafe extern "system" fn count(p:usize,first:*const i32,last:*const i32)->i32{
+   assert_eq!(*first,*last);
+   let style=crate::read_i32(read_ptr(p+0x670));
+   assert_eq!(*first,if style==2{20110}else{10110});
+   crate::read_i32(read_ptr(p+0x680))
+  }
+  let mut actor=vec![0usize;0x688/8];let p=actor.as_mut_ptr() as usize;
+  let mut vt=vec![0usize;0x4d8/8];vt[0x4d0/8]=count as *const () as usize;actor[0]=vt.as_ptr() as usize;
+  let mut style=2i32;let mut points=1i32;
+  ptr::write_unaligned((p+0x670) as *mut usize,&mut style as *mut i32 as usize);
+  ptr::write_unaligned((p+0x680) as *mut usize,&mut points as *mut i32 as usize);
+  for (hand,weapon,fallback) in [(2,FEEDBACK_WEAPON_RIGHT,FEEDBACK_RIGHT),(3,FEEDBACK_WEAPON_LEFT,FEEDBACK_LEFT)]{
+   ptr::write_volatile(&mut style,hand);
+   for n in [1,0,2,0,1]{ptr::write_volatile(&mut points,n);assert_eq!(feedback_spark_state(p),Some(if n>0{weapon}else{fallback}));}
+   ptr::write_unaligned((p+0x680) as *mut usize,0);assert_eq!(feedback_spark_state(p),Some(fallback));
+   ptr::write_unaligned((p+0x680) as *mut usize,&mut points as *mut i32 as usize);
+  }
+  for s in [0,1,4,-1]{ptr::write_volatile(&mut style,s);assert_eq!(feedback_spark_state(p),None);}
+  ptr::write_unaligned((p+0x670) as *mut usize,0);assert_eq!(feedback_spark_state(p),None);
+  assert_eq!(feedback_spark_state(0),None);
+ }}
  #[test]fn source_tracks_equipped_and_current_attack_hand(){
   assert_eq!(source(0,-2),Some(-2));assert_eq!(source(0,5),Some(5));
   assert_eq!(source(1,-2),Some(-1));assert_eq!(source(2,-1),Some(-2));assert_eq!(source(3,0),None);
@@ -522,7 +659,7 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
  #[test]fn only_generated_states_are_intercepted(){
   assert!(condition(data::FIRST-1).is_none());
   for (i,expected) in data::CONDITIONS.iter().enumerate(){for index in 0..TIERS{
-   assert_eq!(condition(data::FIRST+(i*TIERS+index) as u16),Some((*expected,(index+data::MIN_FRAMES) as u8)));
+   assert_eq!(condition(data::FIRST+(i*TIERS+index) as u16),Some((*expected,(index+data::MIN_TIER) as u8)));
   }}
   assert!(condition(data::FIRST+(data::CONDITIONS.len()*TIERS) as u16).is_none());
  }

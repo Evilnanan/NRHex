@@ -28,6 +28,34 @@
       "starts": 6,
       "heldUpdates": 24,
       "allocatedInstances": 6
+    },
+    {
+      "dummy": 20110,
+      "taeByte14": 1,
+      "starts": 6,
+      "heldUpdates": 24,
+      "allocatedInstances": 1
+    },
+    {
+      "dummy": 20110,
+      "taeByte14": 0,
+      "starts": 6,
+      "heldUpdates": 24,
+      "allocatedInstances": 6
+    },
+    {
+      "dummy": 10110,
+      "taeByte14": 1,
+      "starts": 6,
+      "heldUpdates": 24,
+      "allocatedInstances": 1
+    },
+    {
+      "dummy": 10110,
+      "taeByte14": 0,
+      "starts": 6,
+      "heldUpdates": 24,
+      "allocatedInstances": 6
     }
   ],
   "nativeBranchExecuted": true,

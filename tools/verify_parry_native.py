@@ -17,7 +17,7 @@ try:
    if r.type==10:
     q=c.c_uint64.from_address(m+r.rva);q.value=(q.value+m-p.OPTIONAL_HEADER.ImageBase)&0xffffffffffffffff
    else:assert r.type==0
- for off,rva in [(0x388,0x66b910),(0x118,0x4d2f00),(0x250,0x66cde0),(0x260,0x66b8c0),(0x278,0x66b060),(0x328,0x668b30)]:
+ for off,rva in [(0x388,0x66b910),(0x118,0x4d2f00),(0x250,0x66cde0),(0x260,0x66b8c0),(0x278,0x66b060),(0x328,0x668b30),(0x4d0,0x3c9660),(0x4a0,0x66c400)]:
   assert p.get_data(0x2c307f8+off,8)==struct.pack('<Q',p.OPTIONAL_HEADER.ImageBase+rva)
  # HKS's c_Style comes from env(207). Verify its actual dispatch and getter,
  # then execute that getter on synthetic equipment for both hands and rejects.
@@ -119,7 +119,10 @@ work=ROOT/'.work/parry';stage=work/'staged'
 a=json.loads((stage/'actions-validation.json').read_text())
 assert a['guardJudge']==95002400 and a['nativeGuardJudge']==460
 assert a['endState']<=24000 and a['originalEventsPreserved'] and a['originalGuardClipsUntouched']
-assert a['minFrames']==2 and a['tiers']==7 and a['framesPerSecond']==30
+assert a['minTier']==2 and a['tiers']==7 and a['timeUnit']=='milliseconds'
+assert a['totalMilliseconds']==[67,100,133,167,200,233,267]
+assert a['beforeMilliseconds']==[22,33,44,56,67,78,89]
+assert a['afterMilliseconds']==[45,67,89,111,133,155,178]
 assert a['endState']==a['firstState']+a['conditionCount']*7 and a['verifiedWindows']==a['added']
 assert (ROOT/'src/parry_data.rs').read_bytes()==(stage/'parry_data.rs').read_bytes()
 report=dict(nativeCases=len(cases),cases=cases,playerVirtualMethodsVerified=True,managerOwnerVerified=True,nativeStateQueryUsesUnsigned16Bit=True,nativeAttackAndGuardTaeGatesVerified=True,finalGuardNotificationVerified=True,nativeZeroImpactGuardMotionVerified=True,nativeFeedbackTaeConditionsVerified=True,guardDirectionRemainsNative=True,attackGuardStaminaWaived=True,gameMemoryWritten=False,gameplayVerified=False,multiplayerVerified=False)

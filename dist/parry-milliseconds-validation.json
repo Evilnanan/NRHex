@@ -1,0 +1,36 @@
+{
+  "version": "0.17.114",
+  "testsPassed": 19,
+  "nativeCases": 103,
+  "windowReadback": 44681,
+  "wholeFrameOffsets": false,
+  "timeUnit": "milliseconds",
+  "beforeMilliseconds": [
+    22,
+    33,
+    44,
+    56,
+    67,
+    78,
+    89
+  ],
+  "afterMilliseconds": [
+    45,
+    67,
+    89,
+    111,
+    133,
+    155,
+    178
+  ],
+  "followupUnchanged": true,
+  "groundAndHandRestrictionsPreserved": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "changedAssets": {
+    "mod/natives/NRHex.dll": "BC581829336824FBD0919DB645AFC2CE43ACB6BABBC7EF9DAE4AFF123EE428BB",
+    "mod/chr/c0000.anibnd.dcx": "94AC2A53EAAF0E02A2D31855B66091046D8247A1C7E71D79A2AF0370132CCAB8"
+  },
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

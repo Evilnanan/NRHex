@@ -95,7 +95,7 @@ try:
                    lambda *_: errors.append('unexpected fixed slot') or 0)
     patch_callback(0x4c1e60, c.WINFUNCTYPE(None, ptr, ptr), configure)
 
-    for dummy in [20, 21]:
+    for dummy in [20, 21, 20110, 10110]:
         for native_flag in [1, 0]:
             nodes.clear()
             configured.clear()
@@ -135,4 +135,4 @@ report = dict(exeSha256=digest, cases=cases, nativeBranchExecuted=True,
 output = ROOT / '.work/parry-fix/spark-native-validation.json'
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_text(json.dumps(report, indent=2), encoding='utf8')
-print('PASS: native left/right spark starts allocate 6 instances; old flag only 1; held updates allocate none')
+print('PASS: native hand/weapon spark starts allocate 6 instances; old flag only 1; held updates allocate none')
