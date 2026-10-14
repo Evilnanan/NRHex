@@ -1,0 +1,131 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "1FF7D47E77B22D2A31D0A366C5241DD15E8203BFCAEED94CF2530B0D8377FC76",
+  "englishSource": "docs/hexes.en.md",
+  "englishSourceSha256": "AF12836D4ACC95A1DF69F6995E8A21276C8194E69D5599EFF3419B4324FCDB92",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "467BDC4D3789D14494A36CE527338CB137CE7EA6643F7CD619924F29BCFCBEC7",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "79C1D108E63062B93FCEFF9081F847A995441206A40FA9A9595969D5D6228A4C",
+      "outputSha256": "53D41E69E7741FA1F2C91F5DEA202420CB5212104F953307FD63948819044611",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "\u9ED1\u591C\u8D50\u798F"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u7EF4\u63015\u79D2\u540E\uFF0C\u56DE\u8840\u5728\u9000\u51FA\u59FF\u52BF\u540E\u6301\u7EED15\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF1B\u79BB\u5F00\u591C\u96E8\u65F6\uFF0C\u653B\u51FB\u529B\u63D0\u5347\u6548\u679C\u7ED3\u675F\uFF0C\u5269\u4F59\u56DE\u8840\u65F6\u95F4\u4FDD\u7559\u3002\n\u56DE\u8840\u91CF\u4E3A\u591C\u96E8\u57FA\u7840\u4F24\u5BB3\u7684\u4E24\u500D\u3002\u9000\u51FA\u59FF\u52BF\u540E\u51B7\u537460\u79D2\uFF0C\u89E6\u78B0\u8D50\u798F\u53EF\u91CD\u7F6E\u51B7\u5374\u3002"
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "\u9ED1\u591C\u8D50\u798F"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u7EF4\u63015\u79D2\u540E\uFF0C\u56DE\u8840\u5728\u9000\u51FA\u59FF\u52BF\u540E\u6301\u7EED15\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF1B\u79BB\u5F00\u591C\u96E8\u65F6\uFF0C\u653B\u51FB\u529B\u63D0\u5347\u6548\u679C\u7ED3\u675F\uFF0C\u5269\u4F59\u56DE\u8840\u65F6\u95F4\u4FDD\u7559\u3002\n\u56DE\u8840\u91CF\u4E3A\u591C\u96E8\u57FA\u7840\u4F24\u5BB3\u7684\u4E24\u500D\u3002\u9000\u51FA\u59FF\u52BF\u540E\u51B7\u537460\u79D2\uFF0C\u89E6\u78B0\u8D50\u798F\u53EF\u91CD\u7F6E\u51B7\u5374\u3002"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "\u5728\u591C\u96E8\u4E2D\u6446\u51FA\u59FF\u52BF\u201C\u96E8\u554A\uFF01\u201D\u65F6\uFF0C\u6301\u7EED\u56DE\u590D\u8840\u91CF\u3002\u7EF4\u63015\u79D2\u540E\uFF0C\u56DE\u8840\u5728\u9000\u51FA\u59FF\u52BF\u540E\u6301\u7EED15\u79D2\uFF0C\u5E76\u63D0\u534725%\u653B\u51FB\u529B\uFF1B\u79BB\u5F00\u591C\u96E8\u65F6\uFF0C\u653B\u51FB\u529B\u63D0\u5347\u6548\u679C\u7ED3\u675F\uFF0C\u5269\u4F59\u56DE\u8840\u65F6\u95F4\u4FDD\u7559\u3002\n\u56DE\u8840\u91CF\u4E3A\u591C\u96E8\u57FA\u7840\u4F24\u5BB3\u7684\u4E24\u500D\u3002\u9000\u51FA\u59FF\u52BF\u540E\u51B7\u537460\u79D2\uFF0C\u89E6\u78B0\u8D50\u798F\u53EF\u91CD\u7F6E\u51B7\u5374\u3002"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "F1E7BFB691AC11718D43117492B24114DFE19290E30BC19DCFCE1394C4423B3F",
+      "outputSha256": "152DB7091C00C9CB44D10ABDE1F0F9604295A3F9827794B550F3E50E69AB2089",
+      "changes": [
+        {
+          "fmg": "SpEffectName.fmg",
+          "id": 95002503,
+          "before": null,
+          "after": "\u9ED1\u591C\u8D50\u798F"
+        },
+        {
+          "fmg": "SpEffectInfo.fmg",
+          "id": 95002503,
+          "before": null,
+          "after": "\u653B\u51FB\u529B\u63D0\u534725%\uFF0C\u79BB\u5F00\u591C\u96E8\u65F6\u6548\u679C\u7ED3\u675F"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "20B8D19973CE3C94A5AF56A6E2E0FF68877E150967E26E1FD7196AD5F48E1744",
+      "outputSha256": "E3257514637D7E3C18E59B9C4F0A7A7416A244800BB2624F69B93696B982F512",
+      "changes": [
+        {
+          "fmg": "AttachEffectName.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "Night\u2019s Blessing"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. After 5 seconds, HP restoration persists for 15 seconds after ending the gesture, and attack power rises by 25%. Leaving the Night\u2019s Tide ends the attack power boost, but HP restoration continues for its remaining duration.\nRestores twice the HP lost to the Night\u2019s Tide\u2019s base damage. Ending the gesture incurs a 60-second cooldown. Touching a site of grace resets the cooldown."
+        },
+        {
+          "fmg": "PermanentBuffName.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "Night\u2019s Blessing"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. After 5 seconds, HP restoration persists for 15 seconds after ending the gesture, and attack power rises by 25%. Leaving the Night\u2019s Tide ends the attack power boost, but HP restoration continues for its remaining duration.\nRestores twice the HP lost to the Night\u2019s Tide\u2019s base damage. Ending the gesture incurs a 60-second cooldown. Touching a site of grace resets the cooldown."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002500,
+          "before": null,
+          "after": "Gradually restores HP while performing the \u201CIt\u2019s Raining!\u201D gesture in the Night\u2019s Tide. After 5 seconds, HP restoration persists for 15 seconds after ending the gesture, and attack power rises by 25%. Leaving the Night\u2019s Tide ends the attack power boost, but HP restoration continues for its remaining duration.\nRestores twice the HP lost to the Night\u2019s Tide\u2019s base damage. Ending the gesture incurs a 60-second cooldown. Touching a site of grace resets the cooldown."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "C7BA8688C8000F385605E97950AB502C326E754020F899BB592B8297861F6C0A",
+      "outputSha256": "B10ED91CE856EE11AC4684C536A92472700DB95F6D7B543401BD753F52A93513",
+      "changes": [
+        {
+          "fmg": "SpEffectName.fmg",
+          "id": 95002503,
+          "before": null,
+          "after": "Night\u2019s Blessing"
+        },
+        {
+          "fmg": "SpEffectInfo.fmg",
+          "id": 95002503,
+          "before": null,
+          "after": "Increases attack power by 25% until leaving the Night\u2019s Tide."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

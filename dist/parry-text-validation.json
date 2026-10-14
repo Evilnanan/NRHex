@@ -1,0 +1,81 @@
+{
+  "source": "docs/hexes.md",
+  "sourceSha256": "A8CE4CC4D5BFFA87C61651CD67556D9054EB3855DB63DE59C53AB46C42C214FB",
+  "englishSource": "docs/hexes.en.md",
+  "englishSourceSha256": "9C3A782C6D32290A79E8D6FF70F3F251B8015048C12D23E292C2E37E97E41744",
+  "statusSource": "data/text/status-effects.json",
+  "statusSourceSha256": "467BDC4D3789D14494A36CE527338CB137CE7EA6643F7CD619924F29BCFCBEC7",
+  "statusOnly": false,
+  "reports": [
+    {
+      "language": "zhocn",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "53D41E69E7741FA1F2C91F5DEA202420CB5212104F953307FD63948819044611",
+      "outputSha256": "6857AF4FB3370D02375D21A3294FB613F0328AF3ADC2D19FEFC7D087505C4C3A",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002400,
+          "before": "\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%",
+          "after": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u65F6\uFF0C\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002400,
+          "before": "\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%",
+          "after": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u65F6\uFF0C\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002400,
+          "before": "\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%",
+          "after": "\u53CC\u624B\u5171\u6301\u6B66\u5668\u65F6\uFF0C\u4F60\u7684\u653B\u51FB\u9644\u5E26\u9632\u5FA1\u6548\u679C\u3002\u653B\u51FB\u8D8A\u6709\u529B\uFF0C\u5C31\u8D8A\u5BB9\u6613\u9632\u5FA1\u3002\u4EE5\u6B64\u6548\u679C\u6210\u529F\u9632\u5FA1\u540E\uFF0C\u9632\u5FA1\u53CD\u51FB\u7684\u4F24\u5BB3\u63D0\u5347100%"
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "zhocn",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "152DB7091C00C9CB44D10ABDE1F0F9604295A3F9827794B550F3E50E69AB2089",
+      "outputSha256": "152DB7091C00C9CB44D10ABDE1F0F9604295A3F9827794B550F3E50E69AB2089",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "item_dlc01.msgbnd.dcx",
+      "inputSha256": "E3257514637D7E3C18E59B9C4F0A7A7416A244800BB2624F69B93696B982F512",
+      "outputSha256": "6A0FDF501B87293E0706230C7FDDD0489C8FCC9A648AA9E45FCE58421A23F4A2",
+      "changes": [
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002400,
+          "before": "Attacks grant a guarding effect. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect.",
+          "after": "Attacks grant a guarding effect while two-handing a weapon. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect."
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002400,
+          "before": "Attacks grant a guarding effect. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect.",
+          "after": "Attacks grant a guarding effect while two-handing a weapon. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002400,
+          "before": "Attacks grant a guarding effect. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect.",
+          "after": "Attacks grant a guarding effect while two-handing a weapon. More powerful attacks make guarding easier. Guard counters deal 100% more damage after successfully guarding with this effect."
+        }
+      ],
+      "unrelatedEntriesAndMembersUnchanged": true
+    },
+    {
+      "language": "engus",
+      "file": "menu_dlc01.msgbnd.dcx",
+      "inputSha256": "B10ED91CE856EE11AC4684C536A92472700DB95F6D7B543401BD753F52A93513",
+      "outputSha256": "B10ED91CE856EE11AC4684C536A92472700DB95F6D7B543401BD753F52A93513",
+      "changes": [],
+      "unrelatedEntriesAndMembersUnchanged": true
+    }
+  ]
+}

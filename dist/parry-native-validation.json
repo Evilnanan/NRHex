@@ -1,0 +1,505 @@
+{
+  "nativeCases": 103,
+  "cases": [
+    {
+      "equipmentStyle": -1,
+      "twoHanded": false
+    },
+    {
+      "equipmentStyle": 0,
+      "twoHanded": false
+    },
+    {
+      "equipmentStyle": 1,
+      "twoHanded": false
+    },
+    {
+      "equipmentStyle": 2,
+      "twoHanded": true
+    },
+    {
+      "equipmentStyle": 3,
+      "twoHanded": true
+    },
+    {
+      "equipmentStyle": 4,
+      "twoHanded": false
+    },
+    {
+      "equipmentStyle": 5,
+      "twoHanded": false
+    },
+    {
+      "equipmentStyle": 2147483647,
+      "twoHanded": false
+    },
+    {
+      "contact": 0,
+      "actionAir": 0,
+      "jumpController": 0.0,
+      "nativeAirborne": 1
+    },
+    {
+      "contact": 0,
+      "actionAir": 0,
+      "jumpController": 0.1,
+      "nativeAirborne": 1
+    },
+    {
+      "contact": 0,
+      "actionAir": 1,
+      "jumpController": 0.0,
+      "nativeAirborne": 1
+    },
+    {
+      "contact": 0,
+      "actionAir": 1,
+      "jumpController": 0.1,
+      "nativeAirborne": 1
+    },
+    {
+      "contact": 1,
+      "actionAir": 0,
+      "jumpController": 0.0,
+      "nativeAirborne": 0
+    },
+    {
+      "contact": 1,
+      "actionAir": 0,
+      "jumpController": 0.1,
+      "nativeAirborne": 1
+    },
+    {
+      "contact": 1,
+      "actionAir": 1,
+      "jumpController": 0.0,
+      "nativeAirborne": 1
+    },
+    {
+      "contact": 1,
+      "actionAir": 1,
+      "jumpController": 0.1,
+      "nativeAirborne": 1
+    },
+    {
+      "guardClass": 0,
+      "impact": 0,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 1,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 2,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 3,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 4,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 5,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 6,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 7,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 8,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 9,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 10,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 0,
+      "impact": 11,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 1,
+      "impact": 0,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 1,
+      "impact": 1,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 1,
+      "impact": 2,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 1,
+      "impact": 3,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 1,
+      "impact": 4,
+      "nativeGuardMotion": 4
+    },
+    {
+      "guardClass": 1,
+      "impact": 5,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 1,
+      "impact": 6,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 1,
+      "impact": 7,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 1,
+      "impact": 8,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 1,
+      "impact": 9,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 1,
+      "impact": 10,
+      "nativeGuardMotion": 4
+    },
+    {
+      "guardClass": 1,
+      "impact": 11,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 2,
+      "impact": 0,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 2,
+      "impact": 1,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 2,
+      "impact": 2,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 2,
+      "impact": 3,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 2,
+      "impact": 4,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 2,
+      "impact": 5,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 2,
+      "impact": 6,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 2,
+      "impact": 7,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 2,
+      "impact": 8,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 2,
+      "impact": 9,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 2,
+      "impact": 10,
+      "nativeGuardMotion": 4
+    },
+    {
+      "guardClass": 2,
+      "impact": 11,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 3,
+      "impact": 0,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 3,
+      "impact": 1,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 3,
+      "impact": 2,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 3,
+      "impact": 3,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 3,
+      "impact": 4,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 3,
+      "impact": 5,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 3,
+      "impact": 6,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 3,
+      "impact": 7,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 3,
+      "impact": 8,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 3,
+      "impact": 9,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 3,
+      "impact": 10,
+      "nativeGuardMotion": 4
+    },
+    {
+      "guardClass": 3,
+      "impact": 11,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 4,
+      "impact": 0,
+      "nativeGuardMotion": 0
+    },
+    {
+      "guardClass": 4,
+      "impact": 1,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 4,
+      "impact": 2,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 4,
+      "impact": 3,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 4,
+      "impact": 4,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 4,
+      "impact": 5,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 4,
+      "impact": 6,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 4,
+      "impact": 7,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 4,
+      "impact": 8,
+      "nativeGuardMotion": 1
+    },
+    {
+      "guardClass": 4,
+      "impact": 9,
+      "nativeGuardMotion": 3
+    },
+    {
+      "guardClass": 4,
+      "impact": 10,
+      "nativeGuardMotion": 4
+    },
+    {
+      "guardClass": 4,
+      "impact": 11,
+      "nativeGuardMotion": 3
+    },
+    {
+      "mode": 0,
+      "nativeSource": -2
+    },
+    {
+      "mode": 1,
+      "nativeSource": -1
+    },
+    {
+      "mode": 2,
+      "nativeSource": 6
+    },
+    {
+      "mode": 3,
+      "nativeSource": 7
+    },
+    {
+      "mode": 4,
+      "nativeSource": 8
+    },
+    {
+      "mode": 5,
+      "nativeSource": 9
+    },
+    {
+      "mode": 6,
+      "nativeSource": -2
+    },
+    {
+      "state": 3,
+      "flags": 0
+    },
+    {
+      "state": 3,
+      "flags": 1
+    },
+    {
+      "state": 3,
+      "flags": 262144
+    },
+    {
+      "state": 3,
+      "flags": 2147483648
+    },
+    {
+      "state": 434,
+      "flags": 0
+    },
+    {
+      "state": 434,
+      "flags": 1
+    },
+    {
+      "state": 434,
+      "flags": 262144
+    },
+    {
+      "state": 434,
+      "flags": 2147483648
+    },
+    {
+      "state": 14000,
+      "flags": 0
+    },
+    {
+      "state": 14000,
+      "flags": 1
+    },
+    {
+      "state": 14000,
+      "flags": 262144
+    },
+    {
+      "state": 14000,
+      "flags": 2147483648
+    },
+    {
+      "state": 17761,
+      "flags": 0
+    },
+    {
+      "state": 17761,
+      "flags": 1
+    },
+    {
+      "state": 17761,
+      "flags": 262144
+    },
+    {
+      "state": 17761,
+      "flags": 2147483648
+    },
+    {
+      "state": 25013,
+      "flags": 0
+    },
+    {
+      "state": 25013,
+      "flags": 1
+    },
+    {
+      "state": 25013,
+      "flags": 262144
+    },
+    {
+      "state": 25013,
+      "flags": 2147483648
+    }
+  ],
+  "playerVirtualMethodsVerified": true,
+  "managerOwnerVerified": true,
+  "nativeStateQueryUsesUnsigned16Bit": true,
+  "nativeAttackAndGuardTaeGatesVerified": true,
+  "finalGuardNotificationVerified": true,
+  "nativeZeroImpactGuardMotionVerified": true,
+  "nativeFeedbackTaeConditionsVerified": true,
+  "guardDirectionRemainsNative": true,
+  "attackGuardStaminaWaived": true,
+  "gameMemoryWritten": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

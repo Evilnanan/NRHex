@@ -112,9 +112,19 @@ Reduces FP consumption of a catalyst’s secondary spell by 100%. After casting,
 <!-- hex:95002200 -->
 ## Demon's Gaze
 
-Periodically creates golden magic circles nearby that erupt after a brief delay, harming friend and foe alike.
+Occasionally creates golden magic circles nearby.
 
 <!-- hex:95002300 -->
 ## Slingshot
 
 Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%.
+
+<!-- hex:95002400 -->
+## Offense and Defense
+
+Attacks grant a guarding effect while two-handing a weapon. Guard counters deal 100% more damage after successfully guarding with this effect.
+
+<!-- hex:95002500 -->
+## Night’s Blessing
+
+Gradually restores HP while performing the “It’s Raining!” gesture in the Night’s Tide. Completing the gesture allows HP restoration to persist for 15 seconds after ending it, and raises attack power by 25% until leaving the Night’s Tide. 60-second cooldown.

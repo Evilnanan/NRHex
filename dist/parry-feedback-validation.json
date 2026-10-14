@@ -1,0 +1,247 @@
+{
+  "version": "0.17.108",
+  "actions": {
+    "inputSha256": "E0A3F64A94FCC0C193E7C1A4E60831395D5A9B56EB6E00FB89E1E3CCF781490D",
+    "outputSha256": "9D3BE0F60814C1FFD68CBDB0678FD11BAE2DBF2608301DB40F8C15AB303D0536",
+    "targets": {
+      "a00.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410,
+        19450,
+        19460,
+        19470,
+        19480,
+        19481,
+        19482,
+        19483,
+        19484,
+        19485,
+        19486,
+        19487,
+        19489,
+        19490,
+        19491,
+        19492,
+        19493,
+        19494,
+        19495
+      ],
+      "a02.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410
+      ],
+      "a03.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410
+      ],
+      "a10.tae": [
+        19200,
+        19210
+      ],
+      "a12.tae": [
+        19200,
+        19210
+      ],
+      "a13.tae": [
+        19200,
+        19210
+      ],
+      "a15.tae": [
+        19200,
+        19210,
+        19300,
+        19310,
+        19400,
+        19410,
+        19450,
+        19460,
+        19470
+      ]
+    },
+    "reactionEnds": {
+      "a00.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667,
+        "19250": 1.3333334,
+        "19260": 2.1666667,
+        "19300": 1.3333334,
+        "19310": 2.1666667,
+        "19400": 1.3333334,
+        "19410": 2.1666667,
+        "19450": 100,
+        "19460": 100,
+        "19470": 100,
+        "19480": 1.3333334,
+        "19481": 1.3333334,
+        "19482": 1.3333334,
+        "19483": 1.3333334,
+        "19484": 1.3333334,
+        "19485": 1.3333334,
+        "19486": 100,
+        "19487": 1.3333334,
+        "19489": 1.3333334,
+        "19490": 1.3333334,
+        "19491": 1.3333334,
+        "19492": 1.3333334,
+        "19493": 1.3333334,
+        "19494": 1.3333334,
+        "19495": 1.3333334
+      },
+      "a02.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667,
+        "19250": 1.3333334,
+        "19260": 2.1666667,
+        "19300": 1.3333334,
+        "19310": 2.1666667,
+        "19400": 1.3333334,
+        "19410": 2.1666667
+      },
+      "a03.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667,
+        "19250": 1.3333334,
+        "19260": 2.1666667,
+        "19300": 1.3333334,
+        "19310": 2.1666667,
+        "19400": 1.3333334,
+        "19410": 2.1666667
+      },
+      "a10.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667
+      },
+      "a12.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667
+      },
+      "a13.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667
+      },
+      "a15.tae": {
+        "19200": 1.3333334,
+        "19210": 2.1666667,
+        "19300": 1.3333334,
+        "19310": 2.1666667,
+        "19400": 1.3333334,
+        "19410": 2.1666667,
+        "19450": 100,
+        "19460": 100,
+        "19470": 100
+      }
+    },
+    "followupUntilNativeReactionExit": true,
+    "manualGuardClipsWithoutMarker": 126,
+    "nativeExecutorSeconds": 0.16666667,
+    "markersWithinNativeGuard": true,
+    "originalEventsPreserved": true,
+    "addedFeedback": 145,
+    "spark": 462800,
+    "sound": 809000,
+    "feedbackStates": [
+      24000,
+      24001,
+      24002
+    ],
+    "sparkFreshInstanceOnStart": true,
+    "sparkTimingUnchanged": true,
+    "gameplayVerified": false
+  },
+  "audio": {
+    "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "nativeEvent": "Play_c000809000",
+    "eventId": 1635829764,
+    "nativeSoundBank": "hero08.bnk",
+    "nativeSoundBankSha256": "253d94b21c98f03874a314fc5fb62f86a6971247c83389b18442210f2b6e50cc",
+    "sceneOwnsBankLifetime": true,
+    "gameplayVerified": false
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "nativeInstanceSelection": {
+    "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "cases": [
+      {
+        "dummy": 20,
+        "taeByte14": 1,
+        "starts": 6,
+        "heldUpdates": 24,
+        "allocatedInstances": 1
+      },
+      {
+        "dummy": 20,
+        "taeByte14": 0,
+        "starts": 6,
+        "heldUpdates": 24,
+        "allocatedInstances": 6
+      },
+      {
+        "dummy": 21,
+        "taeByte14": 1,
+        "starts": 6,
+        "heldUpdates": 24,
+        "allocatedInstances": 1
+      },
+      {
+        "dummy": 21,
+        "taeByte14": 0,
+        "starts": 6,
+        "heldUpdates": 24,
+        "allocatedInstances": 6
+      }
+    ],
+    "nativeBranchExecuted": true,
+    "allocatorAndRendererStubbed": true,
+    "gameMemoryWritten": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "nativeGuardLifecycle": {
+    "originalHksSha256": "2ec9f8ad913a8a6f1cf4a6f4794692a59e1fecda156bc9a87b3068f226c0dc1d",
+    "installedHksSha256": "d727a9c0aa969b5f5cead9d0af7d1bff33446577e3a81366c01b4e8d352a5199",
+    "unchangedGuardLifecycleFunctions": [
+      "ExecGuard",
+      "ExecGuardOnCancelTiming",
+      "DamageCommonFunction",
+      "GuardCommonFunction",
+      "Guard_Activate",
+      "Guard_Update",
+      "GuardStart_Upper_onActivate",
+      "GuardStart_Upper_onUpdate",
+      "GuardStart_Upper_onDeactivate",
+      "GuardOn_Upper_onActivate",
+      "GuardOn_Upper_onUpdate",
+      "GuardOn_Upper_onDeactivate",
+      "GuardEnd_Upper_onActivate",
+      "GuardEnd_Upper_onUpdate",
+      "GuardDamageSmall_onUpdate",
+      "GuardDamageMiddle_onUpdate",
+      "GuardDamageLarge_onUpdate",
+      "GuardDamageDemonSword_Start_onUpdate",
+      "GuardDamageDemonSword_End_onUpdate",
+      "GuardDamageExLarge_onUpdate"
+    ],
+    "gameplayVerified": false
+  },
+  "parryTestsPassed": 10
+}

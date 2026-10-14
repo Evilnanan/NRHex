@@ -1,0 +1,38 @@
+{
+  "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "cases": [
+    {
+      "dummy": 20,
+      "taeByte14": 1,
+      "starts": 6,
+      "heldUpdates": 24,
+      "allocatedInstances": 1
+    },
+    {
+      "dummy": 20,
+      "taeByte14": 0,
+      "starts": 6,
+      "heldUpdates": 24,
+      "allocatedInstances": 6
+    },
+    {
+      "dummy": 21,
+      "taeByte14": 1,
+      "starts": 6,
+      "heldUpdates": 24,
+      "allocatedInstances": 1
+    },
+    {
+      "dummy": 21,
+      "taeByte14": 0,
+      "starts": 6,
+      "heldUpdates": 24,
+      "allocatedInstances": 6
+    }
+  ],
+  "nativeBranchExecuted": true,
+  "allocatorAndRendererStubbed": true,
+  "gameMemoryWritten": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

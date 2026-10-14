@@ -1,0 +1,15 @@
+{
+  "animationInputSha256": "F458A88D669A6197FC2BD2D9C3EAEB640E9F6817FD4EDFA8BE68C5C74FDE69CC",
+  "animationOutputSha256": "94FE8634654004BBE81F8843A0CF8D63FDC6204AD8D9E81C188579002035A6A6",
+  "gestureClips": [
+    81400,
+    81401
+  ],
+  "graceInput": "E:\\Projects\\NRMod\\NRHex\\assets/original\\script/talk/m00_00_00_00.talkesdbnd.dcx",
+  "graceInputSha256": "B63974DE9C3D16BC830858DDEF22031CEE63548E22BB9B99AEEDF0FF89D6C9A0",
+  "graceOutputSha256": "01C708D7539A11C26C534E3AA13A167C1AF1BE90F17406DCB13B8CBD0E61119E",
+  "graceInputInstalled": false,
+  "originalAnimationEventsPreserved": true,
+  "originalGraceCommandsPreserved": true,
+  "gameplayVerified": false
+}

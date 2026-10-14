@@ -1,0 +1,9 @@
+{
+  "version": "0.17.111",
+  "changedAssets": {
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "A5C97809D020B2DFE3EAB62CEB709F74BA40EB7EE58B446C1A3B6C29EAD61262",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "C8A1C11C02395DA61F5E5D742536E879DCA36C21C0E194702C8C8C788385D1E4"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": false
+}

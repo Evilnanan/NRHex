@@ -1,0 +1,433 @@
+{
+  "version": "0.17.104",
+  "native": {
+    "nativeCases": 87,
+    "cases": [
+      {
+        "guardClass": 0,
+        "impact": 0,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 1,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 2,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 3,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 4,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 5,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 6,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 7,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 8,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 9,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 10,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 0,
+        "impact": 11,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 1,
+        "impact": 0,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 1,
+        "impact": 1,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 1,
+        "impact": 2,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 1,
+        "impact": 3,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 1,
+        "impact": 4,
+        "nativeGuardMotion": 4
+      },
+      {
+        "guardClass": 1,
+        "impact": 5,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 1,
+        "impact": 6,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 1,
+        "impact": 7,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 1,
+        "impact": 8,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 1,
+        "impact": 9,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 1,
+        "impact": 10,
+        "nativeGuardMotion": 4
+      },
+      {
+        "guardClass": 1,
+        "impact": 11,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 2,
+        "impact": 0,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 2,
+        "impact": 1,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 2,
+        "impact": 2,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 2,
+        "impact": 3,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 2,
+        "impact": 4,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 2,
+        "impact": 5,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 2,
+        "impact": 6,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 2,
+        "impact": 7,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 2,
+        "impact": 8,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 2,
+        "impact": 9,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 2,
+        "impact": 10,
+        "nativeGuardMotion": 4
+      },
+      {
+        "guardClass": 2,
+        "impact": 11,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 3,
+        "impact": 0,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 3,
+        "impact": 1,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 3,
+        "impact": 2,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 3,
+        "impact": 3,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 3,
+        "impact": 4,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 3,
+        "impact": 5,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 3,
+        "impact": 6,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 3,
+        "impact": 7,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 3,
+        "impact": 8,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 3,
+        "impact": 9,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 3,
+        "impact": 10,
+        "nativeGuardMotion": 4
+      },
+      {
+        "guardClass": 3,
+        "impact": 11,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 4,
+        "impact": 0,
+        "nativeGuardMotion": 0
+      },
+      {
+        "guardClass": 4,
+        "impact": 1,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 4,
+        "impact": 2,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 4,
+        "impact": 3,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 4,
+        "impact": 4,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 4,
+        "impact": 5,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 4,
+        "impact": 6,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 4,
+        "impact": 7,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 4,
+        "impact": 8,
+        "nativeGuardMotion": 1
+      },
+      {
+        "guardClass": 4,
+        "impact": 9,
+        "nativeGuardMotion": 3
+      },
+      {
+        "guardClass": 4,
+        "impact": 10,
+        "nativeGuardMotion": 4
+      },
+      {
+        "guardClass": 4,
+        "impact": 11,
+        "nativeGuardMotion": 3
+      },
+      {
+        "mode": 0,
+        "nativeSource": -2
+      },
+      {
+        "mode": 1,
+        "nativeSource": -1
+      },
+      {
+        "mode": 2,
+        "nativeSource": 6
+      },
+      {
+        "mode": 3,
+        "nativeSource": 7
+      },
+      {
+        "mode": 4,
+        "nativeSource": 8
+      },
+      {
+        "mode": 5,
+        "nativeSource": 9
+      },
+      {
+        "mode": 6,
+        "nativeSource": -2
+      },
+      {
+        "state": 3,
+        "flags": 0
+      },
+      {
+        "state": 3,
+        "flags": 1
+      },
+      {
+        "state": 3,
+        "flags": 262144
+      },
+      {
+        "state": 3,
+        "flags": 2147483648
+      },
+      {
+        "state": 434,
+        "flags": 0
+      },
+      {
+        "state": 434,
+        "flags": 1
+      },
+      {
+        "state": 434,
+        "flags": 262144
+      },
+      {
+        "state": 434,
+        "flags": 2147483648
+      },
+      {
+        "state": 14000,
+        "flags": 0
+      },
+      {
+        "state": 14000,
+        "flags": 1
+      },
+      {
+        "state": 14000,
+        "flags": 262144
+      },
+      {
+        "state": 14000,
+        "flags": 2147483648
+      },
+      {
+        "state": 17761,
+        "flags": 0
+      },
+      {
+        "state": 17761,
+        "flags": 1
+      },
+      {
+        "state": 17761,
+        "flags": 262144
+      },
+      {
+        "state": 17761,
+        "flags": 2147483648
+      },
+      {
+        "state": 25013,
+        "flags": 0
+      },
+      {
+        "state": 25013,
+        "flags": 1
+      },
+      {
+        "state": 25013,
+        "flags": 262144
+      },
+      {
+        "state": 25013,
+        "flags": 2147483648
+      }
+    ],
+    "playerVirtualMethodsVerified": true,
+    "managerOwnerVerified": true,
+    "nativeStateQueryUsesUnsigned16Bit": true,
+    "nativeAttackAndGuardTaeGatesVerified": true,
+    "finalGuardNotificationVerified": true,
+    "nativeZeroImpactGuardMotionVerified": true,
+    "guardDirectionRemainsNative": true,
+    "attackGuardStaminaWaived": true,
+    "gameMemoryWritten": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "parryTestsPassed": 10,
+  "dllSha256": "9144830782d8c5a14eed2d9d241415237a929fe404751b9dd137480d31bbb532",
+  "assetsAndSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "liveEvidence": "Old version: zero-impact GUARD notifications lacked reaction marker; positive-impact notifications entered native guard reaction."
+}

@@ -1,0 +1,173 @@
+{
+  "version": "0.17.110",
+  "testsPassed": 18,
+  "native": {
+    "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "nativeSetterAndGettersExecuted": true,
+    "positionAndOtherPhysicsFieldsUnchanged": true,
+    "cases": [
+      {
+        "target": [
+          0,
+          1
+        ],
+        "yaw": 3.141592653589793,
+        "nativeForward": [
+          2.3841855067985307e-07,
+          -0.0,
+          0.9999995231628418,
+          -0.0
+        ],
+        "nativeEuler": [
+          0.0,
+          -3.141592502593994,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "target": [
+          1,
+          0
+        ],
+        "yaw": -1.5707963267948966,
+        "nativeForward": [
+          0.9999998807907104,
+          0.0,
+          -5.960464477539063e-08,
+          -0.0
+        ],
+        "nativeEuler": [
+          0.0,
+          -1.570796251296997,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "target": [
+          -1,
+          0
+        ],
+        "yaw": 1.5707963267948966,
+        "nativeForward": [
+          -0.9999998807907104,
+          -0.0,
+          -5.960464477539063e-08,
+          -0.0
+        ],
+        "nativeEuler": [
+          0.0,
+          1.570796251296997,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "target": [
+          0,
+          -1
+        ],
+        "yaw": 0.0,
+        "nativeForward": [
+          -0.0,
+          -0.0,
+          -1.0,
+          -0.0
+        ],
+        "nativeEuler": [
+          0.0,
+          -0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "target": [
+          2,
+          3
+        ],
+        "yaw": -2.5535900500422257,
+        "nativeForward": [
+          0.5547002553939819,
+          0.0,
+          0.832050085067749,
+          -0.0
+        ],
+        "nativeEuler": [
+          0.0,
+          -2.5535898208618164,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "target": [
+          -3,
+          2
+        ],
+        "yaw": 2.158798930342464,
+        "nativeForward": [
+          -0.8320502638816833,
+          -0.0,
+          0.5547001361846924,
+          -0.0
+        ],
+        "nativeEuler": [
+          0.0,
+          2.158798933029175,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "target": [
+          2,
+          -3
+        ],
+        "yaw": -0.5880026035475675,
+        "nativeForward": [
+          0.5547002553939819,
+          0.0,
+          -0.8320502638816833,
+          -0.0
+        ],
+        "nativeEuler": [
+          0.0,
+          -0.5880026817321777,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "target": [
+          -2,
+          -3
+        ],
+        "yaw": 0.5880026035475675,
+        "nativeForward": [
+          -0.5547002553939819,
+          -0.0,
+          -0.8320502638816833,
+          -0.0
+        ],
+        "nativeEuler": [
+          0.0,
+          0.5880026817321777,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "gameMemoryWritten": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "firstGuardTurns": true,
+  "updateDoesNotResetChain": true,
+  "mixedChainStaysDisabled": true,
+  "onlyAfterNativeAcceptance": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

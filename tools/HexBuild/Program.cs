@@ -615,6 +615,14 @@ if(args.Contains("--export-descriptions")){
  Console.WriteLine("Exported 15 current Chinese descriptions from the working Mod package.");return;
 }
 var hexes=HexCatalog.Load(root);
+if(args.Contains("--parry-stage")){Parry.Stage(root,bnd,Parse,hexes);Parry.BuildActions(root,bnd,Parse);return;}
+if(args.Contains("--parry-followup")){ParryFollowup.Stage(root,Parse);return;}
+if(args.Contains("--parry-followup-actions")){ParryFollowup.Actions(root,Parse("SpEffectParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param").Bytes));return;}
+if(args.Contains("--night-blessing")){NightBlessing.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--night-blessing-actions")){NightBlessing.Assets(root);return;}
+if(args.Contains("--parry-actions")){Parry.BuildActions(root,bnd,Parse);return;}
+if(args.Contains("--parry-support")){Parry.StageSupport(root,Parse);return;}
+if(args.Contains("--parry-counter")){Parry.StageCounter(root,Parse);return;}
 if(args.Contains("--slingshot-stage")){Slingshot.Stage(root,bnd,Parse,hexes);return;}
 if(args.Contains("--archmage-stage")){Archmage.Stage(root,bnd,Parse,hexes);return;}
 if(args.Contains("--devils-gaze-stage")){DevilsGaze.Stage(root,bnd,Parse,hexes);return;}
@@ -701,6 +709,9 @@ foreach(var h in hexes){
 }
 Archmage.Markers((source,id)=>Clone("SpEffectParam",source,id));
 Slingshot.Mechanics((source,id)=>Clone("SpEffectParam",source,id));
+Parry.Support(Clone);
+NightBlessing.ValidateNative(bnd,Parse);
+NightBlessing.Mechanics(Clone);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
 Cages.MutationParameters(pars,Cages.TowerSources(root,cageBosses));

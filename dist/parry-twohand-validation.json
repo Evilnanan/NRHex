@@ -1,0 +1,20 @@
+{
+  "version": "0.17.111",
+  "testsPassed": 19,
+  "nativeCases": 95,
+  "twoHandedStyles": [
+    2,
+    3
+  ],
+  "nativeGuardUnchanged": true,
+  "stalePrivateGuardSuppressed": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "changedAssets": {
+    "mod/natives/NRHex.dll": "23e4c6e581fb4ccf917363c99abbdb75072b35f76db4f87ddea1cdb031292859",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "6857af4fb3370d02375d21a3294fb613f0328af3adc2d19fefc7d087505c4c3a",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "6a0fdf501b87293e0706230c7fddd0489c8fcc9a648aa9e45fce58421a23f4a2"
+  },
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

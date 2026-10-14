@@ -1,6 +1,6 @@
 {
   "version": "0.17.60",
-  "codeVersion": "0.17.60",
+  "codeVersion": "0.17.113",
   "gameTested": false,
   "sourceRegulationSha256": "876A3CA279A4561D0C69F81FE5E510C75C59AB9A8A201694F8CF4A42C91E0268",
   "outputRegulationSha256": "E648BDC29084B16FB30F5E2138A32D5856238C0A24EC58E2A4FBFBF9C4BA4DA5",
@@ -15827,16 +15827,16 @@
       "Zh": "红包",
       "En": "Red Envelope",
       "ZhInfo": "获得88888卢恩",
-      "EnInfo": "Gain 88,888 runes.",
+      "EnInfo": "Grants 88,888 runes.",
       "LargeIcon": 21267,
       "SmallIcon": 22267
     },
     {
       "Id": 95000200,
       "Zh": "星界躯体",
-      "En": "Astral Body",
+      "En": "Celestial Body",
       "ZhInfo": "降低25%攻击力。全属性提升10点",
-      "EnInfo": "Deal 25% less damage. All attributes +10.",
+      "EnInfo": "Reduces attack power by 25%. Raises all attributes by 10.",
       "LargeIcon": 21208,
       "SmallIcon": 22208
     },
@@ -15844,17 +15844,17 @@
       "Id": 95000300,
       "Zh": "玻璃大炮",
       "En": "Glass Cannon",
-      "ZhInfo": "承受10倍伤害。提升40%攻击力",
-      "EnInfo": "Take 10 times normal damage. Deal 40% more damage.",
+      "ZhInfo": "承受10倍伤害。提升20%攻击力。你的伤害无视敌人的抗性、防御、减伤率",
+      "EnInfo": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy resistances, defenses, and damage negation.",
       "LargeIcon": 21206,
       "SmallIcon": 22206
     },
     {
       "Id": 95000400,
       "Zh": "终极刷新",
-      "En": "Ultimate Refresh",
-      "ZhInfo": "施放绝招后，回复100%绝招量表，45秒冷却",
-      "EnInfo": "Restore 100% of the ultimate gauge after using an ultimate. 45s cooldown.",
+      "En": "Ultimate Revolution",
+      "ZhInfo": "施放绝招后，充满绝招量表，45秒冷却",
+      "EnInfo": "Fully restores the Art gauge upon using an Ultimate Art. (45-second cooldown.)",
       "LargeIcon": 21297,
       "SmallIcon": 22297
     },
@@ -15863,7 +15863,7 @@
       "Zh": "豪饮",
       "En": "Heavy Drinking",
       "ZhInfo": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒",
-      "EnInfo": "Double your flask capacity, but halve flask healing. Using a flask increases damage by 5% for 15s.",
+      "EnInfo": "Doubles the number of Flask of Crimson Tears uses, but halves HP restoration. Using a flask boosts attack power by 5% for 15 seconds.",
       "LargeIcon": 21291,
       "SmallIcon": 22291
     },
@@ -15872,7 +15872,7 @@
       "Zh": "再生术",
       "En": "Regeneration",
       "ZhInfo": "血量不满时，持续消耗专注值来回复血量。血量全满时，使用圣杯瓶会回复50%专注值",
-      "EnInfo": "When below full HP, continuously spend FP to restore HP. At full HP, using a flask restores 50% FP.",
+      "EnInfo": "Continuously consumes FP to restore HP while HP is not at maximum. Using a Flask of Crimson Tears at maximum HP restores 50% of maximum FP.",
       "LargeIcon": 21291,
       "SmallIcon": 22291
     },
@@ -15881,16 +15881,16 @@
       "Zh": "结晶外壳",
       "En": "Crystal Shell",
       "ZhInfo": "受到攻击时，由结晶外壳代为承受并破碎。结晶外壳破碎后需要40秒来重新生成",
-      "EnInfo": "A crystal shell takes the hit for you and shatters. It regenerates after 40s.",
+      "EnInfo": "A crystal shell absorbs an incoming attack and shatters. The shell regenerates after 40 seconds.",
       "LargeIcon": 21208,
       "SmallIcon": 22208
     },
     {
       "Id": 95000800,
       "Zh": "人是猫",
-      "En": "Human Is Cat",
-      "ZhInfo": "获得无限攀爬能力。你的跳跃攻击随下落高度提升伤害。消除脚步声。受到攻击时，隐身1秒",
-      "EnInfo": "Gain unlimited climbing. Your jump attacks deal more damage with greater fall height. Silence footsteps. Become invisible for 1s when hit.",
+      "En": "Humans Are Cats",
+      "ZhInfo": "获得无限攀爬能力。跳跃攻击的伤害随下落高度提升。消除脚步声。受到攻击时，隐身1秒",
+      "EnInfo": "Allows unlimited climbing. Boosts jump attack damage based on fall height. Silences footsteps. Conceals the body for 1 second upon taking damage.",
       "LargeIcon": 21222,
       "SmallIcon": 22222
     },
@@ -15898,17 +15898,17 @@
       "Id": 95000900,
       "Zh": "亮出你的剑",
       "En": "Draw Your Sword",
-      "ZhInfo": "你的魔法、祷告还会被视为近战攻击，但只能命中近身敌人，并基于该法术的射程提供吸血、增伤、咏唱时减伤率。你的法术咏唱变得不易被打断。提升15%近战攻击力",
-      "EnInfo": "Spells also count as melee attacks, but only hit nearby enemies. Gain lifesteal, bonus damage and casting damage reduction based on spell range. Spellcasting is harder to interrupt. Gain 15% melee attack power.",
+      "ZhInfo": "你的魔法、祷告还会被视为近战攻击，但只能命中近身敌人，并基于该法术的射程提供吸血、增伤、咏唱时减伤率。法术咏唱变得不易被打断。提升15%近战攻击力",
+      "EnInfo": "Sorceries and incantations also count as melee attacks, but can only hit nearby enemies. Spell range determines HP restoration on hit, increased attack power, and damage negation while casting. Makes spell casting harder to interrupt. Boosts melee attack power by 15%.",
       "LargeIcon": 21206,
       "SmallIcon": 22206
     },
     {
       "Id": 95001100,
       "Zh": "大力",
-      "En": "Mighty",
+      "En": "Blunt Force",
       "ZhInfo": "提升攻击成功时的冲击力",
-      "EnInfo": "Increases impact when attacks connect.",
+      "EnInfo": "Boosts the impact of successful attacks.",
       "LargeIcon": 21206,
       "SmallIcon": 22206
     },
@@ -15917,16 +15917,16 @@
       "Zh": "逃跑计划",
       "En": "Escape Plan",
       "ZhInfo": "血量偏低时，在10秒内加快行动并提升60%减伤率，60秒冷却",
-      "EnInfo": "At low HP, double action speed and gain 60% damage negation for 10s. 60s cooldown.",
+      "EnInfo": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. (60-second cooldown.)",
       "LargeIcon": 21222,
       "SmallIcon": 22222
     },
     {
       "Id": 95001300,
       "Zh": "嘉豪身法",
-      "En": "Jiahao Footwork",
+      "En": "Edgelord's Footwork",
       "ZhInfo": "强化后跃的闪避能力。后跃攻击进行反击或正面处决敌人时，回复25%绝招量表。翻滚或受到损伤时，损失30%绝招量表。你的后跃攻击随绝招量表提升最多200%伤害",
-      "EnInfo": "Enhance backstep evasion. Other dodges cost 30% Art gauge. Backstep attacks that hit enemies whose stance is not broken restore 25%. Frontal critical hits restore 25%. Taking damage costs 30%. Backstep attacks gain bonus damage equal to twice your current Art gauge percentage.",
+      "EnInfo": "Improves backstep evasion. Successful backstep attacks against enemies whose stance is not broken, and critical hits from the front, each fill 25% of the Art gauge. Dodge rolls and damage taken each deplete 30% of the Art gauge. Boosts backstep attack damage by up to 200%, based on the current Art gauge.",
       "LargeIcon": 21222,
       "SmallIcon": 22222
     },
@@ -15934,24 +15934,24 @@
       "Id": 95001400,
       "Zh": "百般武艺",
       "En": "Master of Arms",
-      "ZhInfo": "你的战技不消耗专注值。每次施放战技后，重铸该武器的战技",
-      "EnInfo": "Your skills cost no FP. After using a skill, reforge that weapon's skill.",
+      "ZhInfo": "战技专注值消耗降低100%。每次施放战技后，重铸该武器的战技",
+      "EnInfo": "Reduces skill FP consumption by 100%. Using a skill reforges the skill of that armament.",
       "LargeIcon": 21295,
       "SmallIcon": 22295
     },
     {
       "Id": 95001500,
       "Zh": "吵闹鬼",
-      "En": "Noisy Ghost",
-      "ZhInfo": "标记自己位置时，形成熔岩，期间你每次标记自己都会为这颗熔岩提升伤害",
-      "EnInfo": "Mark your own position to form lava. Mark yourself again before it erupts to empower that lava",
+      "En": "Poltergeist",
+      "ZhInfo": "标记自己时，形成熔岩，短暂延时后爆发。期间每次标记自己都会为这颗熔岩提升伤害",
+      "EnInfo": "Marking one's own position generates roiling lava. Further marks of one's own position before eruption increase its damage.",
       "LargeIcon": 21229,
       "SmallIcon": 22229
     },
     {
       "Id": 95001600,
       "Zh": "刷怪笼",
-      "En": "Monster Cage",
+      "En": "Spawner",
       "ZhInfo": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢。每座封印监牢最多开启5次",
       "EnInfo": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times.",
       "LargeIcon": 21267,
@@ -15961,31 +15961,76 @@
       "Id": 95001700,
       "Zh": "气球",
       "En": "Balloon",
-      "ZhInfo": "血量上限提升50%。减伤率降低30%。对突刺的减伤率额外降低50%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害",
-      "EnInfo": "Maximum HP +50%. Reduces damage negation by 30%. Further reduces damage negation against piercing attacks by 50%. Upon death or near-death, explode and deal damage equal to your maximum HP to nearby enemies.",
+      "ZhInfo": "血量上限提升50%。减伤率降低30%。突刺抗性降低100%。阵亡或濒死时爆炸，对附近敌人造成等同于你血量上限的伤害",
+      "EnInfo": "Raises maximum HP by 50%. Reduces damage negation by 30%. Reduces resistance to piercing attacks by 100%. Triggers an explosion upon death or entering near-death, dealing damage equal to maximum HP to nearby enemies.",
       "LargeIcon": 21229,
       "SmallIcon": 22229
     },
     {
       "Id": 95001800,
       "Zh": "强化【死灵术】",
-      "En": "Enhanced Necromancy",
-      "ZhInfo": "储存打倒的强敌的灵魂，优先保留血量上限更高的灵魂。施放绝招时，同时释放出储存的灵魂，短时间内为你作战",
-      "EnInfo": "Store the soul of a powerful enemy defeated by your team, replacing it only with one that had higher maximum HP. Using your Ultimate Art consumes the stored soul and summons its spirit to fight for you. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+      "En": "Enhanced [Necromancy]",
+      "ZhInfo": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。施放【不死行军】时，召唤其灵体，短时间内为你作战",
+      "EnInfo": "Stores the soul of a powerful enemy defeated by the party, replacing it only with a soul of higher maximum HP. Using [Immortal March] consumes the stored soul to summon a spirit that fights alongside the summoner. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
       "LargeIcon": 21267,
       "SmallIcon": 22267
     },
     {
       "Id": 95002000,
       "Zh": "别停止咏唱",
-      "En": "Keep Chanting",
+      "En": "Don't Change the Channel",
       "ZhInfo": "魔法、祷告蓄力时，每秒回复30点精力值",
-      "EnInfo": "Restore 30 stamina per second while charging a sorcery or incantation.",
+      "EnInfo": "Restores 30 stamina per second while charging sorceries or incantations.",
+      "LargeIcon": 21207,
+      "SmallIcon": 22207
+    },
+    {
+      "Id": 95002100,
+      "Zh": "大法师",
+      "En": "Archmage",
+      "ZhInfo": "触媒的副法术消耗降低100%，并且施法后变为随机新法术",
+      "EnInfo": "Reduces FP consumption of a catalyst’s secondary spell by 100%. After casting, replaces it with a random new spell.",
+      "LargeIcon": 21207,
+      "SmallIcon": 22207
+    },
+    {
+      "Id": 95002200,
+      "Zh": "恶魔的注视",
+      "En": "Demon's Gaze",
+      "ZhInfo": "偶尔在周围生成黄金法阵",
+      "EnInfo": "Occasionally creates golden magic circles nearby.",
+      "LargeIcon": 21723,
+      "SmallIcon": 20723
+    },
+    {
+      "Id": 95002300,
+      "Zh": "弹射起步",
+      "En": "Slingshot",
+      "ZhInfo": "提升冲刺后的跳跃距离。可以叠加最多三层。每层提升50%跳跃攻击力",
+      "EnInfo": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%.",
       "LargeIcon": 21222,
       "SmallIcon": 22222
+    },
+    {
+      "Id": 95002400,
+      "Zh": "攻守兼备",
+      "En": "Offense and Defense",
+      "ZhInfo": "双手共持武器的攻击可以招架敌人的攻击。成功招架时的防御反击伤害提升100%",
+      "EnInfo": "Attacks grant a guarding effect while two-handing a weapon. Guard counters deal 100% more damage after successfully guarding with this effect.",
+      "LargeIcon": 21206,
+      "SmallIcon": 22206
+    },
+    {
+      "Id": 95002500,
+      "Zh": "黑夜赐福",
+      "En": "Night’s Blessing",
+      "ZhInfo": "在夜雨中摆出姿势“雨啊！”时，持续回复血量。完整摆出姿势后，回血效果可以在姿势退出后继续维持15秒，并提升25%攻击力，持续至离开夜雨。60秒冷却",
+      "EnInfo": "Gradually restores HP while performing the “It’s Raining!” gesture in the Night’s Tide. Completing the gesture allows HP restoration to persist for 15 seconds after ending it, and raises attack power by 25% until leaving the Night’s Tide. 60-second cooldown.",
+      "LargeIcon": 21291,
+      "SmallIcon": 22291
     }
   ],
-  "orders": 4896,
+  "orders": 10626,
   "drinkingNativeReference": {
     "id": 8670000,
     "fields": {
@@ -16027,8 +16072,9 @@
     }
   },
   "validation": "Mighty excludes Revenant/Recluse from random and preferred rewards. Texts updated; runtime projectile handling and regulation unchanged. Gameplay pending.",
-  "currentIncrementalValidation": "mighty-role-validation.json",
-  "currentStatusTextValidation": "chant-text-validation.json",
+  "currentIncrementalValidation": "parry-onset-validation.json",
+  "currentStatusTextValidation": "text-validation.json",
   "legacyRewardGroups": 5814,
-  "gameplayVerified": false
+  "gameplayVerified": false,
+  "currentIconValidation": "parry-icon-validation.json"
 }

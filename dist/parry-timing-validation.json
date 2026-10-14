@@ -1,0 +1,88 @@
+{
+  "version": "0.17.105",
+  "actions": {
+    "inputSha256": "0003B40D5E0DBEB2DC44509B5B2D8479A9BF1C846BD5569097A9C38DE4626C32",
+    "outputSha256": "622F43D4EEC26346BBFCC858C7030C14D11969D9731FEFEC21510CE39C8B0CFF",
+    "targets": {
+      "a00.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410,
+        19450,
+        19460,
+        19470,
+        19480,
+        19481,
+        19482,
+        19483,
+        19484,
+        19485,
+        19486,
+        19487,
+        19489,
+        19490,
+        19491,
+        19492,
+        19493,
+        19494,
+        19495
+      ],
+      "a02.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410
+      ],
+      "a03.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410
+      ],
+      "a10.tae": [
+        19200,
+        19210
+      ],
+      "a12.tae": [
+        19200,
+        19210
+      ],
+      "a13.tae": [
+        19200,
+        19210
+      ],
+      "a15.tae": [
+        19200,
+        19210,
+        19300,
+        19310,
+        19400,
+        19410,
+        19450,
+        19460,
+        19470
+      ]
+    },
+    "seconds": 0.33333334,
+    "nativeExecutorSeconds": 0.16666667,
+    "markersWithinNativeGuard": true,
+    "originalEventsPreserved": true,
+    "gameplayVerified": false
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

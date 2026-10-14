@@ -117,3 +117,17 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 `HexBuild --archmage-stage`从尚未包含大法师的发行参数包生成新增能力与奖励行，产物及读回报告在`.work/archmage/staged`。`tools/build_archmage_hks.py`从当前动作组合增加34个施法回调通知，默认暂存到`.work/archmage`，`--inplace`用于完整构建。独立检查为`verify_archmage_native.py`与`verify_archmage_decompile.py --decompiler <DSLuaDecompiler.dll>`。`install_archmage.py`校验所有当前输入和暂存哈希，安装前需要退出游戏。中文、英文文案仍在两份海克斯Markdown中维护。
 
 大法师副槽限定的增量构建使用`HexBuild --archmage-secondary`，暂存于`.work/archmage-secondary/staged`，保留其余参数字段。`verify_archmage_secondary_native.py`检查原生选槽、耗蓝与对应调用点；完整构建的拥有行也保持中性耗蓝倍率，由DLL按实际选槽处理。
+
+招架的增量构建使用 `HexBuild --parry-stage`，生成参数、文案、奖励表及动作数据到 `.work/parry/staged`；`--parry-actions` 仅重建动作和削韧查询表。`build.ps1` 在编译DLL前生成并复制 `parry_data.rs` 和动画包。`verify_parry_native.py` 对照当前EXE核对原生状态查询和攻击手选择；增量安装入口为 `tools/install_parry.py`。
+
+招架后续防御更新：`HexBuild --parry-support`校验原生精准防御火花和连续防御时长，增量生成私有标记／视觉参数；配合`--parry-actions`、文案暂存和DLL构建，使用`tools/install_parry.py --guard-update`安装配套资源。
+
+招架防御反击增伤的增量构建：`HexBuild --parry-counter` 从当前 dist 添加原生分类103的双倍增伤参数并回读校验，`install_parry.py --counter-update` 校验哈希、备份并替换参数、DLL及双语文本；完整构建由 `Parry.Support` 生成同一行。
+
+黑夜赐福增量构建使用 `HexBuild --night-blessing`，从尚未包含该能力的发行包生成参数、奖励、双语文本及姿势／赐福资产，产物位于 `.work/night-blessing/staged`。复制生成的 `hex_pool.rs` 后构建 DLL，使用 `tools/install_night_blessing.py` 校验输入、备份并安装。`--night-blessing-actions` 可重复生成姿势与赐福标记，完整 `build.ps1` 已接入。原生共享赐福脚本保留于 `assets/original/script/talk` 并纳入源文件清单。
+
+招架防御通知与连续防御修复：`HexBuild --parry-followup` 生成中性动作标记参数和57个原生防御反应的动画窗口；`--parry-followup-actions` 支持完整构建重复合成。产物及回读检查位于 `.work/parry-fix/staged`。`verify_parry_native.py` 同时核对最终受击通知、原生guard种类和身体接触筛选所依赖的代码。
+
+`verify_parry_feedback_native.py` 在私有内存中执行当前EXE的火花描述符转换和实例选择代码，以受控桩替代分配、渲染和角色分类依赖，验证左右手每次动作开始新建实例、持续帧不重复生成。完整构建已接入；它验证原生分支，不代表游戏中的粒子显示验收。
+
+`verify_parry_turn_native.py` 隔离执行原生朝向设置与读取函数，验证八个方向、角度回读及位置／其他物理字段不变；完整构建同时核对新增设置接口签名。

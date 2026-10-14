@@ -18,6 +18,10 @@ mod noisy;
 mod balloon;
 mod ability_damage;
 mod glass_cannon;
+mod parry;
+mod parry_turn;
+mod night_blessing;
+mod parry_data;
 mod hero_audio;
 mod spirit;
 mod spirit_placement;
@@ -290,7 +294,7 @@ static GAZE_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
 #[cfg(any(feature="test-hotkeys",test))]
 const TEST_REWARD: [usize;3] = [14,6,12];
 #[cfg(any(feature="test-hotkeys",test))]
-const NEW_HEX_REWARD: [usize;3] = [15,16,0];
+const NEW_HEX_REWARD: [usize;3] = [15,16,21];
 #[cfg(any(feature="test-hotkeys",test))]
 const CHANT_REWARD: [usize;3] = [17,8,18];
 #[cfg(any(feature="test-hotkeys",test))]
@@ -334,15 +338,18 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);104] {
+fn signatures()->[(&'static str,u32);112] {
  [(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
   (NEAR_DEATH_STATE_PATTERN,0x66d700),
+  (parry::NOTIFY_PATTERN,parry::NOTIFY_RVA as u32),(parry::COST_PATTERN,parry::COST_RVA as u32),(parry::REPEL_PATTERN,parry::REPEL_RVA as u32),
   (THROW_ANIM_PATTERN,THROW_ANIM_RVA as u32),(GAUGE_ADD_PERCENT_PATTERN,GAUGE_ADD_PERCENT_RVA as u32),
   (NULLIFY_SITE_PATTERN,NULLIFY_SITE_RVA as u32),(REMOVE_EFFECT_PATTERN,REMOVE_EFFECT_RVA as u32),
   (REBOUND_PATTERN,REBOUND_RVA as u32),
   (HIT_COMPLETE_PATTERN,HIT_COMPLETE_RVA as u32),(HAS_STATE_PATTERN,HAS_STATE_RVA as u32),
+  ("8B 91 04 07 00 00 83 EA 01 74 30 83 EA 01 74 25 83 EA 01 74 1A 83 EA 01 74 0F 83 FA 01 75 04",0x66b8c0),
+  ("8D 42 06 83 F8 15 77 0C 48 8B 89 70 06 00 00 E9 CC 4A D1 FF B8 FF FF FF FF C3",0x66cde0),
   (hero_audio::PATTERN,hero_audio::RVA as u32),
   (archmage_cost::SELECT_PATTERN,archmage_cost::SELECT_RVA as u32),(archmage_cost::COST_PATTERN,archmage_cost::COST_RVA as u32),(archmage_runtime::PATTERN,archmage_runtime::RVA as u32),(glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
   (ACTION_REQUEST_PATTERN,ACTION_REQUEST_RVA as u32),
@@ -356,6 +363,9 @@ fn signatures()->[(&'static str,u32);104] {
   (FALL_HEIGHT_PATTERN,FALL_HEIGHT_RVA as u32),
   (SPRING_HEIGHT_PATTERN,SPRING_HEIGHT_RVA as u32),(SPRING_CONTEXT_PATTERN,0x3fa4c0),
   (CHR_POSITION_PATTERN,CHR_POSITION_RVA as u32),(CHR_ROTATION_PATTERN,CHR_ROTATION_RVA as u32),(MAP_POSITION_PATTERN,MAP_POSITION_RVA as u32),
+  (parry_turn::SET_ROTATION_PATTERN,parry_turn::SET_ROTATION_RVA as u32),
+  (parry::HAND_STYLE_PATTERN,parry::HAND_STYLE_RVA as u32),
+  (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
   (REWARD_HIDE_PATTERN,REWARD_HIDE_RVA as u32),(REWARD_SHOW_PATTERN,REWARD_SHOW_RVA as u32),
   (ARTS_ID_PATTERN,ARTS_ID_RVA as u32),(ARTS_PARAM_PATTERN,ARTS_PARAM_RVA as u32),(ARTS_REF_PATTERN,ARTS_REF_RVA as u32),
   (ARTS_RAW_PATTERN,ARTS_RAW_RVA as u32),
@@ -522,7 +532,12 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let arts_raw_prepared=hook::prepare(arts_raw_target,arts_raw_detour as *const u8,64)?;
   let arts_behavior_target=base.add(ARTS_BEHAVIOR_RVA) as *mut u8;
   let arts_behavior_prepared=hook::prepare(arts_behavior_target,arts_behavior_detour as *const u8,64)?;
+  parry::COST_RESUME.store(base.add(parry::COST_RESUME_RVA) as *mut u8,Ordering::Release);
   let arts_transfer_targets=[
+   (parry::NOTIFY_RVA,parry::notify_detour as *const u8,&parry::NOTIFY_ORIGINAL),
+   (parry::COST_RVA,parry::cost_detour as *const u8,&parry::COST_ORIGINAL),
+   (parry::REPEL_RVA,parry::repel as *const u8,&parry::REPEL_ORIGINAL),
+   (parry::RVA,parry::detour as *const u8,&parry::ORIGINAL),
    (slingshot_runtime::RVA,slingshot_runtime::detour as *const u8,&slingshot_runtime::ORIGINAL),
    (slingshot_runtime::HORIZONTAL_RVA,slingshot_runtime::horizontal as *const u8,&slingshot_runtime::HORIZONTAL_ORIGINAL),
    (devils_gaze_hit::RVA,devils_gaze_hit::detour as *const u8,&devils_gaze_hit::ORIGINAL),
@@ -547,6 +562,8 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let mut arts_transfer_prepared=Vec::new();
   for (rva,detour,original) in arts_transfer_targets {
    let p=hook::prepare(base.add(rva) as *mut u8,detour,64)?;
+   if rva==parry::RVA&&p.stolen!=7{return Err("Parry state query must relocate its two 7-byte MOV instructions".into());}
+   if rva==parry::COST_RVA&&p.stolen!=9{return Err("Parry cost gate must relocate the nine-byte MOVSS".into());}
    original.store(p.trampoline,Ordering::Release);arts_transfer_prepared.push((rva,p));
   }
   if arts_param_prepared.stolen!=5{return Err("Arts param entry must relocate its five-byte native jump".into());}
@@ -847,6 +864,7 @@ unsafe fn position(player:usize,base:usize)->[f32;4] {
 // Receiver-side native category calculation also covers bullet/network contexts
 // whose original construction did not expose the player's source pointer.
 unsafe extern "system" fn on_sword_before_calculation(module:usize,source:usize,hit:usize){
+ parry::enter(module,hit);
  glass_cannon::enter(module,source,hit);
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);
@@ -857,6 +875,9 @@ unsafe extern "system" fn on_sword_before_calculation(module:usize,source:usize,
 }
 unsafe extern "system" fn on_rear_calculated(module:usize,source:usize,hit:usize) {
  glass_cannon::leave();
+ parry::finish_guard(module,hit);
+ parry_turn::calculated(module,source,hit);
+ parry::leave();
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0 {return;}
  let base=BASE.load(Ordering::Acquire);
  if ptr::read((hit+0x2c1) as *const u8)&8!=0 {
@@ -1082,7 +1103,7 @@ unsafe extern "system" fn arts_item_create_detour(manager:usize,out:usize,payloa
 }
 unsafe extern "system" fn arts_behavior_detour(player:usize,judge:i32,source:i32,flags:u32,extra:u8)->i32{
  let original:ArtsBehaviorFn=std::mem::transmute(ARTS_BEHAVIOR_ORIG.load(Ordering::Acquire));
- arts_behavior_call(original,player,judge,source,flags,extra)
+ arts_behavior_call(original,player,parry::native_guard_judge(judge),source,flags,extra)
 }
 unsafe extern "system" fn arts_bullet_detour(module:usize,behavior:i32,event:i32,descriptor:usize,source:i32,original_source:i32,flag0:u8,flag1:u8,kind:u8,error:usize)->u8{
  let original:ArtsBulletFn=std::mem::transmute(ARTS_BULLET_ORIG.load(Ordering::Acquire));
@@ -2066,6 +2087,8 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  if world==0{return;}
  if read_ptr(world+0x174e8)!=player {return;}
  if !dt.is_finite()||dt<=0.0||dt>1.0{return;}
+ parry::update_turn(player);
+ night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  update_chant(player,base,dt);
  update_runtime(player,base,dt);
@@ -2312,7 +2335,7 @@ mod tests {
    let next=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(1<<8,Some(hero))).unwrap()];assert_eq!(next[0],17);assert!(!next.contains(&8));
   }
   let excluded=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(0,Some(1))).unwrap()];assert_eq!(excluded[0],18);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
-  assert_eq!(NEW_HEX_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[balloon::OWNER,spirit::OWNER,95000100]);
+  assert_eq!(NEW_HEX_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[balloon::OWNER,spirit::OWNER,parry::OWNER]);
   let both=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(0,Some(6))).unwrap()];
   assert_eq!(both,NEW_HEX_REWARD);
   let after_balloon=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(1<<15,Some(6))).unwrap()];

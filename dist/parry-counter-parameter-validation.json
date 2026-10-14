@@ -1,0 +1,11 @@
+{
+  "inputSha256": "911C84E20516B3FF076FA2DF8995BE1BA80024F67B83046A02E202F85D1A01FA",
+  "outputSha256": "42CDF12C28DF73AB3D28079D48FD1D42C02766A1DEEF0DF961C0EC4244572175",
+  "added": 95002404,
+  "nativeTemplate": 322000,
+  "attackCategory": 103,
+  "multiplier": 2,
+  "originalRowsUnchanged": true,
+  "nativeFiltersUnchanged": true,
+  "gameplayVerified": false
+}

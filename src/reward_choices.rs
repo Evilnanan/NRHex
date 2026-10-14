@@ -50,10 +50,10 @@ mod tests {
     use super::*;
     #[test] fn retired_ability_is_absent_and_remaining_lot_ids_are_stable(){
         use crate::hex_pool::{LOT_IDS,LEGACY_LOT_END};
-        assert_eq!(HEX_COUNT,21);assert!(!OWNER_IDS.contains(&95001900));
-        assert_eq!(ORDERS.len(),7980);assert_eq!(LOT_IDS.len(),ORDERS.len());
+        assert_eq!(HEX_COUNT,23);assert!(!OWNER_IDS.contains(&95001900));
+        assert_eq!(ORDERS.len(),10626);assert_eq!(LOT_IDS.len(),ORDERS.len());
         assert_eq!(LOT_IDS.iter().copied().collect::<std::collections::HashSet<_>>().len(),LOT_IDS.len());
-        for (i,&lot) in LOT_IDS.iter().enumerate(){assert!((95200000..LEGACY_LOT_END).contains(&lot));assert_eq!((lot-95200000)%10,0);if i<4080{assert_eq!(lot,95200000+i as i32*10);}if (4896..5814).contains(&i){assert!(lot>=95258140);assert!(ORDERS[i].contains(&18));}if (5814..6840).contains(&i){assert!(lot>=95268400);assert!(ORDERS[i].contains(&19));}if i>=6840{assert!(lot>=95279800);assert!(ORDERS[i].contains(&20));}}
+        for (i,&lot) in LOT_IDS.iter().enumerate(){assert!((95200000..LEGACY_LOT_END).contains(&lot));assert_eq!((lot-95200000)%10,0);if i<4080{assert_eq!(lot,95200000+i as i32*10);}if (4896..5814).contains(&i){assert!(lot>=95258140);assert!(ORDERS[i].contains(&18));}if (5814..6840).contains(&i){assert!(lot>=95268400);assert!(ORDERS[i].contains(&19));}if (6840..7980).contains(&i){assert!(lot>=95279800);assert!(ORDERS[i].contains(&20));}if (7980..9240).contains(&i){assert!(lot>=95292400);assert!(ORDERS[i].contains(&21));}if i>=9240{assert!(lot>=95306260);assert!(ORDERS[i].contains(&22));}}
         assert!(LOT_IDS[4080..].windows(2).any(|p|p[1]-p[0]>10));
     }
     #[test] fn spirit_is_revenant_only_and_bit_sixteen_is_preserved() {

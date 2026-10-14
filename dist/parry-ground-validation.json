@@ -1,0 +1,15 @@
+{
+  "version": "0.17.112",
+  "testsPassed": 19,
+  "nativeCases": 103,
+  "nativeAirborneQuery": "4678E0",
+  "groundContactAndJumpControllerAndActionFlags": true,
+  "attackAndFollowupAndTurnGated": true,
+  "normalGuardPreserved": true,
+  "existingCounterBonusPreserved": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "dllSha256": "7eb26b5eb8946409a9c48c08b988b4a71b4ee4b14e6a5888bd93f4f3c8f2df5f",
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

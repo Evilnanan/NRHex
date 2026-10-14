@@ -124,6 +124,24 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Archmage secondary FP native verification failed' }
     python -X utf8 tools/verify_slingshot_native.py
     if ($LASTEXITCODE -ne 0) { throw 'Slingshot native impulse verification failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-actions
+    if ($LASTEXITCODE -ne 0) { throw 'Parry native guard window generation failed.' }
+    Copy-Item -LiteralPath '.work/parry/staged/c0000.anibnd.dcx' -Destination 'dist/mod/chr/c0000.anibnd.dcx' -Force
+    Copy-Item -LiteralPath '.work/parry/staged/parry_data.rs' -Destination 'src/parry_data.rs' -Force
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-followup-actions
+    if ($LASTEXITCODE -ne 0) { throw "Parry follow-up actions failed." }
+    python -X utf8 tools/verify_parry_feedback_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Parry native spark instance verification failed.' }
+    python -X utf8 tools/verify_parry_turn_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Parry native turn verification failed.' }
+    Copy-Item -LiteralPath '.work/parry-fix/turn-native-validation.json' -Destination 'dist/parry-turn-native-validation.json' -Force
+    Copy-Item -LiteralPath '.work/parry-fix/spark-native-validation.json' -Destination 'dist/parry-spark-native-validation.json' -Force
+    Copy-Item -LiteralPath ".work/parry-fix/staged/c0000.anibnd.dcx" -Destination "dist/mod/chr/c0000.anibnd.dcx" -Force
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --night-blessing-actions
+    if ($LASTEXITCODE -ne 0) { throw 'Night blessing asset generation failed.' }
+    Copy-Item -LiteralPath '.work/night-blessing/staged/c0000.anibnd.dcx' -Destination 'dist/mod/chr/c0000.anibnd.dcx' -Force
+    New-Item -ItemType Directory -Force 'dist/mod/script/talk' | Out-Null
+    Copy-Item -LiteralPath '.work/night-blessing/staged/m00_00_00_00.talkesdbnd.dcx' -Destination 'dist/mod/script/talk/m00_00_00_00.talkesdbnd.dcx' -Force
     cargo build --release --lib
     if ($LASTEXITCODE -ne 0) { throw 'DLL build failed.' }
     cargo run --release --bin scancheck -- $gameExe

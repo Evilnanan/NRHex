@@ -2,7 +2,7 @@ using SoulsFormats;
 
 // Stable serialization IDs survive removing an ability from the active catalog.
 static class RewardCatalog {
- public static readonly int[] HistoricalOwners=Enumerable.Range(1,23).Where(i=>i!=10).Select(i=>95000000+i*100).ToArray();
+ public static readonly int[] HistoricalOwners=Enumerable.Range(1,25).Where(i=>i!=10).Select(i=>95000000+i*100).ToArray();
  public const int Retired=95001900;
  public sealed record Entry(int Lot,int[] Order);
  public sealed record Serialized(int Lot,int[] Owners);

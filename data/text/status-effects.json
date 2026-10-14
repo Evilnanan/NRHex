@@ -44,5 +44,11 @@
     "enName": "Invisibility",
     "zhInfo": "隐藏身形",
     "enInfo": "Conceals the body."
+  },
+  {
+    "textId": 95002503,
+    "ownerId": 95002500,
+    "zhInfo": "攻击力提升25%，离开夜雨时效果结束",
+    "enInfo": "Increases attack power by 25% until leaving the Night’s Tide."
   }
 ]

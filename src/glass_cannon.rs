@@ -63,11 +63,16 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
  }else{attack};
  if !bypass{return original(out,attack,rates,effects,armor,guard,conditional,additional,
   deflection,repeated,rebound,attack_rate,positional,target_state,balance);}
- // Neutralize all five recipient coefficients for all five damage elements.
+ // 503800 separates DamageCutRate into ordinary, category 110 and category
+ // 434 groups. Combine these BEFORE clamping: reduction and vulnerability
+ // must cancel normally, rather than preserving each vulnerability alone.
+ // Equipment/model resistance and shield guard are separate and stay neutral.
  // Keep attack components/rates, hit-specific offensive multipliers and the
  // native balance factor. No shared rows, recipient stats or HP are modified.
  let neutral=[1f32;5];let n=neutral.as_ptr();
- original(out,attack,rates,n,n,n,n,n,1.,repeated,1.,attack_rate,positional,1.,balance)
+ let vulnerability=std::array::from_fn::<_,5,_>(|i|
+  (*effects.add(i)* *conditional.add(i)* *additional.add(i)).max(1.));
+ original(out,attack,rates,vulnerability.as_ptr(),n,n,n,n,1.,repeated,1.,attack_rate,positional,1.,balance)
 }
 
 #[cfg(test)]mod tests{
@@ -78,14 +83,29 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
   let scalar=d*repeated*b*rate*pos*state*balance;
   let mut sum=0.;for i in 0..5{let value=*a.add(i)* *r.add(i)* *e.add(i)* *armor.add(i)* *g.add(i)* *c.add(i)* *x.add(i)*scalar;*out.add(i)=value;sum+=value;}sum
  }
- #[test]fn bypass_all_defensive_layers_preserves_offense_and_original_inputs(){unsafe{
+ #[test]fn bypass_preserves_only_net_damage_cut_vulnerability_and_offense(){unsafe{
   let a=[100.,200.,300.,400.,500.];let rates=[1.2,1.5,2.,0.5,0.];
   for cuts in [[0.;5],[0.1,0.2,0.3,0.4,0.5],[2.;5]]{
    let saved=cuts;let mut out=[0.;5];
    let value=calculate(native,true,out.as_mut_ptr(),a.as_ptr(),rates.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),0.25,0.5,0.,2.,1.5,0.,0.75);
-   let mut expected=[0.;5];for i in 0..5{expected[i]=a[i]*rates[i]*0.5*2.*1.5*0.75;}
+   let mut expected=[0.;5];for i in 0..5{expected[i]=a[i]*rates[i]*(cuts[i]*cuts[i]*cuts[i]).max(1.)*0.5*2.*1.5*0.75;}
    assert_eq!(out,expected);assert_eq!(value,expected.iter().sum());assert_eq!(cuts,saved);
   }
+ }}
+ #[test]fn reduction_groups_combine_before_clamping_each_damage_element(){unsafe{
+  let a=[100.;5];let one=[1.;5];let mut out=[0.;5];
+  let effects=[0.5,0.75,1.5,0.,1.];
+  let conditional=[1.5,2.,1.,4.,1.];
+  let additional=[1.,1.,0.5,2.,2.];
+  let saved=(effects,conditional,additional);
+  // Opposing reductions produce .75,1.5,.75,0,2. Only the net >1 survives.
+  // Even >1 model resistance, guard and target-state factors stay bypassed.
+  let ignored=[3.;5];
+  for _ in 0..2{
+   let total=calculate(native,true,out.as_mut_ptr(),a.as_ptr(),one.as_ptr(),effects.as_ptr(),ignored.as_ptr(),ignored.as_ptr(),conditional.as_ptr(),additional.as_ptr(),2.,1.,2.,1.,1.,2.,1.);
+   assert_eq!(out,[100.,150.,100.,100.,200.]);assert_eq!(total,650.);
+  }
+  assert_eq!((effects,conditional,additional),saved);
  }}
  #[test]fn non_holder_keeps_all_fifteen_arguments_and_float_return(){unsafe{
   let mut out=[0.;5];let a=[100.;5];let one=[1.;5];let cut=[0.5;5];

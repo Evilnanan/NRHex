@@ -1,10 +1,10 @@
 {
-  "version": "0.17.97",
-  "active": 1,
-  "pid": 33748,
-  "allFourNativeDllsLoaded": true,
+  "version": "0.17.113",
+  "active": null,
+  "pid": null,
+  "allFourNativeDllsLoaded": false,
   "build": "build-validation.json",
-  "dllSha256": "e2d9ed3a3d48a8533afe4b9bee83e1b32117c95347d0fd1bfa5acbbec50ced88",
+  "dllSha256": "3fbfbdda6dbcc99104da609b42e9913fee9cb302ace9bce0687f33176624f2e7",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "pendingChecks": [
@@ -19,29 +19,5 @@
     "Cross-weapon Flame Spit/Tongues of Fire",
     "Bow-only skill pool"
   ],
-  "notes": "Loading status intentionally unclaimed after rebuilding; tools/check_loaded.py can read current process state.",
-  "installedHooks": {
-    "0x6a20b0": "e94bdf69ff",
-    "0x6a2180": "e97bde67ff",
-    "0x6a2240": "e9bbdd65ff",
-    "0x668b30": "e9cb7467ff",
-    "0x7e91a0": "e95b6e47ff",
-    "0x6c16f0": "e90be957ff",
-    "0x570410": "e9ebfb6aff",
-    "0x57ca60": "e99b3568ff",
-    "0x57b490": "e96b4b66ff",
-    "0x3975d0": "e92b8a82ff",
-    "0xb9ea10": "e9eb1500ff",
-    "0x353590": "e96bca82ff",
-    "0x355d20": "e9dba280ff",
-    "0xed60c0": "e93b9fc5fe",
-    "0x353cb0": "e94bc37bff",
-    "0x82ba40": "e9bb456bff",
-    "0x7df110": "e9eb0e6eff",
-    "0xa89a93": "e9686541ff",
-    "0xe94990": "e96bb6b9fe",
-    "0x33c120": "e9db3e94ff",
-    "0x66ab90": "e96b5442ff",
-    "0x6c5ec0": "e93ba13aff"
-  }
+  "notes": "Loading status intentionally unclaimed after rebuilding; tools/check_loaded.py can read current process state."
 }

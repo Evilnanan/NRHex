@@ -7,7 +7,7 @@ static class AngelChant {
  static string Hash(string path)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(path)));
  public static List<int[]> Orders(int total){
   var orders=new List<int[]>();int previous=0;
-  foreach(int count in new[]{15,17,19,20,21,total}.Where(n=>n<=total).Distinct()){
+  foreach(int count in new[]{15,17,19,20,21,22,23,total}.Where(n=>n<=total).Distinct()){
    for(int a=0;a<count;a++)for(int b=0;b<count;b++)for(int c=0;c<count;c++)if(a!=b&&a!=c&&b!=c&&(a>=previous||b>=previous||c>=previous))orders.Add([a,b,c]);
    previous=count;
   }

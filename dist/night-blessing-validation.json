@@ -1,0 +1,26 @@
+{
+  "version": "0.17.102",
+  "changedAssets": {
+    "mod/regulation.bin": "32DD498C9BF3C59FE8418B3B0FBAB7B9E9238124ABB99288D4FCBD3106E68B42",
+    "mod/chr/c0000.anibnd.dcx": "94FE8634654004BBE81F8843A0CF8D63FDC6204AD8D9E81C188579002035A6A6",
+    "mod/script/talk/m00_00_00_00.talkesdbnd.dcx": "01C708D7539A11C26C534E3AA13A167C1AF1BE90F17406DCB13B8CBD0E61119E",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "53D41E69E7741FA1F2C91F5DEA202420CB5212104F953307FD63948819044611",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "152DB7091C00C9CB44D10ABDE1F0F9604295A3F9827794B550F3E50E69AB2089",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "E3257514637D7E3C18E59B9C4F0A7A7416A244800BB2624F69B93696B982F512",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "B10ED91CE856EE11AC4684C536A92472700DB95F6D7B543401BD753F52A93513",
+    "mod/natives/NRHex.dll": "E6018EFFAD9B9BB96E79E35CB2F518BD8BB5775B277507969F75B5F6718E5141"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "checks": {
+    "fullRustSuiteBeforeFinalCooldownRefinement": 291,
+    "finalNightBlessingTests": 10,
+    "sourceManifestsVerified": true,
+    "nativeExeAndSignaturesVerified": true,
+    "bilingualDescriptionsVerified": true,
+    "bothMe3ProfilesVerified": true
+  },
+  "runtimeSourceSha256": "a05ac782504d276958cca4c6785c1f2528ad6a76f551d4828d7801edf35df360"
+}

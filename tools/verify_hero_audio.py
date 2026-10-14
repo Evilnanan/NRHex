@@ -54,3 +54,13 @@ report=dict(exeSha256=hashlib.sha256(exe.read_bytes()).hexdigest(),hookRva='EED2
             staticChecksPassed=True,gameplayVerified=False)
 (out/'validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print('PASS: four native hero selector call sites verified; Restage sound exists in hero04, absent from shared banks.')
+
+parry_name='Play_c000809000';parry_event=fnv(parry_name)
+parry_banks=[p.name for p in banks if parry_event in events(p)]
+assert parry_banks==['hero08.bnk'],parry_banks
+parry_out=root/'.work/parry-fix';parry_out.mkdir(parents=True,exist_ok=True)
+(parry_out/'audio-validation.json').write_text(json.dumps(dict(
+    exeSha256=report['exeSha256'],nativeEvent=parry_name,eventId=parry_event,
+    nativeSoundBank=parry_banks[0],nativeSoundBankSha256=hashlib.sha256((game/'sd/hero08.bnk').read_bytes()).hexdigest(),
+    sceneOwnsBankLifetime=True,gameplayVerified=False),indent=2),encoding='utf8')
+print('PASS: Executor deflect event 809000 belongs to hero08; scene-owned loading can share the existing selector hook.')

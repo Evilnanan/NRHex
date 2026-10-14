@@ -1,0 +1,23 @@
+{
+  "version": "0.17.113",
+  "testsPassed": 19,
+  "nativeCases": 103,
+  "windowReadback": 44681,
+  "wholeFrameOffsets": true,
+  "frameUnitSeconds": 0.03333333333333333,
+  "smallStraightGreatswordFrames": [
+    2,
+    3,
+    6
+  ],
+  "followupUnchanged": true,
+  "groundAndHandRestrictionsPreserved": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "changedAssets": {
+    "mod/natives/NRHex.dll": "3FBFBDDA6DBCC99104DA609B42E9913FEE9CB302ACE9BCE0687F33176624F2E7",
+    "mod/chr/c0000.anibnd.dcx": "FDCB0BDA9942C3B0797ECC8F0F613EC201672E29820FB5D2D222062585548C1C"
+  },
+  "gameStarted": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

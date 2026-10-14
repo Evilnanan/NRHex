@@ -45,19 +45,35 @@ try:
     coefficients[layer] = array(*([cut] * 5))
     before = [bytes(a) for a in coefficients]
     output = array()
-    args = [neutral] * 5 if bypass else coefficients
+    vulnerability = array(*(max(coefficients[0][i] * coefficients[3][i] * coefficients[4][i], 1.) for i in range(5)))
+    args = [vulnerability, neutral, neutral, neutral, neutral] if bypass else coefficients
     scalars = [1., scalar[1], 1., scalar[3], scalar[4], 1., scalar[6]] if bypass else scalar
     total = calculate(c.addressof(output), c.addressof(attack), c.addressof(rates),
                       *map(c.addressof, args), *scalars)
     factor = 1.
     for v in scalars:
      factor *= v
-    expected = [float(attack[i]) * float(rates[i]) * (1. if bypass else cut) * factor for i in range(5)]
+    applied = (max(cut, 1.) if layer in [0, 3, 4] else 1.) if bypass else cut
+    expected = [float(attack[i]) * float(rates[i]) * applied * factor for i in range(5)]
     for got, wanted in zip(output, expected):
      assert abs(got - wanted) < .002, (layer, cut, bypass, got, wanted)
     assert abs(total - sum(expected)) < .005, (total, expected)
     assert before == [bytes(a) for a in coefficients]
     reports.append(dict(bypass=bypass, layer=layer, cut=cut, output=list(output), total=total))
+ # Mixed elemental reduction/vulnerability, including cancellation between
+ # native DamageCutRate categories. Armor and guard must never contribute.
+ mixed = [array(.5,.75,1.5,0,1), array(*([3.]*5)), array(*([3.]*5)),
+          array(1.5,2,1,4,1), array(1,1,.5,2,2)]
+ before = [bytes(a) for a in mixed]
+ retained = array(*(max(mixed[0][i]*mixed[3][i]*mixed[4][i],1.) for i in range(5)))
+ for repeat in range(2):
+  output = array()
+  total = calculate(c.addressof(output),c.addressof(attack),c.addressof(rates),
+                    *map(c.addressof,[retained,neutral,neutral,neutral,neutral]),*([1.]*7))
+  expected = [attack[i]*rates[i]*[1.,1.5,1.,1.,2.][i] for i in range(5)]
+  assert all(abs(a-b)<.002 for a,b in zip(output,expected))
+  assert abs(total-sum(expected))<.005 and before==[bytes(a) for a in mixed]
+  reports.append(dict(mixedDamageCutGroups=True,repeat=repeat,output=list(output),total=total))
  # Immunity expressed as a numerical defensive coefficient, including a 100%
  # shield. Collision invulnerability/attack-nullification flags remain separate.
  out = array()
@@ -111,11 +127,12 @@ try:
     gaze_cases.append(dict(quarterBase=damage,playerScale=scale,defense=.5,guard=guard_rate,holyOutput=output[4],nativeTotal=total))
 finally:
  assert k.VirtualFree(memory, 0, 0x8000)
-work = ROOT / '.work/glass-cannon-01769'
+work = ROOT / '.work/glass-cannon-01798'
 work.mkdir(exist_ok=True)
 (work / 'native-validation.json').write_text(json.dumps(dict(
  cases=reports, objectDefenseCases=object_cases, nativeCasesPassed=len(reports)+1+len(object_cases), dependencyStubs=[],
  fiveElementsAndFiveDefenseLayersVerified=True, originalInputsPreserved=True,
+ netDamageCutVulnerabilityPreserved=True, armorAndGuardVulnerabilityBypassed=True,
  sourceResolvedByNative=True, originalFlagsPreserved=True,
  gameMemoryWritten=False, gameplayVerified=False, multiplayerVerified=False), indent=2), encoding='utf-8')
 print(f'PASS: {len(reports)+1+len(object_cases)} native cases; five damage elements, five defensive layers, shield and source resolution; no game writes')

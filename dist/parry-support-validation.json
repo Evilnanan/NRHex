@@ -1,0 +1,20 @@
+{
+  "inputSha256": "A5DB9699FBEA99051BCBD5D3D0FB89F5C5DA1E05A383F8A813ECDB66A5FB99E3",
+  "outputSha256": "911C84E20516B3FF076FA2DF8995BE1BA80024F67B83046A02E202F85D1A01FA",
+  "chainSeconds": 0.16666667,
+  "sfx": 462800,
+  "nativeCommonResource": true,
+  "originalRowsUnchanged": true,
+  "added": {
+    "SpEffectParam": [
+      95002401,
+      95002402,
+      95002403
+    ],
+    "SpEffectVfxParam": [
+      95002402,
+      95002403
+    ]
+  },
+  "gameplayVerified": false
+}

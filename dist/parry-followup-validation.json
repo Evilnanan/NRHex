@@ -1,0 +1,223 @@
+{
+  "version": "0.17.103",
+  "parameters": {
+    "inputSha256": "32DD498C9BF3C59FE8418B3B0FBAB7B9E9238124ABB99288D4FCBD3106E68B42",
+    "outputSha256": "52FE64524DCE702408D69BE51A1D26D956862ABC264CEBD92ED32A32D341EDA3",
+    "added": 95002405,
+    "originalRowsUnchanged": true
+  },
+  "actions": {
+    "inputSha256": "94FE8634654004BBE81F8843A0CF8D63FDC6204AD8D9E81C188579002035A6A6",
+    "outputSha256": "0003B40D5E0DBEB2DC44509B5B2D8479A9BF1C846BD5569097A9C38DE4626C32",
+    "targets": {
+      "a00.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410,
+        19450,
+        19460,
+        19470,
+        19480,
+        19481,
+        19482,
+        19483,
+        19484,
+        19485,
+        19486,
+        19487,
+        19489,
+        19490,
+        19491,
+        19492,
+        19493,
+        19494,
+        19495
+      ],
+      "a02.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410
+      ],
+      "a03.tae": [
+        19200,
+        19210,
+        19250,
+        19260,
+        19300,
+        19310,
+        19400,
+        19410
+      ],
+      "a10.tae": [
+        19200,
+        19210
+      ],
+      "a12.tae": [
+        19200,
+        19210
+      ],
+      "a13.tae": [
+        19200,
+        19210
+      ],
+      "a15.tae": [
+        19200,
+        19210,
+        19300,
+        19310,
+        19400,
+        19410,
+        19450,
+        19460,
+        19470
+      ]
+    },
+    "seconds": 0.16666667,
+    "originalEventsPreserved": true,
+    "gameplayVerified": false
+  },
+  "native": {
+    "nativeCases": 27,
+    "cases": [
+      {
+        "mode": 0,
+        "nativeSource": -2
+      },
+      {
+        "mode": 1,
+        "nativeSource": -1
+      },
+      {
+        "mode": 2,
+        "nativeSource": 6
+      },
+      {
+        "mode": 3,
+        "nativeSource": 7
+      },
+      {
+        "mode": 4,
+        "nativeSource": 8
+      },
+      {
+        "mode": 5,
+        "nativeSource": 9
+      },
+      {
+        "mode": 6,
+        "nativeSource": -2
+      },
+      {
+        "state": 3,
+        "flags": 0
+      },
+      {
+        "state": 3,
+        "flags": 1
+      },
+      {
+        "state": 3,
+        "flags": 262144
+      },
+      {
+        "state": 3,
+        "flags": 2147483648
+      },
+      {
+        "state": 434,
+        "flags": 0
+      },
+      {
+        "state": 434,
+        "flags": 1
+      },
+      {
+        "state": 434,
+        "flags": 262144
+      },
+      {
+        "state": 434,
+        "flags": 2147483648
+      },
+      {
+        "state": 14000,
+        "flags": 0
+      },
+      {
+        "state": 14000,
+        "flags": 1
+      },
+      {
+        "state": 14000,
+        "flags": 262144
+      },
+      {
+        "state": 14000,
+        "flags": 2147483648
+      },
+      {
+        "state": 17761,
+        "flags": 0
+      },
+      {
+        "state": 17761,
+        "flags": 1
+      },
+      {
+        "state": 17761,
+        "flags": 262144
+      },
+      {
+        "state": 17761,
+        "flags": 2147483648
+      },
+      {
+        "state": 25013,
+        "flags": 0
+      },
+      {
+        "state": 25013,
+        "flags": 1
+      },
+      {
+        "state": 25013,
+        "flags": 262144
+      },
+      {
+        "state": 25013,
+        "flags": 2147483648
+      }
+    ],
+    "playerVirtualMethodsVerified": true,
+    "managerOwnerVerified": true,
+    "nativeStateQueryUsesUnsigned16Bit": true,
+    "nativeAttackAndGuardTaeGatesVerified": true,
+    "finalGuardNotificationVerified": true,
+    "guardDirectionRemainsNative": true,
+    "attackGuardStaminaWaived": true,
+    "gameMemoryWritten": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "changedAssets": {
+    "mod/regulation.bin": "52FE64524DCE702408D69BE51A1D26D956862ABC264CEBD92ED32A32D341EDA3",
+    "mod/chr/c0000.anibnd.dcx": "0003B40D5E0DBEB2DC44509B5B2D8479A9BF1C846BD5569097A9C38DE4626C32",
+    "mod/natives/NRHex.dll": "5B806A28FA465167BECFEF6EEBF3294E45BA197177770AE7C1ED3507238E4524"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "rustTests": 294,
+  "nativeSignatures": 109,
+  "descriptionsVerified": true
+}

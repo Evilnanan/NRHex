@@ -22,6 +22,7 @@ pub unsafe extern "system" fn route_detour() {
   "cmp r10d, 95000801", "je 3f",
   "cmp r10d, 95001201", "je 3f",
   "cmp r10d, 95001202", "je 3f",
+  "cmp r10d, 95002503", "je 3f",
   "cmp r10d, 95005001", "jl 2f",
   "cmp r10d, 95005079", "jle 3f",
   "2:", "pop r10",
@@ -59,7 +60,7 @@ mod tests {
   let prepared=crate::hook::prepare(memory,route_detour as *const u8,8).unwrap();
   assert_eq!(prepared.stolen,7);
   ORIGINAL.store(prepared.trampoline,Ordering::Release);CONTINUE.store(memory.add(7),Ordering::Release);
-  let states=[95000403,95000701,95001203,95000501,95000801,95001201,95001202];
+  let states=[95000403,95000701,95001203,95000501,95000801,95001201,95001202,95002503];
   let mut ids=states.to_vec();ids.extend(95005001..=95005079);
   ids.extend([95005000,95005080,95000500,95000700,95000400,95001200,95000800,8610700,8610702,9700,700600,-1]);
   for kind in [0,1,2,-1] {for &effect in &ids {
