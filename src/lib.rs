@@ -21,6 +21,8 @@ mod glass_cannon;
 mod parry;
 mod parry_turn;
 mod night_blessing;
+mod heartstealer;
+mod ominous_pact;
 mod parry_data;
 mod hero_audio;
 mod spirit;
@@ -290,6 +292,8 @@ static NEW_HEX_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
 static CHANT_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
 #[cfg(feature="test-hotkeys")]
 static GAZE_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
+#[cfg(feature="test-hotkeys")]
+static CONTRACT_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
 // Current development focus: Monster Cage, Crystal Shell, Versatile Arts.
 #[cfg(any(feature="test-hotkeys",test))]
 const TEST_REWARD: [usize;3] = [14,6,12];
@@ -299,6 +303,8 @@ const NEW_HEX_REWARD: [usize;3] = [15,16,21];
 const CHANT_REWARD: [usize;3] = [17,8,18];
 #[cfg(any(feature="test-hotkeys",test))]
 const GAZE_REWARD: [usize;3] = [20,19,7];
+#[cfg(any(feature="test-hotkeys",test))]
+const CONTRACT_REWARD: [usize;3] = [23,24,21];
 #[cfg(feature="test-hotkeys")]
 static LAST_SPAWN: AtomicU64 = AtomicU64::new(0);
 static CALLBACK_LOCK: AtomicBool = AtomicBool::new(false);
@@ -338,7 +344,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);114] {
+fn signatures()->[(&'static str,u32);116] {
  [(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -365,6 +371,8 @@ fn signatures()->[(&'static str,u32);114] {
   (CHR_POSITION_PATTERN,CHR_POSITION_RVA as u32),(CHR_ROTATION_PATTERN,CHR_ROTATION_RVA as u32),(MAP_POSITION_PATTERN,MAP_POSITION_RVA as u32),
   (parry_turn::SET_ROTATION_PATTERN,parry_turn::SET_ROTATION_RVA as u32),
   (parry::HAND_STYLE_PATTERN,parry::HAND_STYLE_RVA as u32),
+  (ominous_pact::HP_PATTERN,ominous_pact::HP_GUARD_RVA as u32),
+  (ominous_pact::NOTIFY_PATTERN,ominous_pact::NOTIFY_RVA as u32),
   (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
   (parry::DUMMY_COUNT_PATTERN,parry::DUMMY_COUNT_RVA as u32),
   (parry::COUNTER_COST_PATTERN,parry::COUNTER_COST_RVA as u32),
@@ -399,10 +407,10 @@ extern "system" { fn GetTickCount64()->u64; }
 extern "system" { fn BCryptGenRandom(handle:*mut c_void,buffer:*mut u8,len:u32,flags:u32)->i32; }
 
 #[derive(Debug)]
-struct Config { key:i32, test_key:i32, new_hex_key:i32, chant_key:i32, gaze_key:i32, ctrl:bool, cooldown:u64 }
+struct Config { key:i32, test_key:i32, new_hex_key:i32, chant_key:i32, gaze_key:i32, contract_key:i32, ctrl:bool, cooldown:u64 }
 impl Config {
  fn read(text:&str)->Result<Self,String> {
-  let mut c=Self{key:0x75,test_key:0x76,new_hex_key:0x77,chant_key:0x78,gaze_key:0x79,ctrl:true,cooldown:3000};
+  let mut c=Self{key:0x75,test_key:0x76,new_hex_key:0x77,chant_key:0x78,gaze_key:0x79,contract_key:0x7a,ctrl:true,cooldown:3000};
   for line in text.lines().map(str::trim).filter(|s|!s.is_empty()&&!s.starts_with([';','#','['])) {
    let (k,v)=line.split_once('=').ok_or("Expected key=value in NRHex.ini")?;
    match k.trim() {
@@ -411,6 +419,7 @@ impl Config {
     "NewHexVirtualKey"=>{let v=v.trim();c.new_hex_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid NewHexVirtualKey")?;},
     "ChantVirtualKey"|"AngelChantVirtualKey"=>{let v=v.trim();c.chant_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid ChantVirtualKey")?;},
     "GazeVirtualKey"=>{let v=v.trim();c.gaze_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid GazeVirtualKey")?;},
+    "ContractVirtualKey"=>{let v=v.trim();c.contract_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid ContractVirtualKey")?;},
     // Older INIs remain loadable, but cannot override the compiled range.
     "SwordNearDistance"=>{},
     "RequireControl"=>c.ctrl=v.trim().parse().map_err(|_|"RequireControl must be true/false")?,
@@ -418,7 +427,7 @@ impl Config {
     _=>return Err(format!("Unknown setting {k}"))
    }
   }
-  let keys=[c.key,c.test_key,c.new_hex_key,c.chant_key,c.gaze_key];
+  let keys=[c.key,c.test_key,c.new_hex_key,c.chant_key,c.gaze_key,c.contract_key];
   if keys.iter().any(|k|!(1..=254).contains(k))||keys.iter().enumerate().any(|(i,k)|keys[i+1..].contains(k))||c.cooldown<1000 {return Err("Hotkeys must be distinct and 1..254; CooldownMs >=1000".into());}
   Ok(c)
  }
@@ -1429,6 +1438,8 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  let original:ApplyEffect=std::mem::transmute(APPLY_ORIG.load(Ordering::Acquire));
  let base=BASE.load(Ordering::Acquire);
  if ACTIVE.load(Ordering::Acquire)&&slingshot_runtime::pulse(player,effect,base){return 1;}
+ if ACTIVE.load(Ordering::Acquire)&&heartstealer::suppress_notification(player,effect,base){return 1;}
+ if ACTIVE.load(Ordering::Acquire)&&ominous_pact::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&effect==spirit::NATIVE_DRAIN&&npc_id(player,base).is_some_and(spirit::is_private_npc){effect=spirit::PASSIVE;}
  if ACTIVE.load(Ordering::Acquire)&&effect==102100&&is_local(player,base){on_effect(player,balloon::DOWN,base);}
  if ACTIVE.load(Ordering::Acquire)&&matches!(effect,balloon::DOWN|balloon::REVIVED)&&is_local(player,base){
@@ -1708,6 +1719,16 @@ unsafe extern "system" fn on_cat_hit(module:usize,hit:usize,before:i32,source:us
  let after=read_i32(stats+0x140);
  let damage=read_i32(hit+0x280);
  if let Some(state)=CAT.get(){if let Ok(mut c)=state.lock(){c.hit(player,stats,true,damage,after);}}
+}
+// Custom on-damage abilities use the same actual HP cost once; this bridge
+// does not create a synthetic hit or award lifesteal/attack-hit effects.
+unsafe fn on_contract_hp_damage(player:usize,stats:usize,base:usize,damage:i32,after:i32){
+ if has_effect(player,jiahao::OWNER,base){
+  if let Some(state)=JIAHAO.get(){if let Ok(mut s)=state.lock(){s.synchronize(player,stats,true,after>0);s.damaged(damage);}}
+ }
+ if has_effect(player,cat::OWNER,base){
+  if let Some(state)=CAT.get(){if let Ok(mut s)=state.lock(){s.hit(player,stats,true,damage,after);}}
+ }
 }
 unsafe fn update_cat(player:usize,stats:usize,base:usize,hp:i32,owned:bool) {
  if let Some(state)=CAT_LANDING.get() {if let Ok(mut state)=state.lock() {
@@ -2121,7 +2142,8 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
  let new_hex_pressed=pressed_edge(&NEW_HEX_KEY_WAS_DOWN,GetAsyncKeyState(cfg.new_hex_key)<0);
  let chant_pressed=pressed_edge(&CHANT_KEY_WAS_DOWN,GetAsyncKeyState(cfg.chant_key)<0);
  let gaze_pressed=pressed_edge(&GAZE_KEY_WAS_DOWN,GetAsyncKeyState(cfg.gaze_key)<0);
- if !pressed&&!test_pressed&&!new_hex_pressed&&!chant_pressed&&!gaze_pressed{return;}
+ let contract_pressed=pressed_edge(&CONTRACT_KEY_WAS_DOWN,GetAsyncKeyState(cfg.contract_key)<0);
+ if !pressed&&!test_pressed&&!new_hex_pressed&&!chant_pressed&&!gaze_pressed&&!contract_pressed{return;}
  if cfg.ctrl&&GetAsyncKeyState(0x11)>=0{return;}
  let mut pid=0;GetWindowThreadProcessId(GetForegroundWindow(),&mut pid);
  if pid!=win::GetCurrentProcessId(){return;}
@@ -2132,7 +2154,7 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
  if unclaimed_hex_ball(base){return;}
  if CALLBACK_LOCK.swap(true,Ordering::AcqRel){return;}
  let owned=unavailable_hexes(player,base);
- let preferred=if gaze_pressed {Some(GAZE_REWARD)}else if chant_pressed {Some(CHANT_REWARD)}else if new_hex_pressed {Some(NEW_HEX_REWARD)}else if test_pressed {Some(TEST_REWARD)}else{None};
+ let preferred=if contract_pressed {Some(CONTRACT_REWARD)}else if gaze_pressed {Some(GAZE_REWARD)}else if chant_pressed {Some(CHANT_REWARD)}else if new_hex_pressed {Some(NEW_HEX_REWARD)}else if test_pressed {Some(TEST_REWARD)}else{None};
  let choice=preferred.and_then(|o|reward_choices::preferred(o,owned)).or_else(||random_order(owned));
  let Some(chosen)=choice else{CALLBACK_LOCK.store(false,Ordering::Release);return;};
  LAST_SPAWN.store(now,Ordering::Relaxed);
@@ -2311,9 +2333,9 @@ mod tests {
  #[test] fn reward_pool_samples_every_ordered_distinct_triple_once(){
   let n=hex_pool::HEX_COUNT;
   assert_eq!(ORDERS.len(),n*(n-1)*(n-2));
-  let unique:std::collections::HashSet<_>=ORDERS.into_iter().collect();
+  let unique:std::collections::HashSet<_>=ORDERS.iter().copied().collect();
   assert_eq!(unique.len(),ORDERS.len());
-  for order in ORDERS {assert!(order.iter().all(|&i|i<n));assert!(order[0]!=order[1]&&order[0]!=order[2]&&order[1]!=order[2]);}
+  for order in &ORDERS {assert!(order.iter().all(|&i|i<n));assert!(order[0]!=order[1]&&order[0]!=order[2]&&order[1]!=order[2]);}
   for slot in 0..3 {for item in 0..n {assert_eq!(ORDERS.iter().filter(|o|o[slot]==item).count(),(n-1)*(n-2));}}
   assert!(ORDERS.contains(&[3,4,5]));
   assert!(ORDERS.contains(&[6,0,1]));
@@ -2329,7 +2351,10 @@ mod tests {
   for value in ["0","255","0x75","0x76"]{assert!(Config::read(&format!("NewHexVirtualKey={value}")).is_err());}
   for value in ["0","255","0x75","0x76","0x77"]{assert!(Config::read(&format!("AngelChantVirtualKey={value}")).is_err());}
   for value in ["0","255","0x75","0x76","0x77","0x78"]{assert!(Config::read(&format!("GazeVirtualKey={value}")).is_err());}
-  assert_eq!(Config::read("GazeVirtualKey=0x7a").unwrap().gaze_key,0x7a);
+  assert_eq!(Config::read("GazeVirtualKey=0x7b").unwrap().gaze_key,0x7b);
+  assert_eq!(Config::read("").unwrap().contract_key,0x7a);
+  assert_eq!(CONTRACT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[95002600,95002700,95002400]);
+  for value in ["0","255","0x75","0x76","0x77","0x78","0x79"]{assert!(Config::read(&format!("ContractVirtualKey={value}")).is_err());}
   assert_eq!(hex_pool::OWNER_IDS[GAZE_REWARD[0]],slingshot::OWNER);
   assert_eq!(ORDERS[reward_choices::preferred(GAZE_REWARD,0).unwrap()][0],GAZE_REWARD[0]);
   assert_eq!(CHANT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[chant::OWNER,sword::OWNER,archmage::OWNER]);

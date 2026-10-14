@@ -1,0 +1,434 @@
+{
+  "version": "0.17.120",
+  "codeTestsPassed": 2,
+  "testFilter": "ominous_pact",
+  "signatureCount": 116,
+  "native": {
+    "nativeCases": 50,
+    "cases": [
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": true,
+        "selected": 1
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": false,
+        "selected": 0
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 0,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 1,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 2,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 3,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 4,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 9,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 10,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 11,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 0,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 1,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 2,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 3,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 4,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 9,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 10,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 11,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 100,
+        "before": 100,
+        "damage": 5,
+        "after": 95,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 100,
+        "before": 10,
+        "damage": 5,
+        "after": 5,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 1000,
+        "before": 1000,
+        "damage": 50,
+        "after": 950,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 1000,
+        "before": 10,
+        "damage": 50,
+        "after": 0,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 2340,
+        "before": 2340,
+        "damage": 117,
+        "after": 2223,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 2340,
+        "before": 10,
+        "damage": 117,
+        "after": 0,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": false,
+        "periodic": 0,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": true,
+        "periodic": 0,
+        "relicTimers": [
+          0.0,
+          0.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": true,
+        "periodic": 1,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 0,
+        "notify": true,
+        "periodic": 0,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      }
+    ],
+    "originalOnHitSelector": true,
+    "originalSelfDamageAndNotification": true,
+    "originalHitEffectReplacementDispatch": true,
+    "verifiedRelics": [
+      6820400,
+      6820500
+    ],
+    "playerDamageModuleRttiVerified": true,
+    "playerDamageVtableRva": "0x2c11d00",
+    "nativeOwnerAccessorVerified": true,
+    "externalManagersAndHPSetterStubbed": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "liveBefore": {
+    "pid": 115648,
+    "player": "0x7ff48dc248a0",
+    "hp": [
+      1570,
+      1570
+    ],
+    "down": 0,
+    "damageModule": "0x7ff47a77d680",
+    "damageVtableRva": "0x2c11d00",
+    "damageOwnerMatches": true,
+    "effects": [
+      {
+        "id": 95002600,
+        "flags": 4,
+        "timer": -1.0,
+        "state": 2103,
+        "occurrence": 95002601
+      },
+      {
+        "id": 6820400,
+        "flags": 4,
+        "timer": -1.0,
+        "state": 0,
+        "occurrence": -1
+      },
+      {
+        "id": 6820500,
+        "flags": 4,
+        "timer": -1.0,
+        "state": 0,
+        "occurrence": -1
+      },
+      {
+        "id": 6820500,
+        "flags": 4,
+        "timer": -1.0,
+        "state": 0,
+        "occurrence": -1
+      }
+    ]
+  },
+  "previousRegression": "0.17.119 rejected CSPlayerDamageModule using an NPC vtable check",
+  "playerDamageModuleGuardCorrected": true,
+  "nativeHPAndEffectNotification": true,
+  "changedAssets": {
+    "mod/natives/NRHex.dll": "C537009BA9A2638EEE422EF518F570B67DA811BAD3E196C59461F5D9B231D9BD"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "loadingVerified": true,
+  "loadedVersion": "0.17.120",
+  "loadedPid": 120928
+}

@@ -1,8 +1,8 @@
 {
   "source": "docs/hexes.md",
-  "sourceSha256": "DD4676306306E294617BB305D0DFF79620D51D0E684B5BFC6410B9A8729A15F8",
+  "sourceSha256": "A8A77ED52EB97F04E7ADD6644E6F092D2736D154136EBD95903E19449279DE0E",
   "englishSource": "docs/hexes.en.md",
-  "englishSourceSha256": "1BA032F7BE02A6D295CB8B75933633C8F6BC8E76A88D8400D09B37B6AE50E6F5",
+  "englishSourceSha256": "D180809FDAE8E9FA396EDD7CFFDF04EEA3C895C55D817C3F73EFAFCC3359DA41",
   "statusSource": "data/text/status-effects.json",
   "statusSourceSha256": "467BDC4D3789D14494A36CE527338CB137CE7EA6643F7CD619924F29BCFCBEC7",
   "statusOnly": false,
@@ -10,20 +10,26 @@
     {
       "language": "zhocn",
       "file": "item_dlc01.msgbnd.dcx",
-      "inputSha256": "3F660792C840658B77F78613DEF7C5C40BC758838ED9E4CBF0BAE291DDEF8790",
-      "outputSha256": "A9CBABE74F8C0BA5AA707CEED6575DC127BDAD93EF4EE2FBAC6216DC054F5FD1",
+      "inputSha256": "686EEADA5EE1A60EDAE2187185E9A8AEAA7DEFE3F0CAD47DCCE3684BF287A4C3",
+      "outputSha256": "3F58C67270771045EBE86ED919A554D4BC0437FA74347E2737738D74060AAAB3",
       "changes": [
         {
-          "fmg": "AttachEffectName.fmg",
-          "id": 95002400,
-          "before": "\u653B\u5B88\u517C\u5907",
-          "after": "\u4EA4\u950B"
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002700,
+          "before": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u4EC5\u8FD4\u8FD8\u7B2C\u4E00\u6B21\u4F7F\u7528\u7684\u6811\u679D",
+          "after": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u6700\u591A\u8FD4\u8FD8\u4E24\u652F"
         },
         {
-          "fmg": "PermanentBuffName.fmg",
-          "id": 95002400,
-          "before": "\u653B\u5B88\u517C\u5907",
-          "after": "\u4EA4\u950B"
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002700,
+          "before": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u4EC5\u8FD4\u8FD8\u7B2C\u4E00\u6B21\u4F7F\u7528\u7684\u6811\u679D",
+          "after": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u6700\u591A\u8FD4\u8FD8\u4E24\u652F"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002700,
+          "before": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u4EC5\u8FD4\u8FD8\u7B2C\u4E00\u6B21\u4F7F\u7528\u7684\u6811\u679D",
+          "after": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u6700\u591A\u8FD4\u8FD8\u4E24\u652F"
         }
       ],
       "unrelatedEntriesAndMembersUnchanged": true
@@ -39,20 +45,26 @@
     {
       "language": "engus",
       "file": "item_dlc01.msgbnd.dcx",
-      "inputSha256": "73A02CE34F81AF3727066014E795893417EB705A369A92E40224AAC2ADD49796",
-      "outputSha256": "A4732B84F7F7A9EF880C5D6A6F8ECDABBE792A6CFF622212A891AB22E3706BFC",
+      "inputSha256": "0423502ABA7FEC081F5623CFB8F1EDFA3A2C670C62B55EAC19C8A1578FA69292",
+      "outputSha256": "C66814399FB635DC12299CC7F6F152A1287E5C158622E70A8ADDD645D94CC056",
       "changes": [
         {
-          "fmg": "AttachEffectName.fmg",
-          "id": 95002400,
-          "before": "Offense and Defense",
-          "after": "Clash"
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002700,
+          "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
+          "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
         },
         {
-          "fmg": "PermanentBuffName.fmg",
-          "id": 95002400,
-          "before": "Offense and Defense",
-          "after": "Clash"
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002700,
+          "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
+          "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002700,
+          "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
+          "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
         }
       ],
       "unrelatedEntriesAndMembersUnchanged": true

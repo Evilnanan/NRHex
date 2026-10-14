@@ -1,0 +1,15 @@
+{
+  "version": "0.17.118",
+  "effectId": 95002600,
+  "excludedHeroes": {
+    "Revenant": 6,
+    "Recluse": 7,
+    "Executor": 8
+  },
+  "randomAndPreferredRewardsUseSameFilter": true,
+  "rewardChoiceTestsPassed": 8,
+  "signatureCount": 114,
+  "otherAssetsAndSettingsPreserved": true,
+  "dllSha256": "7217484256ccf31cfd3f2f3f68af44bfd120e1633202a6d6b4bc844dfcdd2933",
+  "gameplayVerified": false
+}

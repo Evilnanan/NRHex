@@ -1,0 +1,138 @@
+{
+  "version": "0.17.121",
+  "parameters": {
+    "inputSha256": "0D97BFCC54455E7B960EDBD5CD4E36EAF8697202D90AF8168F50BCB445BAE054",
+    "outputSha256": "E6E072D5996B82A1F6342102D0D2631C191F3A04D69FED996FE80B466A258CFD",
+    "eventInputSha256": "AFCDE224307EDA6AC09A16158644EFD94E89CBB4CBEE78E38EBC4EEF92A7E716",
+    "eventOutputSha256": "C8CFB71286197D23FDB294468EEBBA5DC4C12240AE4728C69FA7CE77EEBB2FA9",
+    "addedEffect": 95002705,
+    "changedEvents": [
+      9100971,
+      9100972,
+      1111,
+      9100941
+    ],
+    "existingEffectsAndOtherTablesPreserved": true,
+    "unrelatedEventsAndMetadataPreserved": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "eventTimelines": {
+    "eventTimelineCases": 12,
+    "cases": [
+      "initial pair awarded once while continuously owned",
+      "second use returns two at the first deadline without extending it",
+      "a later single use starts a fresh return with no stale second marker",
+      "one use returns exactly one after 60 seconds",
+      "third and later uses neither exceed two returns nor refresh the deadline",
+      "second use just before expiry still returns two",
+      "use arriving at settlement survives until it starts the next interval",
+      "pending return and initial receipt survive a death/revival timeline",
+      "second-use marker survives death policy and clears on settlement",
+      "loss of owner cannot award a branch; pending return resumes after ownership returns",
+      "two clients have independent initial receipts and return deadlines",
+      "new expedition clears old initial/pending state"
+    ],
+    "serializedArgumentsVerified": true,
+    "nativeInventoryCapacityModelled": 2,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "A8A77ED52EB97F04E7ADD6644E6F092D2736D154136EBD95903E19449279DE0E",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "D180809FDAE8E9FA396EDD7CFFDF04EEA3C895C55D817C3F73EFAFCC3359DA41",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "467BDC4D3789D14494A36CE527338CB137CE7EA6643F7CD619924F29BCFCBEC7",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "686EEADA5EE1A60EDAE2187185E9A8AEAA7DEFE3F0CAD47DCCE3684BF287A4C3",
+        "outputSha256": "3F58C67270771045EBE86ED919A554D4BC0437FA74347E2737738D74060AAAB3",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002700,
+            "before": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，仅返还第一次使用的树枝",
+            "after": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，最多返还两支"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002700,
+            "before": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，仅返还第一次使用的树枝",
+            "after": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，最多返还两支"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002700,
+            "before": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，仅返还第一次使用的树枝",
+            "after": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，最多返还两支"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "152DB7091C00C9CB44D10ABDE1F0F9604295A3F9827794B550F3E50E69AB2089",
+        "outputSha256": "152DB7091C00C9CB44D10ABDE1F0F9604295A3F9827794B550F3E50E69AB2089",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "0423502ABA7FEC081F5623CFB8F1EDFA3A2C670C62B55EAC19C8A1578FA69292",
+        "outputSha256": "C66814399FB635DC12299CC7F6F152A1287E5C158622E70A8ADDD645D94CC056",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002700,
+            "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
+            "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002700,
+            "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
+            "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002700,
+            "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
+            "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "B10ED91CE856EE11AC4684C536A92472700DB95F6D7B543401BD753F52A93513",
+        "outputSha256": "B10ED91CE856EE11AC4684C536A92472700DB95F6D7B543401BD753F52A93513",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "maxReturns": 2,
+  "firstUseDeadlineSeconds": 60,
+  "laterUsesRefreshDeadline": false,
+  "changedAssets": {
+    "mod/natives/NRHex.dll": "F6FB1C37F8AFE7B1386DC0863C2EA899E635C2487BAFBF3E3D1D1D06366046BC",
+    "mod/regulation.bin": "E6E072D5996B82A1F6342102D0D2631C191F3A04D69FED996FE80B466A258CFD",
+    "mod/event/common.emevd.dcx": "C8CFB71286197D23FDB294468EEBBA5DC4C12240AE4728C69FA7CE77EEBB2FA9",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "3F58C67270771045EBE86ED919A554D4BC0437FA74347E2737738D74060AAAB3",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "C66814399FB635DC12299CC7F6F152A1287E5C158622E70A8ADDD645D94CC056"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "loadingVerified": true,
+  "loadedVersion": "0.17.121",
+  "loadedPid": 126592
+}

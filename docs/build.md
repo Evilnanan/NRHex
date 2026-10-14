@@ -131,3 +131,5 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 `verify_parry_feedback_native.py` 在私有内存中执行当前EXE的火花描述符转换和实例选择代码，以受控桩替代分配、渲染和角色分类依赖，验证左右手每次动作开始新建实例、持续帧不重复生成。完整构建已接入；它验证原生分支，不代表游戏中的粒子显示验收。
 
 `verify_parry_turn_native.py` 隔离执行原生朝向设置与读取函数，验证八个方向、角度回读及位置／其他物理字段不变；完整构建同时核对新增设置接口签名。
+
+不祥契约和偷心者通过参数及本地common事件实现。新增时可用 `dotnet run --project tools/HexBuild -- . --contract-heart` 从现有dist生成增量产物；仅接受尚未添加这两项的输入，安装前回读参数、奖励图、事件和中英文文本。当前已安装版本使用 `--contract-heart-check` 导出验证夹具，再运行 `tools/verify_contract_heart_native.py` 和 `tools/verify_contract_heart_events.py`。完整构建已包含同样的生成与检查；两项的Ctrl+F11入口随群友版编译移除。

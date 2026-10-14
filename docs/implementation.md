@@ -27,7 +27,8 @@
 | 百般武艺 | `arts.rs`、`arts_data.rs`、`build_arts_data.py`、`build_arts_hks.py` |
 | 气球、强化【死灵术】、别停止咏唱 | `balloon.rs`／`balloon_runtime.rs`／`ability_damage.rs`（只提供基础攻击值，余下由原生结算）、`spirit.rs`／`spirit_runtime.rs`、`chant.rs` |
 | 大法师：法术槽随机、丢拾与装备同步 | `archmage.rs`、`archmage_runtime.rs`、`archmage_cost.rs`、`archmage_data.rs`、`HexBuild/Archmage.cs`、`build_archmage_hks.py` |
-| 招架 | `parry.rs`、`parry_turn.rs`、`parry_data.rs`、`HexBuild/Parry.cs`、`verify_parry_native.py` |
+| 不祥契约、偷心者 | `HexBuild/ContractHeart.cs`、`ominous_pact.rs`、`heartstealer.rs`、`verify_contract_heart_native.py`、`verify_contract_heart_events.py` |
+| 交锋 | `parry.rs`、`parry_turn.rs`、`parry_data.rs`、`HexBuild/Parry.cs`、`verify_parry_native.py` |
 | PE／特征／挂钩 | `pe.rs`、`pattern.rs`、`hook.rs`、`win.rs` |
 
 再生术蓝血转换比为1:4：血量不满时，每0.25秒消耗4FP、回复16HP。数值由 `HexBuild/Program.cs` 的95000601参数行生成，运行时仅管理触发间隔与资源条件；满血喝瓶回复50%FP沿用原逻辑。增量回读证据见 `dist/regen-balance-validation.json`。
@@ -38,7 +39,7 @@
 
 - 参数／原生效果复制：`HexBuild/Program.cs`；中文名称与描述：`docs/hexes.md`；英文名称与描述：`docs/hexes.en.md`。`HexBuild/HexCatalog.cs` 按相同编号读取两种语言，`HexTexts.cs` 写入并检查文本包；仅更新文案使用 `build-texts.ps1`。
 - 奖励等级与一局内去重：`level_rewards.rs` 及构建中的生命周期事件，二者一起核对。
-- 测试快捷键：`lib.rs` 中受 `test-hotkeys` 编译特性控制的入口；按键配置为 `dist/mod/natives/NRHex.ini`。Ctrl+F6～F9功能见发行说明，群友版编译时移除该入口。
+- 测试快捷键：`lib.rs` 中受 `test-hotkeys` 编译特性控制的入口；按键配置为 `dist/mod/natives/NRHex.ini`。Ctrl+F6～F11功能见发行说明，群友版编译时移除该入口。
 - 亮剑近身距离：`sword.rs::NEAR_DISTANCE`，固定4米；旧INI字段只兼容忽略。
 - 亮剑施法状态：`build_sword_vfx_hks.py` 通知实际施法手，`build_sword_recovery_hks.py` 覆盖原生MagicFire*Cancel收招回调，DLL在后摇沿用刚施放法术的减伤值。`sword.rs::casting_effect` 仅启用减伤和抗打断；风暴管束者幻剑不再添加，`lib.rs::update_sword` 仍清理旧左右手视觉状态。共享风暴管束者资源保留供原生战技与百般武艺使用。
 - 人工法术加成：`data/balance/sword.csv`；`build.rs` 每次编译按当前CSV校验并生成 `OUT_DIR/sword_bonuses.rs`，DLL只使用这份静态数值，修改后需重编译。`sword_map.rs` 提供法术身份及攻击映射，不直接手改。
@@ -87,3 +88,7 @@
 `night_blessing.rs` 管理姿势蓄时、回血尾时和增伤，使用角色游戏时间；冷却由原生60秒效果计时。`NightBlessing.cs` 为原生“雨啊！”81400/81401动画加入中性连续标记，退出动作81402不标记。夜雨暴露只认99810/11及其实际伤害替换行99871/72/76/77，不认离开后仍可能存留的辅助行。回血使用原生周期效果，每秒对应基础99810/11的两倍：百分比项-4、固定项-30/-60，不随长期暴露升级。离开夜雨取消增伤且不自动恢复，已获得的回血尾时继续，离雨后沿用最后的基础回血档位。
 
 5秒达标附加中性视觉95002504，使用原生低血量回血7012201的1643100/1642000特效；攻击加成95002503路由到附加效果。原生共享赐福脚本t000001000恢复分支增加短效95002506，运行时检测到后清除冷却；保留原生12条恢复命令及其他脚本逻辑。拥有、回血、视觉、增伤、冷却分别管理，不每帧重加效果。死亡、失去能力或切换角色对象会清理状态。实机姿势、赐福及联机显示待验收。
+
+不祥契约抽取排除复仇者、隐士、执行者，统一在 `reward_choices.rs::role_exclusions` 过滤，定向测试也遵循此限制。原生stateInfo2103命中触发与攻击者路由产生95002601本地中性标记；`ominous_pact.rs` 在现有效果入口消费该标记，核对本地玩家CSPlayerDamageModule（vtable 2C11D00，区别于敌人模块2C11710）及其+8拥有者后，调用共享431090执行一次血量上限5%的HP损伤。实际失血后另调用504D30通知原生受击效果替换，分类使用未归类属性254、元素属性0、非周期命中0。两个原生入口的116项签名检查覆盖当前版本；没有新增hook。6820400／6820500使用deleteCriteriaDamage12，靠受击通知将其节点计时置零，之后沿原生replace/cycle链累积发狂／催眠；431090的扣血标志本身不足以完成该过程。用户确认0.17.120命中自伤及受损词条生效。中性标记取消旧延迟HP脉冲，远端不能再次扣血；没有实际失血时不通知。同步通知人是猫和嘉豪身法的既有受损状态机，不制造虚假攻击，也不触发吸血。
+
+偷心者通过魅惑树枝的三个原生等级弹丸向使用者发出95002702通知；DLL现有效果入口仅对本地持有者接受该通知，原生树枝和敌方魅惑效果保持原样。通知持续至本地事件消耗，避免低帧率丢失；使用事件核对拥有状态与待返还状态，第一次使用启动60秒原生计时，期间第二次使用登记95002705，后续不叠加、不刷新计时；到期返还一支，有第二次记录则再返还一支并清除记录。9100970～9100972禁用网络同步并使用本机20000实体；本局初次领取记录saveCategory10，倒地保留待返还效果。新远征的1111原生完成守卫及返回圆桌的9100941清理记录及第二支计数。两次发放分别使用两个独立、无完成标志的原生物品表，数量2／1，遵循原生背包规则。原生隔离执行和序列化事件时间线检查不代替实机联机验证。

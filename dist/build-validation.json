@@ -1,7 +1,7 @@
 {
-  "version": "0.17.116",
+  "version": "0.17.121",
   "buildPassed": true,
-  "signatureCount": 114,
+  "signatureCount": 116,
   "functionChecks": [
     "ability-buffs-validation.json",
     "angel-chant-hks-validation.json",
@@ -47,6 +47,9 @@
     "cat-jump-native-validation.json",
     "chant-spirit-validation.json",
     "chant-text-validation.json",
+    "contract-damage-validation.json",
+    "contract-heart-validation.json",
+    "contract-role-validation.json",
     "coop-fixes-01731-validation.json",
     "coop-fixes-validation.json",
     "coop-new-hexes-audit-validation.json",
@@ -78,6 +81,7 @@
     "escape-vfx-validation.json",
     "flask-event-validation.json",
     "glass-cannon-vulnerability-validation.json",
+    "heart-two-validation.json",
     "hks-validation.json",
     "hotkey-cleanup-validation.json",
     "hotkey-f9-validation.json",
@@ -177,8 +181,8 @@
     "ultimate-vfx-validation.json",
     "validation.json"
   ],
-  "dllSha256": "dda9b9a99423edc8f05b9e5df0ca0b7cc898165750f595649bfc63170686f38b",
-  "installedDllSha256": "dda9b9a99423edc8f05b9e5df0ca0b7cc898165750f595649bfc63170686f38b",
+  "dllSha256": "f6fb1c37f8afe7b1386dc0863c2ea899e635c2487bafbf3e3d1d1d06366046bc",
+  "installedDllSha256": "f6fb1c37f8afe7b1386dc0863c2ea899e635c2487bafbf3e3d1d1d06366046bc",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "notes": "Build/static/isolated checks only. Current user gameplay feedback is summarized in docs/implementation.md."

@@ -128,3 +128,13 @@ Attacks grant a guarding effect while two-handing a weapon. After successfully g
 ## Night’s Blessing
 
 Gradually restores HP while performing the “It’s Raining!” gesture in the Night’s Tide. Completing the gesture allows HP restoration to persist for 15 seconds after ending it, and raises attack power by 25% until leaving the Night’s Tide. 60-second cooldown.
+
+<!-- hex:95002600 -->
+## Ominous Pact
+
+Landing attacks causes damage to self equal to 5% of maximum HP.
+
+<!-- hex:95002700 -->
+## Heartstealer
+
+Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned.

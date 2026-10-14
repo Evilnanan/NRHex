@@ -66,6 +66,10 @@ PARAM Parse(string name,Memory<byte> bytes){
  p.ApplyParamdef(d);return p;
 }
 if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
+if(args.Contains("--contract-heart-probe")){ContractHeart.Probe(root,bnd,Parse);return;}
+if(args.Contains("--contract-heart-check")){ContractHeart.ExportChecks(root,Parse);return;}
+if(args.Contains("--contract-damage-marker")){ContractHeart.StageDamageMarker(root,Parse);return;}
+if(args.Contains("--heart-two-returns")){ContractHeart.StageTwoReturns(root,Parse);return;}
 if(args.Contains("--parry-counter-probe")){Parry.ProbeCounterCost(root,bnd,Parse);return;}
 if(args.Contains("--archmage-secondary")){Archmage.StageSecondary(root,Parse);return;}
 if(args.Contains("--archmage-probe")){Archmage.Probe(root,bnd,Parse);return;}
@@ -106,7 +110,7 @@ if(args.Contains("--coop-01749-probe")){CoopAudit.Probe(root,Parse,Parse("NpcPar
 if(args.Contains("--coop-01749-stage")){CoopAudit.Stage(root,Parse);return;}
 if(args.Contains("--spirit-corpse-cue-only")){SpiritPlacement.Stage(root,Parse);return;}
 if(args.Contains("--spirit-cue-visibility-only")){SpiritPlacement.StageVisibility(root,Parse);return;}
-var names=new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods","ItemTableParam","ItemLotParam_enemy","Bullet","AtkParam_Pc","AtkParam_Npc","BehaviorParam_PC","SpEffectVfxParam","NpcParam","NpcThinkParam","ChaosMatchingCorrectParam","ChaosMatchingMutationCategoryParam","ChaosMatchingMutationEnemyTableParam","SpEffectSetParam","LotBaseMapPatternFlag"};
+var names=new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods","ItemTableParam","ItemLotParam_enemy","ItemLotParam_map","Bullet","AtkParam_Pc","AtkParam_Npc","BehaviorParam_PC","SpEffectVfxParam","NpcParam","NpcThinkParam","ChaosMatchingCorrectParam","ChaosMatchingMutationCategoryParam","ChaosMatchingMutationEnemyTableParam","SpEffectSetParam","LotBaseMapPatternFlag"};
 var files=names.ToDictionary(n=>n,n=>bnd.Files.Single(f=>Path.GetFileName(f.Name)==n+".param"));
 var pars=files.ToDictionary(k=>k.Key,k=>Parse(k.Key,k.Value.Bytes));
 if(args.Contains("--spirit-rework-probe")){SpiritRework.Probe(root,bnd,Parse);return;}
@@ -619,6 +623,7 @@ var hexes=HexCatalog.Load(root);
 if(args.Contains("--parry-stage")){Parry.Stage(root,bnd,Parse,hexes);Parry.BuildActions(root,bnd,Parse);return;}
 if(args.Contains("--parry-followup")){ParryFollowup.Stage(root,Parse);return;}
 if(args.Contains("--parry-followup-actions")){ParryFollowup.Actions(root,Parse("SpEffectParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param").Bytes));return;}
+if(args.Contains("--contract-heart")){ContractHeart.Stage(root,bnd,Parse,hexes);return;}
 if(args.Contains("--night-blessing")){NightBlessing.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--night-blessing-actions")){NightBlessing.Assets(root);return;}
 if(args.Contains("--parry-actions")){Parry.BuildActions(root,bnd,Parse);return;}
@@ -685,6 +690,7 @@ foreach(var h in hexes){
  if(h.Id==95000200){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,.75f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"addLifeForceStatus","addWillpowerStatus","addEndureStatus","addStrengthStatus","addDexterityStatus","addMagicStatus","addFaithStatus","addLuckStatus"})Set(s,f,10);}
  if(h.Id==95000300){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,1.2f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,f,10f);}
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
+ if(h.Id==ContractHeart.Contract)ContractHeart.Owners(s);
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
  if(h.Id==95002100){Set(s,"magicConsumptionRate",1f);Set(s,"miracleConsumptionRate",1f);}
@@ -713,6 +719,7 @@ Slingshot.Mechanics((source,id)=>Clone("SpEffectParam",source,id));
 Parry.Support(Clone);
 NightBlessing.ValidateNative(bnd,Parse);
 NightBlessing.Mechanics(Clone);
+ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
 Cages.MutationParameters(pars,Cages.TowerSources(root,cageBosses));
@@ -873,7 +880,11 @@ foreach(var n in names){
  var check=Parse(n,files[n].Bytes);var before=Parse(n,original[files[n].ID]);
  Require(check.Rows.Count==before.Rows.Count+added[n].Count,"Unexpected row count in "+n);
  var old=check.Rows.Where(r=>!added[n].Contains(r.ID)).ToArray();
- Require(old.Length==before.Rows.Count&&old.Zip(before.Rows).All(v=>Eq(v.First,v.Second)),"Original rows changed in "+n);
+ Require(old.Length==before.Rows.Count&&old.Zip(before.Rows).All(v=>{
+  if(n=="Bullet"&&new[]{10335000,13335000,13335010}.Contains(v.First.ID)){
+   var copy=new PARAM.Row(v.First);Require(Convert.ToInt32(copy["spEffectIDForShooter"].Value)==ContractHeart.Used,"Branch shooter notification missing");Set(copy,"spEffectIDForShooter",v.Second["spEffectIDForShooter"].Value);return Eq(copy,v.Second);
+  }return Eq(v.First,v.Second);
+ }),"Original rows changed in "+n);
  foreach(var id in added[n])Require(Eq(pars[n].Rows.Single(r=>r.ID==id),check.Rows.Single(r=>r.ID==id)),"Added row failed round-trip: "+n+" "+id);
 }
 // Check the serialized reward graph, including the actual UI classification.
@@ -1090,10 +1101,11 @@ reset.Instructions.AddRange([new(2000,2,new object[]{(byte)0}),InMap(-1,true,10)
 foreach(int id in Enumerable.Range(95001000,5).Concat(Enumerable.Range(95001010,4)))reset.Instructions.Add(new(2004,21,new object[]{20000u,id}));
 reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),new(1000,4,new object[]{(byte)1})]);ev.Events.Add(reset);
 Cages.Terrain(ev);
+ContractHeart.Events(ev);
 var eventDest=Path.Combine(root,"dist/mod/event/common.emevd.dcx");Directory.CreateDirectory(Path.GetDirectoryName(eventDest)!);ev.Write(eventDest);var outEv=EMEVD.Read(eventDest);
 bool Same(EMEVD.Event a,EMEVD.Event b)=>a.ID==b.ID&&a.RestBehavior==b.RestBehavior&&a.Name==b.Name&&a.Instructions.Count==b.Instructions.Count&&a.Instructions.Zip(b.Instructions).All(v=>v.First.Bank==v.Second.Bank&&v.First.ID==v.Second.ID&&v.First.Layer==v.Second.Layer&&v.First.ArgData.SequenceEqual(v.Second.ArgData))&&JsonSerializer.Serialize(a.Parameters)==JsonSerializer.Serialize(b.Parameters);
 Require(outEv.Format==origEv.Format&&outEv.Compression==origEv.Compression&&outEv.StringData.SequenceEqual(origEv.StringData)&&outEv.LinkedFileOffsets.SequenceEqual(origEv.LinkedFileOffsets),"EMEVD metadata changed");
-Require(outEv.Events.Count==origEv.Events.Count+26&&origEv.Events.Where(e=>e.ID!=0&&e.ID!=1304&&e.ID!=1111).All(e=>Same(e,outEv.Events.Single(o=>o.ID==e.ID))),"Existing events changed");Require(ev.Events.All(e=>Same(e,outEv.Events.Single(o=>o.ID==e.ID))),"Edited events failed readback");
+Require(outEv.Events.Count==origEv.Events.Count+29&&origEv.Events.Where(e=>e.ID!=0&&e.ID!=1304&&e.ID!=1111&&e.ID!=9100941).All(e=>Same(e,outEv.Events.Single(o=>o.ID==e.ID))),"Existing events changed");Require(ev.Events.All(e=>Same(e,outEv.Events.Single(o=>o.ID==e.ID))),"Edited events failed readback");
 var churchReports=new List<object>();
 var churchSources=new[]{
  ("m41_00_00_00",41004700u,"8C9B4F43717A9800E02E1497075AE9C2874808877671364BD5BD0EF7D38D57CA"),

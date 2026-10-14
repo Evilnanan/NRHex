@@ -1,5 +1,5 @@
 {
-  "version": "0.17.116",
+  "version": "0.17.121",
   "hexes": [
     {
       "id": 95000100,
@@ -138,6 +138,18 @@
       "name": "黑夜赐福",
       "large": 21291,
       "small": 22291
+    },
+    {
+      "id": 95002600,
+      "name": "不祥契约",
+      "large": 21229,
+      "small": 22229
+    },
+    {
+      "id": 95002700,
+      "name": "偷心者",
+      "large": 21267,
+      "small": 22267
     }
   ],
   "source": "data/reference/ui/icon-ids.json",
