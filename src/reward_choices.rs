@@ -16,6 +16,7 @@ pub fn role_exclusions(unavailable: u32, hero: Option<u8>) -> u32 {
     let jiahao=OWNER_IDS.iter().position(|&id|id==95001300).expect("Missing Jiahao in serialized pool");
     let ultimate=OWNER_IDS.iter().position(|&id|id==95000400).expect("Missing Ultimate Refresh in serialized pool");
     let contract=OWNER_IDS.iter().position(|&id|id==95002600).expect("Missing Ominous Pact in serialized pool");
+    let clash=OWNER_IDS.iter().position(|&id|id==95002400).expect("Missing Clash in serialized pool");
     let sword_gate=if matches!(hero,Some(4|6|7)) {0} else {(1<<sword)|(1<<chant)};
     let spirit_gate=if hero==Some(6) {0} else {1<<spirit};
     let mighty_gate=if matches!(hero,Some(6|7)) {1<<mighty} else {0};
@@ -25,7 +26,8 @@ pub fn role_exclusions(unavailable: u32, hero: Option<u8>) -> u32 {
     let ultimate_gate=if matches!(hero,Some(1|3|5|7|8)) {0} else {1<<ultimate};
     // Revenant 6, Recluse 7, Executor 8.
     let contract_gate=if matches!(hero,Some(6|7|8)) {1<<contract} else {0};
-    unavailable | sword_gate | spirit_gate | mighty_gate | jiahao_gate | ultimate_gate | contract_gate
+    let clash_gate=if matches!(hero,Some(6|7)) {1<<clash} else {0};
+    unavailable | sword_gate | spirit_gate | mighty_gate | jiahao_gate | ultimate_gate | contract_gate | clash_gate
 }
 
 pub fn eligible(order: [usize; 3], owned: u32) -> bool {
@@ -51,6 +53,21 @@ pub fn is_hex_good(encoded: u32) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test] fn clash_role_filter_covers_normal_focused_refresh_and_exhausted_rounds() {
+        let clash=OWNER_IDS.iter().position(|&id|id==95002400).unwrap();
+        for hero in std::iter::once(None).chain((0..=10).map(Some)).chain([Some(255)]) {
+            let allowed=!matches!(hero,Some(6|7));let excluded=role_exclusions(1<<5,hero);
+            assert_eq!(ORDERS[preferred([clash,0,1],excluded).unwrap()].contains(&clash),allowed);
+            for seen in [0,crate::reward_cycle::ALL] {
+                let round=crate::reward_cycle::Round::new(excluded,seen);
+                assert_eq!(round.candidates.iter().any(|&i|ORDERS[i].contains(&clash)),allowed);
+                let refresh=crate::reward_cycle::Single::new(excluded,seen,7);
+                assert_eq!(refresh.candidates.contains(&clash),allowed);
+                let owned=crate::reward_cycle::Single::new(role_exclusions(1<<clash,hero),seen,7);
+                assert!(!owned.candidates.contains(&clash));
+            }
+        }
+    }
     #[test] fn retired_ability_is_absent_and_remaining_lot_ids_are_stable(){
         use crate::hex_pool::{LOT_IDS,LEGACY_LOT_END};
         assert_eq!(HEX_COUNT,25);assert!(!OWNER_IDS.contains(&95001900));

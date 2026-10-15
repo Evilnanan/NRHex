@@ -48,6 +48,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Native personal reward isolation validation failed.' }
     & python -X utf8 tools/verify_reward_recovery.py
     if ($LASTEXITCODE -ne 0) { throw 'Native personal reward recovery validation failed.' }
+    & python -X utf8 tools/verify_reward_reroll_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Native choice dialog and reroll item-data validation failed.' }
     dotnet run --project tools/FlaskProbe/FlaskProbe.csproj -- built
     if ($LASTEXITCODE -ne 0) { throw 'Flask event readback failed.' }
     & python -X utf8 tools/verify_flask_events.py

@@ -1,7 +1,7 @@
 {
-  "version": "0.17.126",
+  "version": "0.17.129",
   "buildPassed": true,
-  "signatureCount": 118,
+  "signatureCount": 127,
   "functionChecks": [
     "ability-buffs-validation.json",
     "angel-chant-hks-validation.json",
@@ -49,6 +49,7 @@
     "cat-jump-native-validation.json",
     "chant-spirit-validation.json",
     "chant-text-validation.json",
+    "clash-role-validation.json",
     "contract-damage-validation.json",
     "contract-heart-validation.json",
     "contract-role-validation.json",
@@ -137,7 +138,9 @@
     "readiness-sort-validation.json",
     "red-envelope-validation.json",
     "regen-balance-validation.json",
+    "reward-cycle-validation.json",
     "reward-recovery-validation.json",
+    "reward-reroll-validation.json",
     "role-exclusions-validation.json",
     "slingshot-arts-tuning-validation.json",
     "slingshot-cancel-hks-validation.json",
@@ -187,8 +190,8 @@
     "ultimate-vfx-validation.json",
     "validation.json"
   ],
-  "dllSha256": "1ef84b885151159e3eef1dc52499800165ef883f72bb9d1a40318627e44ab00d",
-  "installedDllSha256": "1ef84b885151159e3eef1dc52499800165ef883f72bb9d1a40318627e44ab00d",
+  "dllSha256": "9ef26f161fc3276517cb61ad8c9f4fdfbc32e5329d488ff41b15eb2330e93cf6",
+  "installedDllSha256": "9ef26f161fc3276517cb61ad8c9f4fdfbc32e5329d488ff41b15eb2330e93cf6",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "notes": "Build/static/isolated checks only. Current user gameplay feedback is summarized in docs/implementation.md."

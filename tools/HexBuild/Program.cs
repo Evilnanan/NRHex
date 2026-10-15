@@ -71,6 +71,8 @@ if(args.Contains("--contract-heart-check")){ContractHeart.ExportChecks(root,Pars
 if(args.Contains("--contract-damage-marker")){ContractHeart.StageDamageMarker(root,Parse);return;}
 if(args.Contains("--contract-native-hit")){ContractHeart.StageNativeHit(root,bnd,Parse);return;}
 if(args.Contains("--contract-hit-scope")){ContractHeart.AuditNativeHit(root,bnd,Parse);return;}
+if(args.Contains("--reward-cycle")){RewardCycle.Stage(root,Parse);return;}
+if(args.Contains("--reward-reroll")){RewardReroll.Stage(root,Parse);return;}
 if(args.Contains("--heart-two-returns")){ContractHeart.StageTwoReturns(root,Parse);return;}
 if(args.Contains("--cage-hp-probe")){CageHealth.Probe(root,Parse);return;}
 if(args.Contains("--cage-hp-sync")){CageCoop.Stage(root,Parse);return;}
@@ -725,6 +727,8 @@ Slingshot.Mechanics((source,id)=>Clone("SpEffectParam",source,id));
 Parry.Support(Clone);
 NightBlessing.ValidateNative(bnd,Parse);
 NightBlessing.Mechanics(Clone);
+RewardCycle.Parameters(Clone);
+RewardReroll.Parameters(Clone);
 ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
@@ -1032,11 +1036,12 @@ foreach(var lang in new[]{"zhocn","engus"}){
  statusFmg.Entries.Sort((a,b)=>a.ID.CompareTo(b.ID));statusName.Bytes=statusFmg.Write();
  var checkStatus=FMG.Read(statusName.Bytes);var originalStatus=FMG.Read(originals[statusName.ID]);
  Require(checkStatus.Entries.Count==originalStatus.Entries.Count+statuses.Count&&originalStatus.Entries.All(e=>checkStatus.Entries.Any(v=>v.ID==e.ID&&v.Text==e.Text)),"Shield name changed original status text");
+ RewardReroll.Text(root,tb,lang);
  var menuOutput=Path.Combine(root,"dist/mod/msg",lang,"menu_dlc01.msgbnd.dcx");tb.Write(menuOutput);
  var menuRead=BND4.Read(menuOutput);Require(menuRead.Files.Count==tb.Files.Count,"Menu binder count changed");
  foreach(var f in menuRead.Files)Require(f.Bytes.Span.SequenceEqual(tb.Files.Single(v=>v.ID==f.ID).Bytes.Span),"Menu text readback failed");
- Require(tb.Files.Where(f=>f.ID!=statusName.ID&&f.ID!=statusInfoFile.ID).All(f=>f.Bytes.Span.SequenceEqual(originals[f.ID])),"Unrelated menu text changed");
- textReports.Add(new{language=lang,inputSha256=Hash(menuInput),outputSha256=Hash(menuOutput),changedFiles=new[]{"SpEffectName.fmg","SpEffectInfo.fmg"}});
+ Require(tb.Files.Where(f=>f.ID!=statusName.ID&&f.ID!=statusInfoFile.ID&&Path.GetFileName(f.Name)!="CL_KeyGuide.fmg").All(f=>f.Bytes.Span.SequenceEqual(originals[f.ID])),"Unrelated menu text changed");
+ textReports.Add(new{language=lang,inputSha256=Hash(menuInput),outputSha256=Hash(menuOutput),changedFiles=new[]{"SpEffectName.fmg","SpEffectInfo.fmg","CL_KeyGuide.fmg"}});
 }
 var eventSource=Path.Combine(root,"assets/original/event/common.emevd.dcx");Require(Hash(eventSource)=="0018635B07959514CD9F1DF4E4889959B649C04E175567E6D8A8E2F11B0E2805","Unsupported common event hash");
 var ev=EMEVD.Read(eventSource);var origEv=EMEVD.Read(eventSource);Require(!ev.Events.Any(e=>e.ID==9100900),"Event ID collision");var parent=ev.Events.Single(e=>e.ID==0);
@@ -1110,6 +1115,8 @@ reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),ne
 Cages.Terrain(ev);
 ContractHeart.Events(ev);
 NightBlessing.ResetReceipt(ev);
+RewardCycle.Events(ev);
+RewardReroll.Events(ev);
 var eventDest=Path.Combine(root,"dist/mod/event/common.emevd.dcx");Directory.CreateDirectory(Path.GetDirectoryName(eventDest)!);ev.Write(eventDest);var outEv=EMEVD.Read(eventDest);
 bool Same(EMEVD.Event a,EMEVD.Event b)=>a.ID==b.ID&&a.RestBehavior==b.RestBehavior&&a.Name==b.Name&&a.Instructions.Count==b.Instructions.Count&&a.Instructions.Zip(b.Instructions).All(v=>v.First.Bank==v.Second.Bank&&v.First.ID==v.Second.ID&&v.First.Layer==v.Second.Layer&&v.First.ArgData.SequenceEqual(v.Second.ArgData))&&JsonSerializer.Serialize(a.Parameters)==JsonSerializer.Serialize(b.Parameters);
 Require(outEv.Format==origEv.Format&&outEv.Compression==origEv.Compression&&outEv.StringData.SequenceEqual(origEv.StringData)&&outEv.LinkedFileOffsets.SequenceEqual(origEv.LinkedFileOffsets),"EMEVD metadata changed");

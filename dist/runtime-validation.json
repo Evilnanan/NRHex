@@ -1,13 +1,15 @@
 {
-  "version": "0.17.126",
+  "version": "0.17.129",
   "active": null,
   "pid": null,
   "allFourNativeDllsLoaded": false,
   "build": "build-validation.json",
-  "dllSha256": "1ef84b885151159e3eef1dc52499800165ef883f72bb9d1a40318627e44ab00d",
+  "dllSha256": "9ef26f161fc3276517cb61ad8c9f4fdfbc32e5329d488ff41b15eb2330e93cf6",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "pendingChecks": [
+    "Per-option native Leave-key reroll: keyboard/controller prompt, each slot once, reopen/revival/reload, actual granted item, unchanged weapon Leave and independent peers",
+    "Per-expedition exposure cycles: all displayed choices excluded, tail-first rollover, local saved history through revival/reload, independent peers and new-run reset",
     "Night blessing rain-only 20-percent attack, low-HP 15-second regeneration, unlimited backlash until exit and grace rearming",
     "Ominous Pact original weapon on-hit eligibility with sorcery/incantations excluded, shared one-second game-time cooldown for multihit/multitarget attacks, native self-damage and original on-damage effects",
     "Heartstealer initial two branches, 60-second capped two returns, unchanged first-use deadline, rapid reuse, revival and host/guest inventory independence",

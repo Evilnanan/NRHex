@@ -1,0 +1,14 @@
+{
+  "version": "0.17.129",
+  "excludedHeroes": {
+    "revenant": 6,
+    "recluse": 7
+  },
+  "rewardTestsPassed": 35,
+  "normalFocusedRefreshAndRolloverChecked": true,
+  "onlyDllReplaced": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

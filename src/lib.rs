@@ -6,6 +6,9 @@ pub mod pe;
 pub mod win;
 mod hex_pool;
 mod reward_choices;
+mod reward_cycle;
+mod reward_cycle_runtime;
+mod reward_reroll;
 mod level_rewards;
 mod personal_reward;
 mod reward_recovery;
@@ -345,7 +348,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);118] {
+fn signatures()->[(&'static str,u32);127] {
  [(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -375,6 +378,15 @@ fn signatures()->[(&'static str,u32);118] {
   (ominous_pact::HP_PATTERN,ominous_pact::HP_GUARD_RVA as u32),
   (ominous_pact::NOTIFY_PATTERN,ominous_pact::NOTIFY_RVA as u32),
   (reward_terrain::GET_PATTERN,reward_terrain::GET_RVA as u32),
+  (reward_reroll::CTOR_PATTERN,reward_reroll::CTOR_RVA as u32),
+  (reward_reroll::TEXT_PATTERN,reward_reroll::TEXT_RVA as u32),
+  (reward_reroll::ENABLE_PATTERN,reward_reroll::ENABLE_RVA as u32),
+  (reward_reroll::PRESS_PATTERN,reward_reroll::PRESS_RVA as u32),
+  (reward_reroll::SELECT_PATTERN,reward_reroll::SELECT_RVA as u32),
+  (reward_reroll::ITEM_CTOR_PATTERN,reward_reroll::ITEM_CTOR_RVA as u32),
+  (reward_reroll::ITEM_COPY_PATTERN,reward_reroll::ITEM_COPY_RVA as u32),
+  (reward_reroll::ROW_DTOR_PATTERN,reward_reroll::ROW_DTOR_RVA as u32),
+  (reward_reroll::BIND_PATTERN,reward_reroll::BIND_RVA as u32),
   (cage_trace::PARTY_PATTERN,cage_trace::PARTY_RVA as u32),
   (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
   (parry::DUMMY_COUNT_PATTERN,parry::DUMMY_COUNT_RVA as u32),
@@ -548,6 +560,10 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let arts_behavior_prepared=hook::prepare(arts_behavior_target,arts_behavior_detour as *const u8,64)?;
   parry::COST_RESUME.store(base.add(parry::COST_RESUME_RVA) as *mut u8,Ordering::Release);
   let arts_transfer_targets=[
+   (reward_reroll::CTOR_RVA,reward_reroll::constructor as *const u8,&reward_reroll::CTOR_ORIGINAL),
+   (reward_reroll::TEXT_RVA,reward_reroll::text as *const u8,&reward_reroll::TEXT_ORIGINAL),
+   (reward_reroll::ENABLE_RVA,reward_reroll::enabled as *const u8,&reward_reroll::ENABLE_ORIGINAL),
+   (reward_reroll::PRESS_RVA,reward_reroll::press as *const u8,&reward_reroll::PRESS_ORIGINAL),
    (parry::NOTIFY_RVA,parry::notify_detour as *const u8,&parry::NOTIFY_ORIGINAL),
    (parry::COST_RVA,parry::cost_detour as *const u8,&parry::COST_ORIGINAL),
    (parry::COUNTER_COST_RVA,parry::counter_cost_detour as *const u8,&parry::COUNTER_COST_ORIGINAL),
@@ -1915,14 +1931,19 @@ unsafe fn local_hero(base:usize)->Option<u8> {
 unsafe fn unavailable_hexes(player:usize,base:usize)->u32 {
  reward_choices::role_exclusions(reward_choices::terrain_exclusions(owned_hexes(player,base),reward_terrain::exclude_cage(reward_terrain::great_hollow(base))),local_hero(base))
 }
-fn random_order(owned:u32)->Option<usize> {
- let candidates=reward_choices::candidates(owned);
+fn random_order(candidates:&[usize])->Option<usize> {
  let count=candidates.len() as u32;if count==0{return None;}
  loop {
   let mut random=0u32;
   if unsafe{BCryptGenRandom(ptr::null_mut(),&mut random as *mut u32 as *mut u8,4,2)}<0 {return None;}
   if random<u32::MAX-u32::MAX%count {return Some(candidates[(random%count) as usize]);}
  }
+}
+unsafe fn choose_reward(player:usize,base:usize,preferred:Option<[usize;3]>)->Option<(usize,u32)>{
+ let seen=reward_cycle_runtime::seen(player,base)?;
+ let round=reward_cycle::Round::new(unavailable_hexes(player,base),seen);
+ let chosen=preferred.and_then(|p|round.preferred(p)).or_else(||random_order(&round.candidates))?;
+ Some((chosen,round.next_seen(chosen)?))
 }
 unsafe fn unclaimed_hex_ball(base:usize)->bool {
  let manager=read_ptr(base+ITEMS_RVA);if manager==0{return true;}
@@ -1942,6 +1963,7 @@ unsafe fn unclaimed_hex_ball(base:usize)->bool {
 unsafe fn spawn_personal(player:usize,base:usize,chosen:usize)->bool {
  if unclaimed_hex_ball(base){return false;}
  let created=spawn_personal_lot(player,base,hex_pool::LOT_IDS[chosen]);
+ if created==3{reward_reroll::reset();reward_reroll::update(player,base,0.);}
  created==3
 }
 unsafe fn spawn_personal_lot(player:usize,base:usize,lot:i32)->u32 {
@@ -2050,13 +2072,14 @@ unsafe fn update_level_rewards(player:usize,base:usize) {
  let Some(index)=level_rewards::queued(reached,receipts,alive,expedition,pending_ball) else{return;};
  if CALLBACK_LOCK.swap(true,Ordering::AcqRel){return;}
  let receipt=level_rewards::RECEIPTS[index];
- let Some(chosen)=random_order(unavailable_hexes(player,base)) else{CALLBACK_LOCK.store(false,Ordering::Release);return;};
+ let Some((chosen,next_seen))=choose_reward(player,base,None) else{CALLBACK_LOCK.store(false,Ordering::Release);return;};
  let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+APPLY_SELF_RVA);
  // Native application queues its effect: has_effect is false until the
  // character update processes it. Never reserve a saved receipt before
  // creation and mistake that deferred receipt for a delivered reward.
  // CALLBACK_LOCK prevents reentry and the delay allows the receipt to settle.
  if spawn_personal(player,base,chosen) {
+  reward_cycle_runtime::commit(player,base,next_seen);
   apply(player,receipt,0);
  }else{
   nlog_error!("Personal level reward creation failed; milestone {} remains unissued",level_rewards::LEVELS[index]);
@@ -2131,6 +2154,8 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  update_noisy(player,base,dt);
  actor_lifecycle::update(player,base,dt);
  update_reward_recovery(player,base);
+ reward_cycle_runtime::update(player,base,dt);
+ reward_reroll::update(player,base,dt);
  update_level_rewards(player,base);
  refresh_owned_status(player,base);
  #[cfg(feature="test-hotkeys")]
@@ -2157,12 +2182,11 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
  let stats=read_ptr(modules);if stats==0||ptr::read_unaligned((stats+0x140) as *const i32)<=0{return;}
  if unclaimed_hex_ball(base){return;}
  if CALLBACK_LOCK.swap(true,Ordering::AcqRel){return;}
- let owned=unavailable_hexes(player,base);
  let preferred=if contract_pressed {Some(CONTRACT_REWARD)}else if gaze_pressed {Some(GAZE_REWARD)}else if chant_pressed {Some(CHANT_REWARD)}else if new_hex_pressed {Some(NEW_HEX_REWARD)}else if test_pressed {Some(TEST_REWARD)}else{None};
- let choice=preferred.and_then(|o|reward_choices::preferred(o,owned)).or_else(||random_order(owned));
- let Some(chosen)=choice else{CALLBACK_LOCK.store(false,Ordering::Release);return;};
+ let Some((chosen,next_seen))=choose_reward(player,base,preferred) else{CALLBACK_LOCK.store(false,Ordering::Release);return;};
  LAST_SPAWN.store(now,Ordering::Relaxed);
  let ok=spawn_personal(player,base,chosen);
+ if ok{reward_cycle_runtime::commit(player,base,next_seen);}
  CALLBACK_LOCK.store(false,Ordering::Release);
  if !ok {nlog_error!("Personal test reward spawn failed for order={chosen}");}
 }

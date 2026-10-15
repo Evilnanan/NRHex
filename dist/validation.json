@@ -1,9 +1,9 @@
 {
   "version": "0.17.60",
-  "codeVersion": "0.17.126",
+  "codeVersion": "0.17.129",
   "gameTested": false,
   "sourceRegulationSha256": "876A3CA279A4561D0C69F81FE5E510C75C59AB9A8A201694F8CF4A42C91E0268",
-  "outputRegulationSha256": "A9695718C54D10F05C4D7724CBB09FD062DC34859FF217E322388CCD6952A491",
+  "outputRegulationSha256": "4E3E272ED01E778AE9EB1469447F10B726A811559A59B32D73267032051850AC",
   "changedParams": [
     "AtkParam_Pc",
     "AttachEffectParam",
@@ -95478,7 +95478,7 @@
     }
   },
   "validation": "Mighty excludes Revenant/Recluse from random and preferred rewards. Texts updated; runtime projectile handling and regulation unchanged. Gameplay pending.",
-  "currentIncrementalValidation": "cage-terrain-validation.json",
+  "currentIncrementalValidation": "clash-role-validation.json",
   "currentStatusTextValidation": "text-validation.json",
   "legacyRewardGroups": 5814,
   "gameplayVerified": false,
