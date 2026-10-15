@@ -1,10 +1,18 @@
 {
-  "version": "0.17.141",
+  "version": "0.17.143",
   "buildPassed": true,
-  "scope": "Incremental Sword native regain and descriptions",
-  "dllSha256": "f346b610ee656e379e5abbcfb72d6ba1da0fd8f4c4312c4643c91ebb8b339686",
-  "signatureCount": 134,
-  "validation": "sword-regain-validation.json",
+  "scope": "Restore missing Keep Chanting HKS charge notifications and guard the full build",
+  "dllSha256": "c64e04d50747b60f099eea48af96eca92c2f523cc8d5ea1a84e1293a1264ab01",
+  "installedDllSha256": "c64e04d50747b60f099eea48af96eca92c2f523cc8d5ea1a84e1293a1264ab01",
+  "hksSha256": "226e0fc231b356e367084354aae8746954d85005bff1c4323db3e99ef8c48a4d",
+  "rustTestsPassed": 352,
+  "hksGateCases": 288,
+  "nativeStaminaCases": 7680,
+  "validation": "chant-hks-validation.json",
+  "independentDecompilerReadbackPassed": true,
+  "missingNotificationRegressionDetected": true,
+  "productionDllSha256": "4a873af3ac12b0c5888b5ac17ec6b7e18bfec0b31a69a55ae2bb3388a1b196a5",
+  "productionConfigPreserved": true,
   "gameplayVerified": false,
   "multiplayerVerified": false
 }

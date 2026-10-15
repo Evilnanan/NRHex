@@ -4,6 +4,8 @@
 
 DLL和INI位于`dist/mod/natives`；ME3的原生DLL条目也指向`mod/natives/NRHex.dll`。亮剑近身判定固定在`src/sword.rs`的`NEAR_DISTANCE=4.0`，INI不再控制该数值。
 
+别停止咏唱依赖六个原生蓄力回调中的6999921通知。完整构建须运行 `tools/build_chant_hks.py --inplace`，所有动作补丁结束后再运行 `tools/verify_chant_hks.py`；后者会检查最终文件并独立反编译，缺少通知时构建失败。修复已有包时，仅对未打补丁的当前脚本运行前者；输入已含通知会拒绝重复插入，原脚本备份与验证报告位于 `.work/angel-chant-01740/staged`。运行中的游戏需要重启才能加载新脚本。
+
 亮剑原生回收可通过 `./build-sword-regain.ps1` 增量构建：运行Rust测试、EXE签名检查与原生回收隔离测试，仅更新DLL、95000912的原生回收状态及中英文说明，备份后安装到dist，保留其他资源和CSV／INI。`-NoInstall`仅构建和验证。群友版随后运行 `./build-no-hotkeys.ps1`；ME3配置必须同时加载DLL与mod资源包。
 
 亮剑触媒特效可通过 `./build-sword-vfx.ps1` 增量构建：沿当前资源添加左右手视觉与施法手标记，检查后仅替换 DLL、参数包及动作脚本，保留其他资源与配置。完整构建也包含相同改动。该命令不启动游戏。

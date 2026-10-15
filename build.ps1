@@ -114,6 +114,8 @@ try {
     } # Clean builds retain the checked-in boss catalogue guarded by the EXE/regulation versions.
     & python -X utf8 tools/build_new_hexes_hks.py --inplace
     if ($LASTEXITCODE -ne 0) { throw 'Balloon and Revenant action notifications failed.' }
+    & python -X utf8 tools/build_chant_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Chant spell charge notifications failed.' }
     & python -X utf8 tools/build_sword_vfx_hks.py --inplace
     if ($LASTEXITCODE -ne 0) { throw 'Sword casting-hand visual patch failed.' }
     & python -X utf8 tools/build_sword_recovery_hks.py --inplace
@@ -172,6 +174,10 @@ try {
     Copy-Item -LiteralPath '.work/night-blessing/staged/m00_00_00_00.talkesdbnd.dcx' -Destination 'dist/mod/script/talk/m00_00_00_00.talkesdbnd.dcx' -Force
     dotnet run --project tools/HexBuild -- $PSScriptRoot --regulation-compression
     if ($LASTEXITCODE -ne 0) { throw 'Regulation compression and decompressed content validation failed.' }
+    python -X utf8 tools/verify_chant_hks.py
+    if ($LASTEXITCODE -ne 0) { throw 'Final script is missing Chant charge notifications.' }
+    python -X utf8 tools/verify_angel_chant_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Native Chant stamina addition failed.' }
     cargo build --release --lib
     if ($LASTEXITCODE -ne 0) { throw 'DLL build failed.' }
     cargo run --release --bin scancheck -- $gameExe

@@ -1,0 +1,57 @@
+{
+  "version": "0.17.143",
+  "functions": [
+    {
+      "id": 801,
+      "name": "MagicFireRight_Upper_onUpdate",
+      "prefixInstructions": 44,
+      "insertion": 287,
+      "afterNativeReleaseChecks": true
+    },
+    {
+      "id": 806,
+      "name": "MagicFireRight2_Upper_onUpdate",
+      "prefixInstructions": 44,
+      "insertion": 273,
+      "afterNativeReleaseChecks": true
+    },
+    {
+      "id": 807,
+      "name": "MagicFireRight3_Upper_onUpdate",
+      "prefixInstructions": 44,
+      "insertion": 273,
+      "afterNativeReleaseChecks": true
+    },
+    {
+      "id": 808,
+      "name": "MagicFireLeft_Upper_onUpdate",
+      "prefixInstructions": 44,
+      "insertion": 200,
+      "afterNativeReleaseChecks": true
+    },
+    {
+      "id": 812,
+      "name": "MagicFireLeft2_Upper_onUpdate",
+      "prefixInstructions": 44,
+      "insertion": 240,
+      "afterNativeReleaseChecks": true
+    },
+    {
+      "id": 814,
+      "name": "MagicFireLeft3_Upper_onUpdate",
+      "prefixInstructions": 44,
+      "insertion": 240,
+      "afterNativeReleaseChecks": true
+    }
+  ],
+  "cases": 288,
+  "inputSha256": "0b8915bb4c70ce968dfdc45ae39636332fa8a792f718b82f1cf36faad69a2a99",
+  "outputSha256": "226e0fc231b356e367084354aae8746954d85005bff1c4323db3e99ef8c48a4d",
+  "inverseRestoresInput": true,
+  "originalBranchesUnchanged": true,
+  "registersPreserved": true,
+  "heldChargeOnly": true,
+  "ordinarySpellAndSkillAndContinuousHoldExcluded": true,
+  "independentDecompilerMatchesAllOriginalBodies": true,
+  "gameplayVerified": false
+}

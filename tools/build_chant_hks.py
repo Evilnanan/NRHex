@@ -1,6 +1,8 @@
 """Gate native spell charge callbacks without altering native transitions."""
 from hks_bytecode import *
-import json,itertools
+import argparse,json,itertools,tomllib
+from verify_chant_hks import verify
+parser=argparse.ArgumentParser();parser.add_argument('--inplace',action='store_true');options=parser.parse_args()
 root=Path(__file__).resolve().parents[1];path=root/'dist/mod/action/script/c0000.hks'
 source=path.read_bytes();r=Reader(source);r.function();edits=[];changed={};reports=[];cases=0
 stage=root/'.work/angel-chant-01740/staged';stage.mkdir(parents=True,exist_ok=True)
@@ -78,6 +80,7 @@ for f in r.functions:
  edits.extend([(f['slots_offset'],4,struct.pack('>I',max(f['slots'],s+4))),(f['code_count_offset'],4,struct.pack('>I',len(words))),(f['code_offset'],len(f['code']),code),(f['constants_count_offset'],4,struct.pack('>I',len(cs)+len(extra))),(f['constants_end'],0,bytes(encoded)),(f['line_count_offset'],4,struct.pack('>I',len(words))),(f['lines_offset'],len(f['lines']),f['lines'][:insert*4]+f['lines'][insert*4:insert*4+4]*len(prefix)+f['lines'][insert*4:])])
  for _,a,start,b,end in f['locals']:edits.extend([(a,4,struct.pack('>I',start+(len(prefix) if start>=insert else 0))),(b,4,struct.pack('>I',end+(len(prefix) if end>=insert else 0)))])
  changed[fid]=(code,cs+extra);reports.append(dict(id=fid,name=name,prefixInstructions=len(prefix),insertion=insert,afterNativeReleaseChecks=True))
+assert set(changed)=={801,806,807,808,812,814}, 'Missing native spell charge callbacks'
 patched=source
 for off,n,v in sorted(edits,reverse=True):patched=patched[:off]+v+patched[off+n:]
 inverse=[];shift=0
@@ -91,5 +94,11 @@ for a,b in zip(r.functions,new.functions):
  elif a['id']!=0:assert source[a['start']:a['end']]==patched[b['start']:b['end']]
  else:assert a['code']==b['code'] and a['constants']==b['constants']
 (stage/'c0000.hks').write_bytes(patched)
-(stage/'hks-validation.json').write_text(json.dumps(dict(version='0.17.40',functions=reports,cases=cases,inputSha256=hashlib.sha256(source).hexdigest(),outputSha256=hashlib.sha256(patched).hexdigest(),inverseRestoresInput=True,originalBranchesUnchanged=True,registersPreserved=True,heldChargeOnly=True,ordinarySpellAndSkillAndContinuousHoldExcluded=True,gameplayVerified=False),indent=2))
+(stage/'before.hks').write_bytes(source)
+verify(stage/'c0000.hks',stage/'before.hks')
+version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
+(stage/'hks-validation.json').write_text(json.dumps(dict(version=version,functions=reports,cases=cases,inputSha256=hashlib.sha256(source).hexdigest(),outputSha256=hashlib.sha256(patched).hexdigest(),inverseRestoresInput=True,originalBranchesUnchanged=True,registersPreserved=True,heldChargeOnly=True,ordinarySpellAndSkillAndContinuousHoldExcluded=True,independentDecompilerMatchesAllOriginalBodies=True,gameplayVerified=False),indent=2))
+if options.inplace:
+ assert path.read_bytes()==source,'Input changed during verification'
+ path.write_bytes(patched)
 print(f'PASS: {len(reports)} spell charge callbacks; {cases} gate cases; inverse and unrelated functions preserved.')
