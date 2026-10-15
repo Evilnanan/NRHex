@@ -2,13 +2,14 @@ using SoulsFormats;
 using System.Text.Json;
 
 static class RewardCycle{
- public const int First=95002800,Count=25,Reset=First+Count;
+ public const int First=95002800,Count=26,Reset=95002825;
+ public static int Marker(int index)=>index<25?First+index:95002829+(index-25);
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v){r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());}
  static string Hash(string p)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(p)));
  public static void Parameters(Func<string,int,int,PARAM.Row> clone){
-  for(int i=0;i<=Count;i++){
-   var r=clone("SpEffectParam",8000000,First+i);
+  foreach(int id in Enumerable.Range(0,Count).Select(Marker).Append(Reset)){
+   var r=clone("SpEffectParam",8000000,id);
    foreach(var (f,v) in new (string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",10),("effectEndurance",-1f),("dontDeleteOnDead",1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(r,f,v);
   }
  }
@@ -17,7 +18,7 @@ static class RewardCycle{
    var e=ev.Events.Single(e=>e.ID==id);
    Check(!e.Instructions.Any(i=>i.Bank==2004&&i.ID is 8 or 21&&BitConverter.ToInt32(i.ArgData,4)>=First&&BitConverter.ToInt32(i.ArgData,4)<=Reset),"Cycle reset already present");
    var anchors=e.Instructions.Select((i,n)=>(i,n)).Where(v=>v.i.Bank==2004&&v.i.ID==21&&BitConverter.ToInt32(v.i.ArgData,4)==95002505).ToArray();Check(anchors.Length==1,"Guarded expedition/hub reset anchor missing");int at=anchors[0].n+1;
-   var added=Enumerable.Range(First,Count+1).Select(v=>new EMEVD.Instruction(2004,21,new object[]{20000u,v})).Append(new EMEVD.Instruction(2004,8,new object[]{20000u,Reset}));
+   var added=Enumerable.Range(0,Count).Select(Marker).Append(Reset).Select(v=>new EMEVD.Instruction(2004,21,new object[]{20000u,v})).Append(new EMEVD.Instruction(2004,8,new object[]{20000u,Reset}));
    e.Instructions.InsertRange(at,added);foreach(var p in e.Parameters)if(p.InstructionIndex>=at)p.InstructionIndex+=Count+2;
   }
  }
@@ -37,7 +38,7 @@ static class RewardCycle{
    if(e.ID is 1111 or 9100941){int at=n.Instructions.FindIndex(i=>i.Bank==2004&&i.ID==21&&BitConverter.ToInt32(i.ArgData,4)==First);Check(at>=0,"Cycle cleanup missing");n.Instructions.RemoveRange(at,Count+2);foreach(var p in n.Parameters)if(p.InstructionIndex>=at+Count+2)p.InstructionIndex-=Count+2;}
    Check(Cages.Same(e,n),"Unrelated event instructions/parameters changed");
   }
-  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),effects=final.Rows.Where(r=>r.ID>=First&&r.ID<=Reset).Select(r=>new{r.ID,fields=r.Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),events=changed,previousEvents=oldEv.Events.Where(e=>e.ID is 1111 or 9100941).Select(Cages.Dump),onlyNeutralSavedEffectsAndTwoResetsAdded=true,originalRowsTablesEventsAndMetadataPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: 25 local saved exposure records and consumed run-reset notice staged; original tables/events preserved");
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),effects=final.Rows.Where(r=>Enumerable.Range(0,Count).Select(Marker).Append(Reset).Contains(r.ID)).Select(r=>new{r.ID,fields=r.Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),events=changed,previousEvents=oldEv.Events.Where(e=>e.ID is 1111 or 9100941).Select(Cages.Dump),onlyNeutralSavedEffectsAndTwoResetsAdded=true,originalRowsTablesEventsAndMetadataPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine($"PASS: {Count} local saved exposure records and consumed run-reset notice staged; original tables/events preserved");
  }
 }

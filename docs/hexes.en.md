@@ -17,7 +17,7 @@
 <!-- hex:95000100 -->
 ## Red Envelope
 
-Grants 88,888 runes.
+Grants 88,888 runes and one latent power.
 
 <!-- hex:95000200 -->
 ## Celestial Body
@@ -132,9 +132,14 @@ Raises attack power by 20% in the Night’s Tide. When HP falls below 20% in the
 <!-- hex:95002600 -->
 ## Ominous Pact
 
-Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second.
+Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds.
 
 <!-- hex:95002700 -->
 ## Heartstealer
 
 Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned.
+
+<!-- hex:95002900 -->
+## Essence Reaver
+
+Defeating enemies permanently raises maximum FP by 1%.

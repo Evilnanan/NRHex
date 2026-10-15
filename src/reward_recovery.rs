@@ -23,8 +23,8 @@ impl Recovery {
 pub fn eligible(kind:u32,owner:u16,lot:i32,good:u32,slot:u8)->bool {
     (1..=3).contains(&slot) && kind&31==2 && owner&0x40!=0 && owner&0x800!=0
         && ((owner>>7)&3)==slot as u16
-        && (95200000..crate::hex_pool::LEGACY_LOT_END).contains(&lot)
-        && crate::reward_choices::is_hex_good(good)
+        && (((95200000..crate::hex_pool::LEGACY_LOT_END).contains(&lot)
+        && crate::reward_choices::is_hex_good(good)) || crate::red_envelope::bonus_lot(lot))
 }
 
 /// The native node owns its links, identity, choices and VFX handles. Only
@@ -90,4 +90,14 @@ mod tests {
             assert_eq!(node[0xf9],0);
         }
     }}
+    #[test] fn red_envelope_weapon_and_power_choices_keep_local_ownership() {
+        for slot in 1..=3 {
+            let owner=0x843|((slot as u16)<<7);
+            for base in crate::red_envelope::LOTS {for lot in base..base+3 {for good in [0x10000000,0x40000000|8000000] {
+                assert!(eligible(2,owner,lot,good,slot));
+                assert!(!eligible(0x12,owner,lot,good,slot));
+                for other in 1..=3 {assert_eq!(eligible(2,owner,lot,good,other),slot==other);}
+            }}}
+        }
+    }
 }

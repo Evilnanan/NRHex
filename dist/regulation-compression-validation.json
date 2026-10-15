@@ -1,0 +1,35 @@
+{
+  "inputCompression": "DCX_ZSTD",
+  "outputCompression": "DCX_DFLT_10000_44_9",
+  "inputSha256": "DFF3644B02C4FA7C5E8CE96590BFEF1ECEB19D22830831E324717F6D8DA29D9E",
+  "outputSha256": "7577CC4F1D61C2A672C6A17A47683A1B387585D03B52CE49A7CE333231255153",
+  "decompressedSha256": "DBEDE0CF089F2C3E7EF98577F7543EB621414D16CFF1EA737FB59FE8D2A121D6",
+  "decompressedBytes": 72470120,
+  "parameterFiles": 252,
+  "allDecompressedContentsPreserved": true,
+  "gameplayVerified": false,
+  "version": "0.17.137",
+  "codeTestsPassed": 347,
+  "signatureCount": 129,
+  "loadingVerified": true,
+  "verifiedPid": 23244,
+  "fullSelfTestProfile": true,
+  "otherAssetsAndUserSettingsPreserved": true,
+  "multiplayerVerified": false,
+  "diagnosis": {
+    "exception": "0xc0000005",
+    "faultRva": "0x26ae8c0",
+    "originalDumps": [
+      "nightreign.exe.32928.dmp",
+      "nightreign.exe.808.dmp"
+    ],
+    "loadedTable": "SpEffectVfxParam",
+    "actualBytesMatch": "AtkParam_Npc",
+    "firstLiveBinderDifference": "0x3950002",
+    "assetsOnlyOriginalCompression": "same startup crash",
+    "previousRegulation": "startup passed",
+    "identicalContentsDflt": "startup passed",
+    "completeUpdatedSelfTest": "ACTIVE=1, all four native DLLs loaded",
+    "limitation": "ZSTD failure is isolated by content-identical recompression; exact decoder failure branch not yet traced"
+  }
+}

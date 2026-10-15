@@ -1,0 +1,96 @@
+{
+  "version": "0.17.133",
+  "owner": 95000100,
+  "runes": 88888,
+  "bonusBalls": 1,
+  "threshold": 7,
+  "tierCapturedAtAcquisition": true,
+  "lowLevelNativeLot": 6100000,
+  "highLevelNativeLot": 6110200,
+  "private": true,
+  "codeTestsPassed": 338,
+  "signatureCount": 127,
+  "resetTimelines": [
+    {
+      "event": 1111,
+      "completed": false,
+      "ready": false,
+      "world": false,
+      "reset": false
+    },
+    {
+      "event": 1111,
+      "completed": false,
+      "ready": false,
+      "world": true,
+      "reset": false
+    },
+    {
+      "event": 1111,
+      "completed": false,
+      "ready": true,
+      "world": false,
+      "reset": true
+    },
+    {
+      "event": 1111,
+      "completed": false,
+      "ready": true,
+      "world": true,
+      "reset": true
+    },
+    {
+      "event": 1111,
+      "completed": true,
+      "ready": false,
+      "world": false,
+      "reset": false
+    },
+    {
+      "event": 1111,
+      "completed": true,
+      "ready": false,
+      "world": true,
+      "reset": false
+    },
+    {
+      "event": 1111,
+      "completed": true,
+      "ready": true,
+      "world": false,
+      "reset": false
+    },
+    {
+      "event": 1111,
+      "completed": true,
+      "ready": true,
+      "world": true,
+      "reset": false
+    },
+    {
+      "event": 9100941,
+      "hub": false,
+      "reset": false
+    },
+    {
+      "event": 9100941,
+      "hub": true,
+      "reset": true
+    }
+  ],
+  "allExistingRowsUnchanged": true,
+  "nativeOutdoorLotteriesPreserved": true,
+  "changedAssets": [
+    "mod/regulation.bin",
+    "mod/event/common.emevd.dcx",
+    "mod/natives/NRHex.dll",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx"
+  ],
+  "userConfigurationsPreserved": true,
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

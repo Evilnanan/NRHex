@@ -11,8 +11,11 @@ mod reward_cycle_runtime;
 mod reward_reroll;
 mod level_rewards;
 mod personal_reward;
+mod red_envelope;
 mod reward_recovery;
 mod strength;
+mod strength_sword;
+mod sword_hit_rules;
 mod escape;
 mod jiahao;
 mod arts;
@@ -25,6 +28,7 @@ mod parry;
 mod parry_turn;
 mod night_blessing;
 mod heartstealer;
+mod essence_reaver;
 mod ominous_pact;
 mod reward_terrain;
 mod parry_data;
@@ -65,6 +69,7 @@ mod status_display;
 mod cat;
 mod cat_jump;
 mod wall_input;
+mod cat_wall;
 mod flasks;
 mod sword;
 mod sword_map;
@@ -348,8 +353,8 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);127] {
- [(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
+fn signatures()->[(&'static str,u32);130] {
+ [(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
   (NEAR_DEATH_STATE_PATTERN,0x66d700),
@@ -366,6 +371,7 @@ fn signatures()->[(&'static str,u32);127] {
   (FLASK_COUNT_PATTERN,FLASK_COUNT_RVA as u32),
   (GAME_DATA_PATTERN,0x1fd598),(REWARD_CREATE_PATTERN,REWARD_CREATE_RVA as u32),
   (PLAYER_HERO_PATTERN,0xb61462),
+  (essence_reaver::RATE_PATTERN,essence_reaver::RATE_RVA as u32),
   (status_display::ROUTE_PATTERN,status_display::ROUTE_RVA as u32),
   (STATUS_SORT_PATTERN,STATUS_SORT_RVA as u32),(HUD_SORT_PATTERN,HUD_SORT_RVA as u32),(SPEED_PATTERN,SPEED_RVA as u32),(HIT_BUILD_PATTERN,HIT_BUILD_RVA as u32),(MAGIC_ANIM_PATTERN,0x456870),
   (ATTACK_RATES_PATTERN,ATTACK_RATES_RVA as u32),(EFFECT_FILTER_PATTERN,EFFECT_FILTER_RVA as u32),
@@ -546,6 +552,12 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let reward_prepared=hook::prepare(reward_target,reward_create_detour as *const u8,64)?;
   let dispatch_target=base.add(HIT_BUILD_RVA) as *mut u8;
   let dispatch_prepared=hook::prepare(dispatch_target,strength_detour as *const u8,64)?;
+  let combination_target=base.add(strength_sword::RVA) as *mut u8;
+  let combination_prepared=hook::prepare(combination_target,strength_sword::detour as *const u8,64)?;
+  strength_sword::ORIGINAL.store(combination_prepared.trampoline,Ordering::Release);
+  let charged_target=base.add(sword_hit_rules::RVA) as *mut u8;
+  let charged_prepared=hook::prepare(charged_target,sword_hit_rules::detour as *const u8,64)?;
+  sword_hit_rules::ORIGINAL.store(charged_prepared.trampoline,Ordering::Release);
   let rates_target=base.add(ATTACK_RATES_RVA) as *mut u8;
   let rates_prepared=hook::prepare(rates_target,sword_rates_detour as *const u8,64)?;
   let filter_target=base.add(EFFECT_FILTER_RVA) as *mut u8;
@@ -560,6 +572,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let arts_behavior_prepared=hook::prepare(arts_behavior_target,arts_behavior_detour as *const u8,64)?;
   parry::COST_RESUME.store(base.add(parry::COST_RESUME_RVA) as *mut u8,Ordering::Release);
   let arts_transfer_targets=[
+   (essence_reaver::RATE_RVA,essence_reaver::rate_detour as *const u8,&essence_reaver::RATE_ORIGINAL),
    (reward_reroll::CTOR_RVA,reward_reroll::constructor as *const u8,&reward_reroll::CTOR_ORIGINAL),
    (reward_reroll::TEXT_RVA,reward_reroll::text as *const u8,&reward_reroll::TEXT_ORIGINAL),
    (reward_reroll::ENABLE_RVA,reward_reroll::enabled as *const u8,&reward_reroll::ENABLE_ORIGINAL),
@@ -629,6 +642,8 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
     .and_then(|_|hook::write_code(request_target,&request_prepared.patch))
     .and_then(|_|hook::write_code(reward_target,&reward_prepared.patch))
     .and_then(|_|hook::write_code(dispatch_target,&dispatch_prepared.patch))
+    .and_then(|_|hook::write_code(combination_target,&combination_prepared.patch))
+    .and_then(|_|hook::write_code(charged_target,&charged_prepared.patch))
     .and_then(|_|hook::write_code(rates_target,&rates_prepared.patch))
     .and_then(|_|hook::write_code(filter_target,&filter_prepared.patch))
     .and_then(|_|hook::write_code(arts_id_target,&arts_id_prepared.patch))
@@ -877,8 +892,11 @@ unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  // Native E7039B and E70A72 confirm context[0] is the generic source;
  // compare first before treating it as the local player's ChrIns.
  // Deliberately exclude projectile sources, even when their resolved owner
- // is local. Mighty boosts direct character attacks, not ranged projectiles.
+ // is local. Projectile synergy is evaluated separately at actual contact.
  if local==0||read_ptr(context)!=local{return;}
+ // Sword spells are evaluated at contact, across the complete impact dispatch.
+ // Do not pre-boost a direct spell here and boost it a second time there.
+ if spell_percentage(hit).is_some()&&has_effect(local,sword::OWNER,base){return;}
  if has_effect(local,strength::OWNER,base){strengthen_constructed_hit(hit);}
 }
 
@@ -1458,6 +1476,7 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  let base=BASE.load(Ordering::Acquire);
  if ACTIVE.load(Ordering::Acquire)&&slingshot_runtime::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&heartstealer::suppress_notification(player,effect,base){return 1;}
+ if ACTIVE.load(Ordering::Acquire)&&essence_reaver::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&ominous_pact::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&effect==spirit::NATIVE_DRAIN&&npc_id(player,base).is_some_and(spirit::is_private_npc){effect=spirit::PASSIVE;}
  if ACTIVE.load(Ordering::Acquire)&&effect==102100&&is_local(player,base){on_effect(player,balloon::DOWN,base);}
@@ -1954,8 +1973,10 @@ unsafe fn unclaimed_hex_ball(base:usize)->bool {
   let kind=ptr::read_unaligned((node+0x78) as *const u32);
   let owner=ptr::read_unaligned((node+0xca) as *const u16);
   let lot=read_i32(node+0xd8);
-  if kind&15==2 && owner&0x40!=0 && (95200000..hex_pool::LEGACY_LOT_END).contains(&lot)
-     && reward_choices::is_hex_good(ptr::read_unaligned((node+0x28) as *const u32)) {return true;}
+  // All custom personal balls share one queue; native world rewards do not.
+  if kind&15==2 && owner&0x40!=0 && (red_envelope::bonus_lot(lot) ||
+     ((95200000..hex_pool::LEGACY_LOT_END).contains(&lot)
+     && reward_choices::is_hex_good(ptr::read_unaligned((node+0x28) as *const u32)))) {return true;}
   node=read_ptr(node);
  }
  true // A malformed/oversized list must not issue extra rewards.
@@ -2154,6 +2175,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  update_noisy(player,base,dt);
  actor_lifecycle::update(player,base,dt);
  update_reward_recovery(player,base);
+ red_envelope::update(player,base,dt);
  reward_cycle_runtime::update(player,base,dt);
  reward_reroll::update(player,base,dt);
  update_level_rewards(player,base);
@@ -2394,7 +2416,7 @@ mod tests {
   let excluded=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(0,Some(1))).unwrap()];assert_eq!(excluded[0],18);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
   assert_eq!(NEW_HEX_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[balloon::OWNER,spirit::OWNER,parry::OWNER]);
   let both=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(0,Some(6))).unwrap()];
-  assert_eq!(both,NEW_HEX_REWARD);
+  assert_eq!(&both[..2],&NEW_HEX_REWARD[..2]);assert!(!both.contains(&NEW_HEX_REWARD[2])); // Revenant cannot draw Clash.
   let after_balloon=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(1<<15,Some(6))).unwrap()];
   assert_eq!(after_balloon[0],16);assert!(!after_balloon.contains(&15));
   let other=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(0,Some(1))).unwrap()];

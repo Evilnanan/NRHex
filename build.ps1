@@ -1,4 +1,4 @@
-﻿param([switch]$NoInstall)
+param([switch]$NoInstall)
 $ErrorActionPreference = 'Stop'
 $buildDrive = [IO.Path]::GetPathRoot($PSScriptRoot)
 $me3 = Join-Path $buildDrive 'Program Files/me3/bin/me3.exe'
@@ -18,6 +18,12 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Sword range table build failed.' }
     dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot
     if ($LASTEXITCODE -ne 0) { throw 'Parameter/event/text build failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --red-envelope-rewards-check
+    if ($LASTEXITCODE -ne 0) { throw 'Red Envelope native rewards readback failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --essence-reaver-check
+    if ($LASTEXITCODE -ne 0) { throw 'Essence Reaver parameter/lifecycle readback failed.' }
+    python -X utf8 tools/verify_essence_reaver.py --installed
+    if ($LASTEXITCODE -ne 0) { throw 'Essence Reaver native stacking/HUD/reset validation failed.' }
     dotnet run --project tools/HexBuild -- $PSScriptRoot --cage-hp-check
     if ($LASTEXITCODE -ne 0) { throw 'Cage local correction parameter readback failed.' }
     & python -X utf8 tools/verify_cage_hp_native.py
@@ -136,6 +142,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Archmage secondary FP native verification failed' }
     python -X utf8 tools/verify_slingshot_native.py
     if ($LASTEXITCODE -ne 0) { throw 'Slingshot native impulse verification failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --cat-wall-check
+    if ($LASTEXITCODE -ne 0) { throw 'Cat wall-jump native data readback failed.' }
+    python -X utf8 tools/verify_cat_wall_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Cat wall-jump behavior and native impulse validation failed.' }
     dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-actions
     if ($LASTEXITCODE -ne 0) { throw 'Parry native guard window generation failed.' }
     Copy-Item -LiteralPath '.work/parry/staged/c0000.anibnd.dcx' -Destination 'dist/mod/chr/c0000.anibnd.dcx' -Force
@@ -154,10 +164,18 @@ try {
     Copy-Item -LiteralPath '.work/night-blessing/staged/c0000.anibnd.dcx' -Destination 'dist/mod/chr/c0000.anibnd.dcx' -Force
     New-Item -ItemType Directory -Force 'dist/mod/script/talk' | Out-Null
     Copy-Item -LiteralPath '.work/night-blessing/staged/m00_00_00_00.talkesdbnd.dcx' -Destination 'dist/mod/script/talk/m00_00_00_00.talkesdbnd.dcx' -Force
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --regulation-compression
+    if ($LASTEXITCODE -ne 0) { throw 'Regulation compression and decompressed content validation failed.' }
     cargo build --release --lib
     if ($LASTEXITCODE -ne 0) { throw 'DLL build failed.' }
     cargo run --release --bin scancheck -- $gameExe
     if ($LASTEXITCODE -ne 0) { throw 'EXE signature check failed.' }
+    python -X utf8 tools/verify_mighty_sword_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Mighty/Sword native dispatch check failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-charged-probe
+    if ($LASTEXITCODE -ne 0) { throw 'Sword native on-hit reference export failed.' }
+    python -X utf8 tools/verify_sword_charged.py
+    if ($LASTEXITCODE -ne 0) { throw 'Sword native weapon-hit rules check failed.' }
     python -X utf8 tools/verify_devils_gaze_immunity.py
     if ($LASTEXITCODE -ne 0) { throw 'Native bullet contact immunity validation failed.' }
     Copy-Item -LiteralPath '.work/devils-gaze-iframes/native-validation.json' -Destination 'dist/devils-gaze-immunity-validation.json' -Force

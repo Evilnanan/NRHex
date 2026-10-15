@@ -1,0 +1,248 @@
+{
+  "inputSha256": "7577CC4F1D61C2A672C6A17A47683A1B387585D03B52CE49A7CE333231255153",
+  "outputSha256": "89ED4320D611D392E1F4FAAC8459D1B41A004E7F5ED0626146D63BB17C2224C0",
+  "compression": "DCX_DFLT_10000_44_9",
+  "removed": [
+    95002902
+  ],
+  "changes": [
+    {
+      "id": 95002900,
+      "field": "displayIconForPermamentEffect",
+      "before": 0,
+      "after": 1
+    }
+  ],
+  "unrelatedRowsAndFilesPreserved": true,
+  "gameplayVerified": false,
+  "version": "0.17.139",
+  "codeTests": 348,
+  "signatureCount": 130,
+  "native": {
+    "nativeCategoryCases": [
+      {
+        "category": 10,
+        "sameId": true,
+        "reusesExistingNode": false
+      },
+      {
+        "category": 10,
+        "sameId": false,
+        "reusesExistingNode": false
+      },
+      {
+        "category": 20,
+        "sameId": true,
+        "reusesExistingNode": true
+      },
+      {
+        "category": 20,
+        "sameId": false,
+        "reusesExistingNode": false
+      }
+    ],
+    "nativeHudCases": [
+      {
+        "visibleIcons": 1,
+        "displayedCount": 1
+      }
+    ],
+    "nativeFpCases": [
+      {
+        "flags": 0,
+        "mode": 0,
+        "nativeRate": 1.2000000476837158
+      },
+      {
+        "flags": 0,
+        "mode": 1,
+        "nativeRate": 1.2000000476837158
+      },
+      {
+        "flags": 262144,
+        "mode": 0,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 262144,
+        "mode": 1,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 524288,
+        "mode": 0,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 524288,
+        "mode": 1,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 2147483648,
+        "mode": 0,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 2147483648,
+        "mode": 1,
+        "nativeRate": 1.0
+      }
+    ],
+    "serializedResetTimelines": [
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": false,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": false,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": true,
+        "world": false,
+        "reset": true
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": true,
+        "world": true,
+        "reset": true
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": false,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": false,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": true,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": true,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 9100941,
+        "hub": false,
+        "reset": false
+      },
+      {
+        "event": 9100941,
+        "hub": true,
+        "reset": true
+      }
+    ],
+    "formula": [
+      {
+        "kills": 0,
+        "requestedPower": 1.0
+      },
+      {
+        "kills": 1,
+        "requestedPower": 1.01
+      },
+      {
+        "kills": 10,
+        "requestedPower": 1.1046221254112045
+      },
+      {
+        "kills": 50,
+        "requestedPower": 1.6446318218438827
+      },
+      {
+        "kills": 100,
+        "requestedPower": 2.7048138294215285
+      },
+      {
+        "kills": 256,
+        "requestedPower": 12.772375803217816
+      },
+      {
+        "kills": 1000,
+        "requestedPower": 20959.155637813845
+      }
+    ],
+    "compactSavedRecordLimit": 4,
+    "nativeSavedCategoryCapacities": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        13,
+        18
+      ],
+      [
+        31,
+        50
+      ],
+      [
+        81,
+        5
+      ]
+    ],
+    "originalParameterRowsAndRewardTriplesPreserved": null,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "oldVersionCompatibility": false,
+  "stackDisplay": false,
+  "multiplayerVerified": false
+}

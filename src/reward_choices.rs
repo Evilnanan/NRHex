@@ -19,13 +19,14 @@ pub fn role_exclusions(unavailable: u32, hero: Option<u8>) -> u32 {
     let clash=OWNER_IDS.iter().position(|&id|id==95002400).expect("Missing Clash in serialized pool");
     let sword_gate=if matches!(hero,Some(4|6|7)) {0} else {(1<<sword)|(1<<chant)};
     let spirit_gate=if hero==Some(6) {0} else {1<<spirit};
-    let mighty_gate=if matches!(hero,Some(6|7)) {1<<mighty} else {0};
+    // At this entry the Sword bit represents ownership, before role/history exclusions.
+    let mighty_gate=if matches!(hero,Some(6|7)) && unavailable&(1<<sword)==0 {1<<mighty} else {0};
     // Native hero IDs: Guardian 2, Duchess 4, Revenant 6.
     let jiahao_gate=if matches!(hero,Some(2|4|6)) {1<<jiahao} else {0};
     // Wylder, Ironeye, Raider, Recluse, Executor only; unknown roles are excluded.
     let ultimate_gate=if matches!(hero,Some(1|3|5|7|8)) {0} else {1<<ultimate};
     // Revenant 6, Recluse 7, Executor 8.
-    let contract_gate=if matches!(hero,Some(6|7|8)) {1<<contract} else {0};
+    let contract_gate=if matches!(hero,Some(6|7|8)) && unavailable&(1<<sword)==0 {1<<contract} else {0};
     let clash_gate=if matches!(hero,Some(6|7)) {1<<clash} else {0};
     unavailable | sword_gate | spirit_gate | mighty_gate | jiahao_gate | ultimate_gate | contract_gate | clash_gate
 }
@@ -70,10 +71,10 @@ mod tests {
     }
     #[test] fn retired_ability_is_absent_and_remaining_lot_ids_are_stable(){
         use crate::hex_pool::{LOT_IDS,LEGACY_LOT_END};
-        assert_eq!(HEX_COUNT,25);assert!(!OWNER_IDS.contains(&95001900));
-        assert_eq!(ORDERS.len(),13800);assert_eq!(LOT_IDS.len(),ORDERS.len());
+        assert_eq!(HEX_COUNT,26);assert!(!OWNER_IDS.contains(&95001900));assert_eq!(OWNER_IDS[25],95002900);
+        assert_eq!(ORDERS.len(),15600);assert_eq!(LOT_IDS.len(),ORDERS.len());
         assert_eq!(LOT_IDS.iter().copied().collect::<std::collections::HashSet<_>>().len(),LOT_IDS.len());
-        for (i,&lot) in LOT_IDS.iter().enumerate(){assert!((95200000..LEGACY_LOT_END).contains(&lot));assert_eq!((lot-95200000)%10,0);if i<4080{assert_eq!(lot,95200000+i as i32*10);}if (4896..5814).contains(&i){assert!(lot>=95258140);assert!(ORDERS[i].contains(&18));}if (5814..6840).contains(&i){assert!(lot>=95268400);assert!(ORDERS[i].contains(&19));}if (6840..7980).contains(&i){assert!(lot>=95279800);assert!(ORDERS[i].contains(&20));}if (7980..9240).contains(&i){assert!(lot>=95292400);assert!(ORDERS[i].contains(&21));}if (9240..10626).contains(&i){assert!(lot>=95306260);assert!(ORDERS[i].contains(&22));}if i>=10626{assert!(lot>=95321440);assert!(ORDERS[i].contains(&23)||ORDERS[i].contains(&24));}}
+        for (i,&lot) in LOT_IDS.iter().enumerate(){assert!((95200000..LEGACY_LOT_END).contains(&lot));assert_eq!((lot-95200000)%10,0);if i<4080{assert_eq!(lot,95200000+i as i32*10);}if (4896..5814).contains(&i){assert!(lot>=95258140);assert!(ORDERS[i].contains(&18));}if (5814..6840).contains(&i){assert!(lot>=95268400);assert!(ORDERS[i].contains(&19));}if (6840..7980).contains(&i){assert!(lot>=95279800);assert!(ORDERS[i].contains(&20));}if (7980..9240).contains(&i){assert!(lot>=95292400);assert!(ORDERS[i].contains(&21));}if (9240..10626).contains(&i){assert!(lot>=95306260);assert!(ORDERS[i].contains(&22));}if (10626..13800).contains(&i){assert!(lot>=95321440);assert!(ORDERS[i].contains(&23)||ORDERS[i].contains(&24));}if i>=13800{assert!(lot>=95356000);assert!(ORDERS[i].contains(&25));}}
         assert!(LOT_IDS[4080..].windows(2).any(|p|p[1]-p[0]>10));
     }
     #[test] fn spirit_is_revenant_only_and_bit_sixteen_is_preserved() {
@@ -98,6 +99,47 @@ mod tests {
             for i in candidates(role_exclusions(1<<mighty,hero)) {
                 assert!(!ORDERS[i].contains(&mighty));
             }
+        }
+    }
+    #[test] fn owned_sword_unlocks_mighty_without_bypassing_owned_or_seen_exclusions() {
+        let mighty=OWNER_IDS.iter().position(|&id|id==95001100).unwrap();
+        let sword=OWNER_IDS.iter().position(|&id|id==95000900).unwrap();
+        for hero in [6,7] {
+            let without=role_exclusions(0,Some(hero));
+            assert_ne!(without&(1<<mighty),0);
+            let owned=1<<sword;let unlocked=role_exclusions(owned,Some(hero));
+            assert_eq!(unlocked&(1<<mighty),0);
+            assert_ne!(unlocked&owned,0);
+            assert!(candidates(unlocked).iter().any(|&i|ORDERS[i].contains(&mighty)));
+            assert!(ORDERS[preferred([mighty,0,1],unlocked).unwrap()].contains(&mighty));
+            for seen in [0,crate::reward_cycle::ALL] {
+                let round=crate::reward_cycle::Round::new(unlocked,seen);
+                assert!(round.candidates.iter().any(|&i|ORDERS[i].contains(&mighty)));
+                let refresh=crate::reward_cycle::Single::new(unlocked,seen,(1<<0)|(1<<1));
+                assert!(refresh.candidates.contains(&mighty));
+            }
+            let seen=crate::reward_cycle::Single::new(unlocked,1<<mighty,(1<<0)|(1<<1));
+            assert!(!seen.candidates.contains(&mighty));
+            let both=role_exclusions(owned|(1<<mighty),Some(hero));
+            assert!(candidates(both).iter().all(|&i|!ORDERS[i].contains(&mighty)));
+        }
+    }
+    #[test] fn owned_sword_unlocks_pact_for_excluded_roles_but_retains_history_and_ownership() {
+        let sword=OWNER_IDS.iter().position(|&id|id==95000900).unwrap();
+        let pact=OWNER_IDS.iter().position(|&id|id==95002600).unwrap();
+        for hero in [6,7,8] {
+            assert_ne!(role_exclusions(0,Some(hero))&(1<<pact),0);
+            let unlocked=role_exclusions(1<<sword,Some(hero));
+            assert_eq!(unlocked&(1<<pact),0);
+            assert!(candidates(unlocked).iter().any(|&i|ORDERS[i].contains(&pact)));
+            assert!(ORDERS[preferred([pact,0,1],unlocked).unwrap()].contains(&pact));
+            for seen in [0,crate::reward_cycle::ALL] {
+                assert!(crate::reward_cycle::Single::new(unlocked,seen,3).candidates.contains(&pact));
+                assert!(crate::reward_cycle::Round::new(unlocked,seen).candidates.iter().any(|&i|ORDERS[i].contains(&pact)));
+            }
+            assert!(!crate::reward_cycle::Single::new(unlocked,1<<pact,3).candidates.contains(&pact));
+            let owned=role_exclusions((1<<sword)|(1<<pact),Some(hero));
+            assert!(candidates(owned).iter().all(|&i|!ORDERS[i].contains(&pact)));
         }
     }
     #[test] fn ominous_pact_role_filter_applies_to_random_and_focused_rewards() {

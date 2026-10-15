@@ -6,7 +6,7 @@ use std::sync::Mutex;
 
 pub const OWNER: i32 = 95002600;
 pub const PULSE: i32 = 95002601;
-const COOLDOWN_SECONDS: f64 = 1.0;
+const COOLDOWN_SECONDS: f64 = 10.0;
 static COOLDOWN: Mutex<HitCooldown> = Mutex::new(HitCooldown::new());
 
 // One local-player cooldown, shared by all native hit notifications (including
@@ -119,7 +119,7 @@ mod tests {
         let mut bytes=[0u8;12];bytes[..2].copy_from_slice(&[0x48,0xb8]);bytes[2..10].copy_from_slice(&target.to_le_bytes());bytes[10..].copy_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(bytes.as_ptr(),address as *mut u8,12);
     }
     #[test]
-    fn native_cost_is_local_once_per_second_and_notifies_only_actual_loss(){unsafe{
+    fn native_cost_is_local_once_per_ten_seconds_and_notifies_only_actual_loss(){unsafe{
         let memory=VirtualAlloc(ptr::null_mut(),0x3d00000,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);
         assert!(!memory.is_null());let base=memory as usize;BASE.with(|s|s.set(base));
         jump(base+crate::HAS_EFFECT_RVA,owned as *const () as usize);jump(base+HP_RVA,hurt as *const () as usize);jump(base+NOTIFY_RVA,notify as *const () as usize);
@@ -145,6 +145,7 @@ mod tests {
         *COOLDOWN.lock().unwrap()=HitCooldown::new();
         for _ in 0..20{pulse(actor,PULSE,base);}
         assert_eq!(read_i32(statistics+0x140),950);assert_eq!(COST.with(|s|s.get().2),1);assert_eq!(NOTIFIED.with(|s|s.get().5),1);
+        for _ in 0..9{update(actor,base,1.);pulse(actor,PULSE,base);assert_eq!(COST.with(|s|s.get().2),1);}
         update(actor,base,0.5);update(actor,base,0.499);pulse(actor,PULSE,base);
         assert_eq!(COST.with(|s|s.get().2),1);
         update(actor,base,0.001);pulse(actor,PULSE,base);
@@ -164,14 +165,16 @@ mod tests {
     #[test]
     fn native_hit_burst_has_one_deadline_and_rejected_hits_do_not_extend_it(){
         let mut s=HitCooldown::new();let actor=(1,2);assert!(s.claim(actor));
-        for _ in 0..99{s.advance(actor,true,0.01);for _ in 0..10{assert!(!s.claim(actor));}}
+        for _ in 0..999{s.advance(actor,true,0.01);for _ in 0..10{assert!(!s.claim(actor));}}
         s.advance(actor,true,0.011);assert!(s.claim(actor));assert!(!s.claim(actor));
+        for _ in 0..9{s.advance(actor,true,1.);assert!(!s.claim(actor));}
         s.advance(actor,true,0.5);assert!(!s.claim(actor));s.advance(actor,true,0.5);assert!(s.claim(actor));
     }
     #[test]
     fn paused_or_invalid_time_cannot_expire_cooldown(){
         let mut s=HitCooldown::new();let actor=(1,2);assert!(s.claim(actor));
         for dt in [0.,-1.,f32::NAN,f32::INFINITY,1.01]{s.advance(actor,true,dt);assert!(!s.claim(actor));}
+        for _ in 0..9{s.advance(actor,true,1.);assert!(!s.claim(actor));}
         s.advance(actor,true,1.);assert!(s.claim(actor));
     }
     #[test]

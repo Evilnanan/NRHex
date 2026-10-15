@@ -1,0 +1,94 @@
+{
+  "version": "0.17.138",
+  "cooldownSeconds": 10,
+  "focusedTestsPassed": 6,
+  "changedAssets": [
+    "mod/natives/NRHex.dll",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx"
+  ],
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "2F521C0A2EB4B188C45689C9A3FAE93EA23BBB12A7F5C01F750724BDF36947DC",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "C1F74720CE225DF36C04FEB156CDE663E57394B19B783818D71B3A0757D3CFB8",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "9D3F90381B814BD3CD1650EF82D4D83C0A50BB2CB97E4D8E14A41EA05F3D36BD",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "E6EDFDD1DEC1A4AD8DB62A1B38165B831457249461469D9362ED3723BF7F3949",
+        "outputSha256": "5D84E9BA30A45291019E912CBE73D105177849C8C7E837F8FF9BEBDDC4F3A96E",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002600,
+            "before": "攻击命中时，对自己造成等同于血量上限5%的损伤。每秒最多触发一次",
+            "after": "攻击命中时，对自己造成等同于血量上限5%的损伤。每10秒最多触发一次"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002600,
+            "before": "攻击命中时，对自己造成等同于血量上限5%的损伤。每秒最多触发一次",
+            "after": "攻击命中时，对自己造成等同于血量上限5%的损伤。每10秒最多触发一次"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002600,
+            "before": "攻击命中时，对自己造成等同于血量上限5%的损伤。每秒最多触发一次",
+            "after": "攻击命中时，对自己造成等同于血量上限5%的损伤。每10秒最多触发一次"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "CB229592DAAE17BF79E594FE6F588D29E5EBC9D3AA473D395922B33E97348706",
+        "outputSha256": "CB229592DAAE17BF79E594FE6F588D29E5EBC9D3AA473D395922B33E97348706",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "8666FBACA89D7B871D460E0E779815DC9019D06A3210969AE321C375C674BBD4",
+        "outputSha256": "4FD587866E04F7A9B4507A63BD940BDACEA726C0579FA7009AD98C5BC833E422",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second.",
+            "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second.",
+            "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second.",
+            "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "E91221CAD5EC969F85A8E0542F8FA3070D421A4FE7D2F3F23E44C0AB887280F9",
+        "outputSha256": "E91221CAD5EC969F85A8E0542F8FA3070D421A4FE7D2F3F23E44C0AB887280F9",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "regulationPreserved": true,
+  "loadingVerified": false,
+  "gameplayVerified": false
+}

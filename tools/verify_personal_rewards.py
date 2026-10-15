@@ -1,11 +1,12 @@
 """Read-only native evidence and isolated execution; never attaches to the game."""
 from pathlib import Path
 import ctypes, hashlib, json, struct
+from local_paths import GAME
 import pefile
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64
 
 root = Path(__file__).resolve().parents[1]
-exe = Path(r'D:\Program Files (x86)\Steam\steamapps\common\ELDEN RING NIGHTREIGN\Game\nightreign.exe')
+exe = (GAME/'nightreign.exe')
 raw = exe.read_bytes()
 digest = hashlib.sha256(raw).hexdigest()
 assert digest == '9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a'

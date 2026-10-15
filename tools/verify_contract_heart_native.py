@@ -84,14 +84,15 @@ try:
     stub(0xea1d40,c.c_ubyte,[c.c_void_p,c.c_void_p,c.c_int],lambda *_:1)
     descriptor=c.create_string_buffer(0x40)
     filtering=c.WINFUNCTYPE(c.c_ubyte,c.c_void_p,c.c_void_p,c.c_void_p,c.c_int,c.c_int)(m+0x511010)
-    for spell_bits in [False,True]:
-        put(row,0x160,'<B',0x80 if spell_bits else 0)
-        put(row,0x161,'<B',1 if spell_bits else 0)
-        put(row,0x259,'<B',0x20 if spell_bits else 0)
+    for spell_bits in range(8):
+        put(row,0x160,'<B',0x80 if spell_bits&1 else 0)
+        put(row,0x161,'<B',1 if spell_bits&2 else 0)
+        put(row,0x259,'<B',0x20 if spell_bits&4 else 0)
         for kind_id in [0,1,2,3,4,9,10,11]:
             put(descriptor,0,'<B',kind_id)
             ok=filtering(c.addressof(node),c.addressof(descriptor),0,-1,-1)
-            assert bool(ok)==(spell_bits or kind_id not in [3,4,10]),(spell_bits,kind_id,ok)
+            expected=bool(spell_bits&{3:1,4:2,10:4}[kind_id]) if kind_id in [3,4,10] else True
+            assert bool(ok)==expected,(spell_bits,kind_id,ok)
             cases.append(dict(kind='native-applicability',sourceKind=kind_id,spellBits=spell_bits,accepted=bool(ok)))
     # Real self-damage routine and damage notification. Only external game
     # managers and final HP storage are fixtures; native flag writes execute.

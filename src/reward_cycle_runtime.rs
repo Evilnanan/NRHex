@@ -3,7 +3,8 @@
 use crate::{has_effect,read_ptr,reward_cycle};
 use std::sync::Mutex;
 pub const FIRST:i32=95002800;
-pub const RESET:i32=FIRST+crate::hex_pool::HEX_COUNT as i32;
+pub const RESET:i32=95002825;
+pub const fn marker(index:usize)->i32{if index<25{FIRST+index as i32}else{95002829+(index-25)as i32}}
 static HISTORY:Mutex<History>=Mutex::new(History::new());
 
 struct History { seen:Option<u32>,dirty:bool,wait:f32,resetting:bool }
@@ -29,14 +30,14 @@ pub unsafe fn update(player:usize,base:usize,dt:f32){
  let reset=has_effect(player,RESET,base);
  if reset{crate::reward_reroll::reset();}
  let due=HISTORY.lock().map(|mut s|s.due(reset,dt)).unwrap_or(false);if !due{return;}
- let native=(0..crate::hex_pool::HEX_COUNT).fold(0,|m,i|m|if has_effect(player,FIRST+i as i32,base){1<<i}else{0});
+ let native=(0..crate::hex_pool::HEX_COUNT).fold(0,|m,i|m|if has_effect(player,marker(i),base){1<<i}else{0});
  let wanted=HISTORY.lock().ok().and_then(|mut s|s.observe(native,reset));
  let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+crate::REMOVE_EFFECT_RVA);
  let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);
  if let Some(wanted)=wanted{
   for i in 0..crate::hex_pool::HEX_COUNT{
    if (native^wanted)&(1<<i)==0{continue;}
-   if wanted&(1<<i)!=0{apply(player,FIRST+i as i32,0);}else{remove(manager,FIRST+i as i32);}
+   if wanted&(1<<i)!=0{apply(player,marker(i),0);}else{remove(manager,marker(i));}
   }
  }
  if reset{remove(manager,RESET);}
@@ -51,6 +52,12 @@ pub unsafe fn commit(player:usize,base:usize,seen:u32){
 
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn appended_history_markers_do_not_alias_reset_or_reroll_records(){
+  let ids:Vec<_>=(0..crate::hex_pool::HEX_COUNT).map(marker).collect();
+  assert_eq!(&ids[..25],&(FIRST..FIRST+25).collect::<Vec<_>>());
+  assert_eq!(ids[25],95002829);assert!(!ids.contains(&RESET));
+  assert!(ids.iter().all(|id|!(crate::reward_reroll::FIRST..crate::reward_reroll::FIRST+3).contains(id)));
+ }
  #[test]fn native_records_seed_after_runtime_restart_and_survive_revival(){
   let mut h=History::new();assert_eq!(h.observe(7,false),None);assert_eq!(h.seen(),Some(7));
   h.commit(63);assert_eq!(h.observe(7,false),Some(63));assert_eq!(h.seen(),Some(63));

@@ -1,0 +1,19 @@
+{
+  "version": "0.17.136",
+  "owner": 95002600,
+  "synergyOwner": 95000900,
+  "roleException": [
+    6,
+    7,
+    8
+  ],
+  "separateSpellFilterRemoved": true,
+  "nativeMagicPrayerFlagsEnabled": false,
+  "mechanism": "sword_hit_rules: private native weapon on-hit descriptor within four meters",
+  "range": 4,
+  "sharedCooldownSeconds": 1,
+  "selfDamageMaxHpFraction": 0.05,
+  "validation": "sword-hit-rules-validation.json",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

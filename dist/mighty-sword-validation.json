@@ -1,0 +1,28 @@
+{
+  "wholeNativeDispatch": "0x43d260",
+  "stackArgumentsPreserved": 5,
+  "consumers": {
+    "0x43d4be": "0x439e80",
+    "0x43da15": "0x48d980",
+    "0x43e12f": "0x4391e0",
+    "0x43e14c": "0x438dd0"
+  },
+  "recipientNativeReactionMappingPreserved": true,
+  "hitInput": "0x24",
+  "nativeReactionOutput": "0x2b6",
+  "spellAndProjectileContactRange": 4,
+  "collisionSource": "0x228",
+  "nativeBulletKind": 3,
+  "cachedHitsNotReboosted": true,
+  "sourceDirectSpellsNotDoubleBoosted": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "version": "0.17.134",
+  "codeTestsPassed": 343,
+  "signatureCount": 128,
+  "changedAssets": [
+    "mod/natives/NRHex.dll"
+  ],
+  "otherAssetsAndSettingsPreserved": true,
+  "loadingVerified": false
+}

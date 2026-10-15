@@ -2,7 +2,7 @@ using SoulsFormats;
 using System.Text.Json;
 using System.Security.Cryptography;
 
-static class RedEnvelope {
+static partial class RedEnvelope {
  const int Grant=95000102,Vfx=104392;
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static string Hash(string path)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path)));

@@ -1,0 +1,35 @@
+{
+  "nativeCases": 360,
+  "nativeSelector": "0x505e90",
+  "effectFilter": "0x511010",
+  "weaponChargeCategory": 100,
+  "spellChargeCategory": 110,
+  "tiers": [
+    8320400,
+    8320410,
+    8320420
+  ],
+  "durationSeconds": 10,
+  "negation": [
+    0.24,
+    0.32,
+    0.4
+  ],
+  "range": 4,
+  "additionalOnHitReference": 8600200,
+  "privateWeaponHitDescriptor": true,
+  "sharedRowsAndHitsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "contractNativeFlagsUnchanged": true,
+  "contractNoSeparateSpellFilter": true,
+  "externalHitEligibilityStubbed": true,
+  "version": "0.17.136",
+  "codeTestsPassed": 347,
+  "signatureCount": 129,
+  "changedAssets": [
+    "mod/natives/NRHex.dll"
+  ],
+  "otherAssetsAndSettingsPreserved": true,
+  "loadingVerified": false
+}

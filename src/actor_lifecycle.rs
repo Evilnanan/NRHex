@@ -34,6 +34,7 @@ pub(crate) unsafe fn on_effect(player: usize, effect: i32, base: usize) {
     spirit_runtime::notify(player, effect, base);
 }
 pub(crate) unsafe fn update(player: usize, base: usize, dt: f32) {
+    crate::essence_reaver::update(player, base);
     let stats = stats(player);
     if stats == 0 {
         return;

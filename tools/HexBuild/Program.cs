@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -19,6 +19,7 @@ if(args.Contains("--stage-translations")){
 if(args.Contains("--check-descriptions")){
  HexTexts.Verify(root,HexCatalog.Load(root));return;
 }
+if(args.Contains("--regulation-compression")){RegulationCompression.Normalize(root);return;}
 
 if(args.Contains("--cage-network-selector")){CageNetwork.Stage(root);return;}
 if(args.Contains("--cage-usage")){CageUsage.Stage(root);return;}
@@ -65,7 +66,11 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--sword-charged-probe")){SwordCharged.Probe(root,bnd,Parse);return;}
 if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
+if(args.Contains("--essence-reaver-probe")){EssenceReaver.Probe(root,bnd,Parse);return;}
+if(args.Contains("--essence-reaver-single")){EssenceReaver.StageSingle(root,Parse);return;}
+if(args.Contains("--essence-reaver-check")){EssenceReaver.ExportChecks(root,Parse);return;}
 if(args.Contains("--contract-heart-probe")){ContractHeart.Probe(root,bnd,Parse);return;}
 if(args.Contains("--contract-heart-check")){ContractHeart.ExportChecks(root,Parse);return;}
 if(args.Contains("--contract-damage-marker")){ContractHeart.StageDamageMarker(root,Parse);return;}
@@ -73,6 +78,7 @@ if(args.Contains("--contract-native-hit")){ContractHeart.StageNativeHit(root,bnd
 if(args.Contains("--contract-hit-scope")){ContractHeart.AuditNativeHit(root,bnd,Parse);return;}
 if(args.Contains("--reward-cycle")){RewardCycle.Stage(root,Parse);return;}
 if(args.Contains("--reward-reroll")){RewardReroll.Stage(root,Parse);return;}
+if(args.Contains("--cat-wall-check")){CatWall.Probe(root,bnd,Parse);return;}
 if(args.Contains("--heart-two-returns")){ContractHeart.StageTwoReturns(root,Parse);return;}
 if(args.Contains("--cage-hp-probe")){CageHealth.Probe(root,Parse);return;}
 if(args.Contains("--cage-hp-sync")){CageCoop.Stage(root,Parse);return;}
@@ -105,6 +111,8 @@ if(args.Contains("--devils-gaze-resources-stage")){DevilsGaze.StageResources(roo
 if(args.Contains("--balloon-attribute-probe")){BalloonAttribute.Probe(root,Parse);return;}
 if(args.Contains("--balloon-attribute-stage")){BalloonAttribute.Stage(root,Parse);return;}
 if(args.Contains("--ability-buffs-probe")){AbilityBuffs.Probe(root,Parse);return;}
+if(args.Contains("--red-envelope-rewards")){RedEnvelope.StageRewards(root,bnd,Parse);return;}
+if(args.Contains("--red-envelope-rewards-check")){RedEnvelope.CheckRewards(root,bnd,Parse);return;}
 if(args.Contains("--red-envelope-probe")){RedEnvelope.Probe(root,bnd,Parse);return;}
 if(args.Contains("--red-envelope-only")){RedEnvelope.Stage(root,Parse);return;}
 if(args.Contains("--ultimate-vfx-probe")){UltimateRefreshVfx.Probe(root,bnd,Parse);return;}
@@ -627,6 +635,7 @@ if(args.Contains("--export-descriptions")){
  Console.WriteLine("Exported 15 current Chinese descriptions from the working Mod package.");return;
 }
 var hexes=HexCatalog.Load(root);
+if(args.Contains("--essence-reaver-stage")){EssenceReaver.Stage(root,bnd,Parse,hexes);return;}
 if(args.Contains("--parry-stage")){Parry.Stage(root,bnd,Parse,hexes);Parry.BuildActions(root,bnd,Parse);return;}
 if(args.Contains("--parry-followup")){ParryFollowup.Stage(root,Parse);return;}
 if(args.Contains("--parry-followup-actions")){ParryFollowup.Actions(root,Parse("SpEffectParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param").Bytes));return;}
@@ -699,6 +708,7 @@ foreach(var h in hexes){
  if(h.Id==95000300){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,1.2f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,f,10f);}
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
  if(h.Id==ContractHeart.Contract)ContractHeart.Owners(s);
+ if(h.Id==EssenceReaver.Owner)EssenceReaver.Owners(s);
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
  if(h.Id==95002100){Set(s,"magicConsumptionRate",1f);Set(s,"miracleConsumptionRate",1f);}
@@ -729,6 +739,7 @@ NightBlessing.ValidateNative(bnd,Parse);
 NightBlessing.Mechanics(Clone);
 RewardCycle.Parameters(Clone);
 RewardReroll.Parameters(Clone);
+EssenceReaver.Mechanics(Clone);
 ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
@@ -780,6 +791,7 @@ Require(Convert.ToSingle(escape["conditionHp"].Value)==-1f&&Convert.ToInt32(esca
 var paid=Clone("SpEffectParam",8000000,95000101);Set(paid,"maxHpRate",1f);Set(paid,"iconId",-1);Set(paid,"spEffectTextId_1",-1);
 var money=Clone("SpEffectParam",3269,95000102);Set(money,"soul",88888);
 RedEnvelope.Apply(pars["SpEffectParam"],pars["SpEffectVfxParam"]);
+RedEnvelope.Rewards(Clone);
 // Retain the old refill row for compatibility; the DLL uses the native
 // percentage API in 0.2.2. Only the saved cooldown remains active here.
 var refill=Clone("SpEffectParam",99823,95000401);
@@ -994,6 +1006,7 @@ File.WriteAllText(Path.Combine(root,".work/actions/jiahao-serialized.json"),Json
 Require(Convert.ToSingle(Effect(95002100)["magicConsumptionRate"].Value)==1f&&Convert.ToSingle(Effect(95002100)["miracleConsumptionRate"].Value)==1f,"Archmage owner must leave primary spell FP consumption unchanged");
 Require(Convert.ToSingle(Effect(95001400)["artsConsumptionRate"].Value)==0f&&Convert.ToSingle(Effect(95001400)["magicConsumptionRate"].Value)==1f,"Free skills must not affect spells");
 File.WriteAllText(Path.Combine(root,".work/arts/serialized.json"),JsonSerializer.Serialize(new[]{95001400,6999800,6999801,6999802,6999803}.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));
+bnd.Compression=RegulationCompression.Format;
 var dest=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(Path.GetDirectoryName(dest)!);SFUtil.EncryptNightreignRegulation(dest,bnd,bnd.Compression);
 var reread=SFUtil.DecryptNightreignRegulation(dest);Require(reread.Version==bnd.Version&&reread.Files.Count==bnd.Files.Count,"Binder metadata mismatch");
 foreach(var f in reread.Files)Require(f.Bytes.Span.SequenceEqual(bnd.Files.Single(v=>v.ID==f.ID).Bytes.Span),"Binder readback mismatch "+f.Name);
@@ -1117,6 +1130,8 @@ ContractHeart.Events(ev);
 NightBlessing.ResetReceipt(ev);
 RewardCycle.Events(ev);
 RewardReroll.Events(ev);
+EssenceReaver.Events(ev);
+RedEnvelope.RewardEvents(ev);
 var eventDest=Path.Combine(root,"dist/mod/event/common.emevd.dcx");Directory.CreateDirectory(Path.GetDirectoryName(eventDest)!);ev.Write(eventDest);var outEv=EMEVD.Read(eventDest);
 bool Same(EMEVD.Event a,EMEVD.Event b)=>a.ID==b.ID&&a.RestBehavior==b.RestBehavior&&a.Name==b.Name&&a.Instructions.Count==b.Instructions.Count&&a.Instructions.Zip(b.Instructions).All(v=>v.First.Bank==v.Second.Bank&&v.First.ID==v.Second.ID&&v.First.Layer==v.Second.Layer&&v.First.ArgData.SequenceEqual(v.Second.ArgData))&&JsonSerializer.Serialize(a.Parameters)==JsonSerializer.Serialize(b.Parameters);
 Require(outEv.Format==origEv.Format&&outEv.Compression==origEv.Compression&&outEv.StringData.SequenceEqual(origEv.StringData)&&outEv.LinkedFileOffsets.SequenceEqual(origEv.LinkedFileOffsets),"EMEVD metadata changed");

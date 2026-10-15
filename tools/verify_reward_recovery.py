@@ -1,10 +1,11 @@
 """Read-only ABI/control-flow evidence for moving existing private rewards."""
 from pathlib import Path
 import ctypes as c, hashlib, json, struct
+from local_paths import GAME
 import pefile
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64
 root=Path(__file__).resolve().parents[1]
-raw=Path(r'D:/Program Files (x86)/Steam/steamapps/common/ELDEN RING NIGHTREIGN/Game/nightreign.exe').read_bytes()
+raw=(GAME/'nightreign.exe').read_bytes()
 assert hashlib.sha256(raw).hexdigest()=='9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a'
 pe=pefile.PE(data=raw,fast_load=True)
 def read(r,n):

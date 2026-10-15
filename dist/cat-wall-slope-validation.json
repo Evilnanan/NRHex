@@ -1,0 +1,148 @@
+{
+  "version": "0.17.130",
+  "codeTestsPassed": 329,
+  "signatureCount": 127,
+  "nativeChecks": {
+    "nativeCases": 32,
+    "nativeBehaviorMapping": {
+      "WallJumpStart_F_N_CMSG": 202420,
+      "WallJumpStart_F_F_CMSG": 202420,
+      "WallJumpStart_F_B_CMSG": 202411,
+      "WallJumpStart_F_L_CMSG": 202410,
+      "WallJumpStart_F_R_CMSG": 202410,
+      "WallJumpStart_B_N_CMSG": 202420,
+      "WallJumpStart_B_F_CMSG": 202410,
+      "WallJumpStart_B_B_CMSG00": 202420,
+      "WallJumpStart_B_L_CMSG00": 202410,
+      "WallJumpStart_B_R_CMSG00": 202410,
+      "WallJumpStart_L_F_CMSG00": 202410,
+      "WallJumpStart_L_B_CMSG01": 202410,
+      "WallJumpStart_L_L_CMSG01": 202420,
+      "WallJumpStart_L_R_CMSG01": 202411,
+      "WallJumpStart_R_F_CMSG00": 202410,
+      "WallJumpStart_R_B_CMSG01": 202410,
+      "WallJumpStart_R_L_CMSG01": 202411,
+      "WallJumpStart_R_R_CMSG01": 202420
+    },
+    "intoWallNodes": [
+      "WallJumpStart_F_F_CMSG",
+      "WallJumpStart_B_B_CMSG00",
+      "WallJumpStart_L_L_CMSG01",
+      "WallJumpStart_R_R_CMSG01"
+    ],
+    "awayFromWallNodes": [
+      "WallJumpStart_F_B_CMSG",
+      "WallJumpStart_B_F_CMSG",
+      "WallJumpStart_L_R_CMSG01",
+      "WallJumpStart_R_L_CMSG01"
+    ],
+    "originalIntoWallSpeed": -1.3,
+    "catIntoWallSpeed": 4.8,
+    "verticalVelocityUnchanged": true,
+    "otherJumpRowsAndNonownersUnchanged": true,
+    "oneShotConsumedByNative": true,
+    "parameterAnimationAndBehaviorAssetsUnchanged": true,
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "nativeReference": {
+    "sourceRegulationSha256": "876A3CA279A4561D0C69F81FE5E510C75C59AB9A8A201694F8CF4A42C91E0268",
+    "installedRegulationSha256": "4E3E272ED01E778AE9EB1469447F10B726A811559A59B32D73267032051850AC",
+    "behaviorMember": "W:\\CL\\data\\Target\\INTERROOT_win64\\action\\c0000\\Export\\Behaviors\\c0000.hkx",
+    "behaviorBundleSha256": "D4A80FC4472D3486551C8BC01749DBF109A0F94B7DD02E7D06300CE92146FDAF",
+    "behaviorSha256": "1E17CF3675D379CD7351EC8DD5F649D614D148356615E787D1918BD6098E0210",
+    "rows": [
+      {
+        "ID": 500,
+        "fields": {
+          "horizontalVelocityScale": 0,
+          "verticalVelocityScale": 0,
+          "horizontalVelocityChange": 4.8,
+          "verticalVelocityChange": 9,
+          "horizontalVelocityAngle": 0,
+          "unknown_1": 0,
+          "unknown_2": 0,
+          "unknown_3": 0,
+          "unknown_4": 0,
+          "fallControlParamId": 100,
+          "pad1": "AAAAAA=="
+        }
+      },
+      {
+        "ID": 501,
+        "fields": {
+          "horizontalVelocityScale": 0,
+          "verticalVelocityScale": 0,
+          "horizontalVelocityChange": 4.8,
+          "verticalVelocityChange": 9,
+          "horizontalVelocityAngle": 0,
+          "unknown_1": 0,
+          "unknown_2": 0,
+          "unknown_3": 0,
+          "unknown_4": 0,
+          "fallControlParamId": 100,
+          "pad1": "AAAAAA=="
+        }
+      },
+      {
+        "ID": 510,
+        "fields": {
+          "horizontalVelocityScale": 0,
+          "verticalVelocityScale": 0,
+          "horizontalVelocityChange": -1.3,
+          "verticalVelocityChange": 10,
+          "horizontalVelocityAngle": 0,
+          "unknown_1": 0,
+          "unknown_2": 0,
+          "unknown_3": 0,
+          "unknown_4": 0,
+          "fallControlParamId": 100,
+          "pad1": "AAAAAA=="
+        }
+      }
+    ],
+    "clips": [
+      {
+        "id": 202410,
+        "impulses": [
+          {
+            "row": 500,
+            "start": 0.06666667,
+            "end": 0.16666667
+          }
+        ]
+      },
+      {
+        "id": 202411,
+        "impulses": [
+          {
+            "row": 501,
+            "start": 0.06666667,
+            "end": 0.16666667
+          }
+        ]
+      },
+      {
+        "id": 202420,
+        "impulses": [
+          {
+            "row": 510,
+            "start": 0.06666667,
+            "end": 0.2
+          }
+        ]
+      }
+    ],
+    "installedParameterRowsUnchanged": true
+  },
+  "onlyLivingLocalCatOwner": true,
+  "onlyVelocityRow510": true,
+  "horizontalSpeed": 4.8,
+  "originalHorizontalSpeed": -1.3,
+  "onlyDllReplaced": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

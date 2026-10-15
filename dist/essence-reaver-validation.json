@@ -1,0 +1,245 @@
+{
+  "version": "0.17.132",
+  "owner": 95002900,
+  "largeIcon": 21292,
+  "smallIcon": 20292,
+  "formula": "1.01^kills",
+  "codeTestsPassed": 334,
+  "signatureCount": 127,
+  "nativeChecks": {
+    "nativeCategoryCases": [
+      {
+        "category": 10,
+        "sameId": true,
+        "reusesExistingNode": false
+      },
+      {
+        "category": 10,
+        "sameId": false,
+        "reusesExistingNode": false
+      },
+      {
+        "category": 20,
+        "sameId": true,
+        "reusesExistingNode": true
+      },
+      {
+        "category": 20,
+        "sameId": false,
+        "reusesExistingNode": false
+      }
+    ],
+    "nativeHudCases": [
+      {
+        "layers": 0,
+        "displayedCount": 0
+      },
+      {
+        "layers": 1,
+        "displayedCount": 1
+      },
+      {
+        "layers": 2,
+        "displayedCount": 2
+      },
+      {
+        "layers": 18,
+        "displayedCount": 18
+      },
+      {
+        "layers": 50,
+        "displayedCount": 50
+      },
+      {
+        "layers": 99,
+        "displayedCount": 99
+      },
+      {
+        "layers": 100,
+        "displayedCount": 100
+      },
+      {
+        "layers": 256,
+        "displayedCount": 256
+      },
+      {
+        "layers": 1000,
+        "displayedCount": 1000
+      }
+    ],
+    "serializedResetTimelines": [
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": false,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": false,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": true,
+        "world": false,
+        "reset": true
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": true,
+        "world": true,
+        "reset": true
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": false,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": false,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": true,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": true,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 9100941,
+        "hub": false,
+        "reset": false
+      },
+      {
+        "event": 9100941,
+        "hub": true,
+        "reset": true
+      }
+    ],
+    "formula": [
+      {
+        "kills": 0,
+        "parameterProduct": 1.0,
+        "requestedPower": 1.0
+      },
+      {
+        "kills": 1,
+        "parameterProduct": 1.0099999904632568,
+        "requestedPower": 1.01
+      },
+      {
+        "kills": 10,
+        "parameterProduct": 1.1046221256256104,
+        "requestedPower": 1.1046221254112045
+      },
+      {
+        "kills": 50,
+        "parameterProduct": 1.6446311473846436,
+        "requestedPower": 1.6446318218438827
+      },
+      {
+        "kills": 100,
+        "parameterProduct": 2.704810857772827,
+        "requestedPower": 2.7048138294215285
+      },
+      {
+        "kills": 256,
+        "parameterProduct": 12.77234172821045,
+        "requestedPower": 12.772375803217816
+      },
+      {
+        "kills": 1000,
+        "parameterProduct": 20958.970703125,
+        "requestedPower": 20959.155637813845
+      }
+    ],
+    "compactSavedRecordLimit": 4,
+    "nativeSavedCategoryCapacities": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        13,
+        18
+      ],
+      [
+        31,
+        50
+      ],
+      [
+        81,
+        5
+      ]
+    ],
+    "originalParameterRowsAndRewardTriplesPreserved": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "allExistingRowsAndRewardTriplesPreserved": true,
+  "existingEventMetadataAndGuardsPreserved": true,
+  "changedAssets": [
+    "mod/regulation.bin",
+    "mod/event/common.emevd.dcx",
+    "mod/natives/NRHex.dll",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx"
+  ],
+  "userConfigurationsPreserved": true,
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

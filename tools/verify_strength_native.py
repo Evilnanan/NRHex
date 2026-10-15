@@ -1,9 +1,10 @@
 """Read-only evidence for the scoped outgoing impact hook on the guarded EXE."""
 from pathlib import Path
 import hashlib,json,struct,xml.etree.ElementTree as ET,re
+from local_paths import GAME
 import pefile
 root=Path(__file__).resolve().parents[1]
-raw=Path(r'D:\Program Files (x86)\Steam\steamapps\common\ELDEN RING NIGHTREIGN\Game\nightreign.exe').read_bytes()
+raw=(GAME/'nightreign.exe').read_bytes()
 assert hashlib.sha256(raw).hexdigest()=='9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a'
 pe=pefile.PE(data=raw,fast_load=True)
 def read(rva,n):

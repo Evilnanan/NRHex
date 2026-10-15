@@ -46,6 +46,14 @@
     "enInfo": "Conceals the body."
   },
   {
+    "textId": 95002902,
+    "ownerId": 95002900,
+    "zhName": "专注值上限提升",
+    "enName": "Maximum FP Increased",
+    "zhInfo": "每层永久提升1%专注值上限，效果叠加时以乘算计算",
+    "enInfo": "Permanently raises maximum FP by 1% per stack. This effect accumulates multiplicatively."
+  },
+  {
     "textId": 95002503,
     "ownerId": 95002500,
     "zhInfo": "在夜雨中提升20%攻击力",

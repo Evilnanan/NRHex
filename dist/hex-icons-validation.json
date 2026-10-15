@@ -1,0 +1,28 @@
+{
+  "version": "0.17.131",
+  "iconChanges": [
+    {
+      "hexId": 95002200,
+      "largeIcon": 21700,
+      "smallIcon": 20700,
+      "inputSha256": "4E3E272ED01E778AE9EB1469447F10B726A811559A59B32D73267032051850AC",
+      "outputSha256": "D05F4C9DC9230BE72B4961ABB7250DE547EDC40D8C55C81EB6DD22226E5851A2",
+      "nativeAtlasEntriesPresent": true,
+      "onlyFourIconFieldsChanged": true,
+      "gameplayVerified": false
+    },
+    {
+      "hexId": 95002500,
+      "largeIcon": 21690,
+      "smallIcon": 20690,
+      "inputSha256": "D05F4C9DC9230BE72B4961ABB7250DE547EDC40D8C55C81EB6DD22226E5851A2",
+      "outputSha256": "A20312FD180EEF197A33619506BF5CBF75B3747D7A3E953B8217E75816DE1B77",
+      "nativeAtlasEntriesPresent": true,
+      "onlyFourIconFieldsChanged": true,
+      "gameplayVerified": false
+    }
+  ],
+  "onlyEightIconFieldsChanged": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "gameplayVerified": false
+}
