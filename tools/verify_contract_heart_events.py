@@ -14,7 +14,7 @@ assert effects[RECEIPT]['saveCategory']==10 and effects[COOL]['dontDeleteOnDead'
 assert effects[USED]['isDisableNetSync']==1
 assert effects[SECOND]['isDisableNetSync']==1 and effects[SECOND]['dontDeleteOnDead']==1 and effects[SECOND]['effectEndurance']==-1
 assert effects[95002600]['stateInfo']==2103 and effects[95002600]['atkOccurrenceSpEffectId']==95002601
-assert all(effects[95002600][f]==1 for f in ['magParamChange','miracleParamChange','shamanParamChange'])
+assert all(effects[95002600][f]==0 for f in ['magParamChange','miracleParamChange','shamanParamChange'])
 pulse=effects[95002601]
 assert pulse['changeHpRate']==0 and pulse['changeHpPoint']==0 and pulse['bCurrHPIndependeMaxHP']==0 and pulse['isDisableNetSync']==1
 assert pulse['effectTargetAttacker']==1 and pulse['motionInterval']>pulse['effectEndurance']>0

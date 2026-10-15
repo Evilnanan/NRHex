@@ -23,6 +23,7 @@ mod parry_turn;
 mod night_blessing;
 mod heartstealer;
 mod ominous_pact;
+mod reward_terrain;
 mod parry_data;
 mod hero_audio;
 mod spirit;
@@ -344,7 +345,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);116] {
+fn signatures()->[(&'static str,u32);118] {
  [(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -373,6 +374,8 @@ fn signatures()->[(&'static str,u32);116] {
   (parry::HAND_STYLE_PATTERN,parry::HAND_STYLE_RVA as u32),
   (ominous_pact::HP_PATTERN,ominous_pact::HP_GUARD_RVA as u32),
   (ominous_pact::NOTIFY_PATTERN,ominous_pact::NOTIFY_RVA as u32),
+  (reward_terrain::GET_PATTERN,reward_terrain::GET_RVA as u32),
+  (cage_trace::PARTY_PATTERN,cage_trace::PARTY_RVA as u32),
   (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
   (parry::DUMMY_COUNT_PATTERN,parry::DUMMY_COUNT_RVA as u32),
   (parry::COUNTER_COST_PATTERN,parry::COUNTER_COST_RVA as u32),
@@ -1910,7 +1913,7 @@ unsafe fn local_hero(base:usize)->Option<u8> {
  player_data_hero(read_ptr(base+GAME_DATA_RVA))
 }
 unsafe fn unavailable_hexes(player:usize,base:usize)->u32 {
- reward_choices::role_exclusions(reward_choices::terrain_exclusions(owned_hexes(player,base),has_effect(player,95001601,base)),local_hero(base))
+ reward_choices::role_exclusions(reward_choices::terrain_exclusions(owned_hexes(player,base),reward_terrain::exclude_cage(reward_terrain::great_hollow(base))),local_hero(base))
 }
 fn random_order(owned:u32)->Option<usize> {
  let candidates=reward_choices::candidates(owned);
@@ -2113,6 +2116,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  if read_ptr(world+0x174e8)!=player {return;}
  if !dt.is_finite()||dt<=0.0||dt>1.0{return;}
  parry::update_turn(player);
+ ominous_pact::update(player,base,dt);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  update_chant(player,base,dt);

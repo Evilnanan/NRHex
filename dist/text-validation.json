@@ -1,35 +1,53 @@
 {
   "source": "docs/hexes.md",
-  "sourceSha256": "A8A77ED52EB97F04E7ADD6644E6F092D2736D154136EBD95903E19449279DE0E",
+  "sourceSha256": "5B1E798C0C2BBAF6447CE025EB74B9D74B330F7C66CDD1B6503E96A743BFCD55",
   "englishSource": "docs/hexes.en.md",
-  "englishSourceSha256": "D180809FDAE8E9FA396EDD7CFFDF04EEA3C895C55D817C3F73EFAFCC3359DA41",
+  "englishSourceSha256": "2824C90F566B0F502850C24348915FC520082E7EA655D8926A4DEC725C47EB22",
   "statusSource": "data/text/status-effects.json",
-  "statusSourceSha256": "467BDC4D3789D14494A36CE527338CB137CE7EA6643F7CD619924F29BCFCBEC7",
+  "statusSourceSha256": "5615DFA436BE79F84D1395307D5249336CF8ED7CA4018855B5AF2ACD6BCA3C35",
   "statusOnly": false,
   "reports": [
     {
       "language": "zhocn",
       "file": "item_dlc01.msgbnd.dcx",
-      "inputSha256": "686EEADA5EE1A60EDAE2187185E9A8AEAA7DEFE3F0CAD47DCCE3684BF287A4C3",
-      "outputSha256": "3F58C67270771045EBE86ED919A554D4BC0437FA74347E2737738D74060AAAB3",
+      "inputSha256": "8E675F744C942F6E4AF088C0395973144C2579FCE34B45E726E733FF7EAD236C",
+      "outputSha256": "3E7639F47C02A4976DCE42E406F29AE193EF74507074EA6CE501A52C95804371",
       "changes": [
         {
           "fmg": "AttachEffectInfo.fmg",
-          "id": 95002700,
-          "before": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u4EC5\u8FD4\u8FD8\u7B2C\u4E00\u6B21\u4F7F\u7528\u7684\u6811\u679D",
-          "after": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u6700\u591A\u8FD4\u8FD8\u4E24\u652F"
+          "id": 95001100,
+          "before": "\u63D0\u5347\u653B\u51FB\u6210\u529F\u65F6\u7684\u51B2\u51FB\u529B",
+          "after": "\u63D0\u5347\u8FD1\u6218\u653B\u51FB\u7684\u51B2\u51FB\u529B"
+        },
+        {
+          "fmg": "AttachEffectInfo.fmg",
+          "id": 95002600,
+          "before": "\u653B\u51FB\u6210\u529F\u65F6\uFF0C\u5BF9\u81EA\u5DF1\u9020\u6210\u7B49\u540C\u4E8E\u8840\u91CF\u4E0A\u96505%\u7684\u635F\u4F24",
+          "after": "\u653B\u51FB\u547D\u4E2D\u65F6\uFF0C\u5BF9\u81EA\u5DF1\u9020\u6210\u7B49\u540C\u4E8E\u8840\u91CF\u4E0A\u96505%\u7684\u635F\u4F24\u3002\u6BCF\u79D2\u6700\u591A\u89E6\u53D1\u4E00\u6B21"
         },
         {
           "fmg": "PermanentBuffInfo.fmg",
-          "id": 95002700,
-          "before": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u4EC5\u8FD4\u8FD8\u7B2C\u4E00\u6B21\u4F7F\u7528\u7684\u6811\u679D",
-          "after": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u6700\u591A\u8FD4\u8FD8\u4E24\u652F"
+          "id": 95001100,
+          "before": "\u63D0\u5347\u653B\u51FB\u6210\u529F\u65F6\u7684\u51B2\u51FB\u529B",
+          "after": "\u63D0\u5347\u8FD1\u6218\u653B\u51FB\u7684\u51B2\u51FB\u529B"
+        },
+        {
+          "fmg": "PermanentBuffInfo.fmg",
+          "id": 95002600,
+          "before": "\u653B\u51FB\u6210\u529F\u65F6\uFF0C\u5BF9\u81EA\u5DF1\u9020\u6210\u7B49\u540C\u4E8E\u8840\u91CF\u4E0A\u96505%\u7684\u635F\u4F24",
+          "after": "\u653B\u51FB\u547D\u4E2D\u65F6\uFF0C\u5BF9\u81EA\u5DF1\u9020\u6210\u7B49\u540C\u4E8E\u8840\u91CF\u4E0A\u96505%\u7684\u635F\u4F24\u3002\u6BCF\u79D2\u6700\u591A\u89E6\u53D1\u4E00\u6B21"
         },
         {
           "fmg": "PermanentBuffCaption.fmg",
-          "id": 95002700,
-          "before": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u4EC5\u8FD4\u8FD8\u7B2C\u4E00\u6B21\u4F7F\u7528\u7684\u6811\u679D",
-          "after": "\u83B7\u5F97\u4E24\u652F\u9B45\u60D1\u6811\u679D\u3002\u4F7F\u7528\u9B45\u60D1\u6811\u679D60\u79D2\u540E\uFF0C\u91CD\u65B0\u83B7\u5F97\u4E00\u652F\u9B45\u60D1\u6811\u679D\u3002\u77ED\u65F6\u95F4\u5185\u8FDE\u7EED\u4F7F\u7528\u65F6\uFF0C\u6700\u591A\u8FD4\u8FD8\u4E24\u652F"
+          "id": 95001100,
+          "before": "\u63D0\u5347\u653B\u51FB\u6210\u529F\u65F6\u7684\u51B2\u51FB\u529B",
+          "after": "\u63D0\u5347\u8FD1\u6218\u653B\u51FB\u7684\u51B2\u51FB\u529B"
+        },
+        {
+          "fmg": "PermanentBuffCaption.fmg",
+          "id": 95002600,
+          "before": "\u653B\u51FB\u6210\u529F\u65F6\uFF0C\u5BF9\u81EA\u5DF1\u9020\u6210\u7B49\u540C\u4E8E\u8840\u91CF\u4E0A\u96505%\u7684\u635F\u4F24",
+          "after": "\u653B\u51FB\u547D\u4E2D\u65F6\uFF0C\u5BF9\u81EA\u5DF1\u9020\u6210\u7B49\u540C\u4E8E\u8840\u91CF\u4E0A\u96505%\u7684\u635F\u4F24\u3002\u6BCF\u79D2\u6700\u591A\u89E6\u53D1\u4E00\u6B21"
         }
       ],
       "unrelatedEntriesAndMembersUnchanged": true
@@ -37,34 +55,34 @@
     {
       "language": "zhocn",
       "file": "menu_dlc01.msgbnd.dcx",
-      "inputSha256": "152DB7091C00C9CB44D10ABDE1F0F9604295A3F9827794B550F3E50E69AB2089",
-      "outputSha256": "152DB7091C00C9CB44D10ABDE1F0F9604295A3F9827794B550F3E50E69AB2089",
+      "inputSha256": "58752204F06A0878C0D8AEE3729E0DB43AFE41F53451264243C2B054D21BA8FA",
+      "outputSha256": "58752204F06A0878C0D8AEE3729E0DB43AFE41F53451264243C2B054D21BA8FA",
       "changes": [],
       "unrelatedEntriesAndMembersUnchanged": true
     },
     {
       "language": "engus",
       "file": "item_dlc01.msgbnd.dcx",
-      "inputSha256": "0423502ABA7FEC081F5623CFB8F1EDFA3A2C670C62B55EAC19C8A1578FA69292",
-      "outputSha256": "C66814399FB635DC12299CC7F6F152A1287E5C158622E70A8ADDD645D94CC056",
+      "inputSha256": "29BFF00B26E8117A5B5A2EF54F0614DB92AFF01159A741CA5C2028932F3612AB",
+      "outputSha256": "2409DD201067D89F20BF1CC93C24CEA616C54962FA19BA73F7D416CB090978E2",
       "changes": [
         {
           "fmg": "AttachEffectInfo.fmg",
-          "id": 95002700,
-          "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
-          "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
+          "id": 95002600,
+          "before": "Landing attacks causes damage to self equal to 5% of maximum HP.",
+          "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second."
         },
         {
           "fmg": "PermanentBuffInfo.fmg",
-          "id": 95002700,
-          "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
-          "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
+          "id": 95002600,
+          "before": "Landing attacks causes damage to self equal to 5% of maximum HP.",
+          "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second."
         },
         {
           "fmg": "PermanentBuffCaption.fmg",
-          "id": 95002700,
-          "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Only the first use during this interval grants a replacement.",
-          "after": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned."
+          "id": 95002600,
+          "before": "Landing attacks causes damage to self equal to 5% of maximum HP.",
+          "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second."
         }
       ],
       "unrelatedEntriesAndMembersUnchanged": true
@@ -72,8 +90,8 @@
     {
       "language": "engus",
       "file": "menu_dlc01.msgbnd.dcx",
-      "inputSha256": "B10ED91CE856EE11AC4684C536A92472700DB95F6D7B543401BD753F52A93513",
-      "outputSha256": "B10ED91CE856EE11AC4684C536A92472700DB95F6D7B543401BD753F52A93513",
+      "inputSha256": "C3DF32FECDE460CFF56238883F2E565B7E24ED329A52E3195B67DD8BAF76E8BD",
+      "outputSha256": "C3DF32FECDE460CFF56238883F2E565B7E24ED329A52E3195B67DD8BAF76E8BD",
       "changes": [],
       "unrelatedEntriesAndMembersUnchanged": true
     }

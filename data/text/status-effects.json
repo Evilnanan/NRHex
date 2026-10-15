@@ -48,7 +48,7 @@
   {
     "textId": 95002503,
     "ownerId": 95002500,
-    "zhInfo": "攻击力提升25%，离开夜雨时效果结束",
-    "enInfo": "Increases attack power by 25% until leaving the Night’s Tide."
+    "zhInfo": "在夜雨中提升20%攻击力",
+    "enInfo": "Raises attack power by 20% in the Night’s Tide."
   }
 ]

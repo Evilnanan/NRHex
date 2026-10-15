@@ -69,7 +69,12 @@ if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
 if(args.Contains("--contract-heart-probe")){ContractHeart.Probe(root,bnd,Parse);return;}
 if(args.Contains("--contract-heart-check")){ContractHeart.ExportChecks(root,Parse);return;}
 if(args.Contains("--contract-damage-marker")){ContractHeart.StageDamageMarker(root,Parse);return;}
+if(args.Contains("--contract-native-hit")){ContractHeart.StageNativeHit(root,bnd,Parse);return;}
+if(args.Contains("--contract-hit-scope")){ContractHeart.AuditNativeHit(root,bnd,Parse);return;}
 if(args.Contains("--heart-two-returns")){ContractHeart.StageTwoReturns(root,Parse);return;}
+if(args.Contains("--cage-hp-probe")){CageHealth.Probe(root,Parse);return;}
+if(args.Contains("--cage-hp-sync")){CageCoop.Stage(root,Parse);return;}
+if(args.Contains("--cage-hp-check")){CageCoop.Export(root,Parse);return;}
 if(args.Contains("--parry-counter-probe")){Parry.ProbeCounterCost(root,bnd,Parse);return;}
 if(args.Contains("--archmage-secondary")){Archmage.StageSecondary(root,Parse);return;}
 if(args.Contains("--archmage-probe")){Archmage.Probe(root,bnd,Parse);return;}
@@ -110,7 +115,7 @@ if(args.Contains("--coop-01749-probe")){CoopAudit.Probe(root,Parse,Parse("NpcPar
 if(args.Contains("--coop-01749-stage")){CoopAudit.Stage(root,Parse);return;}
 if(args.Contains("--spirit-corpse-cue-only")){SpiritPlacement.Stage(root,Parse);return;}
 if(args.Contains("--spirit-cue-visibility-only")){SpiritPlacement.StageVisibility(root,Parse);return;}
-var names=new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods","ItemTableParam","ItemLotParam_enemy","ItemLotParam_map","Bullet","AtkParam_Pc","AtkParam_Npc","BehaviorParam_PC","SpEffectVfxParam","NpcParam","NpcThinkParam","ChaosMatchingCorrectParam","ChaosMatchingMutationCategoryParam","ChaosMatchingMutationEnemyTableParam","SpEffectSetParam","LotBaseMapPatternFlag"};
+var names=new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods","ItemTableParam","ItemLotParam_enemy","ItemLotParam_map","Bullet","AtkParam_Pc","AtkParam_Npc","BehaviorParam_PC","SpEffectVfxParam","NpcParam","NpcThinkParam","MultiPlayCorrectionParam","ChaosMatchingCorrectParam","ChaosMatchingMutationCategoryParam","ChaosMatchingMutationEnemyTableParam","SpEffectSetParam","LotBaseMapPatternFlag"};
 var files=names.ToDictionary(n=>n,n=>bnd.Files.Single(f=>Path.GetFileName(f.Name)==n+".param"));
 var pars=files.ToDictionary(k=>k.Key,k=>Parse(k.Key,k.Value.Bytes));
 if(args.Contains("--spirit-rework-probe")){SpiritRework.Probe(root,bnd,Parse);return;}
@@ -625,6 +630,7 @@ if(args.Contains("--parry-followup")){ParryFollowup.Stage(root,Parse);return;}
 if(args.Contains("--parry-followup-actions")){ParryFollowup.Actions(root,Parse("SpEffectParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param").Bytes));return;}
 if(args.Contains("--contract-heart")){ContractHeart.Stage(root,bnd,Parse,hexes);return;}
 if(args.Contains("--night-blessing")){NightBlessing.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--night-blessing-rework")){NightBlessing.Rework(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--night-blessing-actions")){NightBlessing.Assets(root);return;}
 if(args.Contains("--parry-actions")){Parry.BuildActions(root,bnd,Parse);return;}
 if(args.Contains("--parry-support")){Parry.StageSupport(root,Parse);return;}
@@ -724,6 +730,7 @@ var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
 Cages.MutationParameters(pars,Cages.TowerSources(root,cageBosses));
 added["SpEffectParam"].Add(Cages.Mutation);
+CageCoop.Parameters(pars,Clone);
 var cageTerrain=Clone("SpEffectParam",8000000,Cages.Hollow);
 Set(cageTerrain,"maxHpRate",1f);Set(cageTerrain,"saveCategory",-1);Set(cageTerrain,"iconId",-1);Set(cageTerrain,"spEffectTextId_1",-1);Set(cageTerrain,"displayIconForPermamentEffect",0);
 // Exact f32 HKS ownership token and neutral short-lived action notifications.
@@ -1102,6 +1109,7 @@ foreach(int id in Enumerable.Range(95001000,5).Concat(Enumerable.Range(95001010,
 reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),new(1000,4,new object[]{(byte)1})]);ev.Events.Add(reset);
 Cages.Terrain(ev);
 ContractHeart.Events(ev);
+NightBlessing.ResetReceipt(ev);
 var eventDest=Path.Combine(root,"dist/mod/event/common.emevd.dcx");Directory.CreateDirectory(Path.GetDirectoryName(eventDest)!);ev.Write(eventDest);var outEv=EMEVD.Read(eventDest);
 bool Same(EMEVD.Event a,EMEVD.Event b)=>a.ID==b.ID&&a.RestBehavior==b.RestBehavior&&a.Name==b.Name&&a.Instructions.Count==b.Instructions.Count&&a.Instructions.Zip(b.Instructions).All(v=>v.First.Bank==v.Second.Bank&&v.First.ID==v.Second.ID&&v.First.Layer==v.Second.Layer&&v.First.ArgData.SequenceEqual(v.Second.ArgData))&&JsonSerializer.Serialize(a.Parameters)==JsonSerializer.Serialize(b.Parameters);
 Require(outEv.Format==origEv.Format&&outEv.Compression==origEv.Compression&&outEv.StringData.SequenceEqual(origEv.StringData)&&outEv.LinkedFileOffsets.SequenceEqual(origEv.LinkedFileOffsets),"EMEVD metadata changed");

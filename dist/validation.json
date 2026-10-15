@@ -1,9 +1,9 @@
 {
   "version": "0.17.60",
-  "codeVersion": "0.17.121",
+  "codeVersion": "0.17.126",
   "gameTested": false,
   "sourceRegulationSha256": "876A3CA279A4561D0C69F81FE5E510C75C59AB9A8A201694F8CF4A42C91E0268",
-  "outputRegulationSha256": "E6E072D5996B82A1F6342102D0D2631C191F3A04D69FED996FE80B466A258CFD",
+  "outputRegulationSha256": "A9695718C54D10F05C4D7724CBB09FD062DC34859FF217E322388CCD6952A491",
   "changedParams": [
     "AtkParam_Pc",
     "AttachEffectParam",
@@ -26294,7 +26294,7 @@
       "Id": 95001100,
       "Zh": "大力",
       "En": "Blunt Force",
-      "ZhInfo": "提升攻击成功时的冲击力",
+      "ZhInfo": "提升近战攻击的冲击力",
       "EnInfo": "Boosts the impact of successful attacks.",
       "LargeIcon": 21206,
       "SmallIcon": 22206
@@ -26420,8 +26420,8 @@
       "Id": 95002600,
       "Zh": "不祥契约",
       "En": "Ominous Pact",
-      "ZhInfo": "攻击成功时，对自己造成等同于血量上限5%的损伤",
-      "EnInfo": "Landing attacks causes damage to self equal to 5% of maximum HP.",
+      "ZhInfo": "攻击命中时，对自己造成等同于血量上限5%的损伤。每秒最多触发一次",
+      "EnInfo": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second.",
       "LargeIcon": 21229,
       "SmallIcon": 22229
     },
@@ -95478,7 +95478,7 @@
     }
   },
   "validation": "Mighty excludes Revenant/Recluse from random and preferred rewards. Texts updated; runtime projectile handling and regulation unchanged. Gameplay pending.",
-  "currentIncrementalValidation": "heart-two-validation.json",
+  "currentIncrementalValidation": "cage-terrain-validation.json",
   "currentStatusTextValidation": "text-validation.json",
   "legacyRewardGroups": 5814,
   "gameplayVerified": false,

@@ -1,0 +1,634 @@
+{
+  "nativeReference": 8600200,
+  "nativeName": "FP Restoration upon Landing Attacks",
+  "regulationSha256": "A9695718C54D10F05C4D7724CBB09FD062DC34859FF217E322388CCD6952A491",
+  "tiers": [
+    {
+      "hpOwner": 8600100,
+      "fpOwner": 8600200,
+      "onlyDifference": "atkOccurrenceSpEffectId"
+    },
+    {
+      "hpOwner": 8600101,
+      "fpOwner": 8600201,
+      "onlyDifference": "atkOccurrenceSpEffectId"
+    },
+    {
+      "hpOwner": 8600102,
+      "fpOwner": 8600202,
+      "onlyDifference": "atkOccurrenceSpEffectId"
+    }
+  ],
+  "filters": {
+    "stateInfo": 2103,
+    "wepParamChange": 0,
+    "magParamChange": 0,
+    "miracleParamChange": 0,
+    "shamanParamChange": 0,
+    "magicSubCategoryChange1": 0,
+    "magicSubCategoryChange2": 0,
+    "magicSubCategoryChange3": 0,
+    "triggerOnWepType": 0,
+    "triggerAttachedWeapon": 0,
+    "isIgnoreNoDamage": 0
+  },
+  "installedContractNativeFiltersMatch": true,
+  "hpAndFpTriggerCriteriaIdentical": true,
+  "assetsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "version": "0.17.125",
+  "nativeChecks": {
+    "nativeCases": 74,
+    "cases": [
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 1
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 0,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 1,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 2,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 3,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 4,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 9,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 10,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 11,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 0,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 1,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 2,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 3,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 4,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 9,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 10,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 11,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 100,
+        "before": 100,
+        "damage": 5,
+        "after": 95,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 100,
+        "before": 10,
+        "damage": 5,
+        "after": 5,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 1000,
+        "before": 1000,
+        "damage": 50,
+        "after": 950,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 1000,
+        "before": 10,
+        "damage": 50,
+        "after": 0,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 2340,
+        "before": 2340,
+        "damage": 117,
+        "after": 2223,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 2340,
+        "before": 10,
+        "damage": 117,
+        "after": 0,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": false,
+        "periodic": 0,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": true,
+        "periodic": 0,
+        "relicTimers": [
+          0.0,
+          0.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": true,
+        "periodic": 1,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 0,
+        "notify": true,
+        "periodic": 0,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      }
+    ],
+    "originalOnHitSelector": true,
+    "nativeOnHitReference": 8600200,
+    "installedNativeOnHitFiltersMatch": true,
+    "originalSelfDamageAndNotification": true,
+    "originalHitEffectReplacementDispatch": true,
+    "verifiedRelics": [
+      6820400,
+      6820500
+    ],
+    "playerDamageModuleRttiVerified": true,
+    "playerDamageVtableRva": "0x2c11d00",
+    "nativeOwnerAccessorVerified": true,
+    "externalManagersAndHPSetterStubbed": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "bothInstalledPackagesMatch": true
+}

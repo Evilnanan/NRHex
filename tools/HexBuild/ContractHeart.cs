@@ -24,7 +24,7 @@ static partial class ContractHeart {
    if(id==Cooldown)Set(r,"replaceSpEffectId",Return);
   }
  }
- public static void Owners(PARAM.Row contract){Set(contract,"stateInfo",2103);Set(contract,"atkOccurrenceSpEffectId",SelfDamage);foreach(string f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(contract,f,1);}
+ public static void Owners(PARAM.Row contract){Set(contract,"stateInfo",2103);Set(contract,"atkOccurrenceSpEffectId",SelfDamage);foreach(string f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(contract,f,0);}
  public static void Branches(PARAM bullets){
   foreach(int id in BranchBullets){var r=bullets.Rows.Single(r=>r.ID==id);Check(Convert.ToInt32(r["spEffectIDForShooter"].Value)==0,"Native branch shooter effect changed");Set(r,"spEffectIDForShooter",Used);}
  }
@@ -136,7 +136,7 @@ static partial class ContractHeart {
   var tables=new[]{"SpEffectParam","EquipParamGoods","Bullet","AtkParam_Pc","ItemLotParam_enemy","ItemLotParam_map"}.ToDictionary(n=>n,n=>parse(n,original.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes));
   object Dump(PARAM.Row r)=>new{r.ID,fields=r.Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)};
   var report=new Dictionary<string,object>();
-  int[] effects={6820400,6820401,6820500,6820501,8000000,1753,1760,1763,1765,1604004,8600100,8600105,7122000,7122001,7170100,7170101,8610700,8610701,8610702,511086};
+  int[] effects={6820400,6820401,6820500,6820501,8000000,1753,1760,1763,1765,1604004,8600100,8600105,8600200,8600201,8600202,8600205,8600206,8600207,7122000,7122001,7170100,7170101,8610700,8610701,8610702,511086};
   report["SpEffectParam"]=tables["SpEffectParam"].Rows.Where(r=>effects.Contains(r.ID)).Select(Dump).ToArray();
   report["EquipParamGoods"]=tables["EquipParamGoods"].Rows.Where(r=>r.ID==3350).Select(Dump).ToArray();
   report["Bullet"]=tables["Bullet"].Rows.Where(r=>r.ID is 10335000 or 10335001).Select(Dump).ToArray();

@@ -1,17 +1,20 @@
 using SoulsFormats;
 using System.Text.Json;
-static class NightBlessing{
+static partial class NightBlessing{
  public const int Owner=95002500;
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row row,string field,object value){row[field].Value=Convert.ChangeType(value,row[field].Value.GetType());}
  static string Hash(string p)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(p)));
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
-  for(int i=1;i<=7;i++){
+  for(int i=1;i<=11;i++){
    var r=clone("SpEffectParam",8000000,Owner+i);
-   Set(r,"maxHpRate",1f);Set(r,"spCategory",20);Set(r,"iconId",-1);Set(r,"spEffectTextId_1",-1);Set(r,"displayIconForPermamentEffect",0);Set(r,"saveCategory",i==5?0:-1);
-   Set(r,"effectEndurance",i==5?60f:i==6?.3f:i==7?0f:-1f);
-   if(i<=2){Set(r,"changeHpRate",-4f);Set(r,"changeHpPoint",i==1?-30:-60);Set(r,"motionInterval",1f);Set(r,"bCurrHPIndependeMaxHP",0);}
-   if(i==3){foreach(string f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(r,f,1.25f);foreach(string f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(r,f,1);Set(r,"iconId",22206);Set(r,"spEffectTextId_1",Owner+3);}
+   Set(r,"maxHpRate",1f);Set(r,"spCategory",20);Set(r,"iconId",-1);Set(r,"spEffectTextId_1",-1);Set(r,"displayIconForPermamentEffect",0);Set(r,"saveCategory",i==5?10:-1);
+   Set(r,"effectEndurance",i<=2?15f:i==7?0f:-1f);
+   if(i==5){Set(r,"dontDeleteOnDead",1);Set(r,"isDisableNetSync",1);}
+   if(i<=2){Set(r,"changeHpRate",-4f);Set(r,"changeHpPoint",i==1?-30:-60);Set(r,"motionInterval",1f);Set(r,"bCurrHPIndependeMaxHP",0);Set(r,"replaceSpEffectId",Owner+7+i);Set(r,"isDisableNetSync",1);}
+   if(i==6||i>=8)Set(r,"isDisableNetSync",1);
+   if(i>=10){Set(r,"changeHpRate",2f);Set(r,"changeHpPoint",i==10?15:30);Set(r,"motionInterval",1f);Set(r,"bCurrHPIndependeMaxHP",0);}
+   if(i==3){foreach(string f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(r,f,1.2f);foreach(string f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(r,f,1);Set(r,"iconId",22206);Set(r,"spEffectTextId_1",Owner+3);}
    if(i==4){Set(r,"vfxId",1643100);Set(r,"vfxId1",1642000);}
   }
  }
@@ -20,7 +23,6 @@ static class NightBlessing{
   foreach(int id in new[]{99810,99811}){var r=sp.Rows.Single(r=>r.ID==id);Check(Convert.ToSingle(r["changeHpRate"].Value)==2f&&Convert.ToInt32(r["changeHpPoint"].Value)==(id==99810?15:30)&&Convert.ToSingle(r["motionInterval"].Value)==1f&&Convert.ToInt32(r["bCurrHPIndependeMaxHP"].Value)==0,"Native rain base damage changed");}
   var v=sp.Rows.Single(r=>r.ID==7012201);Check(Convert.ToInt32(v["vfxId"].Value)==1643100&&Convert.ToInt32(v["vfxId1"].Value)==1642000,"Native low-HP regeneration visuals changed");
   var heal=sp.Rows.Single(r=>r.ID==100);Check(Convert.ToSingle(heal["changeHpRate"].Value)==-100f&&Convert.ToSingle(heal["changeMpRate"].Value)==-100f,"Grace command template no longer restores HP/FP");
-  var gestures=parse("GestureParam",original.Files.Single(f=>Path.GetFileName(f.Name)=="GestureParam.param").Bytes);foreach(int id in new[]{140,141})Check(Convert.ToInt32(gestures.Rows.Single(r=>r.ID==id)["msgAnimId"].Value)==81400,"Native rain gesture changed");
  }
  public static void Stage(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   ValidateNative(original,parse);
@@ -58,9 +60,11 @@ static class NightBlessing{
  }
  static bool SameEventData(TAE.Event a,TAE.Event b){
   var x=a.GetParameterBytes(false);var y=b.GetParameterBytes(false);if(x.SequenceEqual(y))return true;
-  // These native records include trailing alignment padding. Adding an event
-  // extends 227 from 8 to 16 bytes and type 0 from 24 to 32; allow zeroes only.
-  return ((a.Type==227&&x.Length==8&&y.Length==16)||(a.Type==0&&x.Length==24&&y.Length==32))&&x.SequenceEqual(y.Take(x.Length))&&y.Skip(x.Length).All(v=>v==0);
+  // TAE reads the aligned span up to the next parameter block. Rewriting the
+  // two edited clips may add another eight zero padding bytes to these types.
+  int shortSize=Math.Min(x.Length,y.Length),longSize=Math.Max(x.Length,y.Length);var shorter=x.Length==shortSize?x:y;var longer=x.Length==longSize?x:y;
+  int minimum=a.Type==227?8:a.Type==0?24:int.MaxValue;
+  return shortSize>=minimum&&(shortSize-minimum)%8==0&&(longSize-shortSize)%8==0&&shorter.SequenceEqual(longer.Take(shortSize))&&longer.Skip(shortSize).All(v=>v==0);
  }
  public static void Assets(string root){
   string dir=Path.Combine(root,".work/night-blessing/staged");Directory.CreateDirectory(dir);
@@ -69,17 +73,15 @@ static class NightBlessing{
   var member=binder.Files.Single(f=>Path.GetFileName(f.Name)=="a00.tae");var tae=TAE.Read(member.Bytes);
   foreach(long id in new long[]{81400,81401}){
    var a=tae.Animations.Single(a=>a.ID==id);
-   var template=a.Events.Single(e=>e.Type==67&&BitConverter.ToInt32(e.GetParameterBytes(false))==100200);
-   Check(template.StartTime==0&&template.EndTime==100,"Gesture continuous marker timing changed");
    a.Events.RemoveAll(e=>e.Type==67&&BitConverter.ToInt32(e.GetParameterBytes(false))==Owner+7);
-   var data=template.GetParameterBytes(false).ToArray();BitConverter.GetBytes(Owner+7).CopyTo(data,0);
-   a.Events.Add(new TAE.Event(template.StartTime,template.EndTime,67,template.Unk04,data,false){Group=template.Group});
   }
   member.Bytes=tae.Write();string animOut=Path.Combine(dir,"c0000.anibnd.dcx");binder.Write(animOut);
   var result=BND4.Read(animOut);foreach(var f in result.Files){Check(f.Bytes.Span.SequenceEqual(binder.Files.Single(x=>x.ID==f.ID).Bytes.Span),"TAE readback differs");if(f.ID!=member.ID)Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated TAE changed");}
   bool Marker(TAE.Event e)=>e.Type==67&&BitConverter.ToInt32(e.GetParameterBytes(false))==Owner+7;
   var old=TAE.Read(before[member.ID]);var current=TAE.Read(result.Files.Single(f=>f.ID==member.ID).Bytes);Check(old.Animations.Count==current.Animations.Count,"Animation count changed");
-  foreach(var pair in old.Animations.Zip(current.Animations)){Check(pair.First.ID==pair.Second.ID,"Animation identity changed");var a=pair.First.Events.Where(e=>!Marker(e)).ToArray();var b=pair.Second.Events.Where(e=>!Marker(e)).ToArray();Check(a.Length==b.Length&&a.Zip(b).All(v=>v.First.Type==v.Second.Type&&v.First.StartTime==v.Second.StartTime&&v.First.EndTime==v.Second.EndTime&&SameEventData(v.First,v.Second)),$"Original animation event changed: {pair.First.ID}");Check(pair.Second.Events.Count(Marker)==(pair.Second.ID is 81400 or 81401?1:0),"Gesture marker escaped intended clips");}
+  var differences=old.Animations.Zip(current.Animations).SelectMany(pair=>pair.First.Events.Where(e=>!Marker(e)).Zip(pair.Second.Events.Where(e=>!Marker(e))).Where(v=>!SameEventData(v.First,v.Second)).Select(v=>new{animation=pair.First.ID,type=v.First.Type,before=Convert.ToHexString(v.First.GetParameterBytes(false)),after=Convert.ToHexString(v.Second.GetParameterBytes(false))})).ToArray();
+  File.WriteAllText(Path.Combine(dir,"animation-padding-diff.json"),JsonSerializer.Serialize(differences));
+  foreach(var pair in old.Animations.Zip(current.Animations)){Check(pair.First.ID==pair.Second.ID,"Animation identity changed");var a=pair.First.Events.Where(e=>!Marker(e)).ToArray();var b=pair.Second.Events.Where(e=>!Marker(e)).ToArray();Check(a.Length==b.Length&&a.Zip(b).All(v=>v.First.Type==v.Second.Type&&v.First.StartTime==v.Second.StartTime&&v.First.EndTime==v.Second.EndTime&&SameEventData(v.First,v.Second)),$"Original animation event changed: {pair.First.ID}");Check(!pair.Second.Events.Any(Marker),"Retired gesture marker remains");}
   string rel="script/talk/m00_00_00_00.talkesdbnd.dcx";
   string installed=Path.Combine(root,"dist/mod",rel),talkInput=File.Exists(installed)?installed:Path.Combine(root,"assets/original",rel);
   var talk=BND4.Read(talkInput);var originalTalk=talk.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
@@ -95,7 +97,7 @@ static class NightBlessing{
   t.Bytes=esd.Write();string talkOut=Path.Combine(dir,"m00_00_00_00.talkesdbnd.dcx");talk.Write(talkOut);
   var read=BND4.Read(talkOut);foreach(var f in read.Files){Check(f.Bytes.Span.SequenceEqual(talk.Files.Single(v=>v.ID==f.ID).Bytes.Span),"Talk binder readback differs");if(f.ID!=t.ID)Check(f.Bytes.Span.SequenceEqual(originalTalk[f.ID]),"Unrelated talk script changed");}
   var readEsd=ESD.Read(read.Files.Single(f=>f.ID==t.ID).Bytes);var added=readEsd.StateGroups[2147483623][1].EntryCommands;Check(added.Last().CommandBank==1&&added.Last().CommandID==62&&added.Last().Arguments.Single().SequenceEqual(Arg(Owner+6)),"Grace pulse readback differs");added.RemoveAt(added.Count-1);Check(JsonSerializer.Serialize(readEsd)==beforeEsd,"Original grace logic changed");
-  File.WriteAllText(Path.Combine(dir,"assets-validation.json"),JsonSerializer.Serialize(new{animationInputSha256=Hash(input),animationOutputSha256=Hash(animOut),gestureClips=new[]{81400,81401},graceInput=talkInput,graceInputSha256=Hash(talkInput),graceOutputSha256=Hash(talkOut),graceInputInstalled=File.Exists(installed),originalAnimationEventsPreserved=true,originalGraceCommandsPreserved=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: two native rain-gesture markers and grace restoration pulse staged/read back; original behavior retained");
+  File.WriteAllText(Path.Combine(dir,"assets-validation.json"),JsonSerializer.Serialize(new{animationInputSha256=Hash(input),animationOutputSha256=Hash(animOut),retiredGestureClips=new[]{81400,81401},graceInput=talkInput,graceInputSha256=Hash(talkInput),graceOutputSha256=Hash(talkOut),graceInputInstalled=File.Exists(installed),originalAnimationEventsPreserved=true,originalGraceCommandsPreserved=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: retired gesture markers removed and grace restoration pulse retained; original behavior preserved");
  }
 }

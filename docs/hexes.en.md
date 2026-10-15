@@ -127,12 +127,12 @@ Attacks grant a guarding effect while two-handing a weapon. After successfully g
 <!-- hex:95002500 -->
 ## Night’s Blessing
 
-Gradually restores HP while performing the “It’s Raining!” gesture in the Night’s Tide. Completing the gesture allows HP restoration to persist for 15 seconds after ending it, and raises attack power by 25% until leaving the Night’s Tide. 60-second cooldown.
+Raises attack power by 20% in the Night’s Tide. When HP falls below 20% in the Night’s Tide, gradually restores HP for 15 seconds, then gradually depletes HP until leaving the Night’s Tide. Resets upon touching a site of grace.
 
 <!-- hex:95002600 -->
 ## Ominous Pact
 
-Landing attacks causes damage to self equal to 5% of maximum HP.
+Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second.
 
 <!-- hex:95002700 -->
 ## Heartstealer

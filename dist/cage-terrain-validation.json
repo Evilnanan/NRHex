@@ -1,0 +1,140 @@
+{
+  "version": "0.17.126",
+  "testsPassed": 311,
+  "signatureCount": 118,
+  "native": {
+    "nativeGetterRva": "0x60ce40",
+    "managerRva": "0x3c115a8",
+    "currentTerrainFlag": 7604,
+    "nativeCases": 26,
+    "cases": [
+      {
+        "storage": 1,
+        "activeTerrain": 7600,
+        "greatHollow": false
+      },
+      {
+        "storage": 1,
+        "activeTerrain": 7601,
+        "greatHollow": false
+      },
+      {
+        "storage": 1,
+        "activeTerrain": 7602,
+        "greatHollow": false
+      },
+      {
+        "storage": 1,
+        "activeTerrain": 7603,
+        "greatHollow": false
+      },
+      {
+        "storage": 1,
+        "activeTerrain": 7604,
+        "greatHollow": true
+      },
+      {
+        "storage": 1,
+        "activeTerrain": 7605,
+        "greatHollow": false
+      },
+      {
+        "storage": 1,
+        "liveTransition": true
+      },
+      {
+        "storage": 1,
+        "liveTransition": false
+      },
+      {
+        "storage": 1,
+        "liveTransition": true
+      },
+      {
+        "storage": 1,
+        "liveTransition": false
+      },
+      {
+        "storage": 1,
+        "unallocatedFlag": 6004,
+        "value": 0
+      },
+      {
+        "storage": 1,
+        "unallocatedFlag": 8604,
+        "value": 0
+      },
+      {
+        "storage": 2,
+        "activeTerrain": 7600,
+        "greatHollow": false
+      },
+      {
+        "storage": 2,
+        "activeTerrain": 7601,
+        "greatHollow": false
+      },
+      {
+        "storage": 2,
+        "activeTerrain": 7602,
+        "greatHollow": false
+      },
+      {
+        "storage": 2,
+        "activeTerrain": 7603,
+        "greatHollow": false
+      },
+      {
+        "storage": 2,
+        "activeTerrain": 7604,
+        "greatHollow": true
+      },
+      {
+        "storage": 2,
+        "activeTerrain": 7605,
+        "greatHollow": false
+      },
+      {
+        "storage": 2,
+        "liveTransition": true
+      },
+      {
+        "storage": 2,
+        "liveTransition": false
+      },
+      {
+        "storage": 2,
+        "liveTransition": true
+      },
+      {
+        "storage": 2,
+        "liveTransition": false
+      },
+      {
+        "storage": 2,
+        "unallocatedFlag": 6004,
+        "value": 0
+      },
+      {
+        "storage": 2,
+        "unallocatedFlag": 8604,
+        "value": 0
+      }
+    ],
+    "originalNativeInstructionsExecuted": true,
+    "allReadsLeftStorageUnchanged": true,
+    "bothNativeStorageKindsVerified": true,
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "currentTerrainFlag": 7604,
+  "perDrawNativeTerrainRead": true,
+  "normalAndTestChoicesShareFilter": true,
+  "unknownTerrainExcludesOnlyCage": true,
+  "playerEffect95001601NotUsedForEligibility": true,
+  "otherAssetsAndSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "loadingVerified": false
+}

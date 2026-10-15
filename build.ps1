@@ -18,6 +18,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Sword range table build failed.' }
     dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot
     if ($LASTEXITCODE -ne 0) { throw 'Parameter/event/text build failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --cage-hp-check
+    if ($LASTEXITCODE -ne 0) { throw 'Cage local correction parameter readback failed.' }
+    & python -X utf8 tools/verify_cage_hp_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Native cage multiplayer correction verification failed.' }
     dotnet run --project tools/HexBuild -- $PSScriptRoot --contract-heart-check
     if ($LASTEXITCODE -ne 0) { throw 'Contract and branch effect/event readback failed.' }
     python -X utf8 tools/verify_contract_heart_native.py

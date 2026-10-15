@@ -162,7 +162,7 @@ static class Cages {
   else if(birth.nativeFog)e.Instructions.Add(Anim(entity,20025,true));
   e.Instructions[skip]=I(1000,7,(byte)(e.Instructions.Count-skip-1),(byte)1,(sbyte)5);
   e.Instructions.AddRange([I(2004,5,entity,(byte)1),LocalFlag(shown,true),Flag(-2,choice,false),I(4,7,(sbyte)-2,entity,(byte)0,(sbyte)0,1f),Wait(-2),LocalFlag(shown,false),I(1001,1,1),Restart()]);
-  if(stableSnapshot){StabilizeBirth(e);LocalGeneration(e,entity,entity-5200,entity-1100);CageUsage.Intro(e);}
+  if(stableSnapshot){StabilizeBirth(e);LocalGeneration(e,entity,entity-5200,entity-1100);CageUsage.Intro(e);CageCoop.Birth(e,entity);}
   return e;
  }
  // Native condition results can latch while the main wait is still false.
@@ -411,6 +411,8 @@ static class Cages {
   var list=parameter.GetType().GetProperties().Select(p=>p.GetIndexParameters().Length==0?p.GetValue(parameter):null).OfType<IList>().Single(l=>l.Contains(entry));list.Remove(entry);
  }
  public static void Terrain(EMEVD common){
+  // Compatibility marker for existing event packages. Reward selection now
+  // queries the native 7604 flag directly; this effect is not an eligibility gate.
   Check(!common.Events.Any(e=>e.ID==9100960),"Cage terrain event collision");
   common.Events.Single(e=>e.ID==0).Instructions.Insert(0,I(2000,0,0,9100960,0));
   var e=new EMEVD.Event(9100960,EMEVD.Event.RestBehaviorType.Restart);
@@ -514,7 +516,7 @@ static class Cages {
     // Native gaols finish victory at 5s without removing the actor. Release the
     // shared gaol now, but only touch this old actor during the delayed cleanup.
     encounter.Instructions.AddRange([I(1001,0,CleanupDelaySeconds-VictoryDelaySeconds),I(2004,29,entity,(byte)1),I(2004,5,entity,(byte)0),SetFlag(actorCooling,false),I(1001,1,1),Restart()]);
-    SingleDeaths(encounter,entity,prefix+7900+(uint)index);eventMap.Events.Add(encounter);ctor.Instructions.Insert(0,I(2000,0,0,(uint)encounter.ID,0));
+    SingleDeaths(encounter,entity,prefix+7900+(uint)index);CageCoop.Battle(encounter,prefix,[entity]);eventMap.Events.Add(encounter);ctor.Instructions.Insert(0,I(2000,0,0,(uint)encounter.ID,0));
     var hud=HealthBar(prefix+9800+(uint)index,entity,b.healthBarName,spawned,choice,shown+(uint)index);
     eventMap.Events.Add(hud);ctor.Instructions.Insert(0,I(2000,0,0,(uint)hud.ID,0));
     var presentation=Birth(prefix+9900+(uint)index,entity,b,births,ready,choice,spawned,shown+(uint)index);

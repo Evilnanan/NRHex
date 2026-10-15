@@ -1,0 +1,713 @@
+{
+  "version": "0.17.124",
+  "testsPassed": 309,
+  "signatureCount": 117,
+  "nativeOnHitReference": 8600100,
+  "native": {
+    "nativeCases": 74,
+    "cases": [
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 0,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 152,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 153,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2102,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 1
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2103,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": true,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": true,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": true,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": false,
+        "hitEligible": true,
+        "selected": 0
+      },
+      {
+        "kind": "on-hit",
+        "state": 2104,
+        "active": false,
+        "filter": false,
+        "hitEligible": false,
+        "selected": 0
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 0,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 1,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 2,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 3,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 4,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 9,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 10,
+        "spellBits": false,
+        "accepted": false
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 11,
+        "spellBits": false,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 0,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 1,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 2,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 3,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 4,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 9,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 10,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "native-applicability",
+        "sourceKind": 11,
+        "spellBits": true,
+        "accepted": true
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 100,
+        "before": 100,
+        "damage": 5,
+        "after": 95,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 100,
+        "before": 10,
+        "damage": 5,
+        "after": 5,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 1000,
+        "before": 1000,
+        "damage": 50,
+        "after": 950,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 1000,
+        "before": 10,
+        "damage": 50,
+        "after": 0,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 2340,
+        "before": 2340,
+        "damage": 117,
+        "after": 2223,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "self-damage",
+        "maxHP": 2340,
+        "before": 10,
+        "damage": 117,
+        "after": 0,
+        "nativeDamageFlags": 9
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": false,
+        "periodic": 0,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": true,
+        "periodic": 0,
+        "relicTimers": [
+          0.0,
+          0.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 50,
+        "notify": true,
+        "periodic": 1,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      },
+      {
+        "kind": "actual-madness-sleep-relics",
+        "hpLoss": 0,
+        "notify": true,
+        "periodic": 0,
+        "relicTimers": [
+          -1.0,
+          -1.0
+        ],
+        "unrelatedTimerUnchanged": true
+      }
+    ],
+    "originalOnHitSelector": true,
+    "nativeOnHitReference": 8600100,
+    "installedNativeOnHitFiltersMatch": true,
+    "originalSelfDamageAndNotification": true,
+    "originalHitEffectReplacementDispatch": true,
+    "verifiedRelics": [
+      6820400,
+      6820500
+    ],
+    "playerDamageModuleRttiVerified": true,
+    "playerDamageVtableRva": "0x2c11d00",
+    "nativeOwnerAccessorVerified": true,
+    "externalManagersAndHPSetterStubbed": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "cooldownSeconds": 1.0,
+  "cooldownTime": "game delta time",
+  "multihitAndMultitargetShareCooldown": true,
+  "rejectedHitsDoNotRefreshCooldown": true,
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "5B1E798C0C2BBAF6447CE025EB74B9D74B330F7C66CDD1B6503E96A743BFCD55",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "2824C90F566B0F502850C24348915FC520082E7EA655D8926A4DEC725C47EB22",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "5615DFA436BE79F84D1395307D5249336CF8ED7CA4018855B5AF2ACD6BCA3C35",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "8E675F744C942F6E4AF088C0395973144C2579FCE34B45E726E733FF7EAD236C",
+        "outputSha256": "3E7639F47C02A4976DCE42E406F29AE193EF74507074EA6CE501A52C95804371",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001100,
+            "before": "提升攻击成功时的冲击力",
+            "after": "提升近战攻击的冲击力"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002600,
+            "before": "攻击成功时，对自己造成等同于血量上限5%的损伤",
+            "after": "攻击命中时，对自己造成等同于血量上限5%的损伤。每秒最多触发一次"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001100,
+            "before": "提升攻击成功时的冲击力",
+            "after": "提升近战攻击的冲击力"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002600,
+            "before": "攻击成功时，对自己造成等同于血量上限5%的损伤",
+            "after": "攻击命中时，对自己造成等同于血量上限5%的损伤。每秒最多触发一次"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001100,
+            "before": "提升攻击成功时的冲击力",
+            "after": "提升近战攻击的冲击力"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002600,
+            "before": "攻击成功时，对自己造成等同于血量上限5%的损伤",
+            "after": "攻击命中时，对自己造成等同于血量上限5%的损伤。每秒最多触发一次"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "58752204F06A0878C0D8AEE3729E0DB43AFE41F53451264243C2B054D21BA8FA",
+        "outputSha256": "58752204F06A0878C0D8AEE3729E0DB43AFE41F53451264243C2B054D21BA8FA",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "29BFF00B26E8117A5B5A2EF54F0614DB92AFF01159A741CA5C2028932F3612AB",
+        "outputSha256": "2409DD201067D89F20BF1CC93C24CEA616C54962FA19BA73F7D416CB090978E2",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP.",
+            "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP.",
+            "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP.",
+            "after": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once per second."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "C3DF32FECDE460CFF56238883F2E565B7E24ED329A52E3195B67DD8BAF76E8BD",
+        "outputSha256": "C3DF32FECDE460CFF56238883F2E565B7E24ED329A52E3195B67DD8BAF76E8BD",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "changedAssets": {
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "3E7639F47C02A4976DCE42E406F29AE193EF74507074EA6CE501A52C95804371",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "2409DD201067D89F20BF1CC93C24CEA616C54962FA19BA73F7D416CB090978E2",
+    "mod/natives/NRHex.dll": "CE807700EEC23C3FE5F5E21105FA1BC14DCD97677697848A5ABBF730D06060BA"
+  },
+  "otherAssetsAndSettingsPreserved": true,
+  "regulationUnchanged": true,
+  "eventsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "loadingVerified": false,
+  "gameIntentionallyNotStarted": true
+}

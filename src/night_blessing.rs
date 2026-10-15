@@ -1,371 +1,114 @@
-//! Night's Tide gesture blessing. Timers advance only with character game time.
-use crate::{has_effect, native_actor, read_ptr};
-use std::sync::{Mutex, OnceLock};
-pub const OWNER: i32 = 95002500;
-pub const HEAL_FIRST: i32 = 95002501;
-pub const HEAL_SECOND: i32 = 95002502;
-pub const ATTACK: i32 = 95002503;
-pub const VISUAL: i32 = 95002504;
-pub const COOLDOWN: i32 = 95002505;
-pub const GRACE: i32 = 95002506;
-pub const GESTURE: i32 = 95002507;
-static STATE: OnceLock<Mutex<State>> = OnceLock::new();
+//! Native periodic regeneration, followed by backlash until leaving the Tide.
+//! Native effect lifetime owns the 15-second timer; grace rearms one use.
+use crate::{has_effect,native_actor,read_i32,read_ptr};
+use std::sync::{Mutex,OnceLock};
+pub const OWNER:i32=95002500;
+pub const HEAL_FIRST:i32=OWNER+1;
+pub const HEAL_SECOND:i32=OWNER+2;
+pub const ATTACK:i32=OWNER+3;
+pub const VISUAL:i32=OWNER+4;
+pub const SPENT:i32=OWNER+5;
+pub const GRACE:i32=OWNER+6;
+const LEGACY_GESTURE:i32=OWNER+7;
+pub const BACKLASH_FIRST:i32=OWNER+8;
+pub const BACKLASH_SECOND:i32=OWNER+9;
+pub const DRAIN_FIRST:i32=OWNER+10;
+pub const DRAIN_SECOND:i32=OWNER+11;
+static STATE:OnceLock<Mutex<State>>=OnceLock::new();
 #[derive(Default)]
-struct State {
-    object: (usize, usize),
-    pose: bool,
-    session: bool,
-    charged: bool,
-    charge: f32,
-    after: f32,
-    heal_tier: Option<i32>,
-    attack: bool,
-    pending_cooldown: bool,
+struct State{object:(usize,usize),pending:bool,grace_clean_frames:u8}
+#[derive(Clone,Copy,Default)]
+struct Input{object:(usize,usize),owned:bool,alive:bool,rain:Option<i32>,hp:i32,max_hp:i32,spent:bool,grace:bool,heal:bool,backlash:Option<i32>,phase_extra:bool}
+#[derive(Default,Debug,PartialEq)]
+struct Output{start:Option<i32>,attack:bool,visual:bool,drain:Option<i32>,clear_phase:bool,clear_spent:bool,clear_backlash:bool,consume_grace:bool}
+impl State{
+ fn tick(&mut self,i:Input)->Output{
+  if self.object!=i.object{*self=Self{object:i.object,..Self::default()};}
+  if !i.grace{self.grace_clean_frames=0;}
+  if !i.owned||i.grace{
+   self.pending=false;
+   let clean=!i.spent&&!i.heal&&i.backlash.is_none()&&!i.phase_extra;
+   self.grace_clean_frames=if i.grace&&clean{self.grace_clean_frames.saturating_add(1)}else{0};
+   return Output{attack:i.owned&&i.alive&&i.rain.is_some(),clear_phase:true,clear_spent:i.grace,clear_backlash:true,consume_grace:i.grace&&self.grace_clean_frames>=2,..Output::default()};
+  }
+  if i.spent{self.pending=false;}
+  if !i.alive{return Output{clear_phase:true,clear_backlash:true,..Output::default()};}
+  let start=if !i.spent&&!self.pending&&!i.heal&&i.backlash.is_none()&&i.max_hp>0&&i.hp>0&&(i.hp as i64)*5<(i.max_hp as i64){i.rain}else{None};
+  if start.is_some(){self.pending=true;}
+  let drain=if i.rain.is_some(){match i.backlash{Some(BACKLASH_FIRST)=>Some(DRAIN_FIRST),Some(BACKLASH_SECOND)=>Some(DRAIN_SECOND),_=>None}}else{None};
+  Output{start,attack:i.rain.is_some(),visual:i.heal||start.is_some(),drain,clear_backlash:i.rain.is_none(),..Output::default()}
+ }
 }
-#[derive(Default, Debug, PartialEq)]
-struct Output {
-    heal: bool,
-    visual: bool,
-    attack: bool,
-    cooldown: bool,
+// Only damaging rows establish actual exposure. Helper rows may linger after
+// leaving rain; the prolonged-exposure upgrades never raise our base rate.
+fn rain_tier(mut has:impl FnMut(i32)->bool)->Option<i32>{
+ if [99811,99876,99877].into_iter().any(&mut has){Some(HEAL_SECOND)}else if [99810,99871,99872].into_iter().any(has){Some(HEAL_FIRST)}else{None}
 }
-impl State {
-    fn tick(
-        &mut self,
-        object: (usize, usize),
-        owned: bool,
-        alive: bool,
-        rain_tier: Option<i32>,
-        pose: bool,
-        cooldown: bool,
-        grace: bool,
-        dt: f32,
-    ) -> Output {
-        if self.object != object || !owned {
-            *self = Self {
-                object,
-                ..Self::default()
-            };
-        }
-        if !owned {
-            return Output::default();
-        }
-        if grace {
-            self.pending_cooldown = false;
-        }
-        let cooldown = cooldown && !grace;
-        let dt = if dt.is_finite() && dt > 0. {
-            dt.min(1.)
-        } else {
-            0.
-        };
-        if cooldown {
-            self.pending_cooldown = false;
-        }
-        self.after = (self.after - dt).max(0.);
-        let rain = rain_tier.is_some();
-        if !rain {
-            self.attack = false;
-            self.charge = 0.;
-        }
-        if !alive {
-            self.attack = false;
-            self.after = 0.;
-            self.charge = 0.;
-            self.charged = false;
-        }
-        // A used pose starts cooldown on EXIT, even if interrupted before charging.
-        if (!pose || !alive) && self.session {
-            if self.charged && alive {
-                self.after = 15.;
-            }
-            self.session = false;
-            self.charge = 0.;
-            self.charged = false;
-            self.pending_cooldown = !grace;
-        }
-        // A pose entered while cooling down stays blocked until it is exited.
-        // Entering the rain while already posing may start a fresh eligible session.
-        if alive
-            && rain
-            && pose
-            && !self.session
-            && !cooldown
-            && !self.pending_cooldown
-            && !self.pose
-        {
-            self.session = true;
-        }
-        if self.session && alive && rain && pose {
-            self.charge += dt;
-            if self.charge >= 5. {
-                self.charged = true;
-                self.attack = true;
-            }
-        }
-        self.pose = pose && rain;
-        let heal = alive && ((rain && self.session && pose) || self.after > 0.);
-        if heal && rain {
-            self.heal_tier = rain_tier;
-        }
-        Output {
-            heal,
-            visual: heal && (self.charged || self.after > 0.),
-            attack: alive && rain && self.attack,
-            cooldown: self.pending_cooldown,
-        }
-    }
+pub unsafe fn update(player:usize,base:usize,_dt:f32){
+ let stats=native_actor::stats(player);if stats==0{return;}
+ let owned=has_effect(player,OWNER,base);let grace=has_effect(player,GRACE,base);if !owned&&!grace&&STATE.get().is_none(){return;}
+ let i=Input{object:(player,stats),owned,alive:!native_actor::incapacitated(player,stats),rain:rain_tier(|id|has_effect(player,id,base)),hp:read_i32(stats+0x140),max_hp:read_i32(stats+0x144),spent:has_effect(player,SPENT,base),grace,heal:has_effect(player,HEAL_FIRST,base)||has_effect(player,HEAL_SECOND,base),backlash:if has_effect(player,BACKLASH_SECOND,base){Some(BACKLASH_SECOND)}else if has_effect(player,BACKLASH_FIRST,base){Some(BACKLASH_FIRST)}else{None},phase_extra:has_effect(player,VISUAL,base)||has_effect(player,DRAIN_FIRST,base)||has_effect(player,DRAIN_SECOND,base)};
+ let o={let Ok(mut s)=STATE.get_or_init(||Mutex::new(State::default())).lock()else{return;};s.tick(i)};
+ let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+crate::REMOVE_EFFECT_RVA);
+ let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);
+ let manager=read_ptr(player+0x190);if manager==0{return;}
+ for id in [HEAL_FIRST,HEAL_SECOND,LEGACY_GESTURE,SPENT,BACKLASH_FIRST,BACKLASH_SECOND]{
+  let clear=match id{HEAL_FIRST|HEAL_SECOND=>o.clear_phase,SPENT=>o.clear_spent,BACKLASH_FIRST|BACKLASH_SECOND=>o.clear_backlash,_=>true};
+  if clear&&has_effect(player,id,base){remove(manager,id);}
+ }
+ if o.consume_grace{remove(manager,GRACE);}
+ if let Some(heal)=o.start{
+  // Reserve once while native application is queued. The saved receipt
+  // survives revival; healing or re-entering rain cannot rearm it.
+  apply(player,SPENT,0);apply(player,heal,0);
+ }
+ for (id,wanted) in [(ATTACK,o.attack),(VISUAL,o.visual),(DRAIN_FIRST,o.drain==Some(DRAIN_FIRST)),(DRAIN_SECOND,o.drain==Some(DRAIN_SECOND))]{
+  let present=has_effect(player,id,base);
+  if wanted&&!present{apply(player,id,0);}else if !wanted&&present{remove(manager,id);}
+ }
 }
-// Only damaging native rows identify actual exposure. The 99873/99878 five-
-// second helper rows can outlive exposure and must never prolong our bonuses.
-fn rain_tier(mut has: impl FnMut(i32) -> bool) -> Option<i32> {
-    if [99811, 99876, 99877].into_iter().any(&mut has) {
-        Some(HEAL_SECOND)
-    } else if [99810, 99871, 99872].into_iter().any(has) {
-        Some(HEAL_FIRST)
-    } else {
-        None
-    }
-}
-pub unsafe fn update(player: usize, base: usize, dt: f32) {
-    let stats = native_actor::stats(player);
-    if stats == 0 {
-        return;
-    }
-    let owned = has_effect(player, OWNER, base);
-    if !owned && STATE.get().is_none() {
-        return;
-    }
-    let grace = has_effect(player, GRACE, base);
-    let rain = rain_tier(|id| has_effect(player, id, base));
-    let (output, heal_tier) = {
-        let Ok(mut s) = STATE.get_or_init(|| Mutex::new(State::default())).lock() else {
-            return;
-        };
-        let output = s.tick(
-            (player, stats),
-            owned,
-            !native_actor::incapacitated(player, stats),
-            rain,
-            has_effect(player, GESTURE, base),
-            has_effect(player, COOLDOWN, base),
-            grace,
-            dt,
-        );
-        (output, s.heal_tier)
-    };
-    let remove: unsafe extern "system" fn(usize, i32) -> u8 =
-        std::mem::transmute(base + crate::REMOVE_EFFECT_RVA);
-    let apply: unsafe extern "system" fn(usize, i32, u8) -> u8 =
-        std::mem::transmute(base + crate::APPLY_SELF_RVA);
-    let manager = read_ptr(player + 0x190);
-    if grace && has_effect(player, COOLDOWN, base) {
-        remove(manager, COOLDOWN);
-    }
-    if output.cooldown && !has_effect(player, COOLDOWN, base) {
-        apply(player, COOLDOWN, 0);
-    }
-    for (id, wanted) in [
-        (HEAL_FIRST, output.heal && heal_tier == Some(HEAL_FIRST)),
-        (HEAL_SECOND, output.heal && heal_tier == Some(HEAL_SECOND)),
-        (ATTACK, output.attack),
-        (VISUAL, output.visual),
-    ] {
-        let present = has_effect(player, id, base);
-        if wanted && !present {
-            apply(player, id, 0);
-        } else if !wanted && present {
-            remove(manager, id);
-        }
-    }
-}
-#[cfg(test)]
-mod tests {
-    use super::*;
-    fn step(s: &mut State, rain: bool, pose: bool, cd: bool, dt: f32) -> Output {
-        s.tick(
-            (1, 2),
-            true,
-            true,
-            rain.then_some(HEAL_FIRST),
-            pose,
-            cd,
-            false,
-            dt,
-        )
-    }
-    #[test]
-    fn early_exit_cools_down_all_effects_and_reentry_cannot_heal() {
-        let mut s = State::default();
-        assert!(step(&mut s, true, true, false, 1.).heal);
-        let o = step(&mut s, true, false, false, 0.1);
-        assert!(o.cooldown && !o.heal && !o.attack);
-        assert!(!step(&mut s, true, true, true, 1.).heal);
-        assert!(!step(&mut s, true, true, false, 1.).heal);
-        step(&mut s, true, false, false, 0.);
-        assert!(step(&mut s, true, true, false, 1.).heal);
-    }
-    #[test]
-    fn five_seconds_unlocks_visual_and_attack_then_fifteen_second_tail() {
-        let mut s = State::default();
-        for _ in 0..4 {
-            let o = step(&mut s, true, true, false, 1.);
-            assert!(o.heal && !o.visual && !o.attack);
-        }
-        assert_eq!(
-            step(&mut s, true, true, false, 1.),
-            Output {
-                heal: true,
-                visual: true,
-                attack: true,
-                cooldown: false
-            }
-        );
-        let o = step(&mut s, true, false, false, 0.1);
-        assert!(o.cooldown && o.visual && o.attack);
-        for _ in 0..14 {
-            assert!(step(&mut s, true, false, true, 1.).heal);
-        }
-        let o = step(&mut s, true, false, true, 1.);
-        assert!(!o.heal && !o.visual && o.attack);
-        assert!(!step(&mut s, false, false, true, 0.1).attack);
-        assert!(!step(&mut s, true, false, true, 0.1).attack);
-    }
-    #[test]
-    fn leaving_rain_only_cancels_attack_and_keeps_earned_heal_tail() {
-        let mut s = State::default();
-        for _ in 0..5 {
-            step(&mut s, true, true, false, 1.);
-        }
-        let o = step(&mut s, false, true, false, 1.);
-        assert_eq!(o, Output::default());
-        assert!(step(&mut s, false, false, false, 1.).cooldown);
-        for _ in 0..14 {
-            let o = step(&mut s, false, false, true, 1.);
-            assert!(o.heal && o.visual && !o.attack && !o.cooldown);
-        }
-        let o = step(&mut s, true, false, true, 1.);
-        assert!(!o.heal && !o.attack && !o.cooldown);
-    }
-    #[test]
-    fn leaving_rain_on_exit_retains_fifteen_seconds_and_last_healing_tier() {
-        let mut s = State::default();
-        for _ in 0..5 {
-            s.tick(
-                (1, 2),
-                true,
-                true,
-                Some(HEAL_SECOND),
-                true,
-                false,
-                false,
-                1.,
-            );
-        }
-        let o = step(&mut s, false, false, false, 0.1);
-        assert!(o.heal && o.visual && !o.attack && o.cooldown);
-        assert_eq!(s.after, 15.);
-        assert_eq!(s.heal_tier, Some(HEAL_SECOND));
-        for _ in 0..7 {
-            assert!(step(&mut s, false, false, true, 1.).heal);
-        }
-        assert_eq!(s.heal_tier, Some(HEAL_SECOND));
-        let o = step(&mut s, true, false, true, 1.);
-        assert!(o.heal && !o.attack);
-        assert_eq!(s.after, 7.);
-        for _ in 0..7 {
-            step(&mut s, false, false, true, 1.);
-        }
-        assert!(!step(&mut s, false, false, true, 0.).heal);
-    }
-    #[test]
-    fn interruption_death_loss_and_new_player_clear_charge_and_attack() {
-        for mode in 0..3 {
-            let mut s = State::default();
-            for _ in 0..5 {
-                step(&mut s, true, true, false, 1.);
-            }
-            let o = s.tick(
-                if mode == 2 { (3, 4) } else { (1, 2) },
-                mode != 1,
-                mode != 0,
-                None,
-                false,
-                false,
-                false,
-                0.1,
-            );
-            assert!(!o.heal && !o.attack && !o.visual);
-        }
-    }
-    #[test]
-    fn grace_clears_pending_and_native_cooldown_without_waiting() {
-        let mut s = State::default();
-        step(&mut s, true, true, false, 1.);
-        step(&mut s, true, false, false, 0.);
-        assert!(s.pending_cooldown);
-        assert_eq!(
-            s.tick((1, 2), true, true, None, false, true, true, 0.1),
-            Output::default()
-        );
-        assert!(!s.pending_cooldown);
-        assert!(step(&mut s, true, true, false, 1.).heal);
-    }
-    #[test]
-    fn grace_only_resets_cooldown_and_preserves_remaining_healing() {
-        let mut s = State::default();
-        for _ in 0..5 {
-            step(&mut s, true, true, false, 1.);
-        }
-        step(&mut s, true, false, false, 0.);
-        let o = s.tick((1, 2), true, true, None, false, true, true, 1.);
-        assert!(o.heal && o.visual && !o.attack && !o.cooldown);
-        assert_eq!(s.after, 14.);
-        assert!(step(&mut s, true, true, false, 1.).heal);
-        assert!(s.session);
-        assert!(step(&mut s, true, false, false, 1.).heal);
-        assert_eq!(s.after, 12.);
-    }
-    #[test]
-    fn cooldown_blocks_charge_and_paused_time_does_not_advance() {
-        let mut s = State::default();
-        for _ in 0..8 {
-            assert_eq!(step(&mut s, true, true, true, 1.), Output::default());
-        }
-        step(&mut s, true, false, false, 0.);
-        step(&mut s, true, true, false, 0.);
-        for dt in [0., -1., f32::NAN, f32::INFINITY] {
-            assert!(!step(&mut s, true, true, false, dt).attack);
-        }
-        assert_eq!(s.charge, 0.);
-    }
-    #[test]
-    fn native_damage_upgrade_never_increases_healing_and_helpers_do_not_count() {
-        for id in [99810, 99871, 99872] {
-            assert_eq!(rain_tier(|v| v == id), Some(HEAL_FIRST));
-        }
-        for id in [99811, 99876, 99877] {
-            assert_eq!(rain_tier(|v| v == id), Some(HEAL_SECOND));
-        }
-        for id in [99873, 99874, 99878, 99879] {
-            assert_eq!(rain_tier(|v| v == id), None);
-        }
-    }
-    #[test]
-    fn repeated_cycles_never_stack_attack_and_new_visual_requires_charge() {
-        let mut s = State::default();
-        for _ in 0..5 {
-            step(&mut s, true, true, false, 1.);
-        }
-        step(&mut s, true, false, false, 0.);
-        for _ in 0..60 {
-            step(&mut s, true, false, true, 1.);
-        }
-        assert!(step(&mut s, true, true, false, 1.).attack);
-        assert!(!step(&mut s, true, true, false, 1.).visual);
-        for _ in 0..3 {
-            step(&mut s, true, true, false, 1.);
-        }
-        assert!(s.attack);
-    }
+#[cfg(test)]mod tests{
+ use super::*;
+ fn ready()->Input{Input{object:(1,2),owned:true,alive:true,rain:Some(HEAL_FIRST),hp:199,max_hp:1000,..Input::default()}}
+ #[test]fn attack_is_immediate_in_rain_at_any_hp_and_stops_on_exit(){
+  let mut s=State::default();let mut i=ready();i.hp=1000;let o=s.tick(i);assert!(o.attack&&o.start.is_none());i.rain=None;assert!(!s.tick(i).attack);i.rain=Some(HEAL_FIRST);assert!(s.tick(i).attack);
+ }
+ #[test]fn strict_twenty_percent_threshold_requires_rain_and_living_hp(){
+  for (hp,max_hp,rain,wanted) in [(200,1000,true,false),(199,1000,true,true),(1,5,true,false),(1,6,true,true),(0,1000,true,false),(1,0,true,false),(199,1000,false,false),(i32::MAX,i32::MAX,true,false)]{
+   let mut s=State::default();let i=Input{hp,max_hp,rain:rain.then_some(HEAL_FIRST),..ready()};assert_eq!(s.tick(i).start.is_some(),wanted);
+  }
+ }
+ #[test]fn queued_application_cannot_retrigger_then_receipt_blocks_healed_and_low_again(){
+  let mut s=State::default();let mut i=ready();assert_eq!(s.tick(i).start,Some(HEAL_FIRST));for _ in 0..10{assert_eq!(s.tick(i).start,None);}
+  i.spent=true;i.heal=true;assert!(s.tick(i).visual);i.heal=false;i.hp=1000;assert_eq!(s.tick(i).start,None);i.hp=1;assert_eq!(s.tick(i).start,None);
+ }
+ #[test]fn leaving_rain_keeps_healing_but_ends_backlash_and_never_restarts_it(){
+  let mut s=State::default();let mut i=ready();i.spent=true;i.heal=true;i.rain=None;let o=s.tick(i);assert!(o.visual&&!o.clear_phase&&o.drain.is_none());
+  i.heal=false;i.backlash=Some(BACKLASH_FIRST);let o=s.tick(i);assert!(o.clear_backlash&&o.drain.is_none());i.backlash=None;i.rain=Some(HEAL_FIRST);let o=s.tick(i);assert!(o.attack&&o.start.is_none()&&o.drain.is_none());
+ }
+ #[test]fn backlash_has_no_timeout_and_uses_the_triggering_base_tier(){
+  let mut s=State::default();let mut i=ready();i.spent=true;i.backlash=Some(BACKLASH_SECOND);assert_eq!(s.tick(i).drain,Some(DRAIN_SECOND));
+  for _ in 0..10000{assert_eq!(s.tick(i).drain,Some(DRAIN_SECOND));}i.rain=None;assert_eq!(s.tick(i).drain,None);
+ }
+ #[test]fn grace_clears_receipt_healing_backlash_and_pending_trigger(){
+  let mut s=State::default();let mut i=ready();s.tick(i);i.grace=true;i.spent=true;i.heal=true;i.backlash=Some(BACKLASH_FIRST);let o=s.tick(i);assert!(o.clear_phase&&o.clear_spent&&o.clear_backlash&&!o.visual&&o.drain.is_none()&&o.start.is_none());
+  i.grace=false;i.spent=false;i.heal=false;i.backlash=None;assert!(s.tick(i).start.is_some());
+ }
+ #[test]fn death_and_owner_loss_cancel_phases_without_rearming(){
+  let mut s=State::default();let mut i=ready();s.tick(i);i.spent=true;i.alive=false;let o=s.tick(i);assert!(o.clear_phase&&!o.clear_spent&&!o.attack);i.alive=true;assert!(s.tick(i).start.is_none());
+  i.object=(3,4);assert!(s.tick(i).start.is_none());i.owned=false;let o=s.tick(i);assert!(o.clear_phase&&!o.clear_spent&&o.clear_backlash);
+ }
+ #[test]fn persistent_grace_waits_for_deferred_chain_cleanup_before_consumption(){
+  let mut s=State::default();let mut i=ready();i.grace=true;i.spent=true;i.heal=true;
+  for _ in 0..10{assert!(!s.tick(i).consume_grace);}
+  i.spent=false;i.heal=false;assert!(!s.tick(i).consume_grace);
+  i.backlash=Some(BACKLASH_FIRST);assert!(!s.tick(i).consume_grace);
+  i.backlash=None;i.phase_extra=true;assert!(!s.tick(i).consume_grace);
+  i.phase_extra=false;assert!(!s.tick(i).consume_grace);assert!(s.tick(i).consume_grace);
+ }
+ #[test]fn native_prolonged_rain_and_helpers_do_not_raise_base_rate(){
+  for id in [99810,99871,99872]{assert_eq!(rain_tier(|v|v==id),Some(HEAL_FIRST));}
+  for id in [99811,99876,99877]{assert_eq!(rain_tier(|v|v==id),Some(HEAL_SECOND));}
+  for id in [99873,99874,99878,99879]{assert_eq!(rain_tier(|v|v==id),None);}
+ }
 }

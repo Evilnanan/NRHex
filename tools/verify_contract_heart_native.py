@@ -20,6 +20,20 @@ assert struct.unpack('<Q',pe.get_data(player_vtable,8))[0]-pe.OPTIONAL_HEADER.Im
 assert pe.get_data(0x42c120,5)==bytes.fromhex('488b4108c3')
 runtime=(ROOT/'src/ominous_pact.rs').read_text(encoding='utf8')
 assert 'PLAYER_DAMAGE_VTABLE_RVA: usize = 0x2c11d00' in runtime
+# Compare installed filters with the original FP Restoration upon Landing
+# Attacks row. Only identity, display and persistence may differ.
+native_params=json.loads((ROOT/'.work/contract-heart/native-parameters.json').read_text())
+native_rows={r['ID']:r['fields'] for r in native_params['SpEffectParam']}
+installed=json.loads((ROOT/'.work/contract-heart/staged/mechanics.json').read_text())
+installed_rows={r['ID']:r['fields'] for r in installed['effects']}
+original=native_rows[8600200];contract=installed_rows[95002600]
+assert original['stateInfo']==contract['stateInfo']==2103
+assert contract['atkOccurrenceSpEffectId']==95002601
+allowed={'iconId','atkOccurrenceSpEffectId','saveCategory','spEffectTextId_1'}
+assert original.keys()==contract.keys()
+assert all(original[k]==contract[k] for k in original.keys()-allowed)
+assert all(contract[k]==0 for k in ['magParamChange','miracleParamChange','shamanParamChange'])
+assert all(original[k]==native_rows[8600100][k] for k in original.keys()-{'atkOccurrenceSpEffectId'})
 k=c.WinDLL('kernel32');k.VirtualAlloc.argtypes=[c.c_void_p,c.c_size_t,c.c_uint,c.c_uint];k.VirtualAlloc.restype=c.c_void_p
 k.VirtualFree.argtypes=[c.c_void_p,c.c_size_t,c.c_uint]
 m=k.VirtualAlloc(None,pe.OPTIONAL_HEADER.SizeOfImage,0x3000,0x40);assert m
@@ -51,16 +65,17 @@ try:
     for state in [0,152,153,2102,2103,2104]:
         for active in [True,False]:
             for filter_ok in [True,False]:
-                accepted[0]=filter_ok;eligible[0]=True
-                put(row,0x156,'<H',state);put(row,0x12c,'<i',95002601)
-                put(node,0x68,'<I',0 if active else 1)
-                begin=c.addressof(ids);put(out,8,'<Q',begin);put(out,0x10,'<Q',begin);put(out,0x18,'<Q',begin+c.sizeof(ids))
-                select(c.addressof(effects),c.addressof(out),c.addressof(hit))
-                count=(c.c_uint64.from_buffer(out,0x10).value-begin)//4
-                expected=int(state==2103 and active and filter_ok)
-                assert count==expected,(state,active,filter_ok,count)
-                if count:assert ids[0]==95002601
-                cases.append(dict(kind='on-hit',state=state,active=active,filter=filter_ok,selected=count))
+                for hit_ok in [True,False]:
+                    accepted[0]=filter_ok;eligible[0]=hit_ok
+                    put(row,0x156,'<H',state);put(row,0x12c,'<i',95002601)
+                    put(node,0x68,'<I',0 if active else 1)
+                    begin=c.addressof(ids);put(out,8,'<Q',begin);put(out,0x10,'<Q',begin);put(out,0x18,'<Q',begin+c.sizeof(ids))
+                    select(c.addressof(effects),c.addressof(out),c.addressof(hit))
+                    count=(c.c_uint64.from_buffer(out,0x10).value-begin)//4
+                    expected=int(state==2103 and active and filter_ok and hit_ok)
+                    assert count==expected,(state,active,filter_ok,hit_ok,count)
+                    if count:assert ids[0]==95002601
+                    cases.append(dict(kind='on-hit',state=state,active=active,filter=filter_ok,hitEligible=hit_ok,selected=count))
     # Execute the actual native applicability switch. Its later category and
     # weapon restrictions are neutral fixtures; magic/incantation/shaman bits
     # are interpreted by the original game instructions, not by a Python model.
@@ -140,6 +155,6 @@ try:
         assert c.c_float.from_buffer(neutral_node,0x4c).value==-1.
         cases.append(dict(kind='actual-madness-sleep-relics',hpLoss=loss,notify=send_notification,periodic=periodic,relicTimers=[expected,expected],unrelatedTimerUnchanged=True))
 finally:k.VirtualFree(m,0,0x8000)
-report=dict(nativeCases=len(cases),cases=cases,originalOnHitSelector=True,originalSelfDamageAndNotification=True,originalHitEffectReplacementDispatch=True,verifiedRelics=[6820400,6820500],playerDamageModuleRttiVerified=True,playerDamageVtableRva=hex(player_vtable),nativeOwnerAccessorVerified=True,externalManagersAndHPSetterStubbed=True,gameplayVerified=False,multiplayerVerified=False)
+report=dict(nativeCases=len(cases),cases=cases,originalOnHitSelector=True,nativeOnHitReference=8600200,installedNativeOnHitFiltersMatch=True,originalSelfDamageAndNotification=True,originalHitEffectReplacementDispatch=True,verifiedRelics=[6820400,6820500],playerDamageModuleRttiVerified=True,playerDamageVtableRva=hex(player_vtable),nativeOwnerAccessorVerified=True,externalManagersAndHPSetterStubbed=True,gameplayVerified=False,multiplayerVerified=False)
 (ROOT/'.work/contract-heart/native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print(f'PASS: {len(cases)} isolated native cases; attacker on-hit selection and self-damage notifications verified')
