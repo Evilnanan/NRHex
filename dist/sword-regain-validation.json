@@ -1,0 +1,340 @@
+{
+  "version": "0.17.141",
+  "changedAssets": [
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "mod/natives/NRHex.dll",
+    "mod/regulation.bin"
+  ],
+  "backup": "D:\\Projects\\NRMod\\NRHex\\.work\\sword-regain\\before\\20261015-212358-138179",
+  "unrelatedAssetsAndUserConfigPreserved": true,
+  "files": {
+    "mod/natives/NRHex.dll": "f346b610ee656e379e5abbcfb72d6ba1da0fd8f4c4312c4643c91ebb8b339686",
+    "mod/regulation.bin": "210b55d6b2ca169f196f03d84cf1a619da49fbdaaf4d4a2e3d88745a5f11e209",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "93d2433baf3262e89faeced5747b129fdeb29f49b60eacd640eed68fc41f48a7"
+  },
+  "parameters": {
+    "inputSha256": "49D3D986F3A9CE33958052CEFA2B026D6CB59D8BDA88C39CBDD69A8D596167D8",
+    "outputSha256": "210B55D6B2CA169F196F03D84CF1A619DA49FBDAAF4D4A2E3D88745A5F11E209",
+    "changedEffect": 95000912,
+    "changedFields": [
+      "stateInfo"
+    ],
+    "nativeState": 449,
+    "onlyIntendedFieldChanged": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "native": {
+    "nativeCases": 28,
+    "cases": [
+      {
+        "loss": 1,
+        "requested": 0,
+        "recovered": 0
+      },
+      {
+        "loss": 1,
+        "requested": 1,
+        "recovered": 1
+      },
+      {
+        "loss": 1,
+        "requested": 20,
+        "recovered": 1
+      },
+      {
+        "loss": 1,
+        "requested": 180,
+        "recovered": 1
+      },
+      {
+        "loss": 1,
+        "requested": 65535,
+        "recovered": 1
+      },
+      {
+        "loss": 20,
+        "requested": 0,
+        "recovered": 0
+      },
+      {
+        "loss": 20,
+        "requested": 1,
+        "recovered": 1
+      },
+      {
+        "loss": 20,
+        "requested": 20,
+        "recovered": 20
+      },
+      {
+        "loss": 20,
+        "requested": 180,
+        "recovered": 20
+      },
+      {
+        "loss": 20,
+        "requested": 65535,
+        "recovered": 20
+      },
+      {
+        "loss": 200,
+        "requested": 0,
+        "recovered": 0
+      },
+      {
+        "loss": 200,
+        "requested": 1,
+        "recovered": 1
+      },
+      {
+        "loss": 200,
+        "requested": 20,
+        "recovered": 20
+      },
+      {
+        "loss": 200,
+        "requested": 180,
+        "recovered": 180
+      },
+      {
+        "loss": 200,
+        "requested": 65535,
+        "recovered": 200
+      },
+      {
+        "loss": 700,
+        "requested": 0,
+        "recovered": 0
+      },
+      {
+        "loss": 700,
+        "requested": 1,
+        "recovered": 1
+      },
+      {
+        "loss": 700,
+        "requested": 20,
+        "recovered": 20
+      },
+      {
+        "loss": 700,
+        "requested": 180,
+        "recovered": 180
+      },
+      {
+        "loss": 700,
+        "requested": 65535,
+        "recovered": 700
+      },
+      {
+        "historicalLossNotRecovered": true
+      },
+      {
+        "noDamageNoHealing": true
+      },
+      {
+        "multipleHitsSharePool": true
+      },
+      {
+        "nativeFourSecondWindowAndDecay": true
+      },
+      {
+        "expiryClampsPendingRecovery": true
+      },
+      {
+        "otherHealingClampsNativePool": true
+      },
+      {
+        "noResurrection": true
+      },
+      {
+        "nativeStateRequired": true
+      }
+    ],
+    "nativeState": 449,
+    "nativeQueue": "0x4275a0",
+    "nativeSettlement": "0x4289c0",
+    "nativeHpSetter": "0x426b00",
+    "nativeAward": "0x3da510",
+    "sharedPool": true,
+    "customHpWrites": false,
+    "fixtureStubs": [
+      "network authority",
+      "actor lookup",
+      "local player predicate",
+      "state 449 presence",
+      "E6D630 PARAM lookup for exported original tier rows"
+    ],
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "nativeTierCases": 12,
+    "tierCases": [
+      {
+        "effect": 7005600,
+        "spellType": 3,
+        "rate": 1.0,
+        "requested": 180,
+        "loss": 100,
+        "recovered": 100
+      },
+      {
+        "effect": 7005600,
+        "spellType": 3,
+        "rate": 1.0,
+        "requested": 180,
+        "loss": 500,
+        "recovered": 180
+      },
+      {
+        "effect": 7005600,
+        "spellType": 4,
+        "rate": 1.0,
+        "requested": 180,
+        "loss": 100,
+        "recovered": 100
+      },
+      {
+        "effect": 7005600,
+        "spellType": 4,
+        "rate": 1.0,
+        "requested": 180,
+        "loss": 500,
+        "recovered": 180
+      },
+      {
+        "effect": 7005601,
+        "spellType": 3,
+        "rate": 1.25,
+        "requested": 225,
+        "loss": 100,
+        "recovered": 100
+      },
+      {
+        "effect": 7005601,
+        "spellType": 3,
+        "rate": 1.25,
+        "requested": 225,
+        "loss": 500,
+        "recovered": 225
+      },
+      {
+        "effect": 7005601,
+        "spellType": 4,
+        "rate": 1.25,
+        "requested": 225,
+        "loss": 100,
+        "recovered": 100
+      },
+      {
+        "effect": 7005601,
+        "spellType": 4,
+        "rate": 1.25,
+        "requested": 225,
+        "loss": 500,
+        "recovered": 225
+      },
+      {
+        "effect": 7005602,
+        "spellType": 3,
+        "rate": 1.350000023841858,
+        "requested": 243,
+        "loss": 100,
+        "recovered": 100
+      },
+      {
+        "effect": 7005602,
+        "spellType": 3,
+        "rate": 1.350000023841858,
+        "requested": 243,
+        "loss": 500,
+        "recovered": 243
+      },
+      {
+        "effect": 7005602,
+        "spellType": 4,
+        "rate": 1.350000023841858,
+        "requested": 243,
+        "loss": 100,
+        "recovered": 100
+      },
+      {
+        "effect": 7005602,
+        "spellType": 4,
+        "rate": 1.350000023841858,
+        "requested": 243,
+        "loss": 500,
+        "recovered": 243
+      }
+    ],
+    "nativeRate": "0x507bc0",
+    "nativeDescriptor": "0x50f230",
+    "privateWeaponDescriptor": true,
+    "originalHitUnchanged": true,
+    "nativeAggregationPreserved": true
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "F1EDE4219200DA4F6072BA9E4D7540447400BD84E1E0655389547968384467D1",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "0CE8990E2D900A7EA8AA0740149C3E7BDC25FBF1BF67C5C5C64E28302552D48F",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "9D3F90381B814BD3CD1650EF82D4D83C0A50BB2CB97E4D8E14A41EA05F3D36BD",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "A7AE09A51CAF872D079E6D696087A89078E1C7A66AE5E32CD41406751EEA5FB4",
+        "outputSha256": "93D2433BAF3262E89FAECED5747B129FDEB29F49B60EACD640EED68FC41F48A7",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000900,
+            "before": "你的魔法、祷告还会被视为近战攻击，但只能命中近身敌人，并基于该法术的射程提供攻击力和咏唱时减伤率。受到损伤后短时间内，可通过攻击回收部分血量；法术的回收量基于造成的伤害与射程。法术咏唱变得不易被打断。提升15%近战攻击力",
+            "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力与减伤率。咏唱变得不易被打断。受到损伤后的当下，可通过攻击恢复部分血量。提升15%近战攻击力"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000900,
+            "before": "你的魔法、祷告还会被视为近战攻击，但只能命中近身敌人，并基于该法术的射程提供攻击力和咏唱时减伤率。受到损伤后短时间内，可通过攻击回收部分血量；法术的回收量基于造成的伤害与射程。法术咏唱变得不易被打断。提升15%近战攻击力",
+            "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力与减伤率。咏唱变得不易被打断。受到损伤后的当下，可通过攻击恢复部分血量。提升15%近战攻击力"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000900,
+            "before": "你的魔法、祷告还会被视为近战攻击，但只能命中近身敌人，并基于该法术的射程提供攻击力和咏唱时减伤率。受到损伤后短时间内，可通过攻击回收部分血量；法术的回收量基于造成的伤害与射程。法术咏唱变得不易被打断。提升15%近战攻击力",
+            "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力与减伤率。咏唱变得不易被打断。受到损伤后的当下，可通过攻击恢复部分血量。提升15%近战攻击力"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "CB229592DAAE17BF79E594FE6F588D29E5EBC9D3AA473D395922B33E97348706",
+        "outputSha256": "CB229592DAAE17BF79E594FE6F588D29E5EBC9D3AA473D395922B33E97348706",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "9DD9CEFEE0FB4FF98FC856A8A8F551E08E37417B43B4243AD9DC8C99C7BC1D73",
+        "outputSha256": "9DD9CEFEE0FB4FF98FC856A8A8F551E08E37417B43B4243AD9DC8C99C7BC1D73",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "E91221CAD5EC969F85A8E0542F8FA3070D421A4FE7D2F3F23E44C0AB887280F9",
+        "outputSha256": "E91221CAD5EC969F85A8E0542F8FA3070D421A4FE7D2F3F23E44C0AB887280F9",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -66,6 +66,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--sword-regain-stage")){SwordRegain.Stage(root,bnd,Parse);return;}
+if(args.Contains("--sword-regain-probe")){SwordRegain.Export(root,bnd,Parse);return;}
 if(args.Contains("--sword-charged-probe")){SwordCharged.Probe(root,bnd,Parse);return;}
 if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
 if(args.Contains("--essence-reaver-probe")){EssenceReaver.Probe(root,bnd,Parse);return;}
@@ -779,6 +781,7 @@ var escapeVisual=Clone("SpEffectParam",8000000,95001204);
 Set(escapeVisual,"maxHpRate",1f);Set(escapeVisual,"saveCategory",-1);Set(escapeVisual,"effectEndurance",10f);Set(escapeVisual,"spCategory",20);
 Set(escapeVisual,"iconId",-1);Set(escapeVisual,"spEffectTextId_1",-1);Set(escapeVisual,"displayIconForPermamentEffect",0);Set(escapeVisual,"vfxId",5280);
 EscapeVfx.Apply(pars["SpEffectParam"],pars["SpEffectVfxParam"],pars["Bullet"]);
+added["SpEffectVfxParam"].Add(EscapeVfx.Visual);
 foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(escape,f,.4f);
 var escapeCooldown=Clone("SpEffectParam",8000000,95001202);
 Set(escapeCooldown,"maxHpRate",1f);Set(escapeCooldown,"effectEndurance",60f);Set(escapeCooldown,"iconId",-1);Set(escapeCooldown,"displayIconForPermamentEffect",0);Set(escapeCooldown,"spEffectTextId_1",95001202);
@@ -847,7 +850,7 @@ var shellCooldown=Clone("SpEffectParam",8000000,95000702);Set(shellCooldown,"max
 var invisible=Clone("SpEffectParam",703500,95000801);Set(invisible,"effectEndurance",1f);Set(invisible,"saveCategory",-1);Set(invisible,"spCategory",20);Set(invisible,"categoryPriority",0);Set(invisible,"spEffectTextId_1",95000800);
 // A separate exactly representable f32 ID is queried by the surgical HKS
 // casting guard. The permanent ability's native int ID remains 95000900.
-var castOwner=Clone("SpEffectParam",8000000,95000912);Set(castOwner,"maxHpRate",1f);Set(castOwner,"saveCategory",-1);Set(castOwner,"iconId",-1);Set(castOwner,"spEffectTextId_1",-1);
+var castOwner=Clone("SpEffectParam",8000000,95000912);Set(castOwner,"maxHpRate",1f);Set(castOwner,"saveCategory",-1);Set(castOwner,"iconId",-1);Set(castOwner,"spEffectTextId_1",-1);SwordRegain.Apply(castOwner);
 var castPulse=Clone("SpEffectParam",8000000,95000904);
 Set(castPulse,"maxHpRate",1f);Set(castPulse,"effectEndurance",0f);Set(castPulse,"saveCategory",-1);Set(castPulse,"iconId",-1);Set(castPulse,"spEffectTextId_1",-1);
 SwordVfx.Build(Clone);
@@ -909,6 +912,7 @@ foreach(var n in names){
   }return Eq(v.First,v.Second);
  }),"Original rows changed in "+n);
  foreach(var id in added[n])Require(Eq(pars[n].Rows.Single(r=>r.ID==id),check.Rows.Single(r=>r.ID==id)),"Added row failed round-trip: "+n+" "+id);
+ if(added[n].Count==0&&n!="Bullet")files[n].Bytes=original[files[n].ID];
 }
 // Check the serialized reward graph, including the actual UI classification.
 var serialized=files.ToDictionary(k=>k.Key,k=>Parse(k.Key,k.Value.Bytes));
@@ -932,12 +936,13 @@ foreach(var h in hexes){
  Require(Convert.ToInt32(perm["spEffectId"].Value)==h.Id&&serialized["SpEffectParam"].Rows.Any(r=>r.ID==h.Id),"Permanent ability has no effect");
  Require(Convert.ToInt32(perm["iconId"].Value)==h.LargeIcon&&Convert.ToInt32(serialized["AttachEffectParam"].Rows.Single(r=>r.ID==h.Id)["statusIconId"].Value)==h.SmallIcon,"Serialized large/small icon mapping mismatch");
  var owner=serialized["SpEffectParam"].Rows.Single(r=>r.ID==h.Id);
- Require(Convert.ToInt32(owner["iconId"].Value)==h.SmallIcon&&Convert.ToInt32(owner["displayIconForPermamentEffect"].Value)==0,"Permanent icon must be available in special effects without a persistent HUD icon");
+ Require(Convert.ToInt32(owner["iconId"].Value)==h.SmallIcon&&Convert.ToInt32(owner["displayIconForPermamentEffect"].Value)==(h.Id==EssenceReaver.Owner?1:0),"Permanent icon mapping or Essence Reaver HUD visibility mismatch");
 }
 var effects=serialized["SpEffectParam"];
 PARAM.Row Effect(int id)=>effects.Rows.Single(r=>r.ID==id);
 for(int id=95001000;id<95001004;id++)Require(Convert.ToInt32(Effect(id)["saveCategory"].Value)==10&&Convert.ToSingle(Effect(id)["effectEndurance"].Value)==-1f&&Convert.ToSingle(Effect(id)["maxHpRate"].Value)==1f&&Convert.ToInt32(Effect(id)["iconId"].Value)==-1,"Level receipt must be neutral, hidden and natively saved");
 Require(Convert.ToInt32(serialized["AttachEffectParam"].Rows.Single(r=>r.ID==95000900)["passiveSpEffectId_2"].Value)==95000912,"Sword HKS marker is not attached");
+Require(Convert.ToInt32(serialized["SpEffectParam"].Rows.Single(r=>r.ID==95000912)["stateInfo"].Value)==449,"Sword native regain state missing");
 Require(Convert.ToInt32(Effect(95000900)["magicSubCategoryChange1"].Value)==130,"Sword permanent melee bonus must use native category 130");
 foreach(var field in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Require(Convert.ToSingle(Effect(95000900)[field].Value)==1.15f,"Sword melee bonus must be exactly 15%");
 
@@ -1010,7 +1015,9 @@ bnd.Compression=RegulationCompression.Format;
 var dest=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(Path.GetDirectoryName(dest)!);SFUtil.EncryptNightreignRegulation(dest,bnd,bnd.Compression);
 var reread=SFUtil.DecryptNightreignRegulation(dest);Require(reread.Version==bnd.Version&&reread.Files.Count==bnd.Files.Count,"Binder metadata mismatch");
 foreach(var f in reread.Files)Require(f.Bytes.Span.SequenceEqual(bnd.Files.Single(v=>v.ID==f.ID).Bytes.Span),"Binder readback mismatch "+f.Name);
-var changed=reread.Files.Where(f=>!f.Bytes.Span.SequenceEqual(original[f.ID])).Select(f=>Path.GetFileNameWithoutExtension(f.Name)).Order().ToArray();Require(changed.SequenceEqual(names.Order()),"Unexpected changed parameter files");
+var changed=reread.Files.Where(f=>!f.Bytes.Span.SequenceEqual(original[f.ID])).Select(f=>Path.GetFileNameWithoutExtension(f.Name)).Order().ToArray();
+var expectedChanged=names.Where(n=>added[n].Count>0||n=="Bullet").Order().ToArray();
+Require(changed.SequenceEqual(expectedChanged),"Unexpected changed parameter files: "+string.Join(", ",changed));
 var textReports=new List<object>();
 foreach(var lang in new[]{"zhocn","engus"}){
  var input=Path.Combine(root,"assets/original/msg",lang,"item_dlc01.msgbnd.dcx");var tb=BND4.Read(input);var originals=tb.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());

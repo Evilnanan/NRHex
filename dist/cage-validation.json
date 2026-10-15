@@ -1,5 +1,5 @@
 {
-  "version": "0.17.27",
+  "version": "0.17.139",
   "nativeBossCount": 37,
   "mapTemplates": [
     "m46_50_00_00",
@@ -9,28 +9,1084 @@
   ],
   "openBranchCases": [
     {
-      "owner": false,
-      "keys": 0,
-      "spawnRequested": false,
-      "keysConsumed": 0
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 0,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
     },
     {
-      "owner": false,
-      "keys": 1,
-      "spawnRequested": false,
-      "keysConsumed": 1
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
     },
     {
-      "owner": true,
-      "keys": 0,
-      "spawnRequested": true,
-      "keysConsumed": 0
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
     },
     {
-      "owner": true,
-      "keys": 1,
-      "spawnRequested": true,
-      "keysConsumed": 0
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 0,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 0,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 0,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 0,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 0,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": false,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          10108,
+          12341200,
+          2,
+          8000
+        ]
+      ],
+      "increments": 0
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 1,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 2,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 3,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 4,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": true,
+      "opened": false,
+      "removed": 0,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 1
+    },
+    {
+      "request": false,
+      "opened": true,
+      "removed": 1,
+      "count": 5,
+      "messages": [
+        [
+          11240,
+          10000,
+          1,
+          10000
+        ]
+      ],
+      "increments": 0
     }
   ],
   "opcodeArgumentsDecoded": true,
@@ -41,6 +1097,8 @@
     "isolatedExactNativeCode": true,
     "old6000RequestSilentlyIgnored": true,
     "new7000StatesSetAndClear": true,
+    "personal5000CountersSetAndClear": true,
+    "personalCategoryExcludedFromNativeNetworkTables": true,
     "gameProcessAccessed": false
   },
   "relicNativeCounter": 8145,
@@ -97,8 +1155,7 @@
   "peerBirthReplayAndLateLoadCasesPassed": true,
   "nativeFogModels": 6,
   "towerFog": [
-    690047,
-    690046
+    690047
   ],
   "towerAnimation": 20026,
   "nativeAnimationOverrides": [

@@ -3,7 +3,7 @@ from pathlib import Path
 import json,subprocess,re,os
 root=Path(__file__).resolve().parents[1];work=root/'.work/slingshot-requests'
 report=json.loads((work/'hks-validation.json').read_text())
-decompiler=Path(os.environ.get('NRHEX_DSLUA',str(root/'.work/tools/DSLuaDecompiler/DSLuaDecompiler/bin/Release/net9.0/DSLuaDecompiler.exe')))
+decompiler=Path(os.environ.get('NRHEX_DSLUA',r'D:/Program Files/DSLuaDecompiler/DSLuaDecompiler.exe'))
 for source,name in [('hks-before.hks','before.lua'),('c0000.hks','after.lua')]:
  subprocess.run([str(decompiler),str(work/source),'--included-function-ids','9','1255','-o',str(work/name)],check=True)
 before=(work/'before.lua').read_text(encoding='utf-8-sig');after=(work/'after.lua').read_text(encoding='utf-8-sig')

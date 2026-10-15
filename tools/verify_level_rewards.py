@@ -30,13 +30,13 @@ levels=[int(v.strip()) for v in re.search(r'pub const LEVELS: \[i32; 4\] = \[([^
 assert levels==[2,7,10,13]
 delivery=source[source.index('unsafe fn update_level_rewards'):source.index('unsafe extern "system" fn on_update')]
 # Regression audit: queued native effects must never block reward creation.
-assert 'if spawn_personal(player,base,chosen) {\n  apply(player,receipt,0);' in delivery
+assert 'if spawn_personal(player,base,chosen) {\n  reward_cycle_runtime::commit(player,base,next_seen);\n  apply(player,receipt,0);' in delivery
 assert 'has_effect(player,receipt,base)' not in delivery
 assert 'if CALLBACK_LOCK.swap(true,Ordering::AcqRel)' in delivery
 assert 'now.saturating_add(250)' in delivery
 assert 'unclaimed_hex_ball(base)' in delivery
-assert 'random_order(unavailable_hexes(player,base))' in delivery
-assert 'terrain_exclusions(owned_hexes(player,base),has_effect(player,95001601,base))' in source
+assert 'choose_reward(player,base,None)' in delivery
+assert 'terrain_exclusions(owned_hexes(player,base),reward_terrain::exclude_cage(reward_terrain::great_hollow(base)))' in source
 assert 'level_rewards::REACHED.iter()' in delivery
 assert 'created==3' in source
 assert 'if !changed&&now<due{return;}' in delivery
@@ -49,6 +49,13 @@ assert any(i['Bank']==2004 and i['instruction']==21 for i in events['nativeExamp
 gate, reset = sorted((e for e in events['events'] if e['ID']!=1111), key=lambda e:e['ID'])
 deployment = next(e for e in events['events'] if e['ID']==1111)
 original = next(e for e in json.loads((root/'data/reference/rewards/deployment-events.json').read_text(encoding='utf8')) if e['file']=='common.emevd.dcx' and e['ID']==1111)
+reset_ids=[*range(95002701,95002706),95002505,*range(95002800,95002825),95002829,*range(95002825,95002829),95002903]
+lifecycle_ops=[(21,effect) for effect in reset_ids]+[(8,95002903)]+[(21,effect) for effect in range(95000103,95000107)]+[(8,95000106),(8,95002825)]
+lifecycle=[dict(Bank=2004,ID=operation,hex=struct.pack('<Ii',20000,effect).hex().upper()) for operation,effect in lifecycle_ops]
+assert deployment['instructions'][9:9+len(lifecycle)]==lifecycle
+assert reset['instructions'][13:13+len(lifecycle)]==lifecycle
+deployment=dict(deployment,instructions=deployment['instructions'][:9]+deployment['instructions'][9+len(lifecycle):])
+reset=dict(reset,instructions=reset['instructions'][:13]+reset['instructions'][13+len(lifecycle):])
 assert deployment['Parameters']==[] and len(deployment['instructions'])==40
 assert deployment['instructions'][:9]+deployment['instructions'][17:]==original['instructions']
 assert [(i['Bank'],i['ID'],struct.unpack('<Ii',bytes.fromhex(i['hex']))) for i in deployment['instructions'][9:17]]==[(2004,21,(20000,v)) for v in [95001000,95001001,95001002,95001003,95001010,95001011,95001012,95001013]]

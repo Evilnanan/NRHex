@@ -4,7 +4,7 @@ import json,subprocess,os,re,itertools
 from hks_bytecode import Reader,instructions
 root=Path(__file__).resolve().parents[1];work=root/'.work/slingshot-stacks'
 report=json.loads((work/'hks-validation.json').read_text())
-decompiler=Path(os.environ.get('NRHEX_DSLUA',str(root/'.work/tools/DSLuaDecompiler/DSLuaDecompiler/bin/Release/net9.0/DSLuaDecompiler.exe')))
+decompiler=Path(os.environ.get('NRHEX_DSLUA',r'D:/Program Files/DSLuaDecompiler/DSLuaDecompiler.exe'))
 parsed=[]
 for source,name in [('hks-before.hks','before.lua'),('c0000.hks','after.lua')]:
  subprocess.run([str(decompiler),str(work/source),'--included-function-ids','1245','-o',str(work/name)],check=True)

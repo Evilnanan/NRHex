@@ -129,8 +129,6 @@ def verify_hud(decoded, report, entity, name, choice):
     assert not any(n == 'IfCharacterAIState' for n, _ in decoded)
     bars = [a for n, a in decoded if n == 'DisplayBossHealthBar']
     assert bars == [[1, entity, 0, name], [1, entity, 1, name], [0, entity, 0, name], [0, entity, 1, name]]
-    two_phase=sum(n=='SpawnOneshotSFX' for n,_ in birth_code)==2
-    duration=6.5 if two_phase else 4
     shown = report['shown'] + entity % 10000 - 9000
     flags = {report['spawned']: True, choice: True, shown: True}
     assert ('LinkToBossHealthBar', [1, name, entity]) in decoded
@@ -212,7 +210,8 @@ def verify_birth(decoded, report, entity, choice, animation, fog):
     duration=6.5 if two_phase else 4
     assert effects == ([[2,entity,900,690050],[2,entity,900,690047]] if two_phase else [[2,entity,900,fog]])
     assert [a[1:3] for n, a in decoded if n == 'ForceAnimationPlayback'] == animation
-    assert not any(n in ('SetNetworkconnectedEventFlag', 'SetCharacterAIState', 'IncrementNetworkconnectedEventValue') for n, _ in decoded)
+    assert not any(n in ('SetNetworkconnectedEventFlag', 'IncrementNetworkconnectedEventValue') for n, _ in decoded)
+    assert [args for name,args in decoded if name=='SetCharacterAIState']==[[entity,0],[entity,1]]
     generators=[a for n,a in decoded if n=='InvokeEnemyGenerator']
     assert generators in ([],[[entity-5200],[entity-5200]])
     # Each peer runs its own event. A delayed local backread delays that peer's
@@ -229,11 +228,13 @@ def verify_birth(decoded, report, entity, choice, animation, fog):
             peer.step(delay)
         assert peer.calls('SpawnOneshotSFX') == [(delay,effects[0])]
         if two_phase:peer.step(delay+2.5)
-        assert peer.calls('ChangeCharacterEnableState') == [(delay, [entity, 0])]
+        assert peer.calls('ChangeCharacterEnableState') == [(0, [entity, 0]),(delay, [entity, 0])]
         peer.step(delay + duration - .01)
         assert not peer.calls('ForceAnimationPlayback')
         peer.step(delay + duration)
         assert peer.calls('ChangeCharacterEnableState')[-1] == (delay + duration, [entity, 1])
+        assert peer.calls('ActivateMultiplayerdependantBuffs') == [(delay + duration,[entity])]
+        assert peer.calls('SetCharacterAIState') == [(0,[entity,0]),(delay + duration,[entity,1])]
         assert len(peer.calls('ForceAnimationPlayback')) == len(animation)
         peer.flags[report['spawned']] = True
         peer.step(delay+duration+1)
@@ -242,25 +243,27 @@ def verify_birth(decoded, report, entity, choice, animation, fog):
         peer.flags[choice] = False
         peer.step(delay+duration+2)
         peer.step(delay+duration+3)
+        peer.step(delay+duration+18)
         peer.flags[choice] = True
         peer.flags[report['spawned']] = False
         peer.effects.clear()  # A new generated actor has a new native marker.
-        peer.step(delay+duration+4)
+        peer.step(delay+duration+19)
         assert len(peer.calls('SpawnOneshotSFX')) == len(effects)+1
+        assert len(peer.calls('ActivateMultiplayerdependantBuffs')) == 1
+        if two_phase:peer.step(delay+duration+21.5)
+        peer.step(delay+duration*2+19)
         assert len(peer.calls('ActivateMultiplayerdependantBuffs')) == 2
-    # Loading an already active fight reveals its actor without replaying an
-    # intro or disabling its AI. This includes unload/reload with choice held.
     peer = Peer(decoded, flags | {report['spawned']: True}, entity)
     peer.step()
     assert not peer.calls('SpawnOneshotSFX') and not peer.calls('ForceAnimationPlayback')
-    assert peer.calls('ChangeCharacterEnableState') == [(0, [entity, 1])]
+    assert peer.calls('ChangeCharacterEnableState') == [(0, [entity, 0]),(0, [entity, 1])]
     peer.state['loaded'] = False
     peer.step(1)
     peer.step(2)
     peer.state['loaded'] = True
     peer.step(3)
     assert not peer.calls('SpawnOneshotSFX')
-    assert peer.calls('ChangeCharacterEnableState')[-1] == (3, [entity, 1])
+    assert peer.calls('ChangeCharacterEnableState') == [(0, [entity, 0]),(0, [entity, 1])]
     assert len(peer.calls('ActivateMultiplayerdependantBuffs')) == 1
 
 

@@ -103,7 +103,7 @@ for r in data['reports']:
                 raise AssertionError('Selector did not yield')
             seen,committed,flags=select([18,20,3],cooling_indices=[18,20])
             assert seen==[18,20,3] and committed==[3]
-            assert flags[r['choices']+3] and not flags[r['choices']+18] and not flags[r['choices']+20]
+            assert flags[r['choices']+3] and not flags.get(r['choices']+18,False) and not flags.get(r['choices']+20,False)
             assert select([18])[1]==[18],'Cleaned actors must become eligible again'
             assert select([],already_ready=True)[0]==[],'Reload must retain a committed choice'
         elif e['ID']%10000>=9900:

@@ -127,6 +127,7 @@ static class CageEncounters {
  static void Remove(object param,object entry){foreach(var property in param.GetType().GetProperties()){if(property.GetValue(param) is IList l&&l.Contains(entry)){l.Remove(entry);return;}}throw new InvalidDataException("MSB collection not found");}
  static void Add(MSB_NR map,MSB_NR.Event entry)=>map.Events.Add(entry);
  public static void Build(string root,Dictionary<string,PARAM> tables,string? output=null,string? basis=null){
+  Directory.CreateDirectory(Path.Combine(root,".work/cage-groups"));
   var c=Load(root);output??=Path.Combine(root,"dist/mod");Directory.CreateDirectory(Path.Combine(output,"map/mapstudio"));Directory.CreateDirectory(Path.Combine(output,"event"));
   var genSourceMap=MSB_NR.Read(Path.Combine(root,"assets/original/map/mapstudio/m52_42_00_00.msb.dcx"));var genSource=genSourceMap.Events.Generators.Single(g=>g.EntityID==52423810);var regionSource=genSourceMap.Regions.GetEntries().Single(r=>r.Name==genSource.SpawnRegionNames[0]);var reports=new List<object>();
   foreach(int block in new[]{50,60,70,80}){

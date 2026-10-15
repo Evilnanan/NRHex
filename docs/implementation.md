@@ -22,7 +22,7 @@
 | 队友特殊效果列表／图标维护 | `status_sync.rs`、`lib.rs`、`HexBuild/Program.cs`、`verify_effect_sync_native.py`、`build-effect-sync.ps1` |
 | 详细状态页的特殊效果／附加效果分栏 | `status_display.rs`、`lib.rs`、[归栏证据](research/status-routing-01732.md) |
 | 无限墙跳、下落增伤 | `wall_input.rs`、`cat_wall.rs`、`cat_jump.rs`、`slingshot_runtime.rs`、`build_walljump.py`、`verify_cat_wall_native.py` |
-| 亮出你的剑 | `sword.rs`、`sword_map.rs`、`sword_hit_rules.rs`、`build_sword_ranges.py`、`verify_sword_charged.py` |
+| 亮出你的剑 | `sword.rs`、`sword_regain.rs`、`sword_map.rs`、`sword_hit_rules.rs`、`build_sword_ranges.py`、`verify_sword_charged.py`、`verify_sword_regain_native.py` |
 | 亮剑角色抽取限制 | `reward_choices.rs::role_exclusions`、`lib.rs::local_hero`／`unavailable_hexes`、`record_sword_balance.py` |
 | 大力 | `strength.rs`、`strength_sword.rs`、`verify_strength_native.py`、`verify_mighty_sword_native.py`；亮剑持有者解除隐士／复仇者抽取限制。联动法术及所有本地所属弹丸在完整43D260伤害／反应入口，按亮剑4米命中点距离提升输入冲击；hit+228原生来源kind=3识别弹丸，包含箭矢／弩矢／战技子弹。武器本体仍在构造时提升，联动法术延后处理以免重复；原生439E80目标反应映射及后续消费者读取提升值。退出整次结算后仅还原输入，保留原生输出，缓存命中与同一命中重入不重复提升。 |
 | 逃跑计划 | `escape.rs`、`verify_escape_native.py` |
@@ -52,6 +52,8 @@
 - 亮剑命中词条分类：`sword_hit_rules.rs`在原生505E90选择命中效果时核对manager+10所属本地持有者和实际命中点距离。对近身魔法／祷告使用0x2C8字节独立命中副本，来源类型3／4映射为1，追加近战分类130；原生蓄力法术分类110存在时追加武器蓄力100。完整原生选择器继续检查有效节点、511010适用条件、stateInfo2103及EA0790命中资格，输出原生效果ID；不改变共享命中、元素伤害、数值或效果行。验证覆盖8320400／8320410／8320420三档减伤及8600200回蓝，减伤仍为24%／32%／40%、持续10秒。不祥契约已移除单独开放法术标志的适用例外，近身转换后自然触发一次原生选择并共用冷却，范围外法术不触发。
 - 亮剑施法状态：`build_sword_vfx_hks.py` 通知实际施法手，`build_sword_recovery_hks.py` 覆盖原生MagicFire*Cancel收招回调，DLL在后摇沿用刚施放法术的减伤值。`sword.rs::casting_effect` 仅启用减伤和抗打断；风暴管束者幻剑不再添加，`lib.rs::update_sword` 仍清理旧左右手视觉状态。共享风暴管束者资源保留供原生战技与百般武艺使用。
 - 人工法术加成：`data/balance/sword.csv`；`build.rs` 每次编译按当前CSV校验并生成 `OUT_DIR/sword_bonuses.rs`，DLL只使用这份静态数值，修改后需重编译。`sword_map.rs` 提供法术身份及攻击映射，不直接手改。
+- 亮剑高阶回收（0.17.141）：在亮剑基础回收申请量上乘原生507BC0返回的回收倍率，最后取整并封顶65535。仅对合格近身法术，通过50F230构造独立描述符、将此次回收查询的适用类型改为武器1；原命中及其他增益查询不变。因此原生7005601／7005602的1.25／1.35倍可作用于亮剑法术，聚合和条件仍交给原生；不把原版触媒回收量相加，也不对普通武器重复乘倍率。新增12组原生倍率与回收槽联合隔离测试，实机／联机待测。
+- 亮剑血量回收：95000912沿既有拥有标记启用原生stateInfo449，普通武器完全沿用原版回收。`sword_regain.rs` 在33C4B0／43F3E5两个原生回收发放点，仅对本地亮剑持有者的映射法术替换最终申请量：已结算伤害×CSV加成百分比×2，取整并封顶65535；沿用4米限制，无效／范围外命中为0。不额外叠加原版触媒回收量。后续仍由3DA510进入4275A0排队，4289C0按原生时间窗口与剩余回收槽统一结算、扣减额度；不独立累计血量、不直接加血。普通受击保护期为4秒，随后按血量上限每秒衰减，具体受伤类型仍服从原生规则。武器、法术与其他原生回收词条共享同一槽，槽耗尽或过期后法术不再回血；旧吸血队列已移除。`verify_sword_regain_native.py` 隔离执行原生受损、排队及结算函数，覆盖28组额度、衰减、重复命中和死亡边界；不代表实机／联机验证。
 - 战技随机池：从 `ArtsProbe` 原版数据生成 `arts_data.rs`，不要手改静态 ID 清单。
 
 `dist/*.json` 保留当前功能检查结果，各脚本里的历史“version”可能指该检查首次引入的版本，而不是当前完整包。代码版本由 Cargo 管理。运行时加载状态与用户玩法验证分别判断，不用旧日志证明新 DLL 已加载。

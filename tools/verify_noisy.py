@@ -1,6 +1,6 @@
 """Check original self-marker routing, lava identity and visual-only matrices."""
 from pathlib import Path
-import json,runpy,sys,struct
+import json,runpy,sys,struct,re
 root=Path(__file__).resolve().parents[1]
 sys.argv=['probe','dis','0','0'];d=runpy.run_path(str(root/'tools/native_probe.py'))
 def check(r,b):assert d['read'](r,len(bytes.fromhex(b)))==bytes.fromhex(b),hex(r)
@@ -40,7 +40,8 @@ assert [r['id'] for r in data['effects']]==[95001501]
 package=json.loads((root/'dist/validation.json').read_text(encoding='utf8'))
 hexes={h['Id']:h for h in package['hexes']}
 assert (hexes[95001500]['LargeIcon'],hexes[95001500]['SmallIcon'])==(21229,22229)
-assert hexes[95001500]['ZhInfo']=='标记自己位置时，形成熔岩，期间你每次标记自己都会为这颗熔岩提升伤害'
+description=re.search(r'^<!-- hex:95001500 -->\n## [^\n]+\n(.*?)(?=^<!-- hex:|\Z)',(root/'docs/hexes.md').read_text(encoding='utf8'),re.M|re.S)
+assert description and hexes[95001500]['ZhInfo']==description.group(1).strip()
 assert (hexes[95001200]['LargeIcon'],hexes[95001200]['SmallIcon'])==(21222,22222)
 bullets={r['id']:r['fields'] for r in data['bullets']}
 attacks={r['id']:r['fields'] for r in data['attacks']}

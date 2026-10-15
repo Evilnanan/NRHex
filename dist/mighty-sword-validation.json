@@ -16,13 +16,5 @@
   "cachedHitsNotReboosted": true,
   "sourceDirectSpellsNotDoubleBoosted": true,
   "gameplayVerified": false,
-  "multiplayerVerified": false,
-  "version": "0.17.134",
-  "codeTestsPassed": 343,
-  "signatureCount": 128,
-  "changedAssets": [
-    "mod/natives/NRHex.dll"
-  ],
-  "otherAssetsAndSettingsPreserved": true,
-  "loadingVerified": false
+  "multiplayerVerified": false
 }

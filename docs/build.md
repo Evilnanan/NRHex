@@ -4,9 +4,11 @@
 
 DLL和INI位于`dist/mod/natives`；ME3的原生DLL条目也指向`mod/natives/NRHex.dll`。亮剑近身判定固定在`src/sword.rs`的`NEAR_DISTANCE=4.0`，INI不再控制该数值。
 
+亮剑原生回收可通过 `./build-sword-regain.ps1` 增量构建：运行Rust测试、EXE签名检查与原生回收隔离测试，仅更新DLL、95000912的原生回收状态及中英文说明，备份后安装到dist，保留其他资源和CSV／INI。`-NoInstall`仅构建和验证。群友版随后运行 `./build-no-hotkeys.ps1`；ME3配置必须同时加载DLL与mod资源包。
+
 亮剑触媒特效可通过 `./build-sword-vfx.ps1` 增量构建：沿当前资源添加左右手视觉与施法手标记，检查后仅替换 DLL、参数包及动作脚本，保留其他资源与配置。完整构建也包含相同改动。该命令不启动游戏。
 
-默认构建启用Cargo的`test-hotkeys`功能，保留自测快捷键。已有最新dist游戏资源后，可运行`./build-no-hotkeys.ps1`，以`--no-default-features`单独编译不含快捷键的DLL，并将当前资源复制到`E:\Projects\me3-manager\nightreign-mods\NRHex`。可用`-Destination`指定其他目录。此脚本复用当前dist资源，不重建参数、地图或文本；修改这些内容时先完成正常构建。独立DLL产物保存在`.work/no-hotkeys-target`，不会覆盖自测DLL。
+默认构建启用Cargo的`test-hotkeys`功能，保留自测快捷键。已有最新dist游戏资源后，可运行`./build-no-hotkeys.ps1`，以`--no-default-features`单独编译不含快捷键的DLL，并将当前资源复制到`D:\Users\OwO\Documents\me3-profiles\NRHex`。可用`-Destination`指定其他目录。此脚本复用当前dist资源，不重建参数、地图或文本；修改这些内容时先完成正常构建。独立DLL产物保存在`.work/no-hotkeys-target`，不会覆盖自测DLL。
 
 群友版保留正常升级发球；测试按键检测在编译时移除，添加INI配置不能开启。打包保留已有ME3联机及其他DLL条目，移除废弃的快捷键／射程配置，核对发行DLL不导入`GetAsyncKeyState`，并回读所有复制文件的哈希。已有旧`natives`目录应先迁移到`mod/natives`；本项目和指定管理器目录已迁移。
 
@@ -23,7 +25,7 @@ DLL和INI位于`dist/mod/natives`；ME3的原生DLL条目也指向`mod/natives/N
 | .NET | .NET 10 SDK |
 | Rust | Windows x64 MSVC 工具链 |
 
-Python 依赖见 `tools/requirements.txt`，版本按当前已安装且可执行的环境记录。源码仍有本机工具路径；迁到另一台机器时需统一替换这些路径。原始游戏文件不从 Mod 产物反推。
+Python 依赖见 `tools/requirements.txt`，版本按当前已安装且可执行的环境记录。源码仍有本机工具路径；迁到另一台机器时需统一替换这些路径。弹弓的四个 HKS 独立验证脚本默认使用上表已安装的 DSLuaDecompiler，可通过 `NRHEX_DSLUA` 指定其他可执行文件，不依赖 `.work/tools` 中的临时副本。原始游戏文件不从 Mod 产物反推。
 
 2026-10-09 临时电脑工作区位于 `E:/Projects/NRMod/NRHex`，Python、Smithbox、ME3 与游戏位于 E 盘，.NET 10 SDK 与 Rust 工具链已可用。刷怪笼专用入口 `./build-cages.ps1` 使用当前 Python，并默认从项目所在盘查找 Smithbox、游戏和 ME3；可用 `NRHEX_SMITHBOX`、`NRHEX_GAME`、`NRHEX_ME3` 环境变量覆盖。`HexBuild` 的库路径还可通过 `-p:SmithboxDir=...` 覆盖。启动脚本也支持上述游戏和 ME3 路径。
 
@@ -91,7 +93,7 @@ cargo run --release --bin scancheck
 
 底层双语入口为 `HexBuild --stage-translations` 和 `--check-descriptions`；后者检查源与现有包，不生成文本，编辑后尚未构建时不一致是正常的。历史 `--texts-only` 保留中文暂存行为供旧工具使用。`--export-descriptions` 是旧版中文导出探针，不覆盖文案源。
 
-`data/balance/sword.csv` 为 UTF-8（读取也接受 BOM），加成可含小数；`cargo build --release --lib` 通过 `build.rs` 校验当前CSV并将数值静态嵌入DLL，CSV改动会自动触发重编译。DLL运行时使用内置表，修改CSV后必须重新编译、替换DLL并重启游戏。输入缺失、身份重复／不完整或数值非法时构建失败，用户CSV保持原样。当前校验以 `build_sword_ranges.py` 和 `sword_csv.rs` 为准，表中“加成”直接用于增伤和咏唱减伤，吸血百分比使用该数值×2；不能直接将CSV列乘2，否则会连带提高另外两项。
+`data/balance/sword.csv` 为 UTF-8（读取也接受 BOM），加成可含小数；`cargo build --release --lib` 通过 `build.rs` 校验当前CSV并将数值静态嵌入DLL，CSV改动会自动触发重编译。DLL运行时使用内置表，修改CSV后必须重新编译、替换DLL并重启游戏。输入缺失、身份重复／不完整或数值非法时构建失败，用户CSV保持原样。当前校验以 `build_sword_ranges.py` 和 `sword_csv.rs` 为准，表中“加成”直接用于增伤和咏唱减伤，法术回收申请百分比使用该数值×2，实际回血受原生回收槽限制；不能直接将CSV列乘2，否则会连带提高另外两项。
 
 ## 再生术数值增量更新
 

@@ -65,5 +65,5 @@ try:
  assert any(i.mnemonic=='mov' and i.op_str=='edx, 0xd1' for i in instructions)
 finally:k.VirtualFree(image,0,0x8000)
 report=dict(nativeCases=len(cases)+2,cases=cases,originalNativeInstructionsExecuted=True,onlyLookupDependenciesStubbed=True,nativeLeaveAction=209,nativeLeaveText=120600,slotStride=0x118,goodsOffset=0x64,nodeGoodsOffset=0x28,gameProcessAccessed=False,gameplayVerified=False,multiplayerVerified=False)
-out=ROOT/'.work/hex-reroll/native-validation.json';out.write_text(json.dumps(report,indent=2),encoding='utf8')
+out=ROOT/'.work/hex-reroll/native-validation.json';out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(report,indent=2),encoding='utf8')
 print(f'PASS: {report["nativeCases"]} isolated native menu/Leave/item-data cases; original weapon Leave and action 209 verified')

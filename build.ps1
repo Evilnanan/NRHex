@@ -28,6 +28,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Cage local correction parameter readback failed.' }
     & python -X utf8 tools/verify_cage_hp_native.py
     if ($LASTEXITCODE -ne 0) { throw 'Native cage multiplayer correction verification failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --contract-heart-probe
+    if ($LASTEXITCODE -ne 0) { throw 'Contract and branch native parameter export failed.' }
     dotnet run --project tools/HexBuild -- $PSScriptRoot --contract-heart-check
     if ($LASTEXITCODE -ne 0) { throw 'Contract and branch effect/event readback failed.' }
     python -X utf8 tools/verify_contract_heart_native.py
@@ -76,6 +78,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Native sword AttackRate fixture export failed.' }
     & python -X utf8 tools/verify_sword_native.py
     if ($LASTEXITCODE -ne 0) { throw 'Native sword category/magic binding validation failed.' }
+    dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot --sword-regain-probe
+    if ($LASTEXITCODE -ne 0) { throw 'Native regain tier fixture export failed.' }
+    & python -X utf8 tools/verify_sword_regain_native.py
+    if ($LASTEXITCODE -ne 0) { throw 'Native sword regain validation failed.' }
     dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot --escape-probe
     if ($LASTEXITCODE -ne 0) { throw 'Original low-HP effect export failed.' }
     & python -X utf8 tools/verify_escape_native.py

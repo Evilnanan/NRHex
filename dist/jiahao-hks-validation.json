@@ -66,7 +66,7 @@
   "iframeMechanism": "Duchess JumpTable 8 copied onto 36 normal backstep clips; private owner state 25013; animation time controls lifetime",
   "backstepHitCategory": 129,
   "frontalCriticalOnly": true,
-  "frontalCriticalGaugePercent": 25,
+  "frontalCriticalGaugePercent": 50,
   "damageGaugePercent": -30,
   "removedIncorrectHitKindGate": true,
   "nativeBackstepTae": {

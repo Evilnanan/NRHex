@@ -9,6 +9,7 @@ mod reward_choices;
 mod reward_cycle;
 mod reward_cycle_runtime;
 mod reward_reroll;
+mod sword_regain;
 mod level_rewards;
 mod personal_reward;
 mod red_envelope;
@@ -186,7 +187,6 @@ static REWARD_RECOVERY:OnceLock<Mutex<reward_recovery::Recovery>>=OnceLock::new(
 thread_local! { static PERSONAL_REWARD: Cell<personal_reward::Scope> = const { Cell::new(personal_reward::Scope { manager:0, lot:0, slot:0, created:0 }) }; }
 static CAT: OnceLock<Mutex<cat::Cat>> = OnceLock::new();
 static CAT_LANDING:OnceLock<Mutex<cat_jump::Landing>>=OnceLock::new();
-static SWORD: OnceLock<Mutex<sword::Healing>> = OnceLock::new();
 static SWORD_BONUSES: OnceLock<sword::Bonuses> = OnceLock::new();
 static SWORD_CAST_PLAYER: AtomicUsize = AtomicUsize::new(0);
 static SWORD_LAST_CAST: AtomicU64 = AtomicU64::new(0);
@@ -353,8 +353,8 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);130] {
- [(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
+fn signatures()->[(&'static str,u32);134] {
+ [(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
   (NEAR_DEATH_STATE_PATTERN,0x66d700),
@@ -479,7 +479,6 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   nlog_info!("Test reward hotkeys compiled in: {}",cfg!(feature="test-hotkeys"));
   SWORD_BONUSES.set(sword::Bonuses::defaults()).map_err(|_|"Sword bonuses already initialized")?;
   nlog_info!("Sword shared effect percentages initialized from the compiled user balance table");
-  SWORD.set(Mutex::new(sword::Healing::default())).map_err(|_|"Sword already initialized")?;
   let base=pe::main_module_base()?;
   let bytes=std::fs::read(module_path(base as *mut c_void)?).map_err(|e|e.to_string())?;
   let hash=format!("{:x}",Sha256::digest(bytes));
@@ -572,6 +571,8 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let arts_behavior_prepared=hook::prepare(arts_behavior_target,arts_behavior_detour as *const u8,64)?;
   parry::COST_RESUME.store(base.add(parry::COST_RESUME_RVA) as *mut u8,Ordering::Release);
   let arts_transfer_targets=[
+   (sword_regain::DIRECT_RVA,sword_regain::direct as *const u8,&sword_regain::DIRECT_ORIGINAL),
+   (sword_regain::RECEIVED_RVA,sword_regain::received as *const u8,&sword_regain::RECEIVED_ORIGINAL),
    (essence_reaver::RATE_RVA,essence_reaver::rate_detour as *const u8,&essence_reaver::RATE_ORIGINAL),
    (reward_reroll::CTOR_RVA,reward_reroll::constructor as *const u8,&reward_reroll::CTOR_ORIGINAL),
    (reward_reroll::TEXT_RVA,reward_reroll::text as *const u8,&reward_reroll::TEXT_ORIGINAL),
@@ -1413,11 +1414,6 @@ unsafe fn update_sword(player:usize,base:usize){
    remove(read_ptr(player+0x190),id);
   }
  }
- let Some(state)=SWORD.get() else{return;};
- let amount={let Ok(mut h)=state.lock() else{return;};h.take(player,stats,alive,owned)};
- if amount==0{return;}
- for bit in 0..sword::HEAL_BITS{if amount&(1<<bit)!=0{apply(player,sword::HEAL_BASE+bit as i32,0);}}
- apply(player,sword::HEAL_VISUAL,0); // 8630000 HP-only visual, without native fixed healing.
 }
 unsafe fn has_effect(player:usize,effect:i32,base:usize)->bool {
  let manager=read_ptr(player+0x190);if manager==0{return false;}
@@ -1722,23 +1718,10 @@ unsafe fn update_flasks(player:usize,stats:usize,base:usize,s:runtime::Snapshot)
  }
 }
 
-// Native on-damage dispatch at this site passes hit+280 even when immunity
-// prevents HP loss. Sword heals from full hit damage, including overkill and
-// locked-HP targets, but excludes nullified hits. Cat includes immune hits.
 unsafe extern "system" fn on_cat_hit(module:usize,hit:usize,before:i32,source:usize) {
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);let player=read_ptr(module+8);
  if player==0{return;}
- if source!=player&&is_local(source,base)&&has_effect(source,sword::OWNER,base)&&spell_percentage(hit).is_some()&&sword::near(sword_hit_distance(source,hit,base),sword::NEAR_DISTANCE){
-  let caster_modules=read_ptr(source+0x1b8);
-  if caster_modules!=0{
-   let caster_stats=read_ptr(caster_modules);
-   if caster_stats!=0&&read_i32(caster_stats+0x140)>0{
-    let amount=sword::heal_amount(read_i32(hit+0x280),spell_percentage(hit).unwrap_or(0.),ptr::read((hit+0x2c3) as *const u8)&2!=0);
-    if amount>0{if let Some(state)=SWORD.get(){if let Ok(mut h)=state.lock(){h.queue(source,caster_stats,amount);}}}
-   }
-  }
- }
  if is_local(player,base)&&has_effect(player,jiahao::OWNER,base){
   let stats=read_ptr(read_ptr(player+0x1b8));if stats!=0{if let Some(state)=JIAHAO.get(){if let Ok(mut state)=state.lock(){state.synchronize(player,stats,true,read_i32(stats+0x140)>0);state.damaged(read_i32(hit+0x280));}}}
  }

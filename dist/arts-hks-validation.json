@@ -1,5 +1,5 @@
 {
-  "version": "0.17.27",
+  "version": "0.15.2",
   "functions": [
     {
       "id": 533,
@@ -742,7 +742,7 @@
     233750002,
     241750002
   ],
-  "uniqueSkillPool": 183,
+  "uniqueSkillPool": 182,
   "actualNameTextChecked": true,
   "excludedPreviouslyRandomUnnamedSkills": [
     104,
@@ -751,6 +751,5 @@
     1180,
     1181
   ],
-  "multiplayerVerified": false,
-  "stanceReentryFix": "arts-stance-validation.json"
+  "multiplayerVerified": false
 }

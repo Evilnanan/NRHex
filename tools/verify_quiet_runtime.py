@@ -13,7 +13,7 @@ assert not (root/'src/cat_probe.rs').exists() and not (root/'src/sword_probe.rs'
 logger=(root/'src/log.rs').read_text(encoding='utf8')
 assert 'OutputDebugStringW' not in logger
 assert 'f.probe()' in hot and 'r.note_refill_attempt(after.gauge>=99.9)' in hot
-assert 'SWORD_LAST_CAST.store(GetTickCount64()' in hot and 'sword::CAST_PULSE' in hot
+assert 'let now=GetTickCount64();' in hot and 'SWORD_LAST_CAST.store(now,Ordering::Release)' in hot and 'sword::CAST_PULSE' in hot
 assert 'h.queue(source,caster_stats,amount)' in hot and 'shell.absorb(player,stats,s,eligible)' in hot
 assert 'sword::heal_amount(read_i32(hit+0x280),spell_percentage(hit).unwrap_or(0.),ptr::read((hit+0x2c3) as *const u8)&2!=0)' in hot
 hks=json.loads((root/'dist/hks-validation.json').read_text(encoding='utf8'))

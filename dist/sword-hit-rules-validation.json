@@ -23,13 +23,5 @@
   "multiplayerVerified": false,
   "contractNativeFlagsUnchanged": true,
   "contractNoSeparateSpellFilter": true,
-  "externalHitEligibilityStubbed": true,
-  "version": "0.17.136",
-  "codeTestsPassed": 347,
-  "signatureCount": 129,
-  "changedAssets": [
-    "mod/natives/NRHex.dll"
-  ],
-  "otherAssetsAndSettingsPreserved": true,
-  "loadingVerified": false
+  "externalHitEligibilityStubbed": true
 }

@@ -304,5 +304,6 @@
   "healingUsesCompletedDamage": true,
   "healingRequiresRecipientHpLoss": false,
   "nullifiedHitsExcludedFromHealing": true,
+  "healingConsumesNativeRegain": true,
   "lockedHpGameplayVerified": false
 }

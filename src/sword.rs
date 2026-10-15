@@ -15,9 +15,6 @@ pub const WEAPON_RIGHT:i32=95000940;
 pub const WEAPON_LEFT:i32=95000941;
 pub const GUARD:i32=95000908; // Native int only; not passed through HKS f32.
 pub const POISE:i32=95000916; // Native category 1001 reaction override.
-pub const HEAL_VISUAL:i32=95000910;
-pub const HEAL_BASE:i32=95000920;
-pub const HEAL_BITS:usize=16;
 pub const GLANCE_RATE:f32=0.01; // Native 8821000's five AttackRate fields.
 pub const LIFESTEAL_SCALE:f64=2.;
 pub const NEAR_DISTANCE:f32=4.;
@@ -97,18 +94,6 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
  if recovery{return (continuous&&previous>=0).then_some(previous);}
  Some(if current>=0 {current} else if continuous {previous} else {-1})
 }
-#[derive(Default)]
-pub struct Healing {player:usize,stats:usize,pending:u32}
-impl Healing {
- pub fn queue(&mut self,player:usize,stats:usize,amount:u32){
-  if self.player!=player||self.stats!=stats{self.player=player;self.stats=stats;self.pending=0;}
-  self.pending=self.pending.saturating_add(amount).min(65535);
- }
- pub fn take(&mut self,player:usize,stats:usize,alive:bool,owned:bool)->u32{
-  if self.player!=player||self.stats!=stats||!alive||!owned{self.pending=0;}
-  self.player=player;self.stats=stats;std::mem::take(&mut self.pending)
- }
-}
 #[cfg(test)]mod tests{
  use super::*;
  #[test]fn recovery_retains_cast_spell_without_reviving_stale_protection(){
@@ -161,7 +146,6 @@ impl Healing {
  #[test]fn added_melee_category_keeps_all_original_tags_without_adding_skill_and_is_idempotent(){for original in 0..256{let mut mask=[0u32;8];mask[original/32]|=1<<(original%32);let saved=mask;add_melee_category(&mut mask);for n in [original,130]{assert_ne!(mask[n/32]&(1<<(n%32)),0);}for bit in 0..256{if bit!=130{assert_eq!(mask[bit/32]&(1<<(bit%32)),saved[bit/32]&(1<<(bit%32)));}}let once=mask;add_melee_category(&mut mask);assert_eq!(mask,once);}}
  #[test]fn shared_percentage_headers_are_unambiguous(){for name in ["加成","吸血百分比","效果百分比","增伤百分比"]{assert!(Bonuses::read(&table(4021,"30").replace("增伤百分比",name)).is_ok());}assert!(Bonuses::read("MagicID,吸血百分比,增伤百分比\n4021,20,30").is_err());assert!(Bonuses::read("MagicID,加成,吸血百分比\n4021,20,30").is_err());}
  #[test]fn incoming_reduction_uses_requested_curve_and_preserves_non_damage(){assert_eq!(reduced(65,30.),36);assert_eq!(reduced(100,0.),100);assert_eq!(reduced(100,100.),29);assert_eq!(reduced(-5,50.),-5);assert_eq!(reduced(100,12.5),74);}
- #[test]fn queued_healing_dropped_on_owner_death_or_object_change(){let mut h=Healing::default();h.queue(1,2,40);assert_eq!(h.take(1,2,true,true),40);assert_eq!(h.take(1,2,true,true),0);for (p,s,alive,owned) in [(1,2,false,true),(1,2,true,false),(2,3,true,true)]{h.queue(1,2,40);assert_eq!(h.take(p,s,alive,owned),0);}}
  #[test]fn torso_range_handles_elevated_contacts_without_expanding_horizontal_range(){
   let feet=[10.,20.,30.,1.];
   // A hit 3.8 m forward and 2 m above the feet was incorrectly out of range.

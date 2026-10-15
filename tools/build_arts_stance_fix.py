@@ -11,6 +11,7 @@ parser.add_argument('--inplace', action='store_true')
 args = parser.parse_args()
 path = root / 'dist/mod/action/script/c0000.hks'
 target = path if args.inplace else root / '.work/fixes-01727/staged/mod/action/script/c0000.hks'
+(root/'.work/fixes-01727').mkdir(parents=True,exist_ok=True)
 source = path.read_bytes()
 r = Reader(source); r.function()
 edits, changed, reports = [], {}, []

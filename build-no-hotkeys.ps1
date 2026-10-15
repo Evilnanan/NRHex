@@ -1,4 +1,4 @@
-param([string]$Destination = 'E:\Projects\me3-manager\nightreign-mods\NRHex')
+param([string]$Destination = 'D:\Users\OwO\Documents\me3-profiles\NRHex')
 $ErrorActionPreference = 'Stop'
 Push-Location $PSScriptRoot
 try {
