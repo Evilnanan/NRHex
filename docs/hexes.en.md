@@ -17,7 +17,7 @@
 <!-- hex:95000100 -->
 ## Red Envelope
 
-Grants 88,888 runes and one latent power.
+Grants 88,888 runes and a latent power reward for each party member.
 
 <!-- hex:95000200 -->
 ## Celestial Body

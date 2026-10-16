@@ -9,14 +9,16 @@ from local_paths import ROOT,GAME
 
 work=ROOT/'.work/essence-reaver'
 single='--single-staged' in sys.argv
-installed='--installed' in sys.argv or single
+hidden='--hidden-staged' in sys.argv
+installed='--installed' in sys.argv or single or hidden
+if hidden:work=ROOT/'.work/essence-hidden-icon'
 d=json.loads(((ROOT/'.work/essence-single/parameters.json')if single else(work/('installed.json'if installed else 'staged/validation.json'))).read_text())
 OWNER=95002900;PULSE=OWNER+1;LAYER=OWNER+2;RESET=OWNER+3;FIRST=95006000
 effects={e['ID']:e['fields'] for e in d['effects']}
 owner=effects[OWNER]
 assert LAYER not in effects
 assert (owner['stateInfo'],owner['applyIdOnGetSoul'],owner['applyIdOnKillSp'])==(199,PULSE,PULSE)
-assert owner['iconId']==20292 and owner['displayIconForPermamentEffect']==1
+assert owner['iconId']==20292 and owner['displayIconForPermamentEffect']==0
 assert owner['maxMpRate']==1 and owner['dispDartDebuffStacks']==0
 ids={FIRST+digit*256+value for digit in range(4) for value in range(1,256)}
 assert ids.issubset(effects) and len(ids)==1020
@@ -99,14 +101,12 @@ try:
  # lifetime visibility flag, not just a positive-duration approximation.
  code=pe.get_data(0x7deb30,0x2d4);c.memmove(memory+1024,code,len(code))
  aggregate=c.WINFUNCTYPE(c.c_void_p,c.c_void_p,c.c_void_p,c.c_void_p)(memory+1024)
- row[0x353]=8;vector=c.create_string_buffer(0x30);entries=c.create_string_buffer(1200*20);first=c.addressof(entries)
- # Exactly one owner entry, independent of accumulated kills.
+ row[0x353]=owner['displayIconForPermamentEffect']<<3;vector=c.create_string_buffer(0x30);entries=c.create_string_buffer(1200*20);first=c.addressof(entries)
  struct.pack_into('<QQQ',vector,0x10,first,first,first+len(entries))
  entry=c.create_string_buffer(struct.pack('<iiifi',OWNER,20292,0,-1.0,1))
  aggregate(c.addressof(vector),c.addressof(node),c.addressof(entry))
- end=struct.unpack_from('<Q',vector,0x18)[0];assert end-first==20
- shown=struct.unpack_from('<i',entries,16)[0];assert shown==1
- hud.append(dict(visibleIcons=1,displayedCount=shown))
+ end=struct.unpack_from('<Q',vector,0x18)[0];assert end==first
+ hud.append(dict(visibleIcons=0,displayedCount=0))
  # Run the EXE's actual aggregate and per-node max-FP getter. Only relocate
  # code/data references into private memory; native behavior stays intact.
  import capstone
@@ -142,4 +142,4 @@ finally:assert k.VirtualFree(memory,0,0x8000)
 formula=[dict(kills=count,requestedPower=1.01**count)for count in [0,1,10,50,100,256,1000]]
 report=dict(nativeCategoryCases=cases,nativeHudCases=hud,nativeFpCases=fp,serializedResetTimelines=timelines,formula=formula,compactSavedRecordLimit=4,nativeSavedCategoryCapacities=saved_limits,originalParameterRowsAndRewardTriplesPreserved=True if not installed else None,gameplayVerified=False,multiplayerVerified=False)
 (work/'native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
-print(f'PASS: {len(fp)} native FP aggregation cases, {len(hud)} single-icon case, {len(timelines)} reset timelines and compact records')
+print(f'PASS: {len(fp)} native FP aggregation cases, {len(hud)} hidden-icon case, {len(timelines)} reset timelines and compact records')

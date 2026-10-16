@@ -353,7 +353,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);134] {
+fn signatures()->[(&'static str,u32);135] {
  [(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -393,6 +393,7 @@ fn signatures()->[(&'static str,u32);134] {
   (reward_reroll::ITEM_COPY_PATTERN,reward_reroll::ITEM_COPY_RVA as u32),
   (reward_reroll::ROW_DTOR_PATTERN,reward_reroll::ROW_DTOR_RVA as u32),
   (reward_reroll::BIND_PATTERN,reward_reroll::BIND_RVA as u32),
+  (reward_reroll::SOUND_PATTERN,reward_reroll::SOUND_RVA as u32),
   (cage_trace::PARTY_PATTERN,cage_trace::PARTY_RVA as u32),
   (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
   (parry::DUMMY_COUNT_PATTERN,parry::DUMMY_COUNT_RVA as u32),
@@ -1903,6 +1904,7 @@ fn pressed_edge(state:&AtomicBool,down:bool)->bool {
 unsafe extern "system" fn reward_create_detour(manager:usize,descriptor:usize)->usize {
  let original:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(REWARD_CREATE_ORIG.load(Ordering::Acquire));
  arts_bind_drop(descriptor);
+ red_envelope::observe_dispatch(manager,descriptor);
  let scope=PERSONAL_REWARD.with(Cell::get);
  if descriptor==0||scope.manager==0||manager!=scope.manager {return original(manager,descriptor);}
  let kind=ptr::read_unaligned((descriptor+0x58) as *const u32);
@@ -1949,6 +1951,9 @@ unsafe fn choose_reward(player:usize,base:usize,preferred:Option<[usize;3]>)->Op
 }
 unsafe fn unclaimed_hex_ball(base:usize)->bool {
  let manager=read_ptr(base+ITEMS_RVA);if manager==0{return true;}
+ let game_data=read_ptr(base+GAME_DATA_RVA);if game_data==0{return true;}
+ let data=read_ptr(game_data+8);if data==0{return true;}
+ let slot=read_i32(data+8).max(1);if slot>3{return true;}
  let mut node=read_ptr(manager+0x58);
  // Native list belongs to ItemMan and is examined only on character Update.
  for _ in 0..4096 {
@@ -1957,7 +1962,7 @@ unsafe fn unclaimed_hex_ball(base:usize)->bool {
   let owner=ptr::read_unaligned((node+0xca) as *const u16);
   let lot=read_i32(node+0xd8);
   // All custom personal balls share one queue; native world rewards do not.
-  if kind&15==2 && owner&0x40!=0 && (red_envelope::bonus_lot(lot) ||
+  if kind&15==2 && owner&0x40!=0 && (red_envelope::pending_for(lot,owner,slot as u8) ||
      ((95200000..hex_pool::LEGACY_LOT_END).contains(&lot)
      && reward_choices::is_hex_good(ptr::read_unaligned((node+0x28) as *const u32)))) {return true;}
   node=read_ptr(node);
@@ -2362,6 +2367,13 @@ mod tests {
   assert_eq!(reward_create_detour(42,address),0);assert_eq!(ptr::read_unaligned(flags),0xfedcba12);
   assert_eq!(reward_create_detour(43,address),43+address);
   PERSONAL_REWARD.with(|c|c.set(personal_reward::Scope::default()));
+  ptr::write_unaligned(lot,red_envelope::LOTS[0]);ptr::write_unaligned(flags,0xfedcba12);
+  assert_eq!(red_envelope::dispatch(42,red_envelope::LOTS[0],||{
+   for slot in 1..=3{for _ in 0..3{
+    ptr::write_unaligned(owner,0x40|(slot<<7));let before=descriptor;
+    assert_eq!(reward_create_detour(42,address),42+address);assert_eq!(descriptor,before);
+   }}
+  }),9);
  }}
  #[test] fn reward_pool_samples_every_ordered_distinct_triple_once(){
   let n=hex_pool::HEX_COUNT;

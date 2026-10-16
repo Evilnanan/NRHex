@@ -89,7 +89,7 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
    let saved=cuts;let mut out=[0.;5];
    let value=calculate(native,true,out.as_mut_ptr(),a.as_ptr(),rates.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),0.25,0.5,0.,2.,1.5,0.,0.75);
    let mut expected=[0.;5];for i in 0..5{expected[i]=a[i]*rates[i]*(cuts[i]*cuts[i]*cuts[i]).max(1.)*0.5*2.*1.5*0.75;}
-   assert_eq!(out,expected);assert_eq!(value,expected.iter().sum());assert_eq!(cuts,saved);
+   assert_eq!(out,expected);assert_eq!(value,expected.iter().sum::<f32>());assert_eq!(cuts,saved);
   }
  }}
  #[test]fn reduction_groups_combine_before_clamping_each_damage_element(){unsafe{

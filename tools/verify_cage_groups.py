@@ -244,13 +244,14 @@ for r in built['reports']:
   ww.flags[p+7500+g['choice']]=False;blocked.step(1);blocked.step(1.1);assert blocked.flag(5000) and blocked.flag(5001) and not blocked.calls('DisplayBossHealthBar')
   # Births produce the main fog without the extra prelude, skip replay when joining an active battle.
   for m in g['members']:
-   code=event(r,p+9900+m['index']);fresh=World(p,g);birth=VM(code,fresh,True);birth.step();assert len(birth.calls('SpawnOneshotSFX'))==1;birth.step(4);assert birth.flag(shown(p,m))
+   expected_fog=[[1,p+3900,-1,690047]] if m==g['members'][0] else []
+   code=event(r,p+9900+m['index']);fresh=World(p,g);birth=VM(code,fresh,True);birth.step();assert [args for _,args in birth.calls('SpawnOneshotSFX')]==expected_fog;birth.step(4);assert birth.flag(shown(p,m))
    active=World(p,g);active.flags[p+7404]=True;birth=VM(code,active,True);birth.step();assert not birth.calls('SpawnOneshotSFX') and birth.flag(shown(p,m))
    # This peer observed the selection before the host's intro,
    # but its model loads nine seconds late: its local fog must still play.
    slow=World(p,g);slow.actors[entity(p,m)]['loaded']=False;birth=VM(code,slow,True);birth.step()
    slow.flags[p+7404]=True;slow.actors[entity(p,m)]['loaded']=True;birth.step(9)
-   assert birth.calls('SpawnOneshotSFX') and not birth.flag(shown(p,m))
+   assert [args for _,args in birth.calls('SpawnOneshotSFX')]==expected_fog and not birth.flag(shown(p,m))
    birth.step(13);assert birth.flag(shown(p,m))
    assert len(birth.calls('ActivateMultiplayerdependantBuffs'))==1
   cases+=2

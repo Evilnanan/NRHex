@@ -13,7 +13,7 @@
 | 功能 | 主要源码／工具 |
 | --- | --- |
 | 奖励池、排除已拥有项 | `hex_pool.rs`、`reward_choices.rs`、`HexBuild` |
-| 展示轮换与逐栏刷新 | `reward_cycle.rs`、`reward_cycle_runtime.rs`、`reward_reroll.rs`、`HexBuild/RewardCycle.cs`、`HexBuild/RewardReroll.cs`、`data/text/menu.json`、`verify_reward_reroll_native.py` |
+| 展示轮换与逐栏刷新 | `reward_cycle.rs`、`reward_cycle_runtime.rs`、`reward_reroll.rs`、`HexBuild/RewardCycle.cs`、`HexBuild/RewardReroll.cs`、`data/text/menu.json`、`verify_reward_reroll_native.py`、`verify_reroll_sound.py`；0.17.145在重投成功、原生列表重新绑定后仅提交一次原生确认音：菜单构造器0x79aee0的“決定”描述符为音效100／优先级2／类别1，经0x870290进入原生菜单音效队列，保留音量和优先级处理。不调用原生丢弃／确认动作；失败、已用次数、重入及普通武器菜单不额外提交。入口纳入135项签名守卫，无新增hook。描述符ABI与8条原生入队／优先级分支已隔离验证，实际听感待游戏验收。 |
 | 等级发放与排队 | `level_rewards.rs`、`personal_reward.rs`、`verify_level_rewards.py` |
 | 复活搬回原球 | `reward_recovery.rs`、`verify_reward_recovery.py` |
 | 终极刷新、豪饮叠层、再生术 | `runtime.rs`、`flasks.rs` |
@@ -28,18 +28,18 @@
 | 逃跑计划 | `escape.rs`、`verify_escape_native.py` |
 | 嘉豪身法 | `jiahao.rs`、`build_jiahao.py`、`JiahaoTae` |
 | 吵闹鬼 | `noisy.rs`、`verify_noisy.py`、`HexBuild`的私有熔岩链 |
-| 刷怪笼 | `HexBuild/Cages.cs`、`verify_cages.py`、`cage_local_events.py`、`build-cages.ps1`、`data/reference/world/cage-bosses.json` |
+| 刷怪笼 | `HexBuild/Cages.cs`、`HexBuild/CagePresentation.cs`、`verify_cage_presentation.py`、`verify_cages.py`、`cage_local_events.py`、`build-cages.ps1`、`data/reference/world/cage-bosses.json`；13种组合在4张地牢模板中，每组仅首成员的本地Birth在中央区域prefix+3900播放一次690047黑雾，其他成员用零行跳过替代原黑雾指令。单Boss不变，所有成员的4秒出场、动作、加载／重连分支、AI和奖励不变，无地图修改。区域类型1与指令ABI依据[NR EMEDF](https://soulsmods.github.io/emedf/nr-emedf.html#SpawnOneshotSFX)。增量入口--cage-presentation严格匹配旧事件并回读188个目标事件；52组／1504条成员时序已模拟，实机渲染与联机待验收。 |
 | 百般武艺 | `arts.rs`、`arts_data.rs`、`build_arts_data.py`、`build_arts_hks.py` |
 | 气球、强化【死灵术】、别停止咏唱 | `balloon.rs`／`balloon_runtime.rs`／`ability_damage.rs`（只提供基础攻击值，余下由原生结算）、`spirit.rs`／`spirit_runtime.rs`、`chant.rs`／`build_chant_hks.py`／`verify_chant_hks.py` |
 | 大法师：法术槽随机、丢拾与装备同步 | `archmage.rs`、`archmage_runtime.rs`、`archmage_cost.rs`、`archmage_data.rs`、`HexBuild/Archmage.cs`、`build_archmage_hks.py` |
 | 不祥契约、偷心者 | `HexBuild/ContractHeart.cs`、`ominous_pact.rs`、`heartstealer.rs`、`verify_contract_heart_native.py`、`verify_contract_heart_events.py` |
-| 夺萃之镰 | `essence_reaver.rs`、`HexBuild/EssenceReaver.cs`、`verify_essence_reaver.py`；原生击杀状态199计数，在本地角色原生专注值上限倍率查询 `0x50c230` 返回值上统一乘以 `1.01^击杀数`，其他原生倍率和属性结算保持不变。只显示海克斯自身20292图标，不显示层数；不再创建逐杀增益，移除95002902层参数。击杀数以至多4个隐藏本地保存记录编码，复活／重载恢复，新远征／圆桌守卫内通知重置。 |
+| 夺萃之镰 | `essence_reaver.rs`、`HexBuild/EssenceReaver.cs`、`verify_essence_reaver.py`；原生击杀状态199计数，在本地角色原生专注值上限倍率查询 `0x50c230` 返回值上统一乘以 `1.01^击杀数`，其他原生倍率和属性结算保持不变。不再向Buff栏单独显示小图标：95002900的displayIconForPermamentEffect为0，潜在能力／词条图标仍保留；不显示层数、不创建逐杀增益，移除95002902层参数。击杀数以至多4个隐藏本地保存记录编码，复活／重载恢复，新远征／圆桌守卫内通知重置。 |
 | 交锋 | `parry.rs`、`parry_turn.rs`、`parry_data.rs`、`HexBuild/Parry.cs`、`verify_parry_native.py` |
 | PE／特征／挂钩 | `pe.rs`、`pattern.rs`、`hook.rs`、`win.rs` |
 
 再生术蓝血转换比为1:4：血量不满时，每0.25秒消耗4FP、回复16HP。数值由 `HexBuild/Program.cs` 的95000601参数行生成，运行时仅管理触发间隔与资源条件；满血喝瓶回复50%FP沿用原逻辑。增量回读证据见 `dist/regen-balance-validation.json`。
 
-红包由 `src/red_envelope.rs` 和 `tools/HexBuild/RedEnvelopeRewards.cs` 额外发放一份原生潜在能力：领取时低于7级使用6100000（野外黑刀刺客／老狮子），7级及以上使用6110200（野外黑剑眷属／死亡仪式鸟），复制到95410000／95410010隔离归属与回收。95000103／04保存所选档位，95000105保存已发放记录，95000106接收新远征／圆桌的受守卫重置。档位保存确认后才发球，排队期间升级／降级不改变档位。与海克斯升级球共用未领取门控，RAM先预约再等原生保存确认；零创建失败可重试，部分创建则保留并记录错误，避免复制已有奖励。沿用原生私人球创建、随机武器、锻体、徘徊赐福和原生权重，未接入海克斯逐栏刷新。实机及联机待测。
+红包由 `src/red_envelope.rs` 和 `tools/HexBuild/RedEnvelopeRewards.cs` 发放原生团队潜在能力奖励：仅红包持有者本机发起一次，原生5769D0为各队伍槽独立抽取并生成各自可领取的一份奖励。领取红包时低于7级使用6100000（野外黑刀刺客／老狮子），7级及以上使用6110200（野外黑剑眷属／死亡仪式鸟），复制到95410000／95410010。95000103／04保存持有者选定档位，95000105保存已提交记录，95000106接收新远征／圆桌重置。档位保存确认后才发球，排队期间升级／降级不改变档位。此次调用不进入私人过滤，不修改原生归属、UID和网络位；5759E0按原生会话角色走本地创建、房主广播或队员请求。网络分支返回值不是奖励节点，按实际进入分派的描述符数量预约防重，不把返回值当创建成功。零提交可重试，部分提交也不重发整组，网络失败后的送达不作保证。每个红包持有者可各触发一组；旧版本已提交的红包不追补。待领门控只检查本机可领的红包奖励，不因队友未领取阻塞本机升级球。保留原生随机武器、锻体、徘徊赐福和权重，不接入海克斯逐栏刷新；88888卢恩仍只给红包持有者。18组原生分派隔离测试及24组归属可见性检查通过，房主／队员实际联机领取待测。
 
 玻璃大炮、红包的卢恩、星界躯体等静态数值主要由 `tools/HexBuild/Program.cs` 的参数生成实现。混沌使者已删除，当前对局无需旧效果兼容。
 
@@ -49,7 +49,7 @@
 - 奖励等级与一局内去重：`level_rewards.rs` 及构建中的生命周期事件，二者一起核对。
 - 测试快捷键：`lib.rs` 中受 `test-hotkeys` 编译特性控制的入口；按键配置为 `dist/mod/natives/NRHex.ini`。Ctrl+F6～F11功能见发行说明，群友版编译时移除该入口。
 - 亮剑近身距离：`sword.rs::NEAR_DISTANCE`，固定4米；旧INI字段只兼容忽略。
-- 别停止咏唱：持有者为贵族／复仇者／隐士时，DLL维护6999920启用标记，HKS在左右手六个MagicFire更新回调通过6999921通知有效蓄力，DLL按游戏时间每秒恢复30精力。0.17.143修复完整构建漏跑咏唱补丁导致通知缺失的问题；保留原生释放／取消检查，排除持续喷射与战技。新增最终产物检查与独立反编译对照；288组门控和7680组原生精力加算隔离测试通过，复仇者帚星实机复测待确认。
+- 别停止咏唱：持有者为贵族／复仇者／隐士时，DLL维护6999920启用标记，HKS在左右手六个MagicFire更新回调通过6999921通知有效蓄力，DLL按游戏时间每秒恢复30精力。0.17.143修复完整构建漏跑咏唱补丁导致通知缺失的问题；保留原生释放／取消检查，排除持续喷射与战技。新增最终产物检查与独立反编译对照；288组门控和7680组原生精力加算隔离测试通过，用户确认0.17.143复仇者帚星蓄力回复精力生效；不扩展为其他法术或联机已验证。
 - 亮剑命中词条分类：`sword_hit_rules.rs`在原生505E90选择命中效果时核对manager+10所属本地持有者和实际命中点距离。对近身魔法／祷告使用0x2C8字节独立命中副本，来源类型3／4映射为1，追加近战分类130；原生蓄力法术分类110存在时追加武器蓄力100。完整原生选择器继续检查有效节点、511010适用条件、stateInfo2103及EA0790命中资格，输出原生效果ID；不改变共享命中、元素伤害、数值或效果行。验证覆盖8320400／8320410／8320420三档减伤及8600200回蓝，减伤仍为24%／32%／40%、持续10秒。不祥契约已移除单独开放法术标志的适用例外，近身转换后自然触发一次原生选择并共用冷却，范围外法术不触发。
 - 亮剑施法状态：`build_sword_vfx_hks.py` 通知实际施法手，`build_sword_recovery_hks.py` 覆盖原生MagicFire*Cancel收招回调，DLL在后摇沿用刚施放法术的减伤值。`sword.rs::casting_effect` 仅启用减伤和抗打断；风暴管束者幻剑不再添加，`lib.rs::update_sword` 仍清理旧左右手视觉状态。共享风暴管束者资源保留供原生战技与百般武艺使用。
 - 人工法术加成：`data/balance/sword.csv`；`build.rs` 每次编译按当前CSV校验并生成 `OUT_DIR/sword_bonuses.rs`，DLL只使用这份静态数值，修改后需重编译。`sword_map.rs` 提供法术身份及攻击映射，不直接手改。

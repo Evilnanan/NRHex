@@ -20,6 +20,7 @@ if(args.Contains("--check-descriptions")){
  HexTexts.Verify(root,HexCatalog.Load(root));return;
 }
 if(args.Contains("--regulation-compression")){RegulationCompression.Normalize(root);return;}
+if(args.Contains("--cage-presentation")){CagePresentation.Stage(root);return;}
 
 if(args.Contains("--cage-network-selector")){CageNetwork.Stage(root);return;}
 if(args.Contains("--cage-usage")){CageUsage.Stage(root);return;}
@@ -73,6 +74,7 @@ if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
 if(args.Contains("--essence-reaver-probe")){EssenceReaver.Probe(root,bnd,Parse);return;}
 if(args.Contains("--essence-reaver-single")){EssenceReaver.StageSingle(root,Parse);return;}
 if(args.Contains("--essence-reaver-check")){EssenceReaver.ExportChecks(root,Parse);return;}
+if(args.Contains("--essence-reaver-hide-icon")){EssenceReaver.StageHiddenIcon(root,Parse);return;}
 if(args.Contains("--contract-heart-probe")){ContractHeart.Probe(root,bnd,Parse);return;}
 if(args.Contains("--contract-heart-check")){ContractHeart.ExportChecks(root,Parse);return;}
 if(args.Contains("--contract-damage-marker")){ContractHeart.StageDamageMarker(root,Parse);return;}
@@ -936,7 +938,7 @@ foreach(var h in hexes){
  Require(Convert.ToInt32(perm["spEffectId"].Value)==h.Id&&serialized["SpEffectParam"].Rows.Any(r=>r.ID==h.Id),"Permanent ability has no effect");
  Require(Convert.ToInt32(perm["iconId"].Value)==h.LargeIcon&&Convert.ToInt32(serialized["AttachEffectParam"].Rows.Single(r=>r.ID==h.Id)["statusIconId"].Value)==h.SmallIcon,"Serialized large/small icon mapping mismatch");
  var owner=serialized["SpEffectParam"].Rows.Single(r=>r.ID==h.Id);
- Require(Convert.ToInt32(owner["iconId"].Value)==h.SmallIcon&&Convert.ToInt32(owner["displayIconForPermamentEffect"].Value)==(h.Id==EssenceReaver.Owner?1:0),"Permanent icon mapping or Essence Reaver HUD visibility mismatch");
+ Require(Convert.ToInt32(owner["iconId"].Value)==h.SmallIcon&&Convert.ToInt32(owner["displayIconForPermamentEffect"].Value)==0,"Permanent icon mapping or HUD visibility mismatch");
 }
 var effects=serialized["SpEffectParam"];
 PARAM.Row Effect(int id)=>effects.Rows.Single(r=>r.ID==id);

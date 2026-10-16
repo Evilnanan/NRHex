@@ -1,12 +1,49 @@
 //! One native field-boss lottery, selected by level when Red Envelope is acquired.
 use crate::{has_effect,read_i32,read_ptr};
-use std::sync::{Mutex,atomic::Ordering};
+use std::{cell::Cell,sync::{Mutex,atomic::Ordering}};
 pub const OWNER:i32=95000100;
 // Persist the chosen tier before delivery. Level changes while queued cannot reroll it.
 pub const MARKERS:[i32;3]=[95000103,95000104,95000105];
 pub const RESET:i32=95000106;
 pub const LOTS:[i32;2]=[95410000,95410010];
 pub fn bonus_lot(lot:i32)->bool { LOTS.iter().any(|&base|(base..base+3).contains(&lot)) }
+
+pub fn pending_for(lot:i32,owner:u16,slot:u8)->bool{
+ let recipient=(owner>>7)&3;
+ bonus_lot(lot)&&owner&0x40!=0&&(1..=3).contains(&slot)&&(recipient==0||recipient==slot as u16)
+}
+
+#[derive(Clone,Copy,Default)]
+struct Dispatch { manager:usize,lot:i32,submitted:u32 }
+thread_local! { static DISPATCH:Cell<Dispatch>=const{Cell::new(Dispatch{manager:0,lot:0,submitted:0})}; }
+
+pub fn dispatch(manager:usize,lot:i32,spawn:impl FnOnce())->u32{
+ if manager==0||!LOTS.contains(&lot)||DISPATCH.with(|state|state.get().manager!=0){return 0;}
+ struct Reset;
+ impl Drop for Reset{fn drop(&mut self){DISPATCH.with(|state|state.set(Dispatch::default()));}}
+ let _reset=Reset;
+ DISPATCH.with(|state|state.set(Dispatch{manager,lot,submitted:0}));
+ spawn();
+ DISPATCH.with(|state|state.get().submitted)
+}
+
+pub unsafe fn observe_dispatch(manager:usize,descriptor:usize){
+ DISPATCH.with(|state|{
+  let mut scope=state.get();
+  if scope.manager==0||scope.manager!=manager||descriptor==0{return;}
+  if read_i32(descriptor+0xb8)!=scope.lot||read_i32(descriptor+0x58)&15!=2{return;}
+  scope.submitted+=1;state.set(scope);
+ });
+}
+
+unsafe fn spawn_team_lot(player:usize,base:usize,lot:i32)->u32{
+ let manager=read_ptr(base+crate::ITEMS_RVA);
+ if crate::PERSONAL_REWARD.with(|scope|scope.get().manager!=0){return 0;}
+ dispatch(manager,lot,||{
+  let spawn:unsafe extern "system" fn(usize,usize,i32,u8,u8,u8,u8,*const f32)->u8=std::mem::transmute(base+crate::SPAWN_RVA);
+  let position=[0f32;4];spawn(manager,player,lot,0,1,1,0,position.as_ptr());
+ })
+}
 
 #[derive(Default)]
 struct Delivery { selected:Option<usize>,issued:bool,wait:f32 }
@@ -26,7 +63,6 @@ impl Delivery {
   self.selected
  }
  fn created(&mut self,count:u32){
-  // Never repeat an already visible reward after a partial native failure.
   if count>0{self.issued=true;}
   self.wait=0.25;
  }
@@ -65,15 +101,49 @@ pub unsafe fn update(player:usize,base:usize,dt:f32){
  let ball=crate::unclaimed_hex_ball(base);
  let Some(index)=state.next(ready,ball,dt)else{return;};
  if crate::CALLBACK_LOCK.swap(true,Ordering::AcqRel){return;}
- let count=crate::spawn_personal_lot(player,base,LOTS[index]);
+ let count=spawn_team_lot(player,base,LOTS[index]);
  state.created(count);
  if count>0{apply(player,MARKERS[2],0);}
- if count!=3{crate::nlog_error!("Red Envelope native reward {} created {} choices; receipt reserved={}",LOTS[index],count,count>0);}
+ if !matches!(count,3|6|9){crate::nlog_error!("Red Envelope team reward {} submitted {} choices; receipt reserved={}",LOTS[index],count,count>0);}
  crate::CALLBACK_LOCK.store(false,Ordering::Release);
 }
 
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn team_dispatch_counts_every_slot_without_mutating_native_descriptors(){unsafe{
+  let mut descriptor=[0u64;24];let address=descriptor.as_mut_ptr()as usize;
+  std::ptr::write_unaligned((address+0xb8)as*mut i32,LOTS[0]);
+  std::ptr::write_unaligned((address+0x58)as*mut u32,0xfedcba12);
+  for slots in 1..=3{
+   assert_eq!(dispatch(42,LOTS[0],||{
+    assert_eq!(dispatch(42,LOTS[0],||panic!("Nested dispatch")),0);
+    for slot in 1..=slots{for _ in 0..3{
+     std::ptr::write_unaligned((address+0xaa)as*mut u16,0x40|(slot<<7));
+     let before=descriptor;observe_dispatch(42,address);assert_eq!(descriptor,before);
+    }}
+    observe_dispatch(43,address);observe_dispatch(42,0);
+   }),slots as u32*3);
+  }
+  observe_dispatch(42,address);
+  assert_eq!(dispatch(42,LOTS[0],||{
+   std::ptr::write_unaligned((address+0xb8)as*mut i32,95200000);observe_dispatch(42,address);
+   std::ptr::write_unaligned((address+0xb8)as*mut i32,LOTS[0]);std::ptr::write_unaligned((address+0x58)as*mut u32,0x11);observe_dispatch(42,address);
+   std::ptr::write_unaligned((address+0x58)as*mut u32,0x12);
+   std::thread::spawn(move||observe_dispatch(42,address)).join().unwrap();
+  }),0);
+  assert_eq!(dispatch(0,LOTS[0],||panic!("No manager")),0);
+  assert_eq!(dispatch(42,6100000,||panic!("Unrelated lottery")),0);
+ }}
+ #[test]fn teammate_rewards_do_not_block_local_hex_queue(){
+  for viewer in 1..=3{for owner in 0..=3{for enabled in [false,true]{
+   let flags=(owner<<7)|if enabled{0x40}else{0};
+   for lot in LOTS{assert_eq!(pending_for(lot,flags,viewer),enabled&&(owner==0||owner==viewer as u16));}
+  }}}
+  assert!(!pending_for(6100000,0xc0,1));assert!(!pending_for(LOTS[0],0xc0,0));
+ }
+ #[test]fn team_dispatch_receipt_is_reserved_for_partial_or_full_submission(){
+  for count in 1..=9{let mut state=Delivery::default();state.select(7);state.created(count);assert_eq!(state.next(true,false,1.),None);assert_eq!(state.markers(),6);}
+ }
  #[test]fn level_seven_boundary_is_captured_once_and_waits_for_existing_ball(){
   for level in 1..=15{
    let mut d=Delivery::default();d.select(level);let index=usize::from(level>=7);

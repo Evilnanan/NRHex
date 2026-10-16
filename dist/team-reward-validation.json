@@ -1,0 +1,163 @@
+{
+  "nativeCases": 18,
+  "cases": [
+    {
+      "sessionMode": 0,
+      "slot": 1,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 0,
+      "slot": 1,
+      "network": true,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 0,
+      "slot": 2,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 0,
+      "slot": 2,
+      "network": true,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 0,
+      "slot": 3,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 0,
+      "slot": 3,
+      "network": true,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 3,
+      "slot": 1,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 3,
+      "slot": 1,
+      "network": true,
+      "dispatch": [
+        "create",
+        "broadcast"
+      ]
+    },
+    {
+      "sessionMode": 3,
+      "slot": 2,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 3,
+      "slot": 2,
+      "network": true,
+      "dispatch": [
+        "create",
+        "broadcast"
+      ]
+    },
+    {
+      "sessionMode": 3,
+      "slot": 3,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 3,
+      "slot": 3,
+      "network": true,
+      "dispatch": [
+        "create",
+        "broadcast"
+      ]
+    },
+    {
+      "sessionMode": 6,
+      "slot": 1,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 6,
+      "slot": 1,
+      "network": true,
+      "dispatch": [
+        "forward"
+      ]
+    },
+    {
+      "sessionMode": 6,
+      "slot": 2,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 6,
+      "slot": 2,
+      "network": true,
+      "dispatch": [
+        "forward"
+      ]
+    },
+    {
+      "sessionMode": 6,
+      "slot": 3,
+      "network": false,
+      "dispatch": [
+        "create"
+      ]
+    },
+    {
+      "sessionMode": 6,
+      "slot": 3,
+      "network": true,
+      "dispatch": [
+        "forward"
+      ]
+    }
+  ],
+  "nativePartyLoop": true,
+  "descriptorOwnershipUidAndNetworkFlagsPreserved": true,
+  "networkReturnValueNotUsedAsCreationReceipt": true,
+  "fixtureStubs": [
+    "local node creator",
+    "host broadcast",
+    "guest forwarding",
+    "post-dispatch TLS maintenance bypass"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

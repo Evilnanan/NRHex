@@ -14,6 +14,14 @@ pub const ITEM_CTOR_RVA:usize=0x8b9780;
 pub const ITEM_COPY_RVA:usize=0x8b7fc0;
 pub const ROW_DTOR_RVA:usize=0x9c6b90;
 pub const BIND_RVA:usize=0x9c5cd0;
+pub const SOUND_RVA:usize=0x870290;
+static CONFIRM_NAME:[u16;3]=[0x6c7a,0x5b9a,0];
+#[repr(C)]
+struct MenuSound{sound_id:i32,priority:i32,category:i32,reserved:u32,name:*const u16}
+unsafe fn confirm_sound(submit:unsafe extern "system" fn(*const MenuSound)){
+ let request=MenuSound{sound_id:100,priority:2,category:1,reserved:0,name:CONFIRM_NAME.as_ptr()};
+ submit(&request);
+}
 pub static CTOR_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static TEXT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static ENABLE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
@@ -138,11 +146,25 @@ pub unsafe extern "system" fn press(dialog:usize){
  // Rebind the native provider, preserving focus. Its own renderer updates
  // name, icon and caption; confirmation still grants the same node UID.
  let bind:unsafe extern "system" fn(usize,usize,i32,u8)=std::mem::transmute(base+BIND_RVA);bind(dialog+0xe20,dialog+0x1770,c.index as i32,0);
+ confirm_sound(std::mem::transmute(base+SOUND_RVA));
  crate::nlog_info!("Hex reroll: slot={} old={} new={} uid={uid:#x}",c.index+1,c.old&0xfffffff,good&0xfffffff);
 }
 
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn confirmation_submits_one_native_request_with_persistent_name(){unsafe{
+  static CALLS:std::sync::atomic::AtomicUsize=std::sync::atomic::AtomicUsize::new(0);
+  unsafe extern "system" fn submit(request:*const MenuSound){
+   assert_eq!(std::mem::size_of::<MenuSound>(),0x18);
+   assert_eq!(std::mem::offset_of!(MenuSound,name),0x10);
+   let request=&*request;
+   assert_eq!((request.sound_id,request.priority,request.category,request.reserved),(100,2,1,0));
+   assert_eq!(request.name,CONFIRM_NAME.as_ptr());
+   assert_eq!(std::slice::from_raw_parts(request.name,3),[0x6c7a,0x5b9a,0]);
+   CALLS.fetch_add(1,Ordering::Relaxed);
+  }
+  confirm_sound(submit);assert_eq!(CALLS.load(Ordering::Relaxed),1);
+ }}
  #[test]fn each_slot_has_one_use_and_native_write_delay_cannot_restore_it(){
   let mut u=Uses{mask:None,wait:0.,dirty:false};assert_eq!(u.observe(0),0);
   for slot in [2,0,1]{assert!(u.spend(slot));assert!(!u.spend(slot));let wanted=u.mask.unwrap();assert_eq!(u.observe(0),wanted);assert_eq!(u.observe(wanted),wanted);assert!(!u.dirty);}
@@ -184,3 +206,4 @@ pub const ITEM_CTOR_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 48 89 7C 24 20 5
 pub const ITEM_COPY_PATTERN:&str="E9 BC 77 8C 01 48 8B 05 9C DF 22 03 48 33 C4 48 89 45 C0 48 8B DA 48 8B F9 C7 44 24 40 00 00 00";
 pub const ROW_DTOR_PATTERN:&str="48 89 4C 24 08 53 56 57 48 83 EC 30 48 8B F1 48 8D 79 10 48 89 7C 24 58 48 8D 4F 78 E8 2F CA F2";
 pub const BIND_PATTERN:&str="40 53 55 56 57 41 56 41 57 48 81 EC B8 00 00 00 48 8B 05 81 02 12 03 48 33 C4 48 89 84 24 A0 00";
+pub const SOUND_PATTERN:&str="40 53 48 83 EC 20 8B 11 48 8B D9 85 D2 78 79 8B 41 08 83 F8 FF 74 71 83 F8 07 75 11 E8 2F 02 00";

@@ -8,7 +8,27 @@ static class EssenceReaver {
  static string Hash(string path)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(path)));
  static void Neutral(PARAM.Row r){foreach(var (f,v) in new (string,object)[]{("maxHpRate",1f),("spCategory",20),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(r,f,v);}
  static void Saved(PARAM.Row r){Neutral(r);Set(r,"saveCategory",10);Set(r,"dontDeleteOnDead",1);Set(r,"isDisableNetSync",1);}
- public static void Owners(PARAM.Row owner){Set(owner,"displayIconForPermamentEffect",1);Set(owner,"stateInfo",199);Set(owner,"applyIdOnKillSp",Pulse);Set(owner,"applyIdOnGetSoul",Pulse);}
+ public static void Owners(PARAM.Row owner){Set(owner,"displayIconForPermamentEffect",0);Set(owner,"stateInfo",199);Set(owner,"applyIdOnKillSp",Pulse);Set(owner,"applyIdOnGetSoul",Pulse);}
+ public static void StageHiddenIcon(string root,Func<string,Memory<byte>,PARAM> parse){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,".work/essence-hidden-icon");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var originals=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=binder.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param");var effects=parse("SpEffectParam",file.Bytes);
+  var owner=effects.Rows.Single(r=>r.ID==Owner);
+  Check(Convert.ToInt32(owner["displayIconForPermamentEffect"].Value)==1&&Convert.ToInt32(owner["iconId"].Value)==20292&&Convert.ToSingle(owner["effectEndurance"].Value)==-1f,"Unexpected owner icon state");
+  Set(owner,"displayIconForPermamentEffect",0);file.Bytes=effects.Write();
+  string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);var actual=SFUtil.DecryptNightreignRegulation(output);
+  Check(actual.Version==binder.Version&&actual.Compression==binder.Compression&&actual.Files.Count==binder.Files.Count,"Binder metadata changed");
+  foreach(var pair in binder.Files.Zip(actual.Files)){
+   Check(pair.First.ID==pair.Second.ID&&pair.First.Name==pair.Second.Name&&pair.First.Flags==pair.Second.Flags&&pair.First.Bytes.Span.SequenceEqual(pair.Second.Bytes.Span),"Parameter readback mismatch");
+   if(pair.First.ID!=file.ID)Check(pair.Second.Bytes.Span.SequenceEqual(originals[pair.First.ID]),"Unrelated table changed");
+  }
+  var before=parse("SpEffectParam",originals[file.ID]);var after=parse("SpEffectParam",actual.Files.Single(f=>f.ID==file.ID).Bytes);
+  Check(before.Rows.Select(r=>r.ID).SequenceEqual(after.Rows.Select(r=>r.ID)),"Parameter rows changed");
+  foreach(var row in after.Rows){var old=before.Rows.Single(r=>r.ID==row.ID);var copy=new PARAM.Row(row);if(row.ID==Owner)Set(copy,"displayIconForPermamentEffect",1);Check(CageAI.Same(old,copy),"Unrelated parameter field changed");}
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),row=Owner,field="displayIconForPermamentEffect",before=1,after=0,onlyOneFieldChanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  ExportChecks(root,parse,output,directory);
+  Console.WriteLine("PASS: only Essence Reaver permanent HUD visibility disabled; ability icons, FP, kill/save mechanics and all other parameters preserved");
+ }
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
   var pulse=clone("SpEffectParam",8000000,Pulse);Neutral(pulse);Set(pulse,"effectEndurance",0f);Set(pulse,"saveCategory",-1);Set(pulse,"isDisableNetSync",1);
 
@@ -33,11 +53,11 @@ static class EssenceReaver {
   File.WriteAllText(Path.Combine(dir,"parameters.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),compression=current.Compression.ToString(),removed=new[]{Layer},changes,effects=after.Rows.Where(r=>r.ID>=Owner&&r.ID<=Reset||r.ID>=First&&r.ID<First+1024||r.ID==RewardCycle.Marker(25)).Select(r=>new{r.ID,fields=r.Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),events=EMEVD.Read(Path.Combine(root,"dist/mod/event/common.emevd.dcx")).Events.Where(e=>e.ID is 1111 or 9100941).Select(Cages.Dump),unrelatedRowsAndFilesPreserved=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: one owner icon; per-kill FP layer removed; all unrelated rows and files preserved");
  }
- public static void ExportChecks(string root,Func<string,Memory<byte>,PARAM> parse){
-  var binder=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));
+ public static void ExportChecks(string root,Func<string,Memory<byte>,PARAM> parse,string? path=null,string? directory=null){
+  var binder=SFUtil.DecryptNightreignRegulation(path??Path.Combine(root,"dist/mod/regulation.bin"));
   var sp=parse("SpEffectParam",binder.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param").Bytes);
   var ev=EMEVD.Read(Path.Combine(root,"dist/mod/event/common.emevd.dcx"));
-  var dir=Path.Combine(root,".work/essence-reaver");Directory.CreateDirectory(dir);
+  var dir=directory??Path.Combine(root,".work/essence-reaver");Directory.CreateDirectory(dir);
   File.WriteAllText(Path.Combine(dir,"installed.json"),JsonSerializer.Serialize(new{effects=sp.Rows.Where(r=>r.ID>=Owner&&r.ID<=Reset||r.ID>=First&&r.ID<First+1024||r.ID==RewardCycle.Marker(25)).Select(r=>new{r.ID,fields=r.Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),events=ev.Events.Where(e=>e.ID is 1111 or 9100941).Select(Cages.Dump)},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("Current Essence Reaver parameter and guarded lifecycle checks exported");
  }

@@ -88,7 +88,7 @@ static class CageEncounters {
   Conditions(e,p,g);e.Instructions.AddRange([I(1000,2,(byte)1,(byte)0,(sbyte)1),I(1000,7,(byte)3,(byte)0,(sbyte)-14),Local(5000,true),I(2003,11,(sbyte)1,target,(short)0,bar.name),I(1000,3,(byte)2),Local(5001,true),I(2003,11,(sbyte)1,target,(short)1,bar.name),I(2003,102,(sbyte)1,bar.name,target)]);
   EndConditions(e,p,g);e.Instructions.AddRange([Wait(-12),I(1000,7,(byte)1,(byte)0,(sbyte)5),I(1001,0,Cages.VictoryDelaySeconds),I(1000,7,(byte)3,(byte)0,(sbyte)-14),I(2003,11,(sbyte)0,target,(short)0,bar.name),Local(5000,false),I(1000,3,(byte)2),I(2003,11,(sbyte)0,target,(short)1,bar.name),Local(5001,false),I(1001,1,1),Restart()]);return e;
  }
- public static EMEVD.Event Birth(uint p,Group g,Member m,bool stableSnapshot=true){
+ public static EMEVD.Event Birth(uint p,Group g,Member m,bool stableSnapshot=true,bool centralFog=true){
   uint actor=Actor(p,m),shown=Shown(p,m),choice=p+7500+(uint)g.choice;
   var e=new EMEVD.Event(p+9900+(uint)m.index,EMEVD.Event.RestBehaviorType.Restart);
   e.Instructions.AddRange([I(2000,2,(byte)0),Local(shown,false),Flag(1,p+7403,true),Flag(1,choice,true),Flag(5,p+7404,true),Flag(6,p+7404,false),I(0,0,(sbyte)-5,(byte)1,(sbyte)5),I(0,0,(sbyte)-5,(byte)1,(sbyte)6),I(0,0,(sbyte)1,(byte)1,(sbyte)-5),Wait(1),I(2004,29,actor,(byte)0),I(4,7,(sbyte)2,actor,(byte)1,(sbyte)0,1f),Hp(2,actor,2,0),Wait(2)]);
@@ -96,7 +96,7 @@ static class CageEncounters {
   e.Instructions.AddRange([I(2004,5,actor,(byte)0),I(2006,3,2,actor,900,690047),I(1001,0,4f)]);
   if(g.birthAnimation.HasValue&&m.combat)e.Instructions.Add(Anim(actor,g.birthAnimation.Value,true));
   e.Instructions[skip]=I(1000,7,(byte)(e.Instructions.Count-skip-1),(byte)1,(sbyte)5);
-  e.Instructions.AddRange([I(2004,5,actor,(byte)1),Local(shown,true),Flag(-2,choice,false),I(4,7,(sbyte)-2,actor,(byte)0,(sbyte)0,1f),Wait(-2),Local(shown,false),I(1001,1,1),Restart()]);if(stableSnapshot){Cages.StabilizeBirth(e);Cages.LocalGeneration(e,actor,p+3800+(uint)m.index,m.combat?Dead(p,m):null);CageUsage.Intro(e);CageCoop.Birth(e,actor);}return e;
+  e.Instructions.AddRange([I(2004,5,actor,(byte)1),Local(shown,true),Flag(-2,choice,false),I(4,7,(sbyte)-2,actor,(byte)0,(sbyte)0,1f),Wait(-2),Local(shown,false),I(1001,1,1),Restart()]);if(stableSnapshot){Cages.StabilizeBirth(e);Cages.LocalGeneration(e,actor,p+3800+(uint)m.index,m.combat?Dead(p,m):null);CageUsage.Intro(e);CageCoop.Birth(e,actor);if(centralFog)CagePresentation.CentralFog(e,p,g,m);}return e;
  }
  static EMEVD.Event Death(uint p,Group g,Member m){
   var e=new EMEVD.Event(p+9100+(uint)m.index,EMEVD.Event.RestBehaviorType.Restart);

@@ -1,0 +1,260 @@
+{
+  "revision": "presentation-20261016",
+  "assetOnly": true,
+  "scope": "One center fog per cage group and no standalone Essence Reaver Buff-bar icon",
+  "files": {
+    "mod/regulation.bin": "ed562114f20bada9b75d59977713f9dacab03c028157a375e7de338eacb8a85c",
+    "mod/event/m46_50_00_00.emevd.dcx": "66e6b88d5e718b58262087508050fea234bd1ed421549ea9c60fd625553caeee",
+    "mod/event/m46_60_00_00.emevd.dcx": "93857478919d470500f5996a49bd5014d8440779be49eb57bd2f00c108f73ffc",
+    "mod/event/m46_70_00_00.emevd.dcx": "31abae6d01a7cd28abcdf3ed3e63767a49fbe3abcd73577fccdda32792e4bb0c",
+    "mod/event/m46_80_00_00.emevd.dcx": "569fca4c51e974d3f2ca65252379c5562be27cc0a331964b0d3e53708eddba7b"
+  },
+  "cage": {
+    "encounters": 52,
+    "independentMemberTimelines": 1504,
+    "singleBossBirthsPreserved": 148,
+    "oneCentralFogPerFreshGroup": true,
+    "noOngoingOrStreamReloadReplay": true,
+    "repeatEncountersPassed": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "essenceReaver": {
+    "inputSha256": "210B55D6B2CA169F196F03D84CF1A619DA49FBDAAF4D4A2E3D88745A5F11E209",
+    "outputSha256": "ED562114F20BADA9B75D59977713F9DACAB03C028157A375E7DE338EACB8A85C",
+    "row": 95002900,
+    "field": "displayIconForPermamentEffect",
+    "before": 1,
+    "after": 0,
+    "onlyOneFieldChanged": true,
+    "gameplayVerified": false
+  },
+  "nativeEssenceValidation": {
+    "nativeCategoryCases": [
+      {
+        "category": 10,
+        "sameId": true,
+        "reusesExistingNode": false
+      },
+      {
+        "category": 10,
+        "sameId": false,
+        "reusesExistingNode": false
+      },
+      {
+        "category": 20,
+        "sameId": true,
+        "reusesExistingNode": true
+      },
+      {
+        "category": 20,
+        "sameId": false,
+        "reusesExistingNode": false
+      }
+    ],
+    "nativeHudCases": [
+      {
+        "visibleIcons": 0,
+        "displayedCount": 0
+      }
+    ],
+    "nativeFpCases": [
+      {
+        "flags": 0,
+        "mode": 0,
+        "nativeRate": 1.2000000476837158
+      },
+      {
+        "flags": 0,
+        "mode": 1,
+        "nativeRate": 1.2000000476837158
+      },
+      {
+        "flags": 262144,
+        "mode": 0,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 262144,
+        "mode": 1,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 524288,
+        "mode": 0,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 524288,
+        "mode": 1,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 2147483648,
+        "mode": 0,
+        "nativeRate": 1.0
+      },
+      {
+        "flags": 2147483648,
+        "mode": 1,
+        "nativeRate": 1.0
+      }
+    ],
+    "serializedResetTimelines": [
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": false,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": false,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": true,
+        "world": false,
+        "reset": true
+      },
+      {
+        "event": 1111,
+        "completed": false,
+        "ready": true,
+        "world": true,
+        "reset": true
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": false,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": false,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": true,
+        "world": false,
+        "reset": false
+      },
+      {
+        "event": 1111,
+        "completed": true,
+        "ready": true,
+        "world": true,
+        "reset": false
+      },
+      {
+        "event": 9100941,
+        "hub": false,
+        "reset": false
+      },
+      {
+        "event": 9100941,
+        "hub": true,
+        "reset": true
+      }
+    ],
+    "formula": [
+      {
+        "kills": 0,
+        "requestedPower": 1.0
+      },
+      {
+        "kills": 1,
+        "requestedPower": 1.01
+      },
+      {
+        "kills": 10,
+        "requestedPower": 1.1046221254112045
+      },
+      {
+        "kills": 50,
+        "requestedPower": 1.6446318218438827
+      },
+      {
+        "kills": 100,
+        "requestedPower": 2.7048138294215285
+      },
+      {
+        "kills": 256,
+        "requestedPower": 12.772375803217816
+      },
+      {
+        "kills": 1000,
+        "requestedPower": 20959.155637813845
+      }
+    ],
+    "compactSavedRecordLimit": 4,
+    "nativeSavedCategoryCapacities": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        13,
+        18
+      ],
+      [
+        31,
+        50
+      ],
+      [
+        81,
+        5
+      ]
+    ],
+    "originalParameterRowsAndRewardTriplesPreserved": null,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "dllAndOtherAssetsUnchanged": true,
+  "groupIniAndOtherProfileSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -22,3 +22,6 @@ path = "testmods/StormControl/StormControl_no_gui.dll"
 [[natives]]
 path = "testmods/DeepUnlocker/DeepUnlocker.dll"
 config = "testmods/DeepUnlocker/DeepUnlocker.ini"
+
+[[natives]]
+path = "testmods/RelicDecay/RelicDecay.dll"

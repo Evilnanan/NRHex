@@ -1,0 +1,63 @@
+{
+  "version": "0.17.145",
+  "scope": "DLL-only native reroll confirmation sound",
+  "rustTestsPassed": 356,
+  "productionRustTestsPassed": 356,
+  "signatureCount": 135,
+  "existingNativeMenuCases": 23,
+  "sound": {
+    "nativeCases": 8,
+    "cases": [
+      {
+        "pendingPriority": -1,
+        "confirmationQueued": true
+      },
+      {
+        "pendingPriority": 0,
+        "confirmationQueued": true
+      },
+      {
+        "pendingPriority": 1,
+        "confirmationQueued": true
+      },
+      {
+        "pendingPriority": 2,
+        "confirmationQueued": true
+      },
+      {
+        "pendingPriority": 3,
+        "confirmationQueued": false
+      },
+      {
+        "pendingPriority": 10,
+        "confirmationQueued": false
+      },
+      {
+        "soundId": -1,
+        "category": 1,
+        "confirmationQueued": false
+      },
+      {
+        "soundId": 100,
+        "category": -1,
+        "confirmationQueued": false
+      }
+    ],
+    "nativeConfirmationId": 100,
+    "priority": 2,
+    "category": 1,
+    "nativeConstructorRva": "0x79aee0",
+    "nativeSubmitRva": "0x870290",
+    "nativeQueueRva": "0x39aa560",
+    "nativeConstructorAndQueueExecuted": true,
+    "onlyRipDataReferencesRelocated": true,
+    "gameProcessAccessed": false,
+    "audioPlaybackVerified": false,
+    "gameplayVerified": false
+  },
+  "distDllSha256": "a77e0f5729faa79d38e6277833068656c9c57d78e7bbe01b699073f8920ea9a6",
+  "groupDllSha256": "e76f5002bf1416fedfaf71f45c2721b9d82d69fbe1f94f955e9996352e4e56e2",
+  "resourcesAndConfigurationsUnchanged": true,
+  "gameplayVerified": false,
+  "audioPlaybackVerified": false
+}
