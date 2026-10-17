@@ -14,6 +14,7 @@ mod death_dance;
 mod erosion;
 mod level_rewards;
 mod personal_reward;
+#[cfg(test)]mod reward_template_native_tests;
 mod red_envelope;
 mod reward_recovery;
 mod strength;
@@ -78,7 +79,7 @@ mod sword;
 mod sword_map;
 mod cage_mutation;
 mod cage_trace;
-use hex_pool::ORDERS;
+use reward_choices::HexSet;
 
 use std::ffi::c_void;
 use std::cell::Cell;
@@ -186,7 +187,7 @@ static REWARD_CREATE_ORIG: AtomicPtr<u8> = AtomicPtr::new(ptr::null_mut());
 static NEXT_LEVEL_CHECK: AtomicU64 = AtomicU64::new(0);
 static LEVEL_DELIVERY: OnceLock<Mutex<level_rewards::Delivery>> = OnceLock::new();
 static REWARD_RECOVERY:OnceLock<Mutex<reward_recovery::Recovery>>=OnceLock::new();
-thread_local! { static PERSONAL_REWARD: Cell<personal_reward::Scope> = const { Cell::new(personal_reward::Scope { manager:0, lot:0, slot:0, created:0 }) }; }
+thread_local! { static PERSONAL_REWARD: Cell<personal_reward::Scope> = const { Cell::new(personal_reward::Scope { manager:0, lot:0, slot:0, created:0, choices:None, attempted:0, created_mask:0 }) }; }
 static CAT: OnceLock<Mutex<cat::Cat>> = OnceLock::new();
 static CAT_LANDING:OnceLock<Mutex<cat_jump::Landing>>=OnceLock::new();
 static SWORD_BONUSES: OnceLock<sword::Bonuses> = OnceLock::new();
@@ -475,7 +476,7 @@ pub unsafe extern "system" fn DllMain(h:*mut c_void,reason:u32,_:*mut c_void)->i
 unsafe extern "system" fn worker(_:*mut c_void)->u32 {
  let dir=match module_path(MODULE.load(Ordering::Acquire)){Ok(p)=>p.parent().unwrap().to_path_buf(),Err(_)=>return 1};
  log::init(&dir,"NRHex.log",log::Level::Info);
- nlog_info!("NRHex {} initializing; PC attack kind=1; continuous casting guard; pool={} abilities / {} ordered choices",env!("CARGO_PKG_VERSION"),hex_pool::HEX_COUNT,ORDERS.len());
+ nlog_info!("NRHex {} initializing; PC attack kind=1; continuous casting guard; pool={} abilities / one runtime choice template",env!("CARGO_PKG_VERSION"),hex_pool::HEX_COUNT);
  let init=(||->Result<(),String>{
   let text=std::fs::read_to_string(dir.join("NRHex.ini")).map_err(|e|e.to_string())?;
   let config=Config::read(&text)?;nlog_info!("settings: {config:?}");CONFIG.set(config).map_err(|_|"Already initialized")?;
@@ -1924,15 +1925,26 @@ unsafe extern "system" fn reward_create_detour(manager:usize,descriptor:usize)->
   personal_reward::Route::Original=>original(manager,descriptor),
   personal_reward::Route::Skip=>0,
   personal_reward::Route::Local(flags)=>{
-   ptr::write_unaligned((descriptor+0x58) as *mut u32,flags);
+   let index=ptr::read((descriptor+0xa9)as*const u8)as usize;
+   let old_good=ptr::read_unaligned((descriptor+8)as*const u32);
+   let replacement=if let Some(choices)=scope.choices{
+    if index>=3||scope.attempted&(1<<index)!=0||!reward_choices::is_hex_good(old_good){return 0;}
+    PERSONAL_REWARD.with(|c|{let mut s=c.get();s.attempted|=1<<index;c.set(s);});
+    Some(0x40000000|choices[index]as u32)
+   }else{None};
+   ptr::write_unaligned((descriptor+0x58)as*mut u32,flags);
+   if let Some(good)=replacement{ptr::write_unaligned((descriptor+8)as*mut u32,good);}
    let node=original(manager,descriptor);
-   if node!=0 {PERSONAL_REWARD.with(|c|{let mut s=c.get();s.created+=1;c.set(s);});}
+   // The caller owns/reuses the descriptor; restore both temporary fields.
+   ptr::write_unaligned((descriptor+0x58)as*mut u32,kind);
+   if replacement.is_some(){ptr::write_unaligned((descriptor+8)as*mut u32,old_good);}
+   if node!=0{PERSONAL_REWARD.with(|c|{let mut s=c.get();s.created+=1;if replacement.is_some(){s.created_mask|=1<<index;}c.set(s);});}
    node
   }
  }
 }
-unsafe fn owned_hexes(player:usize,base:usize)->u32 {
- hex_pool::OWNER_IDS.iter().enumerate().fold(0,|mask,(i,&effect)|mask|if has_effect(player,effect,base){1<<i}else{0})
+unsafe fn owned_hexes(player:usize,base:usize)->HexSet {
+ hex_pool::OWNER_IDS.iter().enumerate().filter_map(|(i,&effect)|has_effect(player,effect,base).then_some(i)).collect()
 }
 unsafe fn player_data_hero(game_data:usize)->Option<u8> {
  if game_data==0{return None;}
@@ -1942,21 +1954,22 @@ unsafe fn player_data_hero(game_data:usize)->Option<u8> {
 unsafe fn local_hero(base:usize)->Option<u8> {
  player_data_hero(read_ptr(base+GAME_DATA_RVA))
 }
-unsafe fn unavailable_hexes(player:usize,base:usize)->u32 {
+unsafe fn unavailable_hexes(player:usize,base:usize)->HexSet {
  reward_choices::role_exclusions(reward_choices::terrain_exclusions(owned_hexes(player,base),reward_terrain::exclude_cage(reward_terrain::great_hollow(base))),local_hero(base))
 }
-fn random_order(candidates:&[usize])->Option<usize> {
- let count=candidates.len() as u32;if count==0{return None;}
- loop {
-  let mut random=0u32;
-  if unsafe{BCryptGenRandom(ptr::null_mut(),&mut random as *mut u32 as *mut u8,4,2)}<0 {return None;}
-  if random<u32::MAX-u32::MAX%count {return Some(candidates[(random%count) as usize]);}
+fn random_index(count:usize)->Option<usize>{
+ let count=u64::try_from(count).ok()?;if count==0{return None;}
+ loop{
+  let mut random=0u64;
+  if unsafe{BCryptGenRandom(ptr::null_mut(),&mut random as*mut u64 as*mut u8,8,2)}<0{return None;}
+  if random<u64::MAX-u64::MAX%count{return Some((random%count)as usize);}
  }
 }
-unsafe fn choose_reward(player:usize,base:usize,preferred:Option<[usize;3]>)->Option<(usize,u32)>{
+fn random_order(candidates:&[usize])->Option<usize>{candidates.get(random_index(candidates.len())?).copied()}
+unsafe fn choose_reward(player:usize,base:usize,preferred:Option<[usize;3]>)->Option<([usize;3],HexSet)>{
  let seen=reward_cycle_runtime::seen(player,base)?;
- let round=reward_cycle::Round::new(unavailable_hexes(player,base),seen);
- let chosen=preferred.and_then(|p|round.preferred(p)).or_else(||random_order(&round.candidates))?;
+ let round=reward_cycle::Round::new(&unavailable_hexes(player,base),&seen);
+ let chosen=preferred.and_then(|p|round.preferred(p)).or_else(||round.draw(random_index))?;
  Some((chosen,round.next_seen(chosen)?))
 }
 unsafe fn unclaimed_hex_ball(base:usize)->bool {
@@ -1973,24 +1986,29 @@ unsafe fn unclaimed_hex_ball(base:usize)->bool {
   let lot=read_i32(node+0xd8);
   // All custom personal balls share one queue; native world rewards do not.
   if kind&15==2 && owner&0x40!=0 && (red_envelope::pending_for(lot,owner,slot as u8) ||
-     ((95200000..hex_pool::LEGACY_LOT_END).contains(&lot)
+     (hex_pool::is_template_lot(lot)
      && reward_choices::is_hex_good(ptr::read_unaligned((node+0x28) as *const u32)))) {return true;}
   node=read_ptr(node);
  }
  true // A malformed/oversized list must not issue extra rewards.
 }
-unsafe fn spawn_personal(player:usize,base:usize,chosen:usize)->bool {
+unsafe fn spawn_personal(player:usize,base:usize,chosen:[usize;3])->bool {
  if unclaimed_hex_ball(base){return false;}
- let created=spawn_personal_lot(player,base,hex_pool::LOT_IDS[chosen]);
- if created==3{reward_reroll::reset();reward_reroll::update(player,base,0.);}
- created==3
+ if !reward_choices::eligible(chosen,&HexSet::new()){return false;}
+ let created=spawn_personal_lot(player,base,hex_pool::TEMPLATE_LOT,Some(chosen.map(|i|hex_pool::OWNER_IDS[i])));
+ // A partial native creation is already published: never retry the whole ball.
+ if created>0{
+  reward_reroll::reset();reward_reroll::update(player,base,0.);
+  if created!=3{nlog_error!("Personal reward partially created: {created}/3; suppressing whole-ball retry");}
+ }
+ created>0
 }
-unsafe fn spawn_personal_lot(player:usize,base:usize,lot:i32)->u32 {
+unsafe fn spawn_personal_lot(player:usize,base:usize,lot:i32,choices:Option<[i32;3]>)->u32 {
  let item_man=read_ptr(base+ITEMS_RVA);let game_data=read_ptr(base+GAME_DATA_RVA);
  if item_man==0||game_data==0{return 0;}
  let data=read_ptr(game_data+8);if data==0{return 0;}
  let slot=read_i32(data+8).max(1);if slot>3{return 0;}
- let scope=personal_reward::Scope{manager:item_man,lot,slot:slot as u8,created:0};
+ let scope=personal_reward::Scope{manager:item_man,lot,slot:slot as u8,choices,..Default::default()};
  let previous=PERSONAL_REWARD.with(Cell::get);
  if previous.manager!=0{return 0;}
  PERSONAL_REWARD.with(|c|c.set(scope));
@@ -2209,7 +2227,7 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
  let ok=spawn_personal(player,base,chosen);
  if ok{reward_cycle_runtime::commit(player,base,next_seen);}
  CALLBACK_LOCK.store(false,Ordering::Release);
- if !ok {nlog_error!("Personal test reward spawn failed for order={chosen}");}
+ if !ok {nlog_error!("Personal test reward spawn failed for order={chosen:?}");}
 }
 
 #[cfg(test)]
@@ -2296,17 +2314,16 @@ mod tests {
   manager[1]=0;assert_eq!(player_data_hero(manager.as_ptr() as usize),None);
  }}
  #[test]fn focused_reward_keeps_cage_crystal_arts_and_existing_exclusions(){
+  use reward_choices::{mask,all};
   assert_eq!(TEST_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[95001600,95000700,95001400]);
-  assert_eq!(ORDERS[reward_choices::preferred(TEST_REWARD,0).unwrap()],TEST_REWARD);
-  for owned in [1<<14,1<<6,1<<12,(1<<14)|(1<<6)] {
-   let order=ORDERS[reward_choices::preferred(TEST_REWARD,owned).unwrap()];
-   assert!(reward_choices::eligible(order,owned));
-   for i in TEST_REWARD {if owned&(1<<i)==0 {assert!(order.contains(&i));}}
+  assert_eq!(reward_choices::preferred(TEST_REWARD,&HexSet::new()),Some(TEST_REWARD));
+  for owned in [mask([14]),mask([6]),mask([12]),mask([14,6])]{
+   let order=reward_choices::preferred(TEST_REWARD,&owned).unwrap();assert!(reward_choices::eligible(order,&owned));
+   for i in TEST_REWARD{if !owned.contains(&i){assert!(order.contains(&i));}}
   }
-  let unavailable=reward_choices::terrain_exclusions(0,true);
-  let order=ORDERS[reward_choices::preferred(TEST_REWARD,unavailable).unwrap()];
-  assert_eq!(order,[6,12,0]);
-  assert_eq!(reward_choices::preferred(TEST_REWARD,(1<<hex_pool::HEX_COUNT)-1),None);
+  let unavailable=reward_choices::terrain_exclusions(HexSet::new(),true);
+  assert_eq!(reward_choices::preferred(TEST_REWARD,&unavailable),Some([6,12,0]));
+  assert_eq!(reward_choices::preferred(TEST_REWARD,&all(hex_pool::HEX_COUNT)),None);
  }
  #[test]fn native_lava_wrappers_forward_arguments_and_scope_visual_scale(){unsafe{
   unsafe extern "system" fn mark(a:usize,b:usize,c:usize)->usize{assert_eq!((a,b,c),(1,2,3));0xabcd}
@@ -2371,8 +2388,8 @@ mod tests {
   ptr::write_unaligned(flags,0xfedcba12);ptr::write_unaligned(owner,0x40c3);ptr::write_unaligned(lot,95200000);
   assert_eq!(reward_create_detour(42,address),42+address);
   assert_eq!(ptr::read_unaligned(flags),0xfedcba12);
-  PERSONAL_REWARD.with(|c|c.set(personal_reward::Scope{manager:42,lot:95200000,slot:1,created:0}));
-  for _ in 0..3 {ptr::write_unaligned(flags,0xfedcba12);assert_eq!(reward_create_detour(42,address),42+address);assert_eq!(ptr::read_unaligned(flags),0xfedcba02);assert_eq!(ptr::read_unaligned(owner),0x40c3);}
+  PERSONAL_REWARD.with(|c|c.set(personal_reward::Scope{manager:42,lot:95200000,slot:1,created:0,..Default::default()}));
+  for _ in 0..3 {ptr::write_unaligned(flags,0xfedcba12);assert_eq!(reward_create_detour(42,address),42+address);assert_eq!(ptr::read_unaligned(flags),0xfedcba12);assert_eq!(ptr::read_unaligned(owner),0x40c3);}
   assert_eq!(PERSONAL_REWARD.with(Cell::get).created,3);
   ptr::write_unaligned(owner,0x4143);ptr::write_unaligned(flags,0xfedcba12);
   assert_eq!(reward_create_detour(42,address),0);assert_eq!(ptr::read_unaligned(flags),0xfedcba12);
@@ -2386,16 +2403,10 @@ mod tests {
    }}
   }),9);
  }}
- #[test] fn reward_pool_samples_every_ordered_distinct_triple_once(){
-  let n=hex_pool::HEX_COUNT;
-  assert_eq!(ORDERS.len(),n*(n-1)*(n-2));
-  let unique:std::collections::HashSet<_>=ORDERS.iter().copied().collect();
-  assert_eq!(unique.len(),ORDERS.len());
-  for order in &ORDERS {assert!(order.iter().all(|&i|i<n));assert!(order[0]!=order[1]&&order[0]!=order[2]&&order[1]!=order[2]);}
-  for slot in 0..3 {for item in 0..n {assert_eq!(ORDERS.iter().filter(|o|o[slot]==item).count(),(n-1)*(n-2));}}
-  assert!(ORDERS.contains(&[3,4,5]));
-  assert!(ORDERS.contains(&[6,0,1]));
-  assert!(ORDERS.contains(&[7,3,6]));
+ #[test]fn reward_template_is_constant_while_ability_catalog_is_unique(){
+  assert_eq!(hex_pool::TEMPLATE_LOT,95200000);
+  assert_eq!(hex_pool::OWNER_IDS.len(),hex_pool::HEX_COUNT);
+  assert_eq!(hex_pool::HISTORY_BITS.len(),hex_pool::HEX_COUNT);
  }
  #[test] fn key_config_rejects_invalid_input(){assert!(Config::read("VirtualKey=0").is_err());assert!(Config::read("TestVirtualKey=255").is_err());assert!(Config::read("VirtualKey=0x76").is_err());assert!(Config::read("CooldownMs=999").is_err());assert!(Config::read("Unknown=true").is_err());}
  #[test] fn random_and_focused_hotkeys_are_configurable(){
@@ -2412,20 +2423,20 @@ mod tests {
   assert_eq!(CONTRACT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[95002600,95002700,95002400]);
   for value in ["0","255","0x75","0x76","0x77","0x78","0x79"]{assert!(Config::read(&format!("ContractVirtualKey={value}")).is_err());}
   assert_eq!(hex_pool::OWNER_IDS[GAZE_REWARD[0]],slingshot::OWNER);
-  assert_eq!(ORDERS[reward_choices::preferred(GAZE_REWARD,0).unwrap()][0],GAZE_REWARD[0]);
+  assert_eq!(reward_choices::preferred(GAZE_REWARD,&HexSet::new()).unwrap()[0],GAZE_REWARD[0]);
   assert_eq!(CHANT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[chant::OWNER,sword::OWNER,archmage::OWNER]);
   for hero in [4,6,7]{
-   assert_eq!(ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(0,Some(hero))).unwrap()],CHANT_REWARD);
-   let next=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(1<<17,Some(hero))).unwrap()];assert_eq!(next[0],8);assert!(!next.contains(&17));
-   let next=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(1<<8,Some(hero))).unwrap()];assert_eq!(next[0],17);assert!(!next.contains(&8));
+   assert_eq!(reward_choices::preferred(CHANT_REWARD,&reward_choices::role_exclusions(HexSet::new(),Some(hero))).unwrap(),CHANT_REWARD);
+   let next=reward_choices::preferred(CHANT_REWARD,&reward_choices::role_exclusions(reward_choices::mask([17]),Some(hero))).unwrap();assert_eq!(next[0],8);assert!(!next.contains(&17));
+   let next=reward_choices::preferred(CHANT_REWARD,&reward_choices::role_exclusions(reward_choices::mask([8]),Some(hero))).unwrap();assert_eq!(next[0],17);assert!(!next.contains(&8));
   }
-  let excluded=ORDERS[reward_choices::preferred(CHANT_REWARD,reward_choices::role_exclusions(0,Some(1))).unwrap()];assert_eq!(excluded[0],18);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
+  let excluded=reward_choices::preferred(CHANT_REWARD,&reward_choices::role_exclusions(HexSet::new(),Some(1))).unwrap();assert_eq!(excluded[0],18);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
   assert_eq!(NEW_HEX_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[balloon::OWNER,spirit::OWNER,parry::OWNER]);
-  let both=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(0,Some(6))).unwrap()];
+  let both=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::role_exclusions(HexSet::new(),Some(6))).unwrap();
   assert_eq!(&both[..2],&NEW_HEX_REWARD[..2]);assert!(!both.contains(&NEW_HEX_REWARD[2])); // Revenant cannot draw Clash.
-  let after_balloon=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(1<<15,Some(6))).unwrap()];
+  let after_balloon=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::role_exclusions(reward_choices::mask([15]),Some(6))).unwrap();
   assert_eq!(after_balloon[0],16);assert!(!after_balloon.contains(&15));
-  let other=ORDERS[reward_choices::preferred(NEW_HEX_REWARD,reward_choices::role_exclusions(0,Some(1))).unwrap()];
+  let other=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::role_exclusions(HexSet::new(),Some(1))).unwrap();
   assert_eq!(other[0],15);assert!(!other.contains(&16));
   for retired in ["Shell","Cat","Sword","Strength","Escape","Jiahao","Arts","Noisy","Cage"] {
    assert!(Config::read(&format!("{retired}VirtualKey=0x70")).is_err());

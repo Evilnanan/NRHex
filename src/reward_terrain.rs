@@ -20,12 +20,12 @@ pub fn exclude_cage(terrain:Option<bool>)->bool{terrain.unwrap_or(true)}
 #[cfg(test)]mod tests{
  use super::*;
  #[test]fn only_confirmed_non_hollow_terrain_allows_cage(){
-  use crate::{hex_pool::{OWNER_IDS,ORDERS},reward_choices};
+  use crate::{hex_pool::OWNER_IDS,reward_choices};
   let cage=OWNER_IDS.iter().position(|&id|id==95001600).unwrap();
   for terrain in [None,Some(true),Some(false)]{
-   let excluded=reward_choices::terrain_exclusions(0,exclude_cage(terrain));
-   assert_eq!(reward_choices::candidates(excluded).iter().any(|&i|ORDERS[i].contains(&cage)),terrain==Some(false));
-   assert_eq!(ORDERS[reward_choices::preferred([cage,0,1],excluded).unwrap()].contains(&cage),terrain==Some(false));
+   let excluded=reward_choices::terrain_exclusions(reward_choices::HexSet::new(),exclude_cage(terrain));
+   assert_eq!(reward_choices::candidates(&excluded).contains(&cage),terrain==Some(false));
+   assert_eq!(reward_choices::preferred([cage,0,1],&excluded).unwrap().contains(&cage),terrain==Some(false));
   }
  }
  #[test]fn draw_reads_live_native_flag_without_player_marker_or_role_dependency(){unsafe{

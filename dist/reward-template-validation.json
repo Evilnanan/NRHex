@@ -1,0 +1,199 @@
+{
+  "version": "0.17.149",
+  "changedAssets": [
+    "mod/regulation.bin"
+  ],
+  "files": {
+    "mod/regulation.bin": "f7d6e9c3c2919894b1b78dd1c382b7c3b1cf3afd0ae5077d409b038990b46247",
+    "mod/natives/NRHex.dll": "32c72284d67bd2d6992a9ee2d4be400a55881518c3d95290ad91982b43fc72d0"
+  },
+  "parameters": {
+    "inputSha256": "85AF3BFF42F4AF4CE40319E3B05996D5E9ACA18228F48B7F3D3A82A601612DF3",
+    "outputSha256": "F7D6E9C3C2919894B1B78DD1C382B7C3B1CF3AFD0AE5077D409B038990B46247",
+    "inputRows": 2750,
+    "outputRows": 2750,
+    "removedLegacyHistoryRows": 0,
+    "addedPackedHistoryRows": 0,
+    "activePackedHistoryLimit": 4,
+    "removedPermutationRows": 0,
+    "removedIdsSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "templateLot": 95200000,
+    "templateRows": 3,
+    "hexCount": 28,
+    "simulations": [
+      {
+        "abilities": 28,
+        "rewardRows": 3,
+        "packedParameterRows": 1020,
+        "maxActivePackedHistory": 4,
+        "metadataBytes": 711,
+        "savedRowsAndBothResetsGenerated": true
+      },
+      {
+        "abilities": 64,
+        "rewardRows": 3,
+        "packedParameterRows": 2295,
+        "maxActivePackedHistory": 9,
+        "metadataBytes": 1143,
+        "savedRowsAndBothResetsGenerated": true
+      },
+      {
+        "abilities": 96,
+        "rewardRows": 3,
+        "packedParameterRows": 3315,
+        "maxActivePackedHistory": 13,
+        "metadataBytes": 1528,
+        "savedRowsAndBothResetsGenerated": true
+      },
+      {
+        "abilities": 160,
+        "rewardRows": 3,
+        "packedParameterRows": 5355,
+        "maxActivePackedHistory": 21,
+        "metadataBytes": 2358,
+        "savedRowsAndBothResetsGenerated": true
+      },
+      {
+        "abilities": 256,
+        "rewardRows": 3,
+        "packedParameterRows": 8415,
+        "maxActivePackedHistory": 33,
+        "metadataBytes": 3606,
+        "savedRowsAndBothResetsGenerated": true
+      }
+    ],
+    "sourceHashes": {
+      "tools/HexBuild/RewardCatalog.cs": "69298C304A5C11E814A672287791CC99D9945C21C670A38770BD21F9C02CEB50",
+      "tools/HexBuild/RewardTemplate.cs": "3D4B0B78CC97023E7C0623F4DF85D668A658E117D08A67C3360CE09839F59A71",
+      "tools/HexBuild/RewardCycle.cs": "5D0379FE3AC1085372AD917FF4998B99464191AE3C81E6B02A6C4466FE3D7A1D",
+      "tools/HexBuild/Program.cs": "4CDC4B1C65B23943156657ED0B9BD8B95BC5961F7E9879ABF291CD3C445E1D1D"
+    },
+    "allRetainedRowsAndOtherTablesUnchanged": true,
+    "nativeAndRedEnvelopePreserved": true,
+    "eventsTextsAndUserSettingsUnchanged": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "native": {
+    "nativeExecutionPassed": true,
+    "compiledHookExecuted": true,
+    "nativeSaveCategory10Capacity": 50,
+    "historyEncoding": "eight stable registry bits per nonzero byte effect",
+    "nativeFunctions": [
+      "5759E0 dispatch",
+      "6A1BA0 network-bit predicate",
+      "570410 descriptor copy",
+      "570FC0 item read"
+    ],
+    "descriptorGoodOffset": "8",
+    "descriptorChoiceOffset": "A9",
+    "nodeGoodOffset": "28",
+    "cases": [
+      "each of three local player slots",
+      "all other recipients suppressed",
+      "out-of-order choice descriptors",
+      "all three requested goods present before creation",
+      "native item lookup reads replaced goods",
+      "full native descriptor copy retains UID/group/position/owner/quality",
+      "temporary descriptor edits restored",
+      "repeat callback cannot duplicate a choice",
+      "wrong manager untouched",
+      "other lot untouched",
+      "native weapon untouched",
+      "absent TLS scope untouched",
+      "invalid ordinals rejected",
+      "unexpected item category rejected",
+      "partial creation counted without duplicate callback",
+      "zero creation can retry in a fresh scope"
+    ],
+    "stubs": [
+      "local allocation/grouping/rendering replaced with a fixture invoking real descriptor copy",
+      "UID lookup resolves fixture nodes"
+    ],
+    "sources": {
+      "src/lib.rs": "2a2a1235826879a79f40aa721b7d161dd57aa047edfd297a63621ac4dc40a7bc",
+      "src/hex_pool.rs": "4b5990527abb236ec4c8d3e847d46b07c5b40218f70b856a6a963aee9ce981e0",
+      "src/personal_reward.rs": "689eb74b459fa51db90b731522e3fa95dd1b5a7500985eb9c7c3d8fbb6747319",
+      "src/reward_choices.rs": "a0697e8c0388d3dcce4b2cbb9fca76a618a3e368fa0eca034f5e52b9281455e3",
+      "src/reward_cycle.rs": "2da1daf82b2074d1183cd78dd4d6180fcbe8089e78022e02ca26e1e83b3044d3",
+      "src/reward_cycle_runtime.rs": "1d9b1372a38ea1a0edffca332353187562652d89d633d353a10a589c189007f7",
+      "src/reward_reroll.rs": "c3e1d795e9a2320c5097dbe26bb5f3939eb3cae0f17dc510c37dc6336576ae50",
+      "src/reward_recovery.rs": "1d744eb9c982134b202ff7e34a369385edfaa66a1520c17abc3cb7a3492f8793",
+      "src/reward_template_native_tests.rs": "83980f2f683116d1cbe469f7702766e9223b58f1e5e6cb4c8d6dacca57736b6f"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "backup": "/workspace/NRHex/work/reward-scaling/before/20261017-044325-084803",
+  "allOtherResourcesAndUserSettingsPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "initialUpgrade": {
+    "inputSha256": "0EDD8A64D6CDFF6C43B85F24E1A912AC87452B6E3B317CC990B877931E2B8E21",
+    "outputSha256": "1AEE3996E0C1F6E80F3961154CCB457576D67B9A7926E5B43ADD7DF59E11E34F",
+    "inputRows": 61715,
+    "outputRows": 2750,
+    "removedLegacyHistoryRows": 28,
+    "addedPackedHistoryRows": 1020,
+    "activePackedHistoryLimit": 4,
+    "removedPermutationRows": 58965,
+    "removedIdsSha256": "A16D09A8DD719868F67F457721DF9A0611B3B1EAFA63CB5A364B1EADE2F52973",
+    "templateLot": 95200000,
+    "templateRows": 3,
+    "hexCount": 28,
+    "simulations": [
+      {
+        "abilities": 28,
+        "rewardRows": 3,
+        "packedParameterRows": 1020,
+        "maxActivePackedHistory": 4,
+        "metadataBytes": 711,
+        "savedRowsAndBothResetsGenerated": true
+      },
+      {
+        "abilities": 64,
+        "rewardRows": 3,
+        "packedParameterRows": 2295,
+        "maxActivePackedHistory": 9,
+        "metadataBytes": 1143,
+        "savedRowsAndBothResetsGenerated": true
+      },
+      {
+        "abilities": 96,
+        "rewardRows": 3,
+        "packedParameterRows": 3315,
+        "maxActivePackedHistory": 13,
+        "metadataBytes": 1528,
+        "savedRowsAndBothResetsGenerated": true
+      },
+      {
+        "abilities": 160,
+        "rewardRows": 3,
+        "packedParameterRows": 5355,
+        "maxActivePackedHistory": 21,
+        "metadataBytes": 2358,
+        "savedRowsAndBothResetsGenerated": true
+      },
+      {
+        "abilities": 256,
+        "rewardRows": 3,
+        "packedParameterRows": 8415,
+        "maxActivePackedHistory": 33,
+        "metadataBytes": 3606,
+        "savedRowsAndBothResetsGenerated": true
+      }
+    ],
+    "sourceHashes": {
+      "tools/HexBuild/RewardCatalog.cs": "69298C304A5C11E814A672287791CC99D9945C21C670A38770BD21F9C02CEB50",
+      "tools/HexBuild/RewardTemplate.cs": "D30038564CE607CD6A1141ED59D0787A37697B5FDC87209DDA115405492A4B5C",
+      "tools/HexBuild/RewardCycle.cs": "5D0379FE3AC1085372AD917FF4998B99464191AE3C81E6B02A6C4466FE3D7A1D",
+      "tools/HexBuild/Program.cs": "253799FD755397BAF6295415E157F83EF6DBB30F2A499D55A180E1FC11E3BBE8"
+    },
+    "allRetainedRowsAndOtherTablesUnchanged": true,
+    "nativeAndRedEnvelopePreserved": true,
+    "eventsTextsAndUserSettingsUnchanged": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  }
+}

@@ -67,6 +67,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--erosion-stage")){Erosion.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-stage")){DeathDance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-probe")){DeathDance.Probe(root,bnd,Parse);return;}
@@ -746,7 +747,7 @@ Slingshot.Mechanics((source,id)=>Clone("SpEffectParam",source,id));
 Parry.Support(Clone);
 NightBlessing.ValidateNative(bnd,Parse);
 NightBlessing.Mechanics(Clone);
-RewardCycle.Parameters(Clone);
+RewardCycle.Parameters(Clone,RewardCatalog.PackedIds(RewardCatalog.HistoricalOwners.Length));
 RewardReroll.Parameters(Clone);
 EssenceReaver.Mechanics(Clone);
 DeathDance.Mechanics(Clone);
@@ -901,12 +902,12 @@ DevilsGaze.Mechanics(pars,Clone);
 foreach(int id in new[]{6999920,6999921}){
  var row=Clone("SpEffectParam",8000000,id);Set(row,"maxHpRate",1f);Set(row,"saveCategory",-1);Set(row,"spCategory",20);Set(row,"iconId",-1);Set(row,"spEffectTextId_1",-1);Set(row,"displayIconForPermamentEffect",0);Set(row,"effectEndurance",id==6999920?-1f:.001f);
 }
-// Every ordered sample of three different abilities, matching the DLL pool.
-var rewardEntries=RewardCatalog.Active(hexes);
+// One native three-choice template; the DLL fills the selected goods before creation.
+var rewardEntries=new[]{new RewardCatalog.Entry(RewardCatalog.TemplateLot,new[]{0,1,2})};
 var orders=rewardEntries.Select(e=>e.Order).ToArray();
-Require(orders.Length==hexes.Length*(hexes.Length-1)*(hexes.Length-2),"Incomplete reward pool");
+Require(orders.Length==1,"Expected one native reward template");
 RewardCatalog.Write(Path.Combine(root,"src/hex_pool.rs"),hexes);
-foreach(var entry in RewardCatalog.ActiveSerialized(hexes))for(int slot=0;slot<3;slot++){
+foreach(var entry in RewardCatalog.Template(hexes))for(int slot=0;slot<3;slot++){
  var r=Clone("ItemLotParam_enemy",6100002,entry.Lot+slot);Set(r,"lotItemId01",RewardCatalog.Table(entry.Owners[slot]));Set(r,"lotItem_Rarity",3);
 }
 bool Eq(PARAM.Row a,PARAM.Row b)=>a.ID==b.ID&&a.Name==b.Name&&a.Cells.Count==b.Cells.Count&&a.Cells.Zip(b.Cells).All(v=>v.First==null?v.Second==null:v.Second!=null&&(v.First.Value is byte[] ba?v.Second.Value is byte[] bb&&ba.SequenceEqual(bb):Equals(v.First.Value,v.Second.Value)));
@@ -1145,7 +1146,7 @@ reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),ne
 Cages.Terrain(ev);
 ContractHeart.Events(ev);
 NightBlessing.ResetReceipt(ev);
-RewardCycle.Events(ev);
+RewardCycle.Events(ev,RewardCatalog.PackedIds(RewardCatalog.HistoricalOwners.Length));
 RewardReroll.Events(ev);
 EssenceReaver.Events(ev);
 RedEnvelope.RewardEvents(ev);

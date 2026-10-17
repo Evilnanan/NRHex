@@ -1,15 +1,16 @@
 {
-  "version": "0.17.148",
+  "version": "0.17.149",
   "active": null,
   "pid": null,
-  "dllSha256": "d2d7e54997f504f0b816cddd5cda7d18001e1fc4f48eaf705c8f1e79533f7eec",
+  "dllSha256": "32c72284d67bd2d6992a9ee2d4be400a55881518c3d95290ad91982b43fc72d0",
   "build": "build-validation.json",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "pendingChecks": [
-    "Erosion native attack applicability, seven ailments and immunity in game",
-    "Eochaid multi-hit and Ghostflame ground hit buildup in game",
-    "Native proc effects, escalating resistance, host/client authority and sync",
-    "Death Dance overlapping damage and shared recovery protection in game"
+    "Initial three-choice ball contents, names/icons and normal claim in game",
+    "Per-slot reroll, exposure rollover and role/terrain exclusions in game",
+    "Death/revival, queued level rewards and new-expedition reset",
+    "Host/client private visibility, ownership and claim",
+    "Erosion and Death Dance gameplay interactions"
   ]
 }

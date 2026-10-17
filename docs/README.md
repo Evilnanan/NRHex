@@ -18,6 +18,7 @@
 | 豪饮攻击力图标、原生HUD合并和层数 | [豪饮HUD](research/drinking-hud.md) |
 | 刷怪笼连续开启卡住、队友血条与深夜血量调查 | [刷怪笼生命周期](research/cage-lifecycle.md) |
 | 刷怪笼红化概率、原生红化奖励与塔楼武器球 | [红化与塔楼奖励](research/cage-mutation.md) |
+| 奖励全排列容量、运行时模板和压缩历史 | [运行时奖励与扩容](research/reward-scaling.md) |
 | 潜在能力链、私人奖励、升级排队、圣杯瓶 | [奖励与生命周期](research/rewards-and-lifecycle.md) |
 | HKS 字节码、输入、跳跃高度、原生 ABI | [动作脚本与运行时](research/hks-and-native.md) |
 | 战技随机、子弹行为、武器丢拾身份 | [战技与武器](research/skills-and-weapons.md) |

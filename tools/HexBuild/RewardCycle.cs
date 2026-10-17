@@ -7,19 +7,21 @@ static class RewardCycle{
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v){r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());}
  static string Hash(string p)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(p)));
- public static void Parameters(Func<string,int,int,PARAM.Row> clone){
-  foreach(int id in Enumerable.Range(0,Count).Select(Marker).Append(Reset)){
+ public static void Parameters(Func<string,int,int,PARAM.Row> clone,int[]? historyIds=null){
+  foreach(int id in (historyIds??RewardCatalog.PackedIds(RewardCatalog.HistoricalOwners.Length)).Append(Reset)){
    var r=clone("SpEffectParam",8000000,id);
    foreach(var (f,v) in new (string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",10),("effectEndurance",-1f),("dontDeleteOnDead",1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(r,f,v);
   }
  }
- public static void Events(EMEVD ev){
+ public static void Events(EMEVD ev,int[]? historyIds=null){
+  // Runtime consumes this notice and clears only the active packed records.
+  var records=Array.Empty<int>();
   foreach(int id in new[]{1111,9100941}){
    var e=ev.Events.Single(e=>e.ID==id);
    Check(!e.Instructions.Any(i=>i.Bank==2004&&i.ID is 8 or 21&&BitConverter.ToInt32(i.ArgData,4)>=First&&BitConverter.ToInt32(i.ArgData,4)<=Reset),"Cycle reset already present");
    var anchors=e.Instructions.Select((i,n)=>(i,n)).Where(v=>v.i.Bank==2004&&v.i.ID==21&&BitConverter.ToInt32(v.i.ArgData,4)==95002505).ToArray();Check(anchors.Length==1,"Guarded expedition/hub reset anchor missing");int at=anchors[0].n+1;
-   var added=Enumerable.Range(0,Count).Select(Marker).Append(Reset).Select(v=>new EMEVD.Instruction(2004,21,new object[]{20000u,v})).Append(new EMEVD.Instruction(2004,8,new object[]{20000u,Reset}));
-   e.Instructions.InsertRange(at,added);foreach(var p in e.Parameters)if(p.InstructionIndex>=at)p.InstructionIndex+=Count+2;
+   var added=records.Append(Reset).Select(v=>new EMEVD.Instruction(2004,21,new object[]{20000u,v})).Append(new EMEVD.Instruction(2004,8,new object[]{20000u,Reset}));
+   e.Instructions.InsertRange(at,added);foreach(var p in e.Parameters)if(p.InstructionIndex>=at)p.InstructionIndex+=records.Length+2;
   }
  }
  public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse){

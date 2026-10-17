@@ -1,105 +1,93 @@
-//! Per-expedition exposure rounds. Plans never consume history until delivery.
-use crate::hex_pool::{HEX_COUNT,ORDERS};
-pub const ALL:u32=(1u32<<HEX_COUNT)-1;
-pub fn mask(order:[usize;3])->u32{order.into_iter().fold(0,|m,i|m|(1<<i))}
-
-/// A reroll draws one new option while keeping the other two on screen.
-pub struct Single {pub candidates:Vec<usize>,seen:u32,rollover:bool}
-impl Single {
- pub fn new(unavailable:u32,seen:u32,visible:u32)->Self {
-  let eligible=ALL&!unavailable&!visible;
-  let unseen=eligible&!seen;
-  let rollover=unseen==0;
-  let pool=if rollover{eligible}else{unseen};
-  Self{candidates:(0..HEX_COUNT).filter(|i|pool&(1<<i)!=0).collect(),seen:seen&ALL,rollover}
+//! Linear-space sampling without replacement, with per-expedition exposure rounds.
+use crate::{hex_pool::HEX_COUNT,reward_choices::{HexSet,all,mask}};
+pub struct Single{pub candidates:Vec<usize>,seen:HexSet,rollover:bool}
+impl Single{
+ pub fn new(unavailable:&HexSet,seen:&HexSet,visible:&HexSet)->Self{Self::with_count(HEX_COUNT,unavailable,seen,visible)}
+ pub fn with_count(count:usize,unavailable:&HexSet,seen:&HexSet,visible:&HexSet)->Self{
+  let eligible:HexSet=all(count).difference(unavailable).copied().filter(|i|!visible.contains(i)).collect();
+  let unseen:HexSet=eligible.difference(seen).copied().collect();let rollover=unseen.is_empty();
+  Self{candidates:if rollover{eligible}else{unseen}.into_iter().collect(),seen:seen.intersection(&all(count)).copied().collect(),rollover}
  }
- pub fn next_seen(&self,choice:usize)->Option<u32>{
-  self.candidates.contains(&choice).then(||if self.rollover{1<<choice}else{self.seen|(1<<choice)})
- }
-}
-
-pub struct Round {
- pub candidates:Vec<usize>,
- seen:u32,
- tail:u32,
- rollover:bool,
-}
-impl Round {
- pub fn new(unavailable:u32,seen:u32)->Self{
-  let available=ALL&!unavailable;let unseen=available&!seen;
-  let rollover=unseen.count_ones()<3;
-  let tail=if rollover{unseen}else{0};
-  let excluded=if rollover{unavailable}else{unavailable|seen};
-  let candidates=ORDERS.iter().enumerate().filter_map(|(i,&o)|{
-   if !crate::reward_choices::eligible(o,excluded){return None;}
-   // Finish the old round first, both in membership and displayed order.
-   let tail_len=tail.count_ones() as usize;
-   let prefix=o[..tail_len].iter().fold(0,|m,&i|m|(1<<i));
-   (prefix==tail).then_some(i)
-  }).collect();
-  Self{candidates,seen:seen&ALL,tail,rollover}
- }
- pub fn preferred(&self,preferred:[usize;3])->Option<usize>{
-  let rank=|i|preferred.iter().position(|&p|p==i).unwrap_or(3+i);
-  self.candidates.iter().copied().min_by_key(|&i|ORDERS[i].map(rank))
- }
- pub fn next_seen(&self,choice:usize)->Option<u32>{
+ pub fn next_seen(&self,choice:usize)->Option<HexSet>{
   if !self.candidates.contains(&choice){return None;}
-  let offered=mask(ORDERS[choice]);
-  Some(if self.rollover{offered&!self.tail}else{self.seen|offered})
+  let mut seen=if self.rollover{HexSet::new()}else{self.seen.clone()};seen.insert(choice);Some(seen)
  }
 }
-
+pub struct Round{pub candidates:Vec<usize>,seen:HexSet,tail:HexSet,rollover:bool}
+impl Round{
+ pub fn new(unavailable:&HexSet,seen:&HexSet)->Self{Self::with_count(HEX_COUNT,unavailable,seen)}
+ pub fn with_count(count:usize,unavailable:&HexSet,seen:&HexSet)->Self{
+  let available:HexSet=all(count).difference(unavailable).copied().collect();
+  let unseen:HexSet=available.difference(seen).copied().collect();let rollover=unseen.len()<3;
+  Self{candidates:if available.len()<3{HexSet::new()}else if rollover{available}else{unseen.clone()}.into_iter().collect(),
+   seen:seen.intersection(&all(count)).copied().collect(),tail:if rollover{unseen}else{HexSet::new()},rollover}
+ }
+ fn pools(&self)->(Vec<usize>,Vec<usize>){
+  (self.tail.iter().copied().collect(),self.candidates.iter().copied().filter(|i|!self.tail.contains(i)).collect())
+ }
+ pub fn draw(&self,mut random:impl FnMut(usize)->Option<usize>)->Option<[usize;3]>{
+  if self.candidates.len()<3{return None;}
+  let (mut tail,mut rest)=self.pools();let mut out=[0;3];
+  for slot in &mut out{
+   let pool=if tail.is_empty(){&mut rest}else{&mut tail};let i=random(pool.len())?;
+   if i>=pool.len(){return None;}*slot=pool.swap_remove(i);
+  }Some(out)
+ }
+ pub fn preferred(&self,preferred:[usize;3])->Option<[usize;3]>{
+  if self.candidates.len()<3{return None;}
+  let rank=|i:&usize|preferred.iter().position(|p|p==i).unwrap_or(3+*i);
+  let (mut tail,mut rest)=self.pools();tail.sort_by_key(rank);rest.sort_by_key(rank);
+  tail.extend(rest);Some(tail[..3].try_into().unwrap())
+ }
+ pub fn next_seen(&self,choice:[usize;3])->Option<HexSet>{
+  let offered=mask(choice);
+  if offered.len()!=3||!choice.iter().all(|i|self.candidates.contains(i))||mask(choice[..self.tail.len()].iter().copied())!=self.tail{return None;}
+  Some(if self.rollover{offered.difference(&self.tail).copied().collect()}else{self.seen.union(&offered).copied().collect()})
+ }
+}
 #[cfg(test)]mod tests{
  use super::*;
- #[test]fn single_refresh_never_repeats_visible_owned_or_excluded_options(){
-  let visible=7;let unavailable=(1<<3)|(1<<4);let r=Single::new(unavailable,visible|(1<<5),visible);
-  assert!(!r.candidates.is_empty());for &i in &r.candidates{assert_eq!((visible|unavailable|(1<<5))&(1<<i),0);assert_eq!(r.next_seen(i),Some(visible|(1<<5)|(1<<i)));}
- }
- #[test]fn single_refresh_finishes_round_before_reset_and_commits_only_the_new_option(){
-  let last=1<<7;let r=Single::new(0,ALL&!last,7);assert_eq!(r.candidates,vec![7]);assert_eq!(r.next_seen(7),Some(ALL));
-  let r=Single::new(1<<5,ALL,7);for &i in &r.candidates{assert_eq!((7|(1<<5))&(1<<i),0);assert_eq!(r.next_seen(i),Some(1<<i));}assert_eq!(r.next_seen(0),None);
-  assert!(Single::new(ALL&!7,ALL,7).candidates.is_empty());
- }
- #[test]fn every_shown_option_is_excluded_even_when_only_one_was_chosen(){
-  let first=Round::new(0,0);let c=first.preferred([0,1,2]).unwrap();let seen=first.next_seen(c).unwrap();assert_eq!(seen,7);
-  let next=Round::new(1,seen);assert!(next.candidates.iter().all(|&i|mask(ORDERS[i])&7==0));assert_ne!(next.preferred([0,1,2]),Some(c));
- }
- #[test]fn final_one_or_two_are_shown_first_then_new_round_fills_without_duplicates(){
-  for tail in [1<<6,(1<<6)|(1<<8)]{
-   let unavailable=(1<<0)|(1<<3);let seen=ALL&!unavailable&!tail;let round=Round::new(unavailable,seen);assert!(!round.candidates.is_empty());
-   for &choice in &round.candidates{
-    let o=ORDERS[choice];let shown=mask(o);assert_eq!(shown.count_ones(),3);assert_eq!(shown&unavailable,0);assert_eq!(shown&tail,tail);
-    let prefix=o[..tail.count_ones()as usize].iter().fold(0,|m,&i|m|(1<<i));assert_eq!(prefix,tail);
-    assert_eq!(round.next_seen(choice),Some(shown&!tail));
+ #[test]fn visits_every_eligible_item_before_any_repeat_at_catalog_sizes_above_word_boundaries(){
+  for count in [3,4,28,33,64,96,129,256,1000]{
+   let unavailable=if count>4{mask([1,3])}else{HexSet::new()};let eligible:HexSet=all(count).difference(&unavailable).copied().collect();
+   let mut seen=HexSet::new();let mut visited=HexSet::new();let mut random=0x12345678u64;
+   for _ in 0..count*3{
+    let r=Round::with_count(count,&unavailable,&seen);
+    let chosen=r.draw(|n|{random=random.wrapping_mul(6364136223846793005).wrapping_add(1);Some((random>>32)as usize%n)}).unwrap();
+    assert_eq!(mask(chosen).len(),3);
+    for i in chosen{if visited==eligible{visited.clear();}assert!(!unavailable.contains(&i));assert!(visited.insert(i),"count {count}, repeated {i}");}
+    seen=r.next_seen(chosen).unwrap();
    }
-   let c=round.preferred([0,3,9]).unwrap();assert_eq!(mask(ORDERS[c])&tail,tail);
   }
  }
- #[test]fn exhausted_round_restarts_but_owned_and_role_terrain_exclusions_never_return(){
-  let cage=crate::hex_pool::OWNER_IDS.iter().position(|&id|id==95001600).unwrap();
-  for hero in 1..=10{
-   let excluded=crate::reward_choices::role_exclusions(crate::reward_choices::terrain_exclusions(1,true),Some(hero));
-   let round=Round::new(excluded,ALL);assert!(!round.candidates.is_empty());
-   for &c in &round.candidates{assert_eq!(mask(ORDERS[c])&excluded,0);assert!(!ORDERS[c].contains(&cage));assert_eq!(round.next_seen(c),Some(mask(ORDERS[c])));}
-  }
- }
- #[test]fn unsuccessful_delivery_does_not_mutate_history_or_reset_at_a_boundary(){
-  let seen=ALL&!(1<<7);let round=Round::new(0,seen);let c=round.preferred([1,2,3]).unwrap();
-  assert_eq!(round.seen,seen);assert_eq!(Round::new(0,seen).candidates,round.candidates);assert_ne!(round.next_seen(c),Some(seen));assert_eq!(round.next_seen(usize::MAX),None);
- }
- #[test]fn full_rounds_visit_every_eligible_item_before_any_return(){
-  let unavailable=ALL&!((1<<10)-1);let mut seen=0;let mut visited=0;
-  for turn in 0..12{
-   let round=Round::new(unavailable,seen);let c=round.preferred([0,1,2]).unwrap();let o=ORDERS[c];
-   for i in o{
-    if visited==!unavailable&ALL{visited=0;}
-    assert_eq!(visited&(1<<i),0,"repeat before exhaustion at turn {turn}");visited|=1<<i;
+ #[test]fn tail_is_offered_first_then_new_round_commits_only_its_new_options(){
+  for tail in [mask([6]),mask([6,8])]{
+   let unavailable=mask([0,3]);let seen:HexSet=all(28).difference(&unavailable).copied().filter(|i|!tail.contains(i)).collect();
+   let r=Round::with_count(28,&unavailable,&seen);
+   for chosen in [r.preferred([0,3,9]).unwrap(),r.draw(|_|Some(0)).unwrap()]{
+    assert_eq!(mask(chosen[..tail.len()].iter().copied()),tail);assert_eq!(r.next_seen(chosen),Some(mask(chosen).difference(&tail).copied().collect()));
    }
-   seen=round.next_seen(c).unwrap();
+   assert_eq!(r.seen,seen);assert_eq!(r.next_seen([0,1,2]),None);
   }
  }
- #[test]fn fewer_than_three_unowned_items_cannot_form_duplicate_or_owned_choices(){
-  for available in [0,1,3]{let round=Round::new(ALL&!available,ALL);assert!(round.candidates.is_empty());assert_eq!(round.preferred([0,1,2]),None);}
+ #[test]fn all_options_shown_are_excluded_regardless_of_which_was_selected(){
+  let first=Round::new(&HexSet::new(),&HexSet::new());let c=first.preferred([0,1,2]).unwrap();let seen=first.next_seen(c).unwrap();
+  let next=Round::new(&mask([0]),&seen);assert!(next.candidates.iter().all(|i|!seen.contains(i)));assert_eq!(next.next_seen(c),None);
+ }
+ #[test]fn single_refresh_excludes_owned_visible_and_seen_and_can_roll_over(){
+  let visible=mask([0,65,128]);let unavailable=mask([2,64]);let seen=mask([0,65,128,129]);
+  let r=Single::with_count(160,&unavailable,&seen,&visible);
+  for &i in &r.candidates{assert!(!unavailable.contains(&i)&&!visible.contains(&i)&&!seen.contains(&i));let mut expected=seen.clone();expected.insert(i);assert_eq!(r.next_seen(i),Some(expected));}
+  let r=Single::with_count(160,&unavailable,&all(160),&visible);for &i in &r.candidates{assert_eq!(r.next_seen(i),Some(mask([i])));}
+  assert_eq!(r.next_seen(65),None);
+ }
+ #[test]fn small_remaining_pools_never_duplicate_or_include_owned_and_rng_failure_consumes_nothing(){
+  for left in [0,1,2]{let excluded:HexSet=(left..256).collect();let r=Round::with_count(256,&excluded,&all(256));assert!(r.candidates.is_empty());assert_eq!(r.draw(|_|Some(0)),None);assert_eq!(r.preferred([0,1,2]),None);}
+  let r=Round::with_count(256,&HexSet::new(),&mask([65,128]));assert_eq!(r.draw(|_|None),None);assert_eq!(r.draw(|n|Some(n)),None);assert_eq!(r.seen,mask([65,128]));assert_eq!(r.next_seen([3,3,4]),None);
+ }
+ #[test]fn draw_reaches_all_distinct_triples_uniformly_without_storing_them(){
+  let r=Round::with_count(5,&HexSet::new(),&HexSet::new());let mut results=std::collections::BTreeMap::new();
+  for a in 0..5{for b in 0..4{for c in 0..3{let mut rolls=[a,b,c].into_iter();let chosen=r.draw(|_|rolls.next()).unwrap();*results.entry(chosen).or_insert(0)+=1;}}}
+  assert_eq!(results.len(),60);assert!(results.values().all(|&count|count==1));
  }
 }

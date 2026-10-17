@@ -68,7 +68,7 @@ unsafe fn first(dialog:usize,base:usize)->Option<usize>{
 unsafe fn hex_dialog(dialog:usize,base:usize)->bool{
  first(dialog,base).is_some_and(|row|(0..3).all(|i|reward_choices::is_hex_good(ptr::read_unaligned((row+i*0x118+0x64)as *const u32))))
 }
-struct Choice{player:usize,row:usize,node:usize,index:usize,visible:u32,old:u32}
+struct Choice{player:usize,row:usize,node:usize,index:usize,visible:reward_choices::HexSet,old:u32}
 unsafe fn choice(dialog:usize,base:usize)->Option<Choice>{
  let first=first(dialog,base)?;
  if !hex_dialog(dialog,base){return None;}
@@ -90,15 +90,15 @@ unsafe fn choice(dialog:usize,base:usize)->Option<Choice>{
   node=read_ptr(node);
  }
  if node!=0||found.contains(&0)||uids[0]==uids[1]||uids[0]==uids[2]||uids[1]==uids[2]{return None;}
- let mut visible=0;
- for g in goods{visible|=1<<hex_pool::OWNER_IDS.iter().position(|&id|g==(0x40000000|id as u32))?;}
+ let mut visible=reward_choices::HexSet::new();
+ for g in goods{visible.insert(hex_pool::OWNER_IDS.iter().position(|&id|g==(0x40000000|id as u32))?);}
  Some(Choice{player,row,node:found[index],index,visible,old:goods[index]})
 }
 unsafe fn plan(c:&Choice,base:usize)->Option<reward_cycle::Single>{
  update(c.player,base,0.);
  if !USES.lock().ok()?.mask.is_some_and(|m|m&(1<<c.index)==0){return None;}
  let seen=reward_cycle_runtime::seen(c.player,base)?;
- let r=reward_cycle::Single::new(crate::unavailable_hexes(c.player,base),seen,c.visible);
+ let r=reward_cycle::Single::new(&crate::unavailable_hexes(c.player,base),&seen,&c.visible);
  (!r.candidates.is_empty()).then_some(r)
 }
 

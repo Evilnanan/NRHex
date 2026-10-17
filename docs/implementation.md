@@ -12,7 +12,7 @@
 
 | 功能 | 主要源码／工具 |
 | --- | --- |
-| 奖励池、排除已拥有项 | `hex_pool.rs`、`reward_choices.rs`、`HexBuild` |
+| 奖励池、排除已拥有项 | `hex_pool.rs`、`reward_choices.rs`、`reward_cycle.rs`、`HexBuild/RewardCatalog.cs`、`HexBuild/RewardTemplate.cs` |
 | 展示轮换与逐栏刷新 | `reward_cycle.rs`、`reward_cycle_runtime.rs`、`reward_reroll.rs`、`HexBuild/RewardCycle.cs`、`HexBuild/RewardReroll.cs`、`data/text/menu.json`、`verify_reward_reroll_native.py`、`verify_reroll_sound.py`；0.17.145在重投成功、原生列表重新绑定后仅提交一次原生确认音：菜单构造器0x79aee0的“決定”描述符为音效100／优先级2／类别1，经0x870290进入原生菜单音效队列，保留音量和优先级处理。不调用原生丢弃／确认动作；失败、已用次数、重入及普通武器菜单不额外提交。入口纳入135项签名守卫，无新增hook。描述符ABI与8条原生入队／优先级分支已隔离验证，实际听感待游戏验收。 |
 | 等级发放与排队 | `level_rewards.rs`、`personal_reward.rs`、`verify_level_rewards.py` |
 | 复活搬回原球 | `reward_recovery.rs`、`verify_reward_recovery.py` |
@@ -151,4 +151,14 @@
 
 每行仅将对应基础累积设为30，保留所复制原生行的触发效果、伤害、持续时间和后续逻辑。原生附加异常流程同时乘上`statusAilmentAtkPowerCorrectRate`及`statusAilmentAtkPowerCorrectRate_byPoint`；另保留通用倍率、盾防、抗性增长和同步。只筛选异常类型，不在DLL另算累积或设置冷却。
 
-当前活动池28项、19,656组三元组。生成器固定旧28项历史池排列并跳过红包占用的两个掉落组；仅清理停用能力的旧占位掉落行，现役奖励编号、原生掉落和红包行保留，避免超过PARAM的65,535行上限。完整构建只生成现役三元组。原生隔离执行见`src/erosion_native_tests.rs`，它验证免疫、选择器、补正片段及编译后的钩子，不代表游戏或联机验收。
+侵蚀使用统一运行时奖励模板，不另存任何三选一排列。原生隔离执行见`src/erosion_native_tests.rs`，它验证免疫、选择器、补正片段及编译后的钩子，不代表游戏或联机验收。
+
+## 运行时奖励模板与展示记录
+
+`reward_choices.rs`使用动态集合表示拥有、角色／地形排除和可见选项，`reward_cycle.rs`从候选中逐项无放回抽样，直接生成本次三项。旧轮余下1～2项仍放在前面，再从新轮补足；优先测试选项仍保持可用项顺序。候选存储随目录规模增长，不再保存全部有序排列。
+
+`hex_pool.rs`仅保存能力ID、稳定历史位号和一个模板编号。原生三行模板`95200000..95200002`只负责触发原有三选一创建。在已有5759E0 hook中，限定本线程／管理器／掉落表／本机拥有槽，把描述符+8的Goods ID换为本次选择，选项序号来自+A9；随后走原生创建、分组、显示和领取，返回后还原描述符。UID、组标识、归属、位置、品质及其他数据保留。每个序号在同一调用范围只尝试一次，零创建可重试，部分创建按已发布处理，不整组重发。
+
+展示历史使用`96000000 + byteIndex*256 + nonzeroByte`编码，每8个稳定登记位只需一个活动保存效果，零字节不添加效果。当前29个历史登记位（含停用项的保留位）最多占4条，替代原来28条；96项目录模拟最多13条。参数为隐藏、死亡保留、本地保存效果，类别20按同ID刷新。原生saveCategory10保存区共有50条，需要与其他保存效果共享；不修改这个原生容量。稳定登记表`HistoricalOwners`只能追加，移除能力也保留登记位，避免改变保存位号与ItemTable编号。
+
+原生新远征／圆桌reset通知仍是95002825。运行时只删除当前实际存在的压缩记录，确认清空后消费通知，不为每种字节值生成清理指令；定期对账保证延迟写入不能复活旧轮。当前事件和FMG无需改动。资源压缩清理58,965条排列行，敌人掉落表剩2,750行；原生／红包掉落、所有海克斯实际效果与用户配置保持一致。
