@@ -1,19 +1,15 @@
 {
-  "version": "0.17.150",
+  "version": "0.17.151",
   "active": null,
   "pid": null,
-  "dllSha256": "4d430801028082aa5083b521f2f6dbae5d29807aea98508256128fde3772bf55",
+  "dllSha256": "526ebd91dcc48cc65487398f43c59f8c2ca4c0128c5b7c159352c4612a00cda3",
   "build": "build-validation.json",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "pendingChecks": [
-    "Initial three-choice ball contents, names/icons and normal claim in game",
-    "Per-slot reroll, exposure rollover and role/terrain exclusions in game",
-    "Death/revival, queued level rewards and new-expedition reset",
-    "Host/client private visibility, ownership and claim",
-    "Erosion and Death Dance gameplay interactions",
-    "One-second smooth Death Dance during roll and Ultimate Art immunity in game",
-    "Revenant HP lock during Death Dance debt in game",
-    "Erosion roll contact versus weapon follow-up and simultaneous projectiles in game"
+    "Acquire Fission before/after an existing native ball; only three new sources split",
+    "Claim A/B independently and verify weapons, passives, arts and theme/class tendencies",
+    "Death/revival, map transitions and new-expedition counter reset",
+    "Host/client private ownership and rewards"
   ]
 }

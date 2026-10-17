@@ -71,6 +71,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  p.ApplyParamdef(d);return p;
 }
 if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--erosion-stage")){Erosion.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-stage")){DeathDance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-probe")){DeathDance.Probe(root,bnd,Parse);return;}
@@ -755,6 +756,10 @@ RewardReroll.Parameters(Clone);
 EssenceReaver.Mechanics(Clone);
 DeathDance.Mechanics(Clone);
 Erosion.Mechanics(Clone);
+PotentialFission.Mechanics(Clone);
+foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
+PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
+foreach(var fissionParam in new[]{"ItemTableParam","ItemLotParam_enemy"})added[fissionParam].AddRange(pars[fissionParam].Rows.Where(r=>r.ID>=PotentialFission.FirstTable&&r.ID<99000000).Select(r=>r.ID));
 ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
@@ -924,7 +929,7 @@ foreach(var n in names){
    var copy=new PARAM.Row(v.First);Require(Convert.ToInt32(copy["spEffectIDForShooter"].Value)==ContractHeart.Used,"Branch shooter notification missing");Set(copy,"spEffectIDForShooter",v.Second["spEffectIDForShooter"].Value);return Eq(copy,v.Second);
   }return Eq(v.First,v.Second);
  }),"Original rows changed in "+n);
- foreach(var id in added[n])Require(Eq(pars[n].Rows.Single(r=>r.ID==id),check.Rows.Single(r=>r.ID==id)),"Added row failed round-trip: "+n+" "+id);
+ foreach(var id in added[n].Distinct()){var expected=pars[n].Rows.Where(r=>r.ID==id).ToArray();var actual=check.Rows.Where(r=>r.ID==id).ToArray();Require(expected.Length==actual.Length&&expected.Zip(actual).All(v=>Eq(v.First,v.Second)),"Added row failed round-trip: "+n+" "+id);}
  if(added[n].Count==0&&n!="Bullet")files[n].Bytes=original[files[n].ID];
 }
 // Check the serialized reward graph, including the actual UI classification.

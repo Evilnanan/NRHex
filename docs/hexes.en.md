@@ -153,3 +153,8 @@ Flasks restore HP gradually. Recoverable damage is taken gradually over 1 second
 ## Erosion
 
 Reduces attack power by 15%. Attacks inflict 30 buildup of the status ailment the target is weakest to.
+
+<!-- hex:95003200 -->
+## Potential Fission
+
+Latent powers you obtain next split into two of lower quality. Can trigger 3 times.
