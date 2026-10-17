@@ -143,3 +143,9 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 `./build-death-dance.ps1` 从当前未包含死亡之舞的参数包添加能力、完整奖励链和轮换清理，只暂存到 `work/death-dance/staged`，回读核对原有行、重复行、事件及其他文本保持一致。随后生成奖励池、运行常规Rust测试和 `tools/verify_death_dance.py`、构建DLL并核对当前EXE签名；验证后备份并更新dist。`-NoInstall`跳过安装。已经添加本能力的包可用 `./build-death-dance.ps1 -ProtectionOnly` 仅构建、验证并安装共享保护DLL；与 `-NoInstall`组合只构建。该模式核对已安装死亡之舞资源的哈希，保留参数、事件、FMG及用户配置；普通新增入口遇到ID碰撞会拒绝重复添加。
 
 原生隔离测试需要原游戏EXE，默认使用 `NRHEX_GAME/nightreign.exe`，可用 `NRHEX_NATIVE_EXE`指定测试进程所见路径。跨Windows目标构建可用 `NRHEX_CARGO_TARGET`选择工具链。Linux构建需通过现有Windows Oodle库处理KRAK输入；本次在独立输入副本中解压、完成语义检查后按原始KRAK头重压，并再次解压逐字节核对，不修改原始输入。
+
+## 侵蚀增量构建
+
+`./build-erosion.ps1` 从尚未添加侵蚀的当前包生成参数、完整现役奖励链、轮换清理及双语奖励／状态文本，暂存于`work/erosion/staged`。现有能力的奖励编号和内容不变；清理停用能力的占位掉落行，跳过红包专用编号，并回读核对所有原生与无关数据。已包含侵蚀时拒绝重复添加；`-NoInstall`仅构建和验证。完整构建也接入同一能力与奖励规则。
+
+脚本生成奖励池后运行Rust测试、`tools/verify_erosion.py`、DLL编译及EXE签名检查，再由`tools/install_erosion.py`备份并更新dist，保留INI和其他资源。隔离执行采用与死亡之舞相同的`NRHEX_NATIVE_EXE`、`NRHEX_CARGO_TARGET`约定；Linux的KRAK输入处理及输出无损回读也相同。隔离夹具中的原生效果结算后续仅记录参数，实机异常触发、伤害和联机仍须测试。

@@ -67,6 +67,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--erosion-stage")){Erosion.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-stage")){DeathDance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-probe")){DeathDance.Probe(root,bnd,Parse);return;}
 if(args.Contains("--sword-regain-stage")){SwordRegain.Stage(root,bnd,Parse);return;}
@@ -716,6 +717,7 @@ foreach(var h in hexes){
  if(h.Id==ContractHeart.Contract)ContractHeart.Owners(s);
  if(h.Id==EssenceReaver.Owner)EssenceReaver.Owners(s);
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
+ if(h.Id==Erosion.Owner)Erosion.Owners(s);
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
  if(h.Id==95002100){Set(s,"magicConsumptionRate",1f);Set(s,"miracleConsumptionRate",1f);}
@@ -748,6 +750,7 @@ RewardCycle.Parameters(Clone);
 RewardReroll.Parameters(Clone);
 EssenceReaver.Mechanics(Clone);
 DeathDance.Mechanics(Clone);
+Erosion.Mechanics(Clone);
 ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
@@ -903,7 +906,7 @@ var rewardEntries=RewardCatalog.Active(hexes);
 var orders=rewardEntries.Select(e=>e.Order).ToArray();
 Require(orders.Length==hexes.Length*(hexes.Length-1)*(hexes.Length-2),"Incomplete reward pool");
 RewardCatalog.Write(Path.Combine(root,"src/hex_pool.rs"),hexes);
-foreach(var entry in RewardCatalog.Compatibility(hexes))for(int slot=0;slot<3;slot++){
+foreach(var entry in RewardCatalog.ActiveSerialized(hexes))for(int slot=0;slot<3;slot++){
  var r=Clone("ItemLotParam_enemy",6100002,entry.Lot+slot);Set(r,"lotItemId01",RewardCatalog.Table(entry.Owners[slot]));Set(r,"lotItem_Rarity",3);
 }
 bool Eq(PARAM.Row a,PARAM.Row b)=>a.ID==b.ID&&a.Name==b.Name&&a.Cells.Count==b.Cells.Count&&a.Cells.Zip(b.Cells).All(v=>v.First==null?v.Second==null:v.Second!=null&&(v.First.Value is byte[] ba?v.Second.Value is byte[] bb&&ba.SequenceEqual(bb):Equals(v.First.Value,v.Second.Value)));
@@ -1048,6 +1051,7 @@ foreach(var lang in new[]{"zhocn","engus"}){
  Require(statusNames.Length==1,"Missing native SpEffectName text file");
  var statusName=statusNames[0];var statusFmg=FMG.Read(statusName.Bytes);
  var statuses=HexTexts.Statuses(root,hexes,lang);
+ foreach(var h in hexes.Where(h=>h.Id==Erosion.Owner))statuses[h.Id]=lang=="zhocn"?(h.Zh,h.ZhInfo):(h.En,h.EnInfo);
  var statusInfoFile=tb.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectInfo.fmg");
  var statusInfoFmg=FMG.Read(statusInfoFile.Bytes);
  foreach(var (id,text) in statuses){

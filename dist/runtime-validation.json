@@ -1,14 +1,15 @@
 {
-  "version": "0.17.147",
+  "version": "0.17.148",
   "active": null,
   "pid": null,
-  "dllSha256": "c6a1837aeeb39aaaf68ab17ad9de4874e80540d255fb875e5c59df1e8c0ea2a5",
+  "dllSha256": "d2d7e54997f504f0b816cddd5cda7d18001e1fc4f48eaf705c8f1e79533f7eec",
   "build": "build-validation.json",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "pendingChecks": [
-    "Independent two-second damage schedules and shared protection across new hits in game",
-    "Native gradual flasks and interactions with existing flask effects",
-    "Death, near-death, revival and multiplayer behavior"
+    "Erosion native attack applicability, seven ailments and immunity in game",
+    "Eochaid multi-hit and Ghostflame ground hit buildup in game",
+    "Native proc effects, escalating resistance, host/client authority and sync",
+    "Death Dance overlapping damage and shared recovery protection in game"
   ]
 }

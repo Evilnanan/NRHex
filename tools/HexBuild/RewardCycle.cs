@@ -2,7 +2,7 @@ using SoulsFormats;
 using System.Text.Json;
 
 static class RewardCycle{
- public const int First=95002800,Count=27,Reset=95002825;
+ public const int First=95002800,Count=28,Reset=95002825;
  public static int Marker(int index)=>index<25?First+index:95002829+(index-25);
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v){r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());}

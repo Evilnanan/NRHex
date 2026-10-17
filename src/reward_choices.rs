@@ -70,10 +70,11 @@ mod tests {
     }
     #[test] fn retired_ability_is_absent_and_remaining_lot_ids_are_stable(){
         use crate::hex_pool::{LOT_IDS,LEGACY_LOT_END};
-        assert_eq!(HEX_COUNT,27);assert_eq!(OWNER_IDS[26],95003000);assert!(!OWNER_IDS.contains(&95001900));assert_eq!(OWNER_IDS[25],95002900);
-        assert_eq!(ORDERS.len(),17550);assert_eq!(LOT_IDS.len(),ORDERS.len());
+        assert_eq!(HEX_COUNT,28);assert_eq!(OWNER_IDS.get(27),Some(&95003100));assert_eq!(OWNER_IDS[26],95003000);assert!(!OWNER_IDS.contains(&95001900));assert_eq!(OWNER_IDS[25],95002900);
+        assert_eq!(ORDERS.len(),19656);assert_eq!(LOT_IDS.len(),ORDERS.len());
+        assert!(LOT_IDS.iter().all(|id| !crate::red_envelope::LOTS.contains(id)));
         assert_eq!(LOT_IDS.iter().copied().collect::<std::collections::HashSet<_>>().len(),LOT_IDS.len());
-        for (i,&lot) in LOT_IDS.iter().enumerate(){assert!((95200000..LEGACY_LOT_END).contains(&lot));assert_eq!((lot-95200000)%10,0);if i<4080{assert_eq!(lot,95200000+i as i32*10);}if (4896..5814).contains(&i){assert!(lot>=95258140);assert!(ORDERS[i].contains(&18));}if (5814..6840).contains(&i){assert!(lot>=95268400);assert!(ORDERS[i].contains(&19));}if (6840..7980).contains(&i){assert!(lot>=95279800);assert!(ORDERS[i].contains(&20));}if (7980..9240).contains(&i){assert!(lot>=95292400);assert!(ORDERS[i].contains(&21));}if (9240..10626).contains(&i){assert!(lot>=95306260);assert!(ORDERS[i].contains(&22));}if (10626..13800).contains(&i){assert!(lot>=95321440);assert!(ORDERS[i].contains(&23)||ORDERS[i].contains(&24));}if (13800..15600).contains(&i){assert!(lot>=95356000);assert!(ORDERS[i].contains(&25));}if i>=15600{assert!(lot>=95375500);assert!(ORDERS[i].contains(&26));}}
+        for (i,&lot) in LOT_IDS.iter().enumerate(){assert!((95200000..LEGACY_LOT_END).contains(&lot));assert_eq!((lot-95200000)%10,0);if i<4080{assert_eq!(lot,95200000+i as i32*10);}if (4896..5814).contains(&i){assert!(lot>=95258140);assert!(ORDERS[i].contains(&18));}if (5814..6840).contains(&i){assert!(lot>=95268400);assert!(ORDERS[i].contains(&19));}if (6840..7980).contains(&i){assert!(lot>=95279800);assert!(ORDERS[i].contains(&20));}if (7980..9240).contains(&i){assert!(lot>=95292400);assert!(ORDERS[i].contains(&21));}if (9240..10626).contains(&i){assert!(lot>=95306260);assert!(ORDERS[i].contains(&22));}if (10626..13800).contains(&i){assert!(lot>=95321440);assert!(ORDERS[i].contains(&23)||ORDERS[i].contains(&24));}if (13800..15600).contains(&i){assert!(lot>=95356000);assert!(ORDERS[i].contains(&25));}if (15600..17550).contains(&i){assert!(lot>=95375500);assert!(ORDERS[i].contains(&26));}if i>=17550{assert!(ORDERS[i].contains(&27));}}
         assert!(LOT_IDS[4080..].windows(2).any(|p|p[1]-p[0]>10));
     }
     #[test] fn spirit_is_revenant_only_and_bit_sixteen_is_preserved() {

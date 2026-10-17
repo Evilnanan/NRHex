@@ -49,6 +49,7 @@ static class HexTexts {
     foreach(string f in new[]{"AttachEffectInfo.fmg","PermanentBuffInfo.fmg","PermanentBuffCaption.fmg"})replacements[f]=infos;
    }else{
     var statuses=Statuses(root,hexes,language);
+    if(allRewards)foreach(var h in selected)statuses[h.Id]=(names[h.Id],infos[h.Id]);
     replacements["SpEffectName.fmg"]=statuses.ToDictionary(v=>v.Key,v=>v.Value.Name);
     replacements["SpEffectInfo.fmg"]=statuses.ToDictionary(v=>v.Key,v=>v.Value.Info);
    }

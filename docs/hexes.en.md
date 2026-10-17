@@ -148,3 +148,8 @@ Defeating enemies permanently raises maximum FP by 1%.
 ## Death’s Dance
 
 Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.
+
+<!-- hex:95003100 -->
+## Erosion
+
+Reduces attack power by 15%. Attacks inflict 30 buildup of the status ailment the target is weakest to.
