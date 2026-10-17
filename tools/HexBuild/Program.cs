@@ -67,6 +67,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--death-dance-stage")){DeathDance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--death-dance-probe")){DeathDance.Probe(root,bnd,Parse);return;}
 if(args.Contains("--sword-regain-stage")){SwordRegain.Stage(root,bnd,Parse);return;}
 if(args.Contains("--sword-regain-probe")){SwordRegain.Export(root,bnd,Parse);return;}
 if(args.Contains("--sword-charged-probe")){SwordCharged.Probe(root,bnd,Parse);return;}
@@ -713,6 +715,7 @@ foreach(var h in hexes){
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
  if(h.Id==ContractHeart.Contract)ContractHeart.Owners(s);
  if(h.Id==EssenceReaver.Owner)EssenceReaver.Owners(s);
+ if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
  if(h.Id==95002100){Set(s,"magicConsumptionRate",1f);Set(s,"miracleConsumptionRate",1f);}
@@ -744,6 +747,7 @@ NightBlessing.Mechanics(Clone);
 RewardCycle.Parameters(Clone);
 RewardReroll.Parameters(Clone);
 EssenceReaver.Mechanics(Clone);
+DeathDance.Mechanics(Clone);
 ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);

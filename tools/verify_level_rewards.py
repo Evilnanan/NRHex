@@ -49,7 +49,7 @@ assert any(i['Bank']==2004 and i['instruction']==21 for i in events['nativeExamp
 gate, reset = sorted((e for e in events['events'] if e['ID']!=1111), key=lambda e:e['ID'])
 deployment = next(e for e in events['events'] if e['ID']==1111)
 original = next(e for e in json.loads((root/'data/reference/rewards/deployment-events.json').read_text(encoding='utf8')) if e['file']=='common.emevd.dcx' and e['ID']==1111)
-reset_ids=[*range(95002701,95002706),95002505,*range(95002800,95002825),95002829,*range(95002825,95002829),95002903]
+reset_ids=[*range(95002701,95002706),95002505,*range(95002800,95002825),95002829,95002830,*range(95002825,95002829),95002903]
 lifecycle_ops=[(21,effect) for effect in reset_ids]+[(8,95002903)]+[(21,effect) for effect in range(95000103,95000107)]+[(8,95000106),(8,95002825)]
 lifecycle=[dict(Bank=2004,ID=operation,hex=struct.pack('<Ii',20000,effect).hex().upper()) for operation,effect in lifecycle_ops]
 assert deployment['instructions'][9:9+len(lifecycle)]==lifecycle

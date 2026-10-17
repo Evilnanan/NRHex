@@ -12,6 +12,7 @@
 | 历次版本变更与当时的验证记录 | [历史变更](../CHANGELOG.md) |
 | PARAM、FMG、解包、Oodle、EMEDF | [数据与工具](research/data-and-tools.md) |
 | 增伤、承伤、分类、吸血、图标、护盾联机视觉 | [效果与战斗结算](research/effects-and-combat.md) |
+| 连续受击时旧回收额度如何衰减 | [再次受击与回收槽](research/regain-rehit.md) |
 | 队友特殊效果栏重复、复活后缺失及原生同步 | [效果栏同步](research/effect-sync.md) |
 | 豪饮攻击力图标、原生HUD合并和层数 | [豪饮HUD](research/drinking-hud.md) |
 | 刷怪笼连续开启卡住、队友血条与深夜血量调查 | [刷怪笼生命周期](research/cage-lifecycle.md) |

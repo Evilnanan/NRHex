@@ -55,7 +55,7 @@ pub unsafe fn commit(player:usize,base:usize,seen:u32){
  #[test]fn appended_history_markers_do_not_alias_reset_or_reroll_records(){
   let ids:Vec<_>=(0..crate::hex_pool::HEX_COUNT).map(marker).collect();
   assert_eq!(&ids[..25],&(FIRST..FIRST+25).collect::<Vec<_>>());
-  assert_eq!(ids[25],95002829);assert!(!ids.contains(&RESET));
+  assert_eq!(ids[25],95002829);assert_eq!(ids[26],95002830);assert!(!ids.contains(&RESET));
   assert!(ids.iter().all(|id|!(crate::reward_reroll::FIRST..crate::reward_reroll::FIRST+3).contains(id)));
  }
  #[test]fn native_records_seed_after_runtime_restart_and_survive_revival(){

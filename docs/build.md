@@ -137,3 +137,9 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 `verify_parry_turn_native.py` 隔离执行原生朝向设置与读取函数，验证八个方向、角度回读及位置／其他物理字段不变；完整构建同时核对新增设置接口签名。
 
 不祥契约和偷心者通过参数及本地common事件实现。新增时可用 `dotnet run --project tools/HexBuild -- . --contract-heart` 从现有dist生成增量产物；仅接受尚未添加这两项的输入，安装前回读参数、奖励图、事件和中英文文本。当前已安装版本使用 `--contract-heart-check` 导出验证夹具，再运行 `tools/verify_contract_heart_native.py` 和 `tools/verify_contract_heart_events.py`。完整构建已包含同样的生成与检查；两项的Ctrl+F11入口随群友版编译移除。
+
+## 死亡之舞增量构建
+
+`./build-death-dance.ps1` 从当前未包含死亡之舞的参数包添加能力、完整奖励链和轮换清理，只暂存到 `work/death-dance/staged`，回读核对原有行、重复行、事件及其他文本保持一致。随后生成奖励池、运行常规Rust测试和 `tools/verify_death_dance.py`、构建DLL并核对当前EXE签名；验证后备份并更新dist。`-NoInstall`跳过安装。已经添加本能力的包可用 `./build-death-dance.ps1 -ProtectionOnly` 仅构建、验证并安装共享保护DLL；与 `-NoInstall`组合只构建。该模式核对已安装死亡之舞资源的哈希，保留参数、事件、FMG及用户配置；普通新增入口遇到ID碰撞会拒绝重复添加。
+
+原生隔离测试需要原游戏EXE，默认使用 `NRHEX_GAME/nightreign.exe`，可用 `NRHEX_NATIVE_EXE`指定测试进程所见路径。跨Windows目标构建可用 `NRHEX_CARGO_TARGET`选择工具链。Linux构建需通过现有Windows Oodle库处理KRAK输入；本次在独立输入副本中解压、完成语义检查后按原始KRAK头重压，并再次解压逐字节核对，不修改原始输入。

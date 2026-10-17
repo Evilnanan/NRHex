@@ -143,3 +143,8 @@ Grants two Bewitching Branches. Using a Bewitching Branch grants another after 6
 ## Essence Reaver
 
 Defeating enemies permanently raises maximum FP by 1%.
+
+<!-- hex:95003000 -->
+## Death’s Dance
+
+Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.

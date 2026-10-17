@@ -1,127 +1,17 @@
 {
-  "version": "0.17.145",
+  "version": "0.17.147",
   "buildPassed": true,
-  "scope": "DLL-only native reroll confirmation sound",
-  "dllSha256": "a77e0f5729faa79d38e6277833068656c9c57d78e7bbe01b699073f8920ea9a6",
-  "installedDllSha256": "a77e0f5729faa79d38e6277833068656c9c57d78e7bbe01b699073f8920ea9a6",
-  "rustTestsPassed": 356,
-  "signatureCount": 135,
-  "teamNativeDispatchCases": 18,
-  "nativeVisibilityAndPickupCases": 24,
-  "validation": "reroll-sound-validation.json",
-  "textValidation": {
-    "source": "docs/hexes.md",
-    "sourceSha256": "B2B29DF44688C21F070B0120678884BA61AA8B05C50FC38AD3854ADE4E3E044F",
-    "englishSource": "docs/hexes.en.md",
-    "englishSourceSha256": "7239C92D42164C261334994DC82195EFB9AF091DD95B9F09AF3CFA070F71153B",
-    "statusSource": "data/text/status-effects.json",
-    "statusSourceSha256": "9D3F90381B814BD3CD1650EF82D4D83C0A50BB2CB97E4D8E14A41EA05F3D36BD",
-    "statusOnly": false,
-    "reports": [
-      {
-        "language": "zhocn",
-        "file": "item_dlc01.msgbnd.dcx",
-        "inputSha256": "57B4BBBDDF7F9B5154AA95DF3DDEC8333B54319C63643E69CADE2192D400F977",
-        "outputSha256": "672EA602C27B7CC8E70379939B0D52804E5771FF730721300155FD8613DA661F",
-        "changes": [
-          {
-            "fmg": "AttachEffectInfo.fmg",
-            "id": 95000100,
-            "before": "获得88888卢恩，并为队伍每人提供一份潜在能力奖励",
-            "after": "获得88888卢恩和一个潜在能力"
-          },
-          {
-            "fmg": "AttachEffectInfo.fmg",
-            "id": 95001600,
-            "before": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢。每座封印监牢最多开启5次",
-            "after": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢最多5次"
-          },
-          {
-            "fmg": "AttachEffectInfo.fmg",
-            "id": 95002500,
-            "before": "在夜雨中提升20%攻击力。淋雨时血量低于20%，在15秒内持续回复血量，之后受到反噬，持续损失血量直到离开夜雨。触碰赐福重置",
-            "after": "在夜雨中提升20%攻击力。淋雨时血量低于20%，在15秒内持续回复血量，之后受到反噬，持续损失血量直至离开夜雨。触碰赐福重置"
-          },
-          {
-            "fmg": "PermanentBuffInfo.fmg",
-            "id": 95000100,
-            "before": "获得88888卢恩，并为队伍每人提供一份潜在能力奖励",
-            "after": "获得88888卢恩和一个潜在能力"
-          },
-          {
-            "fmg": "PermanentBuffInfo.fmg",
-            "id": 95001600,
-            "before": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢。每座封印监牢最多开启5次",
-            "after": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢最多5次"
-          },
-          {
-            "fmg": "PermanentBuffInfo.fmg",
-            "id": 95002500,
-            "before": "在夜雨中提升20%攻击力。淋雨时血量低于20%，在15秒内持续回复血量，之后受到反噬，持续损失血量直到离开夜雨。触碰赐福重置",
-            "after": "在夜雨中提升20%攻击力。淋雨时血量低于20%，在15秒内持续回复血量，之后受到反噬，持续损失血量直至离开夜雨。触碰赐福重置"
-          },
-          {
-            "fmg": "PermanentBuffCaption.fmg",
-            "id": 95000100,
-            "before": "获得88888卢恩，并为队伍每人提供一份潜在能力奖励",
-            "after": "获得88888卢恩和一个潜在能力"
-          },
-          {
-            "fmg": "PermanentBuffCaption.fmg",
-            "id": 95001600,
-            "before": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢。每座封印监牢最多开启5次",
-            "after": "你无需钥匙就能打开监牢，且释放的敌人更加多样。攻略监牢后，不会生成赐福，但你可以重复打开同一个监牢最多5次"
-          },
-          {
-            "fmg": "PermanentBuffCaption.fmg",
-            "id": 95002500,
-            "before": "在夜雨中提升20%攻击力。淋雨时血量低于20%，在15秒内持续回复血量，之后受到反噬，持续损失血量直到离开夜雨。触碰赐福重置",
-            "after": "在夜雨中提升20%攻击力。淋雨时血量低于20%，在15秒内持续回复血量，之后受到反噬，持续损失血量直至离开夜雨。触碰赐福重置"
-          }
-        ],
-        "unrelatedEntriesAndMembersUnchanged": true
-      },
-      {
-        "language": "zhocn",
-        "file": "menu_dlc01.msgbnd.dcx",
-        "inputSha256": "CB229592DAAE17BF79E594FE6F588D29E5EBC9D3AA473D395922B33E97348706",
-        "outputSha256": "CB229592DAAE17BF79E594FE6F588D29E5EBC9D3AA473D395922B33E97348706",
-        "changes": [],
-        "unrelatedEntriesAndMembersUnchanged": true
-      },
-      {
-        "language": "engus",
-        "file": "item_dlc01.msgbnd.dcx",
-        "inputSha256": "BB6A76469FA52D711ABCF0946E2B8B68E4B0D0401522BDDFF908FE07C00E339F",
-        "outputSha256": "BB6A76469FA52D711ABCF0946E2B8B68E4B0D0401522BDDFF908FE07C00E339F",
-        "changes": [],
-        "unrelatedEntriesAndMembersUnchanged": true
-      },
-      {
-        "language": "engus",
-        "file": "menu_dlc01.msgbnd.dcx",
-        "inputSha256": "E91221CAD5EC969F85A8E0542F8FA3070D421A4FE7D2F3F23E44C0AB887280F9",
-        "outputSha256": "E91221CAD5EC969F85A8E0542F8FA3070D421A4FE7D2F3F23E44C0AB887280F9",
-        "changes": [],
-        "unrelatedEntriesAndMembersUnchanged": true
-      }
-    ]
-  },
-  "productionDllSha256": "2f35edc62bc5fb6b96424b81678640c0760d6ca962225bf419e32b74ec00eec1",
-  "productionConfigPreserved": true,
+  "scope": "DLL-only Death Dance shared regain protection",
+  "dllSha256": "c6a1837aeeb39aaaf68ab17ad9de4874e80540d255fb875e5c59df1e8c0ea2a5",
+  "signatureCount": 139,
+  "validation": "death-dance-validation.json",
   "gameplayVerified": false,
   "multiplayerVerified": false,
-  "assetPatch": {
-    "revision": "presentation-20261016",
-    "scope": "One center fog per cage group and no standalone Essence Reaver Buff-bar icon",
-    "validation": "presentation-validation.json",
-    "dllRebuilt": false,
-    "gameplayVerified": false
-  },
-  "latestTextPatch": {
-    "scope": "Text-only incremental build from current descriptions",
-    "dllRebuilt": false,
-    "gameplayVerified": false
-  },
-  "productionRustTestsPassed": 356
+  "rustTestsPassed": 361,
+  "nativeScenarioGroups": 23,
+  "sharedRegainProtection": true,
+  "pendingRecoveryResetPreserved": true,
+  "expiredQuotaNotReprotected": true,
+  "windowsTarget": "x86_64-pc-windows-gnu",
+  "extraRuntimeDllsRequired": false
 }
