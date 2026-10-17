@@ -158,3 +158,8 @@ Reduces attack power by 15%. Attacks inflict 30 buildup of the status ailment th
 ## Potential Fission
 
 Latent powers you obtain next split into two of lower quality. Can trigger 3 times.
+
+<!-- hex:95003300 -->
+## Demon’s Summoning
+
+Slowly builds up madness while performing the Cross-Legged gesture. Suffering madness summons a sinner hostile to all. The sinner loses 1/60 of its maximum HP each second. Cooldown: 60 seconds after its death.

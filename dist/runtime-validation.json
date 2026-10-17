@@ -1,15 +1,16 @@
 {
-  "version": "0.17.151",
+  "version": "0.17.152",
   "active": null,
   "pid": null,
-  "dllSha256": "526ebd91dcc48cc65487398f43c59f8c2ca4c0128c5b7c159352c4612a00cda3",
+  "dllSha256": "86ce0233cdb0bcbcde7353382c8113633efce8128db0a3844699766b37714324",
   "build": "build-validation.json",
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "pendingChecks": [
-    "Acquire Fission before/after an existing native ball; only three new sources split",
-    "Claim A/B independently and verify weapons, passives, arts and theme/class tendencies",
-    "Death/revival, map transitions and new-expedition counter reset",
-    "Host/client private ownership and rewards"
+    "Cross-Legged native madness stacking and actual madness trigger",
+    "Native human NPC appearance, hostility and random weapon AI",
+    "No death reward, 1/60 HP drain, death-started 60-second cooldown",
+    "Owner down/revive, map transitions and new expedition",
+    "Host/client creation, identical gear and cleanup"
   ]
 }

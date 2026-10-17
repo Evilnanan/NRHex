@@ -72,6 +72,8 @@ PARAM Parse(string name,Memory<byte> bytes){
 }
 if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--demons-call-catalog")){DemonsCall.Catalog(bnd,Parse,Path.Combine(root,"work/demons-call/demons_data.rs"));return;}
+if(args.Contains("--demons-call-stage")){DemonsCall.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--erosion-stage")){Erosion.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-stage")){DeathDance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-probe")){DeathDance.Probe(root,bnd,Parse);return;}
@@ -723,6 +725,7 @@ foreach(var h in hexes){
  if(h.Id==EssenceReaver.Owner)EssenceReaver.Owners(s);
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==Erosion.Owner)Erosion.Owners(s);
+ if(h.Id==DemonsCall.Owner)Set(s,"stateInfo",2278);
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
  if(h.Id==95002100){Set(s,"magicConsumptionRate",1f);Set(s,"miracleConsumptionRate",1f);}
@@ -757,6 +760,8 @@ EssenceReaver.Mechanics(Clone);
 DeathDance.Mechanics(Clone);
 Erosion.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
+DemonsCall.Mechanics(Clone);
+DemonsCall.Catalog(bnd,Parse,Path.Combine(root,"src/demons_data.rs"));
 foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
 foreach(var fissionParam in new[]{"ItemTableParam","ItemLotParam_enemy"})added[fissionParam].AddRange(pars[fissionParam].Rows.Where(r=>r.ID>=PotentialFission.FirstTable&&r.ID<99000000).Select(r=>r.ID));

@@ -13,6 +13,7 @@
 | PARAM、FMG、解包、Oodle、EMEDF | [数据与工具](research/data-and-tools.md) |
 | 增伤、承伤、分类、吸血、图标、护盾联机视觉 | [效果与战斗结算](research/effects-and-combat.md) |
 | 侵蚀异常选择、免疫和多段攻击补正 | [侵蚀与原生异常](research/erosion.md) |
+| 罪人运行时随机、原生战技／法术抽取与召唤同步 | [恶魔的召唤](research/demons-call.md) |
 | 连续受击时旧回收额度如何衰减 | [再次受击与回收槽](research/regain-rehit.md) |
 | 队友特殊效果栏重复、复活后缺失及原生同步 | [效果栏同步](research/effect-sync.md) |
 | 豪饮攻击力图标、原生HUD合并和层数 | [豪饮HUD](research/drinking-hud.md) |

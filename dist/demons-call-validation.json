@@ -1,0 +1,263 @@
+{
+  "version": "0.17.152",
+  "changedAssets": [
+    "mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "mod/natives/NRHex.dll",
+    "mod/regulation.bin"
+  ],
+  "files": {
+    "mod/regulation.bin": "7236425a0dad4e8c69cdc5a5d8918ad5682d8ed4e79794ba379c1f4a9354f506",
+    "mod/natives/NRHex.dll": "86ce0233cdb0bcbcde7353382c8113633efce8128db0a3844699766b37714324",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "96f13ba5c4ad47982b4c7bfcbe4aca9baba2b52aae01a51407e78d65f67f9dee",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "a266b19623c54dc0126975c0d37821ffccbafbf30c425b12bcf6cd2a2cf1a50f",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "28516930c6f8be4a25c00698834e3bcaa2cdc6089e174494b7597fe62487b53f",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "2b078873719beea098489c53e7ae93c6a3ce257678539fc3dcd637eaedba40c9"
+  },
+  "parameters": {
+    "inputSha256": "0EDC8589B765F439133B6BE99AB4741AD0FB5CAEF63992018FEF5CFF1ACB2767",
+    "outputSha256": "7236425A0DAD4E8C69CDC5A5D8918AD5682D8ED4E79794BA379C1F4A9354F506",
+    "added": {
+      "AttachEffectParam": 1,
+      "EquipParamGoods": 1,
+      "ItemTableParam": 1,
+      "NpcParam": 60,
+      "PermanentBuffParam": 1,
+      "SpEffectParam": 3
+    },
+    "npcRows": 60,
+    "generatedLoadouts": 0,
+    "gestureChainUnchanged": true,
+    "allOriginalRowsAndOtherTablesUnchanged": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "texts": [
+      {
+        "path": "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+        "inputSha256": "9119dbbabf127ad90d339b11e6d2106b9f68ecd57ac8e9bb5fd710db86f00d00",
+        "outputSha256": "96f13ba5c4ad47982b4c7bfcbe4aca9baba2b52aae01a51407e78d65f67f9dee",
+        "containerReadbackPassed": true
+      },
+      {
+        "path": "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+        "inputSha256": "9ebe5973cb4e8e62a3e8add57d0f30ddc1b4d704b7eefc06a4d98367e898e4a1",
+        "outputSha256": "a266b19623c54dc0126975c0d37821ffccbafbf30c425b12bcf6cd2a2cf1a50f",
+        "containerReadbackPassed": true
+      },
+      {
+        "path": "mod/msg/engus/item_dlc01.msgbnd.dcx",
+        "inputSha256": "002db95451296a48d8fbf8229b3ea20cd4ed20b181d002ea8e7932f24e7024cf",
+        "outputSha256": "28516930c6f8be4a25c00698834e3bcaa2cdc6089e174494b7597fe62487b53f",
+        "containerReadbackPassed": true
+      },
+      {
+        "path": "mod/msg/engus/menu_dlc01.msgbnd.dcx",
+        "inputSha256": "b6a9776461f38ec3a531b2070b2966093c4371db229b00da292ed00336090005",
+        "outputSha256": "2b078873719beea098489c53e7ae93c6a3ce257678539fc3dcd637eaedba40c9",
+        "containerReadbackPassed": true
+      }
+    ],
+    "sourceHashes": {
+      "tools/HexBuild/DemonsCall.cs": "c4d67fff239cb1237997a8267e2e70d95fb45632776e3fb8a08960de39312d37",
+      "tools/HexBuild/HexCatalog.cs": "f10fb13ffa0380779cc40de382806ce2f373d0218825e644be3b4562dc39cd5b",
+      "tools/HexBuild/RewardCatalog.cs": "2623acfc7441977a5b774b931527741787502e64609baef80fb65ea89d8c073d",
+      "tools/HexBuild/Program.cs": "ad7428f58e374768ef25846515b9d7af93d1711e37a56586ef7fa91620a81bc4",
+      "docs/hexes.md": "4560208cd4e2bbff4ecdae42b005c653d8fbbae62cfe5cf190414be2dd910aac",
+      "docs/hexes.en.md": "c53a07cbe6206c1561fb4f441fb224b31f8819eaa3c31840dd97f66d03e5e4cd"
+    },
+    "textSemanticReadback": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "4560208CD4E2BBFF4ECDAE42B005C653D8FBBAE62CFE5CF190414BE2DD910AAC",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "C53A07CBE6206C1561FB4F441FB224B31F8819EAA3C31840DD97F66D03E5E4CD",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "447253D6B1157CFE8388E0075726B9392B4B8582D6D97BAF65B2D0E28F1A9A17",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "5BDBBD9B899170EDB753DB1493055693A0F5769C8764C4957549A9C9C6DF05C5",
+          "outputSha256": "988F4D1CF7C11FB14125CE14E45C55768719DCB8737917F128E81BD1FE638076",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "\u6076\u9b54\u7684\u53ec\u5524"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "\u6446\u51fa\u52a8\u4f5c\u201c\u76d8\u817f\u5750\u201d\u65f6\uff0c\u7f13\u6162\u7d2f\u79ef\u53d1\u72c2\u91cf\u8868\u3002\u53d1\u72c2\u65f6\uff0c\u53ec\u5524\u4e00\u4e2a\u4e0d\u5206\u654c\u6211\u7684\u7f6a\u4eba\u3002\u7f6a\u4eba\u6bcf\u79d2\u5931\u53bb\u6700\u5927\u8840\u91cf\u76841/60\uff0c\u9635\u4ea1\u540e60\u79d2\u51b7\u5374"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "\u6076\u9b54\u7684\u53ec\u5524"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "\u6446\u51fa\u52a8\u4f5c\u201c\u76d8\u817f\u5750\u201d\u65f6\uff0c\u7f13\u6162\u7d2f\u79ef\u53d1\u72c2\u91cf\u8868\u3002\u53d1\u72c2\u65f6\uff0c\u53ec\u5524\u4e00\u4e2a\u4e0d\u5206\u654c\u6211\u7684\u7f6a\u4eba\u3002\u7f6a\u4eba\u6bcf\u79d2\u5931\u53bb\u6700\u5927\u8840\u91cf\u76841/60\uff0c\u9635\u4ea1\u540e60\u79d2\u51b7\u5374"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "\u6446\u51fa\u52a8\u4f5c\u201c\u76d8\u817f\u5750\u201d\u65f6\uff0c\u7f13\u6162\u7d2f\u79ef\u53d1\u72c2\u91cf\u8868\u3002\u53d1\u72c2\u65f6\uff0c\u53ec\u5524\u4e00\u4e2a\u4e0d\u5206\u654c\u6211\u7684\u7f6a\u4eba\u3002\u7f6a\u4eba\u6bcf\u79d2\u5931\u53bb\u6700\u5927\u8840\u91cf\u76841/60\uff0c\u9635\u4ea1\u540e60\u79d2\u51b7\u5374"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "EFC73BCD75390E0045405A2B39A6930EB15A7BE3BC41DE6BAFF302156AAAB3F5",
+          "outputSha256": "66DE37CB2002F30594DE182E1E11CCD1B8754A7A0936BF84E52CE5205DCCCF0D",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "\u6076\u9b54\u7684\u53ec\u5524"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "\u6446\u51fa\u52a8\u4f5c\u201c\u76d8\u817f\u5750\u201d\u65f6\uff0c\u7f13\u6162\u7d2f\u79ef\u53d1\u72c2\u91cf\u8868\u3002\u53d1\u72c2\u65f6\uff0c\u53ec\u5524\u4e00\u4e2a\u4e0d\u5206\u654c\u6211\u7684\u7f6a\u4eba\u3002\u7f6a\u4eba\u6bcf\u79d2\u5931\u53bb\u6700\u5927\u8840\u91cf\u76841/60\uff0c\u9635\u4ea1\u540e60\u79d2\u51b7\u5374"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "CC207D44FDD984661D5CE06C47C45CE64A1EA213CA74FEFFFC1D98C54C2EF16A",
+          "outputSha256": "7DE5643AA969177F8D2452832F97E4BD0A6778383515B15311E163A13166A482",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "Demon\u2019s Summoning"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "Slowly builds up madness while performing the Cross-Legged gesture. Suffering madness summons a sinner hostile to all. The sinner loses 1/60 of its maximum HP each second. Cooldown: 60 seconds after its death."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "Demon\u2019s Summoning"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "Slowly builds up madness while performing the Cross-Legged gesture. Suffering madness summons a sinner hostile to all. The sinner loses 1/60 of its maximum HP each second. Cooldown: 60 seconds after its death."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "Slowly builds up madness while performing the Cross-Legged gesture. Suffering madness summons a sinner hostile to all. The sinner loses 1/60 of its maximum HP each second. Cooldown: 60 seconds after its death."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "283ECB5A8B2BC775D56F08B58C817AE2CF7471B62D81627CAA49AD4FB7E9FE20",
+          "outputSha256": "D791A25CC1BCC0F5D7710C899837A8715848BD68006AC28BB3DDE8AC86DF4E60",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "Demon\u2019s Summoning"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003300,
+              "before": null,
+              "after": "Slowly builds up madness while performing the Cross-Legged gesture. Suffering madness summons a sinner hostile to all. The sinner loses 1/60 of its maximum HP each second. Cooldown: 60 seconds after its death."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "native": {
+    "nativeExecutionPassed": true,
+    "compiledHooksExecuted": true,
+    "unitTestsPassed": 368,
+    "isolatedNativeTestsPassed": 6,
+    "signatureCount": 156,
+    "nativeFunctions": [
+      "E88090 CharaInit reference",
+      "EA7FC0 weapon reference and EA9A60 reinforcement",
+      "E86730 weighted art selector",
+      "E86840 selected art",
+      "E7B030 weighted non-duplicate available magic selector",
+      "E7B010 selected magic",
+      "F561D0 float RNG"
+    ],
+    "fixtures": [
+      "private copied executable; protected absolute jump immediates relocated only in test copy",
+      "parameter repository, table iteration and magic availability fixtures",
+      "native magic selector temporary allocator fixture",
+      "constructor integration uses lottery stubs, tested independently with real selectors",
+      "native safe-slot and summon packet tests use creation/rendering/network fixtures"
+    ],
+    "cases": [
+      "same-seed replay without consuming global RNG",
+      "native chance weights and zero-weight exclusion",
+      "native primary and unavailable magic exclusion",
+      "unique-art preservation",
+      "immutable aligned virtual rows and preserved reinforcement structures",
+      "all 19-bit IDs fit native item mask",
+      "human descriptor seed retained in original 48-byte packet",
+      "one live sinner, repeated-death deduplication, cooldown and bounded placement retries"
+    ],
+    "sources": {
+      "Cargo.toml": "71f244bcaab6bb39a5153d1756654ac34983179d941d0770c15704c60d4ef7a2",
+      "Cargo.lock": "2eda257eaa13cc9a66754d57d38481ead27319519f9ec5ed3f8cee1bfd05340c",
+      "src/lib.rs": "7f9df8cd07ea57fb959e834458e03cda983438e55082cbae171a2c96b1419a49",
+      "src/actor_lifecycle.rs": "e37db6de773c37ee0d2c3f7f187342b60e5f51e79aaf849f22039ba77797f253",
+      "src/reward_cycle_runtime.rs": "98ac4048e86525458803f2633d05b3196b74664a903156d6969136bb4beac45b",
+      "src/spirit_runtime.rs": "7d370d06ea5915f889eb7f0512a4d0652229caf0751b3b10527caf1884dd19c0",
+      "src/spirit_runtime/tests.rs": "78e30bb9c630c3d5f05e46169a40e5aa6916513d214ed9389c30b78c4294f2d0",
+      "src/demons.rs": "93c15ec6fce06cd9e76aee2b2b978fe7a5db677d9af7bbda4883af85220c5cb2",
+      "src/demons_data.rs": "70a7e7429cc051245f617bc2978207430fe306dcef0f0c17977b1147f4a948fb",
+      "src/demons_params.rs": "98fea4b07b37f9faee73fa8e1e2a5038757ec597182b7a6820a89f92ad254c0b",
+      "src/demons_params/native_tests.rs": "55e843251d1f0e4cd55ff98c97337ca4ddea2cf52bcc119ceba73496e1927787",
+      "src/demons_lottery.rs": "963b8596c7609186663da994f185d1a35716ee44023883d5b606d2453c2dd006",
+      "src/demons_lottery/native_tests.rs": "17357e7d4d75d2c3fde94d67f66d686acb09f0d3c759b603ad480c0deb3b4cf2",
+      "src/demons_runtime.rs": "7785e9ba295814bfea0f6aaecce34b615d255aec3ac0b0cabb5854c5dd51057b",
+      "src/hex_pool.rs": "ca08a5f6bb2fbac10bf4d195f05ee7d5122f8fe4582f80b710227886e0f95fe1"
+    },
+    "noHotkeysBuildPassed": true,
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "allOtherResourcesAndUserSettingsPreserved": true,
+  "appearance": "Existing native Necromancy SFX; Libra-specific appearance not integrated",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "checks": {
+    "all30AbilityDescriptionsMatchBothLanguagePackages": true
+  }
+}

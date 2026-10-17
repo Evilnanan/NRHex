@@ -16,6 +16,11 @@ mod level_rewards;
 mod personal_reward;
 mod fission_catalog;
 mod potential_fission;
+mod demons;
+mod demons_data;
+mod demons_params;
+mod demons_runtime;
+mod demons_lottery;
 #[cfg(test)]mod reward_template_native_tests;
 mod red_envelope;
 mod reward_recovery;
@@ -358,8 +363,8 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);145] {
- [(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PROTECT_PATTERN,death_dance::PROTECT_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
+fn signatures()->[(&'static str,u32);156] {
+ [(demons_lottery::ART_TABLE_PATTERN,demons_lottery::ART_TABLE as u32),(demons_lottery::ART_PICK_PATTERN,demons_lottery::ART_PICK as u32),(demons_lottery::ART_GET_PATTERN,demons_lottery::ART_GET as u32),(demons_lottery::SPELL_TABLE_PATTERN,demons_lottery::SPELL_TABLE as u32),(demons_lottery::SPELL_PICK_PATTERN,demons_lottery::SPELL_PICK as u32),(demons_lottery::SPELL_GET_PATTERN,demons_lottery::SPELL_GET as u32),(demons_lottery::RNG_PATTERN,demons_lottery::RNG_RVA as u32),(demons_params::CI_PATTERN,demons_params::CI_RVA as u32),(demons_params::WEAPON_PATTERN,demons_params::WEAPON_RVA as u32),(demons_runtime::REMOVE_PATTERN,demons_runtime::REMOVE_RVA as u32),(demons_runtime::TEAM_PATTERN,demons_runtime::TEAM_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PROTECT_PATTERN,death_dance::PROTECT_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
   (NEAR_DEATH_STATE_PATTERN,0x66d700),
@@ -578,6 +583,11 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   parry::COST_RESUME.store(base.add(parry::COST_RESUME_RVA) as *mut u8,Ordering::Release);
   potential_fission::GROUP_SKIP.store(base.add(0x57a8e1)as*mut u8,Ordering::Release);
   let arts_transfer_targets=[
+   (demons_lottery::RNG_RVA,demons_lottery::random as *const u8,&demons_lottery::RNG_ORIGINAL),
+   (demons_params::CI_RVA,demons_params::chara as *const u8,&demons_params::CI_ORIGINAL),
+   (demons_params::WEAPON_RVA,demons_params::weapon as *const u8,&demons_params::WEAPON_ORIGINAL),
+   (demons_runtime::CREATE_RVA,demons_runtime::create as *const u8,&demons_runtime::CREATE_ORIGINAL),
+   (demons_runtime::REMOVE_RVA,demons_runtime::remove as *const u8,&demons_runtime::REMOVE_ORIGINAL),
    (potential_fission::CREATE_RVA,potential_fission::create as *const u8,&potential_fission::CREATE_ORIGINAL),
    (potential_fission::GROUP_RVA,potential_fission::group as *const u8,&potential_fission::GROUP_ORIGINAL),
    (erosion::RVA,erosion::detour as *const u8,&erosion::ORIGINAL),
@@ -1489,6 +1499,7 @@ unsafe extern "system" fn action_request_detour(input:usize,mode:i32,action:i32)
 unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize,a4:usize,a5:usize,a6:u8,a7:u8,a8:u8,a9:u8,a10:u8,a11:i32)->u8 {
  let original:ApplyEffect=std::mem::transmute(APPLY_ORIG.load(Ordering::Acquire));
  let base=BASE.load(Ordering::Acquire);
+ if ACTIVE.load(Ordering::Acquire){match demons_runtime::route_effect(player,effect){Some(id)=>effect=id,None=>return 1}}
  if ACTIVE.load(Ordering::Acquire)&&slingshot_runtime::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&heartstealer::suppress_notification(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&essence_reaver::pulse(player,effect,base){return 1;}
@@ -2179,6 +2190,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  let base=BASE.load(Ordering::Acquire);
  // Also restore the native mutation state on a newly loaded peer replica.
  promote_cage_mutation(player,base,false);
+ demons_runtime::actor_update(player,base);
  let world=read_ptr(base+WORLD_RVA);
  if world==0{return;}
  if read_ptr(world+0x174e8)!=player {return;}
@@ -2199,6 +2211,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  update_arts(player,base);
  update_noisy(player,base,dt);
  actor_lifecycle::update(player,base,dt);
+ demons_runtime::update(player,base,dt);
  update_reward_recovery(player,base);
  red_envelope::update(player,base,dt);
  potential_fission::update(player,base,dt);

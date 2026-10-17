@@ -35,6 +35,7 @@
 | 不祥契约、偷心者 | `HexBuild/ContractHeart.cs`、`ominous_pact.rs`、`heartstealer.rs`、`verify_contract_heart_native.py`、`verify_contract_heart_events.py` |
 | 夺萃之镰 | `essence_reaver.rs`、`HexBuild/EssenceReaver.cs`、`verify_essence_reaver.py`；原生击杀状态199计数，在本地角色原生专注值上限倍率查询 `0x50c230` 返回值上统一乘以 `1.01^击杀数`，其他原生倍率和属性结算保持不变。不再向Buff栏单独显示小图标：95002900的displayIconForPermamentEffect为0，潜在能力／词条图标仍保留；不显示层数、不创建逐杀增益，移除95002902层参数。击杀数以至多4个隐藏本地保存记录编码，复活／重载恢复，新远征／圆桌守卫内通知重置。 |
 | 交锋 | `parry.rs`、`parry_turn.rs`、`parry_data.rs`、`HexBuild/Parry.cs`、`verify_parry_native.py` |
+| 恶魔的召唤 | `demons.rs`、`demons_runtime.rs`、`demons_params.rs`、`demons_lottery.rs`、`HexBuild/DemonsCall.cs`；[机制与验证](research/demons-call.md) |
 | PE／特征／挂钩 | `pe.rs`、`pattern.rs`、`hook.rs`、`win.rs` |
 
 再生术蓝血转换比为1:4：血量不满时，每0.25秒消耗4FP、回复16HP。数值由 `HexBuild/Program.cs` 的95000601参数行生成，运行时仅管理触发间隔与资源条件；满血喝瓶回复50%FP沿用原逻辑。增量回读证据见 `dist/regen-balance-validation.json`。

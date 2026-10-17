@@ -10,6 +10,7 @@ pub(crate) unsafe extern "system" fn death_detour(actor: usize) {
     let base = BASE.load(Ordering::Acquire);
     let local = ACTIVE.load(Ordering::Acquire) && is_local(actor, base);
     if ACTIVE.load(Ordering::Acquire) {
+        crate::demons_runtime::died(actor);
         // Covers direct deaths (including falling/riding), before native cleanup.
         if is_local(actor, base) {
             on_effect(actor, balloon::DOWN, base);

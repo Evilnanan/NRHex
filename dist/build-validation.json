@@ -1,17 +1,16 @@
 {
-  "version": "0.17.151",
+  "version": "0.17.152",
   "buildPassed": true,
-  "scope": "Potential Fission, native shared downgrade pools and independent local choice groups",
-  "dllSha256": "526ebd91dcc48cc65487398f43c59f8c2ca4c0128c5b7c159352c4612a00cda3",
-  "signatureCount": 145,
-  "validation": "potential-fission-validation.json",
-  "gameplayVerified": false,
-  "multiplayerVerified": false,
+  "scope": "Demon\u2019s Summoning with runtime loadouts and native reward art/magic lotteries",
+  "dllSha256": "86ce0233cdb0bcbcde7353382c8113633efce8128db0a3844699766b37714324",
+  "signatureCount": 156,
+  "validation": "demons-call-validation.json",
   "checks": {
-    "unitTestsPassed": 359,
-    "isolatedNativeTestsPassed": 4,
-    "signatureCount": 145,
-    "parameterBuilderPassed": true,
-    "all29AbilityDescriptionsMatchBothLanguagePackages": true
-  }
+    "unitTestsPassed": 368,
+    "isolatedNativeTestsPassed": 6,
+    "noHotkeysBuildPassed": true,
+    "all30AbilityDescriptionsMatchBothLanguagePackages": true
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
 }

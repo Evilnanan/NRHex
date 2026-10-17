@@ -60,6 +60,7 @@ unsafe fn team_kill(actor: usize, local: usize, base: usize) -> bool {
 }
 
 pub(crate) unsafe fn record_soul(actor: usize, base: usize) {
+    if crate::demons_runtime::is_actor(actor) { return; }
     let Some(npc) = npc_id(actor, base) else {
         return;
     };
@@ -163,10 +164,15 @@ unsafe fn soul_finished(player: usize, base: usize, handle: u64) -> bool {
 }
 
 unsafe fn summon(player: usize, soul: spirit::Soul, base: usize) -> Option<u64> {
+    let npc = spirit::private_npc(soul.npc)?;
+    summon_descriptor(player, spirit::Soul { npc, ..soul }, base)
+}
+
+pub(crate) unsafe fn summon_descriptor(player: usize, soul: spirit::Soul, base: usize) -> Option<u64> {
     if !spatial_ready(player) {
         return None;
     }
-    let npc = spirit::private_npc(soul.npc)?;
+    let npc = soul.npc;
     let modules = read_ptr(player + 0x1b8);
     let wrapper = read_ptr(modules + 0x168);
     if wrapper == 0 {
