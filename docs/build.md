@@ -140,7 +140,7 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 
 ## 死亡之舞增量构建
 
-`./build-death-dance.ps1` 从当前未包含死亡之舞的参数包添加能力、完整奖励链和轮换清理，只暂存到 `work/death-dance/staged`，回读核对原有行、重复行、事件及其他文本保持一致。随后生成奖励池、运行常规Rust测试和 `tools/verify_death_dance.py`、构建DLL并核对当前EXE签名；验证后备份并更新dist。`-NoInstall`跳过安装。已经添加本能力的包可用 `./build-death-dance.ps1 -ProtectionOnly` 仅构建、验证并安装共享保护DLL；与 `-NoInstall`组合只构建。该模式核对已安装死亡之舞资源的哈希，保留参数、事件、FMG及用户配置；普通新增入口遇到ID碰撞会拒绝重复添加。
+`./build-death-dance.ps1` 是0.17.146新增能力和0.17.147共享保护修复的历史入口，使用旧奖励排列及当时的资源哈希，当前包不再使用。当前完整包使用统一构建；已有死亡之舞及侵蚀的包，使用下方 `build-combat-protection.ps1` 更新扣血保护与一秒文案，不重跑旧排列或新增能力逻辑。
 
 原生隔离测试需要原游戏EXE，默认使用 `NRHEX_GAME/nightreign.exe`，可用 `NRHEX_NATIVE_EXE`指定测试进程所见路径。跨Windows目标构建可用 `NRHEX_CARGO_TARGET`选择工具链。Linux构建需通过现有Windows Oodle库处理KRAK输入；本次在独立输入副本中解压、完成语义检查后按原始KRAK头重压，并再次解压逐字节核对，不修改原始输入。
 
@@ -162,3 +162,9 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 新增海克斯时，把稳定拥有ID追加到`RewardCatalog.HistoricalOwners`，再添加目录、效果与双语文案；不要删除或重排历史登记。完整构建自动生成新的历史位和每字节255个中性参数行，不再生成排列。每字节运行时最多激活一个非零值，参数候选行数与实际保存条数不同。当前28项最多4条展示记录；原生50条共享保存容量保持原样。
 
 `tools/verify_reward_template.py`沿用`NRHEX_NATIVE_EXE`及`NRHEX_CARGO_TARGET`约定，只在私有映像执行编译后的钩子、原生分派、描述符复制和物品读取；分配／分组／渲染和UID查找使用夹具。实际奖励球、菜单领取、复活和联机仍需游戏验收。替换配套DLL与参数包后从新远征开始测试，旧排列发球与旧展示记录不作跨版本迁移。
+
+## 战斗保护与一秒缓扣增量构建
+
+`./build-combat-protection.ps1` 用于已包含死亡之舞和侵蚀的当前包。只暂存95003000的中英文一秒说明，运行常规Rust测试、两个海克斯的原生隔离执行、DLL编译和EXE签名检查，由`tools/install_combat_protection.py`备份并替换DLL及四份文本容器。验证所有其他资源（包括当前压缩奖励参数）和用户设置保持原样；不重跑新增海克斯或旧全排列生成器。`-NoInstall`只构建验证。DLL以每帧dt平滑结算一秒队列，仅借用原生持续扣血的保护入口，不借用毒／腐败的周期时序。
+
+Linux跨目标采用同一`NRHEX_CARGO_TARGET`／Wine约定，KRAK文本输入须在独立副本解压；重压沿用各自原头，再解压逐字节核对。安装器核对隔离检查的源码哈希、测试和签名日志及文本源哈希，文本回读仅允许95003000改变；检查记录写入`dist/combat-protection-validation.json`。修复后的绝招、复仇者锁血、翻滚期间缓扣和侵蚀接触仍须游戏与联机验收。

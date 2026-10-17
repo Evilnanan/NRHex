@@ -59,38 +59,38 @@ fn compiled_detour_and_original_native_pool_execute_together(){unsafe{
  settle(stats,0.2);assert_eq!(float(stats+0x168),100.);ACTIVE.store(true,Ordering::Release);
  // Regression: real new-hit resets (not reset=0 artificial debits) retain old
  // protected quota/time. Native cancellation of pending recovery still runs.
- reset();setter(stats,800,1,1.,1.,1);pay(1.);
+ reset();setter(stats,800,1,1.,1.,1);pay(0.5);
  assert_eq!(read_i32(stats+0x140),900);assert_eq!(float(stats+0x16c),100.);
  queue(stats,25.);assert_eq!(float(stats+0x174),25.);
  setter(stats,800,1,1.,1.,1);
  assert_eq!(read_i32(stats+0x140),900);assert_eq!(float(stats+0x168),100.);
  assert_eq!(float(stats+0x16c),100.);assert_eq!(float(stats+0x174),0.);
  settle(stats,0.2);assert_eq!(float(stats+0x168),100.);
- pay(1.);assert_eq!(read_i32(stats+0x140),750);assert_eq!(float(stats+0x168),250.);assert_eq!(float(stats+0x16c),250.);
+ pay(0.5);assert_eq!(read_i32(stats+0x140),750);assert_eq!(float(stats+0x168),250.);assert_eq!(float(stats+0x16c),250.);
  assert_eq!(SCHEDULE.lock().unwrap().hits.len(),1);
- pay(1.);assert_eq!(read_i32(stats+0x140),700);assert_eq!(float(stats+0x168),300.);assert_eq!(float(stats+0x16c),300.);
+ pay(0.5);assert_eq!(read_i32(stats+0x140),700);assert_eq!(float(stats+0x168),300.);assert_eq!(float(stats+0x16c),300.);
  settle(stats,3.);assert_eq!(float(stats+0x168),300.);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),1000);assert_eq!(float(stats+0x168),0.);
  queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),1000);
  // Healing still clamps both quotas to missing HP, even after a reset hit.
- reset();setter(stats,800,1,1.,1.,1);pay(2.);setter(stats,700,1,1.,1.,1);pay(2.);
+ reset();setter(stats,800,1,1.,1.,1);pay(1.0);setter(stats,700,1,1.,1.,1);pay(1.0);
  SETTLING.with(|s|s.set(true));setter(stats,950,0,0.,1.,1);SETTLING.with(|s|s.set(false));
  assert_eq!(float(stats+0x168),50.);assert_eq!(float(stats+0x16c),50.);
  queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),1000);
  // Shared protection is naturally refreshed by actual payments and expires.
- reset();setter(stats,800,1,1.,1.,1);pay(2.);settle(stats,3.);
+ reset();setter(stats,800,1,1.,1.,1);pay(1.0);settle(stats,3.);
  assert_eq!(float(stats+0x170),1.);setter(stats,700,1,1.,1.,1);
- assert_eq!(float(stats+0x170),1.);pay(2.);assert_eq!(float(stats+0x170),4.);
+ assert_eq!(float(stats+0x170),1.);pay(1.0);assert_eq!(float(stats+0x170),4.);
  settle(stats,3.99);assert_eq!(float(stats+0x168),300.);settle(stats,0.02);
  assert_eq!(float(stats+0x16c),0.);assert!((float(stats+0x168)-280.).abs()<0.01);
  settle(stats,0.3);assert_eq!(float(stats+0x168),0.);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),700);
  // Already expired portions must never be re-protected by a later hit.
- reset();setter(stats,800,1,1.,1.,1);pay(2.);settle(stats,3.99);settle(stats,0.02);
- assert_eq!(float(stats+0x16c),0.);setter(stats,700,1,1.,1.,1);pay(2.);
+ reset();setter(stats,800,1,1.,1.,1);pay(1.0);settle(stats,3.99);settle(stats,0.02);
+ assert_eq!(float(stats+0x16c),0.);setter(stats,700,1,1.,1.,1);pay(1.0);
  assert_eq!(float(stats+0x16c),100.);assert!((float(stats+0x168)-280.).abs()<0.01);
  settle(stats,0.2);assert_eq!(float(stats+0x168),100.);
  // Nonrecoverable damage neither enters the slot nor renews its timer. Only
  // existing protection survives; immediate damage and native expiry stay intact.
- reset();setter(stats,800,1,1.,1.,1);pay(2.);settle(stats,3.);
+ reset();setter(stats,800,1,1.,1.,1);pay(1.0);settle(stats,3.);
  setter(stats,700,1,0.,1.,1);assert_eq!(read_i32(stats+0x140),700);
  assert_eq!(float(stats+0x168),200.);assert_eq!(float(stats+0x16c),200.);assert_eq!(float(stats+0x170),1.);
  settle(stats,0.2);assert_eq!(float(stats+0x168),200.);assert!(SCHEDULE.lock().unwrap().hits.is_empty());
@@ -105,32 +105,94 @@ fn compiled_detour_and_original_native_pool_execute_together(){unsafe{
  // No immediate debit or free recovery; paid parts enter the native pool once.
  reset();setter(stats,800,0,1.,1.,1);assert_eq!(read_i32(stats+0x140),1000);assert_eq!(float(stats+0x168),0.);
  queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),1000);
- pay(0.5);assert_eq!(read_i32(stats+0x140),950);assert_eq!(float(stats+0x168),50.);
+ pay(0.25);assert_eq!(read_i32(stats+0x140),950);assert_eq!(float(stats+0x168),50.);
  queue(stats,30.);queue(stats,30.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),1000);assert_eq!(float(stats+0x168),0.);
- pay(1.5);assert_eq!(read_i32(stats+0x140),850);assert_eq!(float(stats+0x168),150.);
+ pay(0.75);assert_eq!(read_i32(stats+0x140),850);assert_eq!(float(stats+0x168),150.);
  queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),1000);assert_eq!(float(stats+0x168),0.);assert!(SCHEDULE.lock().unwrap().hits.is_empty());
  // Overlapping hits retain separate starts rather than renewing one timer.
- reset();setter(stats,800,0,1.,1.,1);pay(0.5);setter(stats,550,1,1.,1.,1);pay(1.5);
- assert_eq!(read_i32(stats+0x140),500);assert_eq!(SCHEDULE.lock().unwrap().hits.len(),1);pay(0.5);assert_eq!(read_i32(stats+0x140),400);
+ reset();setter(stats,800,0,1.,1.,1);pay(0.25);setter(stats,550,1,1.,1.,1);pay(0.75);
+ assert_eq!(read_i32(stats+0x140),500);assert_eq!(SCHEDULE.lock().unwrap().hits.len(),1);pay(0.25);assert_eq!(read_i32(stats+0x140),400);
  // Zero-recovery sources such as rain/ailment debits remain immediate.
  reset();setter(stats,800,0,0.,1.,1);assert_eq!(read_i32(stats+0x140),800);assert!(SCHEDULE.lock().unwrap().hits.is_empty());assert_eq!(float(stats+0x168),0.);
  // Native rejection and non-owners cannot be intercepted.
  for(address,bytes)in [(crate::HAS_STATE_RVA,&[0x31,0xc0,0xc3][..]),(crate::HAS_EFFECT_RVA,&[0x31,0xc0,0xc3])]{reset();patch(base,address,bytes);setter(stats,800,0,1.,1.,1);assert_eq!(read_i32(stats+0x140),800);assert!(SCHEDULE.lock().unwrap().hits.is_empty());}
  // Existing historical loss is not promoted to recoverable HP by the delay.
- reset();integer(stats+0x140,700);setter(stats,500,0,1.,1.,1);pay(2.);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),700);
+ reset();integer(stats+0x140,700);setter(stats,500,0,1.,1.,1);pay(1.0);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),700);
  // Native healing can continue while debt remains; it consumes no new budget.
- reset();setter(stats,600,0,1.,1.,1);pay(1.);SETTLING.with(|s|s.set(true));setter(stats,950,0,0.,1.,1);SETTLING.with(|s|s.set(false));pay(1.);assert_eq!(read_i32(stats+0x140),750);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),1000);
- // Execute the actual runtime update and its native completion ABI as well.
- reset();let mut damage=vec![0u64;0x90/8];let damage=damage.as_mut_ptr()as usize;
+ reset();setter(stats,600,0,1.,1.,1);pay(0.5);SETTLING.with(|s|s.set(true));setter(stats,950,0,0.,1.,1);SETTLING.with(|s|s.set(false));pay(0.5);assert_eq!(read_i32(stats+0x140),750);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),1000);
+ // Existing per-source recovery ratios are retained, rather than inflated.
+ reset();setter(stats,800,0,0.5,1.,1);pay(1.0);assert_eq!(float(stats+0x168),100.);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),900);
+ // Lethal payment reaches zero; native settlement cannot revive it.
+ reset();setter(stats,-5000,0,1.,1.,1);assert_eq!(read_i32(stats+0x140),1000);pay(1.0);assert_eq!(read_i32(stats+0x140),0);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),0);
+ // Runtime uses the actual native delta, immunity virtual and floor wrapper,
+ // not an always-success replacement for any of these protection gates.
+ let mut damage=vec![0u64;0x90/8];let damage=damage.as_mut_ptr()as usize;
  pointer(modules+crate::DAMAGE_MODULE_SLOT,damage);pointer(damage,base+crate::ominous_pact::PLAYER_DAMAGE_VTABLE_RVA);pointer(damage+8,player);
- let mut has=vec![0x81,0xea];has.extend_from_slice(&OWNER.to_le_bytes());has.extend_from_slice(&[0x83,0xfa,1,0x0f,0x96,0xc0,0xc3]);patch(base,crate::HAS_EFFECT_RVA,&has);
+ let mut behavior=vec![0u64;0x60/8];let behavior=behavior.as_mut_ptr()as usize;pointer(modules+8,behavior);
+ let mut handle=[0u8;0x10];handle[8]=4;pointer(player+0x18,handle.as_ptr()as usize);
+ let mut vtable=vec![0usize;0x218/8];vtable[0x210/8]=base+0x66d410;pointer(player,vtable.as_ptr()as usize);
+ // Retain real module->actor and module->effects getters in these fixtures.
+ patch(base,0x42c120,&[0x48,0x8b,0x41,8,0xc3]);
+ patch(base,0x42c130,&[0x48,0x8b,0x41,8,0x48,0x8b,0x80,0x90,1,0,0,0xc3]);
+ // The three native debug-manager presence checks must be initialized. Their
+ // global flags remain zero, as in an ordinary non-debug game.
+ pointer(base+0x3c0f338,1);
+ let mut has=vec![0x81,0xea];has.extend_from_slice(&OWNER.to_le_bytes());has.extend_from_slice(&[0x83,0xfa,1,0x0f,0x96,0xc0,0xc3]);
  patch(base,crate::APPLY_SELF_RVA,&[0xb0,1,0xc3]);
  let mut complete=vec![0x48,0xb8];complete.extend_from_slice(&(finish_fixture as*const()as usize).to_le_bytes());complete.extend_from_slice(&[0xff,0xe0]);patch(base,FINISH_RVA,&complete);
- setter(stats,800,0,1.,1.,1);update(player,base,0.5);assert_eq!(read_i32(stats+0x140),950);assert_eq!(float(stats+0x168),50.);assert_eq!(*FINISHED.lock().unwrap(),vec![(damage,50,0,0,1000,0)]);
- // Existing per-source recovery ratios are retained, rather than inflated.
- reset();setter(stats,800,0,0.5,1.,1);pay(2.);assert_eq!(float(stats+0x168),100.);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),900);
- // Lethal payment reaches zero; native settlement cannot revive it.
- reset();setter(stats,-5000,0,1.,1.,1);assert_eq!(read_i32(stats+0x140),1000);pay(2.);assert_eq!(read_i32(stats+0x140),0);queue(stats,999.);settle(stats,0.016);assert_eq!(read_i32(stats+0x140),0);
+ let runtime_reset=||{
+  reset();pointer(stats+8,player);pointer(modules+8,behavior);ptr::write_bytes(behavior as*mut u8,0,0x60);
+  ptr::write_bytes((player+0x1f0)as*mut u8,0,0x10);integer(player+0x6e4,0);
+  patch(base,crate::HAS_EFFECT_RVA,&has);
+  // Native regain state 449 is present, native HP-floor states absent.
+  patch(base,crate::HAS_STATE_RVA,&[0x66,0x81,0xfa,0xc1,1,0x0f,0x94,0xc0,0xc3]);
+  FINISHED.lock().unwrap().clear();
+ };
+ runtime_reset();setter(stats,800,0,1.,1.,1);update(player,base,0.25);
+ assert_eq!(read_i32(stats+0x140),950);assert_eq!(float(stats+0x168),50.);assert_eq!(*FINISHED.lock().unwrap(),vec![(damage,50,0,0,1000,0)]);
+ update(player,base,0.75);assert_eq!(read_i32(stats+0x140),800);assert!(SCHEDULE.lock().unwrap().hits.is_empty());
+ // Preserve smooth, per-frame HP movement; no native poison/rot timer is used.
+ runtime_reset();setter(stats,880,0,1.,1.,1);
+ for frame in 1..=60{update(player,base,1./60.);assert_eq!(read_i32(stats+0x140),1000-2*frame);}
+ assert!(SCHEDULE.lock().unwrap().hits.is_empty());assert_eq!(FINISHED.lock().unwrap().len(),60);
+ // Real native immunity mechanisms, including the player immunity timer.
+ // Immune shares expire in place; they never become regain quota or a burst.
+ for mechanism in 0..6{
+  runtime_reset();setter(stats,800,0,1.,1.,1);
+  match mechanism{
+   0=>integer(behavior+0x58,1),1=>integer(behavior+0x58,2),
+   2=>ptr::write((player+0x1f3)as*mut u8,0x10),
+   3=>pointer(behavior+0x58,1usize<<59),
+   4=>ptr::write((player+0x1fb)as*mut u8,4),
+   _=>ptr::write_unaligned((player+0x6e4)as*mut f32,1.),
+  }
+  update(player,base,0.5);assert_eq!(read_i32(stats+0x140),1000);assert_eq!(float(stats+0x168),0.);assert!(FINISHED.lock().unwrap().is_empty());
+  pointer(behavior+0x58,0);ptr::write((player+0x1f3)as*mut u8,0);ptr::write((player+0x1fb)as*mut u8,0);integer(player+0x6e4,0);
+  update(player,base,0.5);assert_eq!(read_i32(stats+0x140),900);assert_eq!(float(stats+0x168),100.);
+  update(player,base,0.5);assert_eq!(read_i32(stats+0x140),900);
+ }
+ // Lock HP using the real floor wrapper (behavior bit17, stats flags and
+ // native state143/235); only the actual debit can become recoverable.
+ for mechanism in 0..5{
+  runtime_reset();setter(stats,0,0,1.,1.,1);
+  match mechanism{
+   0=>integer(behavior+0x58,1<<17),
+   1=>ptr::write((stats+0x189)as*mut u8,4),
+   2=>ptr::write((stats+0x189)as*mut u8,2),
+   _=>{
+    let state=if mechanism==3{143u16}else{235};
+    let mut code=vec![0x66,0x81,0xfa];code.extend_from_slice(&state.to_le_bytes());code.extend_from_slice(&[0x0f,0x94,0xc0,0x66,0x81,0xfa,0xc1,1,0x0f,0x94,0xc2,0x08,0xd0,0xc3]);patch(base,crate::HAS_STATE_RVA,&code);
+   }
+  }
+  update(player,base,1.);assert_eq!(read_i32(stats+0x140),1);assert_eq!(float(stats+0x168),999.);assert_eq!(FINISHED.lock().unwrap()[0].1,999);
+  pointer(behavior+0x58,0);ptr::write((stats+0x189)as*mut u8,0);update(player,base,1.);assert_eq!(read_i32(stats+0x140),1);
+ }
+ // Ordinary collision-only conditions do not enter the damage-immunity gate:
+ // +1F8 bit3 is read by 3D3DB0, but not by the periodic +210 virtual.
+ runtime_reset();setter(stats,800,0,1.,1.,1);ptr::write((player+0x1f8)as*mut u8,8);
+ update(player,base,1.);assert_eq!(read_i32(stats+0x140),800);assert_eq!(float(stats+0x168),200.);
+ // With no protection, a lethal debt still completes native death bookkeeping.
+ runtime_reset();setter(stats,0,0,1.,1.,1);update(player,base,1.);assert_eq!(read_i32(stats+0x140),0);assert_eq!(FINISHED.lock().unwrap()[0].1,1000);
  ACTIVE.store(previous_active,Ordering::Release);BASE.store(previous_base,Ordering::Release);*SCHEDULE.lock().unwrap()=Schedule::default();
  VirtualFree(allocation,0,MEM_RELEASE);
 }}

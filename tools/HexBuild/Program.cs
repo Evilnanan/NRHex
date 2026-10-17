@@ -16,6 +16,9 @@ Directory.SetCurrentDirectory(game);
 if(args.Contains("--stage-translations")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/texts"),allRewards:true);return;
 }
+if(args.Contains("--combat-protection-texts")){
+ HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,"work/combat-protection/texts"),allRewards:true,onlyIds:new[]{95003000});return;
+}
 if(args.Contains("--check-descriptions")){
  HexTexts.Verify(root,HexCatalog.Load(root));return;
 }

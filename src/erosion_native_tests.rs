@@ -83,6 +83,26 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
  }
  ptr::write(context as*mut u8,0);
 
+ // Reuse the installed shared 511010 detour, then execute the actual native
+ // descriptor builder and state152 collector for roll/body and real attacks.
+ let filter=crate::hook::prepare((base+crate::EFFECT_FILTER_RVA)as*mut u8,crate::sword_filter_detour as*const u8,64).unwrap();
+ crate::EFFECT_FILTER_ORIG.store(filter.trampoline,Ordering::Release);
+ crate::hook::write_code((base+crate::EFFECT_FILTER_RVA)as*mut u8,&filter.patch).unwrap();
+ let active_before=ACTIVE.swap(true,Ordering::AcqRel);
+ let describe:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+crate::sword_regain::DESCRIPTOR_RVA);
+ for (attack,table,blocked)in [(304,1,true),(307,1,true),(301,1,true),(550,1,true),(560,1,true),
+   (304,0,false),(304,2,false),(10000,1,false),(300208910,1,false),(303401305,1,false),(40000,1,false)]{
+  integer(hit+0x40,attack);integer(hit+0x44,table);describe(context,hit);
+  vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);
+  assert_eq!(vector[2],if blocked{start}else{start+4},"attack {attack} table {table}");
+ }
+ // A native on-hit ailment owner using the same body contact remains intact.
+ integer(hit+0x40,304);integer(hit+0x44,1);describe(context,hit);
+ integer(row+0x12c,8110002);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);
+ assert_eq!(vector[2],start+4);assert_eq!(values[0],8110002);integer(row+0x12c,CARRIER);
+ ACTIVE.store(false,Ordering::Release);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);
+ ACTIVE.store(active_before,Ordering::Release);
+ ptr::write_bytes(context as*mut u8,0,0x48);float(context+0x38,1.);
  vector[2]=start;ptr::write_unaligned((row+0x156)as*mut u16,2103);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start);
  // Real native additional-ailment correction, including both correction fields.
  patch(base,0x43c899,&[0xc3]);ptr::write((row+0x259)as*mut u8,1);

@@ -1,8 +1,8 @@
 {
-  "version": "0.17.149",
+  "version": "0.17.150",
   "active": null,
   "pid": null,
-  "dllSha256": "32c72284d67bd2d6992a9ee2d4be400a55881518c3d95290ad91982b43fc72d0",
+  "dllSha256": "4d430801028082aa5083b521f2f6dbae5d29807aea98508256128fde3772bf55",
   "build": "build-validation.json",
   "gameplayVerified": false,
   "multiplayerVerified": false,
@@ -11,6 +11,9 @@
     "Per-slot reroll, exposure rollover and role/terrain exclusions in game",
     "Death/revival, queued level rewards and new-expedition reset",
     "Host/client private visibility, ownership and claim",
-    "Erosion and Death Dance gameplay interactions"
+    "Erosion and Death Dance gameplay interactions",
+    "One-second smooth Death Dance during roll and Ultimate Art immunity in game",
+    "Revenant HP lock during Death Dance debt in game",
+    "Erosion roll contact versus weapon follow-up and simultaneous projectiles in game"
   ]
 }

@@ -1,0 +1,298 @@
+{
+  "version": "0.17.150",
+  "changedAssets": [
+    "mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "mod/natives/NRHex.dll"
+  ],
+  "files": {
+    "mod/natives/NRHex.dll": "4d430801028082aa5083b521f2f6dbae5d29807aea98508256128fde3772bf55",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "81607ca3d8a3718aab0b9411a52dfd86485953ab2ac55e31bf3b48d977ac2834",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "a4e2e360f77e4256ff4c96821fa3857c0c2714994f9b0b662b591dc993eabb87",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "00bd255e01ad8498f285a9753194d792d5752b1819a1c55cf3ff745805e5ac71",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "2bff9d04d257c42ffdccce8275ad7ed4b85b876f1c0e741b4005e55ae6c152a8"
+  },
+  "native": {
+    "death-dance": {
+      "nativeExecutionPassed": true,
+      "compiledMidHookExecuted": true,
+      "protectionHookExecuted": true,
+      "nativeProtectionGate": "0x426b79",
+      "protectedQuotaRetained": true,
+      "pendingRecoveryResetPreserved": true,
+      "expiredQuotaNotReprotected": true,
+      "debitSeconds": 1,
+      "nativeDebit": "0x426130",
+      "nativeDamageImmunity": [
+        "0x66d410",
+        "0x3d3e20"
+      ],
+      "nativeHpFloor": "0x427bc0",
+      "immuneSharesExpireWithoutRecovery": true,
+      "nativeHpSetter": "0x426b00",
+      "nativeEligibilityGate": "0x426bae",
+      "nativeQueue": "0x4275a0",
+      "nativeSettlement": "0x4289c0",
+      "cases": [
+        "per-frame smooth debit at60Hz",
+        "one-second runtime completion",
+        "six real native damage-immunity branches",
+        "immune shares give no regain and no deferred burst",
+        "five native HP-floor mechanisms",
+        "collision-only protection does not block periodic loss",
+        "unprotected runtime lethal debit",
+        "independent overlapping timers",
+        "no free recovery before debit",
+        "shared pool consumed once",
+        "nonrecoverable debit unchanged",
+        "native rejection unchanged",
+        "non-owner unchanged",
+        "historical loss excluded",
+        "healing while debt remains",
+        "runtime debit/completion ABI",
+        "per-source recovery ratio retained",
+        "lethal debit cannot resurrect",
+        "new-hit reset retains old protection",
+        "pending recovery still cancels on a new hit",
+        "shared timer refreshes on actual payment",
+        "natural expiry after final payment",
+        "missing-HP cap after multiple hits",
+        "expired old quota is not re-protected",
+        "nonrecoverable hit preserves old quota without renewal or new quota",
+        "non-owner original reset",
+        "remote recipient original reset",
+        "near-death original reset",
+        "inactive original baseline",
+        "rejected native state original reset"
+      ],
+      "stubs": [
+        "network authority",
+        "actor/effect getters in original pool fixtures; real getters in runtime protection fixtures",
+        "ownership/state presence, including native floor-state presence",
+        "native completion receiver in runtime ABI fixture"
+      ],
+      "sources": {
+        "src/death_dance.rs": "297da75f94b4404ec5b516c4d94578d788dbe1eb405938187324570da2a3b84f",
+        "src/death_dance_native_tests.rs": "9fa6d3f576114ac7a003ff6f517210d4e4e8a4f37b36202f1591c85bb62b02fb",
+        "src/lib.rs": "3267df7f974e47a87ada5e00a66d1a6a657ce14b098a439d37652e7957e4a6b2"
+      },
+      "gameProcessAccessed": false,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "erosion": {
+      "nativeExecutionPassed": true,
+      "compiledHookExecuted": true,
+      "compiledSharedApplicabilityHookExecuted": true,
+      "nativeDescriptorBuilder": "0x50f230",
+      "bodyContactsExcluded": true,
+      "nativeImmunityChain": [
+        "0x509790",
+        "0x510fd0",
+        "0xea19c0"
+      ],
+      "nativeAddedAilmentSelector": "0x506200",
+      "nativeAttackApplicability": "0x511010",
+      "nativeMotionValueFragment": [
+        "0x43c869",
+        "0x43c899"
+      ],
+      "cases": [
+        "roll/backstep/landing/jump/sprint body contacts excluded at native collection",
+        "same IDs in other attack tables unchanged",
+        "weapon/spell/multihit collection unchanged",
+        "native additional ailments on body contacts unchanged",
+        "inactive body filter unchanged",
+        "all seven native immunity flags",
+        "invalid immunity effects ignored",
+        "stateInfo152 accepted and2103 excluded",
+        "native spell applicability flags",
+        "two motion values multiplied",
+        "zero status correction remains zero",
+        "generic buildup multiplier retained",
+        "full threshold rather than remaining gauge",
+        "escalating threshold changes selection",
+        "progress tie and stable exact tie",
+        "immune ailment excluded",
+        "death participates normally",
+        "all immune does nothing",
+        "active ailment excluded",
+        "zero and NaN buildup rejected",
+        "dead recipient rejected",
+        "non-owner rejected",
+        "selected payload IDs not remapped again",
+        "inactive hook forwards unchanged",
+        "all13 arguments andAL result retained"
+      ],
+      "stubs": [
+        "security cookie check",
+        "ownership and active-state lookup",
+        "native apply continuation records parameters; proc, damage and networking are not executed"
+      ],
+      "sources": {
+        "src/erosion.rs": "8a38d013a278b3e24999c60c3e44e4474a74ce4d55df9dabbf56a8042effab44",
+        "src/erosion_native_tests.rs": "55e2a8bb86d8d15123fd4ad69e2a48e4106cac649740aeb906360450596e6a25",
+        "src/lib.rs": "3267df7f974e47a87ada5e00a66d1a6a657ce14b098a439d37652e7957e4a6b2"
+      },
+      "gameProcessAccessed": false,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    }
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "1D8651C22054DE0AAE8DB4F4CEA54C23D3FCCA2C068A1FB9686C4A18A24A9CFC",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "96D1C7E715FF1B42BC3E9A7116D55EE1D15F688AD02D4924BFD2220D7B8FA0DC",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "447253D6B1157CFE8388E0075726B9392B4B8582D6D97BAF65B2D0E28F1A9A17",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "a0ef0588ca0e27c4e15d1fc89c37d65a0238a0dac3c637c36a5e89e3265a65c3",
+        "outputSha256": "81607ca3d8a3718aab0b9411a52dfd86485953ab2ac55e31bf3b48d977ac2834",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003000,
+            "before": "\u5723\u676f\u74f6\u53d8\u4e3a\u7f13\u6162\u56de\u8840\u3002\u53d7\u5230\u7684\u635f\u4f24\u53d8\u4e3a\u6301\u7eed2\u79d2\u7684\u7f13\u6162\u6263\u8840\u3002\u53ef\u901a\u8fc7\u653b\u51fb\u6062\u590d\u90e8\u5206\u8840\u91cf",
+            "after": "\u5723\u676f\u74f6\u53d8\u4e3a\u7f13\u6162\u56de\u8840\u3002\u53d7\u5230\u7684\u635f\u4f24\u53d8\u4e3a\u6301\u7eed1\u79d2\u7684\u7f13\u6162\u6263\u8840\u3002\u53ef\u901a\u8fc7\u653b\u51fb\u6062\u590d\u90e8\u5206\u8840\u91cf"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003000,
+            "before": "\u5723\u676f\u74f6\u53d8\u4e3a\u7f13\u6162\u56de\u8840\u3002\u53d7\u5230\u7684\u635f\u4f24\u53d8\u4e3a\u6301\u7eed2\u79d2\u7684\u7f13\u6162\u6263\u8840\u3002\u53ef\u901a\u8fc7\u653b\u51fb\u6062\u590d\u90e8\u5206\u8840\u91cf",
+            "after": "\u5723\u676f\u74f6\u53d8\u4e3a\u7f13\u6162\u56de\u8840\u3002\u53d7\u5230\u7684\u635f\u4f24\u53d8\u4e3a\u6301\u7eed1\u79d2\u7684\u7f13\u6162\u6263\u8840\u3002\u53ef\u901a\u8fc7\u653b\u51fb\u6062\u590d\u90e8\u5206\u8840\u91cf"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003000,
+            "before": "\u5723\u676f\u74f6\u53d8\u4e3a\u7f13\u6162\u56de\u8840\u3002\u53d7\u5230\u7684\u635f\u4f24\u53d8\u4e3a\u6301\u7eed2\u79d2\u7684\u7f13\u6162\u6263\u8840\u3002\u53ef\u901a\u8fc7\u653b\u51fb\u6062\u590d\u90e8\u5206\u8840\u91cf",
+            "after": "\u5723\u676f\u74f6\u53d8\u4e3a\u7f13\u6162\u56de\u8840\u3002\u53d7\u5230\u7684\u635f\u4f24\u53d8\u4e3a\u6301\u7eed1\u79d2\u7684\u7f13\u6162\u6263\u8840\u3002\u53ef\u901a\u8fc7\u653b\u51fb\u6062\u590d\u90e8\u5206\u8840\u91cf"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "a622a4479bccc78e91e41a846294d90e54cdf3d164a6e14057f10c33f5b3b66c",
+        "outputSha256": "a4e2e360f77e4256ff4c96821fa3857c0c2714994f9b0b662b591dc993eabb87",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95003000,
+            "before": null,
+            "after": "\u6b7b\u4ea1\u4e4b\u821e"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003000,
+            "before": null,
+            "after": "\u5723\u676f\u74f6\u53d8\u4e3a\u7f13\u6162\u56de\u8840\u3002\u53d7\u5230\u7684\u635f\u4f24\u53d8\u4e3a\u6301\u7eed1\u79d2\u7684\u7f13\u6162\u6263\u8840\u3002\u53ef\u901a\u8fc7\u653b\u51fb\u6062\u590d\u90e8\u5206\u8840\u91cf"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "9825d2bb18047dd4ed9ac5c658da2cc8f7d591d7ba31fddca6c765ff34617674",
+        "outputSha256": "00bd255e01ad8498f285a9753194d792d5752b1819a1c55cf3ff745805e5ac71",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003000,
+            "before": "Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.",
+            "after": "Flasks restore HP gradually. Recoverable damage is taken gradually over 1 second. Attacking restores a portion of recently lost HP."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003000,
+            "before": "Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.",
+            "after": "Flasks restore HP gradually. Recoverable damage is taken gradually over 1 second. Attacking restores a portion of recently lost HP."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003000,
+            "before": "Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.",
+            "after": "Flasks restore HP gradually. Recoverable damage is taken gradually over 1 second. Attacking restores a portion of recently lost HP."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "137d3dd9848dbc3c028cc14184996dedb774ed018c90fc674a3bdaf413584887",
+        "outputSha256": "2bff9d04d257c42ffdccce8275ad7ed4b85b876f1c0e741b4005e55ae6c152a8",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95003000,
+            "before": null,
+            "after": "Death\u2019s Dance"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003000,
+            "before": null,
+            "after": "Flasks restore HP gradually. Recoverable damage is taken gradually over 1 second. Attacking restores a portion of recently lost HP."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ],
+    "containerValidation": [
+      {
+        "path": "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+        "inputSha256": "a0ef0588ca0e27c4e15d1fc89c37d65a0238a0dac3c637c36a5e89e3265a65c3",
+        "decodedInputSha256": "a4024c6bec3a1c68e230982c0808ea444015b3614457ee768b49f7e5666707c8",
+        "decodedOutputSha256": "b53ff76fff1df17ff2b44cad57887f03e5fda0a21451455e1b5d4d2b7dfc5974",
+        "outputSha256": "81607ca3d8a3718aab0b9411a52dfd86485953ab2ac55e31bf3b48d977ac2834",
+        "originalKrakHeaderPreserved": true,
+        "losslessRoundtripVerified": true
+      },
+      {
+        "path": "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+        "inputSha256": "a622a4479bccc78e91e41a846294d90e54cdf3d164a6e14057f10c33f5b3b66c",
+        "decodedInputSha256": "7a31d0143e41c25022ae9c32f026c290581a91a91249219a2cdc1465a747535a",
+        "decodedOutputSha256": "6f51c69d7bad303d9158ae8a94b958c97f23bca64ad870012ca18651bcbe8df3",
+        "outputSha256": "a4e2e360f77e4256ff4c96821fa3857c0c2714994f9b0b662b591dc993eabb87",
+        "originalKrakHeaderPreserved": true,
+        "losslessRoundtripVerified": true
+      },
+      {
+        "path": "mod/msg/engus/item_dlc01.msgbnd.dcx",
+        "inputSha256": "9825d2bb18047dd4ed9ac5c658da2cc8f7d591d7ba31fddca6c765ff34617674",
+        "decodedInputSha256": "eeb9d0dabdf19edddb57b080996b2abf78a1607ba426cd17d61064d3c8c8d8d9",
+        "decodedOutputSha256": "1796e528d21a82ca957d32f3a5660dfa1bf8b90c05c10cd891882793fc8108f5",
+        "outputSha256": "00bd255e01ad8498f285a9753194d792d5752b1819a1c55cf3ff745805e5ac71",
+        "originalKrakHeaderPreserved": true,
+        "losslessRoundtripVerified": true
+      },
+      {
+        "path": "mod/msg/engus/menu_dlc01.msgbnd.dcx",
+        "inputSha256": "137d3dd9848dbc3c028cc14184996dedb774ed018c90fc674a3bdaf413584887",
+        "decodedInputSha256": "bea066ca6a2f6f7c8ce53a00e11657ca03b513af101b84b373bb85fd7af96732",
+        "decodedOutputSha256": "f1ad362c4f9d5012aaa64043d2760ec3dc80b0906c70e03bcaa566a57b7dfa7e",
+        "outputSha256": "2bff9d04d257c42ffdccce8275ad7ed4b85b876f1c0e741b4005e55ae6c152a8",
+        "originalKrakHeaderPreserved": true,
+        "losslessRoundtripVerified": true
+      }
+    ]
+  },
+  "rustPassed": 357,
+  "rustIgnored": 3,
+  "signatureCount": 142,
+  "debitSeconds": 1,
+  "perFrameDebit": true,
+  "allOtherResourcesAndUserSettingsPreserved": true,
+  "backup": "/workspace/NRHex/work/combat-protection/before/20261017-045630-665762",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

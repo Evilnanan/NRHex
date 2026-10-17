@@ -48,6 +48,18 @@ unsafe fn select(target:usize,source:usize,context:usize,base:usize)->Option<i32
  }
  weakest(&candidates).map(|i|FIRST+i as i32)
 }
+// 50F230 supplies the native attack-table key at descriptor +34/+38.
+// These PC rows are body/locomotion contacts, including roll 304. Their
+// native status correction is 100 despite having no weapon attack. Filter
+// only Erosion's state152 owner, before it can emit a carrier; leave native
+// attack-added effects and actual attacks performed after a roll untouched.
+pub unsafe fn body_contact(node:usize,descriptor:usize)->bool{
+ if node==0||descriptor==0{return false;}
+ let param=read_ptr(node);if param==0{return false;}
+ ptr::read_unaligned((param+0x156)as*const u16)==152
+  &&read_i32(param+0x12c)==CARRIER&&read_i32(descriptor+0x38)==1
+  &&matches!(read_i32(descriptor+0x34),300..=307|310..=313|322|550|551|560|561)
+}
 // Nine stack arguments follow the four register arguments: a5 is attribution metadata,
 // a6 is the native buildup context. Preserve all 13 arguments and the AL result.
 type Apply=unsafe extern "system" fn(usize,i32,usize,u8,usize,usize,u8,u8,u8,u8,u8,u8,i32)->u8;
@@ -82,6 +94,18 @@ mod native_tests;
   let mut a=[c(0,0);7];a[0].threshold=-1;assert_eq!(weakest(&a),None);
   a[6]=c(999,999);assert_eq!(weakest(&a),Some(6));
  }
+ #[test]fn body_contact_filter_requires_the_erosion_owner_and_pc_table(){unsafe{
+  let mut row=[0u8;0x160];let param=row.as_mut_ptr()as usize;
+  let node=[param];let mut descriptor=[0u8;0x3c];
+  ptr::write_unaligned((param+0x156)as*mut u16,152);ptr::write_unaligned((param+0x12c)as*mut i32,CARRIER);
+  for attack in [304,307,301,550,560,10000,40000,300208910,303401305]{for table in [0,1,2]{
+   descriptor[0x34..0x38].copy_from_slice(&i32::to_le_bytes(attack));descriptor[0x38..].copy_from_slice(&i32::to_le_bytes(table));
+   assert_eq!(body_contact(node.as_ptr()as usize,descriptor.as_ptr()as usize),table==1&&attack<1000);
+  }}
+  descriptor[0x34..0x38].copy_from_slice(&304i32.to_le_bytes());descriptor[0x38..].copy_from_slice(&1i32.to_le_bytes());
+  ptr::write_unaligned((param+0x12c)as*mut i32,8110002);assert!(!body_contact(node.as_ptr()as usize,descriptor.as_ptr()as usize));
+  assert!(!body_contact(0,descriptor.as_ptr()as usize));assert!(!body_contact(node.as_ptr()as usize,0));
+ }}
  #[test]fn native_apply_forwards_all_thirteen_arguments_and_return_when_not_remapping(){unsafe{
   unsafe extern "system" fn native(t:usize,e:i32,s:usize,b:u8,d:usize,c:usize,x:u8,y:u8,z:u8,j:u8,k:u8,l:u8,n:i32)->u8{
    assert_eq!((t,e,s,b,d,c),(11,-22,33,0x81,55,66));

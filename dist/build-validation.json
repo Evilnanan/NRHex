@@ -1,10 +1,10 @@
 {
-  "version": "0.17.149",
+  "version": "0.17.150",
   "buildPassed": true,
-  "scope": "Runtime reward sampling, compact native template and dynamic ownership/history sets",
-  "dllSha256": "32c72284d67bd2d6992a9ee2d4be400a55881518c3d95290ad91982b43fc72d0",
-  "signatureCount": 141,
-  "validation": "reward-template-validation.json",
+  "scope": "Smooth one-second Death Dance with native damage immunity/HP floors; Erosion body-contact filtering",
+  "dllSha256": "4d430801028082aa5083b521f2f6dbae5d29807aea98508256128fde3772bf55",
+  "signatureCount": 142,
+  "validation": "combat-protection-validation.json",
   "gameplayVerified": false,
   "multiplayerVerified": false
 }
