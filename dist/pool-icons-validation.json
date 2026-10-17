@@ -1,0 +1,62 @@
+{
+  "version": "0.17.159",
+  "disabledOwners": [
+    95003300
+  ],
+  "stableCatalogSize": 30,
+  "activePoolSize": 29,
+  "icons": {
+    "inputSha256": "7236425A0DAD4E8C69CDC5A5D8918AD5682D8ED4E79794BA379C1F4A9354F506",
+    "outputSha256": "E69BB8CE674434C20CE6B44FEB3A5F215E7DD1841A58E7ED2D7C46F315C7EDFD",
+    "owner": 95003100,
+    "largeIcon": 21206,
+    "smallIcon": 22206,
+    "changes": [
+      {
+        "table": "AttachEffectParam",
+        "id": 95003100,
+        "field": "statusIconId",
+        "before": 22207,
+        "after": 22206
+      },
+      {
+        "table": "EquipParamGoods",
+        "id": 95003100,
+        "field": "iconId",
+        "before": 20207,
+        "after": 20206
+      },
+      {
+        "table": "PermanentBuffParam",
+        "id": 95003100,
+        "field": "iconId",
+        "before": 21207,
+        "after": 21206
+      },
+      {
+        "table": "SpEffectParam",
+        "id": 95003100,
+        "field": "iconId",
+        "before": 22207,
+        "after": 22206
+      }
+    ],
+    "unrelatedRowsAndFieldsPreserved": true,
+    "gameplayVerified": false
+  },
+  "checks": {
+    "unitTestsPassed": 370,
+    "isolatedNativeTestsPassed": 6,
+    "noHotkeysBuildPassed": true,
+    "signatureCount": 156
+  },
+  "sources": {
+    "src/reward_choices.rs": "bac22e4376396189fc4d98b6f5f0fbf51d1d401eb8ff9411cbd0b28a85c7c0d7",
+    "src/reward_cycle.rs": "8bed3bf6c8fcefd2b0e5401dd3adc7eadd83ff8b07718ddd99661749e30250b7",
+    "src/hex_pool.rs": "fd44da9e252ff2d9367caa1443d15864eb305fe0b492b58710409d57ea5fd40d",
+    "tools/HexBuild/HexCatalog.cs": "d248d607ad2a2e29caea0c224ae5719affaf9009a9012583637237a4440cc448",
+    "tools/HexBuild/AbilityIcons.cs": "2267d5fcea20874a7711323e9b37cb961df31311b4ec38602f2a5101bf45240a"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

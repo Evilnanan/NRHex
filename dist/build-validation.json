@@ -1,16 +1,19 @@
 {
-  "version": "0.17.152",
+  "version": "0.17.163",
   "buildPassed": true,
-  "scope": "Demon\u2019s Summoning with runtime loadouts and native reward art/magic lotteries",
-  "dllSha256": "86ce0233cdb0bcbcde7353382c8113633efce8128db0a3844699766b37714324",
-  "signatureCount": 156,
-  "validation": "demons-call-validation.json",
+  "scope": "Balloon native death action entry; native lifecycle acknowledgment; private near-death team queries",
+  "dllSha256": "b2444ca0a3fddce9680301a78fc8acfdc160f1aa1b0fc82f16af02ee17f11998",
+  "installedDllSha256": "b2444ca0a3fddce9680301a78fc8acfdc160f1aa1b0fc82f16af02ee17f11998",
+  "signatureCount": 160,
   "checks": {
-    "unitTestsPassed": 368,
-    "isolatedNativeTestsPassed": 6,
-    "noHotkeysBuildPassed": true,
-    "all30AbilityDescriptionsMatchBothLanguagePackages": true
+    "unitTestsPassed": 378,
+    "isolatedNativeTestsPassed": 7,
+    "signatureCount": 160,
+    "noHotkeysBuildPassed": true
   },
+  "validation": "balloon-trigger-validation.json",
   "gameplayVerified": false,
-  "multiplayerVerified": false
+  "multiplayerVerified": false,
+  "resourceValidation": "erosion-tuning-validation.json",
+  "regulationSha256": "257f2fbabdad1f1d94c86f82e4a8141fb928888bb1f217c91f90741f79e938fc"
 }

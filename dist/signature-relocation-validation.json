@@ -1,0 +1,69 @@
+{
+  "version": "0.17.153",
+  "signatureCount": 156,
+  "peRelocationsAppliedInRegression": true,
+  "originalFailureReproduced": "Relocated signature 0xe86840: no hits",
+  "relocationFields": [
+    "0xe86868",
+    "0xe7ae62",
+    "0xe7ae77"
+  ],
+  "allOtherResourcesAndUserSettingsPreserved": true,
+  "dllSha256": "1db6c17afec4340f645dd7ce66689f3313676a0d924c21853c04220590a3aec0",
+  "native": {
+    "nativeExecutionPassed": true,
+    "compiledHooksExecuted": true,
+    "unitTestsPassed": 368,
+    "isolatedNativeTestsPassed": 6,
+    "signatureCount": 156,
+    "nativeFunctions": [
+      "E88090 CharaInit reference",
+      "EA7FC0 weapon reference and EA9A60 reinforcement",
+      "E86730 weighted art selector",
+      "E86840 selected art",
+      "E7B030 weighted non-duplicate available magic selector",
+      "E7B010 selected magic",
+      "F561D0 float RNG"
+    ],
+    "fixtures": [
+      "private copied executable; protected absolute jump immediates relocated only in test copy",
+      "parameter repository, table iteration and magic availability fixtures",
+      "native magic selector temporary allocator fixture",
+      "constructor integration uses lottery stubs, tested independently with real selectors",
+      "native safe-slot and summon packet tests use creation/rendering/network fixtures"
+    ],
+    "cases": [
+      "same-seed replay without consuming global RNG",
+      "native chance weights and zero-weight exclusion",
+      "native primary and unavailable magic exclusion",
+      "unique-art preservation",
+      "immutable aligned virtual rows and preserved reinforcement structures",
+      "all 19-bit IDs fit native item mask",
+      "human descriptor seed retained in original 48-byte packet",
+      "one live sinner, repeated-death deduplication, cooldown and bounded placement retries"
+    ],
+    "sources": {
+      "Cargo.toml": "30e8bd4f5ef3cc3979151b87340c3b23a94a0689eb0d885f5faf9581c4e5cbe1",
+      "Cargo.lock": "4efb93e9447cbffac73c23b3f365488a928b93e24cf1673b495c75bed12accfd",
+      "src/lib.rs": "8f453041f3326a84d2cb6df03525fcd6f5ab45411b16bfeb13568c5db27f5496",
+      "src/actor_lifecycle.rs": "5c45cadd02d95ea9b4dd97df2f14ba1aa29f91c0221292e42d1541d581cf696d",
+      "src/reward_cycle_runtime.rs": "1254126c7bde3f143e4c237d3b6b2ee55347fb32cd89438d8157cd391f72a30e",
+      "src/spirit_runtime.rs": "152f70c3dca204bb7cf73236f4945dca9c8927d3410cf649587e66bbac8fd8f2",
+      "src/spirit_runtime/tests.rs": "735c1521c2739e84033d64e1dcd5598c59a6ceee19502ef5c0bd70be0557789b",
+      "src/demons.rs": "53abe7bc84074235c7f289394043b77dad3781b1d847b18fb70e5b235aed85dd",
+      "src/demons_data.rs": "1416b5b01ee44a78f67538932d1b45aae937166a974cd9b6cb68bd39c0112eda",
+      "src/demons_params.rs": "06c650e25df19ac423aebbf2c8a854829387f43c20a71c6a7dce0fa6a048312b",
+      "src/demons_params/native_tests.rs": "80863fd171b2ea21819389c992b8412ae3eea92d41cf34e1334fa9b6ad488aab",
+      "src/demons_lottery.rs": "0142ca0066c1a32e610c73dd8c02ea22d79663f45e73072dca32b271e9fa7c82",
+      "src/demons_lottery/native_tests.rs": "b0cdf1243f7324803c0713bdde66012144d5c3c8604c7db12bc06c9c574edfd9",
+      "src/demons_runtime.rs": "3f71df771ef985fc1c5c022e30c45c4951e3ce234450e1f6a18274b23c14abfa",
+      "src/hex_pool.rs": "fd44da9e252ff2d9367caa1443d15864eb305fe0b492b58710409d57ea5fd40d"
+    },
+    "noHotkeysBuildPassed": true,
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

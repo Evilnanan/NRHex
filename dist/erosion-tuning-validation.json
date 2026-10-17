@@ -1,0 +1,189 @@
+{
+  "version": "0.17.161",
+  "scope": "Resource-only Erosion tuning; DLLs unchanged",
+  "parameters": {
+    "inputSha256": "E69BB8CE674434C20CE6B44FEB3A5F215E7DD1841A58E7ED2D7C46F315C7EDFD",
+    "outputSha256": "257F2FBABDAD1F1D94C86F82E4A8141FB928888BB1F217C91F90741F79E938FC",
+    "owner": 95003100,
+    "attackRate": 0.8,
+    "damageReductionPercent": 20,
+    "largeIcon": 21229,
+    "smallIcon": 22229,
+    "goodsIcon": 20229,
+    "changes": [
+      {
+        "table": "AttachEffectParam",
+        "id": 95003100,
+        "field": "statusIconId",
+        "before": 22206,
+        "after": 22229
+      },
+      {
+        "table": "EquipParamGoods",
+        "id": 95003100,
+        "field": "iconId",
+        "before": 20206,
+        "after": 20229
+      },
+      {
+        "table": "PermanentBuffParam",
+        "id": 95003100,
+        "field": "iconId",
+        "before": 21206,
+        "after": 21229
+      },
+      {
+        "table": "SpEffectParam",
+        "id": 95003100,
+        "field": "iconId",
+        "before": 22206,
+        "after": 22229
+      },
+      {
+        "table": "SpEffectParam",
+        "id": 95003100,
+        "field": "physicsAttackRate",
+        "before": 0.85,
+        "after": 0.8
+      },
+      {
+        "table": "SpEffectParam",
+        "id": 95003100,
+        "field": "magicAttackRate",
+        "before": 0.85,
+        "after": 0.8
+      },
+      {
+        "table": "SpEffectParam",
+        "id": 95003100,
+        "field": "fireAttackRate",
+        "before": 0.85,
+        "after": 0.8
+      },
+      {
+        "table": "SpEffectParam",
+        "id": 95003100,
+        "field": "thunderAttackRate",
+        "before": 0.85,
+        "after": 0.8
+      },
+      {
+        "table": "SpEffectParam",
+        "id": 95003100,
+        "field": "darkAttackRate",
+        "before": 0.85,
+        "after": 0.8
+      }
+    ],
+    "unrelatedRowsAndFieldsPreserved": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "A075FB25D38D23A62DB046409BC6D2D9ABCCD6A974129BA76A0D53F0F34BD560",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "BC350FCD6CA9BC7A45D80D3EB3932E3CDE87141F1C2FD3ECBD643E86BFD02067",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "9D3F90381B814BD3CD1650EF82D4D83C0A50BB2CB97E4D8E14A41EA05F3D36BD",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "C9712037400FE8D27ADC08AFF71025C8F91BC314AE5BE8B3855AD5ADCD814590",
+        "outputSha256": "0E926E1BEAFE6E4570D5BBC58FC21FF34439E1B6230E82E2D2DFACC6E3A8BCF5",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003100,
+            "before": "\u964d\u4f4e15%\u653b\u51fb\u529b\u3002\u653b\u51fb\u9644\u52a030\u70b9\u76ee\u6807\u6700\u8584\u5f31\u7684\u5f02\u5e38\u7d2f\u79ef",
+            "after": "\u964d\u4f4e20%\u653b\u51fb\u529b\u3002\u653b\u51fb\u9644\u52a030\u70b9\u76ee\u6807\u6700\u8584\u5f31\u7684\u5f02\u5e38\u7d2f\u79ef"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003100,
+            "before": "\u964d\u4f4e15%\u653b\u51fb\u529b\u3002\u653b\u51fb\u9644\u52a030\u70b9\u76ee\u6807\u6700\u8584\u5f31\u7684\u5f02\u5e38\u7d2f\u79ef",
+            "after": "\u964d\u4f4e20%\u653b\u51fb\u529b\u3002\u653b\u51fb\u9644\u52a030\u70b9\u76ee\u6807\u6700\u8584\u5f31\u7684\u5f02\u5e38\u7d2f\u79ef"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003100,
+            "before": "\u964d\u4f4e15%\u653b\u51fb\u529b\u3002\u653b\u51fb\u9644\u52a030\u70b9\u76ee\u6807\u6700\u8584\u5f31\u7684\u5f02\u5e38\u7d2f\u79ef",
+            "after": "\u964d\u4f4e20%\u653b\u51fb\u529b\u3002\u653b\u51fb\u9644\u52a030\u70b9\u76ee\u6807\u6700\u8584\u5f31\u7684\u5f02\u5e38\u7d2f\u79ef"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "6A65DB209AD3AAE72B911DA9C390DA296EA4EA6F63BB1D8BDB62C183D34C2454",
+        "outputSha256": "22BECFCD2309E25B529F4D796AEF077BC110D67EA6D3C8DA31D98065EE80FB4A",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003100,
+            "before": "\u964d\u4f4e15%\u653b\u51fb\u529b\u3002\u653b\u51fb\u9644\u52a030\u70b9\u76ee\u6807\u6700\u8584\u5f31\u7684\u5f02\u5e38\u7d2f\u79ef",
+            "after": "\u964d\u4f4e20%\u653b\u51fb\u529b\u3002\u653b\u51fb\u9644\u52a030\u70b9\u76ee\u6807\u6700\u8584\u5f31\u7684\u5f02\u5e38\u7d2f\u79ef"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "D457210577BDE835E4B8A774E4650805CA6A9483BF260A05EFF356C0D021DA06",
+        "outputSha256": "1EC3F4737F4FA8011425D41ABF3496331847A7C6B23AF2DA31A6845AD38D3818",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003100,
+            "before": "Reduces attack power by 15%. Attacks inflict 30 buildup of the status ailment the target is weakest to.",
+            "after": "Reduces attack power by 20%. Attacks inflict 30 buildup of the status ailment the target is weakest to."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003100,
+            "before": "Reduces attack power by 15%. Attacks inflict 30 buildup of the status ailment the target is weakest to.",
+            "after": "Reduces attack power by 20%. Attacks inflict 30 buildup of the status ailment the target is weakest to."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003100,
+            "before": "Reduces attack power by 15%. Attacks inflict 30 buildup of the status ailment the target is weakest to.",
+            "after": "Reduces attack power by 20%. Attacks inflict 30 buildup of the status ailment the target is weakest to."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "48D3546A1C00911CCF4E00CC09050F661BF1C4F7BFE8A365927132E58B28301F",
+        "outputSha256": "208DBF99C4924324CC15AB25AAB8408B44E30F9454F04A04309C1FBC01CCB4A7",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003100,
+            "before": "Reduces attack power by 15%. Attacks inflict 30 buildup of the status ailment the target is weakest to.",
+            "after": "Reduces attack power by 20%. Attacks inflict 30 buildup of the status ailment the target is weakest to."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "nativeScenarioGroups": 25,
+  "changedAssets": [
+    "mod/regulation.bin",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx"
+  ],
+  "dllsAndProfilesUnchanged": true,
+  "allOtherPackagedFilesUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

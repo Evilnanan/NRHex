@@ -2,7 +2,7 @@
 
 本页保留构建用法。当前奖励使用运行时模板，旧的全排列能力增量入口已退役；相关历史命令不适用于当前包，新增能力使用当前完整构建。历次增量修改记录见 [历史变更](../CHANGELOG.md)；限定旧输入哈希的增量工具只用于相应历史基线。
 
-DLL和INI位于`dist/mod/natives`；ME3的原生DLL条目也指向`mod/natives/NRHex.dll`。亮剑近身判定固定在`src/sword.rs`的`NEAR_DISTANCE=4.0`，INI不再控制该数值。
+DLL和INI位于`dist/mod/natives`；ME3的原生DLL条目也指向`mod/natives/NRHex.dll`。亮剑近身判定固定在`src/sword.rs`的`NEAR_DISTANCE=5.0`，INI不再控制该数值。
 
 别停止咏唱依赖六个原生蓄力回调中的6999921通知。完整构建须运行 `tools/build_chant_hks.py --inplace`，所有动作补丁结束后再运行 `tools/verify_chant_hks.py`；后者会检查最终文件并独立反编译，缺少通知时构建失败。修复已有包时，仅对未打补丁的当前脚本运行前者；输入已含通知会拒绝重复插入，原脚本备份与验证报告位于 `.work/angel-chant-01740/staged`。运行中的游戏需要重启才能加载新脚本。
 
@@ -114,7 +114,7 @@ python -X utf8 tools/record_regen_balance.py --rust-tests 158
 
 亮剑施法保护与历史视觉资产的增量更新使用 `./build-sword-vfx.ps1`，会生成参数、手持与后摇动作标记、检查风暴管束者架势幻化剑资源并运行Rust测试。游戏需退出后才能安装DLL，群友版随后运行 `./build-no-hotkeys.ps1`。当前DLL不再添加亮剑幻剑特效；450955及其模型／纹理保留供原生战技与百般武艺使用，无需Node依赖或新特效副本。资源检查会移除已知的旧罗蕾塔放大副本，并验证其余成员保持原样。
 
-自测版保留 Ctrl+F6～F10，说明见 [发行包用法](../dist/README.md)。群友版编译时移除测试按键入口。亮剑距离固定4米，不属于INI配置。群友版不再生成 `NRHex-README.md` 和 `NRHex-build.json`；它们不是运行依赖，已有文件可自行删除。构建校验记录仅留在项目 `.work/no-hotkeys-package/<版本>/NRHex-build.json`，不放入群友版目录。
+自测版保留 Ctrl+F6～F10，说明见 [发行包用法](../dist/README.md)。群友版编译时移除测试按键入口。亮剑距离固定5米，不属于INI配置。群友版不再生成 `NRHex-README.md` 和 `NRHex-build.json`；它们不是运行依赖，已有文件可自行删除。构建校验记录仅留在项目 `.work/no-hotkeys-package/<版本>/NRHex-build.json`，不放入群友版目录。
 
 ## 大法师
 

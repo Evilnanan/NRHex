@@ -19,6 +19,21 @@ static class DeathDance {
   var r=clone("SpEffectParam",8440200,Flask);
   Set(r,"saveCategory",-1);Set(r,"iconId",-1);Set(r,"spEffectTextId_1",-1);Set(r,"displayIconForPermamentEffect",0);Set(r,"isDisableNetSync",1);
  }
+ public static void FlaskCheck(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
+  string input=Path.Combine(root,"dist/mod/regulation.bin");
+  var current=SFUtil.DecryptNightreignRegulation(input);
+  var source=parse("SpEffectParam",native.Files.Single(file=>Name(file)=="SpEffectParam.param").Bytes);
+  var installed=parse("SpEffectParam",current.Files.Single(file=>Name(file)=="SpEffectParam.param").Bytes);
+  var original=source.Rows.Single(row=>row.ID==8440200);
+  var marker=installed.Rows.Single(row=>row.ID==Flask);
+  Check(Convert.ToInt32(original["stateInfo"].Value)==2015&&Convert.ToInt32(marker["stateInfo"].Value)==2015,"Native Flask conversion state changed");
+  var allowed=new HashSet<string>{"saveCategory","iconId","spEffectTextId_1","displayIconForPermamentEffect","isDisableNetSync"};
+  Check(original.Cells.Count==marker.Cells.Count&&original.Cells.Zip(marker.Cells).All(pair=>allowed.Contains(pair.First.Def.InternalName)||JsonSerializer.Serialize(pair.First.Value)==JsonSerializer.Serialize(pair.Second.Value)),"Private marker diverges from native Flask mechanics");
+  foreach(int identity in new[]{8440200,501000,7010230,7010231})Check(CageAI.Same(source.Rows.Single(row=>row.ID==identity),installed.Rows.Single(row=>row.ID==identity)),"Native Flask effect modified");
+  string directory=Path.Combine(root,"work/death-dance");Directory.CreateDirectory(directory);
+  File.WriteAllText(Path.Combine(directory,"flask-parameters.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),nativeFlask=8440200,conversionMarker=Flask,stateInfo=2015,nativeEffectsUnchanged=true,onlyMarkerIdentityDisplayPersistenceAndNetworkFieldsDiffer=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: native Flask effects unchanged; private marker retains every native 8440200 mechanical field and state2015");
+ }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string dir=Path.Combine(root,"work/death-dance/staged"),input=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(dir);
   var binder=SFUtil.DecryptNightreignRegulation(input);Check(binder.Compression==RegulationCompression.Format,"Expected compatible DFLT regulation");

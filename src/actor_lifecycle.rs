@@ -1,7 +1,6 @@
 //! Dispatch shared game callbacks to ability-specific runtimes.
-//! Preserve death ordering: capture/queue, native cleanup, then shockwave.
 use crate::native_actor::{incapacitated, stats};
-use crate::{balloon, balloon_runtime, is_local, spirit_runtime, ACTIVE, BASE, DEATH_ORIG};
+use crate::{balloon_runtime, is_local, spirit_runtime, ACTIVE, BASE, DEATH_ORIG};
 use std::sync::atomic::Ordering;
 
 pub(crate) unsafe extern "system" fn death_detour(actor: usize) {
@@ -13,7 +12,8 @@ pub(crate) unsafe extern "system" fn death_detour(actor: usize) {
         crate::demons_runtime::died(actor);
         // Covers direct deaths (including falling/riding), before native cleanup.
         if is_local(actor, base) {
-            on_effect(actor, balloon::DOWN, base);
+            balloon_runtime::prepare(actor, base);
+            spirit_runtime::notify(actor, crate::balloon::DOWN, base);
         }
         spirit_runtime::record_soul(actor, base);
     }
@@ -22,7 +22,7 @@ pub(crate) unsafe extern "system" fn death_detour(actor: usize) {
         spirit_runtime::flush_capture(base);
     }
     if local {
-        balloon_runtime::flush_balloon(actor, base);
+        balloon_runtime::transition(actor, base);
     }
 }
 
@@ -31,7 +31,6 @@ pub(crate) unsafe fn on_effect(player: usize, effect: i32, base: usize) {
     if stats == 0 {
         return;
     }
-    balloon_runtime::notify(player, effect, base, stats);
     spirit_runtime::notify(player, effect, base);
 }
 pub(crate) unsafe fn update(player: usize, base: usize, dt: f32) {
@@ -41,6 +40,6 @@ pub(crate) unsafe fn update(player: usize, base: usize, dt: f32) {
         return;
     }
     let down = incapacitated(player, stats);
-    balloon_runtime::update(player, base, stats, down);
+    balloon_runtime::update(player, base, stats);
     spirit_runtime::update(player, base, down, dt);
 }

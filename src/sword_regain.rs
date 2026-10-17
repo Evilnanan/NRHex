@@ -66,9 +66,9 @@ regain_detour!(received,"r14","rdi",RECEIVED_ORIGINAL);
   for original in [0,20,40,140,65535]{for distance in [None,Some(4.),Some(5.)]{assert_eq!(select(original,None,distance,300,false,||panic!("Weapon rate must not be applied twice")),original);}}
  }
  #[test]fn sword_spells_replace_instead_of_adding_native_regain(){
-  for original in [0,20,25,27,140]{assert_eq!(select(original,Some(30.),Some(4.),300,false,||1.),180);}
+  for original in [0,20,25,27,140]{for distance in [4.,4.001,4.75,5.]{assert_eq!(select(original,Some(30.),Some(distance),300,false,||1.),180);}}
   assert_eq!(select(20,Some(0.),Some(1.),300,false,||panic!("Zero regain")),0);
-  for distance in [None,Some(4.001),Some(f32::NAN),Some(f32::INFINITY)]{assert_eq!(select(20,Some(30.),distance,300,false,||panic!("Out of range")),0);}
+  for distance in [None,Some(5.001),Some(f32::NAN),Some(f32::INFINITY)]{assert_eq!(select(20,Some(30.),distance,300,false,||panic!("Out of range")),0);}
   for damage in [-1,0,300]{assert_eq!(select(20,Some(30.),Some(1.),damage,true,||panic!("Nullified")),0);}
   assert_eq!(select(20,Some(30.),Some(1.),0,false,||panic!("No damage")),0);
  }

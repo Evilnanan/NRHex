@@ -2,7 +2,7 @@
 use crate::{hex_pool::HEX_COUNT,reward_choices::{HexSet,all,mask}};
 pub struct Single{pub candidates:Vec<usize>,seen:HexSet,rollover:bool}
 impl Single{
- pub fn new(unavailable:&HexSet,seen:&HexSet,visible:&HexSet)->Self{Self::with_count(HEX_COUNT,unavailable,seen,visible)}
+ pub fn new(unavailable:&HexSet,seen:&HexSet,visible:&HexSet)->Self{Self::with_count(HEX_COUNT,&crate::reward_choices::pool_exclusions(unavailable.clone()),seen,visible)}
  pub fn with_count(count:usize,unavailable:&HexSet,seen:&HexSet,visible:&HexSet)->Self{
   let eligible:HexSet=all(count).difference(unavailable).copied().filter(|i|!visible.contains(i)).collect();
   let unseen:HexSet=eligible.difference(seen).copied().collect();let rollover=unseen.is_empty();
@@ -15,7 +15,7 @@ impl Single{
 }
 pub struct Round{pub candidates:Vec<usize>,seen:HexSet,tail:HexSet,rollover:bool}
 impl Round{
- pub fn new(unavailable:&HexSet,seen:&HexSet)->Self{Self::with_count(HEX_COUNT,unavailable,seen)}
+ pub fn new(unavailable:&HexSet,seen:&HexSet)->Self{Self::with_count(HEX_COUNT,&crate::reward_choices::pool_exclusions(unavailable.clone()),seen)}
  pub fn with_count(count:usize,unavailable:&HexSet,seen:&HexSet)->Self{
   let available:HexSet=all(count).difference(unavailable).copied().collect();
   let unseen:HexSet=available.difference(seen).copied().collect();let rollover=unseen.len()<3;

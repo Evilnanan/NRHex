@@ -45,8 +45,8 @@ pub unsafe extern "system" fn detour(module:usize,source:usize,hit:usize,a:u8,b:
 #[cfg(test)]mod tests{
  use super::*;
  #[test]fn only_both_owners_spells_or_projectiles_and_sword_contact_range_qualify(){
-  for bits in 0..32{for distance in [None,Some(f32::NAN),Some(0.),Some(4.),Some(4.001),Some(f32::INFINITY)]{
-   assert_eq!(eligible(bits&1!=0,bits&2!=0,bits&4!=0,bits&8!=0,bits&16!=0,distance),bits==31&&matches!(distance,Some(d)if d.is_finite()&&d<=4.));
+  for bits in 0..32{for distance in [None,Some(f32::NAN),Some(0.),Some(4.),Some(4.001),Some(5.),Some(5.001),Some(f32::INFINITY)]{
+   assert_eq!(eligible(bits&1!=0,bits&2!=0,bits&4!=0,bits&8!=0,bits&16!=0,distance),bits==31&&matches!(distance,Some(d)if d.is_finite()&&d<=5.));
   }}
  }
  #[test]fn native_bullet_sources_qualify_without_double_boosting_direct_weapons(){unsafe{

@@ -17,7 +17,7 @@ pub const GUARD:i32=95000908; // Native int only; not passed through HKS f32.
 pub const POISE:i32=95000916; // Native category 1001 reaction override.
 pub const GLANCE_RATE:f32=0.01; // Native 8821000's five AttackRate fields.
 pub const LIFESTEAL_SCALE:f64=2.;
-pub const NEAR_DISTANCE:f32=4.;
+pub const NEAR_DISTANCE:f32=5.;
 pub const CASTER_HEIGHT:f32=1.; // Range origin at the torso, in metres above the physics root.
 
 pub struct Bonuses {percentages:BTreeMap<i32,f32>}
@@ -148,16 +148,15 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
  #[test]fn incoming_reduction_uses_requested_curve_and_preserves_non_damage(){assert_eq!(reduced(65,30.),36);assert_eq!(reduced(100,0.),100);assert_eq!(reduced(100,100.),29);assert_eq!(reduced(-5,50.),-5);assert_eq!(reduced(100,12.5),74);}
  #[test]fn torso_range_handles_elevated_contacts_without_expanding_horizontal_range(){
   let feet=[10.,20.,30.,1.];
-  // A hit 3.8 m forward and 2 m above the feet was incorrectly out of range.
-  let elevated=[13.8,22.,30.,1.];
+  let elevated=[14.8,22.,30.,1.];
   assert!(!near(distance(feet,elevated),NEAR_DISTANCE));
   assert!(near(hit_distance(feet,elevated),NEAR_DISTANCE));
-  assert!(near(hit_distance(feet,[14.,21.,30.,1.]),NEAR_DISTANCE));
-  assert!(!near(hit_distance(feet,[14.001,21.,30.,1.]),NEAR_DISTANCE));
+  assert!(near(hit_distance(feet,[15.,21.,30.,1.]),NEAR_DISTANCE));
+  assert!(!near(hit_distance(feet,[15.001,21.,30.,1.]),NEAR_DISTANCE));
   // Retain height limits above and below the torso, rather than a cylinder.
-  assert_eq!(hit_distance(feet,[10.,25.,30.,1.]),Some(4.));
-  assert!(!near(hit_distance(feet,[10.,25.001,30.,1.]),NEAR_DISTANCE));
-  assert!(!near(hit_distance(feet,[10.,16.999,30.,1.]),NEAR_DISTANCE));
+  assert_eq!(hit_distance(feet,[10.,26.,30.,1.]),Some(5.));
+  assert!(!near(hit_distance(feet,[10.,26.001,30.,1.]),NEAR_DISTANCE));
+  assert!(!near(hit_distance(feet,[10.,15.999,30.,1.]),NEAR_DISTANCE));
   assert!(near(hit_distance(feet,[10.,20.,30.,1.]),NEAR_DISTANCE));
   for invalid in [f32::NAN,f32::INFINITY,f32::NEG_INFINITY]{
    for axis in 0..3{

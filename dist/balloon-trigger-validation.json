@@ -1,0 +1,73 @@
+{
+  "version": "0.17.163",
+  "earlyNativeActionEntry": true,
+  "actionAcknowledgmentBeforeRearm": true,
+  "hpZeroEmissionRemoved": true,
+  "hpRecoveryRearmRemoved": true,
+  "nearDeathTeamExceptionOnlyForBalloon": true,
+  "characterTeamUnmodified": true,
+  "friendlyAndSelfMasksPreserved": true,
+  "hksAndRegulationUnmodified": true,
+  "unitTestsPassed": 378,
+  "isolatedNativeTestsPassed": 7,
+  "signatureCount": 160,
+  "deathDanceScenarioGroups": 38,
+  "native": {
+    "nativeExecutionPassed": true,
+    "nativeActionCallbacks": [
+      "Death_Activate",
+      "NearDeath_Activate"
+    ],
+    "hksSha256": "b510b48a74d35725d8f1cbe2f673a5a7b66f7096c2772f1e66579fc13e0fcee9",
+    "hksUnmodified": true,
+    "hpZeroIsNotATrigger": true,
+    "healingBeforeNativeAcknowledgmentCannotRearm": true,
+    "nearDeathTeam": 77,
+    "onlyPrivateBullet": 95001750,
+    "onlyPrivateAttack": 95001760,
+    "privatePcAttackTable": 1,
+    "nativeHitDispatch": "0x52cef0",
+    "nativeAttackRelation": "0x52cb90",
+    "nativeBulletTeamGetter": "0x34d1a0",
+    "nativeActorTeamGetter": "0x3d1b30",
+    "nativeRelationshipMethods": [
+      "0x52c900",
+      "0x52c910",
+      "0x52c920"
+    ],
+    "cases": [
+      "native source remains team77 outside the private collision scope",
+      "Balloon bullet query recovers the unchanged base team2",
+      "native relation rejects a team77 source and accepts Balloon against teams6/7",
+      "native friendly and self masks still reject living allies and self",
+      "ordinary Golden Shockwave and non-PC attack remain suppressed while down",
+      "ordinary bullet retains team77",
+      "scoped source is restored after native dispatch; actor fields unchanged"
+    ],
+    "stubs": [
+      "actor handle resolution",
+      "effect-driven team override module lookup",
+      "outer native bullet collision delegates to the real native attack relation predicate; geometry, damage and networking not simulated"
+    ],
+    "sources": {
+      "Cargo.toml": "e1b692e89732a39702d2bd9c8f19e50d5e2c034eee23031026f14140600c993c",
+      "Cargo.lock": "bc909ec65ebe4377d1115ee4bc3cabbe5176e486e6a0f57d1e9634b8bc441f45",
+      "src/lib.rs": "40809bb06a7c3a7439e6e87d747ec3b4bec88bfa1dbb86d467cde195682438e9",
+      "src/balloon.rs": "6e68b24084286b3e8ac229d8bca4054d29f6f027b524c25fa9e292b336b25b1c",
+      "src/balloon_runtime.rs": "0ea74d74d042ec87888bb372409daab81b243747abcb612990afe02eeb8c08a0",
+      "src/balloon_team.rs": "302161773594638e8ea1f5e662a3c4267da5184402214b838b26aa60cc4e0a2f",
+      "src/balloon_team/native_tests.rs": "433c7aa392dd59e246b2cb29a1a9530c8f24cd757065be814d8ea3ee5b177f3b",
+      "tools/verify_balloon_trigger.py": "6e9478b9b6ba29d65626b78d667ce646fc104dc1479b108029355d43834ba919"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "deathSoundTimingVerified": false
+  },
+  "dllSha256": "b2444ca0a3fddce9680301a78fc8acfdc160f1aa1b0fc82f16af02ee17f11998",
+  "groupDllSha256": "91bf9cb93477f4fbd37cf8dd99bbfeef2c570b12bfd99ccf361262822d4463a4",
+  "noHotkeysBuildPassed": true,
+  "allOtherAssetsAndSettingsUnchanged": true,
+  "regulationSha256": "257f2fbabdad1f1d94c86f82e4a8141fb928888bb1f217c91f90741f79e938fc",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

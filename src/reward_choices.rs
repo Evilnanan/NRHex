@@ -4,6 +4,9 @@ pub type HexSet=std::collections::BTreeSet<usize>;
 pub fn all(count:usize)->HexSet{(0..count).collect()}
 pub fn mask(items:impl IntoIterator<Item=usize>)->HexSet{items.into_iter().collect()}
 fn index(owner:i32)->usize{OWNER_IDS.iter().position(|&id|id==owner).expect("Missing ability in catalog")}
+pub fn pool_exclusions(mut unavailable:HexSet)->HexSet{
+ unavailable.insert(index(95003300));unavailable
+}
 pub fn terrain_exclusions(mut owned:HexSet,great_hollow:bool)->HexSet{
  if great_hollow{owned.insert(index(95001600));}owned
 }
@@ -22,7 +25,8 @@ pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  unavailable
 }
 pub fn eligible(order:[usize;3],owned:&HexSet)->bool{
- order.iter().all(|i|*i<HEX_COUNT&&!owned.contains(i))&&mask(order).len()==3
+ let unavailable=pool_exclusions(owned.clone());
+ order.iter().all(|i|*i<HEX_COUNT&&!unavailable.contains(i))&&mask(order).len()==3
 }
 #[cfg(test)]pub fn candidates(owned:&HexSet)->Vec<usize>{(0..HEX_COUNT).filter(|i|!owned.contains(i)).collect()}
 #[cfg(test)]pub fn preferred(order:[usize;3],owned:&HexSet)->Option<[usize;3]>{
@@ -33,6 +37,22 @@ pub fn is_hex_good(encoded:u32)->bool{
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn disabled_ability_keeps_its_stable_slot_but_never_appears_in_draws_or_refreshes(){
+  let disabled=index(95003300);assert_eq!(disabled,29);assert_eq!(crate::hex_pool::HISTORY_BITS[disabled],30);
+  assert!(is_hex_good(0x40000000|95003300));
+  for hero in std::iter::once(None).chain((0..=255).map(Some)){
+   let unavailable=role_exclusions(HexSet::new(),hero);
+   for seen in [HexSet::new(),all(HEX_COUNT)]{
+    let round=crate::reward_cycle::Round::new(&unavailable,&seen);
+    assert!(!round.candidates.contains(&disabled));
+    assert!(!round.preferred([disabled,0,1]).unwrap().contains(&disabled));
+    assert!(!round.draw(|count|Some(count-1)).unwrap().contains(&disabled));
+    assert!(!crate::reward_cycle::Single::new(&unavailable,&seen,&mask([0,1])).candidates.contains(&disabled));
+   }
+  }
+  assert!(!eligible([disabled,0,1],&HexSet::new()));
+  assert_eq!(crate::reward_cycle::Round::new(&HexSet::new(),&HexSet::new()).candidates.len(),HEX_COUNT-1);
+ }
  #[test]fn all_roles_preserve_their_filters_in_random_focused_and_refresh_paths(){
   for hero in std::iter::once(None).chain((0..=255).map(Some)){
    for hollow in [false,true]{

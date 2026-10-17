@@ -3,6 +3,8 @@ using System.Text.Json;
 static class Erosion {
  public const int Owner=95003100;
  public const int Carrier=Owner+1,First=Owner+10;
+ const float AttackRate=.8f;
+ static readonly string[] AttackRates={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"};
  static readonly int[] Sources={8110002,8110402,8110102,6800,8110502,8110202,6750};
  static readonly string[] Powers={"poizonAttackPower","diseaseAttackPower","bloodAttackPower","curseAttackPower","freezeAttackPower","sleepAttackPower","madnessAttackPower"};
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
@@ -11,7 +13,7 @@ static class Erosion {
  static string Hash(string path)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(path)));
  public static void Owners(PARAM.Row r){
   Set(r,"stateInfo",152);Set(r,"atkOccurrenceSpEffectId",Carrier);
-  foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(r,f,.85f);
+  foreach(var field in AttackRates)Set(r,field,AttackRate);
   foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(r,f,1);
  }
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
@@ -21,6 +23,53 @@ static class Erosion {
    var r=clone("SpEffectParam",Sources[i],First+i);
    foreach(var f in Powers)Set(r,f,0);Set(r,Powers[i],30);Set(r,"isUseStatusAilmentAtkPowerCorrect",1);
   }
+ }
+ public static void Tune(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
+  var hex=hexes.Single(entry=>entry.Id==Owner);
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,".work/erosion-tuning/staged");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);Check(binder.Compression==RegulationCompression.Format,"Unexpected regulation compression");
+  var before=binder.Files.ToDictionary(file=>file.ID,file=>file.Bytes.ToArray());
+  var fields=new Dictionary<string,Dictionary<string,object>>{
+   ["SpEffectParam"]=AttackRates.ToDictionary(field=>field,field=>(object)AttackRate),
+   ["AttachEffectParam"]=new(){["statusIconId"]=hex.SmallIcon},
+   ["PermanentBuffParam"]=new(){["iconId"]=hex.LargeIcon},
+   ["EquipParamGoods"]=new(){["iconId"]=hex.LargeIcon-1000}
+  };
+  fields["SpEffectParam"]["iconId"]=hex.SmallIcon;
+  foreach(var (table,updates) in fields){
+   var file=binder.Files.Single(file=>Name(file)==table+".param");var parameters=parse(table,file.Bytes);var row=parameters.Rows.Single(row=>row.ID==Owner);
+   foreach(var (field,value) in updates){
+    if(AttackRates.Contains(field))Check(Convert.ToSingle(row[field].Value) is .85f or AttackRate,$"Unexpected Erosion attack rate: {field}");
+    else{
+     int current=Convert.ToInt32(row[field].Value),previous=table=="PermanentBuffParam"?21206:table=="EquipParamGoods"?20206:22206;
+     Check(current==previous||current==previous+1||current==Convert.ToInt32(value),$"Unexpected Erosion icon: {table}/{field}/{current}");
+    }
+    Set(row,field,value);
+   }
+   file.Bytes=parameters.Write();
+  }
+  string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);var actual=SFUtil.DecryptNightreignRegulation(output);
+  Check(actual.Version==binder.Version&&actual.Compression==binder.Compression&&actual.Files.Count==binder.Files.Count,"Binder metadata changed");
+  var changes=new List<object>();
+  foreach(var pair in binder.Files.Zip(actual.Files)){
+   var file=pair.Second;Check(pair.First.ID==file.ID&&pair.First.Name==file.Name&&pair.First.Flags==file.Flags&&pair.First.Bytes.Span.SequenceEqual(file.Bytes.Span),"Parameter readback mismatch");
+   string table=Name(file).Replace(".param","");
+   if(!fields.TryGetValue(table,out var updates)){Check(file.Bytes.Span.SequenceEqual(before[file.ID]),"Unrelated table changed");continue;}
+   var oldRows=parse(table,before[file.ID]).Rows;var newRows=parse(table,file.Bytes).Rows;Check(oldRows.Count==newRows.Count,"Row count changed");
+   foreach(var rows in oldRows.Zip(newRows)){
+    Check(rows.First.ID==rows.Second.ID&&rows.First.Name==rows.Second.Name,"Row identity changed");
+    foreach(var cell in rows.First.Cells){
+     string field=cell.Def.InternalName;object value=rows.Second[field].Value;
+     if(rows.First.ID==Owner&&updates.TryGetValue(field,out var expected))Check(Equals(value,Convert.ChangeType(expected,value.GetType())),"Erosion tuning readback failed");
+     if(JsonSerializer.Serialize(cell.Value)==JsonSerializer.Serialize(value))continue;
+     Check(rows.First.ID==Owner&&updates.ContainsKey(field),"Unrelated parameter field changed");
+     changes.Add(new{table,id=Owner,field,before=cell.Value,after=value});
+    }
+   }
+  }
+  HexTexts.Stage(root,hexes,Path.Combine(directory,"texts"),allRewards:true,onlyIds:new[]{Owner});
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),owner=Owner,attackRate=AttackRate,damageReductionPercent=20,largeIcon=hex.LargeIcon,smallIcon=hex.SmallIcon,goodsIcon=hex.LargeIcon-1000,changes,unrelatedRowsAndFieldsPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Erosion 20% attack reduction and icons read back; all unrelated parameter fields preserved");
  }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string dir=Path.Combine(root,"work/erosion/staged"),input=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(dir);

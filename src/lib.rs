@@ -52,10 +52,10 @@ mod spirit_cage_models;
 mod native_actor;
 mod actor_lifecycle;
 mod balloon_runtime;
+mod balloon_team;
 mod spirit_runtime;
 use native_actor::npc_id;
 use actor_lifecycle::{on_effect,death_detour};
-use balloon_runtime::flush_balloon;
 mod arts_data;
 mod archmage;
 mod archmage_data;
@@ -363,11 +363,16 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);156] {
- [(demons_lottery::ART_TABLE_PATTERN,demons_lottery::ART_TABLE as u32),(demons_lottery::ART_PICK_PATTERN,demons_lottery::ART_PICK as u32),(demons_lottery::ART_GET_PATTERN,demons_lottery::ART_GET as u32),(demons_lottery::SPELL_TABLE_PATTERN,demons_lottery::SPELL_TABLE as u32),(demons_lottery::SPELL_PICK_PATTERN,demons_lottery::SPELL_PICK as u32),(demons_lottery::SPELL_GET_PATTERN,demons_lottery::SPELL_GET as u32),(demons_lottery::RNG_PATTERN,demons_lottery::RNG_RVA as u32),(demons_params::CI_PATTERN,demons_params::CI_RVA as u32),(demons_params::WEAPON_PATTERN,demons_params::WEAPON_RVA as u32),(demons_runtime::REMOVE_PATTERN,demons_runtime::REMOVE_RVA as u32),(demons_runtime::TEAM_PATTERN,demons_runtime::TEAM_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PROTECT_PATTERN,death_dance::PROTECT_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
+fn signatures()->[(&'static str,u32);160] {
+ [(demons_lottery::ART_TABLE_PATTERN,demons_lottery::ART_TABLE as u32),(demons_lottery::ART_PICK_PATTERN,demons_lottery::ART_PICK as u32),(demons_lottery::ART_GET_PATTERN,demons_lottery::ART_GET as u32),(demons_lottery::SPELL_TABLE_PATTERN,demons_lottery::SPELL_TABLE as u32),(demons_lottery::SPELL_PICK_PATTERN,demons_lottery::SPELL_PICK as u32),(demons_lottery::SPELL_GET_PATTERN,demons_lottery::SPELL_GET as u32),(demons_lottery::RNG_PATTERN,demons_lottery::RNG_RVA as u32),(demons_params::CI_PATTERN,demons_params::CI_RVA as u32),(demons_params::WEAPON_PATTERN,demons_params::WEAPON_RVA as u32),(demons_runtime::REMOVE_PATTERN,demons_runtime::REMOVE_RVA as u32),(demons_runtime::TEAM_PATTERN,demons_runtime::TEAM_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
   (NEAR_DEATH_STATE_PATTERN,0x66d700),
+  (balloon_runtime::STATE_PATTERN,balloon_runtime::STATE_RVA as u32),
+  (balloon_team::TEAM_PATTERN,balloon_team::TEAM_RVA as u32),
+  (balloon_team::HIT_PATTERN,balloon_team::HIT_RVA as u32),
+  (balloon_team::BULLET_PATTERN,balloon_team::BULLET_RVA as u32),
+  (balloon_team::PARAM_PATTERN,balloon_team::PARAM_RVA as u32),
   (parry::NOTIFY_PATTERN,parry::NOTIFY_RVA as u32),(parry::COST_PATTERN,parry::COST_RVA as u32),(parry::REPEL_PATTERN,parry::REPEL_RVA as u32),
   (THROW_ANIM_PATTERN,THROW_ANIM_RVA as u32),(GAUGE_ADD_PERCENT_PATTERN,GAUGE_ADD_PERCENT_RVA as u32),
   (NULLIFY_SITE_PATTERN,NULLIFY_SITE_RVA as u32),(REMOVE_EFFECT_PATTERN,REMOVE_EFFECT_RVA as u32),
@@ -591,7 +596,10 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (potential_fission::CREATE_RVA,potential_fission::create as *const u8,&potential_fission::CREATE_ORIGINAL),
    (potential_fission::GROUP_RVA,potential_fission::group as *const u8,&potential_fission::GROUP_ORIGINAL),
    (erosion::RVA,erosion::detour as *const u8,&erosion::ORIGINAL),
-   (death_dance::PROTECT_RVA,death_dance::protect_detour as *const u8,&death_dance::PROTECT_ORIGINAL),
+   (balloon_runtime::STATE_RVA,balloon_runtime::state_detour as *const u8,&balloon_runtime::STATE_ORIGINAL),
+   (balloon_team::TEAM_RVA,balloon_team::team_detour as *const u8,&balloon_team::TEAM_ORIGINAL),
+   (balloon_team::HIT_RVA,balloon_team::hit_detour as *const u8,&balloon_team::HIT_ORIGINAL),
+   (balloon_team::BULLET_RVA,balloon_team::bullet_detour as *const u8,&balloon_team::BULLET_ORIGINAL),
    (death_dance::RVA,death_dance::detour as *const u8,&death_dance::ORIGINAL),
    (sword_regain::DIRECT_RVA,sword_regain::direct as *const u8,&sword_regain::DIRECT_ORIGINAL),
    (sword_regain::RECEIVED_RVA,sword_regain::received as *const u8,&sword_regain::RECEIVED_ORIGINAL),
@@ -630,10 +638,6 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   for (rva,detour,original) in arts_transfer_targets {
    let p=hook::prepare(base.add(rva) as *mut u8,detour,64)?;
    if rva==potential_fission::GROUP_RVA&&p.stolen!=7{return Err("Fission grouping must relocate only MOVZX ECX,[RDX+CA]".into());}
-   if rva==death_dance::PROTECT_RVA{
-    if p.stolen!=11{return Err("Death dance protection must relocate only the eleven-byte protected-quota/time clear".into());}
-    death_dance::PROTECT_RESUME.store(base.add(death_dance::PROTECT_RESUME_RVA)as*mut u8,Ordering::Release);
-   }
    if rva==death_dance::RVA&&p.stolen!=6{return Err("Death dance must relocate exactly MOV ECX,[RBX+140]".into());}
    if rva==parry::RVA&&p.stolen!=7{return Err("Parry state query must relocate its two 7-byte MOV instructions".into());}
    if rva==parry::COST_RVA&&p.stolen!=9{return Err("Parry cost gate must relocate the nine-byte MOVSS".into());}
@@ -1505,10 +1509,8 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  if ACTIVE.load(Ordering::Acquire)&&essence_reaver::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&ominous_pact::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&effect==spirit::NATIVE_DRAIN&&npc_id(player,base).is_some_and(spirit::is_private_npc){effect=spirit::PASSIVE;}
- if ACTIVE.load(Ordering::Acquire)&&effect==102100&&is_local(player,base){on_effect(player,balloon::DOWN,base);}
- if ACTIVE.load(Ordering::Acquire)&&matches!(effect,balloon::DOWN|balloon::REVIVED)&&is_local(player,base){
-  on_effect(player,effect,base);
- }
+ if ACTIVE.load(Ordering::Acquire)&&matches!(effect,102100|balloon::DOWN)&&is_local(player,base){on_effect(player,balloon::DOWN,base);}
+ if ACTIVE.load(Ordering::Acquire)&&effect==balloon::DOWN&&is_local(player,base){balloon_runtime::action_started(player,base);}
  if ACTIVE.load(Ordering::Acquire)&&effect==chant::PULSE&&is_local(player,base){chant_pulse(player,base);}
  if ACTIVE.load(Ordering::Acquire){archmage_runtime::pulse(player,effect,base);}
  // Capture before native healing can change HP; never hold a lock across it.
@@ -1530,7 +1532,6 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
   if accepted&&stats!=0{if let Some(state)=JIAHAO.get(){if let Ok(mut state)=state.lock(){state.synchronize(player,stats,true,read_i32(stats+0x140)>0);state.marker(effect,GetTickCount64());}}}
  }
  let result=original(player,effect,source,a4,a5,a6,a7,a8,a9,a10,a11);
- if ACTIVE.load(Ordering::Acquire)&&matches!(effect,balloon::DOWN|102100)&&is_local(player,base){flush_balloon(player,base);}
  // The event supplies a synchronized persistent marker. Native mutation
  // sources and native death rewards both read this same actor bit.
  if ACTIVE.load(Ordering::Acquire)&&effect==cage_mutation::MARKER {
@@ -2265,7 +2266,7 @@ mod tests {
    ptr::write_unaligned(hit.as_mut_ptr().add(offset) as *mut [f32;4],v);
   }
   let player=[0f32,0.,0.,1.];
-  for (point,expected) in [([2.,1.,0.,1.],true),([4.,0.,0.,1.],true),([4.001,0.,0.,1.],false),([0.,4.001,0.,1.],false),([f32::NAN,0.,0.,1.],false)]{
+  for (point,expected) in [([2.,1.,0.,1.],true),([4.001,0.,0.,1.],true),([5.,0.,0.,1.],true),([5.001,0.,0.,1.],false),([0.,5.001,0.,1.],false),([f32::NAN,0.,0.,1.],false)]{
    ptr::write_unaligned(hit.as_mut_ptr().add(0x1f0) as *mut [f32;4],point);
    assert_eq!(sword::near(sword::distance(player,sword_hit_point(hit.as_ptr() as usize)),sword::NEAR_DISTANCE),expected);
   }
@@ -2279,7 +2280,7 @@ mod tests {
   // Unrelated origin/direction cannot turn a distant hit into a near one.
   ptr::write_unaligned(hit.as_mut_ptr().add(0x1e0) as *mut [f32;4],[10.,21.,30.,1.]);
   let source=actor.as_ptr() as usize;let hit_ptr=hit.as_mut_ptr() as usize;
-  for (point,expected) in [([13.8,22.,30.,1.],true),([14.,21.,30.,1.],true),([14.001,21.,30.,1.],false),([10.,25.001,30.,1.],false),([f32::NAN,0.,0.,1.],false)]{
+  for (point,expected) in [([14.8,22.,30.,1.],true),([14.001,21.,30.,1.],true),([15.,21.,30.,1.],true),([15.001,21.,30.,1.],false),([10.,26.001,30.,1.],false),([f32::NAN,0.,0.,1.],false)]{
    ptr::write_unaligned((hit_ptr+0x1f0) as *mut [f32;4],point);
    assert_eq!(sword::near(sword_hit_distance(source,hit_ptr,0),sword::NEAR_DISTANCE),expected);
   }
@@ -2472,9 +2473,10 @@ mod tests {
  }
  #[test] fn legacy_sword_distance_cannot_override_compiled_range(){
   for value in ["0","5","6","7.5","NaN","inf","101"]{assert!(Config::read(&format!("SwordNearDistance={value}")).is_ok());}
-  assert_eq!(sword::NEAR_DISTANCE,4.);
-  assert!(sword::near(Some(4.),sword::NEAR_DISTANCE));
-  assert!(!sword::near(Some(4.001),sword::NEAR_DISTANCE));
+  assert_eq!(sword::NEAR_DISTANCE,5.);
+  assert!(sword::near(Some(4.001),sword::NEAR_DISTANCE));
+  assert!(sword::near(Some(5.),sword::NEAR_DISTANCE));
+  assert!(!sword::near(Some(5.001),sword::NEAR_DISTANCE));
  }
  #[test] fn constructed_impact_stays_boosted_for_shared_and_network_copies(){unsafe{
   for original in [0,1,2,3,8,7] {

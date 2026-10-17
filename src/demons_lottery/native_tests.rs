@@ -36,6 +36,34 @@ fn original_reward_art_and_magic_lotteries_replay_without_advancing_global_rng()
  let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").expect("NRHEX_NATIVE_EXE")).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),EXE_HASH);
  let h=pe::Headers::parse(&raw,0).unwrap();let image=VirtualAlloc(ptr::null_mut(),h.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!image.is_null());let base=image as usize;
  for s in &h.sections{ptr::copy_nonoverlapping(raw[s.raw_offset as usize..].as_ptr(),(base+s.virtual_address as usize)as*mut u8,s.raw_size as usize);}
+ let nt=u32::from_le_bytes(raw[0x3c..0x40].try_into().unwrap())as usize;
+ let directory=nt+24+112+5*8;
+ let relocations=u32::from_le_bytes(raw[directory..directory+4].try_into().unwrap())as usize;
+ let relocation_size=u32::from_le_bytes(raw[directory+4..directory+8].try_into().unwrap())as usize;
+ assert!(relocations>0&&relocations+relocation_size<=h.image_size as usize);
+ assert_ne!(base as u64,h.image_base);
+ let delta=(base as u64).wrapping_sub(h.image_base);let mut cursor=relocations;
+ while cursor<relocations+relocation_size{
+  let page=ptr::read_unaligned((base+cursor)as*const u32)as usize;
+  let size=ptr::read_unaligned((base+cursor+4)as*const u32)as usize;
+  assert!(size>=8&&size%2==0&&cursor+size<=relocations+relocation_size);
+  for offset in (8..size).step_by(2){
+   let entry=ptr::read_unaligned((base+cursor+offset)as*const u16);
+   if entry>>12==0{continue;}assert_eq!(entry>>12,10);
+   let target=page+(entry&0xfff)as usize;assert!(target+8<=h.image_size as usize);
+   let pointer=(base+target)as*mut u64;
+   ptr::write_unaligned(pointer,ptr::read_unaligned(pointer).wrapping_add(delta));
+  }
+  cursor+=size;
+ }
+ let regions:Vec<_>=h.sections.iter().filter(|section|section.is_executable()).map(|section|pe::ExecRegion{
+  name:section.name_str(),rva:section.virtual_address,
+  bytes:std::slice::from_raw_parts((base+section.virtual_address as usize)as*const u8,section.mapped_len(h.image_size)),
+ }).collect();
+ for (source,wanted)in crate::signatures(){
+  let hits=crate::pattern::scan_regions(&regions,&crate::pattern::Pattern::parse(source).unwrap());
+  assert_eq!(hits.iter().map(|hit|hit.1.rva).collect::<Vec<_>>(),vec![wanted],"Relocated signature {wanted:#x}");
+ }
  // The protected selectors use absolute MOV r64,imm64 jump targets as well
  // as RIP-relative branches. Relocate only image-address immediates in this
  // private hash-guarded copy, never patch the on-disk game executable.

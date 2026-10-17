@@ -1,4 +1,4 @@
-"""Install the verified combat fixes and one-second text; retain other assets."""
+"""Install the verified combat fixes and two-second text; retain other assets."""
 from pathlib import Path
 from datetime import datetime
 import argparse, hashlib, json, re, shutil, tomllib
@@ -27,7 +27,7 @@ for report in native.values():
     assert report['nativeExecutionPassed']
     for path, digest in report['sources'].items():
         assert sha(ROOT/path) == digest, 'Source changed after verification: '+path
-assert native['death-dance']['debitSeconds'] == 1
+assert native['death-dance']['debitSeconds'] == 2
 assert native['erosion']['bodyContactsExcluded']
 test_log = (work/'rust-tests.log').read_text(errors='replace')
 tests = re.search(r'test result: ok\. (\d+) passed; 0 failed; (\d+) ignored;', test_log)
@@ -69,21 +69,21 @@ except Exception:
 version = tomllib.loads((ROOT/'Cargo.toml').read_text())['package']['version']
 report = dict(version=version, changedAssets=changed, files={p: after[p] for p in sources},
               native=native, texts=text_report, rustPassed=int(tests[1]), rustIgnored=int(tests[2]),
-              signatureCount=signature_count, debitSeconds=1, perFrameDebit=True,
+              signatureCount=signature_count, debitSeconds=2, perFrameDebit=True,
               allOtherResourcesAndUserSettingsPreserved=True, backup=str(backup),
               gameplayVerified=False, multiplayerVerified=False)
 (dist/'combat-protection-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
 (dist/'build-validation.json').write_text(json.dumps(dict(
-    version=version, buildPassed=True, scope='Smooth one-second Death Dance with native damage immunity/HP floors; Erosion body-contact filtering',
+    version=version, buildPassed=True, scope='Smooth two-second Death Dance with native damage immunity/HP floors; Erosion body-contact filtering',
     dllSha256=after['mod/natives/NRHex.dll'], signatureCount=signature_count,
     validation='combat-protection-validation.json', gameplayVerified=False, multiplayerVerified=False), indent=2), encoding='utf8')
 runtime = read(dist/'runtime-validation.json')
 pending = runtime.get('pendingChecks', [])
-pending += ['One-second smooth Death Dance during roll and Ultimate Art immunity in game',
+pending += ['Two-second smooth Death Dance during roll and Ultimate Art immunity in game',
             'Revenant HP lock during Death Dance debt in game',
             'Erosion roll contact versus weapon follow-up and simultaneous projectiles in game']
 runtime.update(version=version, active=None, pid=None, dllSha256=after['mod/natives/NRHex.dll'],
                build='build-validation.json', gameplayVerified=False, multiplayerVerified=False,
                pendingChecks=list(dict.fromkeys(pending)))
 (dist/'runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
-print('PASS: combat DLL and bilingual one-second text installed; all other assets/settings preserved')
+print('PASS: combat DLL and bilingual two-second text installed; all other assets/settings preserved')

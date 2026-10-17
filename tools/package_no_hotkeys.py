@@ -43,11 +43,16 @@ if profile.exists():
  parsed=tomllib.loads(text)
  assert any(n.get('path')=='mod/natives/NRHex.dll' for n in parsed.get('natives',[])), 'Existing profile has no NRHex DLL entry'
  assert any(p.get('source',p.get('path'))=='mod' for p in parsed.get('packages',[])), 'Existing profile has no mod package'
+ if not parsed.get('disable_arxan',False):
+  setting=r'(?m)^\s*disable_arxan\s*=\s*false\b'
+  text=re.sub(setting,'disable_arxan = true',text) if re.search(setting,text) else 'disable_arxan = true\n'+text
+  print('Enabled required Arxan neutralization for native hooks; online and other Mod settings unchanged')
 else:
  text='profileVersion = "v1"\nstart_online = false\ndisable_arxan = true\n\n[[supports]]\ngame = "nightreign"\n\n[[natives]]\npath = "mod/natives/NRHex.dll"\n\n[[packages]]\nid = "nrhex"\nsource = "mod"\n'
 write('NRHex.me3',text.encode('utf-8'))
+assert tomllib.loads(text)['disable_arxan'] is True
 assert sha(dist/'mod/natives/NRHex.dll')==baseline_dll
 report=root/'.work/no-hotkeys-package'/version/'NRHex-build.json'
 report.parent.mkdir(parents=True,exist_ok=True)
-report.write_text(json.dumps(dict(version=version,destination=str(destination),testHotkeys=False,keyboardPollingImportAbsent=True,swordNearDistance=4.0,swordRangeConfigurable=False,dllSha256=sha(dll),files=files.copy(),gameplayVerified=False,loadingVerified=False),ensure_ascii=False,indent=2),encoding='utf-8')
+report.write_text(json.dumps(dict(version=version,destination=str(destination),testHotkeys=False,keyboardPollingImportAbsent=True,requiredArxanNeutralization=True,swordNearDistance=4.0,swordRangeConfigurable=False,dllSha256=sha(dll),files=files.copy(),gameplayVerified=False,loadingVerified=False),ensure_ascii=False,indent=2),encoding='utf-8')
 print(f'PASS: {version} no-hotkeys package installed in {destination}; {len(files)} files verified; existing non-test settings preserved')

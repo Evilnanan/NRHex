@@ -28,6 +28,8 @@
 
 运行 `dist/启动测试版.ps1` 启动。开发构建运行 `./build.ps1`；只验证和构建、不替换正在运行的 DLL 时使用 `./build.ps1 -NoInstall`。
 
+退出卡住或Steam一直显示“正在停止”时，双击 `dist/强制结束游戏.cmd`；清理脚本仅保留在dist，不随群友版打包。它强制结束黑夜君临，并清理可确认归属的ME3启动器残留，不关闭Steam、不重启游戏、不改存档；强退可能结束当前出征。可先运行 `powershell -NoProfile -ExecutionPolicy Bypass -File dist/Stop-Nightreign.ps1 -WhatIf` 仅预览。权限不足时再右键CMD以管理员身份运行；无法确认归属的其他ME3进程不会被结束。
+
 用户维护的 `data/balance/sword.csv`、INI、ME3 以及辅助 Mod 配置不会由资料清理覆盖。研究结论、静态检查、加载检查和实际游戏反馈分别记录，验证状态见实现说明。
 
 可用 `./clean.ps1 -CachesOnly -Apply` 清理编译缓存；不带 `-Apply` 仅预览。脚本不会遍历目录联接或符号链接的目标。详情见 [维护记录](docs/maintenance.md)。

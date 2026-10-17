@@ -118,6 +118,10 @@ try {
     } # Clean builds retain the checked-in boss catalogue guarded by the EXE/regulation versions.
     & python -X utf8 tools/build_new_hexes_hks.py --inplace
     if ($LASTEXITCODE -ne 0) { throw 'Balloon and Revenant action notifications failed.' }
+    & python -X utf8 tools/build_death_dance_flask_hks.py --inplace
+    if ($LASTEXITCODE -ne 0) { throw 'Death Dance native gradual Flask branch failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --death-dance-flask-check
+    if ($LASTEXITCODE -ne 0) { throw 'Death Dance native Flask conversion state check failed.' }
     & python -X utf8 tools/build_chant_hks.py --inplace
     if ($LASTEXITCODE -ne 0) { throw 'Chant spell charge notifications failed.' }
     & python -X utf8 tools/build_sword_vfx_hks.py --inplace

@@ -74,9 +74,12 @@ if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse
 if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--demons-call-catalog")){DemonsCall.Catalog(bnd,Parse,Path.Combine(root,"work/demons-call/demons_data.rs"));return;}
 if(args.Contains("--demons-call-stage")){DemonsCall.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--ability-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--erosion-stage")){Erosion.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--erosion-tuning-stage")){Erosion.Tune(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-stage")){DeathDance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-probe")){DeathDance.Probe(root,bnd,Parse);return;}
+if(args.Contains("--death-dance-flask-check")){DeathDance.FlaskCheck(root,bnd,Parse);return;}
 if(args.Contains("--sword-regain-stage")){SwordRegain.Stage(root,bnd,Parse);return;}
 if(args.Contains("--sword-regain-probe")){SwordRegain.Export(root,bnd,Parse);return;}
 if(args.Contains("--sword-charged-probe")){SwordCharged.Probe(root,bnd,Parse);return;}

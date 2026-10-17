@@ -70,8 +70,8 @@ mod tests {
             stats[0x140 / 4] = 100;
             let st = stats.as_ptr() as usize;
             let mut balloon = balloon::Balloon::default();
-            balloon.synchronize_life(actor, st, true, false);
-            balloon.marker(balloon::DOWN, 1500);
+            balloon.synchronize_life(actor, st, true, balloon::Life::Alive);
+            balloon.commit(balloon::Life::Down, 1500);
             assert_eq!(balloon.take(), Some(1500));
             let mut spirits = spirit::Spirits::default();
             spirits.synchronize(actor, true);
@@ -88,8 +88,9 @@ mod tests {
                 ptr::write((actor + 0x710) as *mut u8, down);
                 let is_down = incapacitated(actor, st);
                 assert!(is_down);
-                balloon.synchronize_life(actor, st, false, is_down);
-                balloon.marker(balloon::DOWN, 1500);
+                let life=if down==1{balloon::Life::Down}else{balloon::Life::Reviving};
+                balloon.synchronize_life(actor, st, false, life);
+                balloon.commit(balloon::Life::Down, 1500);
                 assert_eq!(balloon.take(), None);
                 spirits.synchronize_life(actor, false, is_down);
                 spirits.ultimate();
@@ -98,8 +99,8 @@ mod tests {
             }
             ptr::write((actor + 0x710) as *mut u8, 0);
             assert!(!incapacitated(actor, st));
-            balloon.synchronize_life(actor, st, true, false);
-            balloon.marker(balloon::DOWN, 1500);
+            balloon.synchronize_life(actor, st, true, balloon::Life::Alive);
+            balloon.commit(balloon::Life::Down, 1500);
             assert_eq!(balloon.take(), Some(1500));
             stats[0x140 / 4] = 0;
             assert!(incapacitated(actor, st));

@@ -1,0 +1,75 @@
+{
+  "version": "0.17.161",
+  "nearDistanceMetres": 5,
+  "casterHeightMetres": 1,
+  "distanceMetric": "3D torso-to-native-contact at hit calculation",
+  "consumers": [
+    "damage and impact eligibility",
+    "native regain request",
+    "native on-hit effect selection",
+    "Mighty projectile synergy"
+  ],
+  "unitTestsPassed": 370,
+  "isolatedNativeTestsPassed": 6,
+  "signatureCount": 155,
+  "noHotkeysBuildPassed": true,
+  "diagnosticEntryAbsent": true,
+  "diagnosticSourceAndProfileRemoved": true,
+  "diagnosticBuildCacheNotLoaded": true,
+  "packageResourcesAndSettingsUnchanged": true,
+  "dllSha256": "f017fa5f8115a1a577e5bc4ede72d06fd9aab232c2ce4a256e1119be93b73634",
+  "groupDllSha256": "45d16e6f420343c9af5a53b062a267a8bf9f4d6d22dea9d4b5e562019fe08e7e",
+  "sampling": {
+    "totalRecords": 49,
+    "constructedRecords": 19,
+    "nativeContacts": 15,
+    "minimumContactDistance": 4.140452861785889,
+    "maximumContactDistance": 4.7431559562683105,
+    "largestSample": {
+      "sequence": 42,
+      "observedAt": "2026-10-17T23:17:41.787",
+      "tickMs": 19013531,
+      "phase": "calculated",
+      "attack": 44505,
+      "kind": 1,
+      "source": "0x7ff421ed4e60",
+      "target": "0x7ff421eba810",
+      "hit": "0x1c130ff4c0",
+      "damage": 482,
+      "flags": 0,
+      "hpBefore": -1,
+      "hpAfter": 41558,
+      "player": [
+        15.955523490905762,
+        9.879676818847656,
+        5.199288845062256
+      ],
+      "contact": [
+        11.256214141845703,
+        10.907296180725098,
+        5.84213924407959
+      ],
+      "targetFeet": [
+        11.08799934387207,
+        9.934633255004883,
+        5.9120025634765625
+      ],
+      "lockPoint": [
+        11.08799934387207,
+        10.794631958007812,
+        5.927234649658203
+      ],
+      "swordDistance": 4.7431559562683105,
+      "targetDistance": 4.919733047485352,
+      "targetHorizontal": 4.919425964355469,
+      "lockPointTorsoDistance": 4.922390460968018,
+      "nativeCharged": true,
+      "hasSword": true,
+      "calculationFlags": 0
+    },
+    "theoreticalMaximumProven": false,
+    "rawSha256": "06269d78967bf2002f8d2513b0844200c6eb51215e56fbeee34d4ecdf08d6ef2"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

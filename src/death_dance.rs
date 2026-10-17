@@ -1,5 +1,5 @@
 //! Delay only HP losses accepted by the native regain branch. Every hit owns
-//! its own one-second schedule; paid damage still feeds the one native pool.
+//! its own two-second schedule; paid damage still feeds the one native pool.
 use crate::{has_effect,native_actor,read_i32,read_ptr,ACTIVE,BASE};
 use std::{cell::Cell,ptr,sync::{Mutex,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95003000;
@@ -8,21 +8,12 @@ pub const RVA:usize=0x426bae;
 pub const PATTERN:&str="8B 8B 40 01 00 00 0F 57 C9 8B C1 2B C5 0F 2F F1 0F";
 pub const SET_RVA:usize=0x426b00;
 pub const SET_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 18 48 89 74 24 20 89 54 24 10 57 48 83 EC 30 8B A9 40 01 00 00 41";
-// Periodic SpEffect HP changes use this delta wrapper: actor +210 checks
-// damage immunity (not roll collision i-frames), then 427BC0 applies HP floors.
 pub const DEBIT_RVA:usize=0x426130;
 pub const DEBIT_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 30 41 0F B6 F1 41 0F B6 E8 8B FA 48 8B D9 85 D2";
 pub const FINISH_RVA:usize=0x43ced0;
 pub const FINISH_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 20 44 88 44 24 18 57 41 54 41 55 41 56 41 57 48 83 EC";
-// Native reset clears protected quota and its timer together. Keep only these
-// two fields for this local owner; the next native store still clears pending HP.
-pub const PROTECT_RVA:usize=0x426b79;
-pub const PROTECT_RESUME_RVA:usize=0x426b84;
-pub const PROTECT_PATTERN:&str="48 C7 83 6C 01 00 00 00 00 00 00 C7 83 74 01 00 00 00 00 00 00";
-pub static PROTECT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-pub static PROTECT_RESUME:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-const SECONDS:f64=1.;
+const SECONDS:f64=2.;
 #[derive(Clone,Copy,Debug)]
 struct Terms {rate:f32,window:f32,refresh:u8}
 #[derive(Debug)]
@@ -54,50 +45,20 @@ thread_local!{static SETTLING:Cell<bool>=const{Cell::new(false)};}
 struct Settlement;
 impl Drop for Settlement{fn drop(&mut self){SETTLING.with(|s|s.set(false));}}
 
-// This runs inside an accepted native reset, after HP was clamped but before
-// the original protected quota/time store. Do not create quota or extend time:
-// later eligible payments use the unchanged native accumulation/refresh path.
-unsafe extern "system" fn preserve_protection(stats:usize,before:i32)->u8{
- if !ACTIVE.load(Ordering::Acquire)||stats==0||before<=0||read_i32(stats+0x140)>=before{return 0;}
- let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+crate::WORLD_RVA);if world==0{return 0;}
- let player=read_ptr(world+0x174e8);
- if player==0||native_actor::stats(player)!=stats||matches!(ptr::read((player+0x710)as*const u8),1|2){return 0;}
- (has_effect(player,OWNER,base)&&crate::has_state(player,449,base))as u8
-}
-#[unsafe(naked)]
-pub unsafe extern "system" fn protect_detour(){
- core::arch::naked_asm!(
-  "pushfq","sub rsp,0xc8",
-  "mov [rsp+0x28],rax","mov [rsp+0x30],rcx","mov [rsp+0x38],rdx",
-  "mov [rsp+0x40],r8","mov [rsp+0x48],r9","mov [rsp+0x50],r10","mov [rsp+0x58],r11",
-  "movdqu [rsp+0x60],xmm0","movdqu [rsp+0x70],xmm1","movdqu [rsp+0x80],xmm2",
-  "movdqu [rsp+0x90],xmm3","movdqu [rsp+0xa0],xmm4","movdqu [rsp+0xb0],xmm5",
-  "mov rcx,rbx","mov edx,ebp","call {callback}","mov [rsp+0x20],al",
-  "movdqu xmm0,[rsp+0x60]","movdqu xmm1,[rsp+0x70]","movdqu xmm2,[rsp+0x80]",
-  "movdqu xmm3,[rsp+0x90]","movdqu xmm4,[rsp+0xa0]","movdqu xmm5,[rsp+0xb0]",
-  "mov rax,[rsp+0x28]","mov rcx,[rsp+0x30]","mov rdx,[rsp+0x38]",
-  "mov r8,[rsp+0x40]","mov r9,[rsp+0x48]","mov r10,[rsp+0x50]","mov r11,[rsp+0x58]",
-  "cmp byte ptr [rsp+0x20],0","je 2f",
-  "add rsp,0xc8","popfq","jmp qword ptr [rip+{resume}]",
-  "2:","add rsp,0xc8","popfq","jmp qword ptr [rip+{original}]",
-  callback=sym preserve_protection,resume=sym PROTECT_RESUME,original=sym PROTECT_ORIGINAL
- );
-}
 
 // Called after native authority + stateInfo449 checks, before any pool update.
 // RBP is the pre-set HP, RBX the canonical stats object, XMM6 the regain ratio.
-unsafe extern "system" fn capture(stats:usize,before:i32,rate:f32,window:f32,refresh:u8){
+unsafe extern "system" fn capture(stats:usize,before:i32,rate:f32,window:f32,refresh:u8,requested:i32){
  if !ACTIVE.load(Ordering::Acquire)||SETTLING.with(|s|s.get())||!rate.is_finite()||rate<=0.||before<=0{return;}
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+crate::WORLD_RVA);if world==0{return;}
  let player=read_ptr(world+0x174e8);
  if player==0||native_actor::stats(player)!=stats||!has_effect(player,OWNER,base)||matches!(ptr::read((player+0x710)as*const u8),1|2){return;}
- let after=read_i32(stats+0x140);let loss=before.saturating_sub(after);
+ let after=read_i32(stats+0x140);if after>=before{return;}
+ let loss=before.saturating_sub(requested);
  if loss<=0{return;}
  if let Ok(mut schedule)=SCHEDULE.lock(){
   schedule.sync((player,stats),true);
   schedule.add(loss,Terms{rate,window,refresh});
-  // The setter already clamped this loss. Restore within its synchronous frame;
-  // native code sees zero immediate loss and cannot grant the same budget twice.
   ptr::write_unaligned((stats+0x140)as*mut i32,before.min(read_i32(stats+0x144)));
  }
 }
@@ -105,24 +66,35 @@ unsafe extern "system" fn capture(stats:usize,before:i32,rate:f32,window:f32,ref
 pub unsafe extern "system" fn detour(){
  core::arch::naked_asm!(
   "pushfq","sub rsp,0xc8",
-  "mov [rsp+0x28],rax","mov [rsp+0x30],rcx","mov [rsp+0x38],rdx",
+  "mov [rsp+0xc0],rax","mov [rsp+0x30],rcx","mov [rsp+0x38],rdx",
   "mov [rsp+0x40],r8","mov [rsp+0x48],r9","mov [rsp+0x50],r10","mov [rsp+0x58],r11",
   "movdqu [rsp+0x60],xmm0","movdqu [rsp+0x70],xmm1","movdqu [rsp+0x80],xmm2",
   "movdqu [rsp+0x90],xmm3","movdqu [rsp+0xa0],xmm4","movdqu [rsp+0xb0],xmm5",
   "mov rcx,rbx","mov edx,ebp","movaps xmm2,xmm6","movss xmm3,[rsp+0x130]",
-  "movzx eax,byte ptr [rsp+0x138]","mov [rsp+0x20],eax","call {callback}",
+  "movzx eax,byte ptr [rsp+0x138]","mov [rsp+0x20],eax",
+  "mov eax,[rsp+0x118]","mov [rsp+0x28],eax","call {callback}",
   "movdqu xmm0,[rsp+0x60]","movdqu xmm1,[rsp+0x70]","movdqu xmm2,[rsp+0x80]",
   "movdqu xmm3,[rsp+0x90]","movdqu xmm4,[rsp+0xa0]","movdqu xmm5,[rsp+0xb0]",
-  "mov rax,[rsp+0x28]","mov rcx,[rsp+0x30]","mov rdx,[rsp+0x38]",
+  "mov rax,[rsp+0xc0]","mov rcx,[rsp+0x30]","mov rdx,[rsp+0x38]",
   "mov r8,[rsp+0x40]","mov r9,[rsp+0x48]","mov r10,[rsp+0x50]","mov r11,[rsp+0x58]",
   "add rsp,0xc8","popfq","jmp qword ptr [rip+{original}]",
   callback=sym capture,original=sym ORIGINAL
  );
 }
+unsafe fn update_flask(player:usize,base:usize,enabled:bool){
+ let present=has_effect(player,FLASK,base);
+ if enabled&&!present{
+  let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);
+  apply(player,FLASK,0);
+ }else if !enabled&&present{
+  let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+crate::REMOVE_EFFECT_RVA);
+  remove(read_ptr(player+0x190),FLASK);
+ }
+}
 pub unsafe fn update(player:usize,base:usize,dt:f32){
  let stats=native_actor::stats(player);if stats==0{return;}
  let owned=has_effect(player,OWNER,base);let alive=!native_actor::incapacitated(player,stats);
- crate::maintain_status_effect(player,stats,FLASK,owned&&alive,base);
+ update_flask(player,base,owned&&alive);
  let reset=has_effect(player,crate::reward_cycle_runtime::RESET,base);
  {let Ok(mut s)=SCHEDULE.lock()else{return;};s.sync((player,stats),owned&&alive&&!reset);}
  let module=read_ptr(read_ptr(player+0x1b8)+crate::DAMAGE_MODULE_SLOT);
@@ -136,7 +108,9 @@ pub unsafe fn update(player:usize,base:usize,dt:f32){
   let before=read_i32(stats+0x140);
   // Consume the scheduled share even when immune, as native periodic ticks
   // do. Rejected loss grants no regain quota and is never deferred to a burst.
-  debit(stats,-amount,0,0,terms.rate,terms.window,terms.refresh);
+  let behavior=read_ptr(read_ptr(player+0x1b8)+8);
+  let mode=u8::from(behavior==0||ptr::read_unaligned((behavior+0x58)as*const u64)&(1u64<<59)==0);
+  debit(stats,-amount,mode,0,terms.rate,terms.window,terms.refresh);
   let lost=before.saturating_sub(read_i32(stats+0x140)).max(0);
   if lost>0{
    // Same native completion used by 431090 HP costs: damage bookkeeping and
@@ -150,16 +124,16 @@ pub unsafe fn update(player:usize,base:usize,dt:f32){
  use super::*;
  fn terms()->Terms{Terms{rate:1.,window:1.,refresh:1}}
  fn total(p:Vec<(i32,Terms)>)->i32{p.iter().map(|v|v.0).sum()}
- #[test]fn each_hit_finishes_one_second_after_its_own_start(){
+ #[test]fn each_hit_finishes_two_seconds_after_its_own_start(){
   let mut s=Schedule::default();s.sync((1,2),true);s.add(200,terms());
-  assert_eq!(total(s.tick(0.25)),50);s.add(400,terms());
-  assert_eq!(total(s.tick(0.25)),150);assert_eq!(total(s.tick(0.5)),300);
-  assert_eq!(s.hits.len(),1);assert_eq!(total(s.tick(0.25)),100);assert!(s.hits.is_empty());
+  assert_eq!(total(s.tick(0.5)),50);s.add(400,terms());
+  assert_eq!(total(s.tick(0.5)),150);assert_eq!(total(s.tick(1.)),300);
+  assert_eq!(s.hits.len(),1);assert_eq!(total(s.tick(0.5)),100);assert!(s.hits.is_empty());
  }
  #[test]fn loss_is_paid_every_frame_instead_of_native_poison_tick_intervals(){
-  let mut s=Schedule::default();s.add(120,terms());let mut paid=0;
-  for _ in 0..60{let amount=total(s.tick(1./60.));assert_eq!(amount,2);paid+=amount;}
-  assert_eq!(paid,120);assert!(s.hits.is_empty());
+  let mut s=Schedule::default();s.add(240,terms());let mut paid=0;
+  for _ in 0..120{let amount=total(s.tick(1./60.));assert_eq!(amount,2);paid+=amount;}
+  assert_eq!(paid,240);assert!(s.hits.is_empty());
  }
  #[test]fn rounding_and_frame_rate_conserve_all_damage(){
   for amount in [1,2,3,119,1000,i32::MAX]{for dt in [1./144.,1./60.,0.37,2.5]{
@@ -175,7 +149,7 @@ pub unsafe fn update(player:usize,base:usize,dt:f32){
  }
  #[test]fn simultaneous_hits_keep_their_native_regain_terms(){
   let mut s=Schedule::default();s.add(100,terms());s.add(200,Terms{rate:0.5,window:0.25,refresh:0});
-  let p=s.tick(0.5);assert_eq!(p.len(),2);assert_eq!(p[0].0,50);assert_eq!(p[1].0,100);assert_eq!(p[1].1.rate,0.5);assert_eq!(p[1].1.window,0.25);assert_eq!(p[1].1.refresh,0);
+  let p=s.tick(1.);assert_eq!(p.len(),2);assert_eq!(p[0].0,50);assert_eq!(p[1].0,100);assert_eq!(p[1].1.rate,0.5);assert_eq!(p[1].1.window,0.25);assert_eq!(p[1].1.refresh,0);
  }
 }
 
