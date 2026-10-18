@@ -1,0 +1,28 @@
+{
+  "version": "0.17.165",
+  "specialHitExclusionRemoved": true,
+  "crystalCallbackArguments": [
+    "damage module",
+    "hit context",
+    "character source"
+  ],
+  "originalSpecialFlagPreserved": true,
+  "ignoreNullifyFlagPreserved": true,
+  "nativeGrabInitiationUnmodified": true,
+  "cooldownSeconds": 40,
+  "pactMutualExclusionsPreserved": true,
+  "unitTestsPassed": 380,
+  "unitTestsIgnored": 7,
+  "crystalWrapperMachineCodeTestPassed": true,
+  "signatureCount": 160,
+  "executableSignatureScanPassed": true,
+  "testDllSha256": "f2e1e7f398c9dd8b5feee9f921593e24eb49fb1e7408375b3191a28fca3e1142",
+  "productionDllSha256": "6ba463affa2ea09454299826dbd2b8cdff851b25f00e443f929e92eb25c593f6",
+  "productionHasNoKeyboardPollingImport": true,
+  "regulationAndHksUnmodified": true,
+  "distributionChangedFiles": [
+    "mod/natives/NRHex.dll"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

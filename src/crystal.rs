@@ -27,7 +27,7 @@ pub fn rebound_hit(hit: &[u8; HIT_SIZE]) -> Option<[u8; HIT_SIZE]> {
 #[derive(Clone, Copy)]
 pub struct Snapshot { pub owned: bool, pub hp: i32, pub cooldown: bool, pub visual: bool, pub beast: bool }
 #[derive(Clone, Copy)]
-pub struct Hit { pub special: bool, pub ignores_nullify: bool, pub hp_damage: i32, pub already_nullified: bool }
+pub struct Hit { pub ignores_nullify: bool, pub hp_damage: i32, pub already_nullified: bool }
 #[derive(Debug, PartialEq, Eq)]
 pub enum Action { RemoveVisual, StartCooldown, PrepareVisual }
 #[derive(Default)]
@@ -46,7 +46,7 @@ impl Shell {
     pub fn absorb(&mut self, player: usize, stats: usize, s: Snapshot, hit: Hit) -> bool {
         self.synchronize(player, stats, s);
         if !self.owned || s.beast || s.hp <= 0 || s.cooldown || self.remaining > 0.0 ||
-            hit.special || hit.ignores_nullify || hit.hp_damage <= 0 || hit.already_nullified { return false; }
+            hit.ignores_nullify || hit.hp_damage <= 0 || hit.already_nullified { return false; }
         // Caller holds the mutex across this decision and native hit-bit write.
         self.remaining = 40.0;
         self.broken = true;
@@ -76,7 +76,7 @@ impl Shell {
 mod tests {
     use super::*;
     fn s() -> Snapshot { Snapshot { owned: true, hp: 500, cooldown: false, visual: false, beast: false } }
-    fn hit() -> Hit { Hit { special: false, ignores_nullify: false, hp_damage: 100, already_nullified: false } }
+    fn hit() -> Hit { Hit { ignores_nullify: false, hp_damage: 100, already_nullified: false } }
     #[test] fn greatshield_rebound_preserves_native_attack_and_only_changes_private_result() {
         let mut original=[0u8;HIT_SIZE];original[0..4].copy_from_slice(&100f32.to_le_bytes());
         original[0x2c3]=2;original[0x122]=7;
@@ -152,7 +152,7 @@ mod tests {
     }
     #[test] fn ignored_hits_do_not_consume_shell() {
         let mut shell=Shell::default();
-        for h in [Hit {special:true,..hit()},Hit {ignores_nullify:true,..hit()},Hit {hp_damage:0,..hit()},Hit {already_nullified:true,..hit()}] {
+        for h in [Hit {ignores_nullify:true,..hit()},Hit {hp_damage:0,..hit()},Hit {already_nullified:true,..hit()}] {
             assert!(!shell.absorb(1,2,s(),h));
         }
         assert!(!shell.absorb(1,2,Snapshot {hp:0,..s()},hit()));

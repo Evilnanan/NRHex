@@ -781,7 +781,8 @@ unsafe fn sword_retry_as_melee(original:NativeEffectFilter,node:usize,descriptor
 }
 
 // Mid-function site: RSP is aligned to 16, R14 is the damage module,
-// RSI is the hit context and R13B is the original special-hit flag.
+// RSI is the hit context and R12 is the character source. R13B's original
+// special-hit flag no longer excludes a hit from shell absorption.
 // Preserve flags and all volatile GP/XMM registers; the trampoline executes
 // the original test after our callback and its original branch consumes flags.
 #[unsafe(naked)]
@@ -792,7 +793,7 @@ unsafe extern "system" fn crystal_detour() {
   "mov [rsp+0x38], r8", "mov [rsp+0x40], r9", "mov [rsp+0x48], r10", "mov [rsp+0x50], r11",
   "movdqu [rsp+0x60], xmm0", "movdqu [rsp+0x70], xmm1", "movdqu [rsp+0x80], xmm2",
   "movdqu [rsp+0x90], xmm3", "movdqu [rsp+0xa0], xmm4", "movdqu [rsp+0xb0], xmm5",
-  "mov rcx, r14", "mov rdx, rsi", "movzx r8d, r13b", "mov r9, r12", "call {callback}",
+  "mov rcx, r14", "mov rdx, rsi", "mov r8, r12", "call {callback}",
   "movdqu xmm0, [rsp+0x60]", "movdqu xmm1, [rsp+0x70]", "movdqu xmm2, [rsp+0x80]",
   "movdqu xmm3, [rsp+0x90]", "movdqu xmm4, [rsp+0xa0]", "movdqu xmm5, [rsp+0xb0]",
   "mov rax, [rsp+0x20]", "mov rcx, [rsp+0x28]", "mov rdx, [rsp+0x30]",
@@ -1857,7 +1858,7 @@ unsafe fn refresh_owned_status(player:usize,base:usize) {
 unsafe fn crystal_snapshot(player:usize,base:usize,hp:i32,owned:bool)->crystal::Snapshot {
  crystal::Snapshot { owned,hp,cooldown:has_effect(player,crystal::COOLDOWN,base),visual:has_effect(player,crystal::READY,base),beast:has_effect(player,707115,base) }
 }
-unsafe extern "system" fn on_crystal_hit(module:usize,hit:usize,special:u8,source:usize) {
+unsafe extern "system" fn on_crystal_hit(module:usize,hit:usize,source:usize) {
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0 {return;}
  let base=BASE.load(Ordering::Acquire);
  // Verified 42C120 getter; this is the recipient, not the attacking player.
@@ -1870,7 +1871,7 @@ unsafe extern "system" fn on_crystal_hit(module:usize,hit:usize,special:u8,sourc
  let nullify=hit+0x2c3;
  let flags=ptr::read(nullify as *const u8);
  let damage=read_i32(hit+0x280);
- let eligible=crystal::Hit { special:special!=0,ignores_nullify:ptr::read((hit+0x160) as *const u8)&0x20!=0,hp_damage:damage,already_nullified:flags&2!=0 };
+ let eligible=crystal::Hit { ignores_nullify:ptr::read((hit+0x160) as *const u8)&0x20!=0,hp_damage:damage,already_nullified:flags&2!=0 };
  if !has_effect(player,crystal::OWNER,base){return;}
  let Some(state)=SHELL.get() else{return;};
  let Ok(mut shell)=state.lock() else{return;};
