@@ -1,5 +1,5 @@
-//! Native spell-root echo: delayed replay with retained references, or immediate
-//! meteor generation. Descendants and amplified dispatch cannot recurse.
+//! Delayed spell-root replay through native BulletMan, with retained native
+//! target/snapshot references. Descendants and replay dispatch are not echoed.
 use crate::{ptr,read_ptr,read_i32,has_effect,is_local,native_actor,ACTIVE,BASE};
 use std::{cell::Cell,sync::{Mutex,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95003500;
@@ -27,18 +27,13 @@ impl Drop for Ticket{fn drop(&mut self){unsafe{
 static QUEUE:Mutex<Queue>=Mutex::new(Queue{owner:Owner{actor:0,handle:0,stats:0,context:0},pending:Vec::new()});
 #[derive(Clone,Copy,Default)]struct Scope{descriptor:usize,owner:Owner,consumed:bool}
 #[derive(Clone,Copy,Default)]struct Replay{ticket:usize,consumed:bool}
-thread_local!{static SCOPE:Cell<Scope>=Cell::new(Scope::default());static REPLAY:Cell<Replay>=Cell::new(Replay::default());static DENSITY:Cell<bool>=const{Cell::new(false)};}
+thread_local!{static SCOPE:Cell<Scope>=Cell::new(Scope::default());static REPLAY:Cell<Replay>=Cell::new(Replay::default());}
 struct ScopeGuard(Scope);
 impl Drop for ScopeGuard{fn drop(&mut self){SCOPE.with(|s|s.set(self.0));}}
 struct ReplayGuard(Replay);
 impl Drop for ReplayGuard{fn drop(&mut self){REPLAY.with(|s|s.set(self.0));}}
-struct DensityGuard(bool);
-impl Drop for DensityGuard{fn drop(&mut self){DENSITY.with(|s|s.set(self.0));}}
 fn eligible(magic:i32,bullet:i32)->bool{
  area_replay(magic,bullet).is_some()||crate::echo_cast_data::ROOTS.binary_search_by_key(&magic,|r|r.0).ok().is_some_and(|i|crate::echo_cast_data::ROOTS[i].1.binary_search(&bullet).is_ok())
-}
-fn density(magic:i32,bullet:i32)->bool{
- crate::echo_cast_data::DENSITY.binary_search_by_key(&magic,|r|r.0).ok().is_some_and(|i|crate::echo_cast_data::DENSITY[i].1.binary_search(&bullet).is_ok())
 }
 fn area_replay(magic:i32,bullet:i32)->Option<i32>{
  crate::echo_cast_data::AREAS.binary_search_by_key(&magic,|r|r.0).ok().and_then(|i|{
@@ -52,28 +47,14 @@ unsafe fn owner(actor:usize,base:usize)->Option<Owner>{
 }
 unsafe fn scope(descriptor:usize,base:usize)->Option<Owner>{
  if descriptor==0||read_i32(descriptor+8)>=0||read_ptr(descriptor+0x90)!=0{return None;}
- let magic=read_i32(descriptor+0x18);let bullet=read_i32(descriptor+0x14);
- if !eligible(magic,bullet)&&!density(magic,bullet){return None;}
+ if !eligible(read_i32(descriptor+0x18),read_i32(descriptor+0x14)){return None;}
  let world=read_ptr(base+crate::WORLD_RVA);if world==0{return None;}
  let actor=read_ptr(world+0x174e8);let value=owner(actor,base)?;
  (ptr::read_unaligned(descriptor as*const u64)==value.handle).then_some(value)
 }
 pub unsafe extern "system" fn emit(manager:usize,out:usize,descriptor:usize,error:usize)->usize{
  let original:Emit=std::mem::transmute(EMIT_ORIGINAL.load(Ordering::Acquire));
- let value=if ACTIVE.load(Ordering::Acquire)&&REPLAY.with(Cell::get).ticket==0&&!DENSITY.with(Cell::get){scope(descriptor,BASE.load(Ordering::Acquire))}else{None};
- if value.is_some()&&density(read_i32(descriptor+0x18),read_i32(descriptor+0x14)){
-  let _scope=ScopeGuard(SCOPE.with(|s|s.replace(Scope::default())));
-  let _density=DensityGuard(DENSITY.with(|s|s.replace(true)));
-  let result=original(manager,out,descriptor,error);
-  if out!=0&&read_i32(out)!=-1{
-   // The caller still owns this same-frame descriptor. Run native generation
-   // again with independent native random draws, without any delayed snapshot
-   // or flag changes, and preserve the first shot's public result/error.
-   let mut extra_out=-1i32;let mut extra_error=-1i32;
-   original(manager,&mut extra_out as*mut i32 as usize,descriptor,&mut extra_error as*mut i32 as usize);
-  }
-  return result;
- }
+ let value=if ACTIVE.load(Ordering::Acquire)&&REPLAY.with(Cell::get).ticket==0{scope(descriptor,BASE.load(Ordering::Acquire))}else{None};
  let _guard=ScopeGuard(SCOPE.with(|s|s.replace(value.map_or(Scope::default(),|owner|Scope{descriptor,owner,consumed:false}))));
  original(manager,out,descriptor,error)
 }
@@ -160,8 +141,8 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  use super::*;
  #[test]fn root_filter_does_not_echo_children_or_sustained_casts(){
   assert!(eligible(4021,10402100));assert!(eligible(4021,10402150));assert!(!eligible(4021,10402151));assert!(!eligible(4200,10420000));assert!(!eligible(7000,10700000));assert!(!eligible(4021,10462000));
-  for (magic,roots)in [(7060,&[10706000,10706002][..]),(7090,&[10709000,10709001][..]),(7240,&[10724000][..]),(7330,&[10733000,10733001,10999999][..])]{
-   for &root in roots{assert!(!eligible(magic,root));assert!(!density(magic,root));}
+  for (magic,roots)in [(4120,&[10412000,10412001][..]),(4130,&[10413000][..]),(4510,&[10451000,10451010,10451020][..]),(4700,&[10470000,10470005,10470010,10470020,10470030,10470040][..]),(4701,&[10470100,10470110,10470120,10470150,10470151,10470152][..]),(7060,&[10706000,10706002][..]),(7090,&[10709000,10709001][..]),(7240,&[10724000][..]),(7330,&[10733000,10733001,10999999][..])]{
+   for &root in roots{assert!(!eligible(magic,root));}
   }
  }
  #[test]fn retain_preserves_native_high_flag_bits(){unsafe{
@@ -182,14 +163,6 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
   assert!(eligible(4220,10422000));assert!(eligible(4220,10422050));assert!(!eligible(4220,10422015));
   assert!(!eligible(4220,10422098));assert!(!eligible(4220,10422099));assert!(!eligible(4050,10404099));
   assert!(!eligible(4060,10406000));assert!(!eligible(4520,10452000));assert!(!eligible(7900,10790001));
- }
- #[test]fn meteor_density_only_duplicates_the_reviewed_generation_roots(){
-  assert_eq!(crate::echo_cast_data::DENSITY.len(),2);
-  for &(magic,roots)in crate::echo_cast_data::DENSITY{
-   assert_eq!(roots.len(),6);
-   for &root in roots{assert!(density(magic,root));assert!(!eligible(magic,root));}
-  }
-  for (magic,bullet)in [(4700,10470001),(4700,10470002),(4700,10470003),(4701,10470101),(4701,10470102),(4701,10470105),(4701,10470106),(4700,10470100),(4701,10470000),(4200,10420000)]{assert!(!density(magic,bullet));}
  }
 }
 #[cfg(test)]
