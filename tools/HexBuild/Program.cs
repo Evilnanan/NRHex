@@ -12,6 +12,7 @@ var game=Environment.GetEnvironmentVariable("NRHEX_GAME")??Path.Combine(drive,"P
 AppDomain.CurrentDomain.AssemblyResolve+=(_,a)=>{var p=Path.Combine(smith,new AssemblyName(a.Name).Name+".dll");return File.Exists(p)?Assembly.LoadFrom(p):null;};
 NativeLibrary.SetDllImportResolver(typeof(BND4).Assembly,(n,a,p)=>{var f=Path.Combine(game,n.EndsWith(".dll")?n:n+".dll");return File.Exists(f)?NativeLibrary.Load(f):IntPtr.Zero;});
 Directory.SetCurrentDirectory(game);
+if(args.Contains("--storm-audio-probe")){StormAudio.Probe(root,smith,game);return;}
 // Text-only work does not require parsing parameters or rebuilding gameplay assets.
 if(args.Contains("--stage-translations")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/texts"),allRewards:true);return;
@@ -71,6 +72,9 @@ PARAM Parse(string name,Memory<byte> bytes){
  p.ApplyParamdef(d);return p;
 }
 if(args.Contains("--echo-cast-stage")){EchoCast.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--echo-cast-cost-stage")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),true);return;}
+if(args.Contains("--echo-cast-cost-check")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),false);return;}
+if(args.Contains("--echo-cast-claw-probe")){EchoCast.ClawProbe(root,bnd,Parse);return;}
 if(args.Contains("--echo-cast-areas-stage")){EchoCast.AreaResources(root,Parse,true);return;}
 if(args.Contains("--echo-cast-areas-check")){EchoCast.AreaResources(root,Parse,false);return;}
 if(args.Contains("--ambulance-stage")){Ambulance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -1042,6 +1046,7 @@ Require(Convert.ToInt32(Effect(95001203)["iconId"].Value)==20222&&Convert.ToInt3
 File.WriteAllText(Path.Combine(root,".work/effects/escape-serialized.json"),JsonSerializer.Serialize(escapeIds.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));
 File.WriteAllText(Path.Combine(root,".work/actions/jiahao-serialized.json"),JsonSerializer.Serialize(new[]{95001300,6999700,6999701,6999705}.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));
 Require(Convert.ToSingle(Effect(95002100)["magicConsumptionRate"].Value)==1f&&Convert.ToSingle(Effect(95002100)["miracleConsumptionRate"].Value)==1f,"Archmage owner must leave primary spell FP consumption unchanged");
+Require(Convert.ToSingle(Effect(EchoCast.Owner)["magicConsumptionRate"].Value)==EchoCast.SpellFpRate&&Convert.ToSingle(Effect(EchoCast.Owner)["miracleConsumptionRate"].Value)==EchoCast.SpellFpRate&&Convert.ToSingle(Effect(EchoCast.Owner)["artsConsumptionRate"].Value)==1f,"Echo spell FP rates or unaffected skill FP rate mismatch");
 Require(Convert.ToSingle(Effect(95001400)["artsConsumptionRate"].Value)==0f&&Convert.ToSingle(Effect(95001400)["magicConsumptionRate"].Value)==1f,"Free skills must not affect spells");
 File.WriteAllText(Path.Combine(root,".work/arts/serialized.json"),JsonSerializer.Serialize(new[]{95001400,6999800,6999801,6999802,6999803}.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));
 bnd.Compression=RegulationCompression.Format;

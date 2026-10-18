@@ -3,11 +3,50 @@ using System.Security.Cryptography;
 using System.Text.Json;
 static class EchoCast {
  public const int Owner=95003500;
+ public const float SpellFpRate=2.5f;
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
- public static void OwnerEffect(PARAM.Row r){Set(r,"magicConsumptionRate",2.25f);Set(r,"miracleConsumptionRate",2.25f);}
+ public static void OwnerEffect(PARAM.Row r){Set(r,"magicConsumptionRate",SpellFpRate);Set(r,"miracleConsumptionRate",SpellFpRate);}
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
  static void Check(bool p,string why){if(!p)throw new InvalidDataException(why);}
+ public static void CostResources(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes,bool stage){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,".work/echo-cost");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);Check(binder.Compression==RegulationCompression.Format,"Unexpected regulation compression");
+  var file=binder.Files.Single(entry=>Name(entry)=="SpEffectParam.param");var before=file.Bytes.ToArray();
+  var table=parse("SpEffectParam",before);var owner=table.Rows.Single(row=>row.ID==Owner);
+  var fields=new[]{"magicConsumptionRate","miracleConsumptionRate"};
+  Check(Convert.ToSingle(owner["artsConsumptionRate"].Value)==1f,"Echo must not change skill FP consumption");
+  if(!stage){
+   Check(fields.All(field=>Convert.ToSingle(owner[field].Value)==SpellFpRate),"Installed echo FP rates differ from build configuration");
+   File.WriteAllText(Path.Combine(directory,"installed.json"),JsonSerializer.Serialize(new{installedSha256=Hash(input),spellFpRate=SpellFpRate,artsFpRate=1,installedReadbackPassed=true},new JsonSerializerOptions{WriteIndented=true}));
+   Console.WriteLine("PASS: installed echo spell FP rates are 2.5; skill FP rate remains 1");return;
+  }
+  Check(fields.All(field=>Convert.ToSingle(owner[field].Value) is 2.25f or SpellFpRate),"Unexpected previous echo FP rate");
+  var changes=fields.Select(field=>new{field,before=Convert.ToSingle(owner[field].Value),after=SpellFpRate}).ToArray();
+  OwnerEffect(owner);file.Bytes=table.Write();
+  string output=Path.Combine(directory,"staged");Directory.CreateDirectory(output);string target=Path.Combine(output,"regulation.bin");
+  SFUtil.EncryptNightreignRegulation(target,binder,binder.Compression);var actual=SFUtil.DecryptNightreignRegulation(target);
+  Check(actual.Version==binder.Version&&actual.Compression==binder.Compression&&actual.Files.Count==binder.Files.Count,"Binder metadata changed");
+  foreach(var pair in binder.Files.Zip(actual.Files))Check(pair.First.ID==pair.Second.ID&&pair.First.Name==pair.Second.Name&&pair.First.Flags==pair.Second.Flags&&pair.First.Bytes.Span.SequenceEqual(pair.Second.Bytes.Span),"Parameter binder readback failed");
+  var oldRows=parse("SpEffectParam",before).Rows;var newRows=parse("SpEffectParam",actual.Files.Single(entry=>Name(entry)=="SpEffectParam.param").Bytes).Rows;
+  Check(oldRows.Count==newRows.Count,"Echo tuning changed row count");
+  foreach(var pair in oldRows.Zip(newRows)){
+   if(pair.First.ID==Owner)OwnerEffect(pair.First);
+   Check(pair.First.Name==pair.Second.Name&&CageAI.Same(pair.First,pair.Second),"Echo tuning changed unrelated row or field");
+  }
+  HexTexts.Stage(root,hexes,Path.Combine(output,"texts"),allRewards:true,onlyIds:new[]{Owner});
+  File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(target),owner=Owner,spellFpRate=SpellFpRate,artsFpRate=1,changes,unrelatedRowsAndFieldsPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: echo spell FP rates staged at 2.5; all unrelated parameter fields preserved");
+ }
+ public static void ClawProbe(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
+  var bullets=parse("Bullet",native.Files.Single(entry=>Name(entry)=="Bullet.param").Bytes);
+  var attacks=parse("AtkParam_Pc",native.Files.Single(entry=>Name(entry)=="AtkParam_Pc.param").Bytes);
+  var selected=bullets.Rows.Where(row=>row.ID is >=10682000 and <10682100 or >=10683000 and <10683100).ToArray();
+  object Dump(PARAM.Row row)=>new{row.ID,fields=row.Cells.Where(cell=>cell!=null).ToDictionary(cell=>cell.Def.InternalName,cell=>cell.Value)};
+  var directory=Path.Combine(root,".work/echo-cost");Directory.CreateDirectory(directory);
+  File.WriteAllText(Path.Combine(directory,"native-claws.json"),JsonSerializer.Serialize(new{version=native.Version,bullets=selected.Select(Dump),attacks=attacks.Rows.Where(row=>selected.Any(bullet=>Convert.ToInt32(bullet["atkId_Bullet"].Value)==row.ID)).Select(Dump)},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: native Beast Claw and Gurranq's Beast Claw bullet/attack fields exported");
+ }
  public sealed record Area(int Magic,int Root,int AreaBullet,int Replay);
  public static Area[] ReadAreas(string root){
   using var d=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"data/balance/echo-cast-areas.json")));
@@ -87,6 +126,6 @@ static class EchoCast {
   Check(actual.Files.Count==b.Files.Count&&actual.Version==b.Version&&actual.Compression==b.Compression,"Binder metadata changed");
   foreach(var f in actual.Files){Check(f.Bytes.Span.SequenceEqual(b.Files.Single(x=>x.ID==f.ID).Bytes.Span),"Binder roundtrip mismatch");var name=names.SingleOrDefault(n=>Name(f)==n+".param");if(name==null){Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated table changed");continue;}var old=parse(name,before[f.ID]);var now=parse(name,f.Bytes);Check(now.Rows.Count==old.Rows.Count+added[name].Count,"Row count mismatch");Check(old.Rows.OrderBy(r=>r.ID).Zip(now.Rows.Where(r=>!added[name].Contains(r.ID)).OrderBy(r=>r.ID)).All(pair=>CageAI.Same(pair.First,pair.Second)),"Existing row changed");}
   RewardCatalog.Write(Path.Combine(output,"hex_pool.rs"),hexes);HexTexts.Stage(root,hexes,Path.Combine(output,"texts"),allRewards:true,onlyIds:new[]{Owner});
-  File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(target),owner=Owner,spellFpRate=2.25,artsFpRate=Convert.ToSingle(s["artsConsumptionRate"].Value),addedRows=added,historyBytes=(RewardCatalog.HistoricalOwners.Length+7)/8,historyBit=RewardCatalog.HistoryBit(Owner),unrelatedRowsAndTablesUnchanged=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(target),owner=Owner,spellFpRate=SpellFpRate,artsFpRate=Convert.ToSingle(s["artsConsumptionRate"].Value),addedRows=added,historyBytes=(RewardCatalog.HistoricalOwners.Length+7)/8,historyBit=RewardCatalog.HistoryBit(Owner),unrelatedRowsAndTablesUnchanged=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
  }
 }

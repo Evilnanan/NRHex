@@ -38,6 +38,7 @@ pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
   (95000400,!matches!(hero,Some(1|3|5|7|8))),
   (95002600,matches!(hero,Some(6|7))&&!has_sword),
   (95002400,matches!(hero,Some(6|7))),
+  (95003100,matches!(hero,Some(6|7))),
  ]{if excluded{unavailable.insert(index(id));}}
  unavailable
 }
@@ -167,6 +168,7 @@ pub fn is_hex_good(encoded:u32)->bool{
      (95000400,matches!(hero,Some(1|3|5|7|8))),
      (95002600,!matches!(hero,Some(6|7))),
      (95002400,!matches!(hero,Some(6|7))),
+     (95003100,!matches!(hero,Some(6|7))),
      (95001600,!hollow),
     ];
     for (owner,allowed)in expected{
@@ -185,8 +187,20 @@ pub fn is_hex_good(encoded:u32)->bool{
   for hero in [6,7]{
    let sword=index(95000900);let excluded=role_exclusions(terrain_exclusions(mask([sword,5]),true),Some(hero));
    for owner in [95001100,95002600]{let i=index(owner);assert!(!excluded.contains(&i));assert!(preferred([i,0,1],&excluded).unwrap().contains(&i));}
-   for owner in [95000900,95002400,95001600]{assert!(excluded.contains(&index(owner)));}
+   for owner in [95000900,95002400,95003100,95001600]{assert!(excluded.contains(&index(owner)));}
   }
+ }
+ #[test]fn erosion_role_exclusion_is_not_relaxed_by_sword_or_archmage(){
+  let erosion=index(95003100);
+  for hero in 1..=10{for owned in [HexSet::new(),mask([index(95000900)]),mask([index(95002100)]),mask([index(95000900),index(95002100)])]{
+   let allowed=!matches!(hero,6|7);let excluded=role_exclusions(owned,Some(hero));
+   for seen in [HexSet::new(),all(HEX_COUNT)]{
+    let round=crate::reward_cycle::Round::new(&excluded,&seen);
+    assert_eq!(round.candidates.contains(&erosion),allowed);
+    assert_eq!(round.preferred([erosion,0,1]).unwrap().contains(&erosion),allowed);
+    assert_eq!(crate::reward_cycle::Single::new(&excluded,&seen,&mask([0,1])).candidates.contains(&erosion),allowed);
+   }
+  }}
  }
  #[test]fn focused_preferences_preserve_order_and_replace_owned_or_duplicate_choices(){
   assert_eq!(preferred([9,3,6],&mask([3])),Some([9,6,0]));

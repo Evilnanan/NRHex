@@ -172,4 +172,4 @@ Sprinting, dashing, and running toward a near-death ally consume no stamina. Res
 <!-- hex:95003500 -->
 ## Echo Casting
 
-Sorceries and incantations cost 125% more FP and produce an additional projectile after casting.
+Sorceries and incantations cost 150% more FP and produce an additional projectile after casting.

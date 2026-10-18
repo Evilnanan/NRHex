@@ -1,0 +1,59 @@
+{
+  "staticChecksPassed": true,
+  "nativeBank": "cs_m19",
+  "bankHashes": {
+    "cs_m19.bnk": "C269BB1610D968985269CE0FC0893CDDE45A4F87A56833E814D3FF992E0FEE81",
+    "cs_main.bnk": "BBB794070B2C7909756F834B5A8EA79B6AD633408160973E5A7ED8EACEA7A7E2",
+    "cs_smain.bnk": "2CA00794C1E7BC3EB3449AA8239379A73C558B550128FE63C25664E9879D906F"
+  },
+  "sourceBhdSha256": "9E8DB36A86B01F658DBB16720C1404FA1439DAC8E912F1B225743DF52C0F8ED3",
+  "sfxEvents": [
+    450940,
+    450941,
+    450946,
+    450951,
+    450954,
+    450955,
+    450956,
+    450957,
+    450958,
+    450959,
+    450960,
+    450965
+  ],
+  "taeSoundIds": [
+    450956,
+    450957,
+    450958,
+    450959
+  ],
+  "installedSoundEventsUnchanged": true,
+  "missingFromSharedBanks": true,
+  "nativeRequestRva": "F14360",
+  "nativeFourArgumentCallVerified": true,
+  "nativeReferenceReturnVerified": true,
+  "audioFilesAddedToMod": 0,
+  "gameMemoryWritten": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "version": "0.17.181",
+  "unitTestsPassed": 400,
+  "groupUnitTestsPassed": 400,
+  "isolatedNativeTestsPassed": 9,
+  "signatureCount": 174,
+  "distDllSha256": "3361f226901168d61ab6ad33f5f5788a01180f5999aa9e50dcf42661e0c6ae69",
+  "groupDllSha256": "ef63ee6c7853e66502aacaeb210360fb22faf9b40a987a6d18f67a122887262c",
+  "groupDestination": "D:\\Users\\OwO\\Documents\\me3-profiles\\NRHex",
+  "groupTestHotkeys": false,
+  "resourcesAndConfigurationsUnchanged": true,
+  "sourceHashes": {
+    "src/storm_audio.rs": "865a14f0066ffb042235642dbfc31e9a018baad8d8fe3af07301fa585dda1854",
+    "src/lib.rs": "a63c68da84f6da7b4c8042c55755cbb6c03071656ff00fb752cdb3430fa2f235",
+    "tools/HexBuild/StormAudio.cs": "9bdb25780e77e4e15491ea90f638f0cb39599a9c5699d7e19f780965e51b73c4",
+    "tools/verify_storm_audio.py": "d874a921e570e18269b37f9269ea5109e580ef5d7804e0909f851818d488bdf4"
+  },
+  "loadingVerified": true,
+  "processId": 30864,
+  "loadedDll": "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\natives\\NRHex.dll",
+  "active": 1
+}

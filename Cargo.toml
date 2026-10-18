@@ -1,6 +1,6 @@
 [package]
 name = "nrhex"
-version = "0.17.179"
+version = "0.17.184"
 edition = "2021"
 publish = false
 

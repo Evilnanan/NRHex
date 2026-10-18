@@ -2,6 +2,29 @@
 //! native apply/authority/network path; native motion values and buildup remain.
 use crate::{has_effect,has_state,native_actor,read_i32,read_ptr,ptr,ACTIVE,BASE};
 use std::sync::atomic::{AtomicPtr,Ordering};
+use std::cell::Cell;
+pub const COLLECT_RVA:usize=0x506200;
+pub const COLLECT_PATTERN:&str="48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 48 83 EC 30 48 8B 59 08";
+pub static COLLECT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+thread_local!{static COLLECT_SPELL:Cell<bool>=const{Cell::new(false)};}
+struct CollectGuard(bool);
+impl CollectGuard{
+ fn enter(spell:bool)->Self{Self(COLLECT_SPELL.with(|value|value.replace(spell)))}
+}
+impl Drop for CollectGuard{
+ fn drop(&mut self){COLLECT_SPELL.with(|value|value.set(self.0));}
+}
+pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
+ let original:unsafe extern "system" fn(usize,usize,usize)=std::mem::transmute(COLLECT_ORIGINAL.load(Ordering::Acquire));
+ let spell=ACTIVE.load(Ordering::Acquire)&&descriptor!=0&&matches!(ptr::read(descriptor as*const u8),3|4|10);
+ let _scope=CollectGuard::enter(spell);
+ original(manager,out,descriptor);
+}
+pub unsafe fn spell_contact(node:usize,descriptor:usize)->bool{
+ if node==0||descriptor==0||!COLLECT_SPELL.with(Cell::get)||!matches!(ptr::read(descriptor as*const u8),3|4|10){return false;}
+ let param=read_ptr(node);if param==0{return false;}
+ ptr::read_unaligned((param+0x156)as*const u16)==152&&read_i32(param+0x12c)==CARRIER
+}
 pub const OWNER:i32=95003100;
 pub const CARRIER:i32=OWNER+1;
 pub const FIRST:i32=OWNER+10;
@@ -75,6 +98,23 @@ pub unsafe extern "system" fn detour(target:usize,mut effect:i32,source:usize,a4
 mod native_tests;
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn spell_filter_is_limited_to_erosion_collection_and_restores_nested_scopes(){unsafe{
+  let mut row=vec![0u64;0x400/8];let param=row.as_mut_ptr()as usize;
+  let node=[param];let mut descriptor=[0u8;0x3c];
+  ptr::write_unaligned((param+0x156)as*mut u16,152);ptr::write_unaligned((param+0x12c)as*mut i32,CARRIER);
+  for kind in 0..=12{
+   descriptor[0]=kind;let target=descriptor.as_ptr()as usize;
+   assert!(!spell_contact(node.as_ptr()as usize,target));
+   {let _outer=CollectGuard::enter(true);assert_eq!(spell_contact(node.as_ptr()as usize,target),matches!(kind,3|4|10));
+    {let _inner=CollectGuard::enter(false);assert!(!spell_contact(node.as_ptr()as usize,target));}
+    assert_eq!(spell_contact(node.as_ptr()as usize,target),matches!(kind,3|4|10));
+   }
+   assert!(!spell_contact(node.as_ptr()as usize,target));
+  }
+  descriptor[0]=3;let _scope=CollectGuard::enter(true);
+  ptr::write_unaligned((param+0x12c)as*mut i32,8110002);assert!(!spell_contact(node.as_ptr()as usize,descriptor.as_ptr()as usize));
+  assert!(!spell_contact(0,descriptor.as_ptr()as usize));assert!(!spell_contact(node.as_ptr()as usize,0));
+ }}
  fn c(threshold:i32,remaining:i32)->Candidate{Candidate{threshold,remaining,..Default::default()}}
  #[test]fn immunity_and_active_ailments_are_excluded_but_death_is_a_normal_candidate(){
   let mut a=[c(999,999);7];for v in &mut a{v.immune=true;}

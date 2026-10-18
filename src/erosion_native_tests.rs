@@ -88,6 +88,9 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
  let filter=crate::hook::prepare((base+crate::EFFECT_FILTER_RVA)as*mut u8,crate::sword_filter_detour as*const u8,64).unwrap();
  crate::EFFECT_FILTER_ORIG.store(filter.trampoline,Ordering::Release);
  crate::hook::write_code((base+crate::EFFECT_FILTER_RVA)as*mut u8,&filter.patch).unwrap();
+ let collector=crate::hook::prepare((base+COLLECT_RVA)as*mut u8,super::collect as*const u8,64).unwrap();
+ COLLECT_ORIGINAL.store(collector.trampoline,Ordering::Release);
+ crate::hook::write_code((base+COLLECT_RVA)as*mut u8,&collector.patch).unwrap();
  let active_before=ACTIVE.swap(true,Ordering::AcqRel);
  let describe:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+crate::sword_regain::DESCRIPTOR_RVA);
  for (attack,table,blocked)in [(304,1,true),(307,1,true),(301,1,true),(550,1,true),(560,1,true),
@@ -97,6 +100,18 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
   assert_eq!(vector[2],if blocked{start}else{start+4},"attack {attack} table {table}");
  }
  // A native on-hit ailment owner using the same body contact remains intact.
+ integer(context+0x34,10000);integer(context+0x38,1);
+ let applies:unsafe extern "system" fn(usize,usize,usize,i32,i32)->u8=std::mem::transmute(base+crate::EFFECT_FILTER_RVA);
+ for (kind,offset,mask)in [(3u8,0x160,128u8),(4,0x161,1),(10,0x259,32)]{
+  ptr::write(context as*mut u8,kind);ptr::write((row+offset)as*mut u8,mask);
+  vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start);
+  assert_eq!(applies(node,context,0,-1,-1),1);
+  integer(row+0x12c,8110002);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);assert_eq!(values[0],8110002);
+  integer(row+0x12c,CARRIER);ACTIVE.store(false,Ordering::Release);vector[2]=start;
+  collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);
+  ACTIVE.store(true,Ordering::Release);ptr::write((row+offset)as*mut u8,0);
+ }
+ ptr::write(context as*mut u8,0);
  integer(hit+0x40,304);integer(hit+0x44,1);describe(context,hit);
  integer(row+0x12c,8110002);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);
  assert_eq!(vector[2],start+4);assert_eq!(values[0],8110002);integer(row+0x12c,CARRIER);

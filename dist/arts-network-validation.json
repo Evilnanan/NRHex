@@ -1,0 +1,53 @@
+{
+  "version": "0.17.180",
+  "buildPassed": true,
+  "toolchain": "stable-x86_64-pc-windows-gnu",
+  "unitTestsPassed": 398,
+  "groupUnitTestsPassed": 398,
+  "isolatedNativeTestsPassed": 9,
+  "signatureCount": 173,
+  "nativeBroadcastValidation": {
+    "nativeExecutionPassed": true,
+    "nativeBroadcasterRva": "DF24D0",
+    "peerStride": 240,
+    "peerCountsTested": [
+      0,
+      1,
+      2
+    ],
+    "packetKind": 41,
+    "packetSubtype": 4,
+    "receiveState86fWrittenByDeserializer": true,
+    "publicSerializeCallerVerified": true,
+    "transportReplaced": true,
+    "privateImageOnly": true,
+    "gameMemoryWritten": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "distDllSha256": "6802df7096025cdaa2cbee5335b88eab6586c71b2441f89fe08826f416e39999",
+  "groupDllSha256": "4a1144e3c2fbeb1222f50b0b40f546e96c34c598a799916f5e71d4fd29da57ff",
+  "groupDestination": "D:\\Users\\OwO\\Documents\\me3-profiles\\NRHex",
+  "groupTestHotkeys": false,
+  "resourcesChanged": false,
+  "profilesAndOtherModsUnchanged": true,
+  "groupIniUnchanged": true,
+  "receiveStateFlagsRequired": false,
+  "pendingKeptWithoutPeers": true,
+  "loadingVerified": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "sourceHashes": {
+    "src/arts_network.rs": "699d37d45315eade449a8de5e71ac303e1d88dbc2b09738c30347c511962ef71",
+    "src/arts.rs": "4b0ab3c380b3522c3a9a1fcf0af3cb2afea31cffd10c6fbbf85bb68b7b92aa69",
+    "src/lib.rs": "d71b51601e8ecb4523b452bac3684dd012d97300d8d81b31a30bbe07957bc700",
+    "tools/verify_arts_network_native.py": "449f67474d4dcbc07b9a9c109ad1a00aa44dc3414aec9c4b15bd2ab2753da2ca"
+  },
+  "processId": 38488,
+  "active": 1,
+  "loadedDll": "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\natives\\NRHex.dll",
+  "hookBytes": {
+    "0x6c16f0": "e90be906ff488974",
+    "0x3e0ab0": "e94bf5a7ff909048"
+  }
+}

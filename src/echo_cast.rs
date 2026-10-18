@@ -20,6 +20,9 @@ pub const FINISH_RVA:usize=0x342590;
 pub const FINISH_PATTERN:&str="48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 41 56 41 57 48 81 EC A0 00 00 00 48 8B 05 B6 39 7A 03";
 pub static INITIALIZE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static FINISH_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+pub const VOLLEY_CREATE_RVA:usize=0x52ef20;
+pub const VOLLEY_MANAGER_RVA:usize=0x3c0f428;
+pub const VOLLEY_CREATE_PATTERN:&str="48 89 5C 24 10 55 56 57 48 83 EC 20 48 8B EA 48 8B F9 BA FF FF FF FF 48 83 C1 40 E8 ? ? ? ? 48 8B 5F 30";
 type Emit=unsafe extern "system" fn(usize,usize,usize,usize)->usize;
 type Factory=unsafe extern "system" fn(usize,usize,usize)->usize;
 type Initialize=unsafe extern "system" fn(usize,usize,usize,u32,u32)->usize;
@@ -28,7 +31,16 @@ type Finish=unsafe extern "system" fn(usize);
 #[repr(C,align(16))]#[derive(Clone,Copy)]struct Transform([u8;0x30]);
 type Shots=Arc<Mutex<BTreeMap<u32,Transform>>>;
 struct Binding{group:usize,id:i32,replay:bool,shots:Shots}
-struct Ticket{descriptor:Box<Descriptor>,pose:[u8;0x40],base:usize,wait:f64,area:bool,shots:Shots,owner:Owner}
+struct Volley{source:usize,replay:usize,base:usize}
+impl Drop for Volley{fn drop(&mut self){unsafe{
+ let release:unsafe extern "system" fn(usize)=std::mem::transmute(self.base+RELEASE_RVA);
+ for reference in [self.source,self.replay]{
+  let mut descriptor=Descriptor([0;0x110]);
+  ptr::write_unaligned(descriptor.0.as_mut_ptr().add(0xa0)as*mut usize,reference);
+  release(descriptor.0.as_mut_ptr()as usize);
+ }
+}}}
+struct Ticket{descriptor:Box<Descriptor>,pose:[u8;0x40],base:usize,wait:f64,area:bool,shots:Shots,owner:Owner,volley:Option<Arc<Volley>>}
 impl Drop for Ticket{fn drop(&mut self){unsafe{
  let release:unsafe extern "system" fn(usize)=std::mem::transmute(self.base+RELEASE_RVA);
  release(self.descriptor.0.as_mut_ptr()as usize);
@@ -56,6 +68,7 @@ fn area_replay(magic:i32,bullet:i32)->Option<i32>{
   let (_,root,replay)=crate::echo_cast_data::AREAS[i];(root==bullet).then_some(replay)
  })
 }
+fn replay_delay(_:i32)->f64{0.5}
 unsafe fn owner(actor:usize,base:usize)->Option<Owner>{
  if !is_local(actor,base)||!has_effect(actor,OWNER,base){return None;}
  let stats=native_actor::stats(actor);if stats==0||native_actor::incapacitated(actor,stats){return None;}
@@ -79,6 +92,20 @@ unsafe fn retain_counter(pointer:usize,offset:usize,mask:u32){
  let address=(pointer+offset)as*mut u32;let old=ptr::read_unaligned(address);
  ptr::write_unaligned(address,(old&!mask)|(old.wrapping_add(1)&mask));
 }
+unsafe fn replay_volley(scope:Scope,magic:i32,base:usize)->Result<Option<Arc<Volley>>,()>{
+ let source=read_ptr(scope.descriptor+0xa0);
+ if !matches!(magic,6820|6830)||source==0{return Ok(None);}
+ let existing=QUEUE.lock().ok().and_then(|queue|queue.pending.iter()
+  .filter(|ticket|ticket.owner==scope.owner)
+  .filter_map(|ticket|ticket.volley.as_ref()).find(|volley|volley.source==source).cloned());
+ if let Some(volley)=existing{return Ok(Some(volley));}
+ let manager=read_ptr(base+VOLLEY_MANAGER_RVA);if manager==0{return Err(());}
+ let create:unsafe extern "system" fn(usize,*const u16)->usize=std::mem::transmute(base+VOLLEY_CREATE_RVA);
+ let label=[78u16,82,72,101,120,32,69,99,104,111,0];
+ let replay=create(manager,label.as_ptr());if replay==0{return Err(());}
+ retain_counter(source,0x28,0x7fffffff);
+ Ok(Some(Arc::new(Volley{source,replay,base})))
+}
 unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
  if payload==0||ptr::read_unaligned((payload+0x10)as*const u64)!=scope.owner.handle{return None;}
  let bullet=read_i32(scope.descriptor+0x14);
@@ -88,7 +115,9 @@ unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
  // Independent root shots use one native target descriptor. Multi-target
  // selection needs a separate replay representation rather than choosing one.
  if replay.is_none()&&(targets==0||end.wrapping_sub(targets)!=0x50){return None;}
+ let volley=replay_volley(scope,magic,base).ok()?;
  let mut d=Box::new(Descriptor(ptr::read_unaligned(scope.descriptor as*const[u8;0x110])));
+ if let Some(volley)=volley.as_ref(){ptr::write_unaligned(d.0.as_mut_ptr().add(0xa0)as*mut usize,volley.replay);}
  d.0[0x90..0x98].fill(0);
  // The copied target is replaced with the target already resolved by native
  // calculation, not the player's lock-on at replay time.
@@ -104,11 +133,11 @@ unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
   copy(d.0.as_mut_ptr().add(0xb0)as usize,targets);
  }
  retain_counter(read_ptr(scope.descriptor+0x98),0x18,0x3fffffff);
- retain_counter(read_ptr(scope.descriptor+0xa0),0x28,0x7fffffff);
+ retain_counter(read_ptr(d.0.as_ptr()as usize+0xa0),0x28,0x7fffffff);
  // Native flag0 requests an independent shot; bit3 retains native networking.
  let flags=read_i32(scope.descriptor+0x44)as u32|3;
  d.0[0x44..0x48].copy_from_slice(&flags.to_le_bytes());
- Some(Ticket{descriptor:d,pose:ptr::read_unaligned((payload+0x190)as*const[u8;0x40]),base,wait:0.5,area:replay.is_some(),shots:Arc::default(),owner:scope.owner})
+ Some(Ticket{descriptor:d,pose:ptr::read_unaligned((payload+0x190)as*const[u8;0x40]),base,wait:replay_delay(magic),area:replay.is_some(),shots:Arc::default(),owner:scope.owner,volley})
 }
 pub unsafe extern "system" fn factory(manager:usize,payload:usize,error:usize)->usize{
  let original:Factory=std::mem::transmute(FACTORY_ORIGINAL.load(Ordering::Acquire));
@@ -179,6 +208,17 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn all_roots_use_the_standard_replay_delay(){
+  for &(magic,roots)in crate::echo_cast_data::ROOTS{
+   for &bullet in roots{
+    let expected=0.5;
+    assert_eq!(replay_delay(root_magic(magic,bullet).unwrap()),expected);
+    assert_eq!(replay_delay(root_magic(-1,bullet).unwrap()),expected);
+   }
+  }
+  for &(magic,_,_)in crate::echo_cast_data::AREAS{assert_eq!(replay_delay(magic),0.5);}
+  assert_eq!(replay_delay(6830),0.5);
+ }
  #[test]fn root_filter_does_not_echo_children_or_sustained_casts(){
   assert!(eligible(4021,10402100));assert!(eligible(4021,10402150));assert!(!eligible(4021,10402151));assert!(!eligible(4200,10420000));assert!(!eligible(7000,10700000));assert!(!eligible(4021,10462000));
   for (magic,roots)in [(4120,&[10412000,10412001][..]),(4130,&[10413000][..]),(4510,&[10451000,10451010,10451020][..]),(4700,&[10470000,10470005,10470010,10470020,10470030,10470040][..]),(4701,&[10470100,10470110,10470120,10470150,10470151,10470152][..]),(7060,&[10706000,10706002][..]),(7090,&[10709000,10709001][..]),(7240,&[10724000][..]),(7330,&[10733000,10733001,10999999][..])]{

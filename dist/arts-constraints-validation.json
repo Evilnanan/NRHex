@@ -1,5 +1,5 @@
 {
-  "version": "0.17.139",
+  "version": "0.17.182",
   "poolCount": 182,
   "ordinaryPoolCount": 175,
   "bowPoolCount": 7,
@@ -14,6 +14,7 @@
   ],
   "elementRequirements": {
     "1014": "attackBaseFire > 0",
+    "1183": "attackBaseFire > 0",
     "1184": "attackBaseMagic > 0"
   },
   "elementWeaponCounts": {

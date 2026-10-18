@@ -19,6 +19,8 @@ static SOURCE:AtomicUsize=AtomicUsize::new(0);
 static DUMMY_POSE:Mutex<[u8;0x40]>=Mutex::new([0;0x40]);
 static CHILD:AtomicUsize=AtomicUsize::new(0);
 static SHOT_INDEX:AtomicUsize=AtomicUsize::new(0);
+static VOLLEY_COUNT:AtomicUsize=AtomicUsize::new(0);
+static VOLLEY_FAIL:AtomicBool=AtomicBool::new(false);
 struct Initialized{transform:[u8;0x30],target:[u8;0x50],index:u32,target_index:u32}
 static INITIALIZED:Mutex<Vec<Initialized>>=Mutex::new(Vec::new());
 #[repr(C,align(16))]struct NativePose([u8;0x40]);
@@ -33,12 +35,23 @@ unsafe extern "system" fn yes(_:usize)->u8{1}
 unsafe extern "system" fn resolve(id:u64)->usize{if id==22&&TARGET_ALIVE.load(Ordering::Relaxed){TARGET.load(Ordering::Relaxed)}else{0}}
 unsafe extern "system" fn source_actor(_:usize,_:usize)->usize{SOURCE.load(Ordering::Relaxed)}
 unsafe extern "system" fn source_dummy(_:usize,_:usize)->u8{1}
+unsafe extern "system" fn create_volley(manager:usize,label:*const u16)->usize{
+ assert_eq!(manager,1);assert_eq!(ptr::read(label),78);
+ if VOLLEY_FAIL.load(Ordering::Relaxed){return 0;}
+ let mut record=Box::new([0u64;12]);record[5]=1;
+ VOLLEY_COUNT.fetch_add(1,Ordering::Relaxed);Box::into_raw(record)as usize
+}
+unsafe extern "system" fn release_volley(record:usize){
+ assert_eq!(read_i32(record+0x28),0);VOLLEY_COUNT.fetch_sub(1,Ordering::Relaxed);
+ drop(Box::from_raw(record as*mut[u64;12]));
+}
 unsafe extern "system" fn source_pose(_:usize,out:usize,_:i32,_:f32,_:u8)->usize{
  ptr::copy_nonoverlapping(DUMMY_POSE.lock().unwrap().as_ptr(),out as*mut u8,0x40);out
 }
 unsafe extern "system" fn allocate_child(_:usize,_:usize)->usize{if FAIL.load(Ordering::Relaxed){0}else{CHILD.load(Ordering::Relaxed)}}
 unsafe extern "system" fn metadata(group:usize,out:usize,index:u32)->usize{
  SHOT_INDEX.store(index as usize,Ordering::Relaxed);
+ let initialize:unsafe extern "system" fn(usize)->usize=std::mem::transmute(BASE.load(Ordering::Relaxed)+0x348260);initialize(out);
  let copy:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(BASE.load(Ordering::Relaxed)+TARGET_COPY_RVA);copy(out,group+0x280)
 }
 unsafe extern "system" fn child_initialize(_:usize,_:usize,target:usize,transform:usize,_:u32,target_index:u32){
@@ -100,6 +113,7 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  let mut child=[0usize,88];CHILD.store(child.as_mut_ptr()as usize,Ordering::Relaxed);
  for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(0x63f840,resolve as*const()as usize),(0x3d2f30,yes as*const()as usize),(0x33d010,parse as*const()as usize),(FACTORY_RVA,create as*const()as usize),(0x33e140,packet as*const()as usize),(0x357e00,packet_copy as*const()as usize)]{jump(base,rva,f);}
  jump(base,0x33e570,release_payload as*const()as usize);
+ put(base+0x3c0f428,1);jump(base,VOLLEY_CREATE_RVA,create_volley as*const()as usize);jump(base,0x52dbf0,release_volley as*const()as usize);
  for(rva,stub)in [(0x518f30,source_actor as*const()as usize),(0x3d3950,source_dummy as*const()as usize),(0x3d15b0,source_pose as*const()as usize)]{jump(base,rva,stub);}
  for(rva,stub)in [(0x35a250,allocate_child as*const()as usize),(0x344150,metadata as*const()as usize),(0x34e750,child_initialize as*const()as usize),(FINISH_RVA,group_finish as*const()as usize)]{jump(base,rva,stub);}
  for rva in [0x362940,0x2163f10,0xf56160,0x4e78c0]{write(base,rva,&[0xc3]);}
@@ -222,5 +236,36 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  int(gp,read_i32(gp)+0x10000);init(gp,&mut emitted as*mut usize as usize,transform.0.as_ptr()as usize,0,0);assert_eq!(INITIALIZED.lock().unwrap().last().unwrap().transform,transform.0);
  finish(gp);assert!(QUEUE.lock().unwrap().groups.is_empty());assert_eq!(target_ref[0x78/4],2);assert_eq!(Arc::strong_count(&retained),1);
  TARGET_ALIVE.store(true,Ordering::Relaxed);target_ref[0x80/4]=u32::MAX;
+ let register:unsafe extern "system" fn(usize,usize,*const i8,i32)=std::mem::transmute(base+0x52d590);
+ let allowed:unsafe extern "system" fn(usize,usize,*const i8,i32)->u8=std::mem::transmute(base+0x52db50);
+ let consume:unsafe extern "system" fn(usize,usize)=std::mem::transmute(base+0x52d660);
+ let victim=[0u64,22];let victim_pointer=victim.as_ptr()as usize;let category=0i8;
+ let mut first_hits=[0u64;6];let first_record=second.as_mut_ptr()as usize;
+ put(first_record+8,first_hits.as_mut_ptr()as usize);put(first_record+0x10,first_hits.as_ptr()as usize);put(first_record+0x18,first_hits.as_ptr()as usize+48);
+ register(first_record,victim_pointer,&category,101);assert_eq!(allowed(first_record,victim_pointer,&category,101),1);
+ consume(first_record,victim_pointer);assert_eq!(allowed(first_record,victim_pointer,&category,202),0);
+ for magic in [6820,6830]{
+  int(dp+0x18,magic);let roots=crate::echo_cast_data::ROOTS.iter().find(|root|root.0==magic).unwrap().1;
+  for &root in roots{int(dp+0x14,root);fire();}
+  let queue=QUEUE.lock().unwrap();assert_eq!(queue.pending.len(),roots.len());
+  let replay=read_ptr(queue.pending[0].descriptor.0.as_ptr()as usize+0xa0);
+  assert_ne!(replay,first_record);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),1);
+  assert!(queue.pending.iter().all(|ticket|read_ptr(ticket.descriptor.0.as_ptr()as usize+0xa0)==replay));drop(queue);
+  let mut replay_hits=[0u64;6];put(replay+8,replay_hits.as_mut_ptr()as usize);put(replay+0x10,replay_hits.as_ptr()as usize);put(replay+0x18,replay_hits.as_ptr()as usize+48);
+  register(replay,victim_pointer,&category,202);assert_eq!(allowed(replay,victim_pointer,&category,202),1);
+  assert_eq!(allowed(first_record,victim_pointer,&category,202),0);
+  consume(replay,victim_pointer);register(replay,victim_pointer,&category,303);assert_eq!(allowed(replay,victim_pointer,&category,303),0);
+  assert_eq!(allowed(replay,victim_pointer,&category,202),1);
+  put(replay+8,0);put(replay+0x10,0);put(replay+0x18,0);
+  update(p,base,0.49);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),1);update(p,base,0.01);
+  assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);assert_eq!(second[10],0x80000006);
+  fire();HAS.store(false,Ordering::Relaxed);update(p,base,0.5);HAS.store(true,Ordering::Relaxed);
+  assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);assert_eq!(second[10],0x80000006);
+  FAIL.store(true,Ordering::Relaxed);fire();FAIL.store(false,Ordering::Relaxed);
+  assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);assert_eq!(second[10],0x80000006);
+  VOLLEY_FAIL.store(true,Ordering::Relaxed);fire();VOLLEY_FAIL.store(false,Ordering::Relaxed);
+  assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(second[10],0x80000006);
+ }
+ assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);
  BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(allocation,0,MEM_RELEASE),0);
 }}

@@ -48,6 +48,7 @@ mod reward_terrain;
 mod native_party;
 mod parry_data;
 mod hero_audio;
+mod storm_audio;
 mod spirit;
 mod spirit_placement;
 mod spirit_npcs;
@@ -367,9 +368,9 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);173] {
+fn signatures()->[(&'static str,u32);176] {
  [(echo_cast::FACTORY_PATTERN,echo_cast::FACTORY_RVA as u32),(echo_cast::TARGET_COPY_PATTERN,echo_cast::TARGET_COPY_RVA as u32),(echo_cast::RELEASE_PATTERN,echo_cast::RELEASE_RVA as u32),(echo_cast::TARGET_VALID_PATTERN,echo_cast::TARGET_VALID_RVA as u32),(ambulance::ENV_PATTERN,ambulance::ENV_RVA as u32),(ambulance::NUMBER_PATTERN,ambulance::NUMBER_RVA as u32),(ambulance::COST_PATTERN,ambulance::COST_RVA as u32),(ambulance::HIT_PATTERN,ambulance::HIT_RVA as u32),(ambulance::MODE_PATTERN,ambulance::MODE_RVA as u32),(ambulance::COMMON_PATTERN,ambulance::COMMON_RVA as u32),(ambulance::FORMULA_PATTERN,ambulance::FORMULA_RVA as u32),(demons_lottery::ART_TABLE_PATTERN,demons_lottery::ART_TABLE as u32),(demons_lottery::ART_PICK_PATTERN,demons_lottery::ART_PICK as u32),(demons_lottery::ART_GET_PATTERN,demons_lottery::ART_GET as u32),(demons_lottery::SPELL_TABLE_PATTERN,demons_lottery::SPELL_TABLE as u32),(demons_lottery::SPELL_PICK_PATTERN,demons_lottery::SPELL_PICK as u32),(demons_lottery::SPELL_GET_PATTERN,demons_lottery::SPELL_GET as u32),(demons_lottery::RNG_PATTERN,demons_lottery::RNG_RVA as u32),(demons_params::CI_PATTERN,demons_params::CI_RVA as u32),(demons_params::WEAPON_PATTERN,demons_params::WEAPON_RVA as u32),(demons_runtime::REMOVE_PATTERN,demons_runtime::REMOVE_RVA as u32),(demons_runtime::TEAM_PATTERN,demons_runtime::TEAM_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
-  (echo_cast::INITIALIZE_PATTERN,echo_cast::INITIALIZE_RVA as u32),(echo_cast::FINISH_PATTERN,echo_cast::FINISH_RVA as u32),
+  (echo_cast::INITIALIZE_PATTERN,echo_cast::INITIALIZE_RVA as u32),(echo_cast::FINISH_PATTERN,echo_cast::FINISH_RVA as u32),(echo_cast::VOLLEY_CREATE_PATTERN,echo_cast::VOLLEY_CREATE_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
   (NEAR_DEATH_STATE_PATTERN,0x66d700),
@@ -386,6 +387,8 @@ fn signatures()->[(&'static str,u32);173] {
   ("8B 91 04 07 00 00 83 EA 01 74 30 83 EA 01 74 25 83 EA 01 74 1A 83 EA 01 74 0F 83 FA 01 75 04",0x66b8c0),
   ("8D 42 06 83 F8 15 77 0C 48 8B 89 70 06 00 00 E9 CC 4A D1 FF B8 FF FF FF FF C3",0x66cde0),
   (hero_audio::PATTERN,hero_audio::RVA as u32),
+  (storm_audio::REQUEST_PATTERN,storm_audio::REQUEST_RVA as u32),
+  (erosion::COLLECT_PATTERN,erosion::COLLECT_RVA as u32),
   (archmage_cost::SELECT_PATTERN,archmage_cost::SELECT_RVA as u32),(archmage_cost::COST_PATTERN,archmage_cost::COST_RVA as u32),(archmage_runtime::PATTERN,archmage_runtime::RVA as u32),(glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
   (ACTION_REQUEST_PATTERN,ACTION_REQUEST_RVA as u32),
   (FLASK_COUNT_PATTERN,FLASK_COUNT_RVA as u32),
@@ -512,7 +515,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let update_head=[0x48,0x8b,0xc4,0x48,0x89,0x58,0x10,0x48,0x89,0x78,0x18,0x55,0x48,0x8d,0x68,0xa1];
   if std::slice::from_raw_parts(base.add(UPDATE_RVA),update_head.len())!=update_head {return Err("Character update prologue mismatch".into());}
   // Check the singleton references from their actual RIP-relative instructions.
-  for (rva,wanted) in [(0x3e0ace,WORLD_RVA),(0x37f528,ITEMS_RVA),(0x1fd598,GAME_DATA_RVA)] {
+  for (rva,wanted) in [(0x3e0ace,WORLD_RVA),(0x37f528,ITEMS_RVA),(0x1fd598,GAME_DATA_RVA),(0x4bebaa,echo_cast::VOLLEY_MANAGER_RVA)] {
    let offset=ptr::read_unaligned(base.add(rva+3) as *const i32);
    if (rva as isize+7+offset as isize) as usize!=wanted {return Err("Singleton reference mismatch".into());}
   }
@@ -625,6 +628,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (parry::COUNTER_COST_RVA,parry::counter_cost_detour as *const u8,&parry::COUNTER_COST_ORIGINAL),
    (parry::REPEL_RVA,parry::repel as *const u8,&parry::REPEL_ORIGINAL),
    (parry::RVA,parry::detour as *const u8,&parry::ORIGINAL),
+   (erosion::COLLECT_RVA,erosion::collect as *const u8,&erosion::COLLECT_ORIGINAL),
    (slingshot_runtime::RVA,slingshot_runtime::detour as *const u8,&slingshot_runtime::ORIGINAL),
    (slingshot_runtime::HORIZONTAL_RVA,slingshot_runtime::horizontal as *const u8,&slingshot_runtime::HORIZONTAL_ORIGINAL),
    (devils_gaze_hit::RVA,devils_gaze_hit::detour as *const u8,&devils_gaze_hit::ORIGINAL),
@@ -773,7 +777,7 @@ unsafe extern "system" fn on_sword_attack_rates(manager:usize,context:usize){
 // Retry a copy, retaining the original descriptor and every native condition.
 unsafe extern "system" fn sword_filter_detour(node:usize,descriptor:usize,owner:usize,weapon:i32,extra:i32)->u8{
  let original:NativeEffectFilter=std::mem::transmute(EFFECT_FILTER_ORIG.load(Ordering::Acquire));
- if ACTIVE.load(Ordering::Acquire)&&erosion::body_contact(node,descriptor){return 0;}
+ if ACTIVE.load(Ordering::Acquire)&&(erosion::body_contact(node,descriptor)||erosion::spell_contact(node,descriptor)){return 0;}
  let result=original(node,descriptor,owner,weapon,extra);
  if result!=0||!ACTIVE.load(Ordering::Acquire)||node==0||descriptor==0{return result;}
  let param=read_ptr(node);if param==0{return result;}
@@ -2226,6 +2230,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  update_jiahao(player,base,dt);
  archmage_runtime::update(player,base);
  devils_gaze_audio::update(base);
+ storm_audio::update(base);
  devils_gaze_runtime::update(player,base,dt);
  update_arts(player,base);
  update_noisy(player,base,dt);

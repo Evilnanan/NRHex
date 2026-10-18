@@ -120,12 +120,18 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Skill stance re-entry patch failed.' }
         & python -X utf8 tools/verify_arts.py
         if ($LASTEXITCODE -ne 0) { throw 'Skill native/script verification failed.' }
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --storm-audio-probe
+        if ($LASTEXITCODE -ne 0) { throw 'Storm Ruler native sound-bank probe failed.' }
+        python -X utf8 tools/verify_storm_audio.py
+        if ($LASTEXITCODE -ne 0) { throw 'Storm Ruler sound-bank validation failed.' }
         & python -X utf8 tools/verify_arts_behavior.py
         if ($LASTEXITCODE -ne 0) { throw 'Skill behavior source/table validation failed.' }
         & python -X utf8 tools/verify_arts_transfer.py
         if ($LASTEXITCODE -ne 0) { throw 'Skill drop/pickup instance binding validation failed.' }
         & python -X utf8 tools/verify_arts_constraints.py
         if ($LASTEXITCODE -ne 0) { throw 'Skill pool separation/projectile origin validation failed.' }
+        & python -X utf8 tools/verify_arts_network_native.py
+        if ($LASTEXITCODE -ne 0) { throw 'Native equipment overlay broadcast validation failed.' }
         & python -X utf8 tools/verify_noisy.py
         if ($LASTEXITCODE -ne 0) { throw 'Noisy Ghost native route/lava chain validation failed.' }
         if (Test-Path -LiteralPath '.work/cage-groups/manifest.json') {

@@ -9,12 +9,14 @@ assert pool['bowSkills']==[400,401,402,404,405,406,1169]
 weapons={x['ID']:x['fields'] for x in p['weapons']};skills={x['ID']:x['fields'] for x in p['arts']}
 generated=(root/'src/arts_data.rs').read_text()
 element_counts={}
-for name,field,skill in [('FIRE_WEAPONS','attackBaseFire',1014),('MAGIC_WEAPONS','attackBaseMagic',1184)]:
+for name,field,skill in [('FIRE_WEAPONS','attackBaseFire',1014),('FIRE_WEAPONS','attackBaseFire',1183),('MAGIC_WEAPONS','attackBaseMagic',1184)]:
  ids=json.loads(re.search(r'pub const '+name+r': \[i32; \d+\] = (\[[^;]+\]);',generated).group(1))
  assert ids==sorted(i for i,w in weapons.items() if w[field]>0)
  assert pool['elementRequirements'][str(skill)]==field+' > 0'
  element_counts[field]=len(ids)
 assert pool['bowWeapons']==sorted(i for i,w in weapons.items() if w['wepType'] in [50,51,53])
+assert next(entry for entry in pool['skills'] if entry['id']==1183)['chineseName']=='吞世'
+assert next(entry for entry in pool['skills'] if entry['id']==1183)['name']=='Devourer of Worlds'
 assert all(weapons[skills[i]['sparringGroundsWeaponId']]['wepType'] in [50,51,53] for i in pool['bowSkills'])
 assert {0,1,2,10,117,1007,9999}.isdisjoint(x['id'] for x in pool['skills'])
 assert skills[117]['swordArtsType']==17 and skills[117]['isGrayOutRightHand']==skills[117]['isGrayOutBothHand']==1

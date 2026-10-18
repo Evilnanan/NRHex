@@ -1,0 +1,166 @@
+{
+  "version": "0.17.182",
+  "buildPassed": true,
+  "unitTestsPassed": 403,
+  "groupUnitTestsPassed": 403,
+  "isolatedNativeTestsPassed": 9,
+  "signatureCount": 175,
+  "nativeSpellScopeValidation": {
+    "nativeExecutionPassed": true,
+    "compiledHookExecuted": true,
+    "compiledSharedApplicabilityHookExecuted": true,
+    "compiledCollectorHookExecuted": true,
+    "spellExclusionLimitedToErosionCollection": true,
+    "attackRateApplicabilityPreserved": true,
+    "nativeDescriptorBuilder": "0x50f230",
+    "bodyContactsExcluded": true,
+    "nativeImmunityChain": [
+      "0x509790",
+      "0x510fd0",
+      "0xea19c0"
+    ],
+    "nativeAddedAilmentSelector": "0x506200",
+    "nativeAttackApplicability": "0x511010",
+    "nativeMotionValueFragment": [
+      "0x43c869",
+      "0x43c899"
+    ],
+    "cases": [
+      "roll/backstep/landing/jump/sprint body contacts excluded at native collection",
+      "same IDs in other attack tables unchanged",
+      "weapon/multihit collection unchanged",
+      "three spell descriptor types exclude Erosion only during collection",
+      "outside collection Erosion still passes native attack-rate applicability",
+      "other native added ailments on spells unchanged",
+      "inactive spell collection filter bypassed",
+      "native additional ailments on body contacts unchanged",
+      "inactive body filter unchanged",
+      "all seven native immunity flags",
+      "invalid immunity effects ignored",
+      "stateInfo152 accepted and2103 excluded",
+      "native spell applicability flags",
+      "two motion values multiplied",
+      "zero status correction remains zero",
+      "generic buildup multiplier retained",
+      "full threshold rather than remaining gauge",
+      "escalating threshold changes selection",
+      "progress tie and stable exact tie",
+      "immune ailment excluded",
+      "death participates normally",
+      "all immune does nothing",
+      "active ailment excluded",
+      "zero and NaN buildup rejected",
+      "dead recipient rejected",
+      "non-owner rejected",
+      "selected payload IDs not remapped again",
+      "inactive hook forwards unchanged",
+      "all13 arguments andAL result retained"
+    ],
+    "stubs": [
+      "security cookie check",
+      "ownership and active-state lookup",
+      "native apply continuation records parameters; proc, damage and networking are not executed"
+    ],
+    "sources": {
+      "src/erosion.rs": "98633747b585afdf848e6eeed6ee05f554ee036ae8eff0f94f4f0558657af664",
+      "src/erosion_native_tests.rs": "65ee9deb4813422e1498072a846d15f579d45f5bc0b453788c7b08cea8fc36c4",
+      "src/lib.rs": "47ce8896cdb9d7b55ade64571c7df9d9d8db7f8710b8fda5f20239f2f9366622"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "gameTextUnchanged": true,
+  "parametersUnchanged": true,
+  "spellAddedAilmentsExcluded": true,
+  "spellAttackRate": 0.8,
+  "spellApplicabilityFlagsUnchanged": true,
+  "excludedHeroIds": [
+    6,
+    7
+  ],
+  "swordOrArchmageDoesNotUnlock": true,
+  "existingOwnershipUnchanged": true,
+  "devourerSkillId": 1183,
+  "devourerRequiresWeaponBaseFire": true,
+  "artsCompatibilityValidation": {
+    "version": "0.17.182",
+    "poolCount": 182,
+    "ordinaryPoolCount": 175,
+    "bowPoolCount": 7,
+    "bowSkills": [
+      400,
+      401,
+      402,
+      404,
+      405,
+      406,
+      1169
+    ],
+    "elementRequirements": {
+      "1014": "attackBaseFire > 0",
+      "1183": "attackBaseFire > 0",
+      "1184": "attackBaseMagic > 0"
+    },
+    "elementWeaponCounts": {
+      "attackBaseFire": 310,
+      "attackBaseMagic": 543
+    },
+    "bowWeaponTypes": [
+      50,
+      51,
+      53
+    ],
+    "bowWeaponCount": 21,
+    "excludedUnusableSkills": [
+      0,
+      1,
+      2,
+      10,
+      117,
+      1007,
+      9999
+    ],
+    "torchNativeAnimationTypeDisabled": 17,
+    "allOtherNamedSkillsRetained": true,
+    "projectileCreationRva": "3975D0",
+    "nativeArgumentCount": 10,
+    "nativeReturn": "AL/u8",
+    "originalDescriptorAndOutputsPreserved": true,
+    "localOwnerSelectedSkillOnly": true,
+    "fireMuzzles": {
+      "1001": [
+        10141,
+        20141
+      ],
+      "1002": [
+        10142,
+        20142
+      ]
+    },
+    "fallbackBodyDummy": 58,
+    "originalFireShieldMuzzlesUnchanged": true,
+    "nativeParametersAndTaeUnchanged": true,
+    "nativeMappingVerified": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "changedRuntimeFiles": [
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\natives\\NRHex.dll",
+    "D:\\Users\\OwO\\Documents\\me3-profiles\\NRHex\\mod\\natives\\NRHex.dll"
+  ],
+  "profilesAndOtherResourcesUnchanged": true,
+  "distDllSha256": "103f240d261951ef2f2cbdf24cb0a670f07b0a1c856e1d60a6d5b606d403a9c1",
+  "groupDllSha256": "fda2a3c03e66480c9da527df3cb8bd2addd99c9671e42d2a77a2dddf3999577a",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "loadingVerified": true,
+  "processId": 20092,
+  "loadedDll": "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\natives\\NRHex.dll",
+  "liveHookHeads": {
+    "0x506200": "e9fb9d2aff",
+    "0x511010": "e9ebef74ff",
+    "0x3c80a0": "e95b7f62ff",
+    "0x3e0ab0": "e94bf5a7ff"
+  }
+}
