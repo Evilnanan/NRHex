@@ -26,7 +26,7 @@
 | `.work/` | 可重新生成的参数导出、反编译稿和构建检查中间文件 |
 | `target/` | Cargo 构建缓存，可删除 |
 
-运行 `dist/启动测试版.ps1` 启动。开发构建运行 `./build.ps1`；只验证和构建、不替换正在运行的 DLL 时使用 `./build.ps1 -NoInstall`。
+运行 `dist/启动测试版.ps1` 启动。完整构建使用 `./build.ps1`；仅改运行时代码时使用 `./build.ps1 -DllOnly`，加 `-NoInstall` 可只验证编译、不替换 DLL。文案更新使用 `./build-texts.ps1`，群友版打包使用 `./build-no-hotkeys.ps1`。完整构建的 `-NoInstall` 仍会更新资源，详情见 [构建说明](docs/build.md)。
 
 退出卡住或Steam一直显示“正在停止”时，双击 `dist/强制结束游戏.cmd`；清理脚本仅保留在dist，不随群友版打包。它强制结束黑夜君临，并清理可确认归属的ME3启动器残留，不关闭Steam、不重启游戏、不改存档；强退可能结束当前出征。可先运行 `powershell -NoProfile -ExecutionPolicy Bypass -File dist/Stop-Nightreign.ps1 -WhatIf` 仅预览。权限不足时再右键CMD以管理员身份运行；无法确认归属的其他ME3进程不会被结束。
 

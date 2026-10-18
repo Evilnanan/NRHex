@@ -5,6 +5,7 @@ import json
 import struct
 import tomllib
 import pefile
+import sys
 from local_paths import GAME, ROOT
 
 raw = (GAME / 'nightreign.exe').read_bytes()
@@ -75,11 +76,16 @@ try:
 finally:
     assert k.VirtualFree(memory, 0, 0x8000)
 
-patch = json.loads((ROOT / '.work/effect-sync/parameter-patch.json').read_text())
-assert len(patch['changes']) == 21
-assert patch['unrelatedTablesUnchanged'] and patch['unrelatedFieldsUnchanged']
-assert hashlib.sha256((ROOT / 'dist/mod/regulation.bin').read_bytes()).hexdigest().upper() == patch['outputRegulationSha256']
-rows = {r['ID']: r['fields'] for r in json.loads((ROOT / '.work/effect-sync/parameters.json').read_text())['current']}
+full_build = '--full-build' in sys.argv
+patch = None
+if not full_build:
+    patch = json.loads((ROOT / '.work/effect-sync/parameter-patch.json').read_text())
+    assert len(patch['changes']) == 21
+    assert patch['unrelatedTablesUnchanged'] and patch['unrelatedFieldsUnchanged']
+    assert hashlib.sha256((ROOT / 'dist/mod/regulation.bin').read_bytes()).hexdigest().upper() == patch['outputRegulationSha256']
+parameters = json.loads((ROOT / '.work/effect-sync/parameters.json').read_text())
+assert hashlib.sha256((ROOT / 'dist/mod/regulation.bin').read_bytes()).hexdigest().upper() == parameters['installedRegulationSha256']
+rows = {r['ID']: r['fields'] for r in parameters['current']}
 owners = [95000100,95000200,95000300,95000400,95000500,95000600,95000700,95000800,95000900,95001100,95001200,95001300,95001400,95001500,95001600]
 for effect in owners:
     assert rows[effect]['spCategory'] == 20 and rows[effect]['saveCategory'] == 10 and rows[effect]['effectEndurance'] == -1
@@ -91,11 +97,13 @@ version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
 report = dict(version=version, exeSha256=digest, originalCategoryPredicatesExecuted=True,
               originalGameplayQueryExecuted=True, nativeMatchingCases=cases,
               repeatedNativeReceiveModelAnnouncements=600, viewerReplicaRebuildModelPassed=True,
-              parameterReadbackPassed=True, changes=patch['changes'],
+              parameterReadbackPassed=True, changes=patch['changes'] if patch else None,
+              fullBuildReadback=full_build, historicalPatchScopeChecked=not full_build,
+              parameterRegulationSha256=parameters['installedRegulationSha256'],
               ownerRefreshSeconds=5, readyRefreshSeconds=0.75, readyLeaseSeconds=2,
               gameplayVerified=False, multiplayerVerified=False,
               pendingChecks=['Both teammate detail list and HUD after owner and viewer revival',
                              'Repeated Escape and Ultimate cooldown transitions',
                              'Crystal one-hit consumption, 40-second cooldown and aura continuity'])
 (ROOT / 'dist/effect-sync-validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf8')
-print('PASS: original native matching/query execution, 600 receive refreshes, replica rebuild and parameter scope; coop remains unverified.')
+print('PASS: original native matching/query execution, 600 receive refreshes, replica rebuild and current parameter readback; coop remains unverified.')

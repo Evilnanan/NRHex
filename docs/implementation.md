@@ -23,7 +23,7 @@
 | 终极刷新、豪饮叠层、再生术 | `runtime.rs`、`flasks.rs` |
 | 豪饮HUD图标与原生叠层计数 | `HexBuild/Program.cs`、`record_drinking_hud.py`、[原生HUD研究](research/drinking-hud.md) |
 | 结晶外壳、受击隐身 | `crystal.rs`、`cat.rs` |
-| 队友特殊效果列表／图标维护 | `status_sync.rs`、`lib.rs`、`HexBuild/Program.cs`、`verify_effect_sync_native.py`、`build-effect-sync.ps1` |
+| 队友特殊效果列表／图标维护 | `status_sync.rs`、`lib.rs`、`HexBuild/Program.cs`、`verify_effect_sync_native.py`、`build.ps1` |
 | 详细状态页的特殊效果／附加效果分栏 | `status_display.rs`、`lib.rs`、[归栏证据](research/status-routing-01732.md) |
 | 无限墙跳、下落增伤 | `wall_input.rs`、`cat_wall.rs`、`cat_jump.rs`、`slingshot_runtime.rs`、`build_walljump.py`、`verify_cat_wall_native.py` |
 | 亮出你的剑 | `sword.rs`、`sword_regain.rs`、`sword_map.rs`、`sword_hit_rules.rs`、`build_sword_ranges.py`、`verify_sword_charged.py`、`verify_sword_regain_native.py` |
@@ -32,7 +32,7 @@
 | 逃跑计划 | `escape.rs`、`verify_escape_native.py` |
 | 嘉豪身法 | `jiahao.rs`、`build_jiahao.py`、`JiahaoTae` |
 | 吵闹鬼 | `noisy.rs`、`verify_noisy.py`、`HexBuild`的私有熔岩链 |
-| 刷怪笼 | `HexBuild/Cages.cs`、`HexBuild/CagePresentation.cs`、`verify_cage_presentation.py`、`verify_cages.py`、`cage_local_events.py`、`build-cages.ps1`、`data/reference/world/cage-bosses.json`；13种组合在4张地牢模板中，每组仅首成员的本地Birth在中央区域prefix+3900播放一次690047黑雾，其他成员用零行跳过替代原黑雾指令。单Boss不变，所有成员的4秒出场、动作、加载／重连分支、AI和奖励不变，无地图修改。区域类型1与指令ABI依据[NR EMEDF](https://soulsmods.github.io/emedf/nr-emedf.html#SpawnOneshotSFX)。增量入口--cage-presentation严格匹配旧事件并回读188个目标事件；52组／1504条成员时序已模拟，实机渲染与联机待验收。 |
+| 刷怪笼 | `HexBuild/Cages.cs`、`HexBuild/CagePresentation.cs`、`verify_cage_presentation.py`、`verify_cages.py`、`cage_local_events.py`、`build.ps1`、`data/reference/world/cage-bosses.json`；13种组合在4张地牢模板中，每组仅首成员的本地Birth在中央区域prefix+3900播放一次690047黑雾，其他成员用零行跳过替代原黑雾指令。单Boss不变，所有成员的4秒出场、动作、加载／重连分支、AI和奖励不变，无地图修改。区域类型1与指令ABI依据[NR EMEDF](https://soulsmods.github.io/emedf/nr-emedf.html#SpawnOneshotSFX)。增量入口--cage-presentation严格匹配旧事件并回读188个目标事件；52组／1504条成员时序已模拟，实机渲染与联机待验收。 |
 | 百般武艺 | `arts.rs`、`arts_data.rs`、`build_arts_data.py`、`build_arts_hks.py` |
 | 气球、强化【死灵术】、别停止咏唱 | `balloon.rs`／`balloon_runtime.rs`／`ability_damage.rs`（只提供基础攻击值，余下由原生结算）、`spirit.rs`／`spirit_runtime.rs`、`chant.rs`／`build_chant_hks.py`／`verify_chant_hks.py` |
 | 大法师：法术槽随机、丢拾与装备同步 | `archmage.rs`、`archmage_runtime.rs`、`archmage_cost.rs`、`archmage_data.rs`、`HexBuild/Archmage.cs`、`build_archmage_hks.py` |
