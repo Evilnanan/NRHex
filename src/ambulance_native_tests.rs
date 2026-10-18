@@ -79,32 +79,35 @@ fn ambulance_compiled_detours_execute_outgoing_rescue_before_authority(){unsafe{
  HAS.store(false,Ordering::Relaxed);call_sum(&mut out);assert_eq!(out,[0.,10.]);HAS.store(true,Ordering::Relaxed);
  vm[0]=90.;query(context.as_ptr()as usize,QUERY,vm.as_ptr()as usize);call_sum(&mut out);assert_eq!(out,[0.,10.]);vm[0]=0.;
  bp[0x70/8]=100f32.to_bits()as u64;query(context.as_ptr()as usize,QUERY,vm.as_ptr()as usize);call_sum(&mut out);assert_eq!(out,[0.,10.]);bp[0x70/8]=0;
- query(context.as_ptr()as usize,QUERY,vm.as_ptr()as usize);update(p,base);update(p,base);call_sum(&mut out);assert_eq!(out,[0.,10.]);
+ query(context.as_ptr()as usize,QUERY,vm.as_ptr()as usize);update(p,base,1./60.);update(p,base,1./60.);call_sum(&mut out);assert_eq!(out,[0.,10.]);
+ // The real native parameter layout supplies all three gauge lengths.
+ let mut common_row=vec![0u32;0x420/4];let row=common_row.as_mut_ptr()as usize;
+ for(offset,value)in [(0x380,40),(0x384,90),(0x388,240)]{integer(row+offset,value);}
+ for(offset,value)in [(0x40c,0.75),(0x410,0.5),(0x414,0.25)]{float(row+offset,value);}
+ COMMON.store(row,Ordering::Relaxed);ptr::write((t+0x730)as*mut u8,1);integer(stats+0x160,200);
  // Real hit dispatch refunds before the recipient authority gate (stubbed
  // false). The original gauge and attribution/packet functions cannot run.
  let apply:unsafe extern "system" fn(usize,usize,usize)=std::mem::transmute(base+0x66dec0);let mut hit=vec![0u32;0x2d0/4];let hp=hit.as_mut_ptr()as usize;
  let mut module=[0usize,t];let mp=module.as_mut_ptr()as usize;
  let emit=|source|dispatch(mp,source,hp,base+HIT_RVA);
  float(hp+0x150,40.);float(hp+0x258,0.5);float(t+0x714,100.);emit(p);
- assert_eq!(read_i32(stats+0x15c),10);assert_eq!(ptr::read_unaligned((t+0x714)as*const f32),100.);
- float(hp+0x150,100.);float(hp+0x258,1.);float(t+0x714,12.);emit(p);assert_eq!(read_i32(stats+0x15c),60);
+ assert_eq!(read_i32(stats+0x15c),0);assert_eq!(ptr::read_unaligned((t+0x714)as*const f32),100.);
+ emit(p);assert_eq!(read_i32(stats+0x15c),40);
+ float(hp+0x150,100.);float(hp+0x258,1.);float(t+0x714,12.);emit(p);assert_eq!(read_i32(stats+0x15c),120);
  // No dependency on a remaining-value snapshot, including zero/stale values.
- float(t+0x714,0.);emit(p);assert_eq!(read_i32(stats+0x15c),100);
+ float(t+0x714,0.);emit(p);assert_eq!(read_i32(stats+0x15c),200);
  integer(stats+0x15c,0);emit(o);assert_eq!(read_i32(stats+0x15c),0);
  HAS.store(false,Ordering::Relaxed);emit(p);assert_eq!(read_i32(stats+0x15c),0);HAS.store(true,Ordering::Relaxed);
  ptr::write((t+0x710)as*mut u8,2);emit(p);assert_eq!(read_i32(stats+0x15c),0);ptr::write((t+0x710)as*mut u8,1);
  module[1]=p;emit(p);assert_eq!(read_i32(stats+0x15c),0);module[1]=t;
  // Compare every native tier and optional mode, hit correction, rounding and
  // minimum-one against real 66DEC0; applying native rescue never refunds again.
- let mut common_row=vec![0u32;0x420/4];let row=common_row.as_mut_ptr()as usize;
- for(offset,value)in [(0x40c,0.75),(0x410,0.5),(0x414,0.25)]{float(row+offset,value);}
- COMMON.store(row,Ordering::Relaxed);
  for enabled in [false,true]{MODE.store(enabled,Ordering::Relaxed);for tier in [0u8,1,2,3,9]{ptr::write((t+0x730)as*mut u8,tier);for raw in [0f32,0.9,1.,3.,40.]{for correction in [0f32,0.01,0.5,1.,2.]{
   *STATE.lock().unwrap()=State::default();integer(stats+0x15c,0);float(hp+0x150,raw);float(hp+0x258,correction);float(t+0x714,1000.);
-  let expected=outgoing_power(t,hp,base);emit(p);assert_eq!(read_i32(stats+0x15c),expected/2);
-  apply(t,p,hp);assert_eq!(1000.-ptr::read_unaligned((t+0x714)as*const f32),expected as f32,"{enabled} {tier} {raw} {correction}");assert_eq!(read_i32(stats+0x15c),expected/2);
+  let expected=outgoing_power(t,hp,base,row);let reward=rescue_segment(t,row).map_or(0,|segment|((f64::from(expected)/segment).floor()as i32)*40);emit(p);assert_eq!(read_i32(stats+0x15c),reward);
+  apply(t,p,hp);assert_eq!(1000.-ptr::read_unaligned((t+0x714)as*const f32),expected as f32,"{enabled} {tier} {raw} {correction}");assert_eq!(read_i32(stats+0x15c),reward);
  }}}}
- MODE.store(false,Ordering::Relaxed);COMMON.store(0,Ordering::Relaxed);integer(stats+0x15c,0);*STATE.lock().unwrap()=State::default();
+ MODE.store(false,Ordering::Relaxed);integer(stats+0x15c,0);*STATE.lock().unwrap()=State::default();
  // Execute native type-3 receive decoder. Both target ID formats are tested;
  // all original snapshots/echoes must give no additional stamina.
  pointer(base+0x3c0f0a8,w); // native WorldChrMan assertions at packet resolution
@@ -116,8 +119,19 @@ fn ambulance_compiled_detours_execute_outgoing_rescue_before_authority(){unsafe{
   let result=recv(0,stream.as_mut_ptr()as usize,&id as*const u64 as usize,local_format);assert_eq!(result,1);assert_eq!(read_i32(stream.as_ptr()as usize+8),0);
  };
  float(t+0x714,100.);send(80,1,3,0);send(80,1,3,0);send(60,3,3,0);send(40,1,3,1);send(20,1,1,0);send(0,1,3,0);assert_eq!(read_i32(stats+0x15c),0);
- // Odd outgoing values keep their half point; full stamina discards overflow.
- float(hp+0x150,1.);float(hp+0x258,1.);emit(p);assert_eq!(read_i32(stats+0x15c),0);emit(p);assert_eq!(read_i32(stats+0x15c),1);
- integer(stats+0x15c,99);float(hp+0x150,100.);emit(p);assert_eq!(read_i32(stats+0x15c),100);assert_eq!(STATE.lock().unwrap().fraction,0.);
+ // Shared normalized progress across different teammates and tiers.
+ ptr::write((t+0x730)as*mut u8,1);ptr::write((o+0x710)as*mut u8,1);ptr::write((o+0x730)as*mut u8,3);
+ float(hp+0x150,20.);float(hp+0x258,1.);emit(p);assert_eq!(read_i32(stats+0x15c),0);
+ module[1]=o;float(hp+0x150,40.);emit(p);assert_eq!(read_i32(stats+0x15c),40);assert_eq!(STATE.lock().unwrap().progress.value,0.);module[1]=t;
+ // Decay runs through the real Update callback input, not the network gauge.
+ float(hp+0x150,39.);emit(p);for _ in 0..5{update(p,base,1.);}
+ assert_eq!(STATE.lock().unwrap().progress.value,39.*18.);update(p,base,0.5);assert_eq!(STATE.lock().unwrap().progress.value,24.*18.);
+ float(hp+0x150,16.);emit(p);assert_eq!(read_i32(stats+0x15c),80);
+ float(hp+0x150,39.);emit(p);update(p,base,4.);float(hp+0x150,0.);emit(p);update(p,base,1.5);assert_eq!(STATE.lock().unwrap().progress.value,24.*18.);
+ float(hp+0x150,1.);emit(p);update(p,base,5.);assert_eq!(STATE.lock().unwrap().progress.value,25.*18.);update(p,base,1.);assert_eq!(STATE.lock().unwrap().progress.value,0.);
+ // Real native cap; complete rewards at full stamina cannot pay later.
+ integer(stats+0x160,100);integer(stats+0x15c,99);float(hp+0x150,120.);emit(p);assert_eq!(read_i32(stats+0x15c),100);assert_eq!(STATE.lock().unwrap().progress.value,0.);
+ emit(p);integer(stats+0x15c,0);float(hp+0x150,1.);emit(p);assert_eq!(read_i32(stats+0x15c),0);
+ HAS.store(false,Ordering::Relaxed);update(p,base,1.);assert_eq!(STATE.lock().unwrap().progress.value,0.);HAS.store(true,Ordering::Relaxed);
  BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);*STATE.lock().unwrap()=State::default();assert_ne!(VirtualFree(allocation,0,MEM_RELEASE),0);
 }}

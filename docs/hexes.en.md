@@ -167,4 +167,4 @@ Slowly builds up madness while performing the Cross-Legged gesture. Suffering ma
 <!-- hex:95003400 -->
 ## Ambulance
 
-Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply.
+Sprinting, dashing, and running toward a near-death ally consume no stamina. Every full segment of rescue you contribute restores 40 stamina. After 5 seconds without contributing rescue, accumulated progress decays by 0.75 segments per second.

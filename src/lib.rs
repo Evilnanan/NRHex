@@ -2205,7 +2205,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  if world==0{return;}
  if read_ptr(world+0x174e8)!=player {return;}
  if !dt.is_finite()||dt<=0.0||dt>1.0{return;}
- ambulance::update(player,base);
+ ambulance::update(player,base,dt);
  parry::update_turn(player);
  death_dance::update(player,base,dt);
  ominous_pact::update(player,base,dt);

@@ -1,5 +1,5 @@
-//! Waive locomotion costs toward a downed ally; refund outgoing rescue power
-//! before recipient authority, gauge mutation or network acknowledgement.
+//! Waive locomotion costs toward a downed ally. Share normalized outgoing
+//! rescue progress across targets, redeem full segments and decay idle progress.
 use crate::{has_effect,is_local,native_actor,ptr,read_i32,read_ptr,ACTIVE,BASE};
 use std::{sync::{Mutex,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95003400;
@@ -25,24 +25,47 @@ pub static ENV_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static COST_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static HIT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 #[derive(Clone,Copy,Default,PartialEq,Eq)]struct Identity{actor:usize,handle:u64,stats:usize}
-#[derive(Default)]struct State{owner:Identity,frame:u64,sample:Option<(u64,f32,f32)>,fraction:f64}
-static STATE:Mutex<State>=Mutex::new(State{owner:Identity{actor:0,handle:0,stats:0},frame:0,sample:None,fraction:0.});
+const IDLE_GRACE:f64=5.;
+const STAMINA_PER_SEGMENT:i32=40;
+// 720 is divisible by all three native per-segment values (40/45/80).
+// Whole rescue outputs therefore combine exactly across tiers. Public units
+// use 40 points per segment; 30 points/second means 540 internal units/second.
+const SEGMENT_UNITS:f64=720.;
+const STANDARD_POINTS_PER_SEGMENT:f64=40.;
+const DECAY_PER_SECOND:f64=30.;
+#[derive(Default)]struct Progress{value:f64,idle:f64}
+impl Progress{
+ fn tick(&mut self,dt:f64){
+  if !dt.is_finite()||dt<=0.{return;}
+  let decay=(dt-(IDLE_GRACE-self.idle).max(0.)).max(0.);
+  self.idle=(self.idle+dt).min(IDLE_GRACE);
+  self.value=(self.value-DECAY_PER_SECOND*(SEGMENT_UNITS/STANDARD_POINTS_PER_SEGMENT)*decay).max(0.);
+ }
+ fn add(&mut self,power:i32,segment:f64)->i32{
+  if power<=0||!segment.is_finite()||segment<=0.{return 0;}
+  self.idle=0.;let value=self.value+f64::from(power)*(SEGMENT_UNITS/segment);
+  let segments=(value/SEGMENT_UNITS).floor();self.value=value-segments*SEGMENT_UNITS;
+  (segments*f64::from(STAMINA_PER_SEGMENT)).min(i32::MAX as f64)as i32
+ }
+}
+#[derive(Default)]struct State{owner:Identity,frame:u64,sample:Option<(u64,f32,f32)>,progress:Progress}
+static STATE:Mutex<State>=Mutex::new(State{owner:Identity{actor:0,handle:0,stats:0},frame:0,sample:None,progress:Progress{value:0.,idle:0.}});
 impl State{
  fn bind(&mut self,owner:Identity){if self.owner!=owner{*self=Self{owner,..Self::default()};}}
  fn frame(&mut self,owner:Identity){self.bind(owner);self.frame=self.frame.wrapping_add(1);}
+ fn tick(&mut self,owner:Identity,dt:f32){self.frame(owner);self.progress.tick(f64::from(dt));}
  fn sample(&mut self,owner:Identity,angle:f32,speed:f32){self.bind(owner);self.sample=Some((self.frame,angle,speed));}
  fn movement(&self,owner:Identity)->Option<(f32,f32)>{
   let(frame,angle,speed)=self.sample?;
   (owner==self.owner&&self.frame.wrapping_sub(frame)<=1&&angle.is_finite()&&speed.is_finite()&&speed>0.001).then_some((angle,speed))
  }
- fn credit(&mut self,owner:Identity,delta:f32,current:i32,maximum:i32)->i32{
+ fn credit(&mut self,owner:Identity,power:i32,segment:f64,current:i32,maximum:i32)->i32{
   self.bind(owner);
-  if !delta.is_finite()||delta<=0.||maximum<=0{return 0;}
-  let room=(i64::from(maximum)-i64::from(current)).max(0)as f64;
-  if room<=0.{self.fraction=0.;return 0;}
-  let value=self.fraction+f64::from(delta)*0.5;
-  let amount=value.floor().min(room).min(i32::MAX as f64)as i32;
-  self.fraction=if value>=room{0.}else{value-f64::from(amount)};amount
+  // Consume every complete segment even at maximum stamina. Only incomplete
+  // rescue output remains; no pending stamina is banked for a later frame.
+  let reward=self.progress.add(power,segment);
+  let room=(i64::from(maximum)-i64::from(current)).max(0).min(i64::from(i32::MAX))as i32;
+  if maximum<=0{0}else{reward.min(room)}
  }
 }
 unsafe fn identity(actor:usize)->Identity{Identity{actor,handle:ptr::read_unaligned((actor+8)as*const u64),stats:native_actor::stats(actor)}}
@@ -51,9 +74,9 @@ unsafe fn owned(actor:usize,base:usize)->Option<Identity>{
  let owner=identity(actor);
  (owner.stats!=0&&!native_actor::incapacitated(actor,owner.stats)).then_some(owner)
 }
-pub unsafe fn update(actor:usize,base:usize){
+pub unsafe fn update(actor:usize,base:usize,dt:f32){
  let owner=owned(actor,base);
- if let Ok(mut s)=STATE.lock(){if let Some(owner)=owner{s.frame(owner);}else{*s=State::default();}}
+ if let Ok(mut s)=STATE.lock(){if let Some(owner)=owner{s.tick(owner,dt);}else{*s=State::default();}}
 }
 // Coordinates use negative Z as forward; positive native yaw turns left.
 // Havok MoveAngle is degrees around the character, independent of the camera.
@@ -129,17 +152,24 @@ fn rescue_power(raw:f32,tier_rate:f32,hit_rate:f32)->i32{
  if !scaled.is_finite()||!final_value.is_finite()||scaled<0.||final_value<0.||scaled>=2147483648.||final_value>=2147483648.{return 0;}
  let value=final_value as i32;if scaled as i32>=1{value.max(1)}else{value}
 }
-unsafe fn outgoing_power(target:usize,hit:usize,base:usize)->i32{
+unsafe fn common_row(base:usize)->usize{
+ let mut reference=[0usize;2];
+ let get:unsafe extern "system" fn(usize)->usize=std::mem::transmute(base+COMMON_RVA);
+ let result=get(reference.as_mut_ptr()as usize);read_ptr(result)
+}
+unsafe fn rescue_segment(target:usize,row:usize)->Option<f64>{
+ if row==0{return None;}
+ let tier=ptr::read((target+0x730)as*const u8).min(3);
+ let offset=match tier{1=>0x380,2=>0x384,3=>0x388,_=>return None};
+ let total=read_i32(row+offset);
+ (total>0).then_some(f64::from(total)/f64::from(tier))
+}
+unsafe fn outgoing_power(target:usize,hit:usize,base:usize,row:usize)->i32{
  let mut rate=1f32;
  let mode:unsafe extern "system" fn()->u8=std::mem::transmute(base+MODE_RVA);
- if mode()!=0{
-  let mut reference=[0usize;2];
-  let get:unsafe extern "system" fn(usize)->usize=std::mem::transmute(base+COMMON_RVA);
-  let result=get(reference.as_mut_ptr()as usize);let row=read_ptr(result);
-  if row!=0{
-   let offset=match ptr::read((target+0x730)as*const u8){1=>0x40c,2=>0x410,3.. =>0x414,_=>0};
-   if offset!=0{rate=ptr::read_unaligned((row+offset)as*const f32);}
-  }
+ if mode()!=0&&row!=0{
+  let offset=match ptr::read((target+0x730)as*const u8){1=>0x40c,2=>0x410,3.. =>0x414,_=>0};
+  if offset!=0{rate=ptr::read_unaligned((row+offset)as*const f32);}
  }
  rescue_power(ptr::read_unaligned((hit+0x150)as*const f32),rate,ptr::read_unaligned((hit+0x258)as*const f32))
 }
@@ -150,8 +180,9 @@ unsafe extern "system" fn outgoing(module:usize,source:usize,hit:usize){
  if source==target||!party_member(target,base)||ptr::read((target+0x710)as*const u8)!=1{return;}
  // Deliberately never read +714 (remaining rescue). This is outgoing power,
  // including last-hit overflow, not a recipient-side gauge delta.
- let power=outgoing_power(target,hit,base);
- let amount=STATE.lock().ok().map_or(0,|mut s|s.credit(owner,power as f32,read_i32(owner.stats+0x15c),read_i32(owner.stats+0x160)));
+ let row=common_row(base);let Some(segment)=rescue_segment(target,row)else{return;};
+ let power=outgoing_power(target,hit,base,row);
+ let amount=STATE.lock().ok().map_or(0,|mut s|s.credit(owner,power,segment,read_i32(owner.stats+0x15c),read_i32(owner.stats+0x160)));
  if amount>0{let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);add(owner.stats,amount,0);}
 }
 // 43DA77 is inside 43D260, with RSP aligned to 16, R14 damage module,
@@ -180,13 +211,38 @@ pub unsafe extern "system" fn hit_detour(){
   for degrees in [0f32,29.9,30.,30.1,45.,90.,180.,-30.,-30.1]{let r=degrees.to_radians();assert_eq!(within_cone([0.,-1.],[r.sin()*10.,-r.cos()*10.]),degrees.abs()<=30.,"{degrees}");}
   for p in [[0.,0.],[f32::NAN,0.],[0.,f32::INFINITY]]{assert!(!within_cone([0.,-1.],p));}
  }
- #[test]fn fractional_rescues_and_cap_never_bank_overflow(){
-  let a=Identity{actor:1,handle:2,stats:3};let mut s=State::default();
-  assert_eq!(s.credit(a,1.,0,100),0);assert_eq!(s.credit(a,1.,0,100),1);
-  assert_eq!(s.credit(a,40.,10,100),20);assert_eq!(s.credit(a,30.,99,100),1);assert_eq!(s.fraction,0.);
-  assert_eq!(s.credit(a,1.,100,100),0);assert_eq!(s.credit(a,1.,0,100),0);
-  let b=Identity{handle:3,..a};assert_eq!(s.credit(b,1.,0,100),0);
-  for delta in [0.,-1.,f32::NAN,f32::INFINITY]{assert_eq!(s.credit(b,delta,0,100),0);}
+ #[test]fn mixed_tier_outputs_share_exact_segments_and_never_bank_stamina_overflow(){
+  let owner=Identity{actor:1,handle:2,stats:3};let mut s=State::default();
+  assert_eq!(s.credit(owner,20,40.,0,200),0); // half a tier-one segment
+  assert_eq!(s.credit(owner,40,80.,0,200),40); // plus half a tier-three segment
+  assert_eq!(s.progress.value,0.);
+  for _ in 0..44{assert_eq!(s.credit(owner,1,45.,0,200),0);}
+  assert_eq!(s.credit(owner,1,45.,0,200),40);assert_eq!(s.progress.value,0.);
+  assert_eq!(s.credit(owner,125,40.,0,200),120);assert_eq!(s.progress.value,90.);
+  assert_eq!(s.credit(owner,70,80.,200,200),0);assert_eq!(s.progress.value,0.);
+  assert_eq!(s.credit(owner,80,80.,190,200),10);assert_eq!(s.progress.value,0.);
+  assert_eq!(s.credit(owner,39,40.,0,200),0);
+  let replacement=Identity{handle:10,..owner};assert_eq!(s.credit(replacement,1,40.,0,200),0);assert_eq!(s.progress.value,18.);
+ }
+ #[test]fn five_second_grace_then_thirty_standard_points_per_second_no_negative_debt(){
+  let close=|a:f64,b:f64|assert!((a-b).abs()<1e-9,"{a} != {b}");
+  let mut p=Progress::default();assert_eq!(p.add(79,80.),0);let start=p.value;
+  p.tick(4.9);close(p.value,start);p.tick(0.1);close(p.value,start);
+  p.tick(0.5);close(p.value,start-270.);p.tick(0.5);close(p.value,start-540.);
+  assert_eq!(p.add(0,40.),0);p.tick(0.1);assert!((p.value-(start-594.)).abs()<1e-9); // zero output never renews grace
+  assert_eq!(p.add(1,80.),0);let current=p.value;p.tick(5.);assert_eq!(p.value,current);
+  p.tick(100.);assert_eq!(p.value,0.);p.tick(100.);assert_eq!(p.add(80,80.),40);
+  p.add(79,80.);p.tick(5.5);close(p.value,start-270.); // only excess over five seconds decays
+  for dt in [0.,-1.,f64::NAN,f64::INFINITY]{p.tick(dt);close(p.value,start-270.);}
+ }
+ #[test]fn game_time_partitioning_pause_and_cross_tier_output_refresh_shared_grace(){
+  let owner=Identity{actor:1,handle:2,stats:3};let mut s=State::default();s.credit(owner,79,80.,0,200);
+  for _ in 0..360{s.tick(owner,1./60.);}
+  assert!((s.progress.value-171.).abs()<0.001); // 39.5 - 30 standard points
+  let before=s.progress.value;s.tick(owner,0.);assert_eq!(s.progress.value,before);
+  s.credit(owner,1,45.,0,200);let before=s.progress.value;s.tick(owner,5.);assert_eq!(s.progress.value,before);
+  s.tick(owner,0.25);assert!((s.progress.value-(before-135.)).abs()<0.001);
+  for (power,segment) in [(0,40.),(-1,40.),(1,f64::NAN),(1,0.)]{let value=s.progress.value;let idle=s.progress.idle;assert_eq!(s.credit(owner,power,segment,0,200),0);assert_eq!(s.progress.value,value);assert_eq!(s.progress.idle,idle);}
  }
  #[test]fn movement_expires_and_generation_changes_clear_it(){
   let a=Identity{actor:1,handle:2,stats:3};let mut s=State::default();s.frame(a);s.sample(a,20.,2.);assert_eq!(s.movement(a),Some((20.,2.)));s.frame(a);assert!(s.movement(a).is_some());s.frame(a);assert!(s.movement(a).is_none());

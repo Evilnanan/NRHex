@@ -1294,27 +1294,27 @@
   "multiplayerVerified": false,
   "texts": [
     {
-      "path": "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
-      "inputSha256": "0e926e1beafe6e4570d5bbc58fc21ff34439e1b6230e82e2d2dfacc6e3a8bcf5",
-      "outputSha256": "2145dd5dcf4b24b3d4f0e1887b57984fb3c6c56766ef2308e129febaed1a4e94",
+      "path": "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+      "inputSha256": "2145dd5dcf4b24b3d4f0e1887b57984fb3c6c56766ef2308e129febaed1a4e94",
+      "outputSha256": "d49853865465d57e06867a03f62348c6c2e4bdaf6ddcb7667cc54b471ab95fbc",
       "containerReadbackPassed": true
     },
     {
-      "path": "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
-      "inputSha256": "22becfcd2309e25b529f4d796aef077bc110d67ea6d3c8da31d98065ee80fb4a",
-      "outputSha256": "8c0fc08222e09580b95bad6e9ea0aa47d5440c4ca3edcf4b9460830c02b936ae",
+      "path": "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+      "inputSha256": "8c0fc08222e09580b95bad6e9ea0aa47d5440c4ca3edcf4b9460830c02b936ae",
+      "outputSha256": "0813b92803645e27a8a44d4c7224412e07ff590a4e6ccc9bdddfe6e1767bd11e",
       "containerReadbackPassed": true
     },
     {
-      "path": "mod/msg/engus/item_dlc01.msgbnd.dcx",
-      "inputSha256": "1ec3f4737f4fa8011425d41abf3496331847a7c6b23af2da31a6845ad38d3818",
-      "outputSha256": "aa30d9e300f767c64f1c3c3ed6afe9007954c84a355ecb4aa91f230c31b9fb65",
+      "path": "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+      "inputSha256": "aa30d9e300f767c64f1c3c3ed6afe9007954c84a355ecb4aa91f230c31b9fb65",
+      "outputSha256": "cd3201542ab678ae631b191cf6272e3dec1538fdb52d47f1053534fffb2fb4a5",
       "containerReadbackPassed": true
     },
     {
-      "path": "mod/msg/engus/menu_dlc01.msgbnd.dcx",
-      "inputSha256": "208dbf99c4924324cc15ab25aab8408b44e30f9454f04a04309c1fbc01ccb4a7",
-      "outputSha256": "62d1240b79c993d7c5f564cd037d8159b73e0f8cd61badfb316dcc541ebf9958",
+      "path": "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+      "inputSha256": "62d1240b79c993d7c5f564cd037d8159b73e0f8cd61badfb316dcc541ebf9958",
+      "outputSha256": "eb3ce43bdda7be44830318a4a142543ba20972286549f5e3cf0b9de941b52a0e",
       "containerReadbackPassed": true
     }
   ],
@@ -1323,14 +1323,14 @@
     "tools/HexBuild/HexCatalog.cs": "36570797ccdda247c1c51f9593faac541654655afb90c53ec57e1627c8f3dc41",
     "tools/HexBuild/RewardCatalog.cs": "d93e22ac0e9d71c11bed8581bc17c01bfa9a78217c9189683fbffa44e22db4e5",
     "tools/HexBuild/Program.cs": "0bc3d7184568633dec9212b14c38cdd42045f29a8bc70b137e2f8189b534908c",
-    "docs/hexes.md": "49d088957b92173f082a189acde964b17e00dd62b17ab6e9e5c16ca74509afca",
-    "docs/hexes.en.md": "6700d653d5128e44192248cdb91f4c310f2fb2f06b81d8f6159a4a638bd87164"
+    "docs/hexes.md": "bf4ea6511716cfb24d5b00e7b7bef7414e0efb153f7f457c5e82bc74384d4493",
+    "docs/hexes.en.md": "f271aa8a78f39a1d519fc81dc8d3e8f870532354a8186b2f92687744c9fc25de"
   },
   "textSemanticReadback": {
     "source": "docs/hexes.md",
-    "sourceSha256": "49D088957B92173F082A189ACDE964B17E00DD62B17AB6E9E5C16CA74509AFCA",
+    "sourceSha256": "BF4EA6511716CFB24D5B00E7B7BEF7414E0EFB153F7F457C5E82BC74384D4493",
     "englishSource": "docs/hexes.en.md",
-    "englishSourceSha256": "6700D653D5128E44192248CDB91F4C310F2FB2F06B81D8F6159A4A638BD87164",
+    "englishSourceSha256": "F271AA8A78F39A1D519FC81DC8D3E8F870532354A8186B2F92687744C9FC25DE",
     "statusSource": "data/text/status-effects.json",
     "statusSourceSha256": "447253D6B1157CFE8388E0075726B9392B4B8582D6D97BAF65B2D0E28F1A9A17",
     "statusOnly": false,
@@ -1338,38 +1338,26 @@
       {
         "language": "zhocn",
         "file": "item_dlc01.msgbnd.dcx",
-        "inputSha256": "09A727B7D069609B4BF6B50EB775484E8760A431AEA677FEC137DFD0DEF547F6",
-        "outputSha256": "46A9AE3A8D191765B25E2FDF71139C76A21367E5ADD572EF59A5167778E7248A",
+        "inputSha256": "46A9AE3A8D191765B25E2FDF71139C76A21367E5ADD572EF59A5167778E7248A",
+        "outputSha256": "FF307652DD87CDDAC56C39F9092289004043C6EA3A77BE5156725360E419A907",
         "changes": [
-          {
-            "fmg": "AttachEffectName.fmg",
-            "id": 95003400,
-            "before": null,
-            "after": "救护车"
-          },
           {
             "fmg": "AttachEffectInfo.fmg",
             "id": 95003400,
-            "before": null,
-            "after": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。施加救援时，回复救援值50%的精力值"
-          },
-          {
-            "fmg": "PermanentBuffName.fmg",
-            "id": 95003400,
-            "before": null,
-            "after": "救护车"
+            "before": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。施加救援时，回复救援值50%的精力值",
+            "after": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。每累计施加一格救援值，回复40点精力。连续5秒未施加救援后，累计进度每秒衰减0.75格"
           },
           {
             "fmg": "PermanentBuffInfo.fmg",
             "id": 95003400,
-            "before": null,
-            "after": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。施加救援时，回复救援值50%的精力值"
+            "before": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。施加救援时，回复救援值50%的精力值",
+            "after": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。每累计施加一格救援值，回复40点精力。连续5秒未施加救援后，累计进度每秒衰减0.75格"
           },
           {
             "fmg": "PermanentBuffCaption.fmg",
             "id": 95003400,
-            "before": null,
-            "after": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。施加救援时，回复救援值50%的精力值"
+            "before": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。施加救援时，回复救援值50%的精力值",
+            "after": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。每累计施加一格救援值，回复40点精力。连续5秒未施加救援后，累计进度每秒衰减0.75格"
           }
         ],
         "unrelatedEntriesAndMembersUnchanged": true
@@ -1377,20 +1365,14 @@
       {
         "language": "zhocn",
         "file": "menu_dlc01.msgbnd.dcx",
-        "inputSha256": "5D7308A7D59C84AC98E993092A4C3B2864318BDD767D8F89447DED75BD16ED0C",
-        "outputSha256": "09789003B53BC288FC0AF48F114E4FAD4407A75F22E173B8E4EAAB63DB9C7D51",
+        "inputSha256": "09789003B53BC288FC0AF48F114E4FAD4407A75F22E173B8E4EAAB63DB9C7D51",
+        "outputSha256": "59BFA73683C8600AFBC3ACD83EA4E2A0A711044204B0016951393D7FD9428A4B",
         "changes": [
-          {
-            "fmg": "SpEffectName.fmg",
-            "id": 95003400,
-            "before": null,
-            "after": "救护车"
-          },
           {
             "fmg": "SpEffectInfo.fmg",
             "id": 95003400,
-            "before": null,
-            "after": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。施加救援时，回复救援值50%的精力值"
+            "before": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。施加救援时，回复救援值50%的精力值",
+            "after": "朝濒死队友的方向冲刺、疾跑、奔跑不消耗精力。每累计施加一格救援值，回复40点精力。连续5秒未施加救援后，累计进度每秒衰减0.75格"
           }
         ],
         "unrelatedEntriesAndMembersUnchanged": true
@@ -1398,38 +1380,26 @@
       {
         "language": "engus",
         "file": "item_dlc01.msgbnd.dcx",
-        "inputSha256": "37450B5252019A81C0CCA80F4CCDE84D344BC1144CF4DA9F6ABD0F9901329E1E",
-        "outputSha256": "9CB5E0070903637F740DD38CEF67515C7946FA4A40B3BCFA0F9E2D1DDA1AD71B",
+        "inputSha256": "9CB5E0070903637F740DD38CEF67515C7946FA4A40B3BCFA0F9E2D1DDA1AD71B",
+        "outputSha256": "84C27FBC85B11BC953475687C809C9876B9495D13AE38A8F500401099D275E1E",
         "changes": [
-          {
-            "fmg": "AttachEffectName.fmg",
-            "id": 95003400,
-            "before": null,
-            "after": "Ambulance"
-          },
           {
             "fmg": "AttachEffectInfo.fmg",
             "id": 95003400,
-            "before": null,
-            "after": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply."
-          },
-          {
-            "fmg": "PermanentBuffName.fmg",
-            "id": 95003400,
-            "before": null,
-            "after": "Ambulance"
+            "before": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply.",
+            "after": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Every full segment of rescue you contribute restores 40 stamina. After 5 seconds without contributing rescue, accumulated progress decays by 0.75 segments per second."
           },
           {
             "fmg": "PermanentBuffInfo.fmg",
             "id": 95003400,
-            "before": null,
-            "after": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply."
+            "before": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply.",
+            "after": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Every full segment of rescue you contribute restores 40 stamina. After 5 seconds without contributing rescue, accumulated progress decays by 0.75 segments per second."
           },
           {
             "fmg": "PermanentBuffCaption.fmg",
             "id": 95003400,
-            "before": null,
-            "after": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply."
+            "before": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply.",
+            "after": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Every full segment of rescue you contribute restores 40 stamina. After 5 seconds without contributing rescue, accumulated progress decays by 0.75 segments per second."
           }
         ],
         "unrelatedEntriesAndMembersUnchanged": true
@@ -1437,27 +1407,48 @@
       {
         "language": "engus",
         "file": "menu_dlc01.msgbnd.dcx",
-        "inputSha256": "CE455DC48053899EC808DA11C369F363DE2B6CF6EA181FD4AD2A15C4165F3953",
-        "outputSha256": "34F4F3CF6E3F794AEB4E78B73DD93C5AB4B338BE9937016B81588A0C8A89FE60",
+        "inputSha256": "34F4F3CF6E3F794AEB4E78B73DD93C5AB4B338BE9937016B81588A0C8A89FE60",
+        "outputSha256": "EE3D7A0A8B6F6648105E4D23A8EEF781733F28A484FA08E109394043AE608348",
         "changes": [
-          {
-            "fmg": "SpEffectName.fmg",
-            "id": 95003400,
-            "before": null,
-            "after": "Ambulance"
-          },
           {
             "fmg": "SpEffectInfo.fmg",
             "id": 95003400,
-            "before": null,
-            "after": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply."
+            "before": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply.",
+            "after": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Every full segment of rescue you contribute restores 40 stamina. After 5 seconds without contributing rescue, accumulated progress decays by 0.75 segments per second."
           }
         ],
         "unrelatedEntriesAndMembersUnchanged": true
       }
-    ]
+    ],
+    "compressedContainers": [
+      {
+        "path": "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+        "inputSha256": "2145dd5dcf4b24b3d4f0e1887b57984fb3c6c56766ef2308e129febaed1a4e94",
+        "outputSha256": "d49853865465d57e06867a03f62348c6c2e4bdaf6ddcb7667cc54b471ab95fbc",
+        "containerReadbackPassed": true
+      },
+      {
+        "path": "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+        "inputSha256": "8c0fc08222e09580b95bad6e9ea0aa47d5440c4ca3edcf4b9460830c02b936ae",
+        "outputSha256": "0813b92803645e27a8a44d4c7224412e07ff590a4e6ccc9bdddfe6e1767bd11e",
+        "containerReadbackPassed": true
+      },
+      {
+        "path": "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+        "inputSha256": "aa30d9e300f767c64f1c3c3ed6afe9007954c84a355ecb4aa91f230c31b9fb65",
+        "outputSha256": "cd3201542ab678ae631b191cf6272e3dec1538fdb52d47f1053534fffb2fb4a5",
+        "containerReadbackPassed": true
+      },
+      {
+        "path": "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+        "inputSha256": "62d1240b79c993d7c5f564cd037d8159b73e0f8cd61badfb316dcc541ebf9958",
+        "outputSha256": "eb3ce43bdda7be44830318a4a142543ba20972286549f5e3cf0b9de941b52a0e",
+        "containerReadbackPassed": true
+      }
+    ],
+    "allCatalogReadbackPassed": true
   },
-  "version": "0.17.168",
+  "version": "0.17.169",
   "nativeValidation": {
     "nativeExecutionPassed": true,
     "hksCases": 40,
@@ -1467,7 +1458,16 @@
       102022
     ],
     "preservedPeriodicEffect": 100320,
-    "rescueRate": 0.5,
+    "staminaPerSegment": 40,
+    "segmentRescueValues": [
+      40,
+      45,
+      80
+    ],
+    "sharedProgress": true,
+    "idleGraceSeconds": 5,
+    "decayStandardPointsPerSecond": 30,
+    "standardPointsPerSegment": 40,
     "cases": [
       "compiled hooks installed over native functions",
       "native periodic cost summation matches non-owner and filters only movement effects",
@@ -1477,7 +1477,9 @@
       "250 native rescue arithmetic comparisons across mode/tier/correction/minimum-one",
       "other rescuers, no owner, revived target and self give no recovery",
       "native rescue application and packet decoder in both formats never refund again",
-      "odd rescue fractional carry and real native maximum-stamina clamp"
+      "cross-teammate cross-tier half segments combine into one 40-stamina reward",
+      "five-second game-time grace, boundary split, 30-standard-point decay, zero-output no reset, positive-output reset",
+      "real native stamina cap, multi-segment overkill and no deferred full-stamina rewards"
     ],
     "stubs": [
       "actor/effect/roster lookup",
@@ -1488,11 +1490,11 @@
       "native rescue statistics and network sending suppressed"
     ],
     "sourceHashes": {
-      "src/ambulance.rs": "c53e86068141a33a1b235b7089943db45c88a449a556b030422e746dc2cdc927",
-      "src/ambulance_native_tests.rs": "8a9a4e1073b1b57e705b1ed13f0917a9018370f01ae8820f3e6053634bd68aeb",
+      "src/ambulance.rs": "d724854854ef577f312d7701057991c383126f7e2a0f00463572db4edb339eaa",
+      "src/ambulance_native_tests.rs": "7f06583eea751974b9f11c283e3a2a5e2ac1846a91c7aaf84c4aef5342523718",
       "src/reward_choices.rs": "7124cf11f3a66339f74afd86233d64b4f737f4b9f581a8392e3b004bea961199",
       "src/hex_pool.rs": "c6bf3d2b933bb6b2c1907de64dfef9b1e86ffc9dd4e4f286af66f3035808b413",
-      "src/lib.rs": "ae2345e1c3fc994b26016278b4c5c75af3166a51a5cc9ee1e7e0597a91f442f7",
+      "src/lib.rs": "14aa16d802809c2d8c93a1ce16f81b7fc8693e796eb0d8cea952bd5bf14ebc95",
       "tools/HexBuild/Ambulance.cs": "678b8c88e037d9c4ef1fbf059625555695100544299591d20c90d42c94ffcaae",
       "tools/build_ambulance_hks.py": "860349db84932fb3aec00fc9364ba473df741721e59b33678ef139fcaf270973"
     },
@@ -1787,39 +1789,44 @@
     "gameplayVerified": false
   },
   "files": {
-    "dist/README.md": "bfdc43ce11caf50ff7d1bce91eaa510f9ca842e0a4d1cc1ad2c37317d2c48ae5",
+    "dist/README.md": "cb443e96c53d50072f98739ad5d9b037cfc79d936f67cbd70585a0fdfa449115",
     "dist/mod/regulation.bin": "6ae34c44498ba1c4e1e8d49b62e31d73b1b9f0ed6ddf394553d938e45a8f666f",
-    "dist/mod/natives/NRHex.dll": "9b24ef7c5dba033ace0b426881a94f999b6802f426ee2da273e0ac3a4d7b9b60",
+    "dist/mod/natives/NRHex.dll": "37a1cb577cd56a91e2cba2989c69003934c43989f62939224b9e1bc14530d536",
     "dist/mod/action/script/c0000.hks": "ecbbb7e2b60d896744829c51d7fdd51ab5a13bf6b7dd0f67cdd137e58a5383cb",
-    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "aa30d9e300f767c64f1c3c3ed6afe9007954c84a355ecb4aa91f230c31b9fb65",
-    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "62d1240b79c993d7c5f564cd037d8159b73e0f8cd61badfb316dcc541ebf9958",
-    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "2145dd5dcf4b24b3d4f0e1887b57984fb3c6c56766ef2308e129febaed1a4e94",
-    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "8c0fc08222e09580b95bad6e9ea0aa47d5440c4ca3edcf4b9460830c02b936ae"
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "cd3201542ab678ae631b191cf6272e3dec1538fdb52d47f1053534fffb2fb4a5",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "eb3ce43bdda7be44830318a4a142543ba20972286549f5e3cf0b9de941b52a0e",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "d49853865465d57e06867a03f62348c6c2e4bdaf6ddcb7667cc54b471ab95fbc",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "0813b92803645e27a8a44d4c7224412e07ff590a4e6ccc9bdddfe6e1767bd11e"
   },
   "fullOriginalResourceBuildPerformed": false,
   "resourceGenerationVersion": "0.17.167",
   "resourceGenerationUnchangedDistFileCount": 253,
   "dllUpdate": {
-    "version": "0.17.168",
+    "version": "0.17.169",
     "mode": "dll-only",
     "buildPassed": true,
     "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
-    "dllSha256": "9b24ef7c5dba033ace0b426881a94f999b6802f426ee2da273e0ac3a4d7b9b60",
+    "dllSha256": "37a1cb577cd56a91e2cba2989c69003934c43989f62939224b9e1bc14530d536",
     "installed": true,
-    "installedDllSha256": "9b24ef7c5dba033ace0b426881a94f999b6802f426ee2da273e0ac3a4d7b9b60",
+    "installedDllSha256": "37a1cb577cd56a91e2cba2989c69003934c43989f62939224b9e1bc14530d536",
     "resourcesRebuilt": false,
     "gameplayVerified": false,
     "multiplayerVerified": false,
     "loadingVerified": false,
-    "baselineCommit": "19d11b488c71fc13cba44cd82a0655aa1d204163",
-    "regularTestsPassed": 388,
+    "baselineCommit": "36c69b03be96cf04ad46dc8f71283d725f87cf76",
+    "regularTestsPassed": 390,
     "runtimeSignaturesChecked": 167,
     "otherNativeRegressionSuitesPassed": 4,
     "changedDistFiles": [
       "dist/README.md",
+      "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+      "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+      "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+      "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
       "dist/mod/natives/NRHex.dll",
       "dist/ambulance-validation.json"
     ],
-    "unchangedDistFileCount": 259
+    "unchangedDistFileCount": 255,
+    "textsRebuilt": true
   }
 }
