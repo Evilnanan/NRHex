@@ -42,6 +42,7 @@ mod heartstealer;
 mod essence_reaver;
 mod ominous_pact;
 mod reward_terrain;
+mod native_party;
 mod parry_data;
 mod hero_audio;
 mod spirit;
@@ -409,7 +410,7 @@ fn signatures()->[(&'static str,u32);160] {
   (reward_reroll::ROW_DTOR_PATTERN,reward_reroll::ROW_DTOR_RVA as u32),
   (reward_reroll::BIND_PATTERN,reward_reroll::BIND_RVA as u32),
   (reward_reroll::SOUND_PATTERN,reward_reroll::SOUND_RVA as u32),
-  (cage_trace::PARTY_PATTERN,cage_trace::PARTY_RVA as u32),
+  (native_party::COUNT_PATTERN,native_party::COUNT_RVA as u32),
   (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
   (parry::DUMMY_COUNT_PATTERN,parry::DUMMY_COUNT_RVA as u32),
   (parry::COUNTER_COST_PATTERN,parry::COUNTER_COST_RVA as u32),
@@ -1976,7 +1977,10 @@ unsafe fn local_hero(base:usize)->Option<u8> {
  player_data_hero(read_ptr(base+GAME_DATA_RVA))
 }
 unsafe fn unavailable_hexes(player:usize,base:usize)->HexSet {
- reward_choices::role_exclusions(reward_choices::terrain_exclusions(reward_choices::ownership_exclusions(owned_hexes(player,base)),reward_terrain::exclude_cage(reward_terrain::great_hollow(base))),local_hero(base))
+ let unavailable=reward_choices::ownership_exclusions(owned_hexes(player,base));
+ let unavailable=reward_choices::terrain_exclusions(unavailable,reward_terrain::exclude_cage(reward_terrain::great_hollow(base)));
+ let unavailable=reward_choices::party_exclusions(unavailable,native_party::difficulty_count(base));
+ reward_choices::role_exclusions(unavailable,local_hero(base))
 }
 fn random_index(count:usize)->Option<usize>{
  let count=u64::try_from(count).ok()?;if count==0{return None;}

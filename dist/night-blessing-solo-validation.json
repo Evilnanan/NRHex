@@ -1,0 +1,30 @@
+{
+  "version": "0.17.166",
+  "owner": 95002500,
+  "requiredDifficultyCount": 1,
+  "nativeCountRva": "0x519660",
+  "nativeCountIncludesRetainedBossRecord": true,
+  "queriesOnEveryDraw": true,
+  "unreadyManagersExcludeOnlyNightBlessing": true,
+  "originalManagersAndCountsUnmodified": true,
+  "normalDraws": true,
+  "focusedTestBalls": true,
+  "perOptionRerolls": true,
+  "previouslyOwnedAbilitiesUnmodified": true,
+  "roleTerrainOwnershipAndHistoryFiltersPreserved": true,
+  "newHooks": 0,
+  "unitTestsPassed": 382,
+  "unitTestsIgnored": 7,
+  "isolatedNativeCountCasesPassed": 32,
+  "signatureCount": 160,
+  "executableSignatureScanPassed": true,
+  "testDllSha256": "62a0fe9575c36a950893f543c66d07cc44fbd190ecb229d7eaf105ceae5f2720",
+  "productionDllSha256": "53822ba53dd269d010e7f5739dfbcac9e0d8abb3c66661819d0fefa469633177",
+  "productionHasNoKeyboardPollingImport": true,
+  "regulationAndHksUnmodified": true,
+  "distributionChangedFiles": [
+    "mod/natives/NRHex.dll"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -1,8 +1,6 @@
 //! Bounded transition-only observations for the next cooperative acceptance run.
 use std::{collections::BTreeMap, sync::{Mutex, OnceLock}};
 use crate::{native_actor, read_i32, read_ptr, has_effect};
-pub(crate) const PARTY_RVA:usize=0x519660;
-pub(crate) const PARTY_PATTERN:&str="48 83 EC 28 48 83 3D CC 5C 6F 03 00 75 27";
 static LAST: OnceLock<Mutex<BTreeMap<u64, (i32, i32, bool, i32, i32, bool, bool)>>> = OnceLock::new();
 pub(crate) unsafe fn observe(actor: usize, npc: i32, base: usize) {
     let stats = native_actor::stats(actor);
@@ -14,8 +12,7 @@ pub(crate) unsafe fn observe(actor: usize, npc: i32, base: usize) {
     // Hidden candidate actors need no trace. Observe selected enabled actors,
     // including death and any HP packet exceeding the local maximum.
     if flags&0x10==0{return;}
-    let count:unsafe extern "system" fn()->i32=std::mem::transmute(base+PARTY_RVA);
-    let party=count();let ready=has_effect(actor,95001603,base);
+    let party=crate::native_party::difficulty_count(base).unwrap_or(-1);let ready=has_effect(actor,95001603,base);
     let mut coop=-1;let manager=read_ptr(actor+0x190);
     if manager!=0 {
         let mut node=read_ptr(manager+8);

@@ -18,6 +18,9 @@ pub fn ownership_exclusions(mut owned:HexSet)->HexSet{
 pub fn terrain_exclusions(mut owned:HexSet,great_hollow:bool)->HexSet{
  if great_hollow{owned.insert(index(95001600));}owned
 }
+pub fn party_exclusions(mut unavailable:HexSet,difficulty_count:Option<i32>)->HexSet{
+ if difficulty_count!=Some(1){unavailable.insert(index(95002500));}unavailable
+}
 pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  let sword=index(95000900);let has_sword=unavailable.contains(&sword);
  for (id,excluded)in [
@@ -45,6 +48,21 @@ pub fn is_hex_good(encoded:u32)->bool{
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn night_blessing_draws_and_refreshes_follow_live_difficulty_count(){
+  let blessing=index(95002500);let owned=mask([5]);
+  for count in [None,Some(0),Some(1),Some(2),Some(3),Some(4),Some(1)]{
+   let excluded=party_exclusions(owned.clone(),count);let allowed=count==Some(1);
+   assert_eq!(excluded.difference(&owned).copied().collect::<HexSet>(),if allowed{HexSet::new()}else{mask([blessing])});
+   for seen in [HexSet::new(),all(HEX_COUNT)]{
+    let round=crate::reward_cycle::Round::new(&excluded,&seen);
+    assert_eq!(round.candidates.contains(&blessing),allowed);
+    assert_eq!(round.preferred([blessing,0,1]).unwrap().contains(&blessing),allowed);
+    assert_eq!(crate::reward_cycle::Single::new(&excluded,&seen,&mask([0,1])).candidates.contains(&blessing),allowed);
+   }
+   let mut owned_blessing=owned.clone();owned_blessing.insert(blessing);
+   assert!(!preferred([blessing,0,1],&party_exclusions(owned_blessing,count)).unwrap().contains(&blessing));
+  }
+ }
  #[test]fn pact_conflicts_follow_actual_ownership_in_draws_focused_balls_and_refreshes(){
   let pact=index(95002600);let shell=index(95000700);let jiahao=index(95001300);
   for bits in 0..8{
