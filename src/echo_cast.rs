@@ -17,7 +17,7 @@ pub static FACTORY_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 type Emit=unsafe extern "system" fn(usize,usize,usize,usize)->usize;
 type Factory=unsafe extern "system" fn(usize,usize,usize)->usize;
 #[repr(C,align(16))]struct Descriptor([u8;0x110]);
-struct Ticket{descriptor:Box<Descriptor>,base:usize,wait:f64,area:bool}
+struct Ticket{descriptor:Box<Descriptor>,pose:[u8;0x40],base:usize,wait:f64,area:bool,entity_target:bool}
 impl Drop for Ticket{fn drop(&mut self){unsafe{
  let release:unsafe extern "system" fn(usize)=std::mem::transmute(self.base+RELEASE_RVA);
  release(self.descriptor.0.as_mut_ptr()as usize);
@@ -26,10 +26,11 @@ impl Drop for Ticket{fn drop(&mut self){unsafe{
 #[derive(Default)]struct Queue{owner:Owner,pending:Vec<Ticket>}
 static QUEUE:Mutex<Queue>=Mutex::new(Queue{owner:Owner{actor:0,handle:0,stats:0,context:0},pending:Vec::new()});
 #[derive(Clone,Copy,Default)]struct Scope{descriptor:usize,owner:Owner,consumed:bool}
-thread_local!{static SCOPE:Cell<Scope>=Cell::new(Scope::default());static REPLAY:Cell<bool>=const{Cell::new(false)};}
+#[derive(Clone,Copy,Default)]struct Replay{ticket:usize,consumed:bool}
+thread_local!{static SCOPE:Cell<Scope>=Cell::new(Scope::default());static REPLAY:Cell<Replay>=Cell::new(Replay::default());}
 struct ScopeGuard(Scope);
 impl Drop for ScopeGuard{fn drop(&mut self){SCOPE.with(|s|s.set(self.0));}}
-struct ReplayGuard(bool);
+struct ReplayGuard(Replay);
 impl Drop for ReplayGuard{fn drop(&mut self){REPLAY.with(|s|s.set(self.0));}}
 fn eligible(magic:i32,bullet:i32)->bool{
  area_replay(magic,bullet).is_some()||crate::echo_cast_data::ROOTS.binary_search_by_key(&magic,|r|r.0).ok().is_some_and(|i|crate::echo_cast_data::ROOTS[i].1.binary_search(&bullet).is_ok())
@@ -53,7 +54,7 @@ unsafe fn scope(descriptor:usize,base:usize)->Option<Owner>{
 }
 pub unsafe extern "system" fn emit(manager:usize,out:usize,descriptor:usize,error:usize)->usize{
  let original:Emit=std::mem::transmute(EMIT_ORIGINAL.load(Ordering::Acquire));
- let value=if ACTIVE.load(Ordering::Acquire)&&!REPLAY.with(Cell::get){scope(descriptor,BASE.load(Ordering::Acquire))}else{None};
+ let value=if ACTIVE.load(Ordering::Acquire)&&REPLAY.with(Cell::get).ticket==0{scope(descriptor,BASE.load(Ordering::Acquire))}else{None};
  let _guard=ScopeGuard(SCOPE.with(|s|s.replace(value.map_or(Scope::default(),|owner|Scope{descriptor,owner,consumed:false}))));
  original(manager,out,descriptor,error)
 }
@@ -88,13 +89,28 @@ unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
  // Native flag0 requests an independent shot; bit3 retains native networking.
  let flags=read_i32(scope.descriptor+0x44)as u32|1;
  d.0[0x44..0x48].copy_from_slice(&flags.to_le_bytes());
- Some(Ticket{descriptor:d,base,wait:0.5,area:replay.is_some()})
+ let entity_target=replay.is_none()&&(read_ptr(d.0.as_ptr()as usize+0xb8)!=usize::MAX||read_ptr(d.0.as_ptr()as usize+0xc0)!=0);
+ Some(Ticket{descriptor:d,pose:ptr::read_unaligned((payload+0x190)as*const[u8;0x40]),base,wait:0.5,area:replay.is_some(),entity_target})
 }
 pub unsafe extern "system" fn factory(manager:usize,payload:usize,error:usize)->usize{
  let original:Factory=std::mem::transmute(FACTORY_ORIGINAL.load(Ordering::Acquire));
  let scope=SCOPE.with(|s|{let v=s.get();s.set(Scope{consumed:true,..v});v});
  let base=BASE.load(Ordering::Acquire);
- let ticket=if !REPLAY.with(Cell::get)&&scope.descriptor!=0&&!scope.consumed{snapshot(scope,payload,base)}else{None};
+ let replay=REPLAY.with(|r|{let v=r.get();r.set(Replay{consumed:true,..v});v});
+ if replay.ticket!=0&&!replay.consumed{
+  let ticket=&*(replay.ticket as*const Ticket);
+  if !ticket.area{
+   let targets=read_ptr(payload+0x148);let end=read_ptr(payload+0x150);
+   if targets==0||end.wrapping_sub(targets)!=0x50{return 0;}
+   // Native calculation may reselect a current lock for a forward-only
+   // descriptor. Restore its original resolved target immediately before
+   // allocation; native networking then serializes the restored result too.
+   let copy:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+TARGET_COPY_RVA);
+   copy(targets,ticket.descriptor.0.as_ptr().add(0xb0)as usize);
+  }
+  ptr::copy_nonoverlapping(ticket.pose.as_ptr(),(payload+0x190)as*mut u8,0x40);
+ }
+ let ticket=if replay.ticket==0&&scope.descriptor!=0&&!scope.consumed{snapshot(scope,payload,base)}else{None};
  let result=original(manager,payload,error);
  if result!=0{if let Some(ticket)=ticket{
   let stale=if let Ok(mut q)=QUEUE.lock(){let old=if q.owner!=scope.owner{q.owner=scope.owner;std::mem::take(&mut q.pending)}else{Vec::new()};q.pending.push(ticket);old}else{Vec::new()};drop(stale);
@@ -111,13 +127,13 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
   }
  }else{return;};drop(discard);
  let manager=read_ptr(base+0x3c0ae30);if manager==0{return;}
- let _replay=ReplayGuard(REPLAY.with(|s|s.replace(true)));
  let emit:Emit=std::mem::transmute(EMIT_ORIGINAL.load(Ordering::Acquire));
  let valid:unsafe extern "system" fn(usize)->u8=std::mem::transmute(base+TARGET_VALID_RVA);
  for ticket in &mut ready{
   let descriptor=ticket.descriptor.0.as_mut_ptr()as usize;
   // A vanished target must not make native calculation choose a new lock-on.
-  if !ticket.area&&valid(descriptor+0xb0)==0{continue;}
+  if ticket.entity_target&&valid(descriptor+0xb0)==0{continue;}
+  let _replay=ReplayGuard(REPLAY.with(|r|r.replace(Replay{ticket:ticket as*const Ticket as usize,consumed:false})));
   let mut out=-1i32;let mut error=-1i32;emit(manager,&mut out as*mut i32 as usize,descriptor,&mut error as*mut i32 as usize);
  }
 }
@@ -136,6 +152,14 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
    assert!(!eligible(magic,replay));assert!(!eligible(magic,root+1));
   }
   for magic in [6420,6760,6971]{assert!(!eligible(magic,10000000+magic*100));}
+ }
+ #[test]fn volley_roots_include_no_cost_sides_but_not_helpers_or_descendants(){
+  for root in [10409000,10409001,10409002,10409050,10409051,10409052]{assert!(eligible(4090,root));}
+  for root in [10450010,10450011,10450012,10450060,10450061,10450062]{assert!(eligible(4500,root));}
+  for root in [10682010,10682011,10682012,10682070,10682071,10682072]{assert!(eligible(6820,root));}
+  assert!(eligible(4220,10422000));assert!(eligible(4220,10422050));assert!(!eligible(4220,10422015));
+  assert!(!eligible(4220,10422098));assert!(!eligible(4220,10422099));assert!(!eligible(4050,10404099));
+  assert!(!eligible(4060,10406000));assert!(!eligible(4520,10452000));assert!(!eligible(7900,10790001));
  }
 }
 #[cfg(test)]

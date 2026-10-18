@@ -1,0 +1,640 @@
+{
+  "version": "0.17.172",
+  "baselineCommit": "de774f57e05664d9ee8ca57f446a00d88b21ebbf",
+  "owner": 95003500,
+  "eligibleSpells": 105,
+  "eligibleRoots": 226,
+  "addedSpells": 44,
+  "addedRoots": 136,
+  "addedMagicIds": [
+    4000,
+    4001,
+    4040,
+    4050,
+    4070,
+    4090,
+    4100,
+    4120,
+    4210,
+    4220,
+    4370,
+    4390,
+    4431,
+    4500,
+    4510,
+    4710,
+    4721,
+    5000,
+    5001,
+    5010,
+    5030,
+    5040,
+    5100,
+    6001,
+    6120,
+    6230,
+    6270,
+    6400,
+    6410,
+    6710,
+    6750,
+    6800,
+    6820,
+    6830,
+    6910,
+    6920,
+    6941,
+    6950,
+    7060,
+    7090,
+    7200,
+    7240,
+    7330,
+    7530
+  ],
+  "nativeValidation": {
+    "nativeExecutionPassed": true,
+    "delaySeconds": 0.5,
+    "spellFpRate": 2.25,
+    "eligibleRoles": [
+      4,
+      6,
+      7
+    ],
+    "eligibleSpells": 105,
+    "eligibleRoots": 226,
+    "groupEffects": 11,
+    "catalog": {
+      "eligibleSpells": 105,
+      "eligibleRoots": 226,
+      "groupEffects": 11,
+      "noCostConsumptionType": 2,
+      "roots": {
+        "4000": [
+          10400000
+        ],
+        "4001": [
+          10400100
+        ],
+        "4010": [
+          10401000
+        ],
+        "4020": [
+          10402000,
+          10402050
+        ],
+        "4021": [
+          10402100,
+          10402150
+        ],
+        "4030": [
+          10403000,
+          10403050
+        ],
+        "4040": [
+          10404000,
+          10404050
+        ],
+        "4050": [
+          10405000,
+          10405050
+        ],
+        "4070": [
+          10407000
+        ],
+        "4080": [
+          10408000,
+          10408050
+        ],
+        "4090": [
+          10409000,
+          10409001,
+          10409002,
+          10409050,
+          10409051,
+          10409052
+        ],
+        "4100": [
+          10410000,
+          10410001,
+          10410002
+        ],
+        "4120": [
+          10412000,
+          10412001
+        ],
+        "4130": [
+          10413000
+        ],
+        "4210": [
+          10421007,
+          10421010,
+          10421020,
+          10421030,
+          10421057,
+          10421060,
+          10421070,
+          10421080
+        ],
+        "4220": [
+          10422000,
+          10422050
+        ],
+        "4360": [
+          10436000
+        ],
+        "4361": [
+          10436100
+        ],
+        "4370": [
+          10437000,
+          10437003,
+          10437050,
+          10437053
+        ],
+        "4380": [
+          10438000,
+          10438050
+        ],
+        "4381": [
+          10438100,
+          10438110,
+          10438150,
+          10438160
+        ],
+        "4390": [
+          10439002,
+          10439052
+        ],
+        "4400": [
+          10440000
+        ],
+        "4410": [
+          10441000,
+          10441050
+        ],
+        "4420": [
+          10442000,
+          10442050
+        ],
+        "4431": [
+          10443100,
+          10443110,
+          10443120,
+          10443130
+        ],
+        "4500": [
+          10450010,
+          10450011,
+          10450012,
+          10450060,
+          10450061,
+          10450062
+        ],
+        "4510": [
+          10451000,
+          10451010,
+          10451020
+        ],
+        "4600": [
+          10460000
+        ],
+        "4610": [
+          10461000
+        ],
+        "4620": [
+          10462000,
+          10462050
+        ],
+        "4640": [
+          10464000
+        ],
+        "4641": [
+          10464010
+        ],
+        "4642": [
+          10464020
+        ],
+        "4650": [
+          10465000
+        ],
+        "4710": [
+          10471000,
+          10471001,
+          10471002,
+          10471050,
+          10471051,
+          10471052
+        ],
+        "4720": [
+          10472000,
+          10472050
+        ],
+        "4721": [
+          10472100,
+          10472101,
+          10472150,
+          10472151
+        ],
+        "4800": [
+          10480000,
+          10480050
+        ],
+        "4820": [
+          10482000,
+          10482050
+        ],
+        "4830": [
+          10483000
+        ],
+        "4900": [
+          10490000,
+          10490001,
+          10490002
+        ],
+        "4910": [
+          10491000
+        ],
+        "5000": [
+          10500000,
+          10500001,
+          10500002,
+          10500050,
+          10500051,
+          10500052
+        ],
+        "5001": [
+          10500110,
+          10500111,
+          10500112,
+          10500160,
+          10500161,
+          10500162
+        ],
+        "5010": [
+          10501000,
+          10501001
+        ],
+        "5030": [
+          10503000
+        ],
+        "5040": [
+          10504000,
+          10504050
+        ],
+        "5100": [
+          10510000,
+          10510001,
+          10510050,
+          10510051
+        ],
+        "5110": [
+          10511000,
+          10511050
+        ],
+        "6000": [
+          10600000,
+          10600001,
+          10600002,
+          10600005
+        ],
+        "6001": [
+          10600100,
+          10600105,
+          10600150,
+          10600155
+        ],
+        "6010": [
+          10601000,
+          10601050
+        ],
+        "6020": [
+          10602000,
+          10602050
+        ],
+        "6100": [
+          10610000,
+          10610050
+        ],
+        "6110": [
+          10611000
+        ],
+        "6120": [
+          10612000,
+          10612005,
+          10612050,
+          10612055
+        ],
+        "6210": [
+          10621000,
+          10621050
+        ],
+        "6230": [
+          10623000,
+          10623001,
+          10623050,
+          10623051
+        ],
+        "6240": [
+          10625000,
+          10625050
+        ],
+        "6270": [
+          10624001,
+          10624051
+        ],
+        "6300": [
+          10630000
+        ],
+        "6310": [
+          10631000,
+          10631005
+        ],
+        "6400": [
+          10640000,
+          10640050
+        ],
+        "6410": [
+          10641000,
+          10641050
+        ],
+        "6500": [
+          10650000,
+          10650050
+        ],
+        "6520": [
+          10652000
+        ],
+        "6530": [
+          10653000
+        ],
+        "6700": [
+          10670000
+        ],
+        "6701": [
+          10670100
+        ],
+        "6710": [
+          10671000,
+          10671050
+        ],
+        "6720": [
+          10672000
+        ],
+        "6750": [
+          10675000
+        ],
+        "6800": [
+          10680000,
+          10680001
+        ],
+        "6810": [
+          10681000
+        ],
+        "6820": [
+          10682010,
+          10682011,
+          10682012,
+          10682070,
+          10682071,
+          10682072
+        ],
+        "6830": [
+          10683010,
+          10683011,
+          10683012,
+          10683013,
+          10683014,
+          10683015
+        ],
+        "6900": [
+          10690000,
+          10690050
+        ],
+        "6910": [
+          10691000,
+          10691020,
+          10691050,
+          10691070
+        ],
+        "6920": [
+          10692000
+        ],
+        "6921": [
+          10692100
+        ],
+        "6930": [
+          10693000
+        ],
+        "6940": [
+          10694000
+        ],
+        "6941": [
+          10694100,
+          10694150
+        ],
+        "6950": [
+          10695000
+        ],
+        "7060": [
+          10706000,
+          10706002
+        ],
+        "7090": [
+          10709000
+        ],
+        "7200": [
+          10720000,
+          10720001,
+          10720002,
+          10720003,
+          10720004,
+          10720005
+        ],
+        "7210": [
+          10721000
+        ],
+        "7220": [
+          10722000
+        ],
+        "7240": [
+          10724000
+        ],
+        "7320": [
+          10732000,
+          10732050
+        ],
+        "7330": [
+          10733000
+        ],
+        "7530": [
+          10753000,
+          10753010,
+          10753020,
+          10753030
+        ]
+      },
+      "unsupportedMagic": [
+        7010,
+        7011,
+        7050,
+        7900
+      ],
+      "nativeChainSha256": "05204b7deb7d02212abbc923462925fd33325114031000415eb0a2a4354ce67b"
+    },
+    "groupReadback": {
+      "installedSha256": "8D34E01AE4734B5849ACE5856E3A6B61F88D3E41594E8D01438BD5FBB4009460",
+      "installedReadbackPassed": true,
+      "profiles": [
+        {
+          "Magic": 6330,
+          "Root": 10633000,
+          "AreaBullet": 10633001,
+          "Replay": 95003510
+        },
+        {
+          "Magic": 6340,
+          "Root": 10634000,
+          "AreaBullet": 10634001,
+          "Replay": 95003511
+        },
+        {
+          "Magic": 6421,
+          "Root": 10642100,
+          "AreaBullet": 10642101,
+          "Replay": 95003512
+        },
+        {
+          "Magic": 6422,
+          "Root": 10642200,
+          "AreaBullet": 10642201,
+          "Replay": 95003513
+        },
+        {
+          "Magic": 6423,
+          "Root": 10642300,
+          "AreaBullet": 10642301,
+          "Replay": 95003514
+        },
+        {
+          "Magic": 6424,
+          "Root": 10642400,
+          "AreaBullet": 10642401,
+          "Replay": 95003515
+        },
+        {
+          "Magic": 6430,
+          "Root": 10643000,
+          "AreaBullet": 10643001,
+          "Replay": 95003516
+        },
+        {
+          "Magic": 6431,
+          "Root": 10643100,
+          "AreaBullet": 10643101,
+          "Replay": 95003517
+        },
+        {
+          "Magic": 6490,
+          "Root": 10649000,
+          "AreaBullet": 10649001,
+          "Replay": 95003518
+        },
+        {
+          "Magic": 6600,
+          "Root": 10660000,
+          "AreaBullet": 10660000,
+          "Replay": 95003519
+        },
+        {
+          "Magic": 7903,
+          "Root": 10790300,
+          "AreaBullet": 10790301,
+          "Replay": 95003520
+        }
+      ],
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "cases": [
+      "compiled emit/factory detours with real native BulletMan root dispatch",
+      "original resolved pose and aim restored before allocation despite recalculation selecting a changed pose/lock",
+      "entity targets retained; vanished entities cancel without reacquiring another enemy",
+      "forward-only sentinel, fixed aim point, and point at local origin replay without an entity-validity requirement",
+      "recalculation changing the number of independent targets cancels rather than selecting the first one",
+      "zero dt and 0.49-second hold followed by 0.5-second replay",
+      "all normal/charged/no-cost side roots for Glintstone Stars, Star Shower, Crystal Barrage, Stars of Ruin, Shattering Crystal, Crystal Release, Beast Claw, and Gurranq Beast Claw replay once each",
+      "child and parented emissions cannot reschedule a full volley; replay is not recursive",
+      "native target copy/refcount atomics and descriptor release balance flagged counters, including replacing a newly selected enemy with original untargeted aim",
+      "failed creation, owner loss, and changed expedition context discard retained references",
+      "native network enqueue branch retained; peer transport is not simulated",
+      "all 11 group effects replay dedicated area IDs at the captured position with empty/multiple original targets and a dead enemy lock",
+      "group replays retain no enemy target reference; source/weapon context references balance",
+      "personal heal, control bullets, held channels, and generated area IDs do not schedule echoes",
+      "installed group parameter readback retains native ally amounts, modifiers, radii and category rules; enables self and independent hit records"
+    ],
+    "nativeFunctions": [
+      "35A460 root dispatch",
+      "3482E0 target copy",
+      "3482B0 target release",
+      "214EAF0 / 214EB90 reference atomics",
+      "33E650 descriptor release",
+      "3494C0 target validity"
+    ],
+    "stubs": [
+      "actor/effect lookup and target resolution",
+      "33D010 projectile calculation including deliberate current-lock/pose changes; 35DA70 allocation and scatter/child production",
+      "network packet serialization/copy and transport consumers",
+      "fixture target-vector allocation/cleanup; allocator/string/rendering context teardown"
+    ],
+    "sourceHashes": {
+      "src/echo_cast.rs": "d6fd06613ef5c849a492b9a150e9ff7da7916a85188b720889e0911fbe7eea8e",
+      "src/echo_cast_native_tests.rs": "ff20bbb60fb56361aceca8ce1ce9ac3b9e3a4b2594c5d7bb32fadc587ad9a37e",
+      "src/echo_cast_data.rs": "100b72b9d24d0943b969aa45e65dbdd83166a9464db5ad032b0e6474e006f6f6",
+      "src/lib.rs": "d007f93962a7f72b757d9ce27628318ebeaffa5bada8ae33657512bb92ea289c",
+      "src/reward_choices.rs": "7c5e3abf206c4c839e09d86eea9207bd24bebaf5c0e1dd6c3401f2049fe59183",
+      "src/hex_pool.rs": "aa218ba7b7038e89031581525892d30838641adff9232a64eb85ad13b842c2a6",
+      "tools/build_echo_cast.py": "e14e4e702b9ae323eedf54db38cb768366c4b938c89347eb0d0a93fb2e3a094c",
+      "tools/verify_echo_cast.py": "62b43cd416b2aa1285b2cfbfb1a90e893d034b49077f18efb16bfb442834e376",
+      "data/reference/combat/echo-cast.json": "203233505200a253d68769a38b5541f0f597b615717ba2f96e68a06c41c85ac3",
+      "data/reference/combat/sword-graph.json": "05204b7deb7d02212abbc923462925fd33325114031000415eb0a2a4354ce67b",
+      "data/balance/echo-cast-areas.json": "28f540615bf0eb02d2a908898e3659a54566e610d52a262e7a0bc0d0740f2356",
+      "tools/HexBuild/EchoCast.cs": "e2829779645961ecfcaf356f2dc4d1612ed821ed290299feac79e7912834057f"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "dllBuild": {
+    "version": "0.17.172",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "a60fd36a54a19ebd069d6e41df5036352b1ee0b125a80c90468d58907c8d3110",
+    "installed": true,
+    "installedDllSha256": "a60fd36a54a19ebd069d6e41df5036352b1ee0b125a80c90468d58907c8d3110",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 395,
+  "ignoredNativeTests": 9,
+  "runtimeSignaturesChecked": 171,
+  "existingNativeRegressionSuitesPassed": 5,
+  "resourcesRebuilt": false,
+  "installedRegulationSha256": "8d34e01ae4734b5849ace5856e3a6b61f88d3e41594e8d01438bd5fbb4009460",
+  "existingDistFilesChanged": [
+    "dist/README.md",
+    "dist/mod/natives/NRHex.dll"
+  ],
+  "unchangedExistingDistFileCount": 262,
+  "files": {
+    "dist/README.md": "359f3e2855a5c29cb19b7bea0d418186602e7d8f9014afc7b5b3df609a34c34d",
+    "dist/mod/natives/NRHex.dll": "a60fd36a54a19ebd069d6e41df5036352b1ee0b125a80c90468d58907c8d3110"
+  },
+  "parametersAndTextsAndRewardsAndEventsUnchanged": true,
+  "gameProcessAccessed": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

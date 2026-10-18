@@ -13,6 +13,8 @@ static HANDLE:AtomicUsize=AtomicUsize::new(0);
 static FAIL:AtomicBool=AtomicBool::new(false);
 static NESTED:AtomicBool=AtomicBool::new(false);
 static SHOTS:Mutex<Vec<[u8;0x110]>>=Mutex::new(Vec::new());
+struct FactoryShot{bullet:i32,pose:[u8;0x40],targets:Vec<[u8;0x50]>}
+static FACTORY_SHOTS:Mutex<Vec<FactoryShot>>=Mutex::new(Vec::new());
 unsafe fn put(p:usize,v:usize){ptr::write_unaligned(p as*mut usize,v);}
 unsafe fn int(p:usize,v:i32){ptr::write_unaligned(p as*mut i32,v);}
 unsafe fn write(base:usize,rva:usize,v:&[u8]){ptr::copy_nonoverlapping(v.as_ptr(),(base+rva)as*mut u8,v.len());}
@@ -24,10 +26,27 @@ unsafe extern "system" fn resolve(id:u64)->usize{if id==22&&TARGET_ALIVE.load(Or
 unsafe extern "system" fn parse(out:usize,input:usize,_ctx:usize)->usize{
  SHOTS.lock().unwrap().push(ptr::read_unaligned(input as*const[u8;0x110]));
  ptr::write_bytes(out as*mut u8,0,0x220);put(out+0x10,read_ptr(input));int(out+4,read_i32(input+0x14));
+ ptr::copy_nonoverlapping((input+0x50)as*const u8,(out+0x190)as*mut u8,0x40);
+ // Deliberately simulate native recalculation using a changed current pose.
+ // The compiled factory hook must restore the original resolved matrix.
+ if REPLAY.with(Cell::get).ticket!=0{int(out+0x1c0,999f32.to_bits()as i32);}
  let target=TARGET_DESC.load(Ordering::Relaxed);let count=TARGET_COUNT.load(Ordering::Relaxed);
- put(out+0x148,if count==0{0}else{target});put(out+0x150,if count==0{0}else{target+count*0x50});out
+ if count!=0{
+  let mut rows=vec![[0u64;10];count].into_boxed_slice();let copy:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(BASE.load(Ordering::Relaxed)+TARGET_COPY_RVA);
+  for row in &mut rows{copy(row.as_mut_ptr()as usize,target);}
+  let start=Box::into_raw(rows)as*mut[u64;10]as usize;put(out+0x148,start);put(out+0x150,start+count*0x50);
+ }out
+}
+unsafe extern "system" fn release_payload(payload:usize){
+ let start=read_ptr(payload+0x148);let count=read_ptr(payload+0x150).wrapping_sub(start)/0x50;
+ if start!=0{let mut rows=Box::from_raw(ptr::slice_from_raw_parts_mut(start as*mut[u64;10],count));
+  let release:unsafe extern "system" fn(usize)=std::mem::transmute(BASE.load(Ordering::Relaxed)+0x3482b0);
+  for row in &mut rows{release(row.as_mut_ptr()as usize);}
+ }
 }
 unsafe extern "system" fn create(manager:usize,payload:usize,error:usize)->usize{
+ let start=read_ptr(payload+0x148);let count=read_ptr(payload+0x150).wrapping_sub(start)/0x50;
+ FACTORY_SHOTS.lock().unwrap().push(FactoryShot{bullet:read_i32(payload+4),pose:ptr::read_unaligned((payload+0x190)as*const[u8;0x40]),targets:(0..count).map(|i|ptr::read_unaligned((start+i*0x50)as*const[u8;0x50])).collect()});
  if NESTED.swap(false,Ordering::Relaxed){let nested:Factory=std::mem::transmute(BASE.load(Ordering::Relaxed)+FACTORY_RVA);nested(manager,payload,error);}
  if FAIL.load(Ordering::Relaxed){int(error,3);0}else{int(error,0);HANDLE.load(Ordering::Relaxed)}
 }
@@ -46,10 +65,11 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  let mut target_ref=vec![0u32;0x90/4];target_ref[0x78/4]=2;target_ref[0x80/4]=u32::MAX;
  let mut target=[0u64;0x50/8];let tp=target.as_mut_ptr()as usize;ptr::write(tp as*mut u8,1);put(tp+8,22);put(tp+0x10,target_ref.as_mut_ptr()as usize);TARGET_DESC.store(tp,Ordering::Relaxed);
  let mut first=[0u32;16];first[6]=0xc0000005;let mut second=[0u32;16];second[10]=0x80000006;
- let mut manager=vec![0usize;0x200/8];let mp=manager.as_mut_ptr()as usize;let mut network=vec![0u8;0xc0*100];manager[0x90/8]=network.as_mut_ptr()as usize;manager[0x98/8]=network.as_ptr()as usize+network.len();put(base+0x3c0ae30,mp);
+ let mut manager=vec![0usize;0x200/8];let mp=manager.as_mut_ptr()as usize;let mut network=vec![0u8;0xc0*1024];manager[0x90/8]=network.as_mut_ptr()as usize;manager[0x98/8]=network.as_ptr()as usize+network.len();put(base+0x3c0ae30,mp);
  let handle=17i32;HANDLE.store(&handle as*const i32 as usize,Ordering::Relaxed);
  for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(0x63f840,resolve as*const()as usize),(0x3d2f30,yes as*const()as usize),(0x33d010,parse as*const()as usize),(FACTORY_RVA,create as*const()as usize),(0x33e140,packet as*const()as usize),(0x357e00,packet_copy as*const()as usize)]{jump(base,rva,f);}
- for rva in [0x362940,0x33e570,0x2163f10,0xf56160,0x4e78c0]{write(base,rva,&[0xc3]);}
+ jump(base,0x33e570,release_payload as*const()as usize);
+ for rva in [0x362940,0x2163f10,0xf56160,0x4e78c0]{write(base,rva,&[0xc3]);}
  install(base,EMIT_RVA,emit as*const u8,&EMIT_ORIGINAL);install(base,FACTORY_RVA,factory as*const u8,&FACTORY_ORIGINAL);
  let old_base=BASE.swap(base,Ordering::AcqRel);let old_active=ACTIVE.swap(true,Ordering::AcqRel);SHOTS.lock().unwrap().clear();QUEUE.lock().unwrap().owner=Owner::default();
  let mut d=Box::new(Descriptor([0;0x110]));let dp=d.0.as_mut_ptr()as usize;put(dp,11);int(dp+8,-1);int(dp+0x14,10402100);int(dp+0x18,4021);int(dp+0x44,8);put(dp+0x98,first.as_mut_ptr()as usize);put(dp+0xa0,second.as_mut_ptr()as usize);put(dp+0xb8,usize::MAX);
@@ -88,5 +108,42 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  TARGET_COUNT.store(1,Ordering::Relaxed);int(dp+0x18,6420);int(dp+0x14,10642000);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
  int(dp+0x18,6421);int(dp+0x14,95003512);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
  TARGET_ALIVE.store(true,Ordering::Relaxed);
+ // No entity target: forward-only, fixed point, and a point at local origin.
+ // Native validity rejects the forward sentinel; it must still be replayed.
+ let valid:unsafe extern "system" fn(usize)->u8=std::mem::transmute(base+TARGET_VALID_RVA);
+ let mut no_lock=[0u64;10];let np=no_lock.as_mut_ptr()as usize;put(np+8,usize::MAX);
+ int(np+0x30,-1);int(np+0x40,-1);int(dp+0x18,4021);int(dp+0x14,10402100);
+ for(kind,point)in [(6,[0f32;3]),(4,[10.,20.,30.]),(4,[0.;3])]{
+  ptr::write(np as*mut u8,kind);for(i,v)in point.iter().enumerate(){int(np+0x34+i*4,v.to_bits()as i32);}
+  if kind==6{assert_eq!(valid(np),0);}
+  TARGET_DESC.store(np,Ordering::Relaxed);int(dp+0x80,7f32.to_bits()as i32);
+  let before=SHOTS.lock().unwrap().len();fire();assert_eq!(QUEUE.lock().unwrap().pending.len(),1);
+  let expected_pose=FACTORY_SHOTS.lock().unwrap().last().unwrap().pose;
+  TARGET_DESC.store(tp,Ordering::Relaxed);int(dp+0x80,99f32.to_bits()as i32);update(p,base,0.5);
+  assert_eq!(SHOTS.lock().unwrap().len(),before+2);assert!(QUEUE.lock().unwrap().pending.is_empty());
+  let shots=FACTORY_SHOTS.lock().unwrap();let replay=shots.last().unwrap();assert_eq!(replay.pose,expected_pose);
+  assert_eq!(replay.targets[0],ptr::read_unaligned(np as*const[u8;0x50]));drop(shots);
+  assert_eq!(target_ref[0x78/4],2);assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);
+ }
+ // Replay must be rejected if recalculation unexpectedly changes the number
+ // of independent targets, instead of selecting just the first new target.
+ TARGET_DESC.store(np,Ordering::Relaxed);fire();let before=FACTORY_SHOTS.lock().unwrap().len();TARGET_COUNT.store(2,Ordering::Relaxed);TARGET_DESC.store(tp,Ordering::Relaxed);update(p,base,0.5);
+ assert_eq!(FACTORY_SHOTS.lock().unwrap().len(),before);assert_eq!(target_ref[0x78/4],2);TARGET_COUNT.store(1,Ordering::Relaxed);
+ // Each actual normal/charged/side-volley root gets one ticket. Descendants
+ // and parented emissions cannot multiply the full native projectile chain.
+ TARGET_DESC.store(np,Ordering::Relaxed);
+ for magic in [4040,4050,4090,4220,4500,4510,6820,6830]{
+  let roots=crate::echo_cast_data::ROOTS.iter().find(|r|r.0==magic).unwrap().1;
+  int(dp+0x18,magic);let before=FACTORY_SHOTS.lock().unwrap().len();
+  for &root in roots{int(dp+0x14,root);fire();}
+  assert_eq!(QUEUE.lock().unwrap().pending.len(),roots.len());
+  let expected:Vec<_>=FACTORY_SHOTS.lock().unwrap()[before..].iter().map(|s|(s.bullet,s.pose)).collect();
+  put(dp+0x90,1);fire();put(dp+0x90,0);assert_eq!(QUEUE.lock().unwrap().pending.len(),roots.len());
+  if magic==4220{int(dp+0x14,10422015);fire();assert_eq!(QUEUE.lock().unwrap().pending.len(),roots.len());}
+  let before=FACTORY_SHOTS.lock().unwrap().len();update(p,base,0.49);assert_eq!(FACTORY_SHOTS.lock().unwrap().len(),before);update(p,base,0.01);
+  let shots=FACTORY_SHOTS.lock().unwrap();assert_eq!(shots.len(),before+roots.len());
+  assert_eq!(shots[before..].iter().map(|s|(s.bullet,s.pose)).collect::<Vec<_>>(),expected);drop(shots);
+  assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);
+ }
  BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(allocation,0,MEM_RELEASE),0);
 }}
