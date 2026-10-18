@@ -4,6 +4,7 @@ from pathlib import Path
 r=Path(__file__).resolve().parents[1];p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--report',type=Path);args=p.parse_args()
 v=json.loads((r/'data/reference/combat/echo-cast.json').read_text());assert v['version']==10350000 and v['regulationSha256']=='876a3ca279a4561d0c69f81fe5e510c75c59ab9a8a201694f8cf4a42c91e0268'
 b=v['Bullet'];catalog=[]
+density=[]
 raw=(r/'data/reference/combat/sword-graph.json').read_bytes()
 assert hashlib.sha256(raw).hexdigest()=='05204b7deb7d02212abbc923462925fd33325114031000415eb0a2a4354ce67b'
 graph=json.loads(raw)
@@ -23,6 +24,7 @@ def attacks(root):
 # Held dragon sequences need separate adaptation. Deadly Sin is a personal
 # buff whose periodic damage must not become repeated spell-cast echoes.
 unsupported={7010,7011,7050,7900}
+density_magic={4700,4701}
 areas=json.loads((r/'data/balance/echo-cast-areas.json').read_text())
 assert areas['version']==v['version']
 areas=areas['areas']
@@ -42,6 +44,14 @@ for mid,m in sorted((int(id),row)for id,row in v['Magic'].items()):
  # or direct/personal effects. Retain the previous independent-shot profiles.
  if any(m[f'consumeType{i}']==2 for i in range(1,11)):roots=[id for id in roots if attacks(id)]
  if roots:catalog.append((mid,roots))
+for mid in sorted(density_magic):
+ m=v['Magic'][str(mid)];assert m['consumeLoopMP_forMenu']>0
+ roots=sorted({m[f'refId{i}']for i in range(1,11)if m[f'refCategory{i}']==1})
+ assert len(roots)==6
+ for id in roots:
+  row=b[str(id)]
+  assert row['life']>0 and row['FollowType']==0 and row['isSyncBulletCulcDumypolyPos']==0 and attacks(id)
+ density.append((mid,roots))
 assert dict(catalog)[4021]==[10402100,10402150]
 for mid,ids in {4040:[10404000,10404050],4050:[10405000,10405050],4090:[10409000,10409001,10409002,10409050,10409051,10409052],4220:[10422000,10422050],4500:[10450010,10450011,10450012,10450060,10450061,10450062],4510:[10451000,10451010,10451020],6820:[10682010,10682011,10682012,10682070,10682071,10682072],6830:[10683010,10683011,10683012,10683013,10683014,10683015]}.items():assert dict(catalog)[mid]==ids
 assert not {4060,4200,4520,6420,6760,6971,7000,*unsupported}.intersection(mid for mid,_ in catalog)
@@ -49,11 +59,15 @@ s='// Generated from original regulation 10350000; finite independent spell root
 s+='pub const ROOTS:&[(i32,&[i32])]=&[\n'+''.join(f' ({mid},&[{",".join(map(str,ids))}]),\n'for mid,ids in catalog)+'];\n'
 s+='// Reviewed group effects: Magic, native cast root, dedicated area replay.\n'
 s+='pub const AREAS:&[(i32,i32,i32)]=&[\n'+''.join(f" ({a['magic']},{a['root']},{a['replay']}),\n"for a in areas)+'];\n'
+s+='// Meteor roots launch a second native generation chain immediately.\n'
+s+='pub const DENSITY:&[(i32,&[i32])]=&[\n'+''.join(f' ({mid},&[{",".join(map(str,ids))}]),\n'for mid,ids in density)+'];\n'
 path=r/'src/echo_cast_data.rs'
 if args.check:assert path.read_text()==s,'Echo root catalog changed; regenerate with tools/build_echo_cast.py'
 else:path.write_text(s)
 assert not set(a['magic']for a in areas).intersection(mid for mid,_ in catalog)
-print(f'PASS: {len(catalog)+len(areas)} eligible spells / {sum(len(ids)for _,ids in catalog)+len(areas)} roots, including {len(areas)} reviewed group effects; personal support and sustained/attached types excluded')
+assert not density_magic.intersection(mid for mid,_ in catalog)
+spell_count=len(catalog)+len(areas)+len(density);root_count=sum(len(ids)for _,ids in catalog+density)+len(areas)
+print(f'PASS: {spell_count} eligible spells / {root_count} roots; {len(density)} immediate meteor-density profiles, {len(areas)} group effects; other held channels and personal support excluded')
 if args.report:
  args.report.parent.mkdir(parents=True,exist_ok=True)
- args.report.write_text(json.dumps(dict(eligibleSpells=len(catalog)+len(areas),eligibleRoots=sum(len(ids)for _,ids in catalog)+len(areas),groupEffects=len(areas),noCostConsumptionType=2,roots=dict(catalog),unsupportedMagic=sorted(unsupported),nativeChainSha256=hashlib.sha256(raw).hexdigest()),indent=2)+'\n')
+ args.report.write_text(json.dumps(dict(eligibleSpells=spell_count,eligibleRoots=root_count,delayedSpells=len(catalog)+len(areas),delayedRoots=sum(len(ids)for _,ids in catalog)+len(areas),densitySpells=len(density),densityRoots=dict(density),groupEffects=len(areas),noCostConsumptionType=2,roots=dict(catalog),unsupportedMagic=sorted(unsupported),nativeChainSha256=hashlib.sha256(raw).hexdigest()),indent=2)+'\n')

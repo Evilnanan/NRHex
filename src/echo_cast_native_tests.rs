@@ -12,6 +12,10 @@ static TARGET_COUNT:AtomicUsize=AtomicUsize::new(1);
 static HANDLE:AtomicUsize=AtomicUsize::new(0);
 static FAIL:AtomicBool=AtomicBool::new(false);
 static NESTED:AtomicBool=AtomicBool::new(false);
+static CREATE_CALLS:AtomicUsize=AtomicUsize::new(0);
+static FAIL_ON_CALL:AtomicUsize=AtomicUsize::new(0);
+static DENSITY_SAMPLES:AtomicUsize=AtomicUsize::new(0);
+static NESTED_EMIT:AtomicBool=AtomicBool::new(false);
 static SHOTS:Mutex<Vec<[u8;0x110]>>=Mutex::new(Vec::new());
 struct FactoryShot{bullet:i32,pose:[u8;0x40],targets:Vec<[u8;0x50]>}
 static FACTORY_SHOTS:Mutex<Vec<FactoryShot>>=Mutex::new(Vec::new());
@@ -30,6 +34,9 @@ unsafe extern "system" fn parse(out:usize,input:usize,_ctx:usize)->usize{
  // Deliberately simulate native recalculation using a changed current pose.
  // The compiled factory hook must restore the original resolved matrix.
  if REPLAY.with(Cell::get).ticket!=0{int(out+0x1c0,999f32.to_bits()as i32);}
+ // A deterministic stand-in for independent native random generation. The
+ // density path must call calculation twice and leave both samples untouched.
+ if DENSITY.with(Cell::get){let sample=DENSITY_SAMPLES.fetch_add(1,Ordering::Relaxed);int(out+0x1c0,(sample as f32).to_bits()as i32);}
  let target=TARGET_DESC.load(Ordering::Relaxed);let count=TARGET_COUNT.load(Ordering::Relaxed);
  if count!=0{
   let mut rows=vec![[0u64;10];count].into_boxed_slice();let copy:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(BASE.load(Ordering::Relaxed)+TARGET_COPY_RVA);
@@ -45,10 +52,15 @@ unsafe extern "system" fn release_payload(payload:usize){
  }
 }
 unsafe extern "system" fn create(manager:usize,payload:usize,error:usize)->usize{
+ let call=CREATE_CALLS.fetch_add(1,Ordering::Relaxed)+1;
  let start=read_ptr(payload+0x148);let count=read_ptr(payload+0x150).wrapping_sub(start)/0x50;
  FACTORY_SHOTS.lock().unwrap().push(FactoryShot{bullet:read_i32(payload+4),pose:ptr::read_unaligned((payload+0x190)as*const[u8;0x40]),targets:(0..count).map(|i|ptr::read_unaligned((start+i*0x50)as*const[u8;0x50])).collect()});
  if NESTED.swap(false,Ordering::Relaxed){let nested:Factory=std::mem::transmute(BASE.load(Ordering::Relaxed)+FACTORY_RVA);nested(manager,payload,error);}
- if FAIL.load(Ordering::Relaxed){int(error,3);0}else{int(error,0);HANDLE.load(Ordering::Relaxed)}
+ if NESTED_EMIT.swap(false,Ordering::Relaxed){
+  let input=SHOTS.lock().unwrap().last().copied().unwrap();let nested:Emit=std::mem::transmute(BASE.load(Ordering::Relaxed)+EMIT_RVA);let mut out=-1i32;let mut err=-1i32;
+  nested(manager,&mut out as*mut i32 as usize,input.as_ptr()as usize,&mut err as*mut i32 as usize);
+ }
+ if FAIL.load(Ordering::Relaxed)||FAIL_ON_CALL.load(Ordering::Relaxed)==call{int(error,3);0}else{int(error,0);HANDLE.load(Ordering::Relaxed)+(call-1)*4}
 }
 unsafe extern "system" fn packet(out:usize,_input:usize,_payload:usize,_handle:i32,_ctx:usize)->usize{ptr::write_bytes(out as*mut u8,0x57,0xc0);out}
 unsafe extern "system" fn packet_copy(out:usize,input:usize)->usize{ptr::copy_nonoverlapping(input as*const u8,out as*mut u8,0xc0);out}
@@ -66,7 +78,7 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  let mut target=[0u64;0x50/8];let tp=target.as_mut_ptr()as usize;ptr::write(tp as*mut u8,1);put(tp+8,22);put(tp+0x10,target_ref.as_mut_ptr()as usize);TARGET_DESC.store(tp,Ordering::Relaxed);
  let mut first=[0u32;16];first[6]=0xc0000005;let mut second=[0u32;16];second[10]=0x80000006;
  let mut manager=vec![0usize;0x200/8];let mp=manager.as_mut_ptr()as usize;let mut network=vec![0u8;0xc0*1024];manager[0x90/8]=network.as_mut_ptr()as usize;manager[0x98/8]=network.as_ptr()as usize+network.len();put(base+0x3c0ae30,mp);
- let handle=17i32;HANDLE.store(&handle as*const i32 as usize,Ordering::Relaxed);
+ let handles:Vec<i32>=(17..4113).collect();HANDLE.store(handles.as_ptr()as usize,Ordering::Relaxed);
  for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(0x63f840,resolve as*const()as usize),(0x3d2f30,yes as*const()as usize),(0x33d010,parse as*const()as usize),(FACTORY_RVA,create as*const()as usize),(0x33e140,packet as*const()as usize),(0x357e00,packet_copy as*const()as usize)]{jump(base,rva,f);}
  jump(base,0x33e570,release_payload as*const()as usize);
  for rva in [0x362940,0x2163f10,0xf56160,0x4e78c0]{write(base,rva,&[0xc3]);}
@@ -145,5 +157,51 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
   assert_eq!(shots[before..].iter().map(|s|(s.bullet,s.pose)).collect::<Vec<_>>(),expected);drop(shots);
   assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);
  }
+ // Meteors: every actual initial/held/side generation root runs twice now,
+ // with no delayed ticket, retained references, or copied random sample.
+ for &(magic,roots)in crate::echo_cast_data::DENSITY{
+  int(dp+0x18,magic);
+  for &root in roots{
+   int(dp+0x14,root);let source=ptr::read_unaligned(dp as*const[u8;0x110]);
+   let count=SHOTS.lock().unwrap().len();let records=FACTORY_SHOTS.lock().unwrap().len();let packets=manager[0x90/8];let next=CREATE_CALLS.load(Ordering::Relaxed);
+   let mut public_out=-1i32;let mut public_error=-1i32;
+   let result=call(mp,&mut public_out as*mut i32 as usize,dp,&mut public_error as*mut i32 as usize);
+   assert_eq!(result,&mut public_out as*mut i32 as usize);assert_eq!(public_out,handles[next]);assert_eq!(public_error,0);
+   assert_eq!(SHOTS.lock().unwrap().len(),count+2);assert_eq!(manager[0x90/8],packets+0xc0*2);
+   assert_eq!(ptr::read_unaligned(dp as*const[u8;0x110]),source);
+   let shots=FACTORY_SHOTS.lock().unwrap();assert_eq!(shots.len(),records+2);
+   assert_eq!(shots[records].bullet,root);assert_eq!(shots[records+1].bullet,root);assert_ne!(shots[records].pose,shots[records+1].pose);drop(shots);
+   assert!(QUEUE.lock().unwrap().pending.is_empty());update(p,base,0.5);assert_eq!(SHOTS.lock().unwrap().len(),count+2);
+   assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);assert_eq!(target_ref[0x78/4],2);
+  }
+ }
+ for count in [0,2]{
+  TARGET_COUNT.store(count,Ordering::Relaxed);TARGET_DESC.store(tp,Ordering::Relaxed);
+  let before=SHOTS.lock().unwrap().len();fire();assert_eq!(SHOTS.lock().unwrap().len(),before+2);
+  assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(target_ref[0x78/4],2);
+ }
+ TARGET_COUNT.store(1,Ordering::Relaxed);TARGET_DESC.store(np,Ordering::Relaxed);
+ // First failure creates no extra attempt; an extra failure cannot overwrite
+ // the original successful handle/error or cause a retry on a later frame.
+ int(dp+0x18,4700);int(dp+0x14,10470010);
+ let before=SHOTS.lock().unwrap().len();FAIL.store(true,Ordering::Relaxed);fire();FAIL.store(false,Ordering::Relaxed);assert_eq!(SHOTS.lock().unwrap().len(),before+1);
+ let next=CREATE_CALLS.load(Ordering::Relaxed);let packets=manager[0x90/8];FAIL_ON_CALL.store(next+2,Ordering::Relaxed);
+ let mut public_out=-1i32;let mut public_error=-1i32;call(mp,&mut public_out as*mut i32 as usize,dp,&mut public_error as*mut i32 as usize);
+ assert_eq!(public_out,handles[next]);assert_eq!(public_error,0);assert_eq!(manager[0x90/8],packets+0xc0);FAIL_ON_CALL.store(0,Ordering::Relaxed);
+ // Re-entrant emissions during density generation do not double again.
+ let before=SHOTS.lock().unwrap().len();NESTED_EMIT.store(true,Ordering::Relaxed);fire();assert_eq!(SHOTS.lock().unwrap().len(),before+3);
+ for magic in [4700,4701]{
+  int(dp+0x18,magic);
+  for bullet in if magic==4700{[10470001,10470002,10470003]}else{[10470102,10470105,10470106]}{
+   int(dp+0x14,bullet);let before=SHOTS.lock().unwrap().len();fire();assert_eq!(SHOTS.lock().unwrap().len(),before+1);
+  }
+ }
+ int(dp+0x18,4701);int(dp+0x14,10470100);
+ for reason in 0..6{
+  match reason{0=>HAS.store(false,Ordering::Relaxed),1=>{put(dp,77);},2=>{int(dp+8,123);},3=>{put(dp+0x90,1);},4=>{int(st+0x140,0);},_=>ACTIVE.store(false,Ordering::Relaxed)}
+  let before=SHOTS.lock().unwrap().len();fire();assert_eq!(SHOTS.lock().unwrap().len(),before+1);
+  HAS.store(true,Ordering::Relaxed);put(dp,11);int(dp+8,-1);put(dp+0x90,0);int(st+0x140,100);ACTIVE.store(true,Ordering::Relaxed);
+ }
+ assert!(QUEUE.lock().unwrap().pending.is_empty());assert!(!DENSITY.with(Cell::get));assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);assert_eq!(target_ref[0x78/4],2);
  BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(allocation,0,MEM_RELEASE),0);
 }}
