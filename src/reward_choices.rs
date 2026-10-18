@@ -22,12 +22,16 @@ pub fn party_exclusions(mut unavailable:HexSet,difficulty_count:Option<i32>)->He
  if difficulty_count!=Some(1){unavailable.insert(index(95002500));}
  if !difficulty_count.is_some_and(|count|count>1){unavailable.insert(index(95003400));}unavailable
 }
+pub fn caster_role_eligible(hero:Option<u8>,has_archmage:bool)->bool{
+ matches!(hero,Some(4|6|7))||(has_archmage&&matches!(hero,Some(1..=10)))
+}
 pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  let sword=index(95000900);let has_sword=unavailable.contains(&sword);
+ let caster_allowed=caster_role_eligible(hero,unavailable.contains(&index(95002100)));
  for (id,excluded)in [
-  (95000900,!matches!(hero,Some(4|6|7))),
-  (95003500,!matches!(hero,Some(4|6|7))),
-  (95002000,!matches!(hero,Some(4|6|7))),
+  (95000900,!caster_allowed),
+  (95003500,!caster_allowed),
+  (95002000,!caster_allowed),
   (95001800,hero!=Some(6)),
   (95001100,matches!(hero,Some(6|7))&&!has_sword),
   (95001300,matches!(hero,Some(2|4|6))),
@@ -50,13 +54,28 @@ pub fn is_hex_good(encoded:u32)->bool{
 }
 #[cfg(test)]mod tests{
  use super::*;
- #[test]fn echo_cast_is_only_duchess_revenant_and_recluse_in_every_draw_route(){
-  let echo=index(95003500);
-  for hero in [None,Some(0),Some(1),Some(2),Some(3),Some(4),Some(5),Some(6),Some(7),Some(8),Some(9)]{
-   let excluded=role_exclusions(HexSet::new(),hero);let allowed=matches!(hero,Some(4|6|7));
-   let round=crate::reward_cycle::Round::new(&excluded,&HexSet::new());assert_eq!(round.candidates.contains(&echo),allowed);
-   assert_eq!(round.preferred([echo,0,1]).unwrap().contains(&echo),allowed);
-   assert_eq!(crate::reward_cycle::Single::new(&excluded,&HexSet::new(),&mask([0,1])).candidates.contains(&echo),allowed);
+ #[test]fn archmage_unlocks_only_the_three_caster_role_filters_in_every_draw_route(){
+  let mage=index(95002100);let trio=mask([index(95000900),index(95002000),index(95003500)]);
+  for hero in std::iter::once(None).chain((0..=255).map(Some)){
+   let original=role_exclusions(HexSet::new(),hero);
+   for has_mage in [false,true]{
+    let owned=if has_mage{mask([mage])}else{HexSet::new()};
+    let excluded=role_exclusions(ownership_exclusions(owned.clone()),hero);
+    let allowed=matches!(hero,Some(4|6|7))||(has_mage&&matches!(hero,Some(1..=10)));
+    let mut expected=original.clone();if has_mage{expected.insert(mage);if allowed{for i in &trio{expected.remove(i);}}}
+    assert_eq!(excluded,expected); // No other role restriction is relaxed.
+    for &ability in &trio{
+     for seen in [HexSet::new(),all(HEX_COUNT)]{
+      let round=crate::reward_cycle::Round::new(&excluded,&seen);assert_eq!(round.candidates.contains(&ability),allowed);
+      assert_eq!(round.preferred([ability,0,1]).unwrap().contains(&ability),allowed);
+      assert_eq!(crate::reward_cycle::Single::new(&excluded,&seen,&mask([0,1])).candidates.contains(&ability),allowed);
+      let mut owned_ability=owned.clone();owned_ability.insert(ability);
+      let blocked=role_exclusions(ownership_exclusions(owned_ability),hero);
+      assert!(!crate::reward_cycle::Round::new(&blocked,&seen).candidates.contains(&ability));
+      assert!(!crate::reward_cycle::Single::new(&blocked,&seen,&mask([0,1])).candidates.contains(&ability));
+     }
+    }
+   }
   }
  }
  #[test]fn night_blessing_draws_and_refreshes_follow_live_difficulty_count(){

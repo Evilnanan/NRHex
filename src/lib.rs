@@ -2186,7 +2186,7 @@ unsafe fn combat_alive(player:usize,stats:usize,base:usize)->bool{
 unsafe fn update_chant(player:usize,base:usize,dt:f32){
  let modules=read_ptr(player+0x1b8);if modules==0{return;}let stats=read_ptr(modules);if stats==0{return;}
  let alive=combat_alive(player,stats,base);
- let enabled=alive&&has_effect(player,chant::OWNER,base)&&matches!(local_hero(base),Some(4|6|7));
+ let enabled=alive&&has_effect(player,chant::OWNER,base);
  if let Ok(mut s)=CHANT.get_or_init(||Mutex::new(chant::Chant::default())).lock(){s.frame(player,stats,enabled,dt);}
  let present=has_effect(player,chant::ENABLED,base);
  if enabled&&!present{let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+APPLY_SELF_RVA);apply(player,chant::ENABLED,0);}
@@ -2194,7 +2194,7 @@ unsafe fn update_chant(player:usize,base:usize,dt:f32){
 }
 unsafe fn chant_pulse(player:usize,base:usize){
  let modules=read_ptr(player+0x1b8);if modules==0{return;}let stats=read_ptr(modules);if stats==0{return;}
- let active=combat_alive(player,stats,base)&&has_effect(player,chant::OWNER,base)&&has_effect(player,100610,base)&&matches!(local_hero(base),Some(4|6|7));
+ let active=combat_alive(player,stats,base)&&has_effect(player,chant::OWNER,base)&&has_effect(player,100610,base);
  let amount=CHANT.get().and_then(|s|s.lock().ok().map(|mut s|s.pulse(player,stats,active,read_i32(stats+0x15c)>=read_i32(stats+0x160)))).unwrap_or(0);
  // Same signed integer addition/clamping API as native HKS act(1001).
  if amount>0{let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+STAMINA_ADD_RVA);add(stats,amount,0);}
