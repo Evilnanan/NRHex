@@ -46,6 +46,8 @@ for mid,m in sorted((int(id),row)for id,row in v['Magic'].items()):
 assert dict(catalog)[4021]==[10402100,10402150]
 for mid,ids in {4040:[10404000,10404050],4050:[10405000,10405050],4090:[10409000,10409001,10409002,10409050,10409051,10409052],4220:[10422000,10422050],4500:[10450010,10450011,10450012,10450060,10450061,10450062],6820:[10682010,10682011,10682012,10682070,10682071,10682072],6830:[10683010,10683011,10683012,10683013,10683014,10683015]}.items():assert dict(catalog)[mid]==ids
 assert not {4060,4200,4520,6420,6760,6971,7000,*unsupported}.intersection(mid for mid,_ in catalog)
+root_ids=[root for _,roots in catalog for root in roots]+[a['root']for a in areas]
+assert len(root_ids)==len(set(root_ids)),'Native direct roots need an unambiguous spell mapping'
 s='// Generated from original regulation 10350000; finite independent spell roots.\n'
 s+='pub const ROOTS:&[(i32,&[i32])]=&[\n'+''.join(f' ({mid},&[{",".join(map(str,ids))}]),\n'for mid,ids in catalog)+'];\n'
 s+='// Reviewed group effects: Magic, native cast root, dedicated area replay.\n'

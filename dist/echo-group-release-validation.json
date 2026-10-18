@@ -1,0 +1,21 @@
+{
+  "version": "0.17.179",
+  "destination": "D:\\Users\\OwO\\Documents\\me3-profiles\\NRHex",
+  "buildPassed": true,
+  "testHotkeys": false,
+  "keyboardPollingImportAbsent": true,
+  "diagnosticMarkerAbsent": true,
+  "echoRuntimeDiagnosticLoggingAbsent": true,
+  "productionTransformHooksRetained": true,
+  "unitTestsPassed": 396,
+  "isolatedNativeTestsPassed": 9,
+  "dllSha256": "8307e515735308ed49f2a6dde23c53a59b0b993125798d1c9e71590b8267acb5",
+  "installedFilesVerified": 26,
+  "profileAndOtherModsUnchanged": true,
+  "distDllUnchanged": true,
+  "readmeAndBuildJsonAbsent": true,
+  "nrtestkitAbsent": true,
+  "userConfirmedDistAutoTargetFix": true,
+  "groupGameplayVerified": false,
+  "multiplayerVerified": false
+}

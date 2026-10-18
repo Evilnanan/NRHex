@@ -39,7 +39,9 @@ config=config.replace('[TestSpawn]','[Settings]')
 write('mod/natives/NRHex.ini',('; Test reward hotkeys are disabled at compile time.\n'+config+'\n').encode('utf-8'))
 profile=destination/'NRHex.me3'
 if profile.exists():
- text=profile.read_text(encoding='utf-8-sig').replace('"natives/NRHex.dll"','"mod/natives/NRHex.dll"')
+ original_profile=profile.read_bytes()
+ original_text=original_profile.decode('utf-8-sig')
+ text=original_text.replace('"natives/NRHex.dll"','"mod/natives/NRHex.dll"')
  parsed=tomllib.loads(text)
  assert any(n.get('path')=='mod/natives/NRHex.dll' for n in parsed.get('natives',[])), 'Existing profile has no NRHex DLL entry'
  assert any(p.get('source',p.get('path'))=='mod' for p in parsed.get('packages',[])), 'Existing profile has no mod package'
@@ -48,8 +50,9 @@ if profile.exists():
   text=re.sub(setting,'disable_arxan = true',text) if re.search(setting,text) else 'disable_arxan = true\n'+text
   print('Enabled required Arxan neutralization for native hooks; online and other Mod settings unchanged')
 else:
+ original_profile=None
  text='profileVersion = "v1"\nstart_online = false\ndisable_arxan = true\n\n[[supports]]\ngame = "nightreign"\n\n[[natives]]\npath = "mod/natives/NRHex.dll"\n\n[[packages]]\nid = "nrhex"\nsource = "mod"\n'
-write('NRHex.me3',text.encode('utf-8'))
+write('NRHex.me3',original_profile if original_profile is not None and text==original_text else text.encode('utf-8'))
 assert tomllib.loads(text)['disable_arxan'] is True
 assert sha(dist/'mod/natives/NRHex.dll')==baseline_dll
 report=root/'.work/no-hotkeys-package'/version/'NRHex-build.json'

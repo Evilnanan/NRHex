@@ -1,0 +1,609 @@
+{
+  "version": "0.17.177",
+  "buildPassed": true,
+  "unitTestsPassed": 396,
+  "isolatedNativeTestsPassed": 9,
+  "signatureCount": 171,
+  "dllSha256": "a8108d9821210dfb6733bd1d75f195bc78ac7966971ec79f8e60ef9a5e67bba2",
+  "toolchain": "stable-x86_64-pc-windows-gnu 1.99.1",
+  "directRootMagicSentinel": -1,
+  "directRootsChecked": 215,
+  "nativeFixedPoseFlag": 2,
+  "nativeDummyPoseResolverExecuted": true,
+  "secondShotObservedByUser": true,
+  "secondShotObservationDllSha256": "7591d547f6b67e4f9dce979ba4b7b75527dad6c325a26a66b59121d4c5d86154",
+  "positionGameplayVerified": true,
+  "firstShotAnomaly": "User reported once, not reproduced",
+  "observedSpell": 4000,
+  "observedRoot": 10400000,
+  "observedAuxiliary": 10400099,
+  "observedOriginalMagic": -1,
+  "observedTargetBytes": 80,
+  "fix": "Resolve only missing Magic=-1 through unique existing native-root catalog; preserve descriptor sentinel and strict explicit-Magic pairing",
+  "resourceChanges": false,
+  "groupBuildChanged": false,
+  "diagnosticsRemoved": true,
+  "loadingVerified": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "sourceHashes": {
+    "Cargo.toml": "270b03dc701e7b84a61dd53dd10cbae9255261e9a8699ddbd6a63af2efaea361",
+    "Cargo.lock": "ae6edd66f35d8b0bf29f480790ffcc53062f75b667eb9b39aa9b1a92e6d432c3",
+    "src/echo_cast.rs": "24c3bf7ce85c61d620316bdf68d69b16058a8616f5b11b5ee24198d8313e5636",
+    "src/echo_cast_native_tests.rs": "36b2ace7858bcfe7ca16e15fc4f5410acf649fd4da2501844170c28b42cbce71",
+    "src/echo_cast_data.rs": "67b77f9c4098e0b6c7d68c3e55ed484a9278cc71fb0abf1650b86afdc163d466",
+    "tools/build_echo_cast.py": "c2788ecbf10fcdce7220884bcb59d0a736af5748407bb106b71696334bf3da33",
+    "tools/verify_echo_cast.py": "a0e0b0ed615e47c8736120552ad6468b0dafe83da727a7bc70ca3e856b02003e"
+  },
+  "echoNativeValidation": {
+    "nativeExecutionPassed": true,
+    "delaySeconds": 0.5,
+    "spellFpRate": 2.25,
+    "eligibleRolesWithoutArchmage": [
+      4,
+      6,
+      7
+    ],
+    "archmageUnlockOwner": 95002100,
+    "eligibleRolesWithArchmage": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "eligibleSpells": 98,
+    "eligibleRoots": 215,
+    "groupEffects": 11,
+    "catalog": {
+      "eligibleSpells": 98,
+      "eligibleRoots": 215,
+      "groupEffects": 11,
+      "noCostConsumptionType": 2,
+      "roots": {
+        "4000": [
+          10400000
+        ],
+        "4001": [
+          10400100
+        ],
+        "4010": [
+          10401000
+        ],
+        "4020": [
+          10402000,
+          10402050
+        ],
+        "4021": [
+          10402100,
+          10402150
+        ],
+        "4030": [
+          10403000,
+          10403050
+        ],
+        "4040": [
+          10404000,
+          10404050
+        ],
+        "4050": [
+          10405000,
+          10405050
+        ],
+        "4070": [
+          10407000
+        ],
+        "4080": [
+          10408000,
+          10408050
+        ],
+        "4090": [
+          10409000,
+          10409001,
+          10409002,
+          10409050,
+          10409051,
+          10409052
+        ],
+        "4100": [
+          10410000,
+          10410001,
+          10410002
+        ],
+        "4210": [
+          10421007,
+          10421010,
+          10421020,
+          10421030,
+          10421057,
+          10421060,
+          10421070,
+          10421080
+        ],
+        "4220": [
+          10422000,
+          10422050
+        ],
+        "4360": [
+          10436000
+        ],
+        "4361": [
+          10436100
+        ],
+        "4370": [
+          10437000,
+          10437003,
+          10437050,
+          10437053
+        ],
+        "4380": [
+          10438000,
+          10438050
+        ],
+        "4381": [
+          10438100,
+          10438110,
+          10438150,
+          10438160
+        ],
+        "4390": [
+          10439002,
+          10439052
+        ],
+        "4400": [
+          10440000
+        ],
+        "4410": [
+          10441000,
+          10441050
+        ],
+        "4420": [
+          10442000,
+          10442050
+        ],
+        "4431": [
+          10443100,
+          10443110,
+          10443120,
+          10443130
+        ],
+        "4500": [
+          10450010,
+          10450011,
+          10450012,
+          10450060,
+          10450061,
+          10450062
+        ],
+        "4600": [
+          10460000
+        ],
+        "4610": [
+          10461000
+        ],
+        "4620": [
+          10462000,
+          10462050
+        ],
+        "4640": [
+          10464000
+        ],
+        "4641": [
+          10464010
+        ],
+        "4642": [
+          10464020
+        ],
+        "4650": [
+          10465000
+        ],
+        "4710": [
+          10471000,
+          10471001,
+          10471002,
+          10471050,
+          10471051,
+          10471052
+        ],
+        "4720": [
+          10472000,
+          10472050
+        ],
+        "4721": [
+          10472100,
+          10472101,
+          10472150,
+          10472151
+        ],
+        "4800": [
+          10480000,
+          10480050
+        ],
+        "4820": [
+          10482000,
+          10482050
+        ],
+        "4830": [
+          10483000
+        ],
+        "4900": [
+          10490000,
+          10490001,
+          10490002
+        ],
+        "4910": [
+          10491000
+        ],
+        "5000": [
+          10500000,
+          10500001,
+          10500002,
+          10500050,
+          10500051,
+          10500052
+        ],
+        "5001": [
+          10500110,
+          10500111,
+          10500112,
+          10500160,
+          10500161,
+          10500162
+        ],
+        "5010": [
+          10501000,
+          10501001
+        ],
+        "5030": [
+          10503000
+        ],
+        "5040": [
+          10504000,
+          10504050
+        ],
+        "5100": [
+          10510000,
+          10510001,
+          10510050,
+          10510051
+        ],
+        "5110": [
+          10511000,
+          10511050
+        ],
+        "6000": [
+          10600000,
+          10600001,
+          10600002,
+          10600005
+        ],
+        "6001": [
+          10600100,
+          10600105,
+          10600150,
+          10600155
+        ],
+        "6010": [
+          10601000,
+          10601050
+        ],
+        "6020": [
+          10602000,
+          10602050
+        ],
+        "6100": [
+          10610000,
+          10610050
+        ],
+        "6110": [
+          10611000
+        ],
+        "6120": [
+          10612000,
+          10612005,
+          10612050,
+          10612055
+        ],
+        "6210": [
+          10621000,
+          10621050
+        ],
+        "6230": [
+          10623000,
+          10623001,
+          10623050,
+          10623051
+        ],
+        "6240": [
+          10625000,
+          10625050
+        ],
+        "6270": [
+          10624001,
+          10624051
+        ],
+        "6300": [
+          10630000
+        ],
+        "6310": [
+          10631000,
+          10631005
+        ],
+        "6400": [
+          10640000,
+          10640050
+        ],
+        "6410": [
+          10641000,
+          10641050
+        ],
+        "6500": [
+          10650000,
+          10650050
+        ],
+        "6520": [
+          10652000
+        ],
+        "6530": [
+          10653000
+        ],
+        "6700": [
+          10670000
+        ],
+        "6701": [
+          10670100
+        ],
+        "6710": [
+          10671000,
+          10671050
+        ],
+        "6720": [
+          10672000
+        ],
+        "6750": [
+          10675000
+        ],
+        "6800": [
+          10680000,
+          10680001
+        ],
+        "6810": [
+          10681000
+        ],
+        "6820": [
+          10682010,
+          10682011,
+          10682012,
+          10682070,
+          10682071,
+          10682072
+        ],
+        "6830": [
+          10683010,
+          10683011,
+          10683012,
+          10683013,
+          10683014,
+          10683015
+        ],
+        "6900": [
+          10690000,
+          10690050
+        ],
+        "6910": [
+          10691000,
+          10691020,
+          10691050,
+          10691070
+        ],
+        "6920": [
+          10692000
+        ],
+        "6921": [
+          10692100
+        ],
+        "6930": [
+          10693000
+        ],
+        "6940": [
+          10694000
+        ],
+        "6941": [
+          10694100,
+          10694150
+        ],
+        "6950": [
+          10695000
+        ],
+        "7200": [
+          10720000,
+          10720001,
+          10720002,
+          10720003,
+          10720004,
+          10720005
+        ],
+        "7210": [
+          10721000
+        ],
+        "7220": [
+          10722000
+        ],
+        "7320": [
+          10732000,
+          10732050
+        ],
+        "7530": [
+          10753000,
+          10753010,
+          10753020,
+          10753030
+        ]
+      },
+      "unsupportedMagic": [
+        4120,
+        4130,
+        4510,
+        4700,
+        4701,
+        7010,
+        7011,
+        7050,
+        7060,
+        7090,
+        7240,
+        7330,
+        7900
+      ],
+      "nativeChainSha256": "05204b7deb7d02212abbc923462925fd33325114031000415eb0a2a4354ce67b"
+    },
+    "groupReadback": {
+      "installedSha256": "8D34E01AE4734B5849ACE5856E3A6B61F88D3E41594E8D01438BD5FBB4009460",
+      "installedReadbackPassed": true,
+      "profiles": [
+        {
+          "Magic": 6330,
+          "Root": 10633000,
+          "AreaBullet": 10633001,
+          "Replay": 95003510
+        },
+        {
+          "Magic": 6340,
+          "Root": 10634000,
+          "AreaBullet": 10634001,
+          "Replay": 95003511
+        },
+        {
+          "Magic": 6421,
+          "Root": 10642100,
+          "AreaBullet": 10642101,
+          "Replay": 95003512
+        },
+        {
+          "Magic": 6422,
+          "Root": 10642200,
+          "AreaBullet": 10642201,
+          "Replay": 95003513
+        },
+        {
+          "Magic": 6423,
+          "Root": 10642300,
+          "AreaBullet": 10642301,
+          "Replay": 95003514
+        },
+        {
+          "Magic": 6424,
+          "Root": 10642400,
+          "AreaBullet": 10642401,
+          "Replay": 95003515
+        },
+        {
+          "Magic": 6430,
+          "Root": 10643000,
+          "AreaBullet": 10643001,
+          "Replay": 95003516
+        },
+        {
+          "Magic": 6431,
+          "Root": 10643100,
+          "AreaBullet": 10643101,
+          "Replay": 95003517
+        },
+        {
+          "Magic": 6490,
+          "Root": 10649000,
+          "AreaBullet": 10649001,
+          "Replay": 95003518
+        },
+        {
+          "Magic": 6600,
+          "Root": 10660000,
+          "AreaBullet": 10660000,
+          "Replay": 95003519
+        },
+        {
+          "Magic": 7903,
+          "Root": 10790300,
+          "AreaBullet": 10790301,
+          "Replay": 95003520
+        }
+      ],
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "cases": [
+      "compiled emit/factory detours with real native BulletMan root dispatch",
+      "original resolved pose and aim restored before allocation despite recalculation selecting a changed pose/lock",
+      "entity targets retained; vanished entities cancel without reacquiring another enemy",
+      "forward-only sentinel, fixed aim point, and point at local origin replay without an entity-validity requirement",
+      "recalculation changing the number of independent targets cancels rather than selecting the first one",
+      "zero dt and 0.49-second hold followed by 0.5-second replay",
+      "all normal/charged/no-cost side roots for Glintstone Stars, Star Shower, Crystal Barrage, Stars of Ruin, Shattering Crystal, Beast Claw, and Gurranq Beast Claw replay once each",
+      "child and parented emissions cannot reschedule a full volley; replay is not recursive",
+      "native target copy/refcount atomics and descriptor release balance flagged counters, including replacing a newly selected enemy with original untargeted aim",
+      "failed creation, owner loss, and changed expedition context discard retained references",
+      "native network enqueue branch retained; peer transport is not simulated",
+      "all 11 group effects replay dedicated area IDs at the captured position with empty/multiple original targets and a dead enemy lock",
+      "group replays retain no enemy target reference; source/weapon context references balance",
+      "personal heal, control bullets, held channels, and generated area IDs do not schedule echoes",
+      "all 26 native Bullet references of the nine explicitly excluded spells emit once with balanced references and no delayed or immediate duplicate; meteor support is withdrawn",
+      "installed group parameter readback retains native ally amounts, modifiers, radii and category rules; enables self and independent hit records",
+      "native pose resolver uses captured world matrix for replay instead of current catalyst dummy; first emission flags remain unchanged",
+      "all 215 catalog roots with native Magic=-1 replay exactly once while preserving that sentinel; auxiliary, child, excluded, parented, behavioral, foreign-owner and explicit mismatched-Magic emissions are rejected"
+    ],
+    "nativeFunctions": [
+      "35A460 root dispatch",
+      "3482E0 target copy",
+      "3482B0 target release",
+      "214EAF0 / 214EB90 reference atomics",
+      "33E650 descriptor release",
+      "3494C0 target validity",
+      "345ED0 native dummy-polygon pose resolver with moving-source fixtures"
+    ],
+    "stubs": [
+      "actor/effect lookup and target resolution",
+      "33D010 projectile calculation including deliberate current-lock/pose changes; 35DA70 allocation and scatter/child production",
+      "network packet serialization/copy and transport consumers",
+      "fixture target-vector allocation/cleanup; allocator/string/rendering context teardown"
+    ],
+    "sourceHashes": {
+      "src/echo_cast.rs": "24c3bf7ce85c61d620316bdf68d69b16058a8616f5b11b5ee24198d8313e5636",
+      "src/echo_cast_native_tests.rs": "36b2ace7858bcfe7ca16e15fc4f5410acf649fd4da2501844170c28b42cbce71",
+      "src/echo_cast_data.rs": "67b77f9c4098e0b6c7d68c3e55ed484a9278cc71fb0abf1650b86afdc163d466",
+      "src/lib.rs": "1d777c2d63cadcb3fb151673bd84e29ab017e7b4b2e7062f6633c9244ff6309e",
+      "src/reward_choices.rs": "352984d900540029decfb13d69cc7d4799d6b1c32b469a0d0ab8717de7f5aaff",
+      "src/hex_pool.rs": "484925d23ba91801a8699d7e035e9f6ce070dbb0d78e792aafe099851129adc4",
+      "tools/build_echo_cast.py": "c2788ecbf10fcdce7220884bcb59d0a736af5748407bb106b71696334bf3da33",
+      "tools/verify_echo_cast.py": "a0e0b0ed615e47c8736120552ad6468b0dafe83da727a7bc70ca3e856b02003e",
+      "data/reference/combat/echo-cast.json": "6b67fdbc3c0782aba72cf2f4ec85702b5f2010ab11991a2125fb86aa17325620",
+      "data/reference/combat/sword-graph.json": "05204b7deb7d02212abbc923462925fd33325114031000415eb0a2a4354ce67b",
+      "data/balance/echo-cast-areas.json": "3d91319fb0424162df6c4ebe855a250fae7f2a84d1d75b0298a16722ad8f39e5",
+      "tools/HexBuild/EchoCast.cs": "44727a5c1b25a11d51374e677de992383c0c5be6dd090426a958baca4794148e"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "directRootMagicSentinel": -1,
+    "directRootsChecked": 215,
+    "nativeFixedPoseFlag": 2,
+    "nativeDummyPoseResolverExecuted": true
+  },
+  "processId": 26148,
+  "loadedDll": "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\natives\\NRHex.dll",
+  "active": 1,
+  "hookBytes": {
+    "0x35a460": "e99b5b86ff4881ec",
+    "0x35da70": "e98b2584ff555657",
+    "0x3e0ab0": "e94bf5a7ff909048"
+  },
+  "positionObservationDllSha256": "a8108d9821210dfb6733bd1d75f195bc78ac7966971ec79f8e60ef9a5e67bba2",
+  "manualAimReplayObservedByUser": true,
+  "autoLockCompatibilityVerified": false,
+  "remainingIssue": "Native automatic lock-on may cancel or redirect echoes without manual lock; user reports normal behavior after disabling auto-lock. Not fixed.",
+  "readOnlySamplerStopped": true
+}
