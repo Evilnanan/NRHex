@@ -8,6 +8,7 @@ static HAS:AtomicBool=AtomicBool::new(true);
 static TARGET_ALIVE:AtomicBool=AtomicBool::new(true);
 static TARGET:AtomicUsize=AtomicUsize::new(0);
 static TARGET_DESC:AtomicUsize=AtomicUsize::new(0);
+static TARGET_COUNT:AtomicUsize=AtomicUsize::new(1);
 static HANDLE:AtomicUsize=AtomicUsize::new(0);
 static FAIL:AtomicBool=AtomicBool::new(false);
 static NESTED:AtomicBool=AtomicBool::new(false);
@@ -23,7 +24,8 @@ unsafe extern "system" fn resolve(id:u64)->usize{if id==22&&TARGET_ALIVE.load(Or
 unsafe extern "system" fn parse(out:usize,input:usize,_ctx:usize)->usize{
  SHOTS.lock().unwrap().push(ptr::read_unaligned(input as*const[u8;0x110]));
  ptr::write_bytes(out as*mut u8,0,0x220);put(out+0x10,read_ptr(input));int(out+4,read_i32(input+0x14));
- let target=TARGET_DESC.load(Ordering::Relaxed);put(out+0x148,target);put(out+0x150,target+0x50);out
+ let target=TARGET_DESC.load(Ordering::Relaxed);let count=TARGET_COUNT.load(Ordering::Relaxed);
+ put(out+0x148,if count==0{0}else{target});put(out+0x150,if count==0{0}else{target+count*0x50});out
 }
 unsafe extern "system" fn create(manager:usize,payload:usize,error:usize)->usize{
  if NESTED.swap(false,Ordering::Relaxed){let nested:Factory=std::mem::transmute(BASE.load(Ordering::Relaxed)+FACTORY_RVA);nested(manager,payload,error);}
@@ -64,5 +66,27 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  FAIL.store(true,Ordering::Relaxed);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(target_ref[0x78/4],2);FAIL.store(false,Ordering::Relaxed);
  int(dp+8,1234);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());int(dp+8,-1);
  fire();put(base+0x3c131c8,56);update(p,base,0.5);assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(target_ref[0x78/4],2);
+ // Offensive roots still reject multiple resolved targets; support areas do
+ // not depend on the original enemy lock or even the existence of targets.
+ TARGET_COUNT.store(2,Ordering::Relaxed);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
+ TARGET_ALIVE.store(false,Ordering::Relaxed);put(dp+0xc0,target_ref.as_mut_ptr()as usize);
+ for(i,&(magic,root,replay))in crate::echo_cast_data::AREAS.iter().enumerate(){
+  TARGET_COUNT.store(if i%2==0{0}else{2},Ordering::Relaxed);
+  int(dp+0x18,magic);int(dp+0x14,root);int(dp+0x80,7f32.to_bits()as i32);
+  let before=SHOTS.lock().unwrap().len();fire();assert_eq!(QUEUE.lock().unwrap().pending.len(),1);
+  assert_eq!(target_ref[0x78/4],2);assert_eq!(first[6],0xc0000006);
+  int(dp+0x80,99f32.to_bits()as i32);update(p,base,0.49);assert_eq!(SHOTS.lock().unwrap().len(),before+1);update(p,base,0.01);
+  let shots=SHOTS.lock().unwrap();assert_eq!(shots.len(),before+2);
+  let shot=&shots[before+1];assert_eq!(i32::from_le_bytes(shot[0x14..0x18].try_into().unwrap()),replay);
+  assert_eq!(i32::from_le_bytes(shot[0x18..0x1c].try_into().unwrap()),magic);
+  assert_eq!(f32::from_le_bytes(shot[0x80..0x84].try_into().unwrap()),7.);
+  assert_eq!(u64::from_le_bytes(shot[0xb8..0xc0].try_into().unwrap()),u64::MAX);
+  assert_eq!(u64::from_le_bytes(shot[0xc0..0xc8].try_into().unwrap()),0);drop(shots);
+  assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(target_ref[0x78/4],2);assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);
+ }
+ // Native personal heal and the generated echo IDs cannot schedule an echo.
+ TARGET_COUNT.store(1,Ordering::Relaxed);int(dp+0x18,6420);int(dp+0x14,10642000);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
+ int(dp+0x18,6421);int(dp+0x14,95003512);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
+ TARGET_ALIVE.store(true,Ordering::Relaxed);
  BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(allocation,0,MEM_RELEASE),0);
 }}

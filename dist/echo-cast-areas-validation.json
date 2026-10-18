@@ -1,0 +1,293 @@
+{
+  "version": "0.17.171",
+  "baselineCommit": "fcf18a838cc0579134b5014783e8b5f2765e6f96",
+  "owner": 95003500,
+  "groupEffects": 11,
+  "parameters": {
+    "inputSha256": "9D163795DEA8577447A3C252EB5299465AD79A93294187E18232BE609A8E02F6",
+    "outputSha256": "8D34E01AE4734B5849ACE5856E3A6B61F88D3E41594E8D01438BD5FBB4009460",
+    "addedRows": {
+      "Bullet": [
+        95003510,
+        95003511,
+        95003512,
+        95003513,
+        95003514,
+        95003515,
+        95003516,
+        95003517,
+        95003518,
+        95003519,
+        95003520
+      ],
+      "AtkParam_Pc": [
+        95003510,
+        95003511,
+        95003512,
+        95003513,
+        95003514,
+        95003515,
+        95003516,
+        95003517,
+        95003518,
+        95003519,
+        95003520
+      ],
+      "SpEffectParam": [
+        95003512,
+        95003513,
+        95003514,
+        95003515,
+        95003516,
+        95003517
+      ]
+    },
+    "profiles": [
+      {
+        "Magic": 6330,
+        "Root": 10633000,
+        "AreaBullet": 10633001,
+        "Replay": 95003510
+      },
+      {
+        "Magic": 6340,
+        "Root": 10634000,
+        "AreaBullet": 10634001,
+        "Replay": 95003511
+      },
+      {
+        "Magic": 6421,
+        "Root": 10642100,
+        "AreaBullet": 10642101,
+        "Replay": 95003512
+      },
+      {
+        "Magic": 6422,
+        "Root": 10642200,
+        "AreaBullet": 10642201,
+        "Replay": 95003513
+      },
+      {
+        "Magic": 6423,
+        "Root": 10642300,
+        "AreaBullet": 10642301,
+        "Replay": 95003514
+      },
+      {
+        "Magic": 6424,
+        "Root": 10642400,
+        "AreaBullet": 10642401,
+        "Replay": 95003515
+      },
+      {
+        "Magic": 6430,
+        "Root": 10643000,
+        "AreaBullet": 10643001,
+        "Replay": 95003516
+      },
+      {
+        "Magic": 6431,
+        "Root": 10643100,
+        "AreaBullet": 10643101,
+        "Replay": 95003517
+      },
+      {
+        "Magic": 6490,
+        "Root": 10649000,
+        "AreaBullet": 10649001,
+        "Replay": 95003518
+      },
+      {
+        "Magic": 6600,
+        "Root": 10660000,
+        "AreaBullet": 10660000,
+        "Replay": 95003519
+      },
+      {
+        "Magic": 7903,
+        "Root": 10790300,
+        "AreaBullet": 10790301,
+        "Replay": 95003520
+      }
+    ],
+    "existingRowsAndUnrelatedTablesUnchanged": true,
+    "stagedContainerReadbackPassed": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "nativeValidation": {
+    "nativeExecutionPassed": true,
+    "delaySeconds": 0.5,
+    "spellFpRate": 2.25,
+    "eligibleRoles": [
+      4,
+      6,
+      7
+    ],
+    "eligibleSpells": 61,
+    "eligibleRoots": 90,
+    "groupEffects": 11,
+    "groupReadback": {
+      "installedSha256": "8D34E01AE4734B5849ACE5856E3A6B61F88D3E41594E8D01438BD5FBB4009460",
+      "installedReadbackPassed": true,
+      "profiles": [
+        {
+          "Magic": 6330,
+          "Root": 10633000,
+          "AreaBullet": 10633001,
+          "Replay": 95003510
+        },
+        {
+          "Magic": 6340,
+          "Root": 10634000,
+          "AreaBullet": 10634001,
+          "Replay": 95003511
+        },
+        {
+          "Magic": 6421,
+          "Root": 10642100,
+          "AreaBullet": 10642101,
+          "Replay": 95003512
+        },
+        {
+          "Magic": 6422,
+          "Root": 10642200,
+          "AreaBullet": 10642201,
+          "Replay": 95003513
+        },
+        {
+          "Magic": 6423,
+          "Root": 10642300,
+          "AreaBullet": 10642301,
+          "Replay": 95003514
+        },
+        {
+          "Magic": 6424,
+          "Root": 10642400,
+          "AreaBullet": 10642401,
+          "Replay": 95003515
+        },
+        {
+          "Magic": 6430,
+          "Root": 10643000,
+          "AreaBullet": 10643001,
+          "Replay": 95003516
+        },
+        {
+          "Magic": 6431,
+          "Root": 10643100,
+          "AreaBullet": 10643101,
+          "Replay": 95003517
+        },
+        {
+          "Magic": 6490,
+          "Root": 10649000,
+          "AreaBullet": 10649001,
+          "Replay": 95003518
+        },
+        {
+          "Magic": 6600,
+          "Root": 10660000,
+          "AreaBullet": 10660000,
+          "Replay": 95003519
+        },
+        {
+          "Magic": 7903,
+          "Root": 10790300,
+          "AreaBullet": 10790301,
+          "Replay": 95003520
+        }
+      ],
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "cases": [
+      "compiled emit/factory detours with real native BulletMan root dispatch",
+      "original pose/magic version survive source-buffer reuse and caster movement",
+      "native resolved target retained across delay; vanished target cancels offensive replay",
+      "zero dt and 0.49-second hold followed by 0.5-second replay",
+      "one capture per actual root; nested creation and replay cannot recurse",
+      "native target copy/refcount atomics and descriptor release balance flagged counters",
+      "failed creation, owner loss, and changed expedition context discard retained references",
+      "native network enqueue branch retained; peer transport is not simulated",
+      "all 11 group effects replay dedicated area IDs at the captured position with empty/multiple original targets and a dead enemy lock",
+      "group replays retain no enemy target reference; source/weapon context references balance",
+      "personal heal and generated area IDs do not schedule echoes",
+      "installed group parameter readback retains native ally amounts, modifiers, radii and category rules; enables self and independent hit records"
+    ],
+    "nativeFunctions": [
+      "35A460 root dispatch",
+      "3482E0 target copy",
+      "3482B0 target release",
+      "214EAF0 / 214EB90 reference atomics",
+      "33E650 descriptor release",
+      "3494C0 target validity"
+    ],
+    "stubs": [
+      "actor/effect lookup and target resolution",
+      "33D010 projectile calculation and 35DA70 allocation",
+      "network packet serialization/copy and transport consumers",
+      "allocator/string/rendering context teardown"
+    ],
+    "sourceHashes": {
+      "src/echo_cast.rs": "8739a17205b6fc8d198c7f48231b402ee96a23c07ff80def1879ffe1b1e61d93",
+      "src/echo_cast_native_tests.rs": "71d50bcf34ea7890850010a38723bb028a3ab9f4aedc8f54c469773e7d4a9493",
+      "src/echo_cast_data.rs": "3d19e9904b6c9072dfdac0b5d8f5fb51b0d29768052268634e6b8c5b415f22cb",
+      "src/lib.rs": "d007f93962a7f72b757d9ce27628318ebeaffa5bada8ae33657512bb92ea289c",
+      "src/reward_choices.rs": "7c5e3abf206c4c839e09d86eea9207bd24bebaf5c0e1dd6c3401f2049fe59183",
+      "src/hex_pool.rs": "aa218ba7b7038e89031581525892d30838641adff9232a64eb85ad13b842c2a6",
+      "tools/build_echo_cast.py": "5f2540383a5ecbd7abd6360ca5b18b754b91f3f89225e26bbba9d22591758a1d",
+      "data/reference/combat/echo-cast.json": "203233505200a253d68769a38b5541f0f597b615717ba2f96e68a06c41c85ac3",
+      "data/balance/echo-cast-areas.json": "28f540615bf0eb02d2a908898e3659a54566e610d52a262e7a0bc0d0740f2356",
+      "tools/HexBuild/EchoCast.cs": "e2829779645961ecfcaf356f2dc4d1612ed821ed290299feac79e7912834057f"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "dllBuild": {
+    "version": "0.17.171",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "e857596e6d29b4c21d2eb27c3ffd4c441290ef4e51b8c14f60b72e057f260101",
+    "installed": true,
+    "installedDllSha256": "e857596e6d29b4c21d2eb27c3ffd4c441290ef4e51b8c14f60b72e057f260101",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 394,
+  "ignoredNativeTests": 9,
+  "runtimeSignaturesChecked": 171,
+  "existingNativeRegressionSuitesPassed": 5,
+  "buildEntrypointCasesPassed": 4,
+  "incrementalResourceBuild": true,
+  "fullOriginalResourceBuildPerformed": false,
+  "existingDistFilesChanged": [
+    "dist/README.md",
+    "dist/mod/natives/NRHex.dll",
+    "dist/mod/regulation.bin"
+  ],
+  "unchangedExistingDistFileCount": 260,
+  "files": {
+    "dist/README.md": "f9a616362ffa6ee4dba68dc3574050177d3ad7af09d1e3f887b86335a7f1e242",
+    "dist/mod/natives/NRHex.dll": "e857596e6d29b4c21d2eb27c3ffd4c441290ef4e51b8c14f60b72e057f260101",
+    "dist/mod/regulation.bin": "8d34e01ae4734b5849ace5856e3a6b61f88d3e41594e8d01438bd5fbb4009460"
+  },
+  "sourceHashes": {
+    "src/echo_cast.rs": "8739a17205b6fc8d198c7f48231b402ee96a23c07ff80def1879ffe1b1e61d93",
+    "src/echo_cast_data.rs": "3d19e9904b6c9072dfdac0b5d8f5fb51b0d29768052268634e6b8c5b415f22cb",
+    "src/echo_cast_native_tests.rs": "71d50bcf34ea7890850010a38723bb028a3ab9f4aedc8f54c469773e7d4a9493",
+    "tools/build_echo_cast.py": "5f2540383a5ecbd7abd6360ca5b18b754b91f3f89225e26bbba9d22591758a1d",
+    "tools/verify_echo_cast.py": "a5b69e52c6c109e1fc87666eb3faf568dd62bece133a2d0a5941558781e951de",
+    "tools/HexBuild/EchoCast.cs": "e2829779645961ecfcaf356f2dc4d1612ed821ed290299feac79e7912834057f",
+    "tools/HexBuild/Program.cs": "f5c36873c2ccd7051d5cd0901d48e1883dc555fa1c6504064ed1508a103e8977",
+    "data/balance/echo-cast-areas.json": "28f540615bf0eb02d2a908898e3659a54566e610d52a262e7a0bc0d0740f2356"
+  },
+  "textAndRewardsAndEventsUnchanged": true,
+  "gameProcessAccessed": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

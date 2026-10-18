@@ -17,7 +17,7 @@ pub static FACTORY_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 type Emit=unsafe extern "system" fn(usize,usize,usize,usize)->usize;
 type Factory=unsafe extern "system" fn(usize,usize,usize)->usize;
 #[repr(C,align(16))]struct Descriptor([u8;0x110]);
-struct Ticket{descriptor:Box<Descriptor>,base:usize,wait:f64}
+struct Ticket{descriptor:Box<Descriptor>,base:usize,wait:f64,area:bool}
 impl Drop for Ticket{fn drop(&mut self){unsafe{
  let release:unsafe extern "system" fn(usize)=std::mem::transmute(self.base+RELEASE_RVA);
  release(self.descriptor.0.as_mut_ptr()as usize);
@@ -32,7 +32,12 @@ impl Drop for ScopeGuard{fn drop(&mut self){SCOPE.with(|s|s.set(self.0));}}
 struct ReplayGuard(bool);
 impl Drop for ReplayGuard{fn drop(&mut self){REPLAY.with(|s|s.set(self.0));}}
 fn eligible(magic:i32,bullet:i32)->bool{
- crate::echo_cast_data::ROOTS.binary_search_by_key(&magic,|r|r.0).ok().is_some_and(|i|crate::echo_cast_data::ROOTS[i].1.binary_search(&bullet).is_ok())
+ area_replay(magic,bullet).is_some()||crate::echo_cast_data::ROOTS.binary_search_by_key(&magic,|r|r.0).ok().is_some_and(|i|crate::echo_cast_data::ROOTS[i].1.binary_search(&bullet).is_ok())
+}
+fn area_replay(magic:i32,bullet:i32)->Option<i32>{
+ crate::echo_cast_data::AREAS.binary_search_by_key(&magic,|r|r.0).ok().and_then(|i|{
+  let (_,root,replay)=crate::echo_cast_data::AREAS[i];(root==bullet).then_some(replay)
+ })
 }
 unsafe fn owner(actor:usize,base:usize)->Option<Owner>{
  if !is_local(actor,base)||!has_effect(actor,OWNER,base){return None;}
@@ -59,22 +64,31 @@ unsafe fn retain_counter(pointer:usize,offset:usize,mask:u32){
 }
 unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
  if payload==0||ptr::read_unaligned((payload+0x10)as*const u64)!=scope.owner.handle{return None;}
+ let replay=area_replay(read_i32(scope.descriptor+0x18),read_i32(scope.descriptor+0x14));
  let targets=read_ptr(payload+0x148);let end=read_ptr(payload+0x150);
  // Independent root shots use one native target descriptor. Multi-target
  // selection needs a separate replay representation rather than choosing one.
- if targets==0||end.wrapping_sub(targets)!=0x50{return None;}
+ if replay.is_none()&&(targets==0||end.wrapping_sub(targets)!=0x50){return None;}
  let mut d=Box::new(Descriptor(ptr::read_unaligned(scope.descriptor as*const[u8;0x110])));
  // The copied target is replaced with the target already resolved by native
  // calculation, not the player's lock-on at replay time.
- ptr::write_unaligned(d.0.as_mut_ptr().add(0xc0)as*mut usize,0);
- let copy:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+TARGET_COPY_RVA);
- copy(d.0.as_mut_ptr().add(0xb0)as usize,targets);
+ if let Some(bullet)=replay{
+  d.0[0x14..0x18].copy_from_slice(&bullet.to_le_bytes());
+  // These stationary radial areas use the captured world pose. Clear entity
+  // targeting and its reference, with the native empty handle/index sentinels.
+  d.0[0xb0..0x100].fill(0);
+  d.0[0xb8..0xc0].fill(0xff);d.0[0xe0..0xe4].fill(0xff);d.0[0xf0..0xf4].fill(0xff);
+ }else{
+  ptr::write_unaligned(d.0.as_mut_ptr().add(0xc0)as*mut usize,0);
+  let copy:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+TARGET_COPY_RVA);
+  copy(d.0.as_mut_ptr().add(0xb0)as usize,targets);
+ }
  retain_counter(read_ptr(scope.descriptor+0x98),0x18,0x3fffffff);
  retain_counter(read_ptr(scope.descriptor+0xa0),0x28,0x7fffffff);
  // Native flag0 requests an independent shot; bit3 retains native networking.
  let flags=read_i32(scope.descriptor+0x44)as u32|1;
  d.0[0x44..0x48].copy_from_slice(&flags.to_le_bytes());
- Some(Ticket{descriptor:d,base,wait:0.5})
+ Some(Ticket{descriptor:d,base,wait:0.5,area:replay.is_some()})
 }
 pub unsafe extern "system" fn factory(manager:usize,payload:usize,error:usize)->usize{
  let original:Factory=std::mem::transmute(FACTORY_ORIGINAL.load(Ordering::Acquire));
@@ -103,7 +117,7 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  for ticket in &mut ready{
   let descriptor=ticket.descriptor.0.as_mut_ptr()as usize;
   // A vanished target must not make native calculation choose a new lock-on.
-  if valid(descriptor+0xb0)==0{continue;}
+  if !ticket.area&&valid(descriptor+0xb0)==0{continue;}
   let mut out=-1i32;let mut error=-1i32;emit(manager,&mut out as*mut i32 as usize,descriptor,&mut error as*mut i32 as usize);
  }
 }
@@ -115,6 +129,14 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  #[test]fn retain_preserves_native_high_flag_bits(){unsafe{
   let mut a=[0u32;16];a[6]=0xc0000002;a[10]=0x80000005;let p=a.as_mut_ptr()as usize;retain_counter(p,0x18,0x3fffffff);retain_counter(p,0x28,0x7fffffff);assert_eq!(a[6],0xc0000003);assert_eq!(a[10],0x80000006);
  }}
+ #[test]fn group_profiles_replace_only_the_native_cast_root(){
+  assert_eq!(crate::echo_cast_data::AREAS.len(),11);
+  for &(magic,root,replay) in crate::echo_cast_data::AREAS{
+   assert!(eligible(magic,root));assert_eq!(area_replay(magic,root),Some(replay));
+   assert!(!eligible(magic,replay));assert!(!eligible(magic,root+1));
+  }
+  for magic in [6420,6760,6971]{assert!(!eligible(magic,10000000+magic*100));}
+ }
 }
 #[cfg(test)]
 #[path="echo_cast_native_tests.rs"]mod native_tests;

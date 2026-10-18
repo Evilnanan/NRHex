@@ -71,6 +71,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  p.ApplyParamdef(d);return p;
 }
 if(args.Contains("--echo-cast-stage")){EchoCast.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--echo-cast-areas-stage")){EchoCast.AreaResources(root,Parse,true);return;}
+if(args.Contains("--echo-cast-areas-check")){EchoCast.AreaResources(root,Parse,false);return;}
 if(args.Contains("--ambulance-stage")){Ambulance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -771,6 +773,7 @@ DemonsCall.Catalog(bnd,Parse,Path.Combine(root,"src/demons_data.rs"));
 foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
 foreach(var fissionParam in new[]{"ItemTableParam","ItemLotParam_enemy"})added[fissionParam].AddRange(pars[fissionParam].Rows.Where(r=>r.ID>=PotentialFission.FirstTable&&r.ID<99000000).Select(r=>r.ID));
+EchoCast.Areas(root,Clone,pars);
 ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
@@ -945,6 +948,7 @@ foreach(var n in names){
 }
 // Check the serialized reward graph, including the actual UI classification.
 var serialized=files.ToDictionary(k=>k.Key,k=>Parse(k.Key,k.Value.Bytes));
+EchoCast.VerifyAreas(root,serialized);
 for(int g=0;g<orders.Length;g++)for(int slot=0;slot<3;slot++){
  var lot=serialized["ItemLotParam_enemy"].Rows.Single(r=>r.ID==rewardEntries[g].Lot+slot);
  Require(Convert.ToInt32(lot["lotItemCategory01"].Value)==7&&Convert.ToInt32(lot["lotItemId01"].Value)==RewardCatalog.Table(hexes[orders[g][slot]].Id)&&Convert.ToInt32(lot["lotItemBasePoint01"].Value)==1000,"Serialized choice pool mismatch");
