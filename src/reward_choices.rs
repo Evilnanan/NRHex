@@ -26,6 +26,7 @@ pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  let sword=index(95000900);let has_sword=unavailable.contains(&sword);
  for (id,excluded)in [
   (95000900,!matches!(hero,Some(4|6|7))),
+  (95003500,!matches!(hero,Some(4|6|7))),
   (95002000,!matches!(hero,Some(4|6|7))),
   (95001800,hero!=Some(6)),
   (95001100,matches!(hero,Some(6|7))&&!has_sword),
@@ -49,6 +50,15 @@ pub fn is_hex_good(encoded:u32)->bool{
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn echo_cast_is_only_duchess_revenant_and_recluse_in_every_draw_route(){
+  let echo=index(95003500);
+  for hero in [None,Some(0),Some(1),Some(2),Some(3),Some(4),Some(5),Some(6),Some(7),Some(8),Some(9)]{
+   let excluded=role_exclusions(HexSet::new(),hero);let allowed=matches!(hero,Some(4|6|7));
+   let round=crate::reward_cycle::Round::new(&excluded,&HexSet::new());assert_eq!(round.candidates.contains(&echo),allowed);
+   assert_eq!(round.preferred([echo,0,1]).unwrap().contains(&echo),allowed);
+   assert_eq!(crate::reward_cycle::Single::new(&excluded,&HexSet::new(),&mask([0,1])).candidates.contains(&echo),allowed);
+  }
+ }
  #[test]fn night_blessing_draws_and_refreshes_follow_live_difficulty_count(){
   let blessing=index(95002500);let owned=mask([5]);
   for count in [None,Some(0),Some(1),Some(2),Some(3),Some(4),Some(1)]{

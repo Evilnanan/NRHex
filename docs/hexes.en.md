@@ -168,3 +168,8 @@ Slowly builds up madness while performing the Cross-Legged gesture. Suffering ma
 ## Ambulance
 
 Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina while continuously rescuing allies.
+
+<!-- hex:95003500 -->
+## Echo Casting
+
+Sorceries and incantations cost 125% more FP and produce an additional projectile after casting.
