@@ -23,7 +23,9 @@ def attacks(root):
  return False
 # Held dragon sequences need separate adaptation. Deadly Sin is a personal
 # buff whose periodic damage must not become repeated spell-cast echoes.
-unsupported={7010,7011,7050,7900}
+# Exclude the four spells by Magic ID, including every auxiliary/root variant.
+# Dragonclaw's standalone impact is only part of its animated melee attack.
+unsupported={7010,7011,7050,7060,7090,7240,7330,7900}
 density_magic={4700,4701}
 areas=json.loads((r/'data/balance/echo-cast-areas.json').read_text())
 assert areas['version']==v['version']

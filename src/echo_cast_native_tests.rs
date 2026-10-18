@@ -119,6 +119,16 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  // Native personal heal and the generated echo IDs cannot schedule an echo.
  TARGET_COUNT.store(1,Ordering::Relaxed);int(dp+0x18,6420);int(dp+0x14,10642000);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
  int(dp+0x18,6421);int(dp+0x14,95003512);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
+ // Explicit spell exclusions preserve the original native emission, without
+ // scheduling a delayed echo or immediately duplicating any referenced root.
+ for (magic,roots)in [(7060,&[10706000,10706002][..]),(7090,&[10709000,10709001][..]),(7240,&[10724000][..]),(7330,&[10733000,10733001,10999999][..])]{
+  int(dp+0x18,magic);
+  for &root in roots{
+   int(dp+0x14,root);let before=SHOTS.lock().unwrap().len();fire();
+   assert!(QUEUE.lock().unwrap().pending.is_empty());update(p,base,0.5);assert_eq!(SHOTS.lock().unwrap().len(),before+1);
+   assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);assert_eq!(target_ref[0x78/4],2);
+  }
+ }
  TARGET_ALIVE.store(true,Ordering::Relaxed);
  // No entity target: forward-only, fixed point, and a point at local origin.
  // Native validity rejects the forward sentinel; it must still be replayed.

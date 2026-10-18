@@ -160,6 +160,9 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  use super::*;
  #[test]fn root_filter_does_not_echo_children_or_sustained_casts(){
   assert!(eligible(4021,10402100));assert!(eligible(4021,10402150));assert!(!eligible(4021,10402151));assert!(!eligible(4200,10420000));assert!(!eligible(7000,10700000));assert!(!eligible(4021,10462000));
+  for (magic,roots)in [(7060,&[10706000,10706002][..]),(7090,&[10709000,10709001][..]),(7240,&[10724000][..]),(7330,&[10733000,10733001,10999999][..])]{
+   for &root in roots{assert!(!eligible(magic,root));assert!(!density(magic,root));}
+  }
  }
  #[test]fn retain_preserves_native_high_flag_bits(){unsafe{
   let mut a=[0u32;16];a[6]=0xc0000002;a[10]=0x80000005;let p=a.as_mut_ptr()as usize;retain_counter(p,0x18,0x3fffffff);retain_counter(p,0x28,0x7fffffff);assert_eq!(a[6],0xc0000003);assert_eq!(a[10],0x80000006);
