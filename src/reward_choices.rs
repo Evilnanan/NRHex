@@ -19,7 +19,8 @@ pub fn terrain_exclusions(mut owned:HexSet,great_hollow:bool)->HexSet{
  if great_hollow{owned.insert(index(95001600));}owned
 }
 pub fn party_exclusions(mut unavailable:HexSet,difficulty_count:Option<i32>)->HexSet{
- if difficulty_count!=Some(1){unavailable.insert(index(95002500));}unavailable
+ if difficulty_count!=Some(1){unavailable.insert(index(95002500));}
+ if !difficulty_count.is_some_and(|count|count>1){unavailable.insert(index(95003400));}unavailable
 }
 pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  let sword=index(95000900);let has_sword=unavailable.contains(&sword);
@@ -52,7 +53,7 @@ pub fn is_hex_good(encoded:u32)->bool{
   let blessing=index(95002500);let owned=mask([5]);
   for count in [None,Some(0),Some(1),Some(2),Some(3),Some(4),Some(1)]{
    let excluded=party_exclusions(owned.clone(),count);let allowed=count==Some(1);
-   assert_eq!(excluded.difference(&owned).copied().collect::<HexSet>(),if allowed{HexSet::new()}else{mask([blessing])});
+   assert_eq!(excluded.difference(&owned).copied().collect::<HexSet>(),mask([(blessing,!allowed),(index(95003400),!count.is_some_and(|n|n>1))].into_iter().filter_map(|(id,blocked)|blocked.then_some(id))));
    for seen in [HexSet::new(),all(HEX_COUNT)]{
     let round=crate::reward_cycle::Round::new(&excluded,&seen);
     assert_eq!(round.candidates.contains(&blessing),allowed);
@@ -61,6 +62,17 @@ pub fn is_hex_good(encoded:u32)->bool{
    }
    let mut owned_blessing=owned.clone();owned_blessing.insert(blessing);
    assert!(!preferred([blessing,0,1],&party_exclusions(owned_blessing,count)).unwrap().contains(&blessing));
+  }
+ }
+ #[test]fn ambulance_is_multiplayer_only_in_all_choice_routes(){
+  let ambulance=index(95003400);let blessing=index(95002500);
+  for count in [None,Some(-1),Some(0),Some(1),Some(2),Some(3),Some(4)]{
+   let excluded=party_exclusions(HexSet::new(),count);let allowed=count.is_some_and(|n|n>1);
+   let round=crate::reward_cycle::Round::new(&excluded,&HexSet::new());
+   assert_eq!(round.candidates.contains(&ambulance),allowed);
+   assert_eq!(round.preferred([ambulance,0,1]).unwrap().contains(&ambulance),allowed);
+   assert_eq!(crate::reward_cycle::Single::new(&excluded,&HexSet::new(),&mask([0,1])).candidates.contains(&ambulance),allowed);
+   assert_eq!(excluded.contains(&blessing),count!=Some(1));
   }
  }
  #[test]fn pact_conflicts_follow_actual_ownership_in_draws_focused_balls_and_refreshes(){

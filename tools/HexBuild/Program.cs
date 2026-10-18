@@ -70,6 +70,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--ambulance-stage")){Ambulance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--demons-call-catalog")){DemonsCall.Catalog(bnd,Parse,Path.Combine(root,"work/demons-call/demons_data.rs"));return;}

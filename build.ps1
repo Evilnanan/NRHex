@@ -203,10 +203,14 @@ try {
         python -X utf8 tools/verify_angel_chant_native.py
         if ($LASTEXITCODE -ne 0) { throw 'Native Chant stamina addition failed.' }
     }
+    if (-not $DllOnly) {
+        python -X utf8 tools/build_ambulance_hks.py --inplace
+        if ($LASTEXITCODE -ne 0) { throw 'Ambulance movement script patch failed.' }
+    }
     # Both modes verify the runtime; only Full regenerates game resources.
     cargo test --release --lib @cargoTarget
     if ($LASTEXITCODE -ne 0) { throw 'Runtime regression checks failed.' }
-    foreach ($runtimeCheck in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py')) {
+    foreach ($runtimeCheck in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py')) {
         python -X utf8 (Join-Path 'tools' $runtimeCheck)
         if ($LASTEXITCODE -ne 0) { throw "Runtime native verification failed: $runtimeCheck" }
     }

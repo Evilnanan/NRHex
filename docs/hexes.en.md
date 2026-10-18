@@ -163,3 +163,8 @@ Latent powers you obtain next split into two of lower quality. Can trigger 3 tim
 ## Demon’s Summoning
 
 Slowly builds up madness while performing the Cross-Legged gesture. Suffering madness summons a sinner hostile to all. The sinner loses 1/60 of its maximum HP each second. Cooldown: 60 seconds after its death.
+
+<!-- hex:95003400 -->
+## Ambulance
+
+Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina equal to 50% of the rescue value you apply.
