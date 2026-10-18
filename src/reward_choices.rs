@@ -7,6 +7,14 @@ fn index(owner:i32)->usize{OWNER_IDS.iter().position(|&id|id==owner).expect("Mis
 pub fn pool_exclusions(mut unavailable:HexSet)->HexSet{
  unavailable.insert(index(95003300));unavailable
 }
+// Run on actual ownership before role/terrain restrictions add unavailable
+// entries: a role-ineligible ability must not imply that it is owned.
+pub fn ownership_exclusions(mut owned:HexSet)->HexSet{
+ let pact=index(95002600);let shell=index(95000700);let jiahao=index(95001300);
+ if owned.contains(&pact){owned.extend([shell,jiahao]);}
+ else if owned.contains(&shell)||owned.contains(&jiahao){owned.insert(pact);}
+ owned
+}
 pub fn terrain_exclusions(mut owned:HexSet,great_hollow:bool)->HexSet{
  if great_hollow{owned.insert(index(95001600));}owned
 }
@@ -37,6 +45,40 @@ pub fn is_hex_good(encoded:u32)->bool{
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn pact_conflicts_follow_actual_ownership_in_draws_focused_balls_and_refreshes(){
+  let pact=index(95002600);let shell=index(95000700);let jiahao=index(95001300);
+  for bits in 0..8{
+   let owned=mask([pact,shell,jiahao].into_iter().enumerate().filter_map(|(i,id)|(bits&(1<<i)!=0).then_some(id)));
+   let excluded=ownership_exclusions(owned.clone());
+   let expected=[(pact,bits!=0),(shell,bits&3!=0),(jiahao,bits&5!=0)];
+   for seen in [HexSet::new(),all(HEX_COUNT)]{
+    let round=crate::reward_cycle::Round::new(&excluded,&seen);
+    let focused=round.preferred([pact,shell,jiahao]).unwrap();
+    let random=round.draw(|n|Some(n-1)).unwrap();
+    let refresh=crate::reward_cycle::Single::new(&excluded,&seen,&mask([0,1]));
+    for (id,blocked) in expected{
+     assert_eq!(round.candidates.contains(&id),!blocked,"ownership {bits}, ability {id}");
+     assert_eq!(refresh.candidates.contains(&id),!blocked);
+     if blocked{assert!(!focused.contains(&id));assert!(!random.contains(&id));}
+    }
+   }
+   // Conflicts do not grant or remove actual effects, nor block unrelated options.
+   assert!(owned.is_subset(&excluded));assert!(!excluded.contains(&0));
+  }
+ }
+ #[test]fn role_restrictions_never_count_as_ownership_for_pact_conflicts(){
+  let pact=index(95002600);let shell=index(95000700);let jiahao=index(95001300);
+  for hero in [2,4,6]{
+   let mut owned=HexSet::new();if hero==6{owned.insert(index(95000900));}
+   let excluded=role_exclusions(terrain_exclusions(ownership_exclusions(owned),true),Some(hero));
+   assert!(excluded.contains(&jiahao));assert!(!excluded.contains(&pact));assert!(!excluded.contains(&shell));
+  }
+  // Sword's role exception cannot unlock a pact excluded by an owned conflict.
+  for conflict in [shell,jiahao]{
+   let excluded=role_exclusions(ownership_exclusions(mask([index(95000900),conflict])),Some(6));
+   assert!(excluded.contains(&pact));
+  }
+ }
  #[test]fn disabled_ability_keeps_its_stable_slot_but_never_appears_in_draws_or_refreshes(){
   let disabled=index(95003300);assert_eq!(disabled,29);assert_eq!(crate::hex_pool::HISTORY_BITS[disabled],30);
   assert!(is_hex_good(0x40000000|95003300));

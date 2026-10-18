@@ -1975,7 +1975,7 @@ unsafe fn local_hero(base:usize)->Option<u8> {
  player_data_hero(read_ptr(base+GAME_DATA_RVA))
 }
 unsafe fn unavailable_hexes(player:usize,base:usize)->HexSet {
- reward_choices::role_exclusions(reward_choices::terrain_exclusions(owned_hexes(player,base),reward_terrain::exclude_cage(reward_terrain::great_hollow(base))),local_hero(base))
+ reward_choices::role_exclusions(reward_choices::terrain_exclusions(reward_choices::ownership_exclusions(owned_hexes(player,base)),reward_terrain::exclude_cage(reward_terrain::great_hollow(base))),local_hero(base))
 }
 fn random_index(count:usize)->Option<usize>{
  let count=u64::try_from(count).ok()?;if count==0{return None;}

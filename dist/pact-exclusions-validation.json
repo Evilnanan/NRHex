@@ -1,0 +1,32 @@
+{
+  "version": "0.17.164",
+  "mutualExclusions": [
+    [
+      95002600,
+      95000700
+    ],
+    [
+      95002600,
+      95001300
+    ]
+  ],
+  "shellAndJiahaoRemainCompatible": true,
+  "ownershipEvaluatedBeforeRoleAndTerrain": true,
+  "normalDraws": true,
+  "focusedTestBalls": true,
+  "perOptionRerolls": true,
+  "ownershipCombinationsCovered": 8,
+  "unitTestsPassed": 380,
+  "unitTestsIgnored": 7,
+  "signatureCount": 160,
+  "executableSignatureScanPassed": true,
+  "testDllSha256": "e3a6ea5430b2de7b3f08841b502928ff203d25d4d41a0499f14b8928035d5062",
+  "productionDllSha256": "c7da8fe2c86c3b2e70681c8e07c738457c4810427ea377b8ad299cce8c8f91b9",
+  "productionHasNoKeyboardPollingImport": true,
+  "distributionChangedFiles": [
+    "mod/natives/NRHex.dll"
+  ],
+  "regulationAndHksUnmodified": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}
