@@ -66,14 +66,14 @@ if QUERY in installed.functions[259]['constants']:
 env=os.environ.copy();env.setdefault('NRHEX_NATIVE_EXE',str(GAME/'nightreign.exe'))
 command=['cargo','test','--release']
 if env.get('NRHEX_CARGO_TARGET'):command+=['--target',env['NRHEX_CARGO_TARGET']]
-command+=['--lib','ambulance_compiled_detours_execute_native_cost_rescue_and_packets','--','--ignored','--test-threads=1']
+command+=['--lib','ambulance_compiled_detours_execute_outgoing_rescue_before_authority','--','--ignored','--test-threads=1']
 result=subprocess.run(command,cwd=ROOT,env=env,capture_output=True,text=True,errors='replace');output=result.stdout+result.stderr
 work=ROOT/'work/ambulance';work.mkdir(parents=True,exist_ok=True);(work/'native-test.log').write_text(output)
 assert result.returncode==0 and '1 passed; 0 failed;'in output,output
 sources=['src/ambulance.rs','src/ambulance_native_tests.rs','src/reward_choices.rs','src/hex_pool.rs','src/lib.rs','tools/HexBuild/Ambulance.cs','tools/build_ambulance_hks.py']
 report=dict(nativeExecutionPassed=True,hksCases=cases,coneHalfAngleDegrees=30,periodicDebitEffects=[100300,102022],preservedPeriodicEffect=100320,rescueRate=.5,
- cases=['compiled hooks installed over native functions','native periodic cost summation matches non-owner and filters only movement effects','zero input, side/away direction, revived allies, expired movement samples','native corrected rescue value and last-hit overkill cap','zero remaining rescue and other rescuer give no recovery','native type-3 decoder in both target identity formats','duplicate gauge snapshot does not pay twice','type-1 snapshots do not count as rescue','odd rescue fractional carry and real native maximum-stamina clamp'],
- stubs=['actor/effect/roster lookup','Havok movement variables and rotation getter','network identity lookup and rendering/state transitions','native common-parameter getters and optional mode correction disabled','native rescue statistics and network sending suppressed'],
+ cases=['compiled hooks installed over native functions','native periodic cost summation matches non-owner and filters only movement effects','zero input, side/away direction, revived allies, expired movement samples','actual native hit-dispatch hook refunds before rejected recipient authority; gauge unchanged','last-hit overflow and stale zero gauge retain full outgoing credit','250 native rescue arithmetic comparisons across mode/tier/correction/minimum-one','other rescuers, no owner, revived target and self give no recovery','native rescue application and packet decoder in both formats never refund again','odd rescue fractional carry and real native maximum-stamina clamp'],
+ stubs=['actor/effect/roster lookup','Havok movement variables and rotation getter','network identity lookup and rendering/state transitions','native common-parameter getter and optional mode query supplied by fixture','recipient authority predicate forced false; native dispatch branch retained','native rescue statistics and network sending suppressed'],
  sourceHashes={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest()for name in sources},gameProcessAccessed=False,gameplayVerified=False,multiplayerVerified=False)
 (work/'native-validation.json').write_text(json.dumps(report,indent=2))
-print(f'PASS: Ambulance compiled native hooks, original rescue/packet/stamina code; {cases} HKS guard cases; no live game process')
+print(f'PASS: Ambulance compiled native hooks, outgoing rescue before authority, native arithmetic/packet/stamina code; {cases} HKS guard cases; no live game process')

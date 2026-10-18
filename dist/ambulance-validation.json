@@ -1457,7 +1457,7 @@
       }
     ]
   },
-  "version": "0.17.167",
+  "version": "0.17.168",
   "nativeValidation": {
     "nativeExecutionPassed": true,
     "hksCases": 40,
@@ -1472,26 +1472,27 @@
       "compiled hooks installed over native functions",
       "native periodic cost summation matches non-owner and filters only movement effects",
       "zero input, side/away direction, revived allies, expired movement samples",
-      "native corrected rescue value and last-hit overkill cap",
-      "zero remaining rescue and other rescuer give no recovery",
-      "native type-3 decoder in both target identity formats",
-      "duplicate gauge snapshot does not pay twice",
-      "type-1 snapshots do not count as rescue",
+      "actual native hit-dispatch hook refunds before rejected recipient authority; gauge unchanged",
+      "last-hit overflow and stale zero gauge retain full outgoing credit",
+      "250 native rescue arithmetic comparisons across mode/tier/correction/minimum-one",
+      "other rescuers, no owner, revived target and self give no recovery",
+      "native rescue application and packet decoder in both formats never refund again",
       "odd rescue fractional carry and real native maximum-stamina clamp"
     ],
     "stubs": [
       "actor/effect/roster lookup",
       "Havok movement variables and rotation getter",
       "network identity lookup and rendering/state transitions",
-      "native common-parameter getters and optional mode correction disabled",
+      "native common-parameter getter and optional mode query supplied by fixture",
+      "recipient authority predicate forced false; native dispatch branch retained",
       "native rescue statistics and network sending suppressed"
     ],
     "sourceHashes": {
-      "src/ambulance.rs": "02fcc38ef86bdd420398784a43a125b8536b807ed8821630ef725c13fa5d9c4e",
-      "src/ambulance_native_tests.rs": "837e1fe652867e043fc7aed483c6072c347915b0ba242d6c6bed8c531056f9e4",
+      "src/ambulance.rs": "c53e86068141a33a1b235b7089943db45c88a449a556b030422e746dc2cdc927",
+      "src/ambulance_native_tests.rs": "8a9a4e1073b1b57e705b1ed13f0917a9018370f01ae8820f3e6053634bd68aeb",
       "src/reward_choices.rs": "7124cf11f3a66339f74afd86233d64b4f737f4b9f581a8392e3b004bea961199",
       "src/hex_pool.rs": "c6bf3d2b933bb6b2c1907de64dfef9b1e86ffc9dd4e4f286af66f3035808b413",
-      "src/lib.rs": "2c7e8e8326c759f887286e319ee76bacbbe126f9789cbb57a500719c6cf688c7",
+      "src/lib.rs": "ae2345e1c3fc994b26016278b4c5c75af3166a51a5cc9ee1e7e0597a91f442f7",
       "tools/HexBuild/Ambulance.cs": "678b8c88e037d9c4ef1fbf059625555695100544299591d20c90d42c94ffcaae",
       "tools/build_ambulance_hks.py": "860349db84932fb3aec00fc9364ba473df741721e59b33678ef139fcaf270973"
     },
@@ -1786,15 +1787,39 @@
     "gameplayVerified": false
   },
   "files": {
-    "dist/README.md": "475f7c0178d64db08099394ec8eecf801bebb3e957ee721b6df8ff1f75f7266d",
+    "dist/README.md": "bfdc43ce11caf50ff7d1bce91eaa510f9ca842e0a4d1cc1ad2c37317d2c48ae5",
     "dist/mod/regulation.bin": "6ae34c44498ba1c4e1e8d49b62e31d73b1b9f0ed6ddf394553d938e45a8f666f",
-    "dist/mod/natives/NRHex.dll": "bf2bb92230365b6da0d970f4d374ffca22cd62d76bdeeeb13d7b445812cce155",
+    "dist/mod/natives/NRHex.dll": "9b24ef7c5dba033ace0b426881a94f999b6802f426ee2da273e0ac3a4d7b9b60",
     "dist/mod/action/script/c0000.hks": "ecbbb7e2b60d896744829c51d7fdd51ab5a13bf6b7dd0f67cdd137e58a5383cb",
     "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "aa30d9e300f767c64f1c3c3ed6afe9007954c84a355ecb4aa91f230c31b9fb65",
     "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "62d1240b79c993d7c5f564cd037d8159b73e0f8cd61badfb316dcc541ebf9958",
     "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "2145dd5dcf4b24b3d4f0e1887b57984fb3c6c56766ef2308e129febaed1a4e94",
     "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "8c0fc08222e09580b95bad6e9ea0aa47d5440c4ca3edcf4b9460830c02b936ae"
   },
-  "unchangedDistFileCount": 253,
-  "fullOriginalResourceBuildPerformed": false
+  "fullOriginalResourceBuildPerformed": false,
+  "resourceGenerationVersion": "0.17.167",
+  "resourceGenerationUnchangedDistFileCount": 253,
+  "dllUpdate": {
+    "version": "0.17.168",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "9b24ef7c5dba033ace0b426881a94f999b6802f426ee2da273e0ac3a4d7b9b60",
+    "installed": true,
+    "installedDllSha256": "9b24ef7c5dba033ace0b426881a94f999b6802f426ee2da273e0ac3a4d7b9b60",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false,
+    "baselineCommit": "19d11b488c71fc13cba44cd82a0655aa1d204163",
+    "regularTestsPassed": 388,
+    "runtimeSignaturesChecked": 167,
+    "otherNativeRegressionSuitesPassed": 4,
+    "changedDistFiles": [
+      "dist/README.md",
+      "dist/mod/natives/NRHex.dll",
+      "dist/ambulance-validation.json"
+    ],
+    "unchangedDistFileCount": 259
+  }
 }

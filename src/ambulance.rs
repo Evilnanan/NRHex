@@ -1,7 +1,7 @@
-//! Only locomotion's periodic stamina debit is waived. Rescue accounting follows
-//! both the native authority path and its original type-3 network notification.
+//! Waive locomotion costs toward a downed ally; refund outgoing rescue power
+//! before recipient authority, gauge mutation or network acknowledgement.
 use crate::{has_effect,is_local,native_actor,ptr,read_i32,read_ptr,ACTIVE,BASE};
-use std::{cell::Cell,sync::{Mutex,atomic::{AtomicPtr,Ordering}}};
+use std::{sync::{Mutex,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95003400;
 pub const QUERY:i32=990034;
 pub const ENV_RVA:usize=0x3f7b50;
@@ -10,19 +10,20 @@ pub const NUMBER_RVA:usize=0xd40560;
 pub const NUMBER_PATTERN:&str="E9 AB 8E 88 00 0F 85 B8 DE 59 01 E9 83 DE 59 01 48 89 5C 24 08 57 48 83";
 pub const COST_RVA:usize=0x5085a0;
 pub const COST_PATTERN:&str="48 8B 41 08 45 33 C9 4C 89 0A 48 85 C0 74 5A 0F 57 C9";
-pub const RESCUE_RVA:usize=0x66dec0;
-pub const RESCUE_PATTERN:&str="48 8B C4 48 89 58 10 48 89 68 20 56 57 41 56 48 81 EC 90 00 00 00";
-pub const RECEIVE_RVA:usize=0x4f37d0;
-pub const RECEIVE_PATTERN:&str="48 89 5C 24 08 48 89 74 24 18 55 57 41 56 48 8B EC 48 83 EC 50";
-pub const CREDIT_RVA:usize=0x3d7610;
-pub const CREDIT_PATTERN:&str="48 85 D2 74 44 53 48 83 EC 20 48 8B D9 48 81 C1 38 03 00 00";
-pub const REMOTE_RVA:usize=0x519750;
-pub const REMOTE_PATTERN:&str="48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 48 8D B1";
+// Actual hit dispatch, after contact handling and before recipient authority.
+pub const HIT_RVA:usize=0x43da77;
+pub const HIT_PATTERN:&str="49 8B CE E8 A1 E6 FE FF 48 8B 10 48 8B C8 FF 92 18 01 00 00 84 C0 74 39";
+pub const MODE_RVA:usize=0x6aeb20;
+pub const MODE_PATTERN:&str="48 8B 05 31 47 56 03 48 85 C0 74 08 0F B6 80 1A 0E 00 00 C3";
+pub const COMMON_RVA:usize=0xe76d50;
+pub const COMMON_PATTERN:&str="48 89 5C 24 08 57 48 83 EC 30 48 8B F9 33 DB 48 89 19 89 59 08 48 8B 0D 14 1B DB 02 48 85 C9 0F 84 CC 00 00 00 45 33 C0 BA 92 00 00 00 E8 FE 78 02 00";
+// Verify the complete native rescue arithmetic mirrored below, including tier
+// offsets, f32 operation order, truncation and the native minimum-one rule.
+pub const FORMULA_RVA:usize=0x66def9;
+pub const FORMULA_PATTERN:&str="F3 41 0F 10 B0 50 01 00 00 E8 19 0C 04 00 84 C0 74 50 0F B6 9F 30 07 00 00 48 8D 4C 24 20 E8 34 8E 80 00 F3 0F 10 05 78 57 C8 02 48 8B 08 48 85 C9 74 2B 80 FB 01 75 0A F3 0F 10 81 0C 04 00 00 EB 1C 80 FB 02 75 0A F3 0F 10 81 10 04 00 00 EB 0D 80 FB 03 72 08 F3 0F 10 81 14 04 00 00 F3 0F 59 F0 F3 0F 2C C6 F3 0F 59 B5 58 02 00 00 F3 0F 2C DE 83 F8 01 7C 0A B8 01 00 00 00 3B D8 0F 4C D8";
 pub static ENV_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static COST_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-pub static RESCUE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-pub static RECEIVE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-pub static CREDIT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+pub static HIT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 #[derive(Clone,Copy,Default,PartialEq,Eq)]struct Identity{actor:usize,handle:u64,stats:usize}
 #[derive(Default)]struct State{owner:Identity,frame:u64,sample:Option<(u64,f32,f32)>,fraction:f64}
 static STATE:Mutex<State>=Mutex::new(State{owner:Identity{actor:0,handle:0,stats:0},frame:0,sample:None,fraction:0.});
@@ -123,54 +124,55 @@ pub unsafe extern "system" fn cost(manager:usize,out:usize)->usize{
  let sample=STATE.lock().ok().and_then(|s|s.movement(owner));
  if sample.is_some_and(|(angle,speed)|toward_down(owner,base,angle,speed)){filtered_cost(manager,out)}else{original(manager,out)}
 }
-#[derive(Clone,Copy)]struct Rescue{recipient:Identity,before:f32,down:bool}
-thread_local!{static RESCUE:Cell<Option<Rescue>>=const{Cell::new(None)};}
-struct Scope(Option<Rescue>);
-impl Scope{fn enter(value:Option<Rescue>)->Self{Self(RESCUE.with(|s|s.replace(value)))}}
-impl Drop for Scope{fn drop(&mut self){RESCUE.with(|s|s.set(self.0));}}
-unsafe fn snapshot(target:usize,base:usize)->Option<Rescue>{
- if !party_member(target,base){return None;}
- Some(Rescue{recipient:identity(target),before:ptr::read_unaligned((target+0x714)as*const f32),down:ptr::read((target+0x710)as*const u8)==1})
+fn rescue_power(raw:f32,tier_rate:f32,hit_rate:f32)->i32{
+ let scaled=raw*tier_rate;let final_value=scaled*hit_rate;
+ if !scaled.is_finite()||!final_value.is_finite()||scaled<0.||final_value<0.||scaled>=2147483648.||final_value>=2147483648.{return 0;}
+ let value=final_value as i32;if scaled as i32>=1{value.max(1)}else{value}
 }
-pub unsafe extern "system" fn rescue(target:usize,source:usize,hit:usize){
- let base=BASE.load(Ordering::Acquire);
- let _scope=Scope::enter(if ACTIVE.load(Ordering::Acquire){snapshot(target,base)}else{None});
- let original:unsafe extern "system" fn(usize,usize,usize)=std::mem::transmute(RESCUE_ORIGINAL.load(Ordering::Acquire));original(target,source,hit);
-}
-// Match the original packet parser's two identity formats. Resolve afresh; no
-// remote actor or stream address survives the synchronous original dispatch.
-unsafe fn received_target(stream:usize,id:usize,local_format:u8,base:usize)->usize{
- let world=read_ptr(base+crate::WORLD_RVA);if world==0{return 0;}
- if local_format!=0{
-  if id==0{return 0;}
-  let get:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+REMOTE_RVA);get(world,id)
- }else{
-  if stream==0||ptr::read((stream+0xc)as*const u8)!=0||read_i32(stream+8)<8{return 0;}
-  let data=read_ptr(stream);if data==0{return 0;}
-  native_actor::resolve(base,ptr::read_unaligned(data as*const u64))
- }
-}
-pub unsafe extern "system" fn receive(a:usize,stream:usize,id:usize,local_format:u8)->u8{
- let base=BASE.load(Ordering::Acquire);
- let value=if ACTIVE.load(Ordering::Acquire){snapshot(received_target(stream,id,local_format,base),base)}else{None};
- let _scope=Scope::enter(value);
- let original:unsafe extern "system" fn(usize,usize,usize,u8)->u8=std::mem::transmute(RECEIVE_ORIGINAL.load(Ordering::Acquire));original(a,stream,id,local_format)
-}
-pub unsafe extern "system" fn credit(source:usize,target:usize){
- if ACTIVE.load(Ordering::Acquire){
-  let base=BASE.load(Ordering::Acquire);
-  if let Some(owner)=owned(source,base){
-   let value=RESCUE.with(|s|s.get());
-   if let Some(value)=value.filter(|v|v.down&&v.recipient.actor==target&&identity(target)==v.recipient&&source!=target){
-    RESCUE.with(|s|s.set(None));
-    let after=ptr::read_unaligned((target+0x714)as*const f32);
-    let delta=if value.before.is_finite()&&after.is_finite()&&value.before>0.&&after>=0.{(value.before-after).max(0.)}else{0.};
-    let amount=STATE.lock().ok().map_or(0,|mut s|s.credit(owner,delta,read_i32(owner.stats+0x15c),read_i32(owner.stats+0x160)));
-    if amount>0{let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);add(owner.stats,amount,0);}
-   }
+unsafe fn outgoing_power(target:usize,hit:usize,base:usize)->i32{
+ let mut rate=1f32;
+ let mode:unsafe extern "system" fn()->u8=std::mem::transmute(base+MODE_RVA);
+ if mode()!=0{
+  let mut reference=[0usize;2];
+  let get:unsafe extern "system" fn(usize)->usize=std::mem::transmute(base+COMMON_RVA);
+  let result=get(reference.as_mut_ptr()as usize);let row=read_ptr(result);
+  if row!=0{
+   let offset=match ptr::read((target+0x730)as*const u8){1=>0x40c,2=>0x410,3.. =>0x414,_=>0};
+   if offset!=0{rate=ptr::read_unaligned((row+offset)as*const f32);}
   }
  }
- let original:unsafe extern "system" fn(usize,usize)=std::mem::transmute(CREDIT_ORIGINAL.load(Ordering::Acquire));original(source,target);
+ rescue_power(ptr::read_unaligned((hit+0x150)as*const f32),rate,ptr::read_unaligned((hit+0x258)as*const f32))
+}
+unsafe extern "system" fn outgoing(module:usize,source:usize,hit:usize){
+ if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
+ let base=BASE.load(Ordering::Acquire);let Some(owner)=owned(source,base)else{return;};
+ let target=read_ptr(module+8);
+ if source==target||!party_member(target,base)||ptr::read((target+0x710)as*const u8)!=1{return;}
+ // Deliberately never read +714 (remaining rescue). This is outgoing power,
+ // including last-hit overflow, not a recipient-side gauge delta.
+ let power=outgoing_power(target,hit,base);
+ let amount=STATE.lock().ok().map_or(0,|mut s|s.credit(owner,power as f32,read_i32(owner.stats+0x15c),read_i32(owner.stats+0x160)));
+ if amount>0{let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);add(owner.stats,amount,0);}
+}
+// 43DA77 is inside 43D260, with RSP aligned to 16, R14 damage module,
+// R12 resolved character source, RSI hit. Do not attach to 439E80: it is also
+// used for previews/preflight and would award before actual contact dispatch.
+#[unsafe(naked)]
+pub unsafe extern "system" fn hit_detour(){
+ core::arch::naked_asm!(
+  "pushfq", "sub rsp,0xc8",
+  "mov [rsp+0x20],rax", "mov [rsp+0x28],rcx", "mov [rsp+0x30],rdx",
+  "mov [rsp+0x38],r8", "mov [rsp+0x40],r9", "mov [rsp+0x48],r10", "mov [rsp+0x50],r11",
+  "movdqu [rsp+0x60],xmm0", "movdqu [rsp+0x70],xmm1", "movdqu [rsp+0x80],xmm2",
+  "movdqu [rsp+0x90],xmm3", "movdqu [rsp+0xa0],xmm4", "movdqu [rsp+0xb0],xmm5",
+  "mov rcx,r14", "mov rdx,r12", "mov r8,rsi", "call {callback}",
+  "movdqu xmm0,[rsp+0x60]", "movdqu xmm1,[rsp+0x70]", "movdqu xmm2,[rsp+0x80]",
+  "movdqu xmm3,[rsp+0x90]", "movdqu xmm4,[rsp+0xa0]", "movdqu xmm5,[rsp+0xb0]",
+  "mov rax,[rsp+0x20]", "mov rcx,[rsp+0x28]", "mov rdx,[rsp+0x30]",
+  "mov r8,[rsp+0x38]", "mov r9,[rsp+0x40]", "mov r10,[rsp+0x48]", "mov r11,[rsp+0x50]",
+  "add rsp,0xc8", "popfq", "jmp qword ptr [rip+{original}]",
+  callback=sym outgoing,original=sym HIT_ORIGINAL
+ );
 }
 #[cfg(test)]mod tests{
  use super::*;
@@ -196,9 +198,11 @@ pub unsafe extern "system" fn credit(source:usize,target:usize){
   nodes[4][0x68/8]=4|0x80000;manager[1]=nodes[0].as_ptr()as usize;let saved=nodes;let mut out=[0f32;2];
   assert_eq!(filtered_cost(manager.as_ptr()as usize,out.as_mut_ptr()as usize),out.as_mut_ptr()as usize);assert_eq!(out,[1.,3.]);assert_eq!(nodes,saved);
  }}
- #[test]fn nested_rescue_scopes_restore_outer_and_unmatched_calls_have_no_credit(){
-  RESCUE.with(|s|assert!(s.get().is_none()));let a=Rescue{recipient:Identity{actor:1,handle:2,stats:3},before:40.,down:true};
-  {let _outer=Scope::enter(Some(a));{let _inner=Scope::enter(None);RESCUE.with(|s|assert!(s.get().is_none()));}RESCUE.with(|s|assert_eq!(s.get().unwrap().before,40.));}RESCUE.with(|s|assert!(s.get().is_none()));
+ #[test]fn outgoing_power_matches_native_order_and_minimum(){
+  assert_eq!(rescue_power(40.,1.,0.5),20);assert_eq!(rescue_power(40.,0.25,0.5),5);
+  assert_eq!(rescue_power(1.,1.,0.01),1);assert_eq!(rescue_power(0.9,1.,0.01),0);
+  assert_eq!(rescue_power(0.9,1.,2.),1);assert_eq!(rescue_power(1000.,1.,1.),1000);
+  for v in [f32::NAN,f32::INFINITY,-1.,2147483648.]{assert_eq!(rescue_power(v,1.,1.),0);}
  }
 }
 
