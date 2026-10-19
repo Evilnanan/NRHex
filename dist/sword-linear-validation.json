@@ -1,0 +1,56 @@
+{
+  "version": "0.17.186",
+  "baselineCommit": "710fd049dcf8f7e86bc772e74dcefb52756c580c",
+  "damageFormula": "floor(damage * clamp(100 - bonusPercent, 0, 100) / 100)",
+  "maximumCurrentBonusPercent": 60.0,
+  "maximumCurrentReductionPercent": 60.0,
+  "regularTestsPassed": 404,
+  "ignoredNativeTests": 10,
+  "runtimeSignaturesChecked": 178,
+  "unifiedNativeSuitesPassed": 7,
+  "dllBuild": {
+    "version": "0.17.186",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "a7b03036d4e48b4865fc38687ab42c97c061c3ce1ab37b3917a0d89a9be179e7",
+    "installed": true,
+    "installedDllSha256": "a7b03036d4e48b4865fc38687ab42c97c061c3ce1ab37b3917a0d89a9be179e7",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "cases": [
+    "0 to 100 whole percentages exactly preserved for 100 input damage",
+    "fractional bonus 12.5 percent",
+    "fractional damage rounds down",
+    "nonpositive damage unchanged",
+    "invalid/nonfinite bonus does not reduce damage",
+    "reduction clamps at 100 percent"
+  ],
+  "spellBonusTableUnchanged": true,
+  "castingProtectionConditionsUnchanged": true,
+  "attackAndRegainModifiersUnchanged": true,
+  "resourcesRebuilt": false,
+  "parametersAndTextsAndRewardsAndEventsUnchanged": true,
+  "installedRegulationSha256": "648b4b21329c0dd2c722db5dec7011c0f6c1469cface4adf6ea4b75355e60d11",
+  "existingDistFilesChanged": [
+    "dist/README.md",
+    "dist/mod/natives/NRHex.dll"
+  ],
+  "unchangedExistingDistFileCount": 276,
+  "files": {
+    "dist/README.md": "751632217bfd1dd16fc6c9b24c5c97f572c5970f9630f434059677347d08956a",
+    "dist/mod/natives/NRHex.dll": "a7b03036d4e48b4865fc38687ab42c97c061c3ce1ab37b3917a0d89a9be179e7"
+  },
+  "sourceHashes": {
+    "src/sword.rs": "67c6d283e3001220fe553092e0b9487499d04224b23dc5bc63c7c5fd89c81403",
+    "src/lib.rs": "1b219843f40a36849ce6adf5158ee8517e3e1a2e9038e08a9d0e6a6d00cfa7de",
+    "data/balance/sword.csv": "c8eb2af744897810c89d7df13ae13ac2d0eb2f46c4f579cf8e517e6a451b10b0",
+    "Cargo.toml": "23e9c6569113d3d32b72a01fe56cdea3c6a5f38821e074e2b256c828d008aca5"
+  },
+  "gameProcessAccessed": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

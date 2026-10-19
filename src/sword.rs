@@ -70,9 +70,10 @@ pub fn extra_melee_application(apply_type:u8,mask:&[u32;8],filters:[u8;3])->bool
 pub fn reduced(damage:i32,percentage:f32)->i32{
  if damage<=0{return damage;}
  if !percentage.is_finite() || percentage<0. {return damage;}
- let x=percentage as f64*0.01;
- let rate=21.*(1.+x)/(40.*x*x+81.*x+21.);
- (damage as f64*rate).floor().clamp(0.,i32::MAX as f64) as i32
+ // Multiply before dividing so whole percentages such as 35/70 do not
+ // lose an extra point to rounding a precomputed binary fraction.
+ let remaining=(100.-percentage as f64).clamp(0.,100.);
+ (damage as f64*remaining/100.).floor().clamp(0.,i32::MAX as f64) as i32
 }
 pub fn heal_amount(damage:i32,percentage:f32,nullified:bool)->u32{
  // Like native Soulblood Song, heal from completed hit damage, even when
@@ -117,13 +118,13 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
    }
   }
  }
- #[test]fn reduction_curve_reference_points_and_monotonicity(){
-  // Independent rational reference points for 0%, 25%, 50%, 100%, 200%.
-  for (p,expected) in [(0.,100000),(25.,60000),(50.,44055),(100.,29577),(200.,18367)] {
+ #[test]fn linear_reduction_reference_points_and_monotonicity(){
+  for (p,expected) in [(0.,100000),(25.,75000),(35.,65000),(50.,50000),(60.,40000),(70.,30000),(100.,0),(200.,0)] {
    assert_eq!(reduced(100000,p),expected);
   }
   let mut previous=100000;
-  for p in 0..=1000 {let current=reduced(100000,p as f32);assert!(current<=previous&&current>0);previous=current;}
+  for p in 0..=1000 {let current=reduced(100000,p as f32);assert!(current<=previous&&current>=0);previous=current;}
+  for p in 0..=100{assert_eq!(reduced(100,p as f32),100-p);}
   for p in [-1.,f32::NAN,f32::INFINITY] {assert_eq!(reduced(100,p),100);}
  }
  #[test]fn extra_melee_application_only_allows_tagged_magic_or_prayer_and_relevant_category_filters(){
@@ -145,7 +146,7 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
  #[test]fn glancing_and_immune_hits_never_heal_despite_displayed_damage(){for damage in [1,5,300,i32::MAX]{assert_eq!(heal_amount(damage,100.,true),0);}}
  #[test]fn added_melee_category_keeps_all_original_tags_without_adding_skill_and_is_idempotent(){for original in 0..256{let mut mask=[0u32;8];mask[original/32]|=1<<(original%32);let saved=mask;add_melee_category(&mut mask);for n in [original,130]{assert_ne!(mask[n/32]&(1<<(n%32)),0);}for bit in 0..256{if bit!=130{assert_eq!(mask[bit/32]&(1<<(bit%32)),saved[bit/32]&(1<<(bit%32)));}}let once=mask;add_melee_category(&mut mask);assert_eq!(mask,once);}}
  #[test]fn shared_percentage_headers_are_unambiguous(){for name in ["加成","吸血百分比","效果百分比","增伤百分比"]{assert!(Bonuses::read(&table(4021,"30").replace("增伤百分比",name)).is_ok());}assert!(Bonuses::read("MagicID,吸血百分比,增伤百分比\n4021,20,30").is_err());assert!(Bonuses::read("MagicID,加成,吸血百分比\n4021,20,30").is_err());}
- #[test]fn incoming_reduction_uses_requested_curve_and_preserves_non_damage(){assert_eq!(reduced(65,30.),36);assert_eq!(reduced(100,0.),100);assert_eq!(reduced(100,100.),29);assert_eq!(reduced(-5,50.),-5);assert_eq!(reduced(100,12.5),74);}
+ #[test]fn incoming_reduction_is_linear_and_preserves_non_damage(){assert_eq!(reduced(65,30.),45);assert_eq!(reduced(100,0.),100);assert_eq!(reduced(100,100.),0);assert_eq!(reduced(-5,50.),-5);assert_eq!(reduced(0,50.),0);assert_eq!(reduced(100,12.5),87);}
  #[test]fn torso_range_handles_elevated_contacts_without_expanding_horizontal_range(){
   let feet=[10.,20.,30.,1.];
   let elevated=[14.8,22.,30.,1.];
