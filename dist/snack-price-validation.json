@@ -1,0 +1,96 @@
+{
+  "version": "0.17.189",
+  "buildPassed": true,
+  "regularTestsPassed": 411,
+  "nativeRuntimeSuitesPassed": 9,
+  "nativeSnackVerification": {
+    "nativeExecutionPassed": true,
+    "installedParameterReadbackPassed": true,
+    "nativeFunctions": [
+      "1FC0C0 settled shop statistic increment",
+      "A7CBC6 price * quantity and A7CBCF call",
+      "A7CFC6 price * quantity and A7CFCF call"
+    ],
+    "successfulPurchaseReturnSites": [
+      "A7CBD4",
+      "A7CFD4"
+    ],
+    "excludedOtherSpendReturnSite": "A403EF",
+    "threshold": 20000,
+    "minimumUnitPriceInclusive": 3500,
+    "unitPriceSource": "RAX points to the final nonnegative unit price at both validated native shop CALL sites",
+    "choices": [
+      {
+        "basic": 100
+      },
+      {
+        "basic": 100
+      },
+      {
+        "basic": 80,
+        "mechanism": 10,
+        "high": 10
+      }
+    ],
+    "lotRarityOverride": -1,
+    "usesResolvedItemRarity": true,
+    "cases": [
+      "discounted settled price and purchase quantity",
+      "both native successful purchase callbacks",
+      "3499 and low-price bulk excluded; 3500 inclusive and 3501 eligible",
+      "native stat cap preserved without limiting reward credit",
+      "other spending forwarded without credit",
+      "missing ownership and inactive hook",
+      "nonpositive payments",
+      "multiple purchases before deferred save acknowledgement",
+      "four packed saved bytes",
+      "private pending reward does not block delivery",
+      "next-frame delivery without closing-shop hook or save acknowledgement",
+      "incapacitation defers delivery",
+      "all three local player slots",
+      "zero creations refunded",
+      "partial creation consumes one reward",
+      "multiple thresholds delivered in one update without duplicates",
+      "new-run reset ignores stale records until removal"
+    ],
+    "stubs": [
+      "purchase callback setup/return around original amount multiplication and CALL",
+      "native effect query/application/removal and save acknowledgements",
+      "native item-spawn service and existing private item fixture; no real UI"
+    ],
+    "sources": {
+      "src/snack.rs": "4a917710d036d56cc27463fa7657aeb80612b2c03850f09432d21f84bbb2d72e",
+      "src/snack_native_tests.rs": "d196305477768aa7a6508b1b99ef58844a6c494fa876c351cd7dac3a038a4f30",
+      "src/lib.rs": "17e07226edff6708cad241ed95e7660d10470c21d7a4049681c0f0c854fa4eee",
+      "src/hex_pool.rs": "0612431cf3ec0987588b2f618892474647d1200cc9bdb8038dfae1866713aca9",
+      "src/reward_cycle_runtime.rs": "0790d61f0e1b5af246f5626cfd2f67fbca93f1468bf3e8bdac717eb4be4ff92a",
+      "src/reward_recovery.rs": "42be620666a1faba02a100b30ee70ccf2387b2862be0d0cd2496f1592fa6ba93",
+      "tools/HexBuild/Snack.cs": "de294476cda56ee18a61342b0d8a84436729e7c4fc96f7e4098526f85f93339f",
+      "tools/HexBuild/RewardCatalog.cs": "d44c8f4f9d2a9f43002edfc3936c6ecb41b4d0b1192b9a24fbab26273caae4de",
+      "tools/verify_snack.py": "f92f2c179f3bb66fbfccdf6097004a612ea325853005b4b456313dffbd6d0e50"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "dllSha256": "c81b321b7fb74678f871ae315a72a6f84f86c1609f42ab4f89ce6bd3f027b12f",
+  "minimumUnitPriceInclusive": 3500,
+  "threshold": 20000,
+  "delivery": "All earned rewards on the next valid player update; no shop-close, pending-ball, or save-acknowledgement wait",
+  "textChangesRestrictedTo": 95003600,
+  "changedRuntimeFiles": [
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\msg\\engus\\item_dlc01.msgbnd.dcx",
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\msg\\engus\\menu_dlc01.msgbnd.dcx",
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\msg\\zhocn\\item_dlc01.msgbnd.dcx",
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\msg\\zhocn\\menu_dlc01.msgbnd.dcx",
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\natives\\NRHex.dll"
+  ],
+  "unrelatedRuntimeFilesUnchanged": true,
+  "groupDistributionUnchanged": true,
+  "regulationUnchanged": true,
+  "descriptionsReadbackPassed": true,
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "restartSkipped": "User requested shutdown after pushing the completed changes"
+}

@@ -20,6 +20,7 @@ static class Momentum {
   foreach(int id in new[]{Pulse,Weak,Visual}){
    var r=clone("SpEffectParam",8000000,id);
    foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",-1),("effectEndurance",id==Pulse?0f:2f),("dontDeleteOnDead",1),("isDisableNetSync",id==Pulse?1:0),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(r,f,v);
+   if(id==Pulse)Set(r,"effectTargetAttacker",1);
    if(id==Weak){foreach(string f in AttackFields)Set(r,f,WeakAttack);foreach(string f in CutFields)Set(r,f,1.5f);foreach(string f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(r,f,1);}
    if(id!=Pulse){var source=native.Rows.Single(r=>r.ID==(id==Weak?WeakVisualSource:AttackVisualSource));foreach(string f in new[]{"vfxId","vfxId1"})Set(r,f,source[f].Value);}
   }
@@ -37,6 +38,7 @@ static class Momentum {
   Ambulance.VerifyRecovery(original,actual);
   var owner=actual.Rows.Single(r=>r.ID==Owner);var weak=actual.Rows.Single(r=>r.ID==Weak);
   Check(Convert.ToInt32(owner["stateInfo"].Value)==2103&&Convert.ToInt32(owner["atkOccurrenceSpEffectId"].Value)==Pulse,"Native hit notification missing");
+  Check(Convert.ToInt32(actual.Rows.Single(r=>r.ID==Pulse)["effectTargetAttacker"].Value)==1,"Native hit notification cannot be delivered to the attacker");
   foreach(string f in AttackFields){Check(Convert.ToSingle(owner[f].Value)==Bonus&&Math.Abs(Convert.ToSingle(owner[f].Value)*Convert.ToSingle(weak[f].Value)-.5f)<.000001,"Incorrect native phase attack multiplier");}
   foreach(string f in CutFields)Check(Convert.ToSingle(weak[f].Value)==1.5f,"Incorrect vulnerability rate");
   foreach(int id in new[]{Weak,Visual}){
@@ -51,9 +53,35 @@ static class Momentum {
   Check(RewardCatalog.HistoryBit(Owner)==34&&RewardCatalog.HistoricalOwners.Length>=35,"Stable history must append");
   return new{owner=Owner,positiveMultiplier=Bonus,negativeMultiplier=.5f,incomingMultiplier=1.5f,attackVisualSource=AttackVisualSource,weakVisualSource=WeakVisualSource,historyBit=34};
  }
+ static void Fixture(string directory,BND4 current,Func<string,Memory<byte>,PARAM> parse){
+  var sp=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);sp.Rows=sp.Rows.Where(r=>new[]{Owner,Pulse,Weak,Visual,320500}.Contains(r.ID)).ToList();Directory.CreateDirectory(directory);File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),sp.Write());
+ }
  public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){var current=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));Validate(native,current,parse);
-  var sp=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);sp.Rows=sp.Rows.Where(r=>new[]{Owner,Pulse,Weak,Visual,320500}.Contains(r.ID)).ToList();Directory.CreateDirectory(Path.Combine(root,"work/momentum"));File.WriteAllBytes(Path.Combine(root,"work/momentum/installed-effects.param"),sp.Write());
+  Fixture(Path.Combine(root,"work/momentum"),current,parse);
   Console.WriteLine("PASS: Momentum installed native +30%/-50% attack rates, 1.5 vulnerability and phase VFX");}
+ public static void FixDelivery(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,"work/momentum/delivery-fix");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(file=>file.ID,file=>file.Bytes.ToArray());
+  var member=binder.Files.Single(file=>Name(file)=="SpEffectParam.param");var effects=parse("SpEffectParam",member.Bytes);
+  var pulse=effects.Rows.Single(row=>row.ID==Pulse);Check(Convert.ToInt32(pulse["isDisableNetSync"].Value)==1,"Private hit notification metadata changed");
+  Set(pulse,"effectTargetAttacker",1);member.Bytes=effects.Write();
+  string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);
+  var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Version==binder.Version&&final.Compression==binder.Compression&&final.Files.Count==binder.Files.Count,"Regulation metadata changed");
+  foreach(var file in final.Files){
+   var expected=binder.Files.Single(candidate=>candidate.ID==file.ID);
+   Check(file.Name==expected.Name&&file.Flags==expected.Flags&&file.Bytes.Span.SequenceEqual(expected.Bytes.Span),"Regulation readback mismatch");
+   if(file.ID!=member.ID){Check(file.Bytes.Span.SequenceEqual(before[file.ID]),"Unrelated parameter table changed");continue;}
+   var original=parse("SpEffectParam",before[file.ID]);var current=parse("SpEffectParam",file.Bytes);Check(current.Rows.Count==original.Rows.Count,"Effect row count changed");
+   foreach(var pair in original.Rows.Zip(current.Rows)){
+    var restored=new PARAM.Row(pair.Second);if(restored.ID==Pulse)Set(restored,"effectTargetAttacker",pair.First["effectTargetAttacker"].Value);
+    Check(CageAI.Same(pair.First,restored),"Unrelated effect row or field changed");
+   }
+  }
+  Validate(native,final,parse);Fixture(directory,final,parse);
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),changedEffect=Pulse,changedField="effectTargetAttacker",value=1,otherFieldsRowsAndTablesPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Momentum attacker notification delivery fixed; only one parameter field changed");
+ }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/momentum/staged");Directory.CreateDirectory(dir);
   var b=SFUtil.DecryptNightreignRegulation(input);var before=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());

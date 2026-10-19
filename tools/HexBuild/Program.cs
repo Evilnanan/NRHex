@@ -17,6 +17,9 @@ if(args.Contains("--storm-audio-probe")){StormAudio.Probe(root,smith,game);retur
 if(args.Contains("--stage-translations")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/texts"),allRewards:true);return;
 }
+if(args.Contains("--snack-text-stage")){
+ HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/snack-price/texts"),allRewards:true,onlyIds:new[]{Snack.Owner});return;
+}
 if(args.Contains("--combat-protection-texts")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,"work/combat-protection/texts"),allRewards:true,onlyIds:new[]{95003000});return;
 }
@@ -74,8 +77,10 @@ PARAM Parse(string name,Memory<byte> bytes){
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
 if(args.Contains("--momentum-stage")){Momentum.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--momentum-check")){Momentum.Verify(root,bnd,Parse);return;}
+if(args.Contains("--momentum-delivery-stage")){Momentum.FixDelivery(root,bnd,Parse);return;}
 if(args.Contains("--snack-stage")){Snack.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--snack-check")){Snack.Verify(root,bnd,Parse);return;}
+if(args.Contains("--snack-rarity-stage")){Snack.StageRarity(root,bnd,Parse);return;}
 if(args.Contains("--echo-cast-stage")){EchoCast.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--echo-cast-cost-stage")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),true);return;}
 if(args.Contains("--echo-cast-cost-check")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),false);return;}

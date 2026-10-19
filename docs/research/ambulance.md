@@ -28,7 +28,7 @@ HKS Update通过私有env(990034, MoveAngle, MoveSpeedLevel)报告角色的移�
 
 ## 资源及候选
 
-新增5行：SpEffectParam、AttachEffectParam、PermanentBuffParam、EquipParamGoods各95003400，ItemTableParam为95110131。拥有行沿用中性永久能力模板，图标暂复用21222／22222。稳定候选索引30、展示历史位31，仍复用现有4字节历史和唯一3行奖励模板，不新增排列或事件。
+新增5行：SpEffectParam、AttachEffectParam、PermanentBuffParam、EquipParamGoods各95003400，ItemTableParam为95110131。拥有行沿用中性永久能力模板，图标于2026-10-19改为21293／22293，EquipParamGoods配套使用20293。稳定候选索引30、展示历史位31，仍复用现有4字节历史和唯一3行奖励模板，不新增排列或事件。
 
 中英文名称和描述由docs/hexes.md、docs/hexes.en.md生成，两种语言的5个奖励FMG和2个状态FMG均回读；不改现有文本。全量构建直接按HexCatalog注册同一拥有行，动作补丁与验证接入build.ps1。Ambulance.Stage仅供本次云端保留已有资源后的增量回读，不新增PowerShell构建入口。
 

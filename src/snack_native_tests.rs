@@ -29,12 +29,11 @@ unsafe extern "system" fn spawn(manager:usize,_:usize,lot:i32,a:u8,b:u8,c:u8,d:u
   crate::PERSONAL_REWARD.with(|s|{let mut scope=s.get();assert_eq!(scope.manager,manager);assert_eq!(scope.lot,LOT);assert_eq!(scope.slot,f.slot);assert!(scope.choices.is_none());scope.created=f.created;s.set(scope);});
  });1
 }
-unsafe extern "system" fn shop_return(dialog:usize,dt:f32,extra:usize)->usize{assert!(dialog!=0);assert_eq!(dt,0.125);assert_eq!(extra,0xabcdef);0x987654321}
 unsafe fn ack(){FIXTURE.with(|f|f.borrow_mut().sync());}
 fn balance()->u32{CREDIT.lock().unwrap().amount.unwrap_or(0)}
 #[test]
 #[ignore="requires NRHEX_NATIVE_EXE; run alone"]
-fn native_snack_uses_settled_shop_payments_and_private_queued_rewards(){unsafe{
+fn native_snack_uses_settled_shop_payments_and_private_immediate_rewards(){unsafe{
  let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
  let headers=crate::pe::Headers::parse(&raw,0).unwrap();let memory=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!memory.is_null());let base=memory as usize;
  for section in &headers.sections{ptr::copy_nonoverlapping(raw[section.raw_offset as usize..].as_ptr(),(base+section.virtual_address as usize)as*mut u8,section.raw_size as usize);}
@@ -65,25 +64,28 @@ fn native_snack_uses_settled_shop_payments_and_private_queued_rewards(){unsafe{
  // A second transaction before the first saved markers are acknowledged.
  assert_eq!(buy_b(&8000,capture),999999);assert_eq!(balance(),40000);ack();
  assert_eq!(decode(&records(player)),40000);
+ for buy in [buy_a,buy_b]{
+  for (unit_price,quantity,credited) in [(3499,10,0),(2000,10,0),(3500,1,3500),(3500,6,21000),(3501,2,7002)]{
+   int(capture+0x118,quantity);int(capture+0x110,quantity);
+   let before=balance();int(game+0x190,0);
+   assert_eq!(buy(&unit_price,capture),u32::try_from(unit_price*quantity).unwrap());
+   assert_eq!(balance(),before+credited);ack();assert_eq!(decode(&records(player)),before+credited);
+  }
+ }
+ CREDIT.lock().unwrap().amount=Some(40000);persist(player,base,40000);ack();persist(player,base,40000);ack();
+ int(capture+0x118,3);int(capture+0x110,2);
  // Actual accounting for other rune spending is forwarded but not rewarded.
  let original:unsafe extern "system" fn(i32)->u32=std::mem::transmute(SPEND_ORIGINAL.load(Ordering::Acquire));
- int(game+0x190,10);assert_eq!(settled(100,base+0xa403ef),110);assert_eq!(original(10),120);assert_eq!(balance(),40000);
- FIXTURE.with(|f|{f.borrow_mut().ids.remove(&OWNER);});ack();buy_a(&1000,capture);assert_eq!(balance(),40000);
- FIXTURE.with(|f|{f.borrow_mut().ids.insert(OWNER);});ack();crate::ACTIVE.store(false,Ordering::Release);buy_b(&1000,capture);assert_eq!(balance(),40000);crate::ACTIVE.store(true,Ordering::Release);
- for amount in [0,-100]{settled(amount,base+0xa7cbd4);assert_eq!(balance(),40000);}
- // Shop update wrapper preserves arguments, original prologue and result.
- jump(base,SHOP_RVA+5,shop_return as*const()as usize);
- let p=crate::hook::prepare((base+SHOP_RVA)as*mut u8,shop as*const u8,64).unwrap();SHOP_ORIGINAL.store(p.trampoline,Ordering::Release);crate::hook::write_code((base+SHOP_RVA)as*mut u8,&p.patch).unwrap();
- let mut dialog=[0usize;0xa0/8];let dialog=dialog.as_mut_ptr()as usize;
- let shop:unsafe extern "system" fn(usize,f32,usize)->usize=std::mem::transmute(base+SHOP_RVA);
- assert_eq!(shop(dialog,0.125,0xabcdef),0x987654321);update(player,base,1.);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),0);
- put(dialog+0x98,2);SHOP_SEEN.store(0,Ordering::Relaxed);shop(dialog,0.125,0xabcdef);assert_eq!(SHOP_SEEN.load(Ordering::Relaxed),0);
- // Incapacitation and a pending private ball leave credit intact.
+ int(game+0x190,10);assert_eq!(settled(100,base+0xa403ef,1),110);assert_eq!(original(10),120);assert_eq!(balance(),40000);
+ FIXTURE.with(|f|{f.borrow_mut().ids.remove(&OWNER);});ack();buy_a(&4000,capture);assert_eq!(balance(),40000);
+ FIXTURE.with(|f|{f.borrow_mut().ids.insert(OWNER);});ack();crate::ACTIVE.store(false,Ordering::Release);buy_b(&4000,capture);assert_eq!(balance(),40000);crate::ACTIVE.store(true,Ordering::Release);
+ for amount in [0,-100]{settled(amount,base+0xa7cbd4,1);assert_eq!(balance(),40000);}
  int(stats+0x140,0);update(player,base,1.);assert_eq!(balance(),40000);int(stats+0x140,100);
  let mut ball=[0usize;0xe0/8];let ball=ball.as_mut_ptr()as usize;put(items+0x58,ball);int(ball+0x78,2);ptr::write_unaligned((ball+0xca)as*mut u16,0xc0);int(ball+0xd8,LOT+1);
- update(player,base,1.);assert_eq!(balance(),40000);put(items+0x58,0);
- // Each actual local slot receives its own native lottery, serially. A
- // failed spawn refunds; a partially created ball consumes only one reward.
+ let before=FIXTURE.with(|f|f.borrow().spawns);
+ update(player,base,1./60.);assert_eq!(balance(),0);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),before+2);
+ update(player,base,1./60.);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),before+2);
+ ack();persist(player,base,0);ack();
  for slot in 1..=3{
   int(data+8,slot);FIXTURE.with(|f|f.borrow_mut().slot=slot as u8);
   CREDIT.lock().unwrap().amount=Some(40000);persist(player,base,40000);ack();persist(player,base,40000);ack();
@@ -91,9 +93,14 @@ fn native_snack_uses_settled_shop_payments_and_private_queued_rewards(){unsafe{
   FIXTURE.with(|f|f.borrow_mut().created=1);update(player,base,1.);assert_eq!(balance(),20000);ack();persist(player,base,20000);ack();
   FIXTURE.with(|f|f.borrow_mut().created=3);update(player,base,1.);assert_eq!(balance(),0);ack();persist(player,base,0);ack();
   let count=FIXTURE.with(|f|f.borrow().spawns);update(player,base,1.);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count);
+  int(capture+0x118,6);buy_a(&8000,capture);assert_eq!(balance(),48000);
+  update(player,base,1./60.);assert_eq!(balance(),8000);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count+2);
+  update(player,base,1./60.);assert_eq!(balance(),8000);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count+2);
+  ack();update(player,base,1.);ack();assert_eq!(decode(&records(player)),8000);
  }
+ put(items+0x58,0);
  // Explicit reset survives deferred marker removal and ignores old credit.
  CREDIT.lock().unwrap().amount=Some(12345);persist(player,base,12345);ack();reset(player,base);assert_eq!(balance(),0);buy_a(&8000,capture);assert_eq!(balance(),0);ack();update(player,base,1.);ack();update(player,base,1.);assert!(!CREDIT.lock().unwrap().resetting);assert_eq!(decode(&records(player)),0);
- *CREDIT.lock().unwrap()=saved_credit;crate::BASE.store(saved_base,Ordering::Release);crate::ACTIVE.store(saved_active,Ordering::Release);SPEND_ORIGINAL.store(ptr::null_mut(),Ordering::Release);SHOP_ORIGINAL.store(ptr::null_mut(),Ordering::Release);SHOP_SEEN.store(0,Ordering::Relaxed);
+ *CREDIT.lock().unwrap()=saved_credit;crate::BASE.store(saved_base,Ordering::Release);crate::ACTIVE.store(saved_active,Ordering::Release);SPEND_ORIGINAL.store(ptr::null_mut(),Ordering::Release);
  assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
 }}

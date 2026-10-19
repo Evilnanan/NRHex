@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-19",
+  "version": "0.17.188",
+  "mode": "parameter-only",
+  "staging": {
+    "inputSha256": "1EE9ED292F419711E73E505471C5EC0724A9B80FB6F846D296BE718642657F0B",
+    "outputSha256": "6082830E8D6D1CFF249A46EBEA9AA517EBD6BE6985BA0C7AA191E381879720D2",
+    "changedLots": [
+      95420000,
+      95420001,
+      95420002
+    ],
+    "changedField": "lotItem_Rarity",
+    "value": -1,
+    "otherFieldsRowsAndTablesPreserved": true,
+    "audit": {
+      "lot": 95420000,
+      "choices": 3,
+      "pools": [
+        {
+          "id": 4200100,
+          "entries": 15
+        },
+        {
+          "id": 4200200,
+          "entries": 21
+        },
+        {
+          "id": 4200300,
+          "entries": 20
+        }
+      ],
+      "firstTwo": [
+        100,
+        0,
+        0
+      ],
+      "last": [
+        80,
+        10,
+        10
+      ],
+      "persistentRows": 1020,
+      "activePersistentLimit": 4,
+      "historyBit": 33,
+      "historyBytes": 5
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "nativeValidation": {
+    "nativeExecutionPassed": true,
+    "installedParameterReadbackPassed": true,
+    "nativeFunctions": [
+      "1FC0C0 settled shop statistic increment",
+      "A7CBC6 price * quantity and A7CBCF call",
+      "A7CFC6 price * quantity and A7CFCF call"
+    ],
+    "successfulPurchaseReturnSites": [
+      "A7CBD4",
+      "A7CFD4"
+    ],
+    "excludedOtherSpendReturnSite": "A403EF",
+    "threshold": 20000,
+    "choices": [
+      {
+        "basic": 100
+      },
+      {
+        "basic": 100
+      },
+      {
+        "basic": 80,
+        "mechanism": 10,
+        "high": 10
+      }
+    ],
+    "lotRarityOverride": -1,
+    "usesResolvedItemRarity": true,
+    "cases": [
+      "discounted settled price and purchase quantity",
+      "both native successful purchase callbacks",
+      "native stat cap preserved without limiting reward credit",
+      "other spending forwarded without credit",
+      "missing ownership and inactive hook",
+      "nonpositive payments",
+      "multiple purchases before deferred save acknowledgement",
+      "four packed saved bytes",
+      "private pending reward blocks delivery",
+      "shop-update ABI and closing-state heartbeat",
+      "incapacitation defers delivery",
+      "all three local player slots",
+      "zero creations refunded",
+      "partial creation consumes one reward",
+      "multiple thresholds queue serially",
+      "new-run reset ignores stale records until removal"
+    ],
+    "stubs": [
+      "purchase callback setup/return around original amount multiplication and CALL",
+      "native effect query/application/removal and save acknowledgements",
+      "native item-spawn service and empty item list",
+      "shop continuation after original first instruction; no real UI"
+    ],
+    "sources": {
+      "src/snack.rs": "13427358407beb2a9f1e2fbc88e9fe1c269e6b1574d94974a9d35c099400cadd",
+      "src/snack_native_tests.rs": "25949d97d077c9789b9c7f9d0875223b8894e5d8bb27a387d0a1edfd73726815",
+      "src/lib.rs": "2f599cb5776d42e5f9de66ab14bf395aa46f789fb6cb6803d6658081c05529ae",
+      "src/hex_pool.rs": "0612431cf3ec0987588b2f618892474647d1200cc9bdb8038dfae1866713aca9",
+      "src/reward_cycle_runtime.rs": "0790d61f0e1b5af246f5626cfd2f67fbca93f1468bf3e8bdac717eb4be4ff92a",
+      "src/reward_recovery.rs": "42be620666a1faba02a100b30ee70ccf2387b2862be0d0cd2496f1592fa6ba93",
+      "tools/HexBuild/Snack.cs": "de294476cda56ee18a61342b0d8a84436729e7c4fc96f7e4098526f85f93339f",
+      "tools/HexBuild/RewardCatalog.cs": "d44c8f4f9d2a9f43002edfc3936c6ecb41b4d0b1192b9a24fbab26273caae4de",
+      "tools/verify_snack.py": "da72724aa34e87037e1bb0a1ad25660a1f8cc0b261d6bd76c67e43e0f5975d47"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "changedRuntimeFiles": [
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\regulation.bin"
+  ],
+  "dllAndConfigurationUnchanged": true,
+  "groupPackageUnchanged": true,
+  "restartCompleted": true,
+  "loadingVerified": true,
+  "processId": 30144,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

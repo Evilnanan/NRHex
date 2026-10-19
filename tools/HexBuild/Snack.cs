@@ -15,7 +15,7 @@ static class Snack {
    foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",10),("effectEndurance",-1f),("dontDeleteOnDead",1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(r,f,v);
   }
   for(int option=0;option<3;option++){
-   var r=clone("ItemLotParam_enemy",6100002,Lot+option);Set(r,"lotItem_Rarity",3);
+   var r=clone("ItemLotParam_enemy",6100002,Lot+option);Set(r,"lotItem_Rarity",-1);
    // Native lot lottery selects one pool for this choice, then the native
    // table resolves its class/eligibility filters. No reward permutations.
    for(int i=1;i<=3;i++){
@@ -36,6 +36,7 @@ static class Snack {
   var choices=actual["ItemLotParam_enemy"].Rows.Where(r=>r.ID>=Lot&&r.ID<Lot+3).OrderBy(r=>r.ID).ToArray();
   Check(choices.Length==3,"Expected exactly three Extra Helping choices");
   for(int option=0;option<3;option++){
+   Check(N(choices[option],"lotItem_Rarity")==-1,"Reward ball must use the resolved item's native rarity");
    var row=choices[option];Check(N(row,"lotItemBasePoint01")== (option==2?800:1000)&&N(row,"lotItemId01")==4200100,"Basic-pool weight mismatch");
    Check(N(row,"lotItemBasePoint02")== (option==2?100:0)&&N(row,"lotItemBasePoint03")== (option==2?100:0),"Mechanism/high weights must be 10% each in the last choice only");
    if(option==2)Check(N(row,"lotItemId02")==4200200&&N(row,"lotItemId03")==4200300,"Mechanism/high pool reference mismatch");
@@ -58,6 +59,28 @@ static class Snack {
  public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   Validate(native,SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin")),parse);
   Console.WriteLine("PASS: installed Extra Helping native three-choice lotteries, 80/10/10 weights, original pools and persistent credit markers");
+ }
+ public static void StageRarity(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,"work/snack/rarity-staged");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(file=>file.ID,file=>file.Bytes.ToArray());
+  var member=binder.Files.Single(file=>Name(file)=="ItemLotParam_enemy.param");var lots=parse("ItemLotParam_enemy",member.Bytes);
+  for(int option=0;option<3;option++)Set(lots.Rows.Single(row=>row.ID==Lot+option),"lotItem_Rarity",-1);
+  member.Bytes=lots.Write();string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);
+  var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Version==binder.Version&&final.Compression==binder.Compression&&final.Files.Count==binder.Files.Count,"Regulation metadata changed");
+  foreach(var file in final.Files){
+   var expected=binder.Files.Single(candidate=>candidate.ID==file.ID);
+   Check(file.Name==expected.Name&&file.Flags==expected.Flags&&file.Bytes.Span.SequenceEqual(expected.Bytes.Span),"Regulation readback mismatch");
+   if(file.ID!=member.ID){Check(file.Bytes.Span.SequenceEqual(before[file.ID]),"Unrelated parameter table changed");continue;}
+   var original=parse("ItemLotParam_enemy",before[file.ID]);var current=parse("ItemLotParam_enemy",file.Bytes);Check(current.Rows.Count==original.Rows.Count,"Lot row count changed");
+   foreach(var pair in original.Rows.Zip(current.Rows)){
+    var restored=new PARAM.Row(pair.Second);if(restored.ID>=Lot&&restored.ID<Lot+3)Set(restored,"lotItem_Rarity",pair.First["lotItem_Rarity"].Value);
+    Check(CageAI.Same(pair.First,restored),"Unrelated lot row or field changed");
+   }
+  }
+  var audit=Validate(native,final,parse);
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),changedLots=Enumerable.Range(Lot,3),changedField="lotItem_Rarity",value=-1,otherFieldsRowsAndTablesPreserved=true,audit,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: three Snack lots use resolved item rarity; weights, pools and unrelated resources preserved");
  }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/snack/staged");Directory.CreateDirectory(dir);

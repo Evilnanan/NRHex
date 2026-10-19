@@ -177,7 +177,7 @@ Sorceries and incantations cost 150% more FP and produce an additional projectil
 <!-- hex:95003600 -->
 ## Little Snack
 
-Receive a complimentary stat-boost reward for every 20,000 runes spent at shops.
+Receive a complimentary stat-boost reward for every 20,000 runes spent at shops on items with a final unit price of at least 3,500 runes.
 
 <!-- hex:95003700 -->
 ## Burst of Momentum

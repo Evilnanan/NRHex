@@ -1,25 +1,19 @@
-//! Successful local shop payments feed a persistent personal reward queue.
+//! Successful local shop payments fund immediate personal rewards.
 //! Native shop callbacks supply the settled price * quantity, after success.
 use crate::{has_effect,read_i32,read_ptr,ptr};
-use std::sync::{Mutex,atomic::{AtomicPtr,AtomicU64,Ordering}};
+use std::sync::{Mutex,atomic::{AtomicPtr,Ordering}};
 pub const OWNER:i32=95003600;
 pub const LOT:i32=95420000;
 pub const FIRST:i32=96110000;
 const COST:u32=20_000;
+const MIN_UNIT_PRICE:i32=3_500;
 pub const SPEND_RVA:usize=0x1fc0c0;
 pub const SPEND_PATTERN:&str="4C 8B 05 09 B8 A0 03 B8 3F 42 0F 00 41 8B 90 90 01 00 00 03 D1 3B D0 0F 42 C2 41 89 80 90 01 00 00 C3";
 pub const BUY_A_RVA:usize=0xa7cbc6;
 pub const BUY_A_PATTERN:&str="8B 08 0F AF 8B 18 01 00 00 E8 EC F4 77 FF";
 pub const BUY_B_RVA:usize=0xa7cfc6;
 pub const BUY_B_PATTERN:&str="8B 08 0F AF 8B 10 01 00 00 E8 EC F0 77 FF";
-pub const SHOP_RVA:usize=0xa7b600;
-pub const SHOP_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 57 48 83 EC 30 48 8B D9 E8 F9 5A F4 FF";
-// Base dialog's native closing predicate, also used by ShopDialog update.
-pub const CLOSING_RVA:usize=0x938ca0;
-pub const CLOSING_PATTERN:&str="48 83 B9 98 00 00 00 01 0F 97 C0 C3 CC 47 77 87 E9 7B D5 07 00 0F 84 D5 13 98 01 E9 DD 13 98 01";
 pub static SPEND_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-pub static SHOP_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-static SHOP_SEEN:AtomicU64=AtomicU64::new(0);
 fn purchase(caller:usize)->bool{matches!(caller,0xa7cbd4|0xa7cfd4)}
 pub fn bonus_lot(lot:i32)->bool{(LOT..LOT+3).contains(&lot)}
 pub fn pending_for(lot:i32,owner:u16,slot:u8)->bool{
@@ -77,40 +71,26 @@ unsafe fn persist(player:usize,base:usize,amount:u32)->bool{
 }
 #[unsafe(naked)]
 pub unsafe extern "system" fn spent(_amount:i32)->u32{
- core::arch::naked_asm!("mov rdx,[rsp]","jmp {callback}",callback=sym settled);
+ core::arch::naked_asm!("mov rdx,[rsp]","mov r8,rax","jmp {callback}",callback=sym settled);
 }
-unsafe extern "system" fn settled(amount:i32,caller:usize)->u32{
+unsafe extern "system" fn settled(amount:i32,caller:usize,unit_price_address:usize)->u32{
  let original:unsafe extern "system" fn(i32)->u32=std::mem::transmute(SPEND_ORIGINAL.load(Ordering::Acquire));
- let result=original(amount);
  let base=crate::BASE.load(Ordering::Acquire);
- if amount<=0||!crate::ACTIVE.load(Ordering::Acquire)||base==0||!purchase(caller.wrapping_sub(base)){return result;}
+ let eligible=amount>0&&crate::ACTIVE.load(Ordering::Acquire)&&base!=0&&purchase(caller.wrapping_sub(base))
+  &&unit_price_address!=0&&read_i32(unit_price_address)>=MIN_UNIT_PRICE;
+ let result=original(amount);
+ if !eligible{return result;}
  let world=read_ptr(base+crate::WORLD_RVA);if world==0{return result;}
  let player=read_ptr(world+0x174e8);
  if player==0||!has_effect(player,OWNER,base)||!has_effect(player,crate::level_rewards::EXPEDITION,base)||has_effect(player,crate::reward_cycle_runtime::RESET,base){return result;}
  let saved=decode(&records(player));
  let amount=if let Ok(mut state)=CREDIT.lock(){state.spend(saved,amount);state.amount}else{None};
  if let Some(amount)=amount{persist(player,base,amount);}
- SHOP_SEEN.store(crate::GetTickCount64(),Ordering::Relaxed);result
-}
-unsafe extern "system" fn shop_frame(dialog:usize){
- if dialog!=0&&crate::ACTIVE.load(Ordering::Acquire)&&read_ptr(dialog+0x98)<=1{
-  SHOP_SEEN.store(crate::GetTickCount64(),Ordering::Relaxed);
- }
-}
-// Transparent pre-hook: do not guess ShopDialog::Update's return ABI.
-#[unsafe(naked)]
-pub unsafe extern "system" fn shop(){core::arch::naked_asm!(
- "sub rsp,0xc8",
- "mov [rsp+0x20],rax","mov [rsp+0x28],rcx","mov [rsp+0x30],rdx","mov [rsp+0x38],r8","mov [rsp+0x40],r9","mov [rsp+0x48],r10","mov [rsp+0x50],r11",
- "movdqu [rsp+0x60],xmm0","movdqu [rsp+0x70],xmm1","movdqu [rsp+0x80],xmm2","movdqu [rsp+0x90],xmm3","movdqu [rsp+0xa0],xmm4","movdqu [rsp+0xb0],xmm5",
- "call {callback}",
- "movdqu xmm0,[rsp+0x60]","movdqu xmm1,[rsp+0x70]","movdqu xmm2,[rsp+0x80]","movdqu xmm3,[rsp+0x90]","movdqu xmm4,[rsp+0xa0]","movdqu xmm5,[rsp+0xb0]",
- "mov rax,[rsp+0x20]","mov rcx,[rsp+0x28]","mov rdx,[rsp+0x30]","mov r8,[rsp+0x38]","mov r9,[rsp+0x40]","mov r10,[rsp+0x48]","mov r11,[rsp+0x50]",
- "add rsp,0xc8","jmp qword ptr [rip+{original}]",callback=sym shop_frame,original=sym SHOP_ORIGINAL);
+ result
 }
 pub unsafe fn reset(player:usize,base:usize){
  if let Ok(mut state)=CREDIT.lock(){state.reset();}
- persist(player,base,0);SHOP_SEEN.store(0,Ordering::Relaxed);
+ persist(player,base,0);
 }
 pub unsafe fn update(player:usize,base:usize,dt:f32){
  if has_effect(player,crate::reward_cycle_runtime::RESET,base){reset(player,base);return;}
@@ -118,23 +98,23 @@ pub unsafe fn update(player:usize,base:usize,dt:f32){
  let (amount,resetting)={
   let Ok(mut state)=CREDIT.lock()else{return;};
   if !owned&&!state.resetting{return;}
-  state.wait=(state.wait-dt).max(0.);if state.wait>0.{return;}
-  state.wait=0.25;(state.observe(decode(&records(player))),state.resetting)
+  let amount=state.observe(decode(&records(player)));
+  state.wait=(state.wait-dt).max(0.);if state.wait>0.&&amount<COST&&!state.resetting{return;}
+  state.wait=0.25;(amount,state.resetting)
  };
  let saved=persist(player,base,amount);
  if resetting{if saved{if let Ok(mut state)=CREDIT.lock(){state.resetting=false;}}return;}
- if !owned||!saved||amount<COST{return;}
- let now=crate::GetTickCount64();let seen=SHOP_SEEN.load(Ordering::Relaxed);
+ if !owned||amount<COST{return;}
  let stats=crate::native_actor::stats(player);
- if (seen!=0&&now.saturating_sub(seen)<500)||stats==0||crate::native_actor::incapacitated(player,stats)||!crate::spatial_ready(player)
-  ||!has_effect(player,crate::level_rewards::EXPEDITION,base)||crate::unclaimed_hex_ball(base){return;}
+ if stats==0||crate::native_actor::incapacitated(player,stats)||!crate::spatial_ready(player)
+  ||!has_effect(player,crate::level_rewards::EXPEDITION,base){return;}
  if crate::CALLBACK_LOCK.swap(true,Ordering::AcqRel){return;}
- let reserved=CREDIT.lock().map(|mut state|state.amount==Some(amount)&&state.reserve()).unwrap_or(false);
- if reserved{
+ for _ in 0..amount/COST{
+  if !CREDIT.lock().map(|mut state|state.reserve()).unwrap_or(false){break;}
   let created=crate::spawn_personal_lot(player,base,LOT,None);
   let remaining=CREDIT.lock().ok().and_then(|mut state|{state.complete(created);state.amount});
   if let Some(remaining)=remaining{persist(player,base,remaining);}
-  if created!=3{crate::nlog_error!("Extra Helping created {created} choices; reserved={}",created>0);}
+  if created!=3{crate::nlog_error!("Extra Helping created {created} choices; reserved={}",created>0);break;}
  }
  crate::CALLBACK_LOCK.store(false,Ordering::Release);
 }

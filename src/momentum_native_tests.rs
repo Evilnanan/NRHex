@@ -39,21 +39,32 @@ momentum_native_rate:
  add rsp,0x40
  pop rdi
  ret
+.global momentum_native_delivery_gate
+momentum_native_delivery_gate:
+ push r15
+ sub rsp,0x20
+ mov rax,rcx
+ mov r15,rdx
+ call r8
+ add rsp,0x20
+ pop r15
+ ret
 "#);
 unsafe extern "system"{fn momentum_native_rate(out:*mut f32,rate:f32,fragment:usize)->f32;}
+unsafe extern "system"{fn momentum_native_delivery_gate(row:*const u8,player:usize,fragment:usize)->u8;}
 #[test]
 #[ignore="requires NRHEX_NATIVE_EXE and NRHEX_MOMENTUM_FIXTURES; run alone"]
 fn native_momentum_first_hit_and_unrefreshable_cycle_use_original_attack_rates(){unsafe{
  let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
  let params=std::fs::read(std::env::var_os("NRHEX_MOMENTUM_FIXTURES").unwrap()).unwrap();
- let owner=row(&params,OWNER);let weak=row(&params,WEAK);let reference=row(&params,320500);
+ let owner=row(&params,OWNER);let weak=row(&params,WEAK);let reference=row(&params,320500);let pulse_row=row(&params,PULSE);
  assert_eq!(owner[0x3c4],0);assert_eq!(u16::from_le_bytes(owner[0x156..0x158].try_into().unwrap()),2103);
  let headers=crate::pe::Headers::parse(&raw,0).unwrap();let memory=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!memory.is_null());let base=memory as usize;
  for section in &headers.sections{ptr::copy_nonoverlapping(raw[section.raw_offset as usize..].as_ptr(),(base+section.virtual_address as usize)as*mut u8,section.raw_size as usize);}
  // The native on-hit predicate uses a small absolute-RVA jump table.
  // Its LEA obtains this private image base without relying on PE relocation.
  patch(base,0x50314c,&[0xc3]);patch(base,0x26909a0,&[0xc3]);
- for rva in [0xea1b00,0xea1d40]{patch(base,rva,&[0xb0,1,0xc3]);}
+ patch(base,0x43c9f8,&[0xb0,1,0xc3]);patch(base,0x43ca12,&[0x30,0xc0,0xc3]);
  for(rva,target)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(crate::APPLY_SELF_RVA,apply as*const()as usize),(crate::REMOVE_EFFECT_RVA,remove as*const()as usize)]{jump(base,rva,target);}
  let saved_base=crate::BASE.swap(base,std::sync::atomic::Ordering::AcqRel);let saved_active=crate::ACTIVE.swap(true,std::sync::atomic::Ordering::AcqRel);
  let saved_apply=crate::APPLY_ORIG.swap(unexpected as*mut u8,std::sync::atomic::Ordering::AcqRel);
@@ -61,6 +72,9 @@ fn native_momentum_first_hit_and_unrefreshable_cycle_use_original_attack_rates()
  let filter=crate::hook::prepare((base+crate::EFFECT_FILTER_RVA)as*mut u8,crate::sword_filter_detour as*const u8,64).unwrap();let saved_filter=crate::EFFECT_FILTER_ORIG.swap(filter.trampoline,std::sync::atomic::Ordering::AcqRel);crate::hook::write_code((base+crate::EFFECT_FILTER_RVA)as*mut u8,&filter.patch).unwrap();
  let mut actor=[0usize;0x720/8];let player=actor.as_mut_ptr()as usize;let mut modules=[0usize;4];let modules=modules.as_mut_ptr()as usize;put(player+0x1b8,modules);
  let mut stats=[0usize;0x150/8];let stats=stats.as_mut_ptr()as usize;put(modules,stats);int(stats+0x140,1000);
+ assert_eq!(momentum_native_delivery_gate(pulse_row.as_ptr(),player,base+0x43c9dc),1,"Native delivery rejects the selected on-hit notification");
+ let mut rejected_pulse=pulse_row;rejected_pulse[0x160]&=!2;
+ assert_eq!(momentum_native_delivery_gate(rejected_pulse.as_ptr(),player,base+0x43c9dc),0);
  let mut world=vec![0usize;0x17500/8];let world=world.as_mut_ptr()as usize;put(base+crate::WORLD_RVA,world);put(world+0x174e8,player);
  let mut manager=[0usize;4];let manager=manager.as_mut_ptr()as usize;put(player+0x190,manager);put(manager+0x10,player);
  let mut node=[0usize;0x70/8];let node=node.as_mut_ptr()as usize;put(node,owner.as_ptr()as usize);put(manager+8,node);

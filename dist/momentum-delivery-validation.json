@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-19",
+  "version": "0.17.188",
+  "mode": "parameter-hotfix",
+  "symptom": "Revenant using the Cursed Claw reported unchanged damage and no phase visual; read-only sampling found ownership but no phase effects",
+  "cause": "Selected state2103 notification lacked effectTargetAttacker and was rejected at native 43C9DC before delivery",
+  "staging": {
+    "inputSha256": "4CE2CFF2ED79EE8D32E695892475E4FF36F6B1EAE8DF558596FB6D1518E5BC53",
+    "outputSha256": "1EE9ED292F419711E73E505471C5EC0724A9B80FB6F846D296BE718642657F0B",
+    "changedEffect": 95003701,
+    "changedField": "effectTargetAttacker",
+    "value": 1,
+    "otherFieldsRowsAndTablesPreserved": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "oldParametersReproduceFailure": true,
+  "fixedParametersPass": true,
+  "regularTestsPassed": 411,
+  "nativeValidation": {
+    "nativeExecutionPassed": true,
+    "installedParametersReadbackPassed": true,
+    "bonus": 1.3,
+    "weakAttack": 0.5,
+    "weakIncoming": 1.5,
+    "fullHpAttackReference": 320500,
+    "attackVfxReference": 320500,
+    "weakVfxReference": 8800271,
+    "nativeFunctions": [
+      "505E90 successful hit selector",
+      "50F230 hit descriptor construction",
+      "511010 actual applicability switch through compiled shared hook",
+      "EA1B00 attack category restriction",
+      "EA1D40 weapon restriction",
+      "43C9DC..43C9F8 attacker notification delivery gate",
+      "EA0790 element eligibility including pure magic/fire/lightning/holy",
+      "510750 physical AttackRate getter",
+      "503137..50314C native AttackRate multiplication"
+    ],
+    "cases": [
+      "first hit has bonus before hit notification",
+      "native full-HP bonus uses same multiplier field",
+      "native delivery accepts attacker-targeted pulse and rejects the original missing flag",
+      "roll/body contacts excluded",
+      "weapons and all three spell kinds",
+      "multi-target notifications cannot refresh timer",
+      "five positive then five weak seconds",
+      "native net attack multiplier .5 in weak phase",
+      "all four physical and four elemental cut fields 1.5",
+      "cycle does not repeat until a new hit",
+      "phase visuals switch and clear",
+      "non-local/missing owner/incapacitated notifications ignored",
+      "explicit reset clears phase state"
+    ],
+    "stubs": [
+      "native effect storage, application/removal and replication",
+      "delivery gate branches return a boolean instead of applying the effect",
+      "stack cookie check no-op",
+      "damage applied and rendered in game not exercised"
+    ],
+    "sourceHashes": {
+      "src/momentum.rs": "303d3da2d937bcaa9ab400f0ba58bce3a0b81d9b98566b66fc7893a37c99eaef",
+      "src/momentum_native_tests.rs": "cf117d04f98489881f650c9d6b83f1084e82fd2ec5ea89f4bf8fd743381be1ca",
+      "src/lib.rs": "2f599cb5776d42e5f9de66ab14bf395aa46f789fb6cb6803d6658081c05529ae",
+      "src/hex_pool.rs": "0612431cf3ec0987588b2f618892474647d1200cc9bdb8038dfae1866713aca9",
+      "src/reward_cycle_runtime.rs": "0790d61f0e1b5af246f5626cfd2f67fbca93f1468bf3e8bdac717eb4be4ff92a",
+      "tools/HexBuild/Momentum.cs": "21074a1cbad601cead159a335c9f4f145d0439cd843e03f13388420685af9023",
+      "tools/verify_momentum.py": "b8dc38d0b3739355880873bd22728ad92199592f5e71d0551dcf62f8f5ac3624"
+    },
+    "fixtureSha256": "ea2424cc334a13179f7abcf74f452f2e583d28ddf63fd67ae5a0b491dc71e5d8",
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "changedRuntimeFiles": [
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\regulation.bin"
+  ],
+  "dllAndConfigurationUnchanged": true,
+  "groupPackageUnchanged": true,
+  "restartCompleted": true,
+  "loadingVerified": true,
+  "processId": 22796,
+  "gameplayVerified": true,
+  "gameplayVerificationScope": "2026-10-19: user confirmed the dist fix succeeded in the requested Revenant/Cursed Claw retest. Other weapons, spells and multiplayer were not independently confirmed. Read-only monitoring stopped at user request.",
+  "multiplayerVerified": false
+}
