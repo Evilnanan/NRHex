@@ -46,6 +46,7 @@ mod essence_reaver;
 mod ominous_pact;
 mod reward_terrain;
 mod native_party;
+mod weapon_affinity;
 mod parry_data;
 mod hero_audio;
 mod storm_audio;
@@ -368,7 +369,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);176] {
+fn signatures()->[(&'static str,u32);178] {
  [(echo_cast::FACTORY_PATTERN,echo_cast::FACTORY_RVA as u32),(echo_cast::TARGET_COPY_PATTERN,echo_cast::TARGET_COPY_RVA as u32),(echo_cast::RELEASE_PATTERN,echo_cast::RELEASE_RVA as u32),(echo_cast::TARGET_VALID_PATTERN,echo_cast::TARGET_VALID_RVA as u32),(ambulance::ENV_PATTERN,ambulance::ENV_RVA as u32),(ambulance::NUMBER_PATTERN,ambulance::NUMBER_RVA as u32),(ambulance::COST_PATTERN,ambulance::COST_RVA as u32),(ambulance::HIT_PATTERN,ambulance::HIT_RVA as u32),(ambulance::MODE_PATTERN,ambulance::MODE_RVA as u32),(ambulance::COMMON_PATTERN,ambulance::COMMON_RVA as u32),(ambulance::FORMULA_PATTERN,ambulance::FORMULA_RVA as u32),(demons_lottery::ART_TABLE_PATTERN,demons_lottery::ART_TABLE as u32),(demons_lottery::ART_PICK_PATTERN,demons_lottery::ART_PICK as u32),(demons_lottery::ART_GET_PATTERN,demons_lottery::ART_GET as u32),(demons_lottery::SPELL_TABLE_PATTERN,demons_lottery::SPELL_TABLE as u32),(demons_lottery::SPELL_PICK_PATTERN,demons_lottery::SPELL_PICK as u32),(demons_lottery::SPELL_GET_PATTERN,demons_lottery::SPELL_GET as u32),(demons_lottery::RNG_PATTERN,demons_lottery::RNG_RVA as u32),(demons_params::CI_PATTERN,demons_params::CI_RVA as u32),(demons_params::WEAPON_PATTERN,demons_params::WEAPON_RVA as u32),(demons_runtime::REMOVE_PATTERN,demons_runtime::REMOVE_RVA as u32),(demons_runtime::TEAM_PATTERN,demons_runtime::TEAM_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (echo_cast::INITIALIZE_PATTERN,echo_cast::INITIALIZE_RVA as u32),(echo_cast::FINISH_PATTERN,echo_cast::FINISH_RVA as u32),(echo_cast::VOLLEY_CREATE_PATTERN,echo_cast::VOLLEY_CREATE_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
@@ -418,6 +419,7 @@ fn signatures()->[(&'static str,u32);176] {
   (reward_reroll::BIND_PATTERN,reward_reroll::BIND_RVA as u32),
   (reward_reroll::SOUND_PATTERN,reward_reroll::SOUND_RVA as u32),
   (native_party::COUNT_PATTERN,native_party::COUNT_RVA as u32),
+  (weapon_affinity::QUERY_PATTERN,weapon_affinity::QUERY_RVA as u32),(weapon_affinity::OVERRIDE_PATTERN,weapon_affinity::OVERRIDE_RVA as u32),
   (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
   (parry::DUMMY_COUNT_PATTERN,parry::DUMMY_COUNT_RVA as u32),
   (parry::COUNTER_COST_PATTERN,parry::COUNTER_COST_RVA as u32),
@@ -1995,7 +1997,9 @@ unsafe fn unavailable_hexes(player:usize,base:usize)->HexSet {
  let unavailable=reward_choices::ownership_exclusions(owned_hexes(player,base));
  let unavailable=reward_choices::terrain_exclusions(unavailable,reward_terrain::exclude_cage(reward_terrain::great_hollow(base)));
  let unavailable=reward_choices::party_exclusions(unavailable,native_party::difficulty_count(base));
- reward_choices::role_exclusions(unavailable,local_hero(base))
+ let hero=local_hero(base);
+ let affinity=weapon_affinity::current(player,base,hero);
+ reward_choices::weapon_exclusions(reward_choices::role_exclusions(unavailable,hero),affinity)
 }
 fn random_index(count:usize)->Option<usize>{
  let count=u64::try_from(count).ok()?;if count==0{return None;}
@@ -2471,18 +2475,18 @@ mod tests {
   assert_eq!(hex_pool::OWNER_IDS[GAZE_REWARD[0]],slingshot::OWNER);
   assert_eq!(reward_choices::preferred(GAZE_REWARD,&HexSet::new()).unwrap()[0],GAZE_REWARD[0]);
   assert_eq!(CHANT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[chant::OWNER,sword::OWNER,archmage::OWNER]);
-  for hero in [4,6,7]{
-   assert_eq!(reward_choices::preferred(CHANT_REWARD,&reward_choices::role_exclusions(HexSet::new(),Some(hero))).unwrap(),CHANT_REWARD);
-   let next=reward_choices::preferred(CHANT_REWARD,&reward_choices::role_exclusions(reward_choices::mask([17]),Some(hero))).unwrap();assert_eq!(next[0],8);assert!(!next.contains(&17));
-   let next=reward_choices::preferred(CHANT_REWARD,&reward_choices::role_exclusions(reward_choices::mask([8]),Some(hero))).unwrap();assert_eq!(next[0],17);assert!(!next.contains(&8));
+  for hero in [6,7]{
+   assert_eq!(reward_choices::preferred(CHANT_REWARD,&reward_choices::default_filters(HexSet::new(),Some(hero))).unwrap(),CHANT_REWARD);
+   let next=reward_choices::preferred(CHANT_REWARD,&reward_choices::default_filters(reward_choices::mask([17]),Some(hero))).unwrap();assert_eq!(next[0],8);assert!(!next.contains(&17));
+   let next=reward_choices::preferred(CHANT_REWARD,&reward_choices::default_filters(reward_choices::mask([8]),Some(hero))).unwrap();assert_eq!(next[0],17);assert!(!next.contains(&8));
   }
-  let excluded=reward_choices::preferred(CHANT_REWARD,&reward_choices::role_exclusions(HexSet::new(),Some(1))).unwrap();assert_eq!(excluded[0],18);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
+  let excluded=reward_choices::preferred(CHANT_REWARD,&reward_choices::default_filters(HexSet::new(),Some(1))).unwrap();assert_eq!(excluded[0],18);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
   assert_eq!(NEW_HEX_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[balloon::OWNER,spirit::OWNER,parry::OWNER]);
-  let both=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::role_exclusions(HexSet::new(),Some(6))).unwrap();
+  let both=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::default_filters(HexSet::new(),Some(6))).unwrap();
   assert_eq!(&both[..2],&NEW_HEX_REWARD[..2]);assert!(!both.contains(&NEW_HEX_REWARD[2])); // Revenant cannot draw Clash.
-  let after_balloon=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::role_exclusions(reward_choices::mask([15]),Some(6))).unwrap();
+  let after_balloon=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::default_filters(reward_choices::mask([15]),Some(6))).unwrap();
   assert_eq!(after_balloon[0],16);assert!(!after_balloon.contains(&15));
-  let other=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::role_exclusions(HexSet::new(),Some(1))).unwrap();
+  let other=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::default_filters(HexSet::new(),Some(1))).unwrap();
   assert_eq!(other[0],15);assert!(!other.contains(&16));
   for retired in ["Shell","Cat","Sword","Strength","Escape","Jiahao","Arts","Noisy","Cage"] {
    assert!(Config::read(&format!("{retired}VirtualKey=0x70")).is_err());

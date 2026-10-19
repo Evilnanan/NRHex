@@ -22,23 +22,27 @@ pub fn party_exclusions(mut unavailable:HexSet,difficulty_count:Option<i32>)->He
  if difficulty_count!=Some(1){unavailable.insert(index(95002500));}
  if !difficulty_count.is_some_and(|count|count>1){unavailable.insert(index(95003400));}unavailable
 }
-pub fn caster_role_eligible(hero:Option<u8>,has_archmage:bool)->bool{
- matches!(hero,Some(4|6|7))||(has_archmage&&matches!(hero,Some(1..=10)))
-}
-pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
+pub fn weapon_exclusions(mut unavailable:HexSet,affinity:Option<i32>)->HexSet{
  let sword=index(95000900);let has_sword=unavailable.contains(&sword);
- let caster_allowed=caster_role_eligible(hero,unavailable.contains(&index(95002100)));
+ let caster=affinity.is_some_and(crate::weapon_affinity::is_caster);
+ let caster_allowed=caster||unavailable.contains(&index(95002100));
+ let physical=affinity.is_some()&&!caster;
  for (id,excluded)in [
   (95000900,!caster_allowed),
   (95003500,!caster_allowed),
   (95002000,!caster_allowed),
+  (95001100,!physical&&!has_sword),
+  (95002600,!physical&&!has_sword),
+  (95002400,!physical),
+  (95003100,!physical),
+ ]{if excluded{unavailable.insert(index(id));}}
+ unavailable
+}
+pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
+ for (id,excluded)in [
   (95001800,hero!=Some(6)),
-  (95001100,matches!(hero,Some(6|7))&&!has_sword),
   (95001300,matches!(hero,Some(2|4|6))),
   (95000400,!matches!(hero,Some(1|3|5|7|8))),
-  (95002600,matches!(hero,Some(6|7))&&!has_sword),
-  (95002400,matches!(hero,Some(6|7))),
-  (95003100,matches!(hero,Some(6|7))),
  ]{if excluded{unavailable.insert(index(id));}}
  unavailable
 }
@@ -47,6 +51,10 @@ pub fn eligible(order:[usize;3],owned:&HexSet)->bool{
  order.iter().all(|i|*i<HEX_COUNT&&!unavailable.contains(i))&&mask(order).len()==3
 }
 #[cfg(test)]pub fn candidates(owned:&HexSet)->Vec<usize>{(0..HEX_COUNT).filter(|i|!owned.contains(i)).collect()}
+// Default HeroParam discovery values, for legacy tests without relic overrides.
+#[cfg(test)]pub fn default_filters(owned:HexSet,hero:Option<u8>)->HexSet{
+ weapon_exclusions(role_exclusions(owned,hero),hero.filter(|h|(1..=10).contains(h)).map(|h|1000+i32::from(h)*100))
+}
 #[cfg(test)]pub fn preferred(order:[usize;3],owned:&HexSet)->Option<[usize;3]>{
  crate::reward_cycle::Round::new(owned,&HexSet::new()).preferred(order)
 }
@@ -55,29 +63,25 @@ pub fn is_hex_good(encoded:u32)->bool{
 }
 #[cfg(test)]mod tests{
  use super::*;
- #[test]fn archmage_unlocks_only_the_three_caster_role_filters_in_every_draw_route(){
-  let mage=index(95002100);let trio=mask([index(95000900),index(95002000),index(95003500)]);
-  for hero in std::iter::once(None).chain((0..=255).map(Some)){
-   let original=role_exclusions(HexSet::new(),hero);
-   for has_mage in [false,true]{
-    let owned=if has_mage{mask([mage])}else{HexSet::new()};
-    let excluded=role_exclusions(ownership_exclusions(owned.clone()),hero);
-    let allowed=matches!(hero,Some(4|6|7))||(has_mage&&matches!(hero,Some(1..=10)));
-    let mut expected=original.clone();if has_mage{expected.insert(mage);if allowed{for i in &trio{expected.remove(i);}}}
-    assert_eq!(excluded,expected); // No other role restriction is relaxed.
-    for &ability in &trio{
-     for seen in [HexSet::new(),all(HEX_COUNT)]{
-      let round=crate::reward_cycle::Round::new(&excluded,&seen);assert_eq!(round.candidates.contains(&ability),allowed);
-      assert_eq!(round.preferred([ability,0,1]).unwrap().contains(&ability),allowed);
-      assert_eq!(crate::reward_cycle::Single::new(&excluded,&seen,&mask([0,1])).candidates.contains(&ability),allowed);
-      let mut owned_ability=owned.clone();owned_ability.insert(ability);
-      let blocked=role_exclusions(ownership_exclusions(owned_ability),hero);
-      assert!(!crate::reward_cycle::Round::new(&blocked,&seen).candidates.contains(&ability));
-      assert!(!crate::reward_cycle::Single::new(&blocked,&seen,&mask([0,1])).candidates.contains(&ability));
-     }
+ #[test]fn live_weapon_affinity_controls_seven_abilities_and_keeps_owned_exceptions(){
+  for hero in std::iter::once(None).chain((0..=10).map(Some)){for affinity in [None,Some(57),Some(61),Some(1600),Some(1700),Some(1),Some(1100),Some(1400),Some(2000)]{for flags in 0..4{
+   let owned=mask([(95002100,flags&1!=0),(95000900,flags&2!=0)].into_iter().filter_map(|(id,on)|on.then_some(index(id))));
+   let excluded=weapon_exclusions(role_exclusions(ownership_exclusions(owned.clone()),hero),affinity);
+   let caster=matches!(affinity,Some(57|61|1600|1700));let physical=affinity.is_some()&&!caster;
+   let expected=[(95000900,(caster||flags&1!=0)&&flags&2==0),(95002000,caster||flags&1!=0),(95003500,caster||flags&1!=0),
+    (95001100,physical||flags&2!=0),(95002600,physical||flags&2!=0),(95002400,physical),(95003100,physical),
+    (95001800,hero==Some(6)),(95001300,!matches!(hero,Some(2|4|6))),(95000400,matches!(hero,Some(1|3|5|7|8)))];
+   for (id,allowed)in expected{let ability=index(id);
+    for seen in [HexSet::new(),all(HEX_COUNT)]{
+     let round=crate::reward_cycle::Round::new(&excluded,&seen);assert_eq!(round.candidates.contains(&ability),allowed,"{hero:?}/{affinity:?}/{flags}/{id}");
+     assert_eq!(round.preferred([ability,0,1]).unwrap().contains(&ability),allowed);
+     assert_eq!(crate::reward_cycle::Single::new(&excluded,&seen,&mask([0,1])).candidates.contains(&ability),allowed);
+     let mut owned_ability=owned.clone();owned_ability.insert(ability);
+     let blocked=weapon_exclusions(role_exclusions(ownership_exclusions(owned_ability),hero),affinity);
+     assert!(!crate::reward_cycle::Round::new(&blocked,&seen).candidates.contains(&ability));
     }
    }
-  }
+  }}}
  }
  #[test]fn night_blessing_draws_and_refreshes_follow_live_difficulty_count(){
   let blessing=index(95002500);let owned=mask([5]);
@@ -130,12 +134,12 @@ pub fn is_hex_good(encoded:u32)->bool{
   let pact=index(95002600);let shell=index(95000700);let jiahao=index(95001300);
   for hero in [2,4,6]{
    let mut owned=HexSet::new();if hero==6{owned.insert(index(95000900));}
-   let excluded=role_exclusions(terrain_exclusions(ownership_exclusions(owned),true),Some(hero));
+   let excluded=default_filters(terrain_exclusions(ownership_exclusions(owned),true),Some(hero));
    assert!(excluded.contains(&jiahao));assert!(!excluded.contains(&pact));assert!(!excluded.contains(&shell));
   }
   // Sword's role exception cannot unlock a pact excluded by an owned conflict.
   for conflict in [shell,jiahao]{
-   let excluded=role_exclusions(ownership_exclusions(mask([index(95000900),conflict])),Some(6));
+   let excluded=default_filters(ownership_exclusions(mask([index(95000900),conflict])),Some(6));
    assert!(excluded.contains(&pact));
   }
  }
@@ -143,7 +147,7 @@ pub fn is_hex_good(encoded:u32)->bool{
   let disabled=index(95003300);assert_eq!(disabled,29);assert_eq!(crate::hex_pool::HISTORY_BITS[disabled],30);
   assert!(is_hex_good(0x40000000|95003300));
   for hero in std::iter::once(None).chain((0..=255).map(Some)){
-   let unavailable=role_exclusions(HexSet::new(),hero);
+   let unavailable=default_filters(HexSet::new(),hero);
    for seen in [HexSet::new(),all(HEX_COUNT)]{
     let round=crate::reward_cycle::Round::new(&unavailable,&seen);
     assert!(!round.candidates.contains(&disabled));
@@ -158,17 +162,17 @@ pub fn is_hex_good(encoded:u32)->bool{
  #[test]fn all_roles_preserve_their_filters_in_random_focused_and_refresh_paths(){
   for hero in std::iter::once(None).chain((0..=255).map(Some)){
    for hollow in [false,true]{
-    let excluded=role_exclusions(terrain_exclusions(mask([5]),hollow),hero);
+    let excluded=default_filters(terrain_exclusions(mask([5]),hollow),hero);
     let expected=[
-     (95000900,matches!(hero,Some(4|6|7))),
-     (95002000,matches!(hero,Some(4|6|7))),
+     (95000900,matches!(hero,Some(6|7))),
+     (95002000,matches!(hero,Some(6|7))),
      (95001800,hero==Some(6)),
-     (95001100,!matches!(hero,Some(6|7))),
+     (95001100,matches!(hero,Some(1..=10))&&!matches!(hero,Some(6|7))),
      (95001300,!matches!(hero,Some(2|4|6))),
      (95000400,matches!(hero,Some(1|3|5|7|8))),
-     (95002600,!matches!(hero,Some(6|7))),
-     (95002400,!matches!(hero,Some(6|7))),
-     (95003100,!matches!(hero,Some(6|7))),
+     (95002600,matches!(hero,Some(1..=10))&&!matches!(hero,Some(6|7))),
+     (95002400,matches!(hero,Some(1..=10))&&!matches!(hero,Some(6|7))),
+     (95003100,matches!(hero,Some(1..=10))&&!matches!(hero,Some(6|7))),
      (95001600,!hollow),
     ];
     for (owner,allowed)in expected{
@@ -185,7 +189,7 @@ pub fn is_hex_good(encoded:u32)->bool{
  }
  #[test]fn sword_ownership_unlocks_mighty_and_pact_but_never_owned_clash_or_terrain_filters(){
   for hero in [6,7]{
-   let sword=index(95000900);let excluded=role_exclusions(terrain_exclusions(mask([sword,5]),true),Some(hero));
+   let sword=index(95000900);let excluded=default_filters(terrain_exclusions(mask([sword,5]),true),Some(hero));
    for owner in [95001100,95002600]{let i=index(owner);assert!(!excluded.contains(&i));assert!(preferred([i,0,1],&excluded).unwrap().contains(&i));}
    for owner in [95000900,95002400,95003100,95001600]{assert!(excluded.contains(&index(owner)));}
   }
@@ -193,7 +197,7 @@ pub fn is_hex_good(encoded:u32)->bool{
  #[test]fn erosion_role_exclusion_is_not_relaxed_by_sword_or_archmage(){
   let erosion=index(95003100);
   for hero in 1..=10{for owned in [HexSet::new(),mask([index(95000900)]),mask([index(95002100)]),mask([index(95000900),index(95002100)])]{
-   let allowed=!matches!(hero,6|7);let excluded=role_exclusions(owned,Some(hero));
+   let allowed=!matches!(hero,6|7);let excluded=default_filters(owned,Some(hero));
    for seen in [HexSet::new(),all(HEX_COUNT)]{
     let round=crate::reward_cycle::Round::new(&excluded,&seen);
     assert_eq!(round.candidates.contains(&erosion),allowed);

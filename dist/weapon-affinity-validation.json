@@ -1,0 +1,113 @@
+{
+  "version": "0.17.185",
+  "baselineCommit": "1e694e309fd6235b4ca879549b969b7e91306576",
+  "nativeValidation": {
+    "nativeExecutionPassed": true,
+    "nativeFunctions": [
+      "56ACF0 reward discovery context",
+      "5072D0 SpEffect state 2122 discovery override"
+    ],
+    "casterCategories": [
+      57,
+      61,
+      1600,
+      1700
+    ],
+    "normalCasterOwners": [
+      95000900,
+      95002000,
+      95003500
+    ],
+    "archmageException": 95002100,
+    "physicalOwners": [
+      95001100,
+      95002600,
+      95002400,
+      95003100
+    ],
+    "swordExceptionOwners": [
+      95001100,
+      95002600
+    ],
+    "cases": [
+      "all ten HeroParam defaults",
+      "Duchess dagger default is not caster",
+      "all 33 relic discovery categories override caster and physical defaults",
+      "stat-growth state 2123 is ignored",
+      "multiple matching effects follow native first-match order",
+      "null parameter rows skipped",
+      "first override -1 preserves hero default",
+      "missing HeroParam permits a valid override; no usable result defers",
+      "live changes are queried without caching",
+      "invalid hero, absent actor/effect module, and absent base do not call native",
+      "native writes only reward context+10; actor and effect module unchanged"
+    ],
+    "regularTests": "seven ability filters across heroes, affinities, archmage/sword ownership, display cycles, focused/random pools and refresh; owned/conflicting abilities stay excluded",
+    "stubs": [
+      "E785B0 HeroParam lookup uses fixture rows",
+      "E782E0 scoped parameter-reference release uses fixture no-op"
+    ],
+    "sourceHashes": {
+      "src/weapon_affinity.rs": "c6c20338d7941318cc9222c2d47bfa92d0666a46fa5b3162126831b2c0f83032",
+      "src/weapon_affinity_native_tests.rs": "1a5e5d185bd3f1a254ac89ff1d6cc1d443b9bb60843ac148f8d51c3d39b8390a",
+      "src/reward_choices.rs": "0509600844d67829d50e10618ec6c456bc3a01197c0ee29719c30a1eda680ae6",
+      "src/lib.rs": "1b219843f40a36849ce6adf5158ee8517e3e1a2e9038e08a9d0e6a6d00cfa7de",
+      "tools/verify_weapon_affinity.py": "54aba9c8c659b86167c3a975a48fbf7d4e86c74c739510d0d9af0d889b44db31",
+      "data/reference/rewards/weapon-affinity.json": "b71c60d5038cd1d51d102f769b6c935b5244476b2f77651b37cc9b9398a9743c"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "dllBuild": {
+    "version": "0.17.185",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "d92ef9f09e823365d2294c9f148f2c435028fafe734adc3e989a23b6013339bc",
+    "installed": true,
+    "installedDllSha256": "d92ef9f09e823365d2294c9f148f2c435028fafe734adc3e989a23b6013339bc",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 404,
+  "ignoredNativeTests": 10,
+  "runtimeSignaturesChecked": 178,
+  "unifiedNativeSuitesPassed": 7,
+  "effectiveNativeWeaponAffinity": true,
+  "heroMechanicRestrictionsRetained": [
+    95001300,
+    95000400,
+    95001800
+  ],
+  "noNewHooks": true,
+  "existingBallChoicesRewritten": false,
+  "ownedAbilitiesRemoved": false,
+  "exposureHistoryReset": false,
+  "resourcesRebuilt": false,
+  "parametersAndTextsAndRewardsAndEventsUnchanged": true,
+  "installedRegulationSha256": "648b4b21329c0dd2c722db5dec7011c0f6c1469cface4adf6ea4b75355e60d11",
+  "existingDistFilesChanged": [
+    "dist/README.md",
+    "dist/mod/natives/NRHex.dll"
+  ],
+  "unchangedExistingDistFileCount": 275,
+  "files": {
+    "dist/README.md": "7567b4c6771b6ce5ab8cf18547013540657a267919dc8e885806cf697fbd56d2",
+    "dist/mod/natives/NRHex.dll": "d92ef9f09e823365d2294c9f148f2c435028fafe734adc3e989a23b6013339bc"
+  },
+  "sourceHashes": {
+    "src/lib.rs": "1b219843f40a36849ce6adf5158ee8517e3e1a2e9038e08a9d0e6a6d00cfa7de",
+    "src/reward_choices.rs": "0509600844d67829d50e10618ec6c456bc3a01197c0ee29719c30a1eda680ae6",
+    "src/weapon_affinity.rs": "c6c20338d7941318cc9222c2d47bfa92d0666a46fa5b3162126831b2c0f83032",
+    "src/weapon_affinity_native_tests.rs": "1a5e5d185bd3f1a254ac89ff1d6cc1d443b9bb60843ac148f8d51c3d39b8390a",
+    "data/reference/rewards/weapon-affinity.json": "b71c60d5038cd1d51d102f769b6c935b5244476b2f77651b37cc9b9398a9743c",
+    "build.ps1": "fc2e936e5a1b6de86235eddc4afd01d20922990d6b79fe25d5709185d967de22",
+    "tools/verify_weapon_affinity.py": "54aba9c8c659b86167c3a975a48fbf7d4e86c74c739510d0d9af0d889b44db31"
+  },
+  "gameProcessAccessed": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

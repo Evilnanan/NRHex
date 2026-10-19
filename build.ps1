@@ -216,7 +216,7 @@ try {
     # Both modes verify the runtime; only Full regenerates game resources.
     cargo test --release --lib @cargoTarget
     if ($LASTEXITCODE -ne 0) { throw 'Runtime regression checks failed.' }
-    foreach ($runtimeCheck in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py')) {
+    foreach ($runtimeCheck in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_weapon_affinity.py')) {
         python -X utf8 (Join-Path 'tools' $runtimeCheck)
         if ($LASTEXITCODE -ne 0) { throw "Runtime native verification failed: $runtimeCheck" }
     }
