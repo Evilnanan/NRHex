@@ -173,3 +173,8 @@ Sprinting, dashing, and running toward a near-death ally consume no stamina. Res
 ## Echo Casting
 
 Sorceries and incantations cost 150% more FP and produce an additional projectile after casting.
+
+<!-- hex:95003600 -->
+## Extra Helping
+
+Receive an additional stat-boost reward for every 20,000 runes spent at shops.

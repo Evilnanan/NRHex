@@ -71,6 +71,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--snack-stage")){Snack.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--snack-check")){Snack.Verify(root,bnd,Parse);return;}
 if(args.Contains("--echo-cast-stage")){EchoCast.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--echo-cast-cost-stage")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),true);return;}
 if(args.Contains("--echo-cast-cost-check")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),false);return;}
@@ -770,6 +772,7 @@ RewardCycle.Parameters(Clone,RewardCatalog.PackedIds(RewardCatalog.HistoricalOwn
 RewardReroll.Parameters(Clone);
 EssenceReaver.Mechanics(Clone);
 DeathDance.Mechanics(Clone);
+Snack.Mechanics(Clone);
 Erosion.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
 DemonsCall.Mechanics(Clone);

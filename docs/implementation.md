@@ -18,6 +18,7 @@
 | --- | --- |
 | 奖励池、排除已拥有项 | `hex_pool.rs`、`reward_choices.rs`、`reward_cycle.rs`、`HexBuild/RewardCatalog.cs`、`HexBuild/RewardTemplate.cs` |
 | 展示轮换与逐栏刷新 | `reward_cycle.rs`、`reward_cycle_runtime.rs`、`reward_reroll.rs`、`HexBuild/RewardCycle.cs`、`HexBuild/RewardReroll.cs`、`data/text/menu.json`、`verify_reward_reroll_native.py`、`verify_reroll_sound.py`；0.17.145在重投成功、原生列表重新绑定后仅提交一次原生确认音：菜单构造器0x79aee0的“決定”描述符为音效100／优先级2／类别1，经0x870290进入原生菜单音效队列，保留音量和优先级处理。不调用原生丢弃／确认动作；失败、已用次数、重入及普通武器菜单不额外提交。入口纳入135项签名守卫，无新增hook。描述符ABI与8条原生入队／优先级分支已隔离验证，实际听感待游戏验收。 |
+| 加餐消费与私人锻体奖励 | `snack.rs`、`snack_native_tests.rs`、`HexBuild/Snack.cs`、`verify_snack.py`；成交后统计入口1FC0C0，仅接受A7CBD4／A7CFD4返回点；折后单价×数量，累计20000。原生统计上限999999不限制独立奖励额度；四字节本地保存、公共新远征重置、ShopDialog关闭后按私人球队列发放。前三个lot为95420000～002，前两项4200100，第三项4200100／4200200／4200300权重800／100／100；不复制池、不展开三选一排列。 |
 | 等级发放与排队 | `level_rewards.rs`、`personal_reward.rs`、`verify_level_rewards.py` |
 | 复活搬回原球 | `reward_recovery.rs`、`verify_reward_recovery.py` |
 | 终极刷新、豪饮叠层、再生术 | `runtime.rs`、`flasks.rs` |

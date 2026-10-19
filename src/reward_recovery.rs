@@ -24,7 +24,7 @@ pub fn eligible(kind:u32,owner:u16,lot:i32,good:u32,slot:u8)->bool {
     (1..=3).contains(&slot) && kind&31==2 && owner&0x40!=0 && owner&0x800!=0
         && ((owner>>7)&3)==slot as u16
         && ((crate::hex_pool::is_template_lot(lot)
-        && crate::reward_choices::is_hex_good(good)) || crate::red_envelope::bonus_lot(lot))
+        && crate::reward_choices::is_hex_good(good)) || crate::red_envelope::bonus_lot(lot) || crate::snack::bonus_lot(lot))
 }
 
 /// The native node owns its links, identity, choices and VFX handles. Only
