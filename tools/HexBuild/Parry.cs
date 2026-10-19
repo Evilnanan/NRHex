@@ -165,8 +165,9 @@ static class Parry {
    var group=a.EventGroups.FirstOrDefault(g=>g.GroupType==0);
    if(group==null){group=new TAE.EventGroup(guardTemplate.Group!.GroupType){GroupData=guardTemplate.Group!.GroupData};a.EventGroups.Add(group);}
    foreach(var e in selected)for(int index=0;index<tiers;index++){
-    // Configure offsets in milliseconds, without frame-unit quantization.
-    int totalMs=totalMilliseconds[index],beforeMs=(totalMs+1)/3,afterMs=totalMs-beforeMs;
+    // Configure offsets in milliseconds: two thirds before attack onset,
+    // one third after, without frame-unit quantization.
+    int totalMs=totalMilliseconds[index],afterMs=(totalMs+1)/3,beforeMs=totalMs-afterMs;
     var b=guardTemplate.GetParameterBytes(false).ToArray();BitConverter.GetBytes(GuardJudge).CopyTo(b,8);BitConverter.GetBytes((short)(first+indices[Key(e)]*tiers+index)).CopyTo(b,14);
     a.Events.Add(new TAE.Event(Math.Max(0,e.StartTime-beforeMs/1000f),e.StartTime+afterMs/1000f,0,guardTemplate.Unk04,b,false){Group=group});added++;
    }
@@ -179,7 +180,7 @@ static class Parry {
   // Independent readback: enumerate original attack onsets, not newly written
   // windows. Explicit millisecond splits catch duration-based and unit errors.
   int verifiedWindows=0;
-  int[] pre={22,33,44,56,67,78,89},post={45,67,89,111,133,155,178};
+  int[] pre={45,67,89,111,133,155,178},post={22,33,44,56,67,78,89};
   foreach(var f in readback.Files.Where(f=>parsed.ContainsKey(f.ID))){
    var old=TAE.Read(before[f.ID]);var current=TAE.Read(f.Bytes);
    foreach(var pair in old.Animations.Zip(current.Animations)){

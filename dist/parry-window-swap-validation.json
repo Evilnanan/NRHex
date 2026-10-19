@@ -1,0 +1,45 @@
+{
+  "version": "0.17.189",
+  "clips": 3815,
+  "windows": 44681,
+  "changedWindows": 44681,
+  "preservedOtherEvents": 513499,
+  "clippedAtAnimationStart": 1778,
+  "beforeMilliseconds": [
+    45,
+    67,
+    89,
+    111,
+    133,
+    155,
+    178
+  ],
+  "afterMilliseconds": [
+    22,
+    33,
+    44,
+    56,
+    67,
+    78,
+    89
+  ],
+  "onlyCustomGuardTimingChanged": true,
+  "followupEventsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "containerRoundTripPassed": true,
+  "compiledAttackTablesUnchanged": true,
+  "otherDistributionFilesUnchanged": true,
+  "changedAssets": {
+    "mod/chr/c0000.anibnd.dcx": {
+      "inputSha256": "58617854789f3e7a9e5ee3474754cb7ea190a7655bfd6ebf274ed57463bce26d",
+      "outputSha256": "c8ebdf42892b23dcdfad60ebd8dcd20d7dfa7ab3fb6d1992e562c17ae609712f"
+    }
+  },
+  "sources": {
+    "tools/HexBuild/Parry.cs": "fc0f79c4fc2de18bdd51b9cae322fe1d4508a7d794fcc60c0fe09f0caded0527",
+    "tools/verify_parry_native.py": "6b57864a26df2d0df6a3e134703ea4b1ac359eda528213e8c668dbea49bc66a4",
+    "src/parry_data.rs": "a4557e66e087e873a91db161baa3d7563b2411e9861a73277e650467e56e7e59"
+  },
+  "validationScope": "Current Parry.BuildActions compiled with original hash-guarded regulation; independent full before/after animation event comparison; KRAK round-trip. No game process or multiplayer test."
+}
