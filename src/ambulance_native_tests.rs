@@ -4,6 +4,8 @@ use super::*;
 use crate::win::*;
 use sha2::{Digest,Sha256};
 use std::sync::atomic::{AtomicBool,AtomicUsize};
+static VFX_COUNT:AtomicUsize=AtomicUsize::new(0);
+unsafe extern "system" fn recovery_visual(actor:usize,effect:i32,flag:u8)->u8{assert_eq!(actor,SELF.load(Ordering::Relaxed));assert_eq!((effect,flag),(RECOVERY_VISUAL,0));VFX_COUNT.fetch_add(1,Ordering::Relaxed);1}
 static MODE:AtomicBool=AtomicBool::new(false);
 static COMMON:AtomicUsize=AtomicUsize::new(0);
 static HAS:AtomicBool=AtomicBool::new(true);
@@ -57,7 +59,8 @@ fn ambulance_compiled_detours_execute_outgoing_rescue_before_authority(){unsafe{
  let(mut a,_am,_as,_ap,_av)=actor(base,1,[0.;4]);let(mut b,_bm,_bs,mut bp,_bv)=actor(base,2,[0.,0.,-10.,1.]);let(mut c,_cm,_cs,_cp,_cv)=actor(base,3,[20.,0.,10.,1.]);
  let p=a.as_mut_ptr()as usize;let t=b.as_mut_ptr()as usize;let o=c.as_mut_ptr()as usize;SELF.store(p,Ordering::Relaxed);ALLY.store(t,Ordering::Relaxed);OTHER.store(o,Ordering::Relaxed);pointer(w+0x174e8,p);ptr::write((t+0x710)as*mut u8,1);
  let stats=native_actor::stats(p);integer(stats+0x15c,0);
- for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(crate::CHR_ROTATION_RVA,rotation as*const()as usize),(0x5197e0,party as*const()as usize),(0x519140,resolve as*const()as usize),(0x519750,resolve as*const()as usize),(NUMBER_RVA,number as*const()as usize),(MODE_RVA,mode as*const()as usize),(COMMON_RVA,common as*const()as usize),(0x3d3fe0,no as*const()as usize),(0xe765d0,empty as*const()as usize),(0x217e710,ceil as*const()as usize),(0x3d42a0,no as*const()as usize),(0x3d4180,no as*const()as usize),(0x66f3b0,state as*const()as usize)]{jump(base,rva,f);}
+ VFX_COUNT.store(0,Ordering::Relaxed);
+ for(rva,f)in [(crate::APPLY_SELF_RVA,recovery_visual as*const()as usize),(crate::HAS_EFFECT_RVA,has as*const()as usize),(crate::CHR_ROTATION_RVA,rotation as*const()as usize),(0x5197e0,party as*const()as usize),(0x519140,resolve as*const()as usize),(0x519750,resolve as*const()as usize),(NUMBER_RVA,number as*const()as usize),(MODE_RVA,mode as*const()as usize),(COMMON_RVA,common as*const()as usize),(0x3d3fe0,no as*const()as usize),(0xe765d0,empty as*const()as usize),(0x217e710,ceil as*const()as usize),(0x3d42a0,no as*const()as usize),(0x3d4180,no as*const()as usize),(0x66f3b0,state as*const()as usize)]{jump(base,rva,f);}
  for rva in [0x4b3510,0x4e78c0]{bytes(base,rva,&[0xc3]);}jump(base,0x4e78a0,empty as*const()as usize);
  install(base,ENV_RVA,env as*const u8,&ENV_ORIGINAL);install(base,COST_RVA,cost as*const u8,&COST_ORIGINAL);install(base,HIT_RVA,hit_detour as*const u8,&HIT_ORIGINAL);bytes(base,0x43dac8,&[0xc3]);
  let old_base=BASE.swap(base,Ordering::AcqRel);let old_active=ACTIVE.swap(true,Ordering::AcqRel);*STATE.lock().unwrap()=State::default();
@@ -91,8 +94,8 @@ fn ambulance_compiled_detours_execute_outgoing_rescue_before_authority(){unsafe{
  let mut module=[0usize,t];let mp=module.as_mut_ptr()as usize;
  let emit=|source|dispatch(mp,source,hp,base+HIT_RVA);
  float(hp+0x150,40.);float(hp+0x258,0.5);float(t+0x714,100.);emit(p);
- assert_eq!(read_i32(stats+0x15c),0);assert_eq!(ptr::read_unaligned((t+0x714)as*const f32),100.);
- emit(p);assert_eq!(read_i32(stats+0x15c),40);
+ assert_eq!(read_i32(stats+0x15c),0);assert_eq!(VFX_COUNT.load(Ordering::Relaxed),0);assert_eq!(ptr::read_unaligned((t+0x714)as*const f32),100.);
+ emit(p);assert_eq!(read_i32(stats+0x15c),40);assert_eq!(VFX_COUNT.load(Ordering::Relaxed),1);
  float(hp+0x150,100.);float(hp+0x258,1.);float(t+0x714,12.);emit(p);assert_eq!(read_i32(stats+0x15c),120);
  // No dependency on a remaining-value snapshot, including zero/stale values.
  float(t+0x714,0.);emit(p);assert_eq!(read_i32(stats+0x15c),200);

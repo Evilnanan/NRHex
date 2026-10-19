@@ -9,6 +9,18 @@ static class Ambulance {
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string field,object value)=>r[field].Value=Convert.ChangeType(value,r[field].Value.GetType());
  static string Hash(string path)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path)));
+ public const int RecoveryVisual=Owner+1,RecoveryVisualSource=8970054;
+ public static void RecoveryEffect(Func<string,int,int,PARAM.Row> clone,PARAM native){
+  var source=native.Rows.Single(r=>r.ID==RecoveryVisualSource);var r=clone("SpEffectParam",8000000,RecoveryVisual);
+  foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",-1),("effectEndurance",.3f),("motionInterval",0f),("changeStaminaPoint",0),("changeStaminaRate",0f),("isDisableNetSync",0),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(r,f,v);
+  foreach(string f in new[]{"vfxId","vfxId1"})Set(r,f,source[f].Value);
+ }
+ public static void VerifyRecovery(PARAM native,PARAM current){
+  var source=native.Rows.Single(r=>r.ID==RecoveryVisualSource);var actual=current.Rows.Single(r=>r.ID==RecoveryVisual);
+  Check(CageAI.Same(source,current.Rows.Single(r=>r.ID==RecoveryVisualSource)),"Native Beast's Hunt modified");
+  foreach(string f in new[]{"vfxId","vfxId1"})Check(Convert.ToInt32(actual[f].Value)==Convert.ToInt32(source[f].Value),"Ambulance recovery visual mismatch");
+  Check(Convert.ToInt32(actual["vfxId"].Value)==73110&&Convert.ToInt32(actual["changeStaminaPoint"].Value)==0&&Convert.ToSingle(actual["changeStaminaRate"].Value)==0f&&Convert.ToSingle(actual["effectEndurance"].Value)==.3f,"Recovery visual must add no extra stamina");
+ }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   var input=Path.Combine(root,"dist/mod/regulation.bin");var dir=Path.Combine(root,"work/ambulance/staged");Directory.CreateDirectory(dir);
   var b=SFUtil.DecryptNightreignRegulation(input);var before=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());

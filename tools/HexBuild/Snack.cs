@@ -49,7 +49,7 @@ static class Snack {
    var r=effects.Rows.Single(r=>r.ID==First+digit*256+value);
    foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("maxMpRate",1f),("stateInfo",0),("soul",0),("spCategory",20),("saveCategory",10),("effectEndurance",-1f),("dontDeleteOnDead",1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Check(Convert.ToDouble(r[f].Value)==Convert.ToDouble(v),$"Nonneutral credit marker {r.ID}/{f}");
   }
-  Check(RewardCatalog.HistoryBit(Owner)==33&&RewardCatalog.HistoricalOwners.Length==34,"Stable history must append without reindexing");
+  Check(RewardCatalog.HistoryBit(Owner)==33&&RewardCatalog.HistoricalOwners.Length>=34,"Stable history must append without reindexing");
   Check(RewardCatalog.PackedIds(34).All(id=>effects.Rows.Any(r=>r.ID==id)),"Missing packed history capacity");
   foreach(var n in new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods"})Check(Table(current,n).Rows.Count(r=>r.ID==Owner)==1,"Missing/duplicate Extra Helping owner metadata");
   Check(N(tables.Rows.Single(r=>r.ID==RewardCatalog.Table(Owner)),"itemId")==Owner,"Missing hex reward reference");

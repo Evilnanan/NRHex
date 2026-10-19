@@ -71,6 +71,9 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
+if(args.Contains("--momentum-stage")){Momentum.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--momentum-check")){Momentum.Verify(root,bnd,Parse);return;}
 if(args.Contains("--snack-stage")){Snack.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--snack-check")){Snack.Verify(root,bnd,Parse);return;}
 if(args.Contains("--echo-cast-stage")){EchoCast.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -742,6 +745,7 @@ foreach(var h in hexes){
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
  if(h.Id==EchoCast.Owner)EchoCast.OwnerEffect(s);
+ if(h.Id==Momentum.Owner)Momentum.OwnerEffect(s);
  if(h.Id==95002100){Set(s,"magicConsumptionRate",1f);Set(s,"miracleConsumptionRate",1f);}
  if(h.Id==95000900){
   var nativeMelee=pars["SpEffectParam"].Rows.Single(r=>r.ID==8320500);
@@ -773,6 +777,8 @@ RewardReroll.Parameters(Clone);
 EssenceReaver.Mechanics(Clone);
 DeathDance.Mechanics(Clone);
 Snack.Mechanics(Clone);
+Momentum.Mechanics(Clone,pars["SpEffectParam"]);
+Ambulance.RecoveryEffect(Clone,pars["SpEffectParam"]);
 Erosion.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
 DemonsCall.Mechanics(Clone);

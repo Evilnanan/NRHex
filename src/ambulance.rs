@@ -3,6 +3,7 @@
 use crate::{has_effect,is_local,native_actor,ptr,read_i32,read_ptr,ACTIVE,BASE};
 use std::{sync::{Mutex,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95003400;
+pub const RECOVERY_VISUAL:i32=OWNER+1;
 pub const QUERY:i32=990034;
 pub const ENV_RVA:usize=0x3f7b50;
 pub const ENV_PATTERN:&str="48 8B C4 48 89 58 10 55 56 57 41 54 41 55 41 56 41 57 48 8D 68 A1 48 81 EC 00 01 00 00";
@@ -183,7 +184,10 @@ unsafe extern "system" fn outgoing(module:usize,source:usize,hit:usize){
  let row=common_row(base);let Some(segment)=rescue_segment(target,row)else{return;};
  let power=outgoing_power(target,hit,base,row);
  let amount=STATE.lock().ok().map_or(0,|mut s|s.credit(owner,power,segment,read_i32(owner.stats+0x15c),read_i32(owner.stats+0x160)));
- if amount>0{let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);add(owner.stats,amount,0);}
+ if amount>0{
+  let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);add(owner.stats,amount,0);
+  let visual:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);visual(source,RECOVERY_VISUAL,0);
+ }
 }
 // 43DA77 is inside 43D260, with RSP aligned to 16, R14 damage module,
 // R12 resolved character source, RSI hit. Do not attach to 439E80: it is also

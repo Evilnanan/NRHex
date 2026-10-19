@@ -27,6 +27,7 @@ mod demons_lottery;
 #[cfg(test)]mod reward_template_native_tests;
 mod red_envelope;
 mod snack;
+mod momentum;
 mod reward_recovery;
 mod strength;
 mod strength_sword;
@@ -783,7 +784,7 @@ unsafe extern "system" fn on_sword_attack_rates(manager:usize,context:usize){
 // Retry a copy, retaining the original descriptor and every native condition.
 unsafe extern "system" fn sword_filter_detour(node:usize,descriptor:usize,owner:usize,weapon:i32,extra:i32)->u8{
  let original:NativeEffectFilter=std::mem::transmute(EFFECT_FILTER_ORIG.load(Ordering::Acquire));
- if ACTIVE.load(Ordering::Acquire)&&(erosion::body_contact(node,descriptor)||erosion::spell_contact(node,descriptor)){return 0;}
+ if ACTIVE.load(Ordering::Acquire)&&(erosion::body_contact(node,descriptor)||erosion::spell_contact(node,descriptor)||momentum::body_contact(node,descriptor)){return 0;}
  let result=original(node,descriptor,owner,weapon,extra);
  if result!=0||!ACTIVE.load(Ordering::Acquire)||node==0||descriptor==0{return result;}
  let param=read_ptr(node);if param==0{return result;}
@@ -1531,6 +1532,7 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  if ACTIVE.load(Ordering::Acquire)&&heartstealer::suppress_notification(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&essence_reaver::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&ominous_pact::pulse(player,effect,base){return 1;}
+ if ACTIVE.load(Ordering::Acquire)&&momentum::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&effect==spirit::NATIVE_DRAIN&&npc_id(player,base).is_some_and(spirit::is_private_npc){effect=spirit::PASSIVE;}
  if ACTIVE.load(Ordering::Acquire)&&matches!(effect,102100|balloon::DOWN)&&is_local(player,base){on_effect(player,balloon::DOWN,base);}
  if ACTIVE.load(Ordering::Acquire)&&effect==balloon::DOWN&&is_local(player,base){balloon_runtime::action_started(player,base);}
@@ -2249,6 +2251,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  potential_fission::update(player,base,dt);
  reward_cycle_runtime::update(player,base,dt);
  snack::update(player,base,dt);
+ momentum::update(player,base,dt);
  reward_reroll::update(player,base,dt);
  update_level_rewards(player,base);
  refresh_owned_status(player,base);
