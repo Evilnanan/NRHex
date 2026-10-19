@@ -123,6 +123,7 @@ assert a['minTier']==2 and a['tiers']==7 and a['timeUnit']=='milliseconds'
 assert a['totalMilliseconds']==[67,100,133,167,200,233,267]
 assert a['beforeMilliseconds']==[45,67,89,111,133,155,178]
 assert a['afterMilliseconds']==[22,33,44,56,67,78,89]
+assert [before+after for before,after in zip(a['beforeMilliseconds'],a['afterMilliseconds'])]==a['totalMilliseconds']
 assert a['endState']==a['firstState']+a['conditionCount']*7 and a['verifiedWindows']==a['added']
 assert (ROOT/'src/parry_data.rs').read_bytes()==(stage/'parry_data.rs').read_bytes()
 report=dict(nativeCases=len(cases),cases=cases,playerVirtualMethodsVerified=True,managerOwnerVerified=True,nativeStateQueryUsesUnsigned16Bit=True,nativeAttackAndGuardTaeGatesVerified=True,finalGuardNotificationVerified=True,nativeZeroImpactGuardMotionVerified=True,nativeFeedbackTaeConditionsVerified=True,guardDirectionRemainsNative=True,attackGuardStaminaWaived=True,gameMemoryWritten=False,gameplayVerified=False,multiplayerVerified=False)

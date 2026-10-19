@@ -1,0 +1,15 @@
+{
+  "animation": 20026,
+  "loop": false,
+  "dummy": 905,
+  "nativeEvent": 90065910,
+  "models": [
+    {"model":"c3160","sfx":690042,"sha256":"8E33977B16D1D31C724AB80AD1DCEF3302945686842D142D07868D84B33924CF"},
+    {"model":"c3250","sfx":690042,"sha256":"8B1081837FAB26753C67D4E8CE50E7EA44EF1B26635814B75F8D20E885A2AD1E"},
+    {"model":"c3251","sfx":690042,"sha256":"A58082FB65BBC6382B079DDC4C624FED4592DA861FA8B43EDD9882DF68AA0E41"},
+    {"model":"c4130","sfx":690042,"sha256":"D0B519E62A0FCDC291A10AFFDB1E9A7503C9E3EE90EF30DBF153A5FE6568A603"},
+    {"model":"c5810","sfx":690040,"sha256":"B6C6CAE18CBCD41C7548922D284993E3D541B5B3EA1655DDB83F1FC016F0AD7F"}
+  ],
+  "excludedVariant":{"model":"c3150","fullAnimation":3020026,"reason":"Do not infer a force-animation ID by taking the full TAE ID modulo one million."},
+  "gameplayVerified":false
+}

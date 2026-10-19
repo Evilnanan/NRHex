@@ -50,7 +50,7 @@
 ./build-no-hotkeys.ps1 -Destination 'D:/Mods/NRHex'
 ```
 
-先保证 dist 资源是最新版本，再运行打包。脚本以 `--no-default-features` 单独编译无测试快捷键 DLL，搭配现有 dist 资源复制到目标目录，保留目标已有的 ME3 和用户设置，并检查必要的 Arxan 设置与 DLL 导入。群友版不能通过 INI 重新开启测试热键。
+先保证 dist 资源是最新版本，再运行打包。脚本以 `--no-default-features --features cage-demand` 单独编译无测试快捷键 DLL，同时启用与当前监牢事件配套的按需创建逻辑，不启用 `cage-lifecycle-probe` 诊断特性。搭配现有 dist 资源复制到目标目录，保留目标已有的 ME3 和用户设置，并检查必要的 Arxan 设置与 DLL 导入。群友版不能通过 INI 重新开启测试热键。
 
 未指定 `-Destination` 时沿用脚本中的本机默认目录。独立 DLL 产物放在 `.work/no-hotkeys-target`，不会覆盖 dist 自测 DLL；打包记录只留在项目 `.work/no-hotkeys-package`。
 

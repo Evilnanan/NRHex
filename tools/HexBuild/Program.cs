@@ -28,6 +28,11 @@ if(args.Contains("--check-descriptions")){
 }
 if(args.Contains("--regulation-compression")){RegulationCompression.Normalize(root);return;}
 if(args.Contains("--cage-presentation")){CagePresentation.Stage(root);return;}
+if(args.Contains("--cage-demand")){CageDemand.Stage(root);return;}
+if(args.Contains("--cage-music-probe")){CageMusic.Probe(root);return;}
+if(args.Contains("--cage-music-stage")){CageMusic.Stage(root);return;}
+if(args.Contains("--cage-music-shown-fix")){CageMusic.Stage(root,true);return;}
+if(args.Contains("--cage-body-fog")){CagePresentation.StageBodyFog(root);return;}
 
 if(args.Contains("--cage-network-selector")){CageNetwork.Stage(root);return;}
 if(args.Contains("--cage-usage")){CageUsage.Stage(root);return;}

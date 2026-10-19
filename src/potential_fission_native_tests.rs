@@ -40,7 +40,7 @@ fn descriptor(lot:i32,slot:u8,index:u8,source:u64)->[u64;24]{unsafe{
 unsafe extern "system" fn lottery(manager:usize,_:usize,lot:i32,_:u8,_:u8,_:u8,_:u8,_:*const f32)->u8{
  let base=IMAGE.load(Ordering::Acquire);
  let dispatch:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+REWARD_CREATE_RVA);
- let count=ROOTS.iter().find(|r|r.1==lot||r.2==lot).unwrap().3;
+ let count=if crate::snack::bonus_lot(lot){3}else{ROOTS.iter().find(|r|r.1==lot||r.2==lot).unwrap().3};
  for slot in 1..=3{for index in (0..count).rev(){let mut d=descriptor(lot,slot,index,999);let before=d;dispatch(manager,d.as_mut_ptr()as usize);assert_eq!(d,before);}}1
 }
 unsafe fn emit(base:usize,manager:usize,lot:i32,slot:u8,source:u64,count:u8){
@@ -86,6 +86,30 @@ fn compiled_fission_routes_saved_charges_and_native_independent_groups(){unsafe{
   // Reconstruction from acknowledged native state resumes at the saved charge.
   *STATE.lock().unwrap()=State::new();emit(base,items,source,local_slot as u8,600,count);assert!(STATE.lock().unwrap().queue.is_empty());
   apply(player,reward_cycle_runtime::RESET,0);update(player,base,0.3);assert_eq!(STATE.lock().unwrap().spent,Some(0));assert!(spent_native(player,base)==0);remove(0,reward_cycle_runtime::RESET);
+ }
+ for slot in 1..=3{
+  data[2]=slot;ptr::write_unaligned((items+0x58)as*mut usize,0);NODES.with(|nodes|nodes.borrow_mut().clear());
+  emit(base,items,crate::snack::LOT,slot as u8,999,3);emit(base,items,crate::snack::LOT,slot as u8,999,3);
+  assert_eq!(NODES.with(|nodes|nodes.borrow().iter().filter(|node|read_ptr(node.as_ptr()as usize+0x18)==0).count()),1);
+  ptr::write_unaligned((items+0x58)as*mut usize,0);NODES.with(|nodes|nodes.borrow_mut().clear());
+  let mut balls=Vec::new();
+  for _ in 0..3{
+   assert_eq!(crate::spawn_personal_lot(player,base,crate::snack::LOT,None),3);
+   let nodes=NODES.with(|nodes|nodes.borrow().iter().rev().take(3).map(|node|node.as_ptr()as usize).collect::<Vec<_>>());balls.push(nodes);
+  }
+  let nodes=NODES.with(|nodes|nodes.borrow().iter().map(|node|node.as_ptr()as usize).collect::<Vec<_>>());
+  assert_eq!(nodes.len(),9);
+  assert_eq!(nodes.iter().filter(|&&node|read_ptr(node+0x18)==0).count(),3,"Snack rewards must not merge into an existing ball");
+  for ball in &balls{
+   let mut node=*ball.iter().find(|&&node|read_ptr(node+0x18)==0).unwrap();let mut seen=Vec::new();
+   while node!=0{assert!(ball.contains(&node));assert!(!seen.contains(&node));seen.push(node);node=read_ptr(node+0x10);}
+   assert_eq!(seen.len(),3);
+  }
+  emit(base,items,crate::snack::LOT+100,slot as u8,999,3);
+  assert_eq!(NODES.with(|nodes|nodes.borrow().iter().filter(|node|read_ptr(node.as_ptr()as usize+0x18)==0).count()),4);
+  assert_eq!(crate::spawn_personal_lot(player,base,crate::snack::LOT,None),3);
+  assert_eq!(NODES.with(|nodes|nodes.borrow().iter().filter(|node|read_ptr(node.as_ptr()as usize+0x18)==0).count()),5);
+  assert_eq!(PERSONAL_REWARD.with(|scope|scope.get().manager),0);
  }
  *STATE.lock().unwrap()=old_state;BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);REWARD_CREATE_ORIG.store(old_dispatch,Ordering::Release);NODES.with(|n|n.borrow_mut().clear());VirtualFree(allocation,0,MEM_RELEASE);
 }}

@@ -1,6 +1,6 @@
 //! Scope is restricted to one synchronous custom native spawn on this thread.
 #[derive(Clone, Copy, Default)]
-pub struct Scope { pub manager: usize, pub lot: i32, pub slot: u8, pub created: u32, pub choices:Option<[i32;3]>, pub attempted:u8, pub created_mask:u8 }
+pub struct Scope { pub manager: usize, pub lot: i32, pub slot: u8, pub created: u32, pub choices:Option<[i32;3]>, pub attempted:u8, pub created_mask:u8, pub nodes:[usize;3] }
 
 #[derive(Debug, PartialEq)]
 pub enum Route { Original, Skip, Local(u32) }

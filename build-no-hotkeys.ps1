@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 Push-Location $PSScriptRoot
 try {
     # Separate output keeps the development DLL with hotkeys intact.
-    cargo build --release --lib --no-default-features --target-dir "$PSScriptRoot/.work/no-hotkeys-target"
+    cargo build --release --lib --no-default-features --features cage-demand --target-dir "$PSScriptRoot/.work/no-hotkeys-target"
     if ($LASTEXITCODE -ne 0) { throw 'No-hotkeys DLL build failed.' }
     python -X utf8 tools/package_no_hotkeys.py --destination $Destination
     if ($LASTEXITCODE -ne 0) { throw 'No-hotkeys packaging failed.' }

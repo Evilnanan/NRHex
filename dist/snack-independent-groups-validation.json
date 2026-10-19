@@ -1,0 +1,81 @@
+{
+  "version": "0.17.190",
+  "build": {
+    "version": "0.17.190",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "target\\release\\NRHex.dll",
+    "dllSha256": "d603988f9e955ef63fa387e2f85a9657819b7de572669d5b710caa68b8fe8e3e",
+    "installed": true,
+    "installedDllSha256": "d603988f9e955ef63fa387e2f85a9657819b7de572669d5b710caa68b8fe8e3e",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "nativeGrouping": {
+    "nativeExecutionPassed": true,
+    "compiledHooksExecuted": true,
+    "nativeFunctions": [
+      "5759E0 reward dispatch",
+      "6A1BA0 network-bit predicate",
+      "570410 descriptor copy",
+      "57A840 choice grouping"
+    ],
+    "cases": [
+      "all three local recipient slots and offline slot zero",
+      "teammate rewards unchanged",
+      "pre-acquisition group stays original even if the hook missed its first creation",
+      "one charge per multi-option source",
+      "three charges only",
+      "two separate native choice chains",
+      "partial creation retries missing options only",
+      "caller buffers unchanged",
+      "saved counter restored",
+      "explicit expedition reset",
+      "negative control: repeated unscoped Snack emissions merge into one native choice chain",
+      "three immediate Snack emissions with identical source and position create three independent three-choice chains for every recipient slot",
+      "native linked-choice traversal never reaches a different Snack reward",
+      "unrelated reward emitted between Snack rewards stays separate in both directions",
+      "temporary grouping scope restored after each emission"
+    ],
+    "stubs": [
+      "allocation/rendering replaced by fixture invoking native descriptor copy",
+      "lottery emits deterministic descriptors; actual native lottery requires game parameter managers",
+      "character/effect state and UID lookup fixtures"
+    ],
+    "sources": {
+      "src/lib.rs": "a3667048d015f69f3aa7b041af6fdcde677e0c26257ea95783a95793f24241fb",
+      "src/potential_fission.rs": "be2b7a1ece3cb6333e84d1d57257fa70e7ee181880a66e607473558f86ec8426",
+      "src/potential_fission_native_tests.rs": "b73c5ea6130ede57ee685e20c74c703e3a62008c2ec01ceb18807065434d3f20",
+      "src/fission_catalog.rs": "011270103ad424e0e5cfb8fe5fc3c4376c32ddc7efbdf7d14c0be1cb7e1a5ed7",
+      "src/hex_pool.rs": "0612431cf3ec0987588b2f618892474647d1200cc9bdb8038dfae1866713aca9",
+      "src/personal_reward.rs": "5e1cb7f2f735909f3e47e67a03a61e7130e45b37b057a83401ed0a1e5d430451",
+      "src/reward_cycle_runtime.rs": "0790d61f0e1b5af246f5626cfd2f67fbca93f1468bf3e8bdac717eb4be4ff92a",
+      "src/snack.rs": "4a917710d036d56cc27463fa7657aeb80612b2c03850f09432d21f84bbb2d72e"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "negativeControlReproduced": true,
+  "regularTestsPassed": 411,
+  "nativeRuntimeSuitesPassed": 9,
+  "existingDistRuntimeUnchanged": false,
+  "installed": true,
+  "loadingVerified": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pid": 27380,
+  "active": 1,
+  "hookEntries": {
+    "0x3e0ab0": "e94bf5a7ff",
+    "0x5759e0": "e91ba678ff",
+    "0x57a8c5": "e9365747ff"
+  },
+  "changedRuntimeFiles": [
+    "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\natives\\NRHex.dll"
+  ],
+  "otherDistRuntimeFilesUnchanged": true,
+  "groupDistributionUnchanged": true
+}

@@ -88,13 +88,14 @@ static class CageEncounters {
   Conditions(e,p,g);e.Instructions.AddRange([I(1000,2,(byte)1,(byte)0,(sbyte)1),I(1000,7,(byte)3,(byte)0,(sbyte)-14),Local(5000,true),I(2003,11,(sbyte)1,target,(short)0,bar.name),I(1000,3,(byte)2),Local(5001,true),I(2003,11,(sbyte)1,target,(short)1,bar.name),I(2003,102,(sbyte)1,bar.name,target)]);
   EndConditions(e,p,g);e.Instructions.AddRange([Wait(-12),I(1000,7,(byte)1,(byte)0,(sbyte)5),I(1001,0,Cages.VictoryDelaySeconds),I(1000,7,(byte)3,(byte)0,(sbyte)-14),I(2003,11,(sbyte)0,target,(short)0,bar.name),Local(5000,false),I(1000,3,(byte)2),I(2003,11,(sbyte)0,target,(short)1,bar.name),Local(5001,false),I(1001,1,1),Restart()]);return e;
  }
- public static EMEVD.Event Birth(uint p,Group g,Member m,bool stableSnapshot=true,bool centralFog=true){
+ public static EMEVD.Event Birth(uint p,Group g,Member m,bool stableSnapshot=true,bool centralFog=true,bool nativeTowerIntro=true){
   uint actor=Actor(p,m),shown=Shown(p,m),choice=p+7500+(uint)g.choice;
   var e=new EMEVD.Event(p+9900+(uint)m.index,EMEVD.Event.RestBehaviorType.Restart);
   e.Instructions.AddRange([I(2000,2,(byte)0),Local(shown,false),Flag(1,p+7403,true),Flag(1,choice,true),Flag(5,p+7404,true),Flag(6,p+7404,false),I(0,0,(sbyte)-5,(byte)1,(sbyte)5),I(0,0,(sbyte)-5,(byte)1,(sbyte)6),I(0,0,(sbyte)1,(byte)1,(sbyte)-5),Wait(1),I(2004,29,actor,(byte)0),I(4,7,(sbyte)2,actor,(byte)1,(sbyte)0,1f),Hp(2,actor,2,0),Wait(2)]);
   Cages.Multiplayer(e,actor);int skip=e.Instructions.Count;e.Instructions.Add(I(1000,7,(byte)0,(byte)1,(sbyte)5));
   e.Instructions.AddRange([I(2004,5,actor,(byte)0),I(2006,3,2,actor,900,690047),I(1001,0,4f)]);
   if(g.birthAnimation.HasValue&&m.combat)e.Instructions.Add(Anim(actor,g.birthAnimation.Value,true));
+  else if(nativeTowerIntro&&CagePresentation.HasTowerIntro(g,m))e.Instructions.Add(Anim(actor,20026,false));
   e.Instructions[skip]=I(1000,7,(byte)(e.Instructions.Count-skip-1),(byte)1,(sbyte)5);
   e.Instructions.AddRange([I(2004,5,actor,(byte)1),Local(shown,true),Flag(-2,choice,false),I(4,7,(sbyte)-2,actor,(byte)0,(sbyte)0,1f),Wait(-2),Local(shown,false),I(1001,1,1),Restart()]);if(stableSnapshot){Cages.StabilizeBirth(e);Cages.LocalGeneration(e,actor,p+3800+(uint)m.index,m.combat?Dead(p,m):null);CageUsage.Intro(e);CageCoop.Birth(e,actor);if(centralFog)CagePresentation.CentralFog(e,p,g,m);}return e;
  }
@@ -168,6 +169,7 @@ static class CageEncounters {
     Add(map,team);rewardReports.Add(new{g.choice,native=JsonSerializer.SerializeToElement(nativeReward),copy=JsonSerializer.SerializeToElement(team)});addedEvents.Add(Battle(p,g,tables));addedEvents.Add(Hud(p,g));
    }
    foreach(var e in addedEvents){Check(!events.Events.Any(v=>v.ID==e.ID),"Group event collision");events.Events.Add(e);ctor.Instructions.Insert(0,I(2000,0,0,(uint)e.ID,0));}
+   var musicEvents=CageMusic.Install(root,events,p);
    map.Write(outMap);events.Write(outEvent);var checkedMap=MSB_NR.Read(outMap);var checkedEvents=EMEVD.Read(outEvent);
    Check(checkedMap.Parts.Enemies.Count==map.Parts.Enemies.Count&&checkedMap.Events.Generators.Count==84,"Group map readback count");
    foreach(var m in c.groups.SelectMany(g=>g.members)){var enemy=checkedMap.Parts.Enemies.Single(e=>e.EntityData.EntityID==Actor(p,m));Check(enemy.NpcParamId==95300000+m.index&&enemy.NpcThinkParamId==95300000+m.index&&enemy.EntityData.Variation==-1&&enemy.Position==new Vector3(m.offset[0],m.offset[1],m.offset[2]),"Group actor binding readback");}
@@ -183,7 +185,7 @@ static class CageEncounters {
    Check(checkedMap.Write().SequenceEqual(beforeMap),"Group patch changed preexisting map content");
    Check(events.Events.Count==checkedEvents.Events.Count&&events.Events.Zip(checkedEvents.Events).All(x=>Cages.Same(x.First,x.Second)),"Group event readback failed");
    Check(before.Format==checkedEvents.Format&&before.Compression==checkedEvents.Compression&&before.StringData.SequenceEqual(checkedEvents.StringData)&&before.LinkedFileOffsets.SequenceEqual(checkedEvents.LinkedFileOffsets),"Group event metadata changed");
-   var stripped=EMEVD.Read(outEvent);stripped.Events.RemoveAll(e=>addedEvents.Any(v=>v.ID==e.ID));var strippedCtor=stripped.Events.Single(e=>e.ID==0);strippedCtor.Instructions.RemoveRange(0,addedEvents.Count);Check(JsonSerializer.Serialize(Cages.Dump(strippedCtor))==oldCtor,"Group constructor changed existing initializers");
+   var stripped=EMEVD.Read(outEvent);stripped.Events.RemoveAll(e=>addedEvents.Concat(musicEvents).Any(v=>v.ID==e.ID));var strippedCtor=stripped.Events.Single(e=>e.ID==0);strippedCtor.Instructions.RemoveRange(0,addedEvents.Count+musicEvents.Count);Check(JsonSerializer.Serialize(Cages.Dump(strippedCtor))==oldCtor,"Group constructor changed existing initializers");
    foreach(var e in before.Events.Where(e=>e.ID!=0&&e.ID!=p+9700&&(e.ID<p+9800||e.ID>=p+9837)))Check(Cages.Same(e,checkedEvents.Events.Single(v=>v.ID==e.ID)),"Group patch changed unrelated event");
    reports.Add(new{mapName=name,inputMapSha256=inputMapHash,inputEventSha256=inputEventHash,mapSha256=Hash(outMap),eventSha256=Hash(outEvent),actorReports,rewardReports,selector=Cages.Dump(checkedEvents.Events.Single(e=>e.ID==p+9700)),singleEvents=checkedEvents.Events.Where(e=>e.ID==p+9700||e.ID>=p+9710&&e.ID<p+9747||e.ID>=p+9800&&e.ID<p+9837||e.ID>=p+9900&&e.ID<p+9937).Select(Cages.Dump),events=addedEvents.Select(e=>Cages.Dump(checkedEvents.Events.Single(v=>v.ID==e.ID))),preexistingMapContentPreserved=true,unrelatedEventsPreserved=true});
   }

@@ -246,6 +246,7 @@ static class Cages {
    }
   }
   Check(loads==2&&reveals==1,"Unexpected replica birth branches");
+  CageDemand.Birth(e,actor);
  }
  public static void StagePeerLifecycle(string root){
   string output=Path.Combine(root,".work/audit-01734/events");Directory.CreateDirectory(output);

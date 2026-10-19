@@ -104,7 +104,14 @@ pub unsafe fn route(manager:usize,descriptor:usize,original:unsafe extern "syste
 }
 fn same_partition(a:i32,b:i32)->bool{if generated(a)||generated(b){a==b}else{true}}
 unsafe extern "system" fn group_allowed(incoming:usize,candidate:usize)->u8{
- same_partition(read_i32(incoming+0xd8),read_i32(candidate+0xd8))as u8
+ let incoming_lot=read_i32(incoming+0xd8);let candidate_lot=read_i32(candidate+0xd8);
+ let incoming_snack=snack::bonus_lot(incoming_lot);let candidate_snack=snack::bonus_lot(candidate_lot);
+ if incoming_snack!=candidate_snack{return 0;}
+ if incoming_snack{
+  let scope=PERSONAL_REWARD.with(Cell::get);
+  if scope.manager!=0&&snack::bonus_lot(scope.lot){return scope.nodes.contains(&candidate)as u8;}
+ }
+ same_partition(incoming_lot,candidate_lot)as u8
 }
 #[unsafe(naked)]
 pub unsafe extern "system" fn group(){core::arch::naked_asm!(

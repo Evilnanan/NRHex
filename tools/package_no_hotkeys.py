@@ -11,6 +11,9 @@ assert not dist.is_relative_to(destination), 'Destination must not contain the p
 assert not (destination/'natives').exists(), 'Migrate existing natives to mod/natives before packaging'
 version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
 dll=root/'.work/no-hotkeys-target/release/NRHex.dll';assert dll.is_file()
+dll_bytes=dll.read_bytes()
+assert b'CageDemand prepared:' in dll_bytes, 'DLL is missing the cage-demand runtime required by current events'
+assert b'CageProbe prepared:' not in dll_bytes, 'Lifecycle diagnostic probe must not be packaged'
 pe=pefile.PE(str(dll),fast_load=True);pe.parse_data_directories(directories=[1])
 imports={i.name for entry in pe.DIRECTORY_ENTRY_IMPORT for i in entry.imports}
 assert b'GetAsyncKeyState' not in imports, 'DLL still imports test keyboard polling'

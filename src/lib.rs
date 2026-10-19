@@ -1,5 +1,9 @@
 #![allow(non_snake_case, clippy::missing_safety_doc)]
 mod ambulance;
+#[cfg(feature="cage-lifecycle-probe")]mod cage_lifecycle_probe;
+#[cfg(feature="cage-demand")]mod cage_demand;
+#[cfg(all(feature="cage-demand",feature="cage-lifecycle-probe"))]
+compile_error!("Use the demand implementation or lifecycle probe, not both");
 mod echo_cast;
 mod echo_cast_data;
 pub mod hook;
@@ -202,7 +206,7 @@ static REWARD_CREATE_ORIG: AtomicPtr<u8> = AtomicPtr::new(ptr::null_mut());
 static NEXT_LEVEL_CHECK: AtomicU64 = AtomicU64::new(0);
 static LEVEL_DELIVERY: OnceLock<Mutex<level_rewards::Delivery>> = OnceLock::new();
 static REWARD_RECOVERY:OnceLock<Mutex<reward_recovery::Recovery>>=OnceLock::new();
-thread_local! { static PERSONAL_REWARD: Cell<personal_reward::Scope> = const { Cell::new(personal_reward::Scope { manager:0, lot:0, slot:0, created:0, choices:None, attempted:0, created_mask:0 }) }; }
+thread_local! { static PERSONAL_REWARD: Cell<personal_reward::Scope> = const { Cell::new(personal_reward::Scope { manager:0, lot:0, slot:0, created:0, choices:None, attempted:0, created_mask:0, nodes:[0;3] }) }; }
 static CAT: OnceLock<Mutex<cat::Cat>> = OnceLock::new();
 static CAT_LANDING:OnceLock<Mutex<cat_jump::Landing>>=OnceLock::new();
 static SWORD_BONUSES: OnceLock<sword::Bonuses> = OnceLock::new();
@@ -667,6 +671,10 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    original.store(p.trampoline,Ordering::Release);arts_transfer_prepared.push((rva,p));
   }
   if arts_param_prepared.stolen!=5{return Err("Arts param entry must relocate its five-byte native jump".into());}
+  #[cfg(feature="cage-lifecycle-probe")]
+  arts_transfer_prepared.extend(cage_lifecycle_probe::prepare(base as usize)?);
+  #[cfg(feature="cage-demand")]
+  arts_transfer_prepared.extend(cage_demand::prepare(base as usize)?);
   // Publish before patching: the detour always has a valid original target.
   ORIG.store(prepared.trampoline,Ordering::Release);
   APPLY_ORIG.store(apply_prepared.trampoline,Ordering::Release);
@@ -1982,7 +1990,7 @@ unsafe extern "system" fn reward_create_detour(manager:usize,descriptor:usize)->
    // The caller owns/reuses the descriptor; restore both temporary fields.
    ptr::write_unaligned((descriptor+0x58)as*mut u32,kind);
    if replacement.is_some(){ptr::write_unaligned((descriptor+8)as*mut u32,old_good);}
-   if node!=0{PERSONAL_REWARD.with(|c|{let mut s=c.get();s.created+=1;if replacement.is_some(){s.created_mask|=1<<index;}c.set(s);});}
+   if node!=0{PERSONAL_REWARD.with(|c|{let mut s=c.get();if let Some(entry)=s.nodes.get_mut(s.created as usize){*entry=node;}s.created+=1;if replacement.is_some(){s.created_mask|=1<<index;}c.set(s);});}
    node
   }
  }
