@@ -79,6 +79,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--ultimate-unstoppable-stage")){UltimateUnstoppable.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--ultimate-unstoppable-check")){UltimateUnstoppable.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
@@ -793,6 +795,7 @@ DeathDance.Mechanics(Clone);
 Snack.Mechanics(Clone);
 Momentum.Mechanics(Clone,pars["SpEffectParam"]);
 UltimateAwakening.Mechanics(Clone);
+UltimateUnstoppable.Mechanics(Clone);
 Ambulance.RecoveryEffect(Clone,pars["SpEffectParam"]);
 Erosion.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
@@ -1196,6 +1199,7 @@ reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),ne
 Cages.Terrain(ev);
 ContractHeart.Events(ev);
 UltimateAwakening.Events(ev);
+UltimateUnstoppable.Events(ev);
 NightBlessing.ResetReceipt(ev);
 RewardCycle.Events(ev,RewardCatalog.PackedIds(RewardCatalog.HistoricalOwners.Length));
 RewardReroll.Events(ev);

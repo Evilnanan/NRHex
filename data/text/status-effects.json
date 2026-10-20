@@ -64,5 +64,11 @@
     "ownerId": 95003800,
     "zhInfo": "专注值消耗归零",
     "enInfo": "Eliminates FP consumption"
+  },
+  {
+    "textId": 95003901,
+    "ownerId": 95003900,
+    "zhInfo": "获得霸体效果",
+    "enInfo": "Grants Endure’s resistance to stagger."
   }
 ]

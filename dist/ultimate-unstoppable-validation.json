@@ -1,0 +1,391 @@
+{
+  "version": "0.17.196",
+  "owner": 95003900,
+  "buff": 95003901,
+  "abilityIcon": {
+    "large": 21297,
+    "small": 22297,
+    "sameAsUltimateRevolution": true
+  },
+  "buffIcon": 20408,
+  "seconds": 15,
+  "refreshesWithoutStacking": true,
+  "allHeroesEligible": true,
+  "nativeEndurePreserved": true,
+  "extraDamageReduction": false,
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "e046490e925d72c89790be42cf26dababe990547affdb21eb67c74ebde3ba393",
+        "outputSha256": "3dc9f0d168a564bef16184ae1b21e8793b5eaaabf026b7dc26a7b56ae22f2630"
+      },
+      "mod/event/common.emevd.dcx": {
+        "inputSha256": "65d003079b1a6449ff383c4b6c47d80ba987fd73049bef063e7a66dea4ff4164",
+        "outputSha256": "b8f5a43c8152cc05e486eee2dacd4292dfd87c20d7d4b47b56001502ba66a6b9"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "7a24c47943ff1b259ef9dbc918e54d7d630e149f99171988a53b6b7a92dbad01",
+        "outputSha256": "803494bfa404554b112191c361e6c8a636b1b793511b3dd8cd6a21e64e59f7b7"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "9ccfd62c341c90799cb99748f094ca13952ddb0a4b9508805dfabecafdaf99fe",
+        "outputSha256": "3a9342073fe4fa639585c8bf054e8fd0f98272802987f283f50eae6d0c31bb33"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "8d6e6f04086790dc06183dfe60ad62d1fe9e94ba9d8e6ca3bc79b7d98eeef639",
+        "outputSha256": "b1d60d8c7de54c5ed3cca0be6d7c6655c4c417ffdfbd9dedc2b9c8ae57ac34a9"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "3d93906038ea294e7af6068fb97e438b0878fe1e9fafe216e1e8fdc32dffaf7d",
+        "outputSha256": "b241bd106b54d791e6e161111953f1b9c69ef6860ec4f82010c352d481c55865"
+      }
+    },
+    "containers": {
+      "mod/event/common.emevd.dcx": {
+        "rawSha256": "6c4db130494e7bda6481d2d9874d12cdbb0925bbc88442004475d5e772a5c839",
+        "containerSha256": "b8f5a43c8152cc05e486eee2dacd4292dfd87c20d7d4b47b56001502ba66a6b9",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "efbb06bd8c36096c97ee4c96f79c642edfa7d44b44aaa2d495b5b5a50d28073e",
+        "containerSha256": "803494bfa404554b112191c361e6c8a636b1b793511b3dd8cd6a21e64e59f7b7",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "ab8d20b4182cd247483a8a3cdd2765330a0f6e37c696c4b2823546a5e9c258e0",
+        "containerSha256": "3a9342073fe4fa639585c8bf054e8fd0f98272802987f283f50eae6d0c31bb33",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "f475fea92d22ec709050dac198e18be6120e0a54da6ae8d63b06d85fccf3911a",
+        "containerSha256": "b1d60d8c7de54c5ed3cca0be6d7c6655c4c417ffdfbd9dedc2b9c8ae57ac34a9",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "3cc412dbe55c9256efb0d17231d5719829c4d82ea72c4d34b4df68dee80f96fa",
+        "containerSha256": "b241bd106b54d791e6e161111953f1b9c69ef6860ec4f82010c352d481c55865",
+        "roundTripPassed": true
+      }
+    },
+    "generator": {
+      "inputSha256": "E046490E925D72C89790BE42CF26DABABE990547AFFDB21EB67C74EBDE3BA393",
+      "outputSha256": "3DC9F0D168A564BEF16184AE1B21E8793B5EAAABF026B7DC26A7B56AE22F2630",
+      "eventInputSha256": "C17962D27BF4960319DE69A34D30E21B24A9E41214F2D5BDFA2A940D05555EAF",
+      "eventOutputSha256": "6C4DB130494E7BDA6481D2D9874D12CDBB0925BBC88442004475D5E772A5C839",
+      "hexCount": 36,
+      "addedRows": {
+        "SpEffectParam": [
+          95003900,
+          95003901
+        ],
+        "AttachEffectParam": [
+          95003900
+        ],
+        "PermanentBuffParam": [
+          95003900
+        ],
+        "EquipParamGoods": [
+          95003900
+        ],
+        "ItemTableParam": [
+          95110136
+        ]
+      },
+      "rowCounts": {
+        "SpEffectParam": 17102,
+        "AttachEffectParam": 2115,
+        "PermanentBuffParam": 159,
+        "EquipParamGoods": 469,
+        "ItemTableParam": 34904
+      },
+      "audit": {
+        "owner": 95003900,
+        "buff": 95003901,
+        "source": 1650,
+        "seconds": 15,
+        "historyBit": 36,
+        "damageRates": {
+          "slashDamageCutRate": 1,
+          "blowDamageCutRate": 1,
+          "thrustDamageCutRate": 1,
+          "neutralDamageCutRate": 1,
+          "magicDamageCutRate": 1,
+          "fireDamageCutRate": 1,
+          "thunderDamageCutRate": 1,
+          "darkDamageCutRate": 1
+        },
+        "nativeVfx": 8570,
+        "nativeSfx": 440111
+      },
+      "existingRowsAndUnrelatedTablesUnchanged": true,
+      "onlyTwoGuardedCleanupEventsExtended": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "75B605CD0971AA01BE223FF1EA7DB2CB5354E8D5FD46AC6792ACC0E9D4F3A792",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "A6CF598EC1855E4F8E2636A301B3D6D79730CB2D8385F047FC5E303E4F0F5045",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "05886AB057A5E5659302CF7B1E09B747CDA9C4173745B0E240355C29EEA233D6",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "6277F3141A7706643B65CB6C187126EC8259F5564BAE13AAF1355BD6D8F10DB7",
+          "outputSha256": "EFBB06BD8C36096C97EE4C96F79C642EDFA7D44B44AAA2D495B5B5A50D28073E",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "终极不可阻挡"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "发动绝招后，获得15秒霸体效果"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "终极不可阻挡"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "发动绝招后，获得15秒霸体效果"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "发动绝招后，获得15秒霸体效果"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "447592F1DD0ACC516278B52CDB8ECE242704BBE480A5E8246BD6E5E81D3A6454",
+          "outputSha256": "AB8D20B4182CD247483A8A3CDD2765330A0F6E37C696C4B2823546A5E9C258E0",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003901,
+              "before": null,
+              "after": "终极不可阻挡"
+            },
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "终极不可阻挡"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003901,
+              "before": null,
+              "after": "获得霸体效果"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "发动绝招后，获得15秒霸体效果"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "C3F9E661414616C19E8C65F0654505FCFA5C7BADDAFEEA93404DC64CCBC13D50",
+          "outputSha256": "F475FEA92D22EC709050DAC198E18BE6120E0A54DA6AE8D63B06D85FCCF3911A",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "Ultimate Unstoppable"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "Grants Endure’s resistance to stagger for 15 seconds after activating an Ultimate Art."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "Ultimate Unstoppable"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "Grants Endure’s resistance to stagger for 15 seconds after activating an Ultimate Art."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "Grants Endure’s resistance to stagger for 15 seconds after activating an Ultimate Art."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "FD3B6273CF31FC16D1F70A4A75B6C8F037090F6FD28E52CC560CE3ABA512FBA4",
+          "outputSha256": "3CC412DBE55C9256EFB0D17231D5719829C4D82EA72C4D34B4DF68DEE80F96FA",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003901,
+              "before": null,
+              "after": "Ultimate Unstoppable"
+            },
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "Ultimate Unstoppable"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003901,
+              "before": null,
+              "after": "Grants Endure’s resistance to stagger."
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003900,
+              "before": null,
+              "after": "Grants Endure’s resistance to stagger for 15 seconds after activating an Ultimate Art."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "native": {
+    "installedParameterReadbackPassed": true,
+    "nativeExecutionPassed": true,
+    "seconds": 15,
+    "trigger": 6999615,
+    "owner": 95003900,
+    "buff": 95003901,
+    "nativeSource": 1650,
+    "nativeVfx": 8570,
+    "nativeSfx": 440111,
+    "nativeFunctions": [
+      "50D060 native collision selection before allocation",
+      "510B20 same-ID candidate",
+      "510BD0 category conflicts",
+      "507C40 and EA0CF0 original Endure reaction mapping",
+      "504E80 remove by effect ID",
+      "50B5B0 native doubly-linked list removal",
+      "511700 native duration initialization"
+    ],
+    "cases": [
+      "compiled shared successful-ultimate hook",
+      "other/rejected notifications do not activate",
+      "nested self-application does not loop",
+      "native category1001 reaction mapping matches Endure for 13 levels and two flags",
+      "category20 negative control loses stagger resistance",
+      "eight native damage multipliers restored to one",
+      "same-ID category1001 collision found before replacement",
+      "only private buff removed before reapplication",
+      "refresh lifetime to 15 rather than add time",
+      "vanilla Endure and Sword IDs and durations preserved",
+      "one private instance after repeated ultimates",
+      "expired but not yet removed node does not block the next activation",
+      "Ultimate Awakening remains active at its own ten-second duration",
+      "ownerless/reset/down/dead/reviving/remote/inactive/missing-stats calls ignored",
+      "failed application does not create a permanent reservation",
+      "all-hero/affinity/party choice eligibility"
+    ],
+    "stubs": [
+      "native accepted application result and row lookup",
+      "effect allocation/storage; native add routine returns at collision decision before allocator",
+      "native removal executes list splice but skips allocator destruction/category bookkeeping",
+      "elapsed game-time update and network replication not executed"
+    ],
+    "sources": {
+      "src/ultimate_unstoppable.rs": "c54d4805db0ce4cafbe3e031dbca634f896263d60a8288e297368eaa094d695d",
+      "src/ultimate_unstoppable_native_tests.rs": "f1301919814a02d5b78a633f48f9350632ec3a934cb95485cca0230286aa49ab",
+      "src/lib.rs": "94e46c3d39b37cd64719ae0c90d2c42692a30eea428c0baff09ed14e1ceca3d7",
+      "src/hex_pool.rs": "4ba705a2a3e65001c67018c14918fc5b5a8bc73279cd736f724c06a6a99542d4",
+      "tools/HexBuild/UltimateUnstoppable.cs": "51f1092ea5f5d73eb46a112d2e93b11b447e75b08123301bd641feabc2959cdf",
+      "tools/HexBuild/RewardCatalog.cs": "2676b30874aaeb920b2ac568743b24fbe2db1ea542b3b4b70ab340182d1dc634",
+      "tools/verify_ultimate_unstoppable.py": "a849cefb8132d6fca3f9dcb504974dae0896c4a9a6e091d8a6d5ef20e6d82823"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.196",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "e32f9d5afb76a1b7b947411f4a89cf00f4f403be09c567370dc6a65895686e69",
+    "installed": true,
+    "installedDllSha256": "e32f9d5afb76a1b7b947411f4a89cf00f4f403be09c567370dc6a65895686e69",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 420,
+  "regularIgnoredTests": 16,
+  "runtimeNativeSuitesPassed": 13,
+  "changedDistributionFiles": {
+    "README.md": {
+      "inputSha256": "333750d4cc5561def15dda8818b16bc4f07106ade35a49e554ad55fd8bd8b22e",
+      "outputSha256": "2af18ad90f614850d5d5ca772eacbfdf2ffc1131e4d6546f2c931eeb497e86f2"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "e046490e925d72c89790be42cf26dababe990547affdb21eb67c74ebde3ba393",
+      "outputSha256": "3dc9f0d168a564bef16184ae1b21e8793b5eaaabf026b7dc26a7b56ae22f2630"
+    },
+    "mod/event/common.emevd.dcx": {
+      "inputSha256": "65d003079b1a6449ff383c4b6c47d80ba987fd73049bef063e7a66dea4ff4164",
+      "outputSha256": "b8f5a43c8152cc05e486eee2dacd4292dfd87c20d7d4b47b56001502ba66a6b9"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "390cb5b6fe9c8ac886cb98365648425563566f1a10f4b971ad86b12985229e8f",
+      "outputSha256": "e32f9d5afb76a1b7b947411f4a89cf00f4f403be09c567370dc6a65895686e69"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "8d6e6f04086790dc06183dfe60ad62d1fe9e94ba9d8e6ca3bc79b7d98eeef639",
+      "outputSha256": "b1d60d8c7de54c5ed3cca0be6d7c6655c4c417ffdfbd9dedc2b9c8ae57ac34a9"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "3d93906038ea294e7af6068fb97e438b0878fe1e9fafe216e1e8fdc32dffaf7d",
+      "outputSha256": "b241bd106b54d791e6e161111953f1b9c69ef6860ec4f82010c352d481c55865"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "7a24c47943ff1b259ef9dbc918e54d7d630e149f99171988a53b6b7a92dbad01",
+      "outputSha256": "803494bfa404554b112191c361e6c8a636b1b793511b3dd8cd6a21e64e59f7b7"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "9ccfd62c341c90799cb99748f094ca13952ddb0a4b9508805dfabecafdaf99fe",
+      "outputSha256": "3a9342073fe4fa639585c8bf054e8fd0f98272802987f283f50eae6d0c31bb33"
+    }
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

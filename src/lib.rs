@@ -49,6 +49,7 @@ mod parry_turn;
 mod night_blessing;
 mod heartstealer;
 mod ultimate_awakening;
+mod ultimate_unstoppable;
 mod essence_reaver;
 mod ominous_pact;
 mod reward_terrain;
@@ -1585,7 +1586,7 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
   if matches!(effect,flasks::GRANTED|flasks::CAPTURE|flasks::CHURCH|flasks::CHURCH_REQUEST) && is_local(player,base) {
    if let Some(state)=FLASKS.get(){if let Ok(mut f)=state.lock(){f.applied(effect);}}
   }
-  if effect==runtime::ULTIMATE_TRIGGER&&is_local(player,base){ultimate_awakening::activated(player,base);on_effect(player,effect,base);}
+  if effect==runtime::ULTIMATE_TRIGGER&&is_local(player,base){ultimate_awakening::activated(player,base);ultimate_unstoppable::activated(player,base);on_effect(player,effect,base);}
   if matches!(effect,runtime::ULTIMATE_TRIGGER|runtime::FLASK_TRIGGER)&&is_local(player,base) {
    if let Some((stats,s))=snapshot(player,base) {
     if let Some(state)=RUNTIME.get() {
