@@ -65,9 +65,9 @@ fn native_ultimate_awakening_success_refresh_and_fp_aggregation(){unsafe{
  ACCEPT.with(|s|s.set(0));assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),0);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(1));
  assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),1);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(value(node+0x4c),10.);assert_eq!(crate::read_i32(stats+0x150),42);
  for remaining in [9.5,1.,0.001]{float(node+0x4c,remaining);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),10.);}
- // Installed native cost rows, including Echo Casting's x2.5, aggregate through
+ // Installed native cost rows, including Echo Casting's x2, aggregate through
  // the original functions. Expiry is represented by native inactive-node flags.
- for(rva,with_echo)in [(0x5061b0,1.),(0x507310,2.5),(0x5081e0,1.),(0x507410,2.5)]{
+ for(rva,with_echo)in [(0x5061b0,1.),(0x507310,2.),(0x5081e0,1.),(0x507410,2.)]{
   let aggregate:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+rva);
   int(node+0x68,0);assert_eq!(aggregate(manager),0.);int(node+0x68,2);assert_eq!(aggregate(manager),with_echo);
   put(echo_node+0x38,tear_node);assert_eq!(aggregate(manager),0.);put(echo_node+0x38,0);assert_eq!(value(tear_node+0x4c),7.);

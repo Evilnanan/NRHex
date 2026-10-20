@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 static class EchoCast {
  public const int Owner=95003500;
- public const float SpellFpRate=2.5f;
+ public const float SpellFpRate=2f;
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
  public static void OwnerEffect(PARAM.Row r){Set(r,"magicConsumptionRate",SpellFpRate);Set(r,"miracleConsumptionRate",SpellFpRate);}
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
@@ -18,10 +18,13 @@ static class EchoCast {
   Check(Convert.ToSingle(owner["artsConsumptionRate"].Value)==1f,"Echo must not change skill FP consumption");
   if(!stage){
    Check(fields.All(field=>Convert.ToSingle(owner[field].Value)==SpellFpRate),"Installed echo FP rates differ from build configuration");
+   var magic=parse("Magic",binder.Files.Single(entry=>Name(entry)=="Magic.param").Bytes);
+   magic.Rows=magic.Rows.Where(row=>row.ID==4021).ToList();Check(magic.Rows.Count==1,"Missing native Comet row");
+   File.WriteAllBytes(Path.Combine(directory,"installed-magic.param"),magic.Write());
    File.WriteAllText(Path.Combine(directory,"installed.json"),JsonSerializer.Serialize(new{installedSha256=Hash(input),spellFpRate=SpellFpRate,artsFpRate=1,installedReadbackPassed=true},new JsonSerializerOptions{WriteIndented=true}));
-   Console.WriteLine("PASS: installed echo spell FP rates are 2.5; skill FP rate remains 1");return;
+   Console.WriteLine("PASS: installed echo spell FP rates are 2; skill FP rate remains 1");return;
   }
-  Check(fields.All(field=>Convert.ToSingle(owner[field].Value) is 2.25f or SpellFpRate),"Unexpected previous echo FP rate");
+  Check(fields.All(field=>Convert.ToSingle(owner[field].Value) is 2.25f or 2.5f or SpellFpRate),"Unexpected previous echo FP rate");
   var changes=fields.Select(field=>new{field,before=Convert.ToSingle(owner[field].Value),after=SpellFpRate}).ToArray();
   OwnerEffect(owner);file.Bytes=table.Write();
   string output=Path.Combine(directory,"staged");Directory.CreateDirectory(output);string target=Path.Combine(output,"regulation.bin");
@@ -36,7 +39,7 @@ static class EchoCast {
   }
   HexTexts.Stage(root,hexes,Path.Combine(output,"texts"),allRewards:true,onlyIds:new[]{Owner});
   File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(target),owner=Owner,spellFpRate=SpellFpRate,artsFpRate=1,changes,unrelatedRowsAndFieldsPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: echo spell FP rates staged at 2.5; all unrelated parameter fields preserved");
+  Console.WriteLine("PASS: echo spell FP rates staged at 2; all unrelated parameter fields preserved");
  }
  public static void ClawProbe(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   var bullets=parse("Bullet",native.Files.Single(entry=>Name(entry)=="Bullet.param").Bytes);

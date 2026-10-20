@@ -5,6 +5,7 @@ mod ambulance;
 #[cfg(all(feature="cage-demand",feature="cage-lifecycle-probe"))]
 compile_error!("Use the demand implementation or lifecycle probe, not both");
 mod echo_cast;
+mod echo_cost;
 mod echo_cast_data;
 pub mod hook;
 pub mod log;
@@ -380,9 +381,10 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);187] {
+fn signatures()->[(&'static str,u32);189] {
  [(echo_cast::FACTORY_PATTERN,echo_cast::FACTORY_RVA as u32),(echo_cast::TARGET_COPY_PATTERN,echo_cast::TARGET_COPY_RVA as u32),(echo_cast::RELEASE_PATTERN,echo_cast::RELEASE_RVA as u32),(echo_cast::TARGET_VALID_PATTERN,echo_cast::TARGET_VALID_RVA as u32),(ambulance::ENV_PATTERN,ambulance::ENV_RVA as u32),(ambulance::NUMBER_PATTERN,ambulance::NUMBER_RVA as u32),(ambulance::COST_PATTERN,ambulance::COST_RVA as u32),(ambulance::HIT_PATTERN,ambulance::HIT_RVA as u32),(ambulance::MODE_PATTERN,ambulance::MODE_RVA as u32),(ambulance::COMMON_PATTERN,ambulance::COMMON_RVA as u32),(ambulance::FORMULA_PATTERN,ambulance::FORMULA_RVA as u32),(demons_lottery::ART_TABLE_PATTERN,demons_lottery::ART_TABLE as u32),(demons_lottery::ART_PICK_PATTERN,demons_lottery::ART_PICK as u32),(demons_lottery::ART_GET_PATTERN,demons_lottery::ART_GET as u32),(demons_lottery::SPELL_TABLE_PATTERN,demons_lottery::SPELL_TABLE as u32),(demons_lottery::SPELL_PICK_PATTERN,demons_lottery::SPELL_PICK as u32),(demons_lottery::SPELL_GET_PATTERN,demons_lottery::SPELL_GET as u32),(demons_lottery::RNG_PATTERN,demons_lottery::RNG_RVA as u32),(demons_params::CI_PATTERN,demons_params::CI_RVA as u32),(demons_params::WEAPON_PATTERN,demons_params::WEAPON_RVA as u32),(demons_runtime::REMOVE_PATTERN,demons_runtime::REMOVE_RVA as u32),(demons_runtime::TEAM_PATTERN,demons_runtime::TEAM_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (snack::SPEND_PATTERN,snack::SPEND_RVA as u32),(snack::BUY_A_PATTERN,snack::BUY_A_RVA as u32),(snack::BUY_B_PATTERN,snack::BUY_B_RVA as u32),(snack::ITEM_A_PATTERN,snack::ITEM_A_RVA as u32),(snack::ITEM_B_PATTERN,snack::ITEM_B_RVA as u32),(snack::RARITY_PATTERN,snack::RARITY_RVA as u32),
+  (echo_cost::PATTERN,echo_cost::RVA as u32),(echo_cost::GETTER_PATTERN,echo_cost::GETTER_RVA as u32),
   (echo_cast::INITIALIZE_PATTERN,echo_cast::INITIALIZE_RVA as u32),(echo_cast::FINISH_PATTERN,echo_cast::FINISH_RVA as u32),(echo_cast::VOLLEY_CREATE_PATTERN,echo_cast::VOLLEY_CREATE_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -614,6 +616,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   potential_fission::GROUP_SKIP.store(base.add(0x57a8e1)as*mut u8,Ordering::Release);
   let arts_transfer_targets=[
    (snack::SPEND_RVA,snack::spent as *const u8,&snack::SPEND_ORIGINAL),
+   (echo_cost::RVA,echo_cost::detour as *const u8,&echo_cost::ORIGINAL),
    (echo_cast::EMIT_RVA,echo_cast::emit as *const u8,&echo_cast::EMIT_ORIGINAL),
    (echo_cast::FACTORY_RVA,echo_cast::factory as *const u8,&echo_cast::FACTORY_ORIGINAL),
    (echo_cast::INITIALIZE_RVA,echo_cast::initialize as *const u8,&echo_cast::INITIALIZE_ORIGINAL),
