@@ -38,7 +38,7 @@
 | 百般武艺 | `arts.rs`、`arts_data.rs`、`build_arts_data.py`、`build_arts_hks.py` |
 | 气球、强化【死灵术】、别停止咏唱 | `balloon.rs`／`balloon_runtime.rs`／`ability_damage.rs`（只提供基础攻击值，余下由原生结算）、`spirit.rs`／`spirit_runtime.rs`、`chant.rs`／`build_chant_hks.py`／`verify_chant_hks.py` |
 | 大法师：法术槽随机、丢拾与装备同步 | `archmage.rs`、`archmage_runtime.rs`、`archmage_cost.rs`、`archmage_data.rs`、`HexBuild/Archmage.cs`、`build_archmage_hks.py` |
-| 不祥契约、偷心者 | `HexBuild/ContractHeart.cs`、`ominous_pact.rs`、`heartstealer.rs`、`verify_contract_heart_native.py`、`verify_contract_heart_events.py` |
+| 不祥契约、偷心者 | `HexBuild/ContractHeart.cs`、`HexBuild/HeartMist.cs`、`ominous_pact.rs`、`heartstealer.rs`、`heartstealer_native_tests.rs`、`verify_contract_heart_native.py`、`verify_heartstealer.py` |
 | 夺萃之镰 | `essence_reaver.rs`、`HexBuild/EssenceReaver.cs`、`verify_essence_reaver.py`；原生击杀状态199计数，在本地角色原生专注值上限倍率查询 `0x50c230` 返回值上统一乘以 `1.01^击杀数`，其他原生倍率和属性结算保持不变。不再向Buff栏单独显示小图标：95002900的displayIconForPermamentEffect为0，潜在能力／词条图标仍保留；不显示层数、不创建逐杀增益，移除95002902层参数。击杀数以至多4个隐藏本地保存记录编码，复活／重载恢复，新远征／圆桌守卫内通知重置。 |
 | 交锋 | `parry.rs`、`parry_turn.rs`、`parry_data.rs`、`HexBuild/Parry.cs`、`verify_parry_native.py` |
 | 恶魔的召唤 | `demons.rs`、`demons_runtime.rs`、`demons_params.rs`、`demons_lottery.rs`、`HexBuild/DemonsCall.cs`；[机制与验证](research/demons-call.md) |
@@ -135,7 +135,9 @@ tools/HexBuild/StormAudio.cs直接从当前sd.bhd／sd.bdt选择性提取cs_m19�
 
 不祥契约对执行者直接开放，抽取排除杖／圣印记倾向；已持有亮剑时解除这项倾向限制，统一在 `reward_choices.rs::weapon_exclusions` 过滤，定向测试也遵循此限制。以原生8600200“攻击命中时恢复专注值”为命中基准，核对三档8600200～8600202与恢复血量8600100～8600102，除命中后效果ID外全部字段一致；`--contract-hit-scope`只读验证当前包及原生三档。stateInfo2103及命中过滤字段一致（仅身份、显示、保存不同；参数内魔法／祷告／shaman三项适用标志均为原生0；持有亮剑时由通用近身武器命中转换自然触发，不再单独开启法术适用标志。范围外法术维持原生排除，法术和武器共用冷却），沿原生触发与攻击者路由产生95002601本地中性标记。自伤前以本地玩家／属性对象身份同步预占10秒游戏时间冷却，统一限制多段、多目标、同帧及重入请求；额外命中不刷新期限，暂停不推进，失去拥有资格或对象重建时清理。冷却锁在任何原生调用前释放；`ominous_pact.rs` 在现有效果入口消费该标记，核对本地玩家CSPlayerDamageModule（vtable 2C11D00，区别于敌人模块2C11710）及其+8拥有者后，调用共享431090执行一次血量上限5%的HP损伤。实际失血后另调用504D30通知原生受击效果替换，分类使用未归类属性254、元素属性0、非周期命中0。两个原生入口的118项签名检查覆盖当前版本；没有新增hook。6820400／6820500使用deleteCriteriaDamage12，靠受击通知将其节点计时置零，之后沿原生replace/cycle链累积发狂／催眠；431090的扣血标志本身不足以完成该过程。用户确认0.17.120命中自伤及受损词条生效。中性标记取消旧延迟HP脉冲，远端不能再次扣血；没有实际失血时不通知。同步通知人是猫和嘉豪身法的既有受损状态机，不制造虚假攻击，也不触发吸血。
 
-偷心者通过魅惑树枝的三个原生等级弹丸向使用者发出95002702通知；DLL现有效果入口仅对本地持有者接受该通知，原生树枝和敌方魅惑效果保持原样。通知持续至本地事件消耗，避免低帧率丢失；使用事件核对拥有状态与待返还状态，第一次使用启动60秒原生计时，期间第二次使用登记95002705，后续不叠加、不刷新计时；到期返还一支，有第二次记录则再返还一支并清除记录。9100970～9100972禁用网络同步并使用本机20000实体；本局初次领取记录saveCategory10，倒地保留待返还效果。新远征的1111原生完成守卫及返回圆桌的9100941清理记录及第二支计数。两次发放分别使用两个独立、无完成标志的原生物品表，数量2／1，遵循原生背包规则。原生隔离执行和序列化事件时间线检查不代替实机联机验证。
+偷心者0.17.193重做：95002700沿用原生8320400的state2103、蓄力攻击分类100及全部使用类型／目标筛选，仅将命中通知改为95002706并保留能力展示／保存字段。现有效果入口只消费本地存活持有者的通知；多目标／重入先预约30秒游戏时间，再施加95002707和95002703，不持锁调用原生。95002707完整复用8630302的state275、behavior863030000及挂点80，只取消其原生累积器重置替换；原生50AA20／396AE0在首次更新发射12335000→12335001，烟雾及503350魅惑完全原样。95002703为30秒本地隐藏冷却、死亡保留且无替换链，运行时预约补足原生异步写入窗口；重建角色不重置预约，重载由原生冷却记录阻止重触发。亮剑的既有近身蓄力法术转换遵循共享命中规则，不单独开放法术类型。
+
+移除9100970～9100972及初始化调用，三个树枝等级弹体的spEffectIDForShooter恢复原生0；不再初次发树枝或到期返还。旧隐藏ID95002701／02／04／05仅保留中性兼容行，不再保存、计时、发放或启动替换。新远征1111和圆桌9100941清理冷却、发射及旧记录。34项能力、历史位和奖励模板不变。验证覆盖原生505E90蓄力筛选、43C9DC通知投递正反门控、50AA20发射与396AE0描述符、冷却及多目标／重入／死亡限制，原生效果存储和最后弹体创建为隔离桩；不代表实际游戏或联机验收。
 
 刷怪笼的联机血量修正由CageCoop.cs管理。仅84个副本NPC引用独立MultiPlayCorrectionParam行，沿用原生client1/2/3效果与bOverrideSpEffect；效果复制只将isDisableNetSync设为1，保留stateInfo282，由原生2009[4]选取和替换，不额外叠乘血量。各端Birth在生成、ChangeCharacterEnableState完成之后执行修正，再开启碰撞／AI并设置本地shown；Battle不再次应用修正，发布spawned前等本机全部成员shown。地图、HUD和奖励不改。联机日志中同网络编号黑夜骑兵房主6984、队友3492；剑盾熔炉房主6517、队友11340，差值对应2倍和1.74倍原生修正，支持本地修正缺失的判断，但不能证明仅影响显示或确定每次缺失的完整网络时序。0.17.122仍需联机验收。诊断增加原生519660人数查询，117项守卫，无新增hook。
 

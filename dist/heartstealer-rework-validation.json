@@ -1,0 +1,280 @@
+{
+  "version": "0.17.193",
+  "owner": 95002700,
+  "regularTestsPassed": 417,
+  "nativeSuitesPassed": 10,
+  "runtimeSignaturesVerified": 183,
+  "cageDemandSignaturesVerified": 33,
+  "cageDemandFeatureRetained": true,
+  "buildEntrypointModesVerified": [
+    "FullNoInstall",
+    "DllNoInstall",
+    "DllInstall",
+    "DllFailure"
+  ],
+  "changedAssets": {
+    "mod/regulation.bin": {
+      "inputSha256": "d2b2458484845e4f4c59109eaa14adda2d461eb5b59e005886c67d006459e22f",
+      "outputSha256": "115772241f4be05aefc5d83980587b1bb8683bbff07d0d4572e014e2324532e3"
+    },
+    "mod/event/common.emevd.dcx": {
+      "inputSha256": "d4207ff95fd0fb31d30cd68a1289eafb06959673f9acefb2ee26e4ac6fcb44ef",
+      "outputSha256": "740562b526ec8b6587a3caaf00f56645b6a9182773b45520d3b05bdb90185cb7"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "ce392d15aa7cb94d3c7734e050d1b9f06aa4a2985a9aed4f8d3b0a73828e2be4",
+      "outputSha256": "cd4f9235ea5df4751a1c6e76353c2b50205adf844cd075a62efacc76b7b3ef57"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "255717581d49843191aa3a84a36feeb6861c5107e0665260898ba34fead8d348",
+      "outputSha256": "58ddf113aa6e466c449ed3be6f750920cacfb05d47bff73b534185a65a549728"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "3d3c50fd5f13ee6147bbc4b18b12cb097e2f5858176cb8c40c87e7c3b138adc0",
+      "outputSha256": "3f14f6c95ace43ce8fddf875dd7b220d4f87f6723ac72f881580a2b43493b835"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "ee14fa9e10f4c90d6be0176084ba2461483abbb350abd9f7347a57219cc1fe68",
+      "outputSha256": "7cecdaa10a1da83914756fe0eccba8716e2176da9f5a26314b08227b9613bc68"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "52b0ad497de0ad65feb156b0318eabc6a0a8f4521083c429af7a1461b6509f43",
+      "outputSha256": "099e45a744d6f3e1f4ebedb5efbe3a38920318c534dddf5530a056f5defa6441"
+    }
+  },
+  "containers": {
+    "mod/event/common.emevd.dcx": {
+      "rawSha256": "19b160aec9ff5a28cd753357e8b83b9c9f1698f63a844c5f98f91ad11b995930",
+      "containerSha256": "740562b526ec8b6587a3caaf00f56645b6a9182773b45520d3b05bdb90185cb7",
+      "roundTripPassed": true
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "rawSha256": "d39379b6889c4cac3d5b853bf350bb4cac4365211d5309fa2104cd6e7b32cd7f",
+      "containerSha256": "cd4f9235ea5df4751a1c6e76353c2b50205adf844cd075a62efacc76b7b3ef57",
+      "roundTripPassed": true
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "rawSha256": "ebfe63f4de6163398aced1cf7008eb9440f05f008e87b684d9de31f663310ae7",
+      "containerSha256": "58ddf113aa6e466c449ed3be6f750920cacfb05d47bff73b534185a65a549728",
+      "roundTripPassed": true
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "rawSha256": "bbd98d91f8e542a98080c73c2699b405fe629dc33b27d580df5cc6d793a1cb02",
+      "containerSha256": "3f14f6c95ace43ce8fddf875dd7b220d4f87f6723ac72f881580a2b43493b835",
+      "roundTripPassed": true
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "rawSha256": "0a121fd7a0e399befc0773bbeb41e90b22f3d5e27f2c88bef7de96461c671ca3",
+      "containerSha256": "7cecdaa10a1da83914756fe0eccba8716e2176da9f5a26314b08227b9613bc68",
+      "roundTripPassed": true
+    }
+  },
+  "generator": {
+    "inputSha256": "D2B2458484845E4F4C59109EAA14ADDA2D461EB5B59E005886C67D006459E22F",
+    "outputSha256": "115772241F4BE05AEFC5D83980587B1BB8683BBFF07D0D4572E014E2324532E3",
+    "eventInputSha256": "20299DA434BB2B6289E954ADC8696031F54520DAE1ADC2A157EEA4B63432B8CD",
+    "eventOutputSha256": "19B160AEC9FF5A28CD753357E8B83B9C9F1698F63A844C5F98F91AD11B995930",
+    "proof": {
+      "owner": 95002700,
+      "pulse": 95002706,
+      "cooldown": 95002703,
+      "mist": 95002707,
+      "chargedCategory": 100,
+      "cooldownSeconds": 30,
+      "nativeEmitter": 8630302,
+      "nativeBehavior": 863030000,
+      "nativeBullets": [
+        12335000,
+        12335001
+      ],
+      "nativeCharmEffect": 503350,
+      "nativeSourceParametersUnchanged": true
+    },
+    "removedEvents": [
+      9100970,
+      9100971,
+      9100972
+    ],
+    "otherRowsTablesAndEventsPreserved": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "A28ABA3A13CDB519212BD4B6BE145BAEB46572D0A63BB9DA32C2D6F336D6ECCB",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "EAC0C1CD5A063239C783FB626102A617C20EA4C1DFA3B26036DFD0955588EC57",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "447253D6B1157CFE8388E0075726B9392B4B8582D6D97BAF65B2D0E28F1A9A17",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "5358785EF7CA23CBC87F325E884D8ABEC95ED707654F53A78EBAA87EBB8C54C5",
+        "outputSha256": "D39379B6889C4CAC3D5B853BF350BB4CAC4365211D5309FA2104CD6E7B32CD7F",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002700,
+            "before": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，最多返还两支",
+            "after": "蓄力攻击命中时，释放魅惑烟雾，30秒冷却"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002700,
+            "before": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，最多返还两支",
+            "after": "蓄力攻击命中时，释放魅惑烟雾，30秒冷却"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002700,
+            "before": "获得两支魅惑树枝。使用魅惑树枝60秒后，重新获得一支魅惑树枝。短时间内连续使用时，最多返还两支",
+            "after": "蓄力攻击命中时，释放魅惑烟雾，30秒冷却"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "626565D536DB4F718423648C9D6004E4C16A670CF73D91D745A50E6F365D901A",
+        "outputSha256": "EBFE63F4DE6163398ACED1CF7008EB9440F05F008E87B684D9DE31F663310AE7",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95002700,
+            "before": null,
+            "after": "偷心者"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002700,
+            "before": null,
+            "after": "蓄力攻击命中时，释放魅惑烟雾，30秒冷却"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "67FADDB6D028D9E7A9D0C456D0E6F71D78A42694A3DB56D2242165C7AFE73C51",
+        "outputSha256": "BBD98D91F8E542A98080C73C2699B405FE629DC33B27D580DF5CC6D793A1CB02",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002700,
+            "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned.",
+            "after": "Landing a charged attack releases a mist of charm. 30-second cooldown."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002700,
+            "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned.",
+            "after": "Landing a charged attack releases a mist of charm. 30-second cooldown."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002700,
+            "before": "Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned.",
+            "after": "Landing a charged attack releases a mist of charm. 30-second cooldown."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "1551E8A65C1E483E44D57922A53A3E5DAD67ACB013C22A2D715152A783BD33E8",
+        "outputSha256": "0A121FD7A0E399BEFC0773BBEB41E90B22F3D5E27F2C88BEF7DE96461C671CA3",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95002700,
+            "before": null,
+            "after": "Heartstealer"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002700,
+            "before": null,
+            "after": "Landing a charged attack releases a mist of charm. 30-second cooldown."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "native": {
+    "installedParametersAndEventsVerified": true,
+    "nativeExecutionPassed": true,
+    "chargedAttackCategory": 100,
+    "cooldownSeconds": 30,
+    "nativeMistBehavior": 863030000,
+    "nativeMistBullets": [
+      12335000,
+      12335001
+    ],
+    "nativeCharmEffect": 503350,
+    "cases": [
+      "actual 505E90 charged-hit selector and native applicability/category filters",
+      "43C9DC attacker notification delivery and missing-flag negative control",
+      "compiled DLL notification dispatch",
+      "ordinary hits and charged spells excluded by native weapon rules",
+      "multitarget/reentrant notifications and deferred effect storage",
+      "fixed 30-second game-time cooldown, invalid deltas rejected",
+      "restored native cooldown respected",
+      "non-local/unowned/down/dead/reviving actors ignored",
+      "failed effect submission does not spend cooldown",
+      "actual 50AA20 and 396AE0 dispatch native behavior at dummy80 for first-frame nodes only",
+      "ordinary, expired and removal-flagged nodes do not emit",
+      "new expedition clears cooldown and emission",
+      "retired branch grant/return events removed and native item bullets restored"
+    ],
+    "stubs": [
+      "actor/world and effect storage/application",
+      "owner-reference and emission-suppression lookups",
+      "final 397570 projectile dispatch recorded instead of rendering or network replication",
+      "stack-cookie check and notification gate exits"
+    ],
+    "fixtureSha256": "4c3aebb6310f0d1f6604e9f6b5b8ccdc6f57777b88b49b7aa5c82aefefaf53b9",
+    "sourceHashes": {
+      "src/heartstealer.rs": "6b530fa6dbfd3de06150bd9d8d0253849bb288215754874c47f7ea7a8a1e1081",
+      "src/heartstealer_native_tests.rs": "9eb3557957e419e013c960782a470e5b39c45b15e0a44a763d9aaec8f4484b28",
+      "src/lib.rs": "956dee30d1cb9b4513267134c4639633b69764ddf533d07669b6486d615d6ad7",
+      "src/reward_cycle_runtime.rs": "7265921baf735732665b482ad04f95c2c957a819df94e28983784b17005d0be1",
+      "tools/HexBuild/HeartMist.cs": "f0ae48e77392a20065e1844d3d652a54fe0d24fc48e6fdbedeeb648dd4075fc8",
+      "tools/HexBuild/ContractHeart.cs": "34156d9eea5e029a472cf9bf0b138fedb1fb57de28ed3263f3725ef2bde1b8c8",
+      "tools/verify_heartstealer.py": "84eb1fe2b4d8b5c8a7681b3e899293c832ca607c6da7c6b3a0bec5bb987de7fc"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "dllBuild": {
+    "version": "0.17.193",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "099e45a744d6f3e1f4ebedb5efbe3a38920318c534dddf5530a056f5defa6441",
+    "installed": true,
+    "installedDllSha256": "099e45a744d6f3e1f4ebedb5efbe3a38920318c534dddf5530a056f5defa6441",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "sourceHashes": {
+    "tools/HexBuild/Program.cs": "7e90b5b8db38525063cf2d6567e1f3613fb76e9ea22605ecd2e99e6421947651",
+    "tools/HexBuild/HeartMist.cs": "f0ae48e77392a20065e1844d3d652a54fe0d24fc48e6fdbedeeb648dd4075fc8",
+    "tools/HexBuild/ContractHeart.cs": "34156d9eea5e029a472cf9bf0b138fedb1fb57de28ed3263f3725ef2bde1b8c8",
+    "build.ps1": "97a6b772499ee6644ef018ac25cfeeccc1b22f017262ba851d2437a654e5ce43",
+    "tools/verify_build_entrypoints.ps1": "8a108c4a237aa9fe17808914b47cc2a96e3f54da0b901eca2a70f3ed20eb9d11",
+    "docs/hexes.md": "a28aba3a13cdb519212bd4b6be145baeb46572d0a63bb9da32c2d6f336d6eccb",
+    "docs/hexes.en.md": "eac0c1cd5a063239c783fb626102a617c20ea4c1dfa3b26036dfd0955588ec57"
+  }
+}

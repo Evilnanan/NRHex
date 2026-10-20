@@ -119,7 +119,8 @@ if(args.Contains("--contract-hit-scope")){ContractHeart.AuditNativeHit(root,bnd,
 if(args.Contains("--reward-cycle")){RewardCycle.Stage(root,Parse);return;}
 if(args.Contains("--reward-reroll")){RewardReroll.Stage(root,Parse);return;}
 if(args.Contains("--cat-wall-check")){CatWall.Probe(root,bnd,Parse);return;}
-if(args.Contains("--heart-two-returns")){ContractHeart.StageTwoReturns(root,Parse);return;}
+if(args.Contains("--heart-mist-stage")){HeartMist.Stage(root,bnd,Parse);return;}
+if(args.Contains("--heart-mist-check")){HeartMist.Verify(root,bnd,Parse);return;}
 if(args.Contains("--cage-hp-probe")){CageHealth.Probe(root,Parse);return;}
 if(args.Contains("--cage-hp-sync")){CageCoop.Stage(root,Parse);return;}
 if(args.Contains("--cage-hp-check")){CageCoop.Export(root,Parse);return;}
@@ -679,7 +680,7 @@ if(args.Contains("--essence-reaver-stage")){EssenceReaver.Stage(root,bnd,Parse,h
 if(args.Contains("--parry-stage")){Parry.Stage(root,bnd,Parse,hexes);Parry.BuildActions(root,bnd,Parse);return;}
 if(args.Contains("--parry-followup")){ParryFollowup.Stage(root,Parse);return;}
 if(args.Contains("--parry-followup-actions")){ParryFollowup.Actions(root,Parse("SpEffectParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param").Bytes));return;}
-if(args.Contains("--contract-heart")){ContractHeart.Stage(root,bnd,Parse,hexes);return;}
+if(args.Contains("--contract-heart")){HeartMist.Stage(root,bnd,Parse);return;}
 if(args.Contains("--night-blessing")){NightBlessing.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--night-blessing-rework")){NightBlessing.Rework(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--night-blessing-actions")){NightBlessing.Assets(root);return;}
@@ -748,6 +749,7 @@ foreach(var h in hexes){
  if(h.Id==95000300){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,1.2f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,f,10f);}
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
  if(h.Id==ContractHeart.Contract)ContractHeart.Owners(s);
+ if(h.Id==HeartMist.Owner)HeartMist.OwnerEffect(s,pars["SpEffectParam"].Rows.Single(r=>r.ID==8320400));
  if(h.Id==EssenceReaver.Owner)EssenceReaver.Owners(s);
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==Erosion.Owner)Erosion.Owners(s);
@@ -962,9 +964,7 @@ foreach(var n in names){
  Require(check.Rows.Count==before.Rows.Count+added[n].Count,"Unexpected row count in "+n);
  var old=check.Rows.Where(r=>!added[n].Contains(r.ID)).ToArray();
  Require(old.Length==before.Rows.Count&&old.Zip(before.Rows).All(v=>{
-  if(n=="Bullet"&&new[]{10335000,13335000,13335010}.Contains(v.First.ID)){
-   var copy=new PARAM.Row(v.First);Require(Convert.ToInt32(copy["spEffectIDForShooter"].Value)==ContractHeart.Used,"Branch shooter notification missing");Set(copy,"spEffectIDForShooter",v.Second["spEffectIDForShooter"].Value);return Eq(copy,v.Second);
-  }return Eq(v.First,v.Second);
+  return Eq(v.First,v.Second);
  }),"Original rows changed in "+n);
  foreach(var id in added[n].Distinct()){var expected=pars[n].Rows.Where(r=>r.ID==id).ToArray();var actual=check.Rows.Where(r=>r.ID==id).ToArray();Require(expected.Length==actual.Length&&expected.Zip(actual).All(v=>Eq(v.First,v.Second)),"Added row failed round-trip: "+n+" "+id);}
  if(added[n].Count==0&&n!="Bullet")files[n].Bytes=original[files[n].ID];
@@ -1200,7 +1200,7 @@ RedEnvelope.RewardEvents(ev);
 var eventDest=Path.Combine(root,"dist/mod/event/common.emevd.dcx");Directory.CreateDirectory(Path.GetDirectoryName(eventDest)!);ev.Write(eventDest);var outEv=EMEVD.Read(eventDest);
 bool Same(EMEVD.Event a,EMEVD.Event b)=>a.ID==b.ID&&a.RestBehavior==b.RestBehavior&&a.Name==b.Name&&a.Instructions.Count==b.Instructions.Count&&a.Instructions.Zip(b.Instructions).All(v=>v.First.Bank==v.Second.Bank&&v.First.ID==v.Second.ID&&v.First.Layer==v.Second.Layer&&v.First.ArgData.SequenceEqual(v.Second.ArgData))&&JsonSerializer.Serialize(a.Parameters)==JsonSerializer.Serialize(b.Parameters);
 Require(outEv.Format==origEv.Format&&outEv.Compression==origEv.Compression&&outEv.StringData.SequenceEqual(origEv.StringData)&&outEv.LinkedFileOffsets.SequenceEqual(origEv.LinkedFileOffsets),"EMEVD metadata changed");
-Require(outEv.Events.Count==origEv.Events.Count+29&&origEv.Events.Where(e=>e.ID!=0&&e.ID!=1304&&e.ID!=1111&&e.ID!=9100941).All(e=>Same(e,outEv.Events.Single(o=>o.ID==e.ID))),"Existing events changed");Require(ev.Events.All(e=>Same(e,outEv.Events.Single(o=>o.ID==e.ID))),"Edited events failed readback");
+Require(outEv.Events.Count==origEv.Events.Count+26&&origEv.Events.Where(e=>e.ID!=0&&e.ID!=1304&&e.ID!=1111&&e.ID!=9100941).All(e=>Same(e,outEv.Events.Single(o=>o.ID==e.ID))),"Existing events changed");Require(ev.Events.All(e=>Same(e,outEv.Events.Single(o=>o.ID==e.ID))),"Edited events failed readback");
 var churchReports=new List<object>();
 var churchSources=new[]{
  ("m41_00_00_00",41004700u,"8C9B4F43717A9800E02E1497075AE9C2874808877671364BD5BD0EF7D38D57CA"),

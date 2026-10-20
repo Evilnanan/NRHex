@@ -22,13 +22,14 @@ function Copy-Item {
 function Has-Call([string]$Name, [string]$Text) {
     @($global:NRHexBuildFixtureCalls | Where-Object { $_.Name -eq $Name -and (($_.Arguments -join ' ') -like "*$Text*") }).Count -gt 0
 }
-$names = @('NRHEX_GAME', 'NRHEX_ME3', 'NRHEX_CARGO_TARGET', 'NRHEX_NATIVE_EXE')
+$names = @('NRHEX_GAME', 'NRHEX_ME3', 'NRHEX_CARGO_TARGET', 'NRHEX_NATIVE_EXE', 'NRHEX_CARGO_FEATURES')
 $before = @{}; foreach ($name in $names) { $before[$name] = [Environment]::GetEnvironmentVariable($name) }
 $location = Get-Location
 try {
     $env:NRHEX_GAME = Join-Path $work 'game'
     $env:NRHEX_ME3 = 'nrhex-me3-fixture'
     $env:NRHEX_CARGO_TARGET = 'x86_64-pc-windows-gnu'
+    $env:NRHEX_CARGO_FEATURES = 'cage-demand'
     $env:NRHEX_NATIVE_EXE = 'Z:\fixture game\nightreign.exe'
     foreach ($mode in @('FullNoInstall', 'DllNoInstall', 'DllInstall', 'DllFailure')) {
         $global:NRHexBuildFixtureCalls.Clear()
@@ -44,8 +45,11 @@ try {
             Assert-True (-not (Has-Call 'python' 'record_build.py')) 'A failed build was recorded as successful'
         } else {
             Assert-True (Has-Call 'cargo' 'test --release --lib --target x86_64-pc-windows-gnu') 'Target was not forwarded to regression tests'
-            foreach ($check in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py')) {
+            foreach ($check in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_heartstealer.py')) {
                 Assert-True (Has-Call 'python' $check) "Missing runtime verification: $check"
+            }
+            foreach ($call in @($global:NRHexBuildFixtureCalls | Where-Object { $_.Name -eq 'cargo' })) {
+                Assert-True (($call.Arguments -contains '--features') -and ($call.Arguments -contains 'cage-demand')) 'Cargo build/test/scan dropped the configured feature'
             }
             $scan = @($global:NRHexBuildFixtureCalls | Where-Object { $_.Name -eq 'cargo' -and $_.Arguments -contains 'scancheck' })
             Assert-True ($scan.Count -eq 1 -and $scan[0].Arguments[-1] -eq $env:NRHEX_NATIVE_EXE -and $scan[0].Arguments -contains 'x86_64-pc-windows-gnu') 'Signature scan did not receive the runner-visible EXE path'

@@ -137,7 +137,7 @@ Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at mos
 <!-- hex:95002700 -->
 ## Heartstealer
 
-Grants two Bewitching Branches. Using a Bewitching Branch grants another after 60 seconds. Up to two branches used during this interval are returned.
+Landing a charged attack releases a mist of charm. 30-second cooldown.
 
 <!-- hex:95002900 -->
 ## Essence Reaver

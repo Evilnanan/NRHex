@@ -1536,7 +1536,7 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  let base=BASE.load(Ordering::Acquire);
  if ACTIVE.load(Ordering::Acquire){match demons_runtime::route_effect(player,effect){Some(id)=>effect=id,None=>return 1}}
  if ACTIVE.load(Ordering::Acquire)&&slingshot_runtime::pulse(player,effect,base){return 1;}
- if ACTIVE.load(Ordering::Acquire)&&heartstealer::suppress_notification(player,effect,base){return 1;}
+ if ACTIVE.load(Ordering::Acquire)&&heartstealer::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&essence_reaver::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&ominous_pact::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&momentum::pulse(player,effect,base){return 1;}
@@ -2238,6 +2238,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  parry::update_turn(player);
  death_dance::update(player,base,dt);
  ominous_pact::update(player,base,dt);
+ heartstealer::update(player,base,dt);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  update_chant(player,base,dt);

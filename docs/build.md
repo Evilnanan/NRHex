@@ -28,7 +28,7 @@
 ./build.ps1 -DllOnly -NoInstall
 ```
 
-此模式复用现有资源，执行常规 Rust 测试，以及死亡之舞、侵蚀、潜能分裂、奖励模板、救护车、回响施放、武器倾向、小点心和一鼓作气的编译后原生隔离验证，再编译 DLL 并检查当前游戏 EXE 签名。它不需要重新导出参数、重建动作或读取完整特效包；小点心与一鼓作气检查会回读当前参数包，也不调用 ME3。
+此模式复用现有资源，执行常规 Rust 测试，以及死亡之舞、侵蚀、潜能分裂、奖励模板、救护车、回响施放、武器倾向、小点心、一鼓作气和偷心者的编译后原生隔离验证，再编译 DLL 并检查当前游戏 EXE 签名。它不需要重新导出参数、重建动作或读取完整特效包；小点心与一鼓作气检查会回读当前参数包，也不调用 ME3。
 
 默认只替换 `dist/mod/natives/NRHex.dll`。加 `-NoInstall` 后不修改 dist；构建记录保存在 `work/build/dll-validation.json`，不覆盖完整资源构建的验证报告。适用于互斥、抽取限制等仅修改运行时代码的任务；新增参数或资源仍须完整构建。
 
@@ -65,6 +65,7 @@
 | `NRHEX_GAME` | 包含 `nightreign.exe` 和原始 `regulation.bin` 的游戏目录 |
 | `NRHEX_SMITHBOX` | Smithbox 库与参数定义目录；由底层 .NET 工具读取 |
 | `NRHEX_ME3` | ME3 可执行文件路径 |
+| `NRHEX_CARGO_FEATURES` | 可选 Cargo 特性列表；当前监牢事件配套的 DLL 使用 `cage-demand` |
 | `NRHEX_CARGO_TARGET` | 可选 Rust 编译目标，例如 `x86_64-pc-windows-gnu`；DLL 从对应目标目录安装 |
 | `NRHEX_NATIVE_EXE` | Windows 测试进程及签名检查程序所见的 EXE 路径，供 Wine 等跨目标环境使用 |
 

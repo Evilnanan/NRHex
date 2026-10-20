@@ -5,6 +5,7 @@ $me3 = if ($env:NRHEX_ME3) { $env:NRHEX_ME3 } else { Join-Path $buildDrive 'Prog
 $game = if ($env:NRHEX_GAME) { $env:NRHEX_GAME } else { Join-Path $buildDrive 'Program Files (x86)/Steam/steamapps/common/ELDEN RING NIGHTREIGN/Game' }
 $gameExe = Join-Path $game 'nightreign.exe'
 $nativeExe = if ($env:NRHEX_NATIVE_EXE) { $env:NRHEX_NATIVE_EXE } else { $gameExe }
+$cargoFeatures = if ($env:NRHEX_CARGO_FEATURES) { @('--features', $env:NRHEX_CARGO_FEATURES) } else { @() }
 $cargoTarget = @()
 $releaseFolder = Join-Path $PSScriptRoot 'target/release'
 if ($env:NRHEX_CARGO_TARGET) {
@@ -50,8 +51,6 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Contract and branch effect/event readback failed.' }
         python -X utf8 tools/verify_contract_heart_native.py
         if ($LASTEXITCODE -ne 0) { throw 'Native on-hit self-damage verification failed.' }
-        python -X utf8 tools/verify_contract_heart_events.py
-        if ($LASTEXITCODE -ne 0) { throw 'Branch return event timeline verification failed.' }
         & python -X utf8 tools/verify_cage_network_native.py --full-build
         if ($LASTEXITCODE -ne 0) { throw 'Monster Cage native network packet regression failed.' }
         & python -X utf8 tools/verify_cage_flag_storage.py
@@ -214,15 +213,15 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Ambulance movement script patch failed.' }
     }
     # Both modes verify the runtime; only Full regenerates game resources.
-    cargo test --release --lib @cargoTarget
+    cargo test --release --lib @cargoTarget @cargoFeatures
     if ($LASTEXITCODE -ne 0) { throw 'Runtime regression checks failed.' }
-    foreach ($runtimeCheck in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_weapon_affinity.py', 'verify_snack.py', 'verify_momentum.py')) {
+    foreach ($runtimeCheck in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_weapon_affinity.py', 'verify_snack.py', 'verify_momentum.py', 'verify_heartstealer.py')) {
         python -X utf8 (Join-Path 'tools' $runtimeCheck)
         if ($LASTEXITCODE -ne 0) { throw "Runtime native verification failed: $runtimeCheck" }
     }
-    cargo build --release --lib @cargoTarget
+    cargo build --release --lib @cargoTarget @cargoFeatures
     if ($LASTEXITCODE -ne 0) { throw 'DLL build failed.' }
-    cargo run --release --bin scancheck @cargoTarget -- $nativeExe
+    cargo run --release --bin scancheck @cargoTarget @cargoFeatures -- $nativeExe
     if ($LASTEXITCODE -ne 0) { throw 'EXE signature check failed.' }
     if (-not $DllOnly) {
         python -X utf8 tools/verify_mighty_sword_native.py
