@@ -1,0 +1,382 @@
+{
+  "version": "0.17.197",
+  "owner": 95000900,
+  "protection": 95000916,
+  "nativeSource": 3519,
+  "nativeLeadenHardtearPreserved": true,
+  "normalPoiseDamageMultiplier": 1,
+  "reboundPower": 0,
+  "castingWindowUnchanged": true,
+  "damageHealingNegationAndMeleeBonusesUnchanged": true,
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "3dc9f0d168a564bef16184ae1b21e8793b5eaaabf026b7dc26a7b56ae22f2630",
+        "outputSha256": "f7fac805d197ddb3b4d5dd9afe752d95ee7d6d2e7c79d47ae02d24dd28bb86d1"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "803494bfa404554b112191c361e6c8a636b1b793511b3dd8cd6a21e64e59f7b7",
+        "outputSha256": "f908c0f2a0bb7308325e13d43fc0564af05dcf65dbd87e1220dce4c5bbae7f39"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "3a9342073fe4fa639585c8bf054e8fd0f98272802987f283f50eae6d0c31bb33",
+        "outputSha256": "efa854012d5970d3d9a000f7f61311ba01ea7b42f68ae7ba3d0a36d0ba084ea1"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "b1d60d8c7de54c5ed3cca0be6d7c6655c4c417ffdfbd9dedc2b9c8ae57ac34a9",
+        "outputSha256": "e1eb6a7bd9214b5436a60837b54ede3543237cdf0204a5b217003cca5edfacfa"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "b241bd106b54d791e6e161111953f1b9c69ef6860ec4f82010c352d481c55865",
+        "outputSha256": "1928c5e7570711c0d524b0abcbdd72900f8a84ff1794581a9de2e971117e2462"
+      }
+    },
+    "containers": {
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "d91b4830089127fe1bf5909be25c87d76dd406fe05744516188c6cee64208d7a",
+        "containerSha256": "f908c0f2a0bb7308325e13d43fc0564af05dcf65dbd87e1220dce4c5bbae7f39",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "ef2aaf5928d7f900c3d89e57f7b96ef73a7c1dd9e8000576c8173c1420c115f5",
+        "containerSha256": "efa854012d5970d3d9a000f7f61311ba01ea7b42f68ae7ba3d0a36d0ba084ea1",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "9911df6324af993761dd627e78bf1ea3d3a751edc568a3c0a3a33d18d57069c7",
+        "containerSha256": "e1eb6a7bd9214b5436a60837b54ede3543237cdf0204a5b217003cca5edfacfa",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "56a6434d379f10431e807417c1e837f2a98652086ed112ad96a998f65a804243",
+        "containerSha256": "1928c5e7570711c0d524b0abcbdd72900f8a84ff1794581a9de2e971117e2462",
+        "roundTripPassed": true
+      }
+    },
+    "generator": {
+      "inputSha256": "3DC9F0D168A564BEF16184AE1B21E8793B5EAAABF026B7DC26A7B56AE22F2630",
+      "outputSha256": "F7FAC805D197DDB3B4D5DD9AFE752D95EE7D6D2E7C79D47AE02D24DD28BB86D1",
+      "effect": 95000916,
+      "source": 3519,
+      "fields": {
+        "dmgLv_None": 0,
+        "dmgLv_S": 1,
+        "dmgLv_M": 1,
+        "dmgLv_L": 1,
+        "dmgLv_BlowM": 0,
+        "dmgLv_Push": 1,
+        "dmgLv_Strike": 0,
+        "dmgLv_BlowS": 0,
+        "dmgLv_Min": 1,
+        "dmgLv_Uppercut": 0,
+        "dmgLv_BlowLL": 0,
+        "dmgLv_Breath": 0,
+        "defFlickPower": 0,
+        "saReceiveDamageRate": 1
+      },
+      "onlySwordProtectionChanged": true,
+      "unrelatedRowsTablesAndFieldsPreserved": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "74614B882B1885F9F77B2C822A31B637700B8DD6737A7E084FF8091488E4CE84",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "56B817E634A287894D2764E4E0AB26DF955FE45D0A5E0FF0B1461EA0D43F2B51",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "05886AB057A5E5659302CF7B1E09B747CDA9C4173745B0E240355C29EEA233D6",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "656A264CA3FFCC6A36987B38EBF266C27427ECC53B6296038BB2D57F40902492",
+          "outputSha256": "D91B4830089127FE1BF5909BE25C87D76DD406FE05744516188C6CEE64208D7A",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95000900,
+              "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+              "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于法术射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95000900,
+              "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+              "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于法术射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95000900,
+              "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+              "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于法术射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "74DD1896D07F36757B17B727223A6C0874E6889B878EA3A3D4807DE125BC55EE",
+          "outputSha256": "EF2AAF5928D7F900C3D89E57F7B96EF73A7C1DD9E8000576C8173C1420C115F5",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95000900,
+              "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+              "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于法术射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "9911DF6324AF993761DD627E78BF1EA3D3A751EDC568A3C0A3A33D18D57069C7",
+          "outputSha256": "9911DF6324AF993761DD627E78BF1EA3D3A751EDC568A3C0A3A33D18D57069C7",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "56A6434D379F10431E807417C1E837F2A98652086ED112AD96A998F65A804243",
+          "outputSha256": "56A6434D379F10431E807417C1E837F2A98652086ED112AD96A998F65A804243",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "allBilingualDescriptionsMatch": true,
+    "previousTextStage": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "B6E52083D910066D29117A210243CDDF61A5DD756B74F0A1C86345667B8988A9",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "56B817E634A287894D2764E4E0AB26DF955FE45D0A5E0FF0B1461EA0D43F2B51",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "05886AB057A5E5659302CF7B1E09B747CDA9C4173745B0E240355C29EEA233D6",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "EFBB06BD8C36096C97EE4C96F79C642EDFA7D44B44AAA2D495B5B5A50D28073E",
+          "outputSha256": "656A264CA3FFCC6A36987B38EBF266C27427ECC53B6296038BB2D57F40902492",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95000900,
+              "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率与减伤率。咏唱变得不易被打断。提升15%近战攻击力",
+              "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95000900,
+              "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率与减伤率。咏唱变得不易被打断。提升15%近战攻击力",
+              "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95000900,
+              "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率与减伤率。咏唱变得不易被打断。提升15%近战攻击力",
+              "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "AB8D20B4182CD247483A8A3CDD2765330A0F6E37C696C4B2823546A5E9C258E0",
+          "outputSha256": "74DD1896D07F36757B17B727223A6C0874E6889B878EA3A3D4807DE125BC55EE",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95000900,
+              "before": null,
+              "after": "亮出你的剑"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95000900,
+              "before": null,
+              "after": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "F475FEA92D22EC709050DAC198E18BE6120E0A54DA6AE8D63B06D85FCCF3911A",
+          "outputSha256": "9911DF6324AF993761DD627E78BF1EA3D3A751EDC568A3C0A3A33D18D57069C7",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95000900,
+              "before": "Sorceries and incantations also count as melee attacks, but can only hit nearby enemies. Spell range determines increased attack power and damage negation while casting. Attacks recover some recently lost HP for a short time after taking damage. Spell recovery scales with damage dealt and spell range. Makes spell casting harder to interrupt. Boosts melee attack power by 15%.",
+              "after": "Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95000900,
+              "before": "Sorceries and incantations also count as melee attacks, but can only hit nearby enemies. Spell range determines increased attack power and damage negation while casting. Attacks recover some recently lost HP for a short time after taking damage. Spell recovery scales with damage dealt and spell range. Makes spell casting harder to interrupt. Boosts melee attack power by 15%.",
+              "after": "Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95000900,
+              "before": "Sorceries and incantations also count as melee attacks, but can only hit nearby enemies. Spell range determines increased attack power and damage negation while casting. Attacks recover some recently lost HP for a short time after taking damage. Spell recovery scales with damage dealt and spell range. Makes spell casting harder to interrupt. Boosts melee attack power by 15%.",
+              "after": "Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "3CC412DBE55C9256EFB0D17231D5719829C4D82EA72C4D34B4DF68DEE80F96FA",
+          "outputSha256": "56A6434D379F10431E807417C1E837F2A98652086ED112AD96A998F65A804243",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95000900,
+              "before": null,
+              "after": "Draw Your Sword"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95000900,
+              "before": null,
+              "after": "Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "nativeReactionValidation": {
+    "installedParameterReadbackPassed": true,
+    "nativeExecutionPassed": true,
+    "seconds": 15,
+    "trigger": 6999615,
+    "owner": 95003900,
+    "buff": 95003901,
+    "nativeSource": 1650,
+    "nativeVfx": 8570,
+    "nativeSfx": 440111,
+    "nativeFunctions": [
+      "50D060 native collision selection before allocation",
+      "510B20 same-ID candidate",
+      "510BD0 category conflicts",
+      "507C40 and EA0CF0 original Endure reaction mapping",
+      "504E80 remove by effect ID",
+      "50B5B0 native doubly-linked list removal",
+      "511700 native duration initialization"
+    ],
+    "cases": [
+      "compiled shared successful-ultimate hook",
+      "other/rejected notifications do not activate",
+      "nested self-application does not loop",
+      "native category1001 reaction mapping matches Endure for 13 levels and two flags",
+      "Sword matches native Leaden Hardtear for 13 levels and two flags; strong forced reactions remain while Endure suppresses them",
+      "category20 negative control loses stagger resistance",
+      "eight native damage multipliers restored to one",
+      "same-ID category1001 collision found before replacement",
+      "only private buff removed before reapplication",
+      "refresh lifetime to 15 rather than add time",
+      "vanilla Endure and Sword IDs and durations preserved",
+      "one private instance after repeated ultimates",
+      "expired but not yet removed node does not block the next activation",
+      "Ultimate Awakening remains active at its own ten-second duration",
+      "ownerless/reset/down/dead/reviving/remote/inactive/missing-stats calls ignored",
+      "failed application does not create a permanent reservation",
+      "all-hero/affinity/party choice eligibility"
+    ],
+    "stubs": [
+      "native accepted application result and row lookup",
+      "effect allocation/storage; native add routine returns at collision decision before allocator",
+      "native removal executes list splice but skips allocator destruction/category bookkeeping",
+      "elapsed game-time update and network replication not executed"
+    ],
+    "sources": {
+      "src/ultimate_unstoppable.rs": "c54d4805db0ce4cafbe3e031dbca634f896263d60a8288e297368eaa094d695d",
+      "src/ultimate_unstoppable_native_tests.rs": "7d82ac8edd476c5e13e862157757f9e794910ba1e831138d6da8ec12e3c8aeb1",
+      "src/lib.rs": "94e46c3d39b37cd64719ae0c90d2c42692a30eea428c0baff09ed14e1ceca3d7",
+      "src/hex_pool.rs": "4ba705a2a3e65001c67018c14918fc5b5a8bc73279cd736f724c06a6a99542d4",
+      "tools/HexBuild/UltimateUnstoppable.cs": "12aa6418cc0e59ce2160b72751ce1a594bed733d70242e7b12b2664c3a323e31",
+      "tools/HexBuild/RewardCatalog.cs": "2676b30874aaeb920b2ac568743b24fbe2db1ea542b3b4b70ab340182d1dc634",
+      "tools/verify_ultimate_unstoppable.py": "5086641903b44ebe820c61092a50e581450b5e35dc3560c8b8d90b2fc9440412"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.197",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "6357c2dd98cfe3efad6fcad5d71b39ea89dbe4c09e06306fd69ee877c3c4c38b",
+    "installed": true,
+    "installedDllSha256": "6357c2dd98cfe3efad6fcad5d71b39ea89dbe4c09e06306fd69ee877c3c4c38b",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 420,
+  "regularIgnoredTests": 16,
+  "runtimeNativeSuitesPassed": 13,
+  "signatureChecksPassed": 183,
+  "changedDistributionFiles": {
+    "README.md": {
+      "inputSha256": "2af18ad90f614850d5d5ca772eacbfdf2ffc1131e4d6546f2c931eeb497e86f2",
+      "outputSha256": "4185f0284ee05b34d3f89e041c43453bf41a8f2636ea7245630e6c6e52daef1c"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "b1d60d8c7de54c5ed3cca0be6d7c6655c4c417ffdfbd9dedc2b9c8ae57ac34a9",
+      "outputSha256": "e1eb6a7bd9214b5436a60837b54ede3543237cdf0204a5b217003cca5edfacfa"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "b241bd106b54d791e6e161111953f1b9c69ef6860ec4f82010c352d481c55865",
+      "outputSha256": "1928c5e7570711c0d524b0abcbdd72900f8a84ff1794581a9de2e971117e2462"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "803494bfa404554b112191c361e6c8a636b1b793511b3dd8cd6a21e64e59f7b7",
+      "outputSha256": "f908c0f2a0bb7308325e13d43fc0564af05dcf65dbd87e1220dce4c5bbae7f39"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "3a9342073fe4fa639585c8bf054e8fd0f98272802987f283f50eae6d0c31bb33",
+      "outputSha256": "efa854012d5970d3d9a000f7f61311ba01ea7b42f68ae7ba3d0a36d0ba084ea1"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "e32f9d5afb76a1b7b947411f4a89cf00f4f403be09c567370dc6a65895686e69",
+      "outputSha256": "6357c2dd98cfe3efad6fcad5d71b39ea89dbe4c09e06306fd69ee877c3c4c38b"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "3dc9f0d168a564bef16184ae1b21e8793b5eaaabf026b7dc26a7b56ae22f2630",
+      "outputSha256": "f7fac805d197ddb3b4d5dd9afe752d95ee7d6d2e7c79d47ae02d24dd28bb86d1"
+    }
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "sources": {
+    "tools/HexBuild/SwordPoise.cs": "a8681c9d8a4697fa291625896730f7f068ee90aa6046274a110ff800e83dca1f",
+    "tools/HexBuild/Program.cs": "a62233d7f1b6446be5b15f39233f7bffd7df8c625651bbfb0cefa001e76a30a2",
+    "tools/HexBuild/UltimateUnstoppable.cs": "12aa6418cc0e59ce2160b72751ce1a594bed733d70242e7b12b2664c3a323e31",
+    "src/sword.rs": "7df5a9a9f84e9d6e4892bb223f7457824649993e5bc7c49a3b8a65980d5b0a73",
+    "src/ultimate_unstoppable_native_tests.rs": "7d82ac8edd476c5e13e862157757f9e794910ba1e831138d6da8ec12e3c8aeb1",
+    "tools/verify_ultimate_unstoppable.py": "5086641903b44ebe820c61092a50e581450b5e35dc3560c8b8d90b2fc9440412",
+    "build.ps1": "e1215949f24cc6ef49f8c7551a6805cd130928e48b9f3b1fe9e10ecda655d33d",
+    "docs/hexes.md": "74614b882b1885f9f77b2c822a31b637700b8dd6737a7e084ff8091488e4ce84",
+    "docs/hexes.en.md": "56b817e634a287894d2764e4e0ab26df955fe45d0a5e0ff0b1461ea0d43f2b51",
+    "docs/implementation.md": "9cff4f707b016430b1550da04efcefc839259e8364920606d6c594bba2a23b7a",
+    "CHANGELOG.md": "7dbc2ca4d6cb509acc007335516900e38af56a22865f3e5391e55f809beef7c1",
+    "Cargo.toml": "1735a9f3b023cca0f06f7d8b28e8db5743d4a9d12612dfd9f8caaea5e2aa0fdf",
+    "Cargo.lock": "fd4b86abbf1bd5493533b76d372998b7f270c0a6be142731f2e6451f5b382ca8"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -213,6 +213,8 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Ambulance movement script patch failed.' }
     }
     # Both modes verify the runtime; only Full regenerates game resources.
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-poise-check
+    if ($LASTEXITCODE -ne 0) { throw 'Sword Leaden Hardtear protection readback failed.' }
     cargo test --release --lib @cargoTarget @cargoFeatures
     if ($LASTEXITCODE -ne 0) { throw 'Runtime regression checks failed.' }
     foreach ($runtimeCheck in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_weapon_affinity.py', 'verify_snack.py', 'verify_momentum.py', 'verify_heartstealer.py', 'verify_cat_arena.py', 'verify_ultimate_awakening.py', 'verify_ultimate_unstoppable.py')) {

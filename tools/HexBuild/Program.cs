@@ -79,6 +79,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--sword-poise-stage")){SwordPoise.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--sword-poise-check")){SwordPoise.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-unstoppable-stage")){UltimateUnstoppable.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-unstoppable-check")){UltimateUnstoppable.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -924,8 +926,7 @@ foreach(var field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamag
 // lowest priority. Keep this separate from category 20 casting protection.
 var castPoise=Clone("SpEffectParam",5300,95000916);
 Set(castPoise,"saveCategory",-1);Set(castPoise,"categoryPriority",0);Set(castPoise,"spEffectTextId_1",-1);
-Set(castPoise,"defFlickPower",pars["SpEffectParam"].Rows.Single(r=>r.ID==1650)["defFlickPower"].Value);
-Set(castPoise,"saReceiveDamageRate",pars["SpEffectParam"].Rows.Single(r=>r.ID==45)["saReceiveDamageRate"].Value);
+SwordPoise.Apply(castPoise,pars["SpEffectParam"].Rows.Single(r=>r.ID==SwordPoise.Source));
 var healVisual=Clone("SpEffectParam",8630001,95000910);Set(healVisual,"changeHpPoint",0);Set(healVisual,"changeMpPoint",0);Set(healVisual,"saveCategory",-1);
 // Native instant HP pulses in binary denominations avoid writing HP memory or
 // guessing a native HP-mutator ABI. Every queued heal is consumed only once.
@@ -1013,8 +1014,7 @@ Require(Convert.ToSingle(Effect(95000908)["effectEndurance"].Value)==-1f&&Conver
 foreach(var field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Require(Convert.ToSingle(Effect(95000908)[field].Value)==1f,"Sword casting VFX row must be neutral; the active spell supplies reduction");
 foreach(var field in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Require(Convert.ToSingle(Effect(8821000)[field].Value)==.01f,"Native glancing damage reference changed");
 Require(Convert.ToInt32(Effect(95000908)["vfxId"].Value)==Convert.ToInt32(Effect(8330902)["vfxId"].Value),"Sword casting VFX differs from native casting reduction");
-Require(Convert.ToInt32(Effect(95000916)["spCategory"].Value)==1001&&Convert.ToInt32(Effect(95000916)["categoryPriority"].Value)==0&&Convert.ToSingle(Effect(95000916)["saReceiveDamageRate"].Value)==0f&&Convert.ToSingle(Effect(95000916)["effectEndurance"].Value)==-1f&&Convert.ToInt32(Effect(95000916)["saveCategory"].Value)==-1,"Sword native poise category/priority/lifetime mismatch");
-foreach(var field in new[]{"dmgLv_None","dmgLv_S","dmgLv_M","dmgLv_L","dmgLv_BlowM","dmgLv_Push","dmgLv_Strike","dmgLv_BlowS","dmgLv_Min","dmgLv_Uppercut","dmgLv_BlowLL","dmgLv_Breath"})Require(Equals(Effect(95000916)[field].Value,Effect(5300)[field].Value),"Sword no-stagger remap differs from native");
+SwordPoise.Validate(Effect(SwordPoise.Effect),Effect(SwordPoise.Source));
 Require(Convert.ToInt32(Effect(95000910)["vfxId"].Value)==Convert.ToInt32(Effect(8630001)["vfxId"].Value)&&Convert.ToInt32(Effect(95000910)["changeHpPoint"].Value)==0&&Convert.ToInt32(Effect(95000910)["changeMpPoint"].Value)==0&&Convert.ToSingle(Effect(95000910)["effectEndurance"].Value)==0f,"Sword HP-only VFX must not also restore HP/FP");
 for(int bit=0;bit<16;bit++)Require(Convert.ToInt32(Effect(95000920+bit)["changeHpPoint"].Value)==-(1<<bit)&&Convert.ToInt32(Effect(95000920+bit)["changeMpPoint"].Value)==0&&Convert.ToInt32(Effect(95000920+bit)["soul"].Value)==0&&Convert.ToSingle(Effect(95000920+bit)["effectEndurance"].Value)==0f,"Sword native healing denomination mismatch");
 foreach(var f in drinkingRates)Require(Convert.ToSingle(Effect(95000200)[f].Value)==.75f,"Astral Body damage multiplier must be 0.75");

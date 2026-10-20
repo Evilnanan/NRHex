@@ -43,7 +43,7 @@ static class UltimateUnstoppable {
  }
  static void ValidateEvents(EMEVD ev){foreach(int id in new[]{1111,9100941})foreach(int effect in new[]{Owner,Buff})Check(ev.Events.Single(e=>e.ID==id).Instructions.Count(i=>Removal(i,effect))==1,"Missing/duplicate Unstoppable reset");}
  static void Fixture(string directory,BND4 current,Func<string,Memory<byte>,PARAM> parse){
-  var sp=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);sp.Rows=sp.Rows.Where(r=>new[]{Owner,Buff,Source,UltimateAwakening.Owner,UltimateAwakening.Buff,95000916}.Contains(r.ID)).ToList();Directory.CreateDirectory(directory);File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),sp.Write());
+  var sp=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);sp.Rows=sp.Rows.Where(r=>new[]{Owner,Buff,Source,UltimateAwakening.Owner,UltimateAwakening.Buff,SwordPoise.Effect,SwordPoise.Source}.Contains(r.ID)).ToList();Directory.CreateDirectory(directory);File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),sp.Write());
  }
  public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   var current=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));Validate(native,current,parse);Fixture(Path.Combine(root,"work/ultimate-unstoppable"),current,parse);
