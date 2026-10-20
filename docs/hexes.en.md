@@ -183,3 +183,8 @@ Receive a complimentary stat-boost reward for every 20,000 runes spent at shops 
 ## Burst of Momentum
 
 For 10 seconds after landing an attack, boosts attack power by 30% for the first 5 seconds, then reduces attack power and damage negation by 50% for the next 5 seconds.
+
+<!-- hex:95003800 -->
+## Ultimate Awakening
+
+Eliminates FP consumption for 10 seconds after activating an Ultimate Art.

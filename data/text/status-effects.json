@@ -58,5 +58,11 @@
     "ownerId": 95002500,
     "zhInfo": "在夜雨中提升20%攻击力",
     "enInfo": "Raises attack power by 20% in the Night’s Tide."
+  },
+  {
+    "textId": 95003801,
+    "ownerId": 95003800,
+    "zhInfo": "专注值消耗归零",
+    "enInfo": "Eliminates FP consumption"
   }
 ]

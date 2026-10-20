@@ -1,0 +1,380 @@
+{
+  "version": "0.17.195",
+  "owner": 95003800,
+  "buff": 95003801,
+  "abilityIcon": {
+    "large": 21297,
+    "small": 22297,
+    "sameAsUltimateRevolution": true
+  },
+  "buffIcon": 20407,
+  "seconds": 10,
+  "refreshesWithoutStacking": true,
+  "allHeroesEligible": true,
+  "nativeTearPreserved": true,
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "115772241f4be05aefc5d83980587b1bb8683bbff07d0d4572e014e2324532e3",
+        "outputSha256": "e046490e925d72c89790be42cf26dababe990547affdb21eb67c74ebde3ba393"
+      },
+      "mod/event/common.emevd.dcx": {
+        "inputSha256": "740562b526ec8b6587a3caaf00f56645b6a9182773b45520d3b05bdb90185cb7",
+        "outputSha256": "65d003079b1a6449ff383c4b6c47d80ba987fd73049bef063e7a66dea4ff4164"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "cd4f9235ea5df4751a1c6e76353c2b50205adf844cd075a62efacc76b7b3ef57",
+        "outputSha256": "7a24c47943ff1b259ef9dbc918e54d7d630e149f99171988a53b6b7a92dbad01"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "58ddf113aa6e466c449ed3be6f750920cacfb05d47bff73b534185a65a549728",
+        "outputSha256": "9ccfd62c341c90799cb99748f094ca13952ddb0a4b9508805dfabecafdaf99fe"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "3f14f6c95ace43ce8fddf875dd7b220d4f87f6723ac72f881580a2b43493b835",
+        "outputSha256": "8d6e6f04086790dc06183dfe60ad62d1fe9e94ba9d8e6ca3bc79b7d98eeef639"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "7cecdaa10a1da83914756fe0eccba8716e2176da9f5a26314b08227b9613bc68",
+        "outputSha256": "3d93906038ea294e7af6068fb97e438b0878fe1e9fafe216e1e8fdc32dffaf7d"
+      }
+    },
+    "containers": {
+      "mod/event/common.emevd.dcx": {
+        "rawSha256": "c17962d27bf4960319de69a34d30e21b24a9e41214f2d5bdfa2a940d05555eaf",
+        "containerSha256": "65d003079b1a6449ff383c4b6c47d80ba987fd73049bef063e7a66dea4ff4164",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "6277f3141a7706643b65cb6c187126ec8259f5564bae13aaf1355bd6d8f10db7",
+        "containerSha256": "7a24c47943ff1b259ef9dbc918e54d7d630e149f99171988a53b6b7a92dbad01",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "447592f1dd0acc516278b52cdb8ece242704bbe480a5e8246bd6e5e81d3a6454",
+        "containerSha256": "9ccfd62c341c90799cb99748f094ca13952ddb0a4b9508805dfabecafdaf99fe",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "c3f9e661414616c19e8c65f0654505fcfa5c7baddafeea93404dc64ccbc13d50",
+        "containerSha256": "8d6e6f04086790dc06183dfe60ad62d1fe9e94ba9d8e6ca3bc79b7d98eeef639",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "fd3b6273cf31fc16d1f70a4a75b6c8f037090f6fd28e52cc560ce3aba512fba4",
+        "containerSha256": "3d93906038ea294e7af6068fb97e438b0878fe1e9fafe216e1e8fdc32dffaf7d",
+        "roundTripPassed": true
+      }
+    },
+    "generator": {
+      "inputSha256": "115772241F4BE05AEFC5D83980587B1BB8683BBFF07D0D4572E014E2324532E3",
+      "outputSha256": "E046490E925D72C89790BE42CF26DABABE990547AFFDB21EB67C74EBDE3BA393",
+      "eventInputSha256": "19B160AEC9FF5A28CD753357E8B83B9C9F1698F63A844C5F98F91AD11B995930",
+      "eventOutputSha256": "C17962D27BF4960319DE69A34D30E21B24A9E41214F2D5BDFA2A940D05555EAF",
+      "hexCount": 35,
+      "addedRows": {
+        "SpEffectParam": [
+          95003800,
+          95003801
+        ],
+        "AttachEffectParam": [
+          95003800
+        ],
+        "PermanentBuffParam": [
+          95003800
+        ],
+        "EquipParamGoods": [
+          95003800
+        ],
+        "ItemTableParam": [
+          95110135
+        ]
+      },
+      "rowCounts": {
+        "SpEffectParam": 17100,
+        "AttachEffectParam": 2114,
+        "PermanentBuffParam": 158,
+        "EquipParamGoods": 468,
+        "ItemTableParam": 34903
+      },
+      "audit": {
+        "owner": 95003800,
+        "buff": 95003801,
+        "source": 511060,
+        "seconds": 10,
+        "historyBit": 35,
+        "fpRates": {
+          "artsConsumptionRate": 0,
+          "magicConsumptionRate": 0,
+          "shamanConsumptionRate": 0,
+          "miracleConsumptionRate": 0,
+          "goodsConsumptionRate": 0
+        },
+        "nativeVfx": 5860,
+        "nativeSfx": 330111
+      },
+      "existingRowsAndUnrelatedTablesUnchanged": true,
+      "onlyTwoGuardedCleanupEventsExtended": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "6FB0E324C7B30BFA56EB2BAF0F3F0D0C3FCF0FF819D24A1FC971D3BA650A70F7",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "C54D02E39609588E80FFD2C7F468791C9371413ED19E7440F26B4CB1C2C76871",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "3966A4F0F0C4AE45A29F87ECFCC098263728600377F74866EBBD46C934143F7F",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "D39379B6889C4CAC3D5B853BF350BB4CAC4365211D5309FA2104CD6E7B32CD7F",
+          "outputSha256": "6277F3141A7706643B65CB6C187126EC8259F5564BAE13AAF1355BD6D8F10DB7",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "终极觉醒"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "发动绝招后的10秒内，专注值消耗归零"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "终极觉醒"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "发动绝招后的10秒内，专注值消耗归零"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "发动绝招后的10秒内，专注值消耗归零"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "EBFE63F4DE6163398ACED1CF7008EB9440F05F008E87B684D9DE31F663310AE7",
+          "outputSha256": "447592F1DD0ACC516278B52CDB8ECE242704BBE480A5E8246BD6E5E81D3A6454",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003801,
+              "before": null,
+              "after": "终极觉醒"
+            },
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "终极觉醒"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003801,
+              "before": null,
+              "after": "专注值消耗归零"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "发动绝招后的10秒内，专注值消耗归零"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "BBD98D91F8E542A98080C73C2699B405FE629DC33B27D580DF5CC6D793A1CB02",
+          "outputSha256": "C3F9E661414616C19E8C65F0654505FCFA5C7BADDAFEEA93404DC64CCBC13D50",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "Ultimate Awakening"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "Eliminates FP consumption for 10 seconds after activating an Ultimate Art."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "Ultimate Awakening"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "Eliminates FP consumption for 10 seconds after activating an Ultimate Art."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "Eliminates FP consumption for 10 seconds after activating an Ultimate Art."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "0A121FD7A0E399BEFC0773BBEB41E90B22F3D5E27F2C88BEF7DE96461C671CA3",
+          "outputSha256": "FD3B6273CF31FC16D1F70A4A75B6C8F037090F6FD28E52CC560CE3ABA512FBA4",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003801,
+              "before": null,
+              "after": "Ultimate Awakening"
+            },
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "Ultimate Awakening"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003801,
+              "before": null,
+              "after": "Eliminates FP consumption"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003800,
+              "before": null,
+              "after": "Eliminates FP consumption for 10 seconds after activating an Ultimate Art."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "native": {
+    "installedParameterReadbackPassed": true,
+    "nativeExecutionPassed": true,
+    "seconds": 10,
+    "trigger": 6999615,
+    "owner": 95003800,
+    "buff": 95003801,
+    "nativeSource": 511060,
+    "nativeVfx": 5860,
+    "nativeSfx": 330111,
+    "nativeFunctions": [
+      "510B20 same-ID refresh eligibility",
+      "511450 category20 ID isolation",
+      "511700 original duration refresh",
+      "5061B0 arts FP multiplier",
+      "507310 magic FP multiplier",
+      "5081E0 shaman FP multiplier",
+      "507410 miracle FP multiplier"
+    ],
+    "cases": [
+      "accepted ultimate notification via compiled shared effect hook",
+      "rejected/other notifications do not activate",
+      "nested self-application does not loop",
+      "refresh remaining duration to 10, never add time",
+      "installed zero multipliers override Echo Casting x2.5",
+      "inactive native node restores normal FP rates",
+      "native tear coexists and its remaining duration stays unchanged",
+      "ownerless, reset, down, dead, reviving, remote and inactive calls rejected",
+      "missing stats and failed effect submission",
+      "all-hero/affinity/party random/focused/reroll eligibility"
+    ],
+    "stubs": [
+      "native effect submission and accepted application result",
+      "effect-row lookup called by native lifetime reset",
+      "actor/effect storage and expiry flags; full update loop not simulated"
+    ],
+    "sources": {
+      "src/ultimate_awakening.rs": "cc5819ce3d29bffa297afb2d28b26264d1f45e2822cdb5af7e993961b9b5e9df",
+      "src/ultimate_awakening_native_tests.rs": "ce29fef6871f21d1be8fc659dd393ef090358eb76d66accbb8eafe0ed952a2b1",
+      "src/lib.rs": "1669a3bc7f94274a3a7149091b649d8a4810a668df8ebc2f4f517c537ba5bd87",
+      "src/hex_pool.rs": "1c5e2f8807d11c1441bea1b9aacfe43461c7cdeea2eba69b3eb52e54f7702ddc",
+      "tools/HexBuild/UltimateAwakening.cs": "ff3077fef72d867723c78a349b92bbcf06e1e1bc79e8003d50621853971bee91",
+      "tools/HexBuild/RewardCatalog.cs": "4cac4e93cdd5285d9dd2f6c0edaf8ca7a4b792a6802a8b1c3f395fbf49a8969a",
+      "tools/verify_ultimate_awakening.py": "d0cb2c0b4d1f09e553e4e85b5f4132fde42ffe16986e65908a89a44ee09a529f"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.195",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "390cb5b6fe9c8ac886cb98365648425563566f1a10f4b971ad86b12985229e8f",
+    "installed": true,
+    "installedDllSha256": "390cb5b6fe9c8ac886cb98365648425563566f1a10f4b971ad86b12985229e8f",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 419,
+  "regularIgnoredTests": 15,
+  "runtimeNativeSuitesPassed": 12,
+  "changedDistributionFiles": {
+    "README.md": {
+      "inputSha256": "ca7c583e02d89ed2c9411f57e3e5739c68e4325c55b843170b16e85a978831ae",
+      "outputSha256": "333750d4cc5561def15dda8818b16bc4f07106ade35a49e554ad55fd8bd8b22e"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "115772241f4be05aefc5d83980587b1bb8683bbff07d0d4572e014e2324532e3",
+      "outputSha256": "e046490e925d72c89790be42cf26dababe990547affdb21eb67c74ebde3ba393"
+    },
+    "mod/event/common.emevd.dcx": {
+      "inputSha256": "740562b526ec8b6587a3caaf00f56645b6a9182773b45520d3b05bdb90185cb7",
+      "outputSha256": "65d003079b1a6449ff383c4b6c47d80ba987fd73049bef063e7a66dea4ff4164"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "169312b1df5633f3f09e9fae0e095af9e7a32ced0f3a187580a6e69848451095",
+      "outputSha256": "390cb5b6fe9c8ac886cb98365648425563566f1a10f4b971ad86b12985229e8f"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "3f14f6c95ace43ce8fddf875dd7b220d4f87f6723ac72f881580a2b43493b835",
+      "outputSha256": "8d6e6f04086790dc06183dfe60ad62d1fe9e94ba9d8e6ca3bc79b7d98eeef639"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "7cecdaa10a1da83914756fe0eccba8716e2176da9f5a26314b08227b9613bc68",
+      "outputSha256": "3d93906038ea294e7af6068fb97e438b0878fe1e9fafe216e1e8fdc32dffaf7d"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "cd4f9235ea5df4751a1c6e76353c2b50205adf844cd075a62efacc76b7b3ef57",
+      "outputSha256": "7a24c47943ff1b259ef9dbc918e54d7d630e149f99171988a53b6b7a92dbad01"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "58ddf113aa6e466c449ed3be6f750920cacfb05d47bff73b534185a65a549728",
+      "outputSha256": "9ccfd62c341c90799cb99748f094ca13952ddb0a4b9508805dfabecafdaf99fe"
+    }
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

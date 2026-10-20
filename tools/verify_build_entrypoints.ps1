@@ -45,7 +45,7 @@ try {
             Assert-True (-not (Has-Call 'python' 'record_build.py')) 'A failed build was recorded as successful'
         } else {
             Assert-True (Has-Call 'cargo' 'test --release --lib --target x86_64-pc-windows-gnu') 'Target was not forwarded to regression tests'
-            foreach ($check in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_heartstealer.py', 'verify_cat_arena.py')) {
+            foreach ($check in @('verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_heartstealer.py', 'verify_cat_arena.py', 'verify_ultimate_awakening.py')) {
                 Assert-True (Has-Call 'python' $check) "Missing runtime verification: $check"
             }
             foreach ($call in @($global:NRHexBuildFixtureCalls | Where-Object { $_.Name -eq 'cargo' })) {

@@ -79,6 +79,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
 if(args.Contains("--momentum-stage")){Momentum.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--momentum-check")){Momentum.Verify(root,bnd,Parse);return;}
@@ -790,6 +792,7 @@ EssenceReaver.Mechanics(Clone);
 DeathDance.Mechanics(Clone);
 Snack.Mechanics(Clone);
 Momentum.Mechanics(Clone,pars["SpEffectParam"]);
+UltimateAwakening.Mechanics(Clone);
 Ambulance.RecoveryEffect(Clone,pars["SpEffectParam"]);
 Erosion.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
@@ -1192,6 +1195,7 @@ foreach(int id in Enumerable.Range(95001000,5).Concat(Enumerable.Range(95001010,
 reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),new(1000,4,new object[]{(byte)1})]);ev.Events.Add(reset);
 Cages.Terrain(ev);
 ContractHeart.Events(ev);
+UltimateAwakening.Events(ev);
 NightBlessing.ResetReceipt(ev);
 RewardCycle.Events(ev,RewardCatalog.PackedIds(RewardCatalog.HistoricalOwners.Length));
 RewardReroll.Events(ev);
