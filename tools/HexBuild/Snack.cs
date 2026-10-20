@@ -10,10 +10,6 @@ static class Snack {
  static int N(PARAM.Row r,string f)=>Convert.ToInt32(r[f].Value);
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
-  for(int digit=0;digit<4;digit++)for(int value=1;value<256;value++){
-   var r=clone("SpEffectParam",8000000,First+digit*256+value);
-   foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",10),("effectEndurance",-1f),("dontDeleteOnDead",1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(r,f,v);
-  }
   for(int option=0;option<3;option++){
    var r=clone("ItemLotParam_enemy",6100002,Lot+option);Set(r,"lotItem_Rarity",-1);
    // Native lot lottery selects one pool for this choice, then the native
@@ -32,9 +28,9 @@ static class Snack {
   var templates=new[]{"SpEffectParam","ItemLotParam_enemy"}.ToDictionary(n=>n,n=>Table(native,n));
   Mechanics((name,from,id)=>{var r=new PARAM.Row(templates[name].Rows.Single(r=>r.ID==from)){ID=id};generated.Add((name,id),r);return r;});
   var actual=templates.Keys.ToDictionary(n=>n,n=>Table(current,n));
-  foreach(var(pair,row)in generated)Check(CageAI.Same(row,actual[pair.Item1].Rows.Single(r=>r.ID==pair.Item2)),"Extra Helping parameter differs from intended native template");
+  foreach(var(pair,row)in generated)Check(CageAI.Same(row,actual[pair.Item1].Rows.Single(r=>r.ID==pair.Item2)),"Extra Practice parameter differs from intended native template");
   var choices=actual["ItemLotParam_enemy"].Rows.Where(r=>r.ID>=Lot&&r.ID<Lot+3).OrderBy(r=>r.ID).ToArray();
-  Check(choices.Length==3,"Expected exactly three Extra Helping choices");
+  Check(choices.Length==3,"Expected exactly three Extra Practice choices");
   for(int option=0;option<3;option++){
    Check(N(choices[option],"lotItem_Rarity")==-1,"Reward ball must use the resolved item's native rarity");
    var row=choices[option];Check(N(row,"lotItemBasePoint01")== (option==2?800:1000)&&N(row,"lotItemId01")==4200100,"Basic-pool weight mismatch");
@@ -46,19 +42,28 @@ static class Snack {
   var pools=new[]{(4200100,15),(4200200,21),(4200300,20)};
   foreach(var(id,count)in pools){var a=original.Rows.Where(r=>r.ID==id).ToArray();var b=tables.Rows.Where(r=>r.ID==id).ToArray();Check(a.Length==count&&b.Length==count&&a.Zip(b).All(p=>CageAI.Same(p.First,p.Second)),"Native basic/mechanism/high pool changed");}
   var effects=Table(current,"SpEffectParam");
-  for(int digit=0;digit<4;digit++)for(int value=1;value<256;value++){
-   var r=effects.Rows.Single(r=>r.ID==First+digit*256+value);
-   foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("maxMpRate",1f),("stateInfo",0),("soul",0),("spCategory",20),("saveCategory",10),("effectEndurance",-1f),("dontDeleteOnDead",1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Check(Convert.ToDouble(r[f].Value)==Convert.ToDouble(v),$"Nonneutral credit marker {r.ID}/{f}");
-  }
+  Check(!effects.Rows.Any(r=>r.ID>=First&&r.ID<First+1024),"Retired spending records must not remain in the parameter package");
   Check(RewardCatalog.HistoryBit(Owner)==33&&RewardCatalog.HistoricalOwners.Length>=34,"Stable history must append without reindexing");
   Check(RewardCatalog.PackedIds(34).All(id=>effects.Rows.Any(r=>r.ID==id)),"Missing packed history capacity");
-  foreach(var n in new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods"})Check(Table(current,n).Rows.Count(r=>r.ID==Owner)==1,"Missing/duplicate Extra Helping owner metadata");
+  foreach(var n in new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods"})Check(Table(current,n).Rows.Count(r=>r.ID==Owner)==1,"Missing/duplicate Extra Practice owner metadata");
   Check(N(tables.Rows.Single(r=>r.ID==RewardCatalog.Table(Owner)),"itemId")==Owner,"Missing hex reward reference");
-  return new{lot=Lot,choices=3,pools=pools.Select(p=>new{id=p.Item1,entries=p.Item2}),firstTwo=new[]{100,0,0},last=new[]{80,10,10},persistentRows=1020,activePersistentLimit=4,historyBit=33,historyBytes=5};
+  return new{lot=Lot,choices=3,pools=pools.Select(p=>new{id=p.Item1,entries=p.Item2}),firstTwo=new[]{100,0,0},last=new[]{80,10,10},persistentRows=0,pendingRewardCountInMemory=true,historyBit=33,historyBytes=5};
  }
  public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   Validate(native,SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin")),parse);
-  Console.WriteLine("PASS: installed Extra Helping native three-choice lotteries, 80/10/10 weights, original pools and persistent credit markers");
+  Console.WriteLine("PASS: installed Extra Practice native three-choice lotteries, 80/10/10 weights, original pools and no retired spending records");
+ }
+ public static void StageRework(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/extra-practice/staged");Directory.CreateDirectory(dir);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var member=binder.Files.Single(f=>Name(f)=="SpEffectParam.param");var effects=parse("SpEffectParam",member.Bytes);
+  int removed=effects.Rows.RemoveAll(r=>r.ID>=First&&r.ID<First+1024);Check(removed is 0 or 1020,"Unexpected legacy credit records");member.Bytes=effects.Write();
+  string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Version==binder.Version&&final.Compression==binder.Compression&&final.Files.Count==binder.Files.Count,"Regulation metadata changed");
+  foreach(var f in final.Files){var expected=binder.Files.Single(v=>v.ID==f.ID);Check(f.Name==expected.Name&&f.Flags==expected.Flags&&f.Bytes.Span.SequenceEqual(expected.Bytes.Span),"Regulation readback mismatch");if(f.ID!=member.ID){Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated table changed");continue;}var old=parse("SpEffectParam",before[f.ID]);var now=parse("SpEffectParam",f.Bytes);var retained=old.Rows.Where(r=>r.ID<First||r.ID>=First+1024).ToArray();Check(now.Rows.Count==retained.Length&&retained.Zip(now.Rows).All(p=>CageAI.Same(p.First,p.Second)),"Unrelated effect row or field changed");}
+  var audit=Validate(native,final,parse);HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner});
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),removedCreditRows=removed,originalRewardPoolsAndAllRemainingRowsPreserved=true,audit,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Extra Practice retired credit records removed and bilingual descriptions staged; existing reward pools preserved");
  }
  public static void StageRarity(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,"work/snack/rarity-staged");Directory.CreateDirectory(directory);
@@ -89,7 +94,7 @@ static class Snack {
   var tables=names.ToDictionary(n=>n,n=>parse(n,b.Files.Single(f=>Name(f)==n+".param").Bytes));
   var originals=names.ToDictionary(n=>n,n=>parse(n,native.Files.Single(f=>Name(f)==n+".param").Bytes));
   var added=names.ToDictionary(n=>n,n=>new HashSet<int>());
-  PARAM.Row Add(string name,int from,int id){Check(!tables[name].Rows.Any(r=>r.ID==id),$"Extra Helping ID collision: {name}/{id}");var r=new PARAM.Row(originals[name].Rows.First(r=>r.ID==from)){ID=id};tables[name].Rows.Add(r);added[name].Add(id);return r;}
+  PARAM.Row Add(string name,int from,int id){Check(!tables[name].Rows.Any(r=>r.ID==id),$"Extra Practice ID collision: {name}/{id}");var r=new PARAM.Row(originals[name].Rows.First(r=>r.ID==from)){ID=id};tables[name].Rows.Add(r);added[name].Add(id);return r;}
   var h=hexes.Single(h=>h.Id==Owner);var s=Add("SpEffectParam",8000000,Owner);
   foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("iconId",h.SmallIcon),("spEffectTextId_1",Owner),("displayIconForPermamentEffect",0)})Set(s,f,v);
   var a=Add("AttachEffectParam",8000000,Owner);foreach(var(f,v)in new[]{("passiveSpEffectId_1",Owner),("attachTextId",Owner),("statusIconId",h.SmallIcon),("compatibilityId",-1),("overrideBaseEffectId",Owner),("overrideEffectId",-1),("isNumericEffect",0),("displayPercentageSymbol",0),("displayedModifierValue",0)})Set(a,f,v);
@@ -104,6 +109,6 @@ static class Snack {
   var audit=Validate(native,final,parse);RewardCatalog.Write(Path.Combine(dir,"hex_pool.rs"),hexes);
   HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner});
   File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),hexCount=hexes.Length,addedRows=added.ToDictionary(p=>p.Key,p=>p.Value.Count),rowCounts=tables.ToDictionary(p=>p.Key,p=>p.Value.Rows.Count),audit,existingRowsAndUnrelatedTablesUnchanged=true,eventsUnchanged=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: Extra Helping owner, native 3-choice lottery, persistent credit and bilingual text staged; all prior rows preserved");
+  Console.WriteLine("PASS: Extra Practice owner, native 3-choice lottery and bilingual text staged; all prior rows preserved");
  }
 }

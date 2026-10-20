@@ -90,6 +90,7 @@ if(args.Contains("--momentum-stage")){Momentum.Stage(root,bnd,Parse,HexCatalog.L
 if(args.Contains("--momentum-check")){Momentum.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-delivery-stage")){Momentum.FixDelivery(root,bnd,Parse);return;}
 if(args.Contains("--snack-stage")){Snack.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--snack-rework-stage")){Snack.StageRework(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--snack-check")){Snack.Verify(root,bnd,Parse);return;}
 if(args.Contains("--snack-rarity-stage")){Snack.StageRarity(root,bnd,Parse);return;}
 if(args.Contains("--echo-cast-stage")){EchoCast.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}

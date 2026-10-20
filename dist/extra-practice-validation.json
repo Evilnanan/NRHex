@@ -1,0 +1,432 @@
+{
+  "version": "0.17.198",
+  "name": "额外练习",
+  "owner": 95003600,
+  "rewardsPerWeapon": 1,
+  "priceThreshold": null,
+  "choices": [
+    {
+      "basic": 100
+    },
+    {
+      "basic": 100
+    },
+    {
+      "basic": 80,
+      "mechanism": 10,
+      "high": 10
+    }
+  ],
+  "retiredSpendingRowsRemoved": 1020,
+  "pendingRewards": "RAM only; safe next-frame creation; incapacity defers; expedition reset clears",
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "f7fac805d197ddb3b4d5dd9afe752d95ee7d6d2e7c79d47ae02d24dd28bb86d1",
+        "outputSha256": "a27bd66b7b4d81c2603e34b9b2708bd5b532e10a40337789422c24e4e5b5a335"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "f908c0f2a0bb7308325e13d43fc0564af05dcf65dbd87e1220dce4c5bbae7f39",
+        "outputSha256": "512b795e730aed590dd8d53db599c6e447ad629a30969941006900a78889372a"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "efa854012d5970d3d9a000f7f61311ba01ea7b42f68ae7ba3d0a36d0ba084ea1",
+        "outputSha256": "e62481650a3aebede87a6a53e7bdbab41c1934def342caa3347fdf858015e8c0"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "e1eb6a7bd9214b5436a60837b54ede3543237cdf0204a5b217003cca5edfacfa",
+        "outputSha256": "09f2a9580c6a48bcc8cb08567438233f1b0dfe40363c98e8ff963d7b7d3b6e44"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "1928c5e7570711c0d524b0abcbdd72900f8a84ff1794581a9de2e971117e2462",
+        "outputSha256": "08aeef91710e50882c53ce9851a45f98f78c616e8a02e3ff1c7d8a81248fd058"
+      }
+    },
+    "containers": {
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "2903262d5ca98e54b13c3edc6429ac89ada06c2415afc12d783e1105fb3aaa64",
+        "containerSha256": "512b795e730aed590dd8d53db599c6e447ad629a30969941006900a78889372a",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "fe8333d22c4dc19b5cfd92cc6733c86d8b7283f3bfd576df44d66e753ddf444d",
+        "containerSha256": "e62481650a3aebede87a6a53e7bdbab41c1934def342caa3347fdf858015e8c0",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "a0859a5bf889e229266dea08097417582ddaffba25557143b23d97b28ee62ab0",
+        "containerSha256": "09f2a9580c6a48bcc8cb08567438233f1b0dfe40363c98e8ff963d7b7d3b6e44",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "9c896415d9a21515b685fcf1824e70482b6d39e08608279f3b348da532a8d8ca",
+        "containerSha256": "08aeef91710e50882c53ce9851a45f98f78c616e8a02e3ff1c7d8a81248fd058",
+        "roundTripPassed": true
+      }
+    },
+    "generator": {
+      "inputSha256": "F7FAC805D197DDB3B4D5DD9AFE752D95EE7D6D2E7C79D47AE02D24DD28BB86D1",
+      "outputSha256": "A27BD66B7B4D81C2603E34B9B2708BD5B532E10A40337789422C24E4E5B5A335",
+      "removedCreditRows": 1020,
+      "originalRewardPoolsAndAllRemainingRowsPreserved": true,
+      "audit": {
+        "lot": 95420000,
+        "choices": 3,
+        "pools": [
+          {
+            "id": 4200100,
+            "entries": 15
+          },
+          {
+            "id": 4200200,
+            "entries": 21
+          },
+          {
+            "id": 4200300,
+            "entries": 20
+          }
+        ],
+        "firstTwo": [
+          100,
+          0,
+          0
+        ],
+        "last": [
+          80,
+          10,
+          10
+        ],
+        "persistentRows": 0,
+        "pendingRewardCountInMemory": true,
+        "historyBit": 33,
+        "historyBytes": 5
+      },
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "45F44D80F45FB34979387AFACBB44C47F5ADBB2594016F9064C3D5DBC755367E",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "BD730AD6D794E000211C3CD203DC12DDDCA13BAA827AA1EC0A90995657E3B8AB",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "05886AB057A5E5659302CF7B1E09B747CDA9C4173745B0E240355C29EEA233D6",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "D91B4830089127FE1BF5909BE25C87D76DD406FE05744516188C6CEE64208D7A",
+          "outputSha256": "2903262D5CA98E54B13C3EDC6429AC89ADA06C2415AFC12D783E1105FB3AAA64",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003600,
+              "before": "小点心",
+              "after": "额外练习"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003600,
+              "before": "在商店购买单价不低于3500卢恩的物品，每累计消费20000卢恩，就额外附赠一个锻体奖励",
+              "after": "在商人处购买武器时，额外获得一个锻体型潜在能力"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003600,
+              "before": "小点心",
+              "after": "额外练习"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003600,
+              "before": "在商店购买单价不低于3500卢恩的物品，每累计消费20000卢恩，就额外附赠一个锻体奖励",
+              "after": "在商人处购买武器时，额外获得一个锻体型潜在能力"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003600,
+              "before": "在商店购买单价不低于3500卢恩的物品，每累计消费20000卢恩，就额外附赠一个锻体奖励",
+              "after": "在商人处购买武器时，额外获得一个锻体型潜在能力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "EF2AAF5928D7F900C3D89E57F7B96EF73A7C1DD9E8000576C8173C1420C115F5",
+          "outputSha256": "FE8333D22C4DC19B5CFD92CC6733C86D8B7283F3BFD576DF44D66E753DDF444D",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003600,
+              "before": "小点心",
+              "after": "额外练习"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003600,
+              "before": "在商店购买单价不低于3500卢恩的物品，每累计消费20000卢恩，就额外附赠一个锻体奖励",
+              "after": "在商人处购买武器时，额外获得一个锻体型潜在能力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "9911DF6324AF993761DD627E78BF1EA3D3A751EDC568A3C0A3A33D18D57069C7",
+          "outputSha256": "A0859A5BF889E229266DEA08097417582DDAFFBA25557143B23D97B28EE62AB0",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003600,
+              "before": "Little Snack",
+              "after": "Extra Practice"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003600,
+              "before": "Receive a complimentary stat-boost reward for every 20,000 runes spent at shops on items with a final unit price of at least 3,500 runes.",
+              "after": "Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003600,
+              "before": "Little Snack",
+              "after": "Extra Practice"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003600,
+              "before": "Receive a complimentary stat-boost reward for every 20,000 runes spent at shops on items with a final unit price of at least 3,500 runes.",
+              "after": "Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003600,
+              "before": "Receive a complimentary stat-boost reward for every 20,000 runes spent at shops on items with a final unit price of at least 3,500 runes.",
+              "after": "Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "56A6434D379F10431E807417C1E837F2A98652086ED112AD96A998F65A804243",
+          "outputSha256": "9C896415D9A21515B685FCF1824E70482B6D39E08608279F3B348DA532A8D8CA",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003600,
+              "before": "Little Snack",
+              "after": "Extra Practice"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003600,
+              "before": "Receive a complimentary stat-boost reward for every 20,000 runes spent at shops on items with a final unit price of at least 3,500 runes.",
+              "after": "Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "native": {
+    "nativeExecutionPassed": true,
+    "installedParameterReadbackPassed": true,
+    "nativeFunctions": [
+      "1FC0C0 settled shop statistic increment",
+      "A7CBC6 price * quantity and A7CBCF call",
+      "A7CFC6 price * quantity and A7CFCF call"
+    ],
+    "successfulPurchaseReturnSites": [
+      "A7CBD4",
+      "A7CFD4"
+    ],
+    "excludedOtherSpendReturnSite": "A403EF",
+    "rewardsPerWeapon": 1,
+    "priceThreshold": null,
+    "countsPurchasedQuantity": true,
+    "purchaseContext": "RBX at the two signature-guarded native successful-purchase CALL sites",
+    "itemFields": {
+      "A7CBD4": "64",
+      "A7CFD4": "5C"
+    },
+    "quantityFields": {
+      "A7CBD4": "118",
+      "A7CFD4": "110"
+    },
+    "weaponEncodedKind": 0,
+    "choices": [
+      {
+        "basic": 100
+      },
+      {
+        "basic": 100
+      },
+      {
+        "basic": 80,
+        "mechanism": 10,
+        "high": 10
+      }
+    ],
+    "lotRarityOverride": -1,
+    "usesResolvedItemRarity": true,
+    "cases": [
+      "actual native item loads and both successful purchase callbacks",
+      "one reward per purchased weapon independent of rune price",
+      "zero/1/3499/3500/20000 unit prices",
+      "shields and catalysts use native weapon category",
+      "consumables/accessories/armor/invalid item codes excluded",
+      "native price multiplication and capped statistic preserved",
+      "other spending forwarded without item-record access",
+      "missing ownership/inactive/outside expedition ignored",
+      "zero and negative quantities ignored",
+      "negative payment ignored",
+      "multiple weapon purchases accumulate pending rewards",
+      "no currency credit or persistent spending markers",
+      "existing private reward does not block delivery",
+      "next-frame delivery without closing shop",
+      "death/near-death defer delivery",
+      "all three local player slots",
+      "zero creations refunded",
+      "partial creation consumes one reward",
+      "multiple purchased weapons delivered in one update without duplicates",
+      "new-run reset drops pending rewards"
+    ],
+    "stubs": [
+      "purchase callback prologues and return around original item loads, amount multiplication and CALL",
+      "native ownership queries",
+      "native item-spawn service; no real shop UI or inventory grant"
+    ],
+    "sources": {
+      "src/snack.rs": "d4599ac3686caa5f4d8a8b1470b3535772151ad17b69a2b5510242fbe0c815f0",
+      "src/snack_native_tests.rs": "278e26503289e5ca6f539b18542c650a181663a3993f6002c7f69842c63e826f",
+      "src/lib.rs": "27558c7c030626b80f1aaa843a73e9ab207a1f8a859d52bf6a799af20ad4a8f9",
+      "src/hex_pool.rs": "4ba705a2a3e65001c67018c14918fc5b5a8bc73279cd736f724c06a6a99542d4",
+      "src/reward_cycle_runtime.rs": "7265921baf735732665b482ad04f95c2c957a819df94e28983784b17005d0be1",
+      "src/reward_recovery.rs": "4d75f8333fdf91bcbc3c2bcb5aa5151b8138d81a62d710be702baa474b5f0693",
+      "tools/HexBuild/Snack.cs": "4833744d9fbb1dc3aa4aed2234376a3658d34ecbc2d98980bf0bdbc841015b29",
+      "tools/HexBuild/RewardCatalog.cs": "2676b30874aaeb920b2ac568743b24fbe2db1ea542b3b4b70ab340182d1dc634",
+      "tools/verify_snack.py": "72d713fe5054a8c4781daa006db488622d6c416871972e2cafbdbb63965385b3"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "independentGroupValidation": {
+    "nativeExecutionPassed": true,
+    "compiledHooksExecuted": true,
+    "nativeFunctions": [
+      "5759E0 reward dispatch",
+      "6A1BA0 network-bit predicate",
+      "570410 descriptor copy",
+      "57A840 choice grouping"
+    ],
+    "cases": [
+      "all three local recipient slots and offline slot zero",
+      "teammate rewards unchanged",
+      "pre-acquisition group stays original even if the hook missed its first creation",
+      "one charge per multi-option source",
+      "three charges only",
+      "two separate native choice chains",
+      "partial creation retries missing options only",
+      "caller buffers unchanged",
+      "saved counter restored",
+      "explicit expedition reset",
+      "negative control: repeated unscoped Snack emissions merge into one native choice chain",
+      "three immediate Snack emissions with identical source and position create three independent three-choice chains for every recipient slot",
+      "native linked-choice traversal never reaches a different Snack reward",
+      "unrelated reward emitted between Snack rewards stays separate in both directions",
+      "temporary grouping scope restored after each emission"
+    ],
+    "stubs": [
+      "allocation/rendering replaced by fixture invoking native descriptor copy",
+      "lottery emits deterministic descriptors; actual native lottery requires game parameter managers",
+      "character/effect state and UID lookup fixtures"
+    ],
+    "sources": {
+      "src/lib.rs": "27558c7c030626b80f1aaa843a73e9ab207a1f8a859d52bf6a799af20ad4a8f9",
+      "src/potential_fission.rs": "d081352e5a9ee3d612621f043ddfd7ed52f410414b9d4f6954fde82017748fa5",
+      "src/potential_fission_native_tests.rs": "73d1f7441017f7e87b1f7dfe5462aacae25bf85b66ac6dde40f55ed002e8685e",
+      "src/fission_catalog.rs": "27246b2aff7a2d79b26eaa6419d17a92e6fcb006032d3e93723477cc4299964c",
+      "src/hex_pool.rs": "4ba705a2a3e65001c67018c14918fc5b5a8bc73279cd736f724c06a6a99542d4",
+      "src/personal_reward.rs": "09c29e62d2912832b215870bba46543c90fc66eaff567166f82afbc0dd621944",
+      "src/reward_cycle_runtime.rs": "7265921baf735732665b482ad04f95c2c957a819df94e28983784b17005d0be1",
+      "src/snack.rs": "d4599ac3686caa5f4d8a8b1470b3535772151ad17b69a2b5510242fbe0c815f0"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.198",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "d5c4483d40b7d047690b3eda94596c151f61c3e612240d28f3ee185335fc1d2e",
+    "installed": true,
+    "installedDllSha256": "d5c4483d40b7d047690b3eda94596c151f61c3e612240d28f3ee185335fc1d2e",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 420,
+  "regularIgnoredTests": 16,
+  "runtimeNativeSuitesPassed": 13,
+  "runtimeSignatureCount": 183,
+  "changedDistributionFiles": {
+    "README.md": {
+      "inputSha256": "4185f0284ee05b34d3f89e041c43453bf41a8f2636ea7245630e6c6e52daef1c",
+      "outputSha256": "47a376ce9485e1722dd25967b639e76a788eddb7f0352acb53593187204efc98"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "e1eb6a7bd9214b5436a60837b54ede3543237cdf0204a5b217003cca5edfacfa",
+      "outputSha256": "09f2a9580c6a48bcc8cb08567438233f1b0dfe40363c98e8ff963d7b7d3b6e44"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "1928c5e7570711c0d524b0abcbdd72900f8a84ff1794581a9de2e971117e2462",
+      "outputSha256": "08aeef91710e50882c53ce9851a45f98f78c616e8a02e3ff1c7d8a81248fd058"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "f908c0f2a0bb7308325e13d43fc0564af05dcf65dbd87e1220dce4c5bbae7f39",
+      "outputSha256": "512b795e730aed590dd8d53db599c6e447ad629a30969941006900a78889372a"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "efa854012d5970d3d9a000f7f61311ba01ea7b42f68ae7ba3d0a36d0ba084ea1",
+      "outputSha256": "e62481650a3aebede87a6a53e7bdbab41c1934def342caa3347fdf858015e8c0"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "6357c2dd98cfe3efad6fcad5d71b39ea89dbe4c09e06306fd69ee877c3c4c38b",
+      "outputSha256": "d5c4483d40b7d047690b3eda94596c151f61c3e612240d28f3ee185335fc1d2e"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "f7fac805d197ddb3b4d5dd9afe752d95ee7d6d2e7c79d47ae02d24dd28bb86d1",
+      "outputSha256": "a27bd66b7b4d81c2603e34b9b2708bd5b532e10a40337789422c24e4e5b5a335"
+    }
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "sources": {
+    "src/snack.rs": "d4599ac3686caa5f4d8a8b1470b3535772151ad17b69a2b5510242fbe0c815f0",
+    "src/snack_native_tests.rs": "278e26503289e5ca6f539b18542c650a181663a3993f6002c7f69842c63e826f",
+    "src/lib.rs": "27558c7c030626b80f1aaa843a73e9ab207a1f8a859d52bf6a799af20ad4a8f9",
+    "tools/HexBuild/Snack.cs": "4833744d9fbb1dc3aa4aed2234376a3658d34ecbc2d98980bf0bdbc841015b29",
+    "tools/HexBuild/Program.cs": "df4bc0905552a5448ad91c9a61b2ebc8fa6bdaeb7399a3d9d5ac6db7a3ca48c1",
+    "tools/verify_snack.py": "72d713fe5054a8c4781daa006db488622d6c416871972e2cafbdbb63965385b3",
+    "docs/hexes.md": "45f44d80f45fb34979387afacbb44c47f5adbb2594016f9064c3d5dbc755367e",
+    "docs/hexes.en.md": "bd730ad6d794e000211c3cd203dc12dddca13baa827aa1ec0a90995657e3b8ab",
+    "docs/implementation.md": "2c0fa41e941505809fdec00aae3ed8c955b2a078d5cd7cf7f7491c6125c91716",
+    "CHANGELOG.md": "b61d94d1c347239a41fe69960ac079db1e1d959b2cc4f605e0b4929efcc28203",
+    "Cargo.toml": "c6b75c6457004adb43be7e134ebcd7b27b627b422866d65e13420dde5647cbdc",
+    "Cargo.lock": "b193ab00a69324fa94d401ab15f8a044fc88679074261eba864beb5d2174681f"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}
