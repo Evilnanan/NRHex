@@ -1520,7 +1520,7 @@ unsafe extern "system" fn action_request_detour(input:usize,mode:i32,action:i32)
  let raw=ptr::read_unaligned((input+0x20) as *const u64);
  if raw&64==0{return result;}
  let base=BASE.load(Ordering::Acquire);let player=read_ptr(input+8);
- if !is_local(player,base)||!has_effect(player,cat::OWNER,base){return result;}
+ if !cat_wall::enabled(player,base){return result;}
  let modules=read_ptr(player+0x1b8);if modules==0||read_ptr(modules+0x80)!=input{return result;}
  let physics=read_ptr(modules+0x68);let stats=read_ptr(modules);
  if physics==0||stats==0{return result;}

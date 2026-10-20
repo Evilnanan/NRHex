@@ -28,7 +28,7 @@ for name,fid,count in [('JumpCommonFunction',1508,1072),('ExecWallJump',1514,119
  assert cs[env+1:env+3]==[None,None] and cs[true+1:true+3]==[None,None]
  scratch=struct.unpack('>I',f['header'][4:8])[0]
  assert scratch+3<=f['slots'] # Preserve the function's parameter registers.
- check=number(1116);owner=number(95000800)
+ check=number(990008);owner=number(95000800)
  words=[abx(91,scratch,env),abx(76,20,env+1),abx(25,scratch+1,check),abx(25,scratch+2,owner),abc(2,scratch,3,2),
   abx(91,scratch+1,true),abx(76,20,true+1),abc(4,0,scratch,scratch+1),0]
  jumps=[8]
@@ -63,7 +63,7 @@ for name,fid,count in [('JumpCommonFunction',1508,1072),('ExecWallJump',1514,119
   for jump in [8,16,23]:middle[jump]=abx(28,0,0x10000+len(middle)-jump-2)
   for owned,grounded_now,accepted in __import__('itertools').product([False,True],repeat=3):
    calls=[];regs={0:17,1:12.5,2:1};pc=0;returned=False
-   globals_={'TRUE':1,'env':lambda *args:int(owned) if args==(1116,95000800) else int(grounded_now),
+   globals_={'TRUE':1,'env':lambda *args:int(owned) if args==(990008,95000800) else int(grounded_now),
     'ExecWallJump':lambda:calls.append('helper') or int(accepted),'act':lambda *args:calls.append(args)}
    constants=cs+extra
    while pc<len(middle):
@@ -107,7 +107,7 @@ for name,fid,count in [('JumpCommonFunction',1508,1072),('ExecWallJump',1514,119
  for owned,enabled_before,grounded_now,requested,accepted in __import__('itertools').product([False,True],[0,1],[False,True],[False,True],[False,True]):
    calls=[];reg={i:123+i for i in range(scratch)};saved=dict(reg)
    def mock_env(*args):
-    return {(1116,95000800):int(owned),(201,):int(grounded_now),(1106,6):int(requested)}.get(args,-1)
+    return {(990008,95000800):int(owned),(201,):int(grounded_now),(1106,6):int(requested)}.get(args,-1)
    def mock_helper():calls.append(('ExecWallJump',));return int(accepted)
    glob={'env':mock_env,'act':lambda *args:calls.append(args),'ExecWallJump':mock_helper,'TRUE':1,'ISENABLE_WALLJUMP':enabled_before}
    constants=cs+extra;pc=0

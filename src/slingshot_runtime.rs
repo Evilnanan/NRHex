@@ -47,7 +47,7 @@ pub unsafe extern "system" fn detour(velocity:usize,out:*mut f32,input:*const f3
  if ACTIVE.load(Ordering::Acquire)&&velocity!=0{
   let base=BASE.load(Ordering::Acquire);let player=read_ptr(velocity+0x20);let row=read_i32(velocity+0x14);
   if let Some((stats,alive,_))=context(player,base){
-   scope=(row,1.,row==crate::cat_wall::INTO_WALL_ROW&&alive&&has_effect(player,crate::cat::OWNER,base));
+   scope=(row,1.,row==crate::cat_wall::INTO_WALL_ROW&&alive&&crate::cat_wall::enabled(player,base));
    let owned=has_effect(player,s::OWNER,base);
    if let Ok(mut state)=state().lock(){state.synchronize(player,stats,owned,alive);if owned&&alive{scope.1=state.impulse(row);}}
   }

@@ -1,0 +1,132 @@
+{
+  "version": "0.17.194",
+  "method": "Live Nightlord arena map gate across custom wall-jump queries, raw-input retry and into-wall impulse",
+  "nightlordMapFamilies": [
+    16,
+    18,
+    19
+  ],
+  "hks": {
+    "inputSha256": "ecbbb7e2b60d896744829c51d7fdd51ab5a13bf6b7dd0f67cdd137e58a5383cb",
+    "outputSha256": "459c2041ddfd8a664883fcdedb6b16636eb85b4576e4ebd84e35ad7c081f55e7",
+    "functions": [
+      {
+        "id": 1508,
+        "name": "JumpCommonFunction",
+        "querySites": [
+          16,
+          83
+        ]
+      },
+      {
+        "id": 1514,
+        "name": "ExecWallJump",
+        "querySites": [
+          2
+        ]
+      },
+      {
+        "id": 1579,
+        "name": "WallJumpCancelEarly_onUpdate",
+        "querySites": [
+          2
+        ]
+      },
+      {
+        "id": 1581,
+        "name": "WallJumpCancelLate_onUpdate",
+        "querySites": [
+          2
+        ]
+      }
+    ],
+    "inverseRestoresInput": true,
+    "allOtherInstructionsAndFunctionsUnchanged": true,
+    "gameplayVerified": false
+  },
+  "native": {
+    "hksQuerySites": 5,
+    "hksGuardCases": 80,
+    "nativeExecutionPassed": true,
+    "nightlordMapFamilies": [
+      16,
+      18,
+      19
+    ],
+    "knownArenaMaps": [
+      "m16_00_00_00",
+      "m16_00_00_99",
+      "m16_10_00_00",
+      "m16_10_00_99",
+      "m16_11_00_00",
+      "m16_11_00_99",
+      "m18_00_00_00",
+      "m18_00_00_99",
+      "m19_00_00_00",
+      "m19_00_00_99"
+    ],
+    "cases": [
+      "native source-map fragment 576D44 with actor-map and active-map fallback",
+      "live map changes and invalid/loading contexts",
+      "compiled shared HKS env hook and unchanged ordinary queries",
+      "raw-input retry disabled but accepted native input retained",
+      "compiled launch scope with real E737B0 speed getter",
+      "owner effect remains present in arenas",
+      "down/dead/reviving/non-local actors rejected",
+      "five serialized HKS guard paths retain live arguments and native branches"
+    ],
+    "stubs": [
+      "actor/effect storage",
+      "ordinary env query and native input return",
+      "launch wrapper calls compiled speed override over native getter"
+    ],
+    "hksSha256": "459c2041ddfd8a664883fcdedb6b16636eb85b4576e4ebd84e35ad7c081f55e7",
+    "sourceHashes": {
+      "src/cat_wall.rs": "ed1e002bcb3d9b1b2dabde26c0567a14ec3c69e3e1bc568092b47e7ee311e131",
+      "src/cat_arena_native_tests.rs": "491499b538d1c915ad5be665ba58dd036c3e6a73f88635305f5ee0f3cfb2e09c",
+      "src/ambulance.rs": "3e5afc3bbda0e578398f89937ee3acc52670e4a922618954c6e2389dae50801c",
+      "src/slingshot_runtime.rs": "6c994bf608a54fda7f7c0a7fad753f5006de4cce126012b887fc7a02a70c868b",
+      "src/lib.rs": "227acfefb7022b7345625353b78f958599ebb1899473e9032f4346ac13806123",
+      "tools/build_walljump.py": "42098c106b1a10213ffb6e459fdcf9a16f151ce3d8d372bea498dafe8a7d0f4b",
+      "tools/build_cat_arena_hks.py": "f093dcba858337334dc801eac9fe914289901a5e9e573382bbc4f462bf316af5",
+      "tools/verify_cat_arena.py": "f53c6c6b03f3db84fcde409959f30c889ba74ad2214162e9afafae29020c11ef"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "gameTextUnchanged": true,
+  "build": {
+    "version": "0.17.194",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "169312b1df5633f3f09e9fae0e095af9e7a32ced0f3a187580a6e69848451095",
+    "installed": true,
+    "installedDllSha256": "169312b1df5633f3f09e9fae0e095af9e7a32ced0f3a187580a6e69848451095",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 418,
+  "regularIgnoredTests": 14,
+  "runtimeNativeSuitesPassed": 11,
+  "changedDistributionFiles": {
+    "README.md": {
+      "inputSha256": "0356eef4719257817ac30305d254fd213fe79ef19245637fe915daa9c31f17b4",
+      "outputSha256": "ca7c583e02d89ed2c9411f57e3e5739c68e4325c55b843170b16e85a978831ae"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "099e45a744d6f3e1f4ebedb5efbe3a38920318c534dddf5530a056f5defa6441",
+      "outputSha256": "169312b1df5633f3f09e9fae0e095af9e7a32ced0f3a187580a6e69848451095"
+    },
+    "mod/action/script/c0000.hks": {
+      "inputSha256": "ecbbb7e2b60d896744829c51d7fdd51ab5a13bf6b7dd0f67cdd137e58a5383cb",
+      "outputSha256": "459c2041ddfd8a664883fcdedb6b16636eb85b4576e4ebd84e35ad7c081f55e7"
+    }
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}
