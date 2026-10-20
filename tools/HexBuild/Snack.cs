@@ -3,22 +3,22 @@ using System.Security.Cryptography;
 using System.Text.Json;
 
 static class Snack {
- public const int Owner=95003600,First=96110000,Lot=95420000;
+ public const int Owner=95003600,First=96110000,Lot=95420000,PremiumLot=95420010;
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
  static int N(PARAM.Row r,string f)=>Convert.ToInt32(r[f].Value);
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
-  for(int option=0;option<3;option++){
-   var r=clone("ItemLotParam_enemy",6100002,Lot+option);Set(r,"lotItem_Rarity",-1);
+  foreach(int first in new[]{Lot,PremiumLot})for(int option=0;option<3;option++){
+   var r=clone("ItemLotParam_enemy",6100002,first+option);Set(r,"lotItem_Rarity",-1);
    // Native lot lottery selects one pool for this choice, then the native
    // table resolves its class/eligibility filters. No reward permutations.
    for(int i=1;i<=3;i++){
     bool enabled=option==2||i==1;
     Set(r,$"lotItemId{i:00}",enabled?new[]{4200100,4200200,4200300}[i-1]:0);
     Set(r,$"lotItemCategory{i:00}",enabled?7:0);Set(r,$"lotItemNum{i:00}",enabled?1:0);
-    Set(r,$"lotItemBasePoint{i:00}",enabled?(option==2?new[]{800,100,100}[i-1]:1000):0);
+    Set(r,$"lotItemBasePoint{i:00}",enabled?(option==2?(first==PremiumLot?new[]{0,500,500}:new[]{900,50,50})[i-1]:1000):0);
    }
   }
  }
@@ -29,14 +29,16 @@ static class Snack {
   Mechanics((name,from,id)=>{var r=new PARAM.Row(templates[name].Rows.Single(r=>r.ID==from)){ID=id};generated.Add((name,id),r);return r;});
   var actual=templates.Keys.ToDictionary(n=>n,n=>Table(current,n));
   foreach(var(pair,row)in generated)Check(CageAI.Same(row,actual[pair.Item1].Rows.Single(r=>r.ID==pair.Item2)),"Extra Practice parameter differs from intended native template");
-  var choices=actual["ItemLotParam_enemy"].Rows.Where(r=>r.ID>=Lot&&r.ID<Lot+3).OrderBy(r=>r.ID).ToArray();
+  foreach(int first in new[]{Lot,PremiumLot}){
+  var choices=actual["ItemLotParam_enemy"].Rows.Where(r=>r.ID>=first&&r.ID<first+3).OrderBy(r=>r.ID).ToArray();
   Check(choices.Length==3,"Expected exactly three Extra Practice choices");
   for(int option=0;option<3;option++){
    Check(N(choices[option],"lotItem_Rarity")==-1,"Reward ball must use the resolved item's native rarity");
-   var row=choices[option];Check(N(row,"lotItemBasePoint01")== (option==2?800:1000)&&N(row,"lotItemId01")==4200100,"Basic-pool weight mismatch");
-   Check(N(row,"lotItemBasePoint02")== (option==2?100:0)&&N(row,"lotItemBasePoint03")== (option==2?100:0),"Mechanism/high weights must be 10% each in the last choice only");
+   var row=choices[option];Check(N(row,"lotItemBasePoint01")== (option==2?(first==PremiumLot?0:900):1000)&&N(row,"lotItemId01")==4200100,"Basic-pool weight mismatch");
+   Check(N(row,"lotItemBasePoint02")== (option==2?(first==PremiumLot?500:50):0)&&N(row,"lotItemBasePoint03")== (option==2?(first==PremiumLot?500:50):0),"Mechanism/high weights must match purchase quality in the last choice only");
    if(option==2)Check(N(row,"lotItemId02")==4200200&&N(row,"lotItemId03")==4200300,"Mechanism/high pool reference mismatch");
    Check(Enumerable.Range(1,8).Sum(i=>N(row,$"lotItemBasePoint{i:00}"))==1000,"Choice weights must sum to 1000");
+  }
   }
   var original=Table(native,"ItemTableParam");var tables=Table(current,"ItemTableParam");
   var pools=new[]{(4200100,15),(4200200,21),(4200300,20)};
@@ -47,11 +49,38 @@ static class Snack {
   Check(RewardCatalog.PackedIds(34).All(id=>effects.Rows.Any(r=>r.ID==id)),"Missing packed history capacity");
   foreach(var n in new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods"})Check(Table(current,n).Rows.Count(r=>r.ID==Owner)==1,"Missing/duplicate Extra Practice owner metadata");
   Check(N(tables.Rows.Single(r=>r.ID==RewardCatalog.Table(Owner)),"itemId")==Owner,"Missing hex reward reference");
-  return new{lot=Lot,choices=3,pools=pools.Select(p=>new{id=p.Item1,entries=p.Item2}),firstTwo=new[]{100,0,0},last=new[]{80,10,10},persistentRows=0,pendingRewardCountInMemory=true,historyBit=33,historyBytes=5};
+  return new{lot=Lot,premiumLot=PremiumLot,choices=3,pools=pools.Select(p=>new{id=p.Item1,entries=p.Item2}),firstTwo=new[]{100,0,0},last=new[]{90,5,5},premiumLast=new[]{0,50,50},persistentRows=0,pendingRewardCountInMemory=true,historyBit=33,historyBytes=5};
  }
- public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
-  Validate(native,SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin")),parse);
-  Console.WriteLine("PASS: installed Extra Practice native three-choice lotteries, 80/10/10 weights, original pools and no retired spending records");
+ public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,string? input=null){
+  Validate(native,SFUtil.DecryptNightreignRegulation(input??Path.Combine(root,"dist/mod/regulation.bin")),parse);
+  Console.WriteLine("PASS: installed Extra Practice native three-choice lotteries, 90/5/5 and 0/50/50 weights, original pools and no retired spending records");
+ }
+ public static void StageOdds(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,"work/extra-practice-odds/staged");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(file=>file.ID,file=>file.Bytes.ToArray());
+  var member=binder.Files.Single(file=>Name(file)=="ItemLotParam_enemy.param");var lots=parse("ItemLotParam_enemy",member.Bytes);
+  var original=parse("ItemLotParam_enemy",native.Files.Single(file=>Name(file)=="ItemLotParam_enemy.param").Bytes);
+  var expected=new Dictionary<int,PARAM.Row>();
+  Mechanics((name,from,id)=>{var row=new PARAM.Row(original.Rows.Single(row=>row.ID==from)){ID=id};expected.Add(id,row);return row;});
+  for(int option=0;option<3;option++){
+   var row=lots.Rows.Single(row=>row.ID==Lot+option);var oldExpected=new PARAM.Row(expected[row.ID]);
+   if(option==2){Set(oldExpected,"lotItemBasePoint01",800);Set(oldExpected,"lotItemBasePoint02",100);Set(oldExpected,"lotItemBasePoint03",100);}
+   Check(CageAI.Same(row,oldExpected),"Unexpected pre-update Extra Practice lottery");
+   Check(!lots.Rows.Any(row=>row.ID==PremiumLot+option),"Premium lottery ID collision");
+   lots.Rows[lots.Rows.IndexOf(row)]=expected[row.ID];lots.Rows.Add(expected[PremiumLot+option]);
+  }
+  lots.Rows=lots.Rows.OrderBy(row=>row.ID).ToList();member.Bytes=lots.Write();
+  string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Version==binder.Version&&final.Compression==binder.Compression&&final.Files.Count==binder.Files.Count,"Regulation metadata changed");
+  foreach(var file in final.Files){
+   var intended=binder.Files.Single(value=>value.ID==file.ID);Check(file.Name==intended.Name&&file.Flags==intended.Flags&&file.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Regulation readback mismatch");
+   if(file.ID!=member.ID){Check(file.Bytes.Span.SequenceEqual(before[file.ID]),"Unrelated parameter table changed");continue;}
+   var old=parse("ItemLotParam_enemy",before[file.ID]);var current=parse("ItemLotParam_enemy",file.Bytes);Check(current.Rows.Count==old.Rows.Count+3,"Unexpected lottery row count");
+   foreach(var row in old.Rows.Where(row=>row.ID!=Lot+2))Check(CageAI.Same(row,current.Rows.Single(value=>value.ID==row.ID)),"Unrelated lottery changed");
+  }
+  var audit=Validate(native,final,parse);HexTexts.Stage(root,hexes,Path.Combine(directory,"texts"),allRewards:true,onlyIds:new[]{Owner});
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),changedLot=Lot+2,addedLots=Enumerable.Range(PremiumLot,3),unrelatedRowsAndTablesUnchanged=true,audit,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Extra Practice purchase-quality lotteries and targeted texts staged; dist untouched");
  }
  public static void StageRework(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/extra-practice/staged");Directory.CreateDirectory(dir);

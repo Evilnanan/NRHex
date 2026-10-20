@@ -27,7 +27,7 @@ unsafe extern "system" fn apply(player:usize,id:i32,flag:u8)->u8{
   if FAIL.with(Cell::get){return 0;}
   MISTS.with(|s|s.set(s.get()+1));
   if REENTER.with(Cell::get){assert!(pulse(player,PULSE,IMAGE.with(Cell::get)));}
- }else{assert_eq!(id,COOLDOWN);if DEFER.with(Cell::get){return 1;}}
+ }else{assert!(matches!(id,COOLDOWN|READY));if DEFER.with(Cell::get){return 1;}}
  EFFECTS.with(|s|s.borrow_mut().insert(id));1
 }
 unsafe extern "system" fn owner_reference(_:usize,out:usize)->usize{out}
@@ -83,21 +83,25 @@ fn native_heartstealer_charge_selector_and_mist_emit_use_original_chain(){unsafe
   let count=(read_ptr(outp+0x10)-read_ptr(outp+8))/4;for &id in &ids[..count]{assert_eq!(id,PULSE);assert_eq!(crate::effect_detour(player,id,player,0,0,0,0,0,0,0,0),1);}count
  };
  EFFECTS.with(|s|s.borrow_mut().insert(OWNER));
+ assert!(ready(player,base));update(player,base,1./60.);assert!(has_effect(player,READY,base));
  // The actual native selector rejects empty category/ordinary/charged spells.
  for(kind,tag)in [(1,0),(1,102),(3,110),(4,110),(3,100),(4,100)]{assert_eq!(notify(kind,tag),0);assert_eq!(MISTS.with(Cell::get),0);}
  REENTER.with(|s|s.set(true));DEFER.with(|s|s.set(true));
  assert_eq!(notify(1,100),1);assert_eq!(MISTS.with(Cell::get),1);for _ in 0..100{assert_eq!(notify(1,100),1);}assert_eq!(MISTS.with(Cell::get),1);
+ assert!(!ready(player,base));assert!(!has_effect(player,READY,base));
  // A missing/deferred native effect cannot reopen the 30-second reservation.
  for _ in 0..29{update(player,base,1.);notify(1,100);}assert_eq!(MISTS.with(Cell::get),1);
  for dt in [0.,-1.,f32::NAN,f32::INFINITY,1.1]{update(player,base,dt);notify(1,100);}assert_eq!(MISTS.with(Cell::get),1);
- update(player,base,1.);DEFER.with(|s|s.set(false));notify(1,100);assert_eq!(MISTS.with(Cell::get),2);assert!(has_effect(player,COOLDOWN,base));
+ update(player,base,1.);assert!(ready(player,base));DEFER.with(|s|s.set(false));notify(1,100);assert_eq!(MISTS.with(Cell::get),2);assert!(has_effect(player,COOLDOWN,base));
  for _ in 0..30{update(player,base,1.);}notify(1,100);assert_eq!(MISTS.with(Cell::get),2);EFFECTS.with(|s|{s.borrow_mut().remove(&COOLDOWN);});notify(1,100);assert_eq!(MISTS.with(Cell::get),3);
  // Restored native cooldown blocks even when this DLL's reservation is empty.
  *GATE.lock().unwrap()=Gate::new();notify(1,100);assert_eq!(MISTS.with(Cell::get),3);
+ assert!(!ready(player,base));
  EFFECTS.with(|s|{s.borrow_mut().remove(&COOLDOWN);});
  for(mode,state,hp,owned)in [(0,0,0,true),(1,1,100,true),(2,2,100,true),(3,0,100,false)]{
   *GATE.lock().unwrap()=Gate::new();ptr::write((player+0x710)as*mut u8,state);int(stats+0x140,hp);EFFECTS.with(|s|{if owned{s.borrow_mut().insert(OWNER);}else{s.borrow_mut().remove(&OWNER);}});
   assert!(pulse(player,PULSE,base));assert_eq!(MISTS.with(Cell::get),3,"Invalid local actor mode {mode}");
+  assert!(!ready(player,base));update(player,base,1./60.);assert!(!has_effect(player,READY,base));
  }
  ptr::write((player+0x710)as*mut u8,0);int(stats+0x140,100);EFFECTS.with(|s|{s.borrow_mut().insert(OWNER);});assert!(pulse(player+8,PULSE,base));assert_eq!(MISTS.with(Cell::get),3);
  FAIL.with(|s|s.set(true));assert!(pulse(player,PULSE,base));assert_eq!(GATE.lock().unwrap().remaining,0.);FAIL.with(|s|s.set(false));pulse(player,PULSE,base);assert_eq!(MISTS.with(Cell::get),4);
@@ -107,5 +111,8 @@ fn native_heartstealer_charge_selector_and_mist_emit_use_original_chain(){unsafe
  for r in [&mist,&original_mist]{put(node,r.as_ptr()as usize);int(node+0x68,4);let before=SHOTS.with(Cell::get);emit(manager);assert_eq!(SHOTS.with(Cell::get),before+1);for flags in [0,8,0x40004,0x80004,0x80000004u32 as i32]{int(node+0x68,flags);emit(manager);}assert_eq!(SHOTS.with(Cell::get),before+1);}
  put(node,owner.as_ptr()as usize);int(node+0x68,4);let before=SHOTS.with(Cell::get);emit(manager);assert_eq!(SHOTS.with(Cell::get),before);
  reset(player,base);assert_eq!(GATE.lock().unwrap().remaining,0.);assert!(!has_effect(player,COOLDOWN,base)&&!has_effect(player,MIST,base));
+ assert!(!has_effect(player,READY,base));assert!(ready(player,base));update(player,base,1./60.);assert!(has_effect(player,READY,base));
+ EFFECTS.with(|effects|{effects.borrow_mut().insert(crate::reward_cycle_runtime::RESET);});
+ update(player,base,1./60.);assert!(!ready(player,base));assert!(!has_effect(player,READY,base));
  *GATE.lock().unwrap()=saved_gate;crate::BASE.store(saved_base,Ordering::Release);crate::ACTIVE.store(saved_active,Ordering::Release);assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
 }}

@@ -32,7 +32,7 @@ Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores
 <!-- hex:95000400 -->
 ## Ultimate Revolution
 
-Fully restores the Art gauge upon using an Ultimate Art. (45-second cooldown.)
+Fully restores the Art gauge upon using an Ultimate Art. (60-second cooldown.)
 
 <!-- hex:95000500 -->
 ## Heavy Drinking
@@ -192,4 +192,9 @@ Eliminates FP consumption for 10 seconds after activating an Ultimate Art.
 <!-- hex:95003900 -->
 ## Ultimate Unstoppable
 
-Grants Endure’s resistance to stagger for 15 seconds after activating an Ultimate Art.
+Greatly increases poise and grants immunity to status buildup for 15 seconds after activating an Ultimate Art.
+
+<!-- hex:95004000 -->
+## Ultimate Challenge
+
+Raises maximum HP by 50% and makes you more likely to be targeted by enemies for 15 seconds after activating an Ultimate Art.

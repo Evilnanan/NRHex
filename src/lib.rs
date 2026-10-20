@@ -50,6 +50,7 @@ mod night_blessing;
 mod heartstealer;
 mod ultimate_awakening;
 mod ultimate_unstoppable;
+mod ultimate_challenge;
 mod essence_reaver;
 mod ominous_pact;
 mod reward_terrain;
@@ -59,6 +60,7 @@ mod parry_data;
 mod hero_audio;
 mod storm_audio;
 mod spirit;
+mod spirit_kills;
 mod spirit_placement;
 mod spirit_npcs;
 mod spirit_bosses;
@@ -83,6 +85,7 @@ mod devils_gaze_audio;
 mod devils_gaze_hit;
 static MAGE:OnceLock<Mutex<archmage::Archmage>>=OnceLock::new();
 mod runtime;
+#[cfg(test)]mod ultimate_timing_native_tests;
 mod crystal;
 mod chant;
 static CHANT:OnceLock<Mutex<chant::Chant>>=OnceLock::new();
@@ -377,9 +380,9 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);183] {
+fn signatures()->[(&'static str,u32);187] {
  [(echo_cast::FACTORY_PATTERN,echo_cast::FACTORY_RVA as u32),(echo_cast::TARGET_COPY_PATTERN,echo_cast::TARGET_COPY_RVA as u32),(echo_cast::RELEASE_PATTERN,echo_cast::RELEASE_RVA as u32),(echo_cast::TARGET_VALID_PATTERN,echo_cast::TARGET_VALID_RVA as u32),(ambulance::ENV_PATTERN,ambulance::ENV_RVA as u32),(ambulance::NUMBER_PATTERN,ambulance::NUMBER_RVA as u32),(ambulance::COST_PATTERN,ambulance::COST_RVA as u32),(ambulance::HIT_PATTERN,ambulance::HIT_RVA as u32),(ambulance::MODE_PATTERN,ambulance::MODE_RVA as u32),(ambulance::COMMON_PATTERN,ambulance::COMMON_RVA as u32),(ambulance::FORMULA_PATTERN,ambulance::FORMULA_RVA as u32),(demons_lottery::ART_TABLE_PATTERN,demons_lottery::ART_TABLE as u32),(demons_lottery::ART_PICK_PATTERN,demons_lottery::ART_PICK as u32),(demons_lottery::ART_GET_PATTERN,demons_lottery::ART_GET as u32),(demons_lottery::SPELL_TABLE_PATTERN,demons_lottery::SPELL_TABLE as u32),(demons_lottery::SPELL_PICK_PATTERN,demons_lottery::SPELL_PICK as u32),(demons_lottery::SPELL_GET_PATTERN,demons_lottery::SPELL_GET as u32),(demons_lottery::RNG_PATTERN,demons_lottery::RNG_RVA as u32),(demons_params::CI_PATTERN,demons_params::CI_RVA as u32),(demons_params::WEAPON_PATTERN,demons_params::WEAPON_RVA as u32),(demons_runtime::REMOVE_PATTERN,demons_runtime::REMOVE_RVA as u32),(demons_runtime::TEAM_PATTERN,demons_runtime::TEAM_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
-  (snack::SPEND_PATTERN,snack::SPEND_RVA as u32),(snack::BUY_A_PATTERN,snack::BUY_A_RVA as u32),(snack::BUY_B_PATTERN,snack::BUY_B_RVA as u32),(snack::ITEM_A_PATTERN,snack::ITEM_A_RVA as u32),(snack::ITEM_B_PATTERN,snack::ITEM_B_RVA as u32),
+  (snack::SPEND_PATTERN,snack::SPEND_RVA as u32),(snack::BUY_A_PATTERN,snack::BUY_A_RVA as u32),(snack::BUY_B_PATTERN,snack::BUY_B_RVA as u32),(snack::ITEM_A_PATTERN,snack::ITEM_A_RVA as u32),(snack::ITEM_B_PATTERN,snack::ITEM_B_RVA as u32),(snack::RARITY_PATTERN,snack::RARITY_RVA as u32),
   (echo_cast::INITIALIZE_PATTERN,echo_cast::INITIALIZE_RVA as u32),(echo_cast::FINISH_PATTERN,echo_cast::FINISH_RVA as u32),(echo_cast::VOLLEY_CREATE_PATTERN,echo_cast::VOLLEY_CREATE_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -406,6 +409,8 @@ fn signatures()->[(&'static str,u32);183] {
   (PLAYER_HERO_PATTERN,0xb61462),
   (essence_reaver::RATE_PATTERN,essence_reaver::RATE_RVA as u32),
   (status_display::ROUTE_PATTERN,status_display::ROUTE_RVA as u32),
+  (spirit_runtime::KILL_PATTERN,spirit_runtime::KILL_RVA as u32),
+  (spirit_runtime::RECEIVE_PATTERN,spirit_runtime::RECEIVE_RVA as u32),
   (STATUS_SORT_PATTERN,STATUS_SORT_RVA as u32),(HUD_SORT_PATTERN,HUD_SORT_RVA as u32),(SPEED_PATTERN,SPEED_RVA as u32),(HIT_BUILD_PATTERN,HIT_BUILD_RVA as u32),(MAGIC_ANIM_PATTERN,0x456870),
   (ATTACK_RATES_PATTERN,ATTACK_RATES_RVA as u32),(EFFECT_FILTER_PATTERN,EFFECT_FILTER_RVA as u32),
   (ability_damage::BASE_PATTERN,ability_damage::BASE_RVA as u32),
@@ -415,6 +420,7 @@ fn signatures()->[(&'static str,u32);183] {
   (parry_turn::SET_ROTATION_PATTERN,parry_turn::SET_ROTATION_RVA as u32),
   (parry::HAND_STYLE_PATTERN,parry::HAND_STYLE_RVA as u32),
   (ominous_pact::HP_PATTERN,ominous_pact::HP_GUARD_RVA as u32),
+  (ultimate_challenge::RECALCULATE_PATTERN,ultimate_challenge::RECALCULATE_RVA as u32),
   (ominous_pact::NOTIFY_PATTERN,ominous_pact::NOTIFY_RVA as u32),
   (reward_terrain::GET_PATTERN,reward_terrain::GET_RVA as u32),
   (reward_reroll::CTOR_PATTERN,reward_reroll::CTOR_RVA as u32),
@@ -661,6 +667,8 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (archmage_cost::SELECT_RVA,archmage_cost::select as *const u8,&archmage_cost::SELECT_ORIGINAL),
    (archmage_cost::COST_RVA,archmage_cost::wrapper as *const u8,&archmage_cost::COST_ORIGINAL),
    (DEATH_RVA,death_detour as *const u8,&DEATH_ORIG),
+   (spirit_runtime::KILL_RVA,spirit_runtime::kill_detour as *const u8,&spirit_runtime::KILL_ORIGINAL),
+   (spirit_runtime::RECEIVE_RVA,spirit_runtime::receive_detour as *const u8,&spirit_runtime::RECEIVE_ORIGINAL),
    (SPIRIT_MODEL_RVA,spirit_runtime::spirit_model_detour as *const u8,&SPIRIT_MODEL_ORIG)];
   let mut arts_transfer_prepared=Vec::new();
   for (rva,detour,original) in arts_transfer_targets {
@@ -1586,7 +1594,9 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
   if matches!(effect,flasks::GRANTED|flasks::CAPTURE|flasks::CHURCH|flasks::CHURCH_REQUEST) && is_local(player,base) {
    if let Some(state)=FLASKS.get(){if let Ok(mut f)=state.lock(){f.applied(effect);}}
   }
-  if effect==runtime::ULTIMATE_TRIGGER&&is_local(player,base){ultimate_awakening::activated(player,base);ultimate_unstoppable::activated(player,base);on_effect(player,effect,base);}
+  if effect==runtime::ULTIMATE_TRIGGER&&is_local(player,base){ultimate_awakening::activated(player,base);ultimate_unstoppable::activated(player,base);ultimate_challenge::activated(player,base);}
+  if effect==runtime::ULTIMATE_ACTION&&is_local(player,base){on_effect(player,effect,base);}
+  if matches!(effect,102100|balloon::DOWN)&&is_local(player,base){ultimate_challenge::clear(player,base);}
   if matches!(effect,runtime::ULTIMATE_TRIGGER|runtime::FLASK_TRIGGER)&&is_local(player,base) {
    if let Some((stats,s))=snapshot(player,base) {
     if let Some(state)=RUNTIME.get() {
@@ -2236,6 +2246,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  if read_ptr(world+0x174e8)!=player {return;}
  if !dt.is_finite()||dt<=0.0||dt>1.0{return;}
  ambulance::update(player,base,dt);
+ ultimate_challenge::update(player,base,dt);
  echo_cast::update(player,base,dt);
  parry::update_turn(player);
  death_dance::update(player,base,dt);

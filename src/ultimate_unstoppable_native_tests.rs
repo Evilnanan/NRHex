@@ -55,6 +55,55 @@ fn row(bytes:&[u8],id:i32)->[u8;1024]{
 }
 #[test]
 #[ignore="requires NRHEX_NATIVE_EXE and NRHEX_UNSTOPPABLE_FIXTURES; run alone"]
+fn native_ultimate_unstoppable_buildup_immunity(){unsafe{
+ let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
+ let params=std::fs::read(std::env::var_os("NRHEX_UNSTOPPABLE_FIXTURES").unwrap()).unwrap();let buff=row(&params,BUFF);let endure=row(&params,1650);
+ let headers=crate::pe::Headers::parse(&raw,0).unwrap();let memory=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!memory.is_null());let base=memory as usize;
+ for section in &headers.sections{ptr::copy_nonoverlapping(raw[section.raw_offset as usize..].as_ptr(),(base+section.virtual_address as usize)as*mut u8,section.raw_size as usize);}
+ patch(base,0x26909a0,&[0xc3]);branch(base,0x42d801,0x42d988,&[]);
+ let mut actor=[0usize;0x200/8];let actor=actor.as_mut_ptr()as usize;
+ let mut manager=[0usize;8];let manager=manager.as_mut_ptr()as usize;put(actor+0x190,manager);
+ let mut node=[0usize;0x88/8];let node=node.as_mut_ptr()as usize;put(manager+8,node);put(node,buff.as_ptr()as usize);int(node+8,BUFF);
+ let mut resist=[0usize;0x100/8];let resist=resist.as_mut_ptr()as usize;put(resist+8,actor);
+ let mut context=[0usize;0x48/8];let context=context.as_mut_ptr()as usize;
+ let mut incoming=[0u8;1024];let incoming_ptr=incoming.as_mut_ptr()as usize;
+ let wrapper=[incoming_ptr,0usize];
+ let immunity:unsafe extern "system" fn(usize,u32)->u8=std::mem::transmute(base+0x509790);
+ let accumulate:unsafe extern "system" fn(usize,usize,usize)->u8=std::mem::transmute(base+0x42d110);
+ let states=[2u16,5,6,116,260,436,437];let offsets=[0xcc,0xd0,0xd4,0xd8,0x1a8,0x338,0x33c];
+ let boluses=[3061,3071,3051,3090,3093,3056,3066];
+ for index in 0..7{
+  assert_eq!(immunity(manager,index as u32),1);
+  ptr::write_unaligned((incoming_ptr+0x156)as*mut u16,states[index]);
+  for amount in [1,20,100000,-99999]{for attack_context in [0u8,1]{
+   ptr::write_bytes(context as*mut u8,0,0x48);float(context+0x38,1.);ptr::write((context+0x40)as*mut u8,attack_context);
+   for multiplier in 0..7{float(context+multiplier*4,1.);}
+   for meter in 0..7{int(resist+0x10+meter*4,1);int(resist+0x2c+meter*4,100);int(resist+0x64+meter*4,7);}
+   int(resist+0xb8,0);int(incoming_ptr+offsets[index],amount);
+   let before=std::slice::from_raw_parts(resist as*const u8,0x100).to_vec();let context_before=std::slice::from_raw_parts(context as*const u8,0x48).to_vec();
+   assert_eq!(accumulate(resist,wrapper.as_ptr()as usize,context),1);
+   assert_eq!(std::slice::from_raw_parts(resist as*const u8,0x100),before);
+   assert_eq!(std::slice::from_raw_parts(context as*const u8,0x48),context_before);
+  }}
+  let bolus=row(&params,boluses[index]);let bolus_wrapper=[bolus.as_ptr()as usize,0usize];
+  assert_eq!(accumulate(resist,bolus_wrapper.as_ptr()as usize,context),1);assert_eq!(crate::read_i32(resist+0x10+index*4),1);
+  for mode in 0..3{
+   put(node,if mode==0{endure.as_ptr()as usize}else{buff.as_ptr()as usize});int(node+0x68,if mode==1{2}else{0});put(manager+8,if mode==2{0}else{node});
+   assert_eq!(immunity(manager,index as u32),0);
+   ptr::write_bytes(context as*mut u8,0,0x48);float(context+0x38,1.);
+   for multiplier in 0..7{float(context+multiplier*4,1.);}
+   int(resist+0x10+index*4,50);int(incoming_ptr+offsets[index],10);
+   assert_eq!(accumulate(resist,wrapper.as_ptr()as usize,context),1);
+   assert_eq!(crate::read_i32(resist+0x10+index*4),40,"native meter write, status {index}, mode {mode}");
+   accumulate(resist,bolus_wrapper.as_ptr()as usize,context);
+   assert_eq!(crate::read_i32(resist+0x10+index*4),100,"native bolus removal, status {index}, mode {mode}");
+  }
+  put(node,buff.as_ptr()as usize);int(node+0x68,0);put(manager+8,node);
+ }
+ assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
+}}
+#[test]
+#[ignore="requires NRHEX_NATIVE_EXE and NRHEX_UNSTOPPABLE_FIXTURES; run alone"]
 fn native_ultimate_unstoppable_endure_reaction_and_private_replacement(){unsafe{
  let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
  let params=std::fs::read(std::env::var_os("NRHEX_UNSTOPPABLE_FIXTURES").unwrap()).unwrap();let buff=row(&params,BUFF);let endure=row(&params,1650);let sword=row(&params,crate::sword::POISE);let leaden=row(&params,3519);let fp=row(&params,crate::ultimate_awakening::BUFF);
@@ -77,7 +126,7 @@ fn native_ultimate_unstoppable_endure_reaction_and_private_replacement(){unsafe{
  let mut en=[0usize;0x88/8];let end_node=en.as_mut_ptr()as usize;put(end_node,endure.as_ptr()as usize);int(end_node+8,1650);float(end_node+0x4c,1.25);
  let mut sn=[0usize;0x88/8];let sword_node=sn.as_mut_ptr()as usize;put(sword_node,sword.as_ptr()as usize);int(sword_node+8,crate::sword::POISE);float(sword_node+0x4c,-1.);
  let cast=|id,actor|crate::effect_detour(actor,id,actor,0,0,0,0,0,0,0,0);
- cast(12345,player);ACCEPT.with(|s|s.set(0));assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),0);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(1));
+ cast(12345,player);cast(crate::runtime::ULTIMATE_ACTION,player);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(0));assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),0);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(1));
  cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(value(node+0x4c),15.);assert_eq!(candidate(base,manager,BUFF),1);
  let reaction:unsafe extern "system" fn(usize,u8,u8)->u8=std::mem::transmute(base+0x507c40);
  let mut original_manager=[0usize;8];let reference=original_manager.as_mut_ptr()as usize;put(reference+8,end_node);

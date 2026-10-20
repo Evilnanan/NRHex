@@ -14,8 +14,9 @@ pub(crate) unsafe extern "system" fn death_detour(actor: usize) {
         if is_local(actor, base) {
             balloon_runtime::prepare(actor, base);
             spirit_runtime::notify(actor, crate::balloon::DOWN, base);
+            crate::ultimate_challenge::clear(actor,base);
         }
-        spirit_runtime::record_soul(actor, base);
+        spirit_runtime::observe_soul(actor, base, false);
     }
     original(actor);
     if ACTIVE.load(Ordering::Acquire) {

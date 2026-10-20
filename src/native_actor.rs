@@ -33,20 +33,6 @@ pub(crate) unsafe fn incapacitated(actor: usize, stats: usize) -> bool {
         || matches!(ptr::read_unaligned((actor + 0x710) as *const u8), 1 | 2)
 }
 
-pub(crate) unsafe fn buddy(player: usize, base: usize, offset: usize, index: i32) -> usize {
-    let modules = read_ptr(player + 0x1b8);
-    if modules == 0 {
-        return 0;
-    }
-    let module = read_ptr(modules + offset);
-    if module == 0 {
-        return 0;
-    }
-    let get: unsafe extern "system" fn(usize, i32) -> usize =
-        std::mem::transmute(base + if offset == 0x160 { 0x460870 } else { 0x47f890 });
-    get(module, index)
-}
-
 pub(crate) unsafe fn resolve(base: usize, handle: u64) -> usize {
     let world = read_ptr(base + WORLD_RVA);
     if world == 0 || handle == 0 || handle == u64::MAX {

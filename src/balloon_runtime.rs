@@ -49,7 +49,10 @@ pub unsafe extern "system" fn state_detour(player:usize,state:u8,time:f32){
  let base=BASE.load(Ordering::Acquire);let local=ACTIVE.load(Ordering::Acquire)&&is_local(player,base);
  if local{prepare(player,base);}
  original(player,state,time);
- if local{transition(player,base);}
+ if local{
+  if matches!(state,1|2){crate::ultimate_challenge::clear(player,base);}
+  transition(player,base);
+ }
 }
 unsafe fn emit_balloon(player:usize,damage:i32,base:usize){
  debug_assert!(damage>0);

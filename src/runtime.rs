@@ -1,5 +1,3 @@
-//! Trigger logic independent of animation script replacement. Effects are
-//! observed only after successful native application, then applied on Update.
 pub const ULTIMATE: i32 = 95000400;
 pub const DRINKING: i32 = 95000500;
 pub const REGEN: i32 = 95000600;
@@ -20,7 +18,8 @@ pub const REGEN_FLASK: i32 = 95000602;
 pub const REGEN_GLOW: i32 = 95000603;
 pub const REGEN_INTERVAL: f32 = 0.25;
 pub fn can_regenerate(s: Snapshot) -> bool { s.owners & 4 != 0 && s.hp>0 && s.hp<s.max_hp && s.fp>=4 }
-pub const ULTIMATE_TRIGGER: i32 = 6999615;
+pub const ULTIMATE_ACTION: i32 = 6999615;
+pub const ULTIMATE_TRIGGER: i32 = 95000404;
 pub const FLASK_TRIGGER: i32 = 7010299;
 
 #[derive(Clone, Copy, Debug)]
@@ -137,7 +136,7 @@ impl Runtime {
         }
         if confirmed {
             self.pending = None;
-            self.cooldown_remaining = 45.0;
+            self.cooldown_remaining = 60.0;
             effects.push(COOLDOWN);
         }
         if can_regenerate(s) {
@@ -163,8 +162,9 @@ mod tests {
         assert!(!r.ultimate_ready(Snapshot{hp:0,..s}));
         assert!(!r.ultimate_ready(Snapshot{owners:0,..s}));
         r.applied(ULTIMATE_TRIGGER,s);assert!(!r.ultimate_ready(s));
-        r.cooldown_remaining=45.0;r.pending=None;assert!(!r.ultimate_ready(s));
-        for _ in 0..360{r.tick(s,0.125);}assert!(r.ultimate_ready(s));
+        r.cooldown_remaining=60.0;r.pending=None;assert!(!r.ultimate_ready(s));
+        for _ in 0..479{r.tick(s,0.125);}assert!(!r.ultimate_ready(s));
+        r.tick(s,0.125);assert!(r.ultimate_ready(s));
     }
     fn s() -> Snapshot { Snapshot { hp: 500, max_hp: 1000, fp: 100, gauge: 100.0, owners: 7, cooldown: false, beast: false } }
     fn step(r: &mut Runtime, s: Snapshot, n: usize) -> Vec<i32> {
@@ -316,7 +316,7 @@ mod tests {
         assert_eq!(step(&mut r,s,1),[COOLDOWN]);
         assert!(step(&mut r,s,10).is_empty());
     }
-    #[test] fn confirmed_refill_has_45_second_local_gate_even_before_effect_is_visible() {
+    #[test] fn confirmed_refill_has_60_second_local_gate_even_before_effect_is_visible() {
         let mut r=Runtime::default(); let mut s=s(); s.owners=1;
         r.synchronize(1,2,s); r.tick(s,0.1); r.applied(ULTIMATE_TRIGGER,s);
         s.gauge=0.0; assert_eq!(step(&mut r,s,4),[REFILL]);
@@ -325,6 +325,11 @@ mod tests {
         // The native saved marker is absent in this simulated async window.
         s.cooldown=false; r.applied(ULTIMATE_TRIGGER,s); s.gauge=0.0;
         assert!(step(&mut r,s,359).is_empty());
+        s.gauge=100.0; r.tick(s,0.125);
+        assert!(!r.ultimate_ready(s));
+        r.applied(ULTIMATE_TRIGGER,s); s.gauge=0.0;
+        assert!(step(&mut r,s,119).is_empty());
+        assert!(!r.ultimate_ready(s));
         s.gauge=100.0; r.tick(s,0.125); r.applied(ULTIMATE_TRIGGER,s);
         s.gauge=0.0; assert_eq!(step(&mut r,s,4),[REFILL]);
     }

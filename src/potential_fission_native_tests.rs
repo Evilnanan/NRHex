@@ -93,8 +93,8 @@ fn compiled_fission_routes_saved_charges_and_native_independent_groups(){unsafe{
   assert_eq!(NODES.with(|nodes|nodes.borrow().iter().filter(|node|read_ptr(node.as_ptr()as usize+0x18)==0).count()),1);
   ptr::write_unaligned((items+0x58)as*mut usize,0);NODES.with(|nodes|nodes.borrow_mut().clear());
   let mut balls=Vec::new();
-  for _ in 0..3{
-   assert_eq!(crate::spawn_personal_lot(player,base,crate::snack::LOT,None),3);
+  for lot in [crate::snack::LOT,crate::snack::PREMIUM_LOT,crate::snack::LOT]{
+   assert_eq!(crate::spawn_personal_lot(player,base,lot,None),3);
    let nodes=NODES.with(|nodes|nodes.borrow().iter().rev().take(3).map(|node|node.as_ptr()as usize).collect::<Vec<_>>());balls.push(nodes);
   }
   let nodes=NODES.with(|nodes|nodes.borrow().iter().map(|node|node.as_ptr()as usize).collect::<Vec<_>>());

@@ -11,7 +11,7 @@ static partial class NightBlessing{
    Set(r,"maxHpRate",1f);Set(r,"spCategory",20);Set(r,"iconId",-1);Set(r,"spEffectTextId_1",-1);Set(r,"displayIconForPermamentEffect",0);Set(r,"saveCategory",i==5?10:-1);
    Set(r,"effectEndurance",i<=2?15f:i==7?0f:-1f);
    if(i==5){Set(r,"dontDeleteOnDead",1);Set(r,"isDisableNetSync",1);}
-   if(i<=2){Set(r,"changeHpRate",-4f);Set(r,"changeHpPoint",i==1?-30:-60);Set(r,"motionInterval",1f);Set(r,"bCurrHPIndependeMaxHP",0);Set(r,"replaceSpEffectId",Owner+7+i);Set(r,"isDisableNetSync",1);}
+   if(i<=2){Set(r,"changeHpRate",-6f);Set(r,"changeHpPoint",i==1?-45:-90);Set(r,"motionInterval",1f);Set(r,"bCurrHPIndependeMaxHP",0);Set(r,"replaceSpEffectId",Owner+7+i);Set(r,"isDisableNetSync",1);}
    if(i==6||i>=8)Set(r,"isDisableNetSync",1);
    if(i>=10){Set(r,"changeHpRate",2f);Set(r,"changeHpPoint",i==10?15:30);Set(r,"motionInterval",1f);Set(r,"bCurrHPIndependeMaxHP",0);}
    if(i==3){foreach(string f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(r,f,1.2f);foreach(string f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(r,f,1);Set(r,"iconId",22206);Set(r,"spEffectTextId_1",Owner+3);}

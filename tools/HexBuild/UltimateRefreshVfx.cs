@@ -12,14 +12,16 @@ static class UltimateRefreshVfx {
   var visual=visuals.Rows.Single(r=>r.ID==Vfx);
   Check(Convert.ToInt32(visual["initSfxId"].Value)==803800&&Convert.ToInt32(visual["initDmyId"].Value)==220&&Convert.ToInt32(visual["midstSfxId"].Value)==-1&&Convert.ToInt32(visual["finishSfxId"].Value)==-1,"Native refill visual changed");
   // Runtime emits COOLDOWN only once, after a later Update confirms a full gauge.
-  // Its initial-only VFX plays at that confirmation, with no 45-second loop.
+  // Its initial-only VFX plays at that confirmation, with no cooldown-duration loop.
   var row=effects.Rows.Single(r=>r.ID==Cooldown);
-  Check(Convert.ToSingle(row["effectEndurance"].Value)==45f&&Convert.ToSingle(row["ultimateArtGauge"].Value)==0f&&Convert.ToInt32(row["replaceSpEffectId"].Value)==-1&&Convert.ToInt32(row["cycleOccurrenceSpEffectId"].Value)==-1,"Unexpected Ultimate Refresh cooldown");
+  Check(Convert.ToSingle(row["effectEndurance"].Value)==60f&&Convert.ToSingle(row["ultimateArtGauge"].Value)==0f&&Convert.ToInt32(row["replaceSpEffectId"].Value)==-1&&Convert.ToInt32(row["cycleOccurrenceSpEffectId"].Value)==-1,"Unexpected Ultimate Refresh cooldown");
   Check(Convert.ToInt32(row["vfxId"].Value) is -1 or Vfx,"Unexpected Ultimate Refresh visual");
   row["vfxId"].Value=Vfx;
  }
- public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse){
-  string dir=Path.Combine(root,".work/ultimate-refresh-vfx/staged");Directory.CreateDirectory(dir);
+ public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,bool cooldownOnly=false){
+  string field=cooldownOnly?"effectEndurance":"vfxId";
+  int value=cooldownOnly?60:Vfx;
+  string dir=Path.Combine(root,cooldownOnly?".work/ultimate-refresh-cooldown/staged":".work/ultimate-refresh-vfx/staged");Directory.CreateDirectory(dir);
   var common=BND4.Read(Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"));
   foreach(string name in new[]{"f000803800.fxr","f000803800.ffxreslist"})
    Check(common.Files.Any(f=>Path.GetFileName(f.Name)==name),"Missing shared native refill resource: "+name);
@@ -29,6 +31,12 @@ static class UltimateRefreshVfx {
   var file=binder.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param");
   var before=parse("SpEffectParam",file.Bytes);var effects=parse("SpEffectParam",file.Bytes);
   var visuals=parse("SpEffectVfxParam",binder.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectVfxParam.param").Bytes);
+  if(cooldownOnly){
+   var cooldown=effects.Rows.Single(row=>row.ID==Cooldown);
+   Check(Convert.ToSingle(cooldown[field].Value) is 45f or 60f,"Unexpected existing cooldown duration");
+   cooldown[field].Value=60f;
+   Check(Convert.ToInt32(cooldown["vfxId"].Value)==Vfx,"Unexpected cooldown visual");
+  }
   Apply(effects,visuals);file.Bytes=effects.Write();
   SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);
   var reopened=SFUtil.DecryptNightreignRegulation(output);
@@ -42,14 +50,14 @@ static class UltimateRefreshVfx {
   Check(before.Rows.Count==after.Count,"Effect count changed");
   foreach(var row in before.Rows)foreach(var cell in row.Cells){
    var actual=after[row.ID][cell.Def.InternalName].Value;
-   if(row.ID==Cooldown&&cell.Def.InternalName=="vfxId")Check(Convert.ToInt32(actual)==Vfx,"VFX readback mismatch");
+   if(row.ID==Cooldown&&cell.Def.InternalName==field)Check(Convert.ToSingle(actual)==value,"Cooldown field readback mismatch");
    else Check(JsonSerializer.Serialize(actual)==JsonSerializer.Serialize(cell.Value),$"Unrelated field changed: {row.ID}/{cell.Def.InternalName}");
   }
   File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{
    inputSha256=Hash(input),outputSha256=Hash(output),effectId=Cooldown,nativeSourceEffect=6999611,vfxId=Vfx,sfxId=803800,dummyId=220,
-   onlyCooldownVfxChanged=true,initialOnly=true,existingCommonResourceVerified=true,gameplayVerified=false
+   changedField=field,value,onlySelectedCooldownFieldChanged=true,initialOnly=true,existingCommonResourceVerified=true,gameplayVerified=false
   },new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: Ultimate Refresh confirmed cooldown uses native Favor of the Great Hollow initial VFX; only 95000402/vfxId changed; all other parameters preserved");
+  Console.WriteLine($"PASS: Ultimate Refresh only 95000402/{field} changed to {value}; all other parameters preserved");
  }
  public static void Probe(string root,BND4 binder,Func<string,Memory<byte>,PARAM> parse){
   var effects=parse("SpEffectParam",binder.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param").Bytes);

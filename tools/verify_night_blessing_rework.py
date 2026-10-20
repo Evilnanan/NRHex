@@ -12,7 +12,7 @@ d=json.loads((stage/'validation.json').read_text())
 effects={r['ID']:r['fields'] for r in d['effects']}
 for heal,token,drain,flat in [(95002501,95002508,95002510,15),(95002502,95002509,95002511,30)]:
     h,t,b=effects[heal],effects[token],effects[drain]
-    assert (h['changeHpRate'],h['changeHpPoint'],h['motionInterval'],h['effectEndurance'],h['replaceSpEffectId'])==(-4,-2*flat,1,15,token)
+    assert (h['changeHpRate'],h['changeHpPoint'],h['motionInterval'],h['effectEndurance'],h['replaceSpEffectId'])==(-6,-3*flat,1,15,token)
     assert h['bCurrHPIndependeMaxHP']==b['bCurrHPIndependeMaxHP']==0
     assert t['effectEndurance']==-1 and t['changeHpRate']==t['changeHpPoint']==0 and t['replaceSpEffectId']==-1
     assert (b['changeHpRate'],b['changeHpPoint'],b['motionInterval'],b['effectEndurance'],b['replaceSpEffectId'])==(2,flat,1,-1,-1)

@@ -14,6 +14,7 @@ pub struct Soul {
 }
 #[derive(Default)]
 pub struct Spirits {
+    pub(crate) kills: crate::spirit_kills::Kills,
     player: usize,
     owned: bool,
     soul: Option<Soul>,
@@ -33,6 +34,7 @@ impl Spirits {
             };
         }
         if !owned {
+            self.kills = Default::default();
             self.soul = None;
             self.stored_max_hp = 0;
             self.pending = false;
@@ -147,9 +149,6 @@ pub fn boss_npc(id: i32) -> bool {
 // An active/loading slot (0/1) wins even if a retired slot retains the same handle.
 pub fn slot_finished(handle: u64, slots: &[(u64, u8); 6]) -> bool {
     !slots.iter().any(|&(h, state)| h == handle && matches!(state, 0 | 1))
-}
-pub fn matches_killer(killer: u64, dot: u64, member: u64) -> bool {
-    member != 0 && member != u64::MAX && (killer == member || dot == member)
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -378,14 +377,6 @@ mod tests {
         assert_eq!(std::mem::offset_of!(Packet, npc), 12);
         assert_eq!(std::mem::offset_of!(Packet, map), 28);
         assert_eq!(std::mem::offset_of!(Packet, position), 32);
-    }
-    #[test]
-    fn native_killer_or_periodic_damage_must_belong_to_a_real_team_member() {
-        assert!(matches_killer(3, 7, 3));
-        assert!(matches_killer(9, 7, 7));
-        assert!(!matches_killer(9, 7, 5));
-        assert!(!matches_killer(0, 0, 0));
-        assert!(!matches_killer(u64::MAX, u64::MAX, u64::MAX));
     }
     #[test]
     fn stored_soul_survives_native_down_cleanup_but_not_a_real_owner_or_actor_loss() {

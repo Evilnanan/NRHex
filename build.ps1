@@ -157,6 +157,9 @@ try {
         dotnet run --project tools/HexBuild -- $PSScriptRoot --devils-gaze-resources-stage
         if ($LASTEXITCODE -ne 0) { throw 'Libra resource merge failed.' }
         Copy-Item -LiteralPath '.work/devils-gaze/staged/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Destination 'dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Force
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --heart-ready-fog-resources
+        if ($LASTEXITCODE -ne 0) { throw 'Heartstealer ready mist resource validation failed.' }
+        Copy-Item -LiteralPath 'work/heart-ready/fog-staged/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Destination 'dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx' -Force
         python -X utf8 tools/build_archmage_hks.py --inplace
         if ($LASTEXITCODE -ne 0) { throw 'Archmage spell-slot script validation failed.' }
         python -X utf8 tools/build_slingshot_hks.py --inplace
@@ -201,6 +204,9 @@ try {
         Copy-Item -LiteralPath '.work/night-blessing/staged/c0000.anibnd.dcx' -Destination 'dist/mod/chr/c0000.anibnd.dcx' -Force
         New-Item -ItemType Directory -Force 'dist/mod/script/talk' | Out-Null
         Copy-Item -LiteralPath '.work/night-blessing/staged/m00_00_00_00.talkesdbnd.dcx' -Destination 'dist/mod/script/talk/m00_00_00_00.talkesdbnd.dcx' -Force
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --ultimate-timing-actions
+        if ($LASTEXITCODE -ne 0) { throw 'Ultimate formal-activation action generation failed.' }
+        Copy-Item -LiteralPath 'work/ultimate-timing/staged/c0000.anibnd.dcx' -Destination 'dist/mod/chr/c0000.anibnd.dcx' -Force
         dotnet run --project tools/HexBuild -- $PSScriptRoot --regulation-compression
         if ($LASTEXITCODE -ne 0) { throw 'Regulation compression and decompressed content validation failed.' }
         python -X utf8 tools/verify_chant_hks.py

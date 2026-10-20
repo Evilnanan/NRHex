@@ -61,7 +61,7 @@ fn native_ultimate_awakening_success_refresh_and_fp_aggregation(){unsafe{
  let mut en=[0usize;0x88/8];let echo_node=en.as_mut_ptr()as usize;put(echo_node,echo.as_ptr()as usize);int(echo_node+8,crate::echo_cast::OWNER);put(node+0x38,echo_node);
  let mut tn=[0usize;0x88/8];let tear_node=tn.as_mut_ptr()as usize;put(tear_node,tear.as_ptr()as usize);int(tear_node+8,511060);float(tear_node+0x4c,7.);
  let cast=|id,actor|crate::effect_detour(actor,id,actor,0,0,0,0,0,0,0,0);
- float(node+0x4c,0.);assert_eq!(cast(12345,player),1);assert_eq!(APPLICATIONS.with(Cell::get),0);
+ float(node+0x4c,0.);assert_eq!(cast(12345,player),1);cast(crate::runtime::ULTIMATE_ACTION,player);assert_eq!(APPLICATIONS.with(Cell::get),0);
  ACCEPT.with(|s|s.set(0));assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),0);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(1));
  assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),1);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(value(node+0x4c),10.);assert_eq!(crate::read_i32(stats+0x150),42);
  for remaining in [9.5,1.,0.001]{float(node+0x4c,remaining);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),10.);}

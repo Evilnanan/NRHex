@@ -8,7 +8,7 @@
   {
     "textId": 95000403,
     "ownerId": 95000400,
-    "zhInfo": "施放绝招后，回复100%绝招量表",
+    "zhInfo": "发动绝招后，回复100%绝招量表",
     "enInfo": "Fully restores the Art gauge upon using an Ultimate Art."
   },
   {
@@ -68,7 +68,13 @@
   {
     "textId": 95003901,
     "ownerId": 95003900,
-    "zhInfo": "获得霸体效果",
-    "enInfo": "Grants Endure’s resistance to stagger."
+    "zhInfo": "大幅提升强韧度，且免疫异常累积",
+    "enInfo": "Greatly increases poise and grants immunity to status buildup."
+  },
+  {
+    "textId": 95004001,
+    "ownerId": 95004000,
+    "zhInfo": "提升50%血量上限，更容易被敌人攻击",
+    "enInfo": "Raises maximum HP by 50% and makes you more likely to be targeted by enemies."
   }
 ]

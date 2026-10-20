@@ -2,16 +2,20 @@
 //! compiled callback. Actor queries and private reward creation are fixtures.
 use super::*;use crate::win::*;use sha2::{Digest,Sha256};
 use std::{cell::RefCell,collections::BTreeSet};
-#[derive(Default)]struct Fixture{ids:BTreeSet<i32>,created:u32,spawns:u32,slot:u8}
+#[derive(Default)]struct Fixture{ids:BTreeSet<i32>,created:u32,spawns:u32,slot:u8,rarity:u8,row:Vec<u8>,lots:Vec<i32>}
 thread_local!{static FIXTURE:RefCell<Fixture>=RefCell::new(Fixture::default());}
 unsafe fn put(p:usize,n:usize){ptr::write_unaligned(p as*mut usize,n);}
 unsafe fn int(p:usize,n:i32){ptr::write_unaligned(p as*mut i32,n);}
 unsafe fn jump(base:usize,rva:usize,target:usize){let mut b=vec![0x48,0xb8];b.extend_from_slice(&target.to_le_bytes());b.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(b.as_ptr(),(base+rva)as*mut u8,b.len());}
 unsafe extern "system" fn has(_:usize,id:i32)->u8{FIXTURE.with(|f|u8::from(f.borrow().ids.contains(&id)))}
 unsafe extern "system" fn spawn(manager:usize,_:usize,lot:i32,a:u8,b:u8,c:u8,d:u8,pos:*const f32)->u8{
- assert_eq!((lot,a,b,c,d),(LOT,0,1,1,0));assert_eq!(ptr::read_unaligned(pos as*const [f32;4]),[0.;4]);
- FIXTURE.with(|f|{let mut f=f.borrow_mut();f.spawns+=1;crate::PERSONAL_REWARD.with(|s|{let mut scope=s.get();assert_eq!(scope.manager,manager);assert_eq!(scope.lot,LOT);assert_eq!(scope.slot,f.slot);assert!(scope.choices.is_none());scope.created=f.created;s.set(scope);});});1
+ assert!([LOT,PREMIUM_LOT].contains(&lot));assert_eq!((a,b,c,d),(0,1,1,0));assert_eq!(ptr::read_unaligned(pos as*const [f32;4]),[0.;4]);
+ FIXTURE.with(|f|{let mut f=f.borrow_mut();f.spawns+=1;f.lots.push(lot);crate::PERSONAL_REWARD.with(|s|{let mut scope=s.get();assert_eq!(scope.manager,manager);assert_eq!(scope.lot,lot);assert_eq!(scope.slot,f.slot);assert!(scope.choices.is_none());scope.created=f.created;s.set(scope);});});1
 }
+unsafe extern "system" fn weapon_param(out:usize,id:i32)->usize{
+ FIXTURE.with(|state|{let mut state=state.borrow_mut();state.row[0x240]=state.rarity;int(out,id);int(out+0x10,id-id%100);put(out+8,state.row.as_ptr()as usize);});out
+}
+fn set_pending(quantity:u32){let mut state=PENDING.lock().unwrap();*state=Pending::new();state.bought(quantity,false);}
 fn balance()->u32{PENDING.lock().unwrap().count}
 #[test]
 #[ignore="requires NRHEX_NATIVE_EXE; run alone"]
@@ -27,7 +31,10 @@ fn native_extra_practice_rewards_merchant_weapon_purchases(){unsafe{
  let mut modules=[0usize;0x80/8];let modules=modules.as_mut_ptr()as usize;put(player+0x1b8,modules);put(modules+0x68,1);
  let mut stats=[0usize;0x150/8];let stats=stats.as_mut_ptr()as usize;put(modules,stats);int(stats+0x140,100);
  let mut items=[0usize;0x60/8];let items=items.as_mut_ptr()as usize;put(base+crate::ITEMS_RVA,items);
- FIXTURE.with(|f|{*f.borrow_mut()=Fixture{created:3,slot:1,..Default::default()};f.borrow_mut().ids.extend([OWNER,crate::level_rewards::EXPEDITION]);});
+ FIXTURE.with(|f|{*f.borrow_mut()=Fixture{created:3,slot:1,row:vec![0;0x280],..Default::default()};f.borrow_mut().ids.extend([OWNER,crate::level_rewards::EXPEDITION]);});
+ jump(base,crate::demons_params::WEAPON_RVA,weapon_param as*const()as usize);
+ for rva in [0xea9a60,0x26909a0]{ptr::write((base+rva)as*mut u8,0xc3);}
+ ptr::copy_nonoverlapping([0xb0,1,0xc3].as_ptr(),(base+0x6c12f0)as*mut u8,3);
  jump(base,crate::HAS_EFFECT_RVA,has as*const()as usize);jump(base,crate::SPAWN_RVA,spawn as*const()as usize);
  let prepared=crate::hook::prepare((base+SPEND_RVA)as*mut u8,spent as*const u8,64).unwrap();SPEND_ORIGINAL.store(prepared.trampoline,Ordering::Release);crate::hook::write_code((base+SPEND_RVA)as*mut u8,&prepared.patch).unwrap();
  // Fixture prologue preserves the real RBX item record. Execute each original
@@ -39,7 +46,7 @@ fn native_extra_practice_rewards_merchant_weapon_purchases(){unsafe{
  }
  let buy_a:unsafe extern "system" fn(*const i32,usize)->u32=std::mem::transmute(base+0xa7cbb0);let buy_b:unsafe extern "system" fn(*const i32,usize)->u32=std::mem::transmute(base+0xa7cfb0);
  let mut capture=[0usize;0x120/8];let capture=capture.as_mut_ptr()as usize;
- let set=|code:u32,quantity|{int(capture+0x64,code as i32);int(capture+0x5c,code as i32);int(capture+0x118,quantity);int(capture+0x110,quantity);};
+ let set=|code:u32,quantity|{int(capture+0x64,code as i32);int(capture+0x5c,code as i32);int(capture+0xc0,code as i32);int(capture+0xb8,code as i32);int(capture+0x118,quantity);int(capture+0x110,quantity);};
  set(1_000_000,3);assert_eq!(buy_a(&8000,capture),999999);assert_eq!(balance(),3);assert_eq!(read_i32(game+0x190),999999);
  set(40_000_000,2);buy_b(&1,capture);assert_eq!(balance(),5);
  for buy in [buy_a,buy_b]{for price in [0,1,3499,3500,20_000]{set(33_000_000,1);let before=balance();int(game+0x190,0);assert_eq!(buy(&price,capture),price as u32);assert_eq!(balance(),before+1);}}
@@ -52,14 +59,24 @@ fn native_extra_practice_rewards_merchant_weapon_purchases(){unsafe{
  int(stats+0x140,0);update(player,base,1.);assert_eq!(balance(),before);int(stats+0x140,100);ptr::write((player+0x710)as*mut u8,1);update(player,base,1.);assert_eq!(balance(),before);ptr::write((player+0x710)as*mut u8,0);
  // Old pending balls do not block an independent new three-choice reward.
  let mut ball=[0usize;0xe0/8];let ball=ball.as_mut_ptr()as usize;put(items+0x58,ball);int(ball+0x78,2);ptr::write_unaligned((ball+0xca)as*mut u16,0xc0);int(ball+0xd8,LOT+1);
- PENDING.lock().unwrap().count=2;let count=FIXTURE.with(|f|f.borrow().spawns);update(player,base,1./60.);assert_eq!(balance(),0);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count+2);update(player,base,1./60.);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count+2);
+ set_pending(2);let count=FIXTURE.with(|f|f.borrow().spawns);update(player,base,1./60.);assert_eq!(balance(),0);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count+2);update(player,base,1./60.);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count+2);
  for slot in 1..=3{
-  int(data+8,slot);FIXTURE.with(|f|f.borrow_mut().slot=slot as u8);PENDING.lock().unwrap().count=2;
+  int(data+8,slot);FIXTURE.with(|f|f.borrow_mut().slot=slot as u8);set_pending(2);
   FIXTURE.with(|f|f.borrow_mut().created=0);update(player,base,1.);assert_eq!(balance(),2);
   FIXTURE.with(|f|f.borrow_mut().created=1);update(player,base,1.);assert_eq!(balance(),1);
   FIXTURE.with(|f|f.borrow_mut().created=3);update(player,base,1.);assert_eq!(balance(),0);
   let count=FIXTURE.with(|f|f.borrow().spawns);set(1_000_000,3);buy_a(&8000,capture);assert_eq!(balance(),3);update(player,base,1./60.);assert_eq!(balance(),0);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count+3);update(player,base,1.);assert_eq!(FIXTURE.with(|f|f.borrow().spawns),count+3);
  }
- PENDING.lock().unwrap().count=2;FIXTURE.with(|f|f.borrow_mut().ids.insert(crate::reward_cycle_runtime::RESET));buy_a(&8000,capture);assert_eq!(balance(),2);update(player,base,1.);assert_eq!(balance(),0);FIXTURE.with(|f|f.borrow_mut().ids.remove(&crate::reward_cycle_runtime::RESET));update(player,base,1.);assert_eq!(balance(),0);
+ set_pending(2);FIXTURE.with(|f|f.borrow_mut().ids.insert(crate::reward_cycle_runtime::RESET));buy_a(&8000,capture);assert_eq!(balance(),2);update(player,base,1.);assert_eq!(balance(),0);FIXTURE.with(|f|f.borrow_mut().ids.remove(&crate::reward_cycle_runtime::RESET));update(player,base,1.);assert_eq!(balance(),0);
+ for buy in [buy_a,buy_b]{
+  let mut expected=Vec::new();FIXTURE.with(|state|state.borrow_mut().lots.clear());
+  for (rarity,cursed) in [(0,false),(1,false),(2,false),(3,false),(0,true),(2,true),(4,false),(255,false)]{
+   set(1_000_000,2);FIXTURE.with(|state|state.borrow_mut().rarity=rarity);
+   ptr::write((capture+0xde)as*mut u8,u8::from(cursed));ptr::write((capture+0xd6)as*mut u8,u8::from(cursed));
+   buy(&4000,capture);expected.extend([if cursed||[2,3].contains(&rarity){PREMIUM_LOT}else{LOT};2]);
+  }
+  FIXTURE.with(|state|state.borrow_mut().rarity=0);ptr::write((capture+0xde)as*mut u8,0);ptr::write((capture+0xd6)as*mut u8,0);
+  update(player,base,1.);assert_eq!(balance(),0);assert_eq!(FIXTURE.with(|state|state.borrow().lots.clone()),expected);
+ }
  *PENDING.lock().unwrap()=saved_pending;crate::BASE.store(saved_base,Ordering::Release);crate::ACTIVE.store(saved_active,Ordering::Release);SPEND_ORIGINAL.store(ptr::null_mut(),Ordering::Release);assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
 }}

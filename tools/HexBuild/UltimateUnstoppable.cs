@@ -4,6 +4,7 @@ using System.Text.Json;
 static class UltimateUnstoppable {
  public const int Owner=95003900,Buff=Owner+1,Source=1650;
  static readonly string[] CutFields={"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"};
+ static readonly string[] ImmunityFields={"disablePoison","disableDisease","disableBlood","disableCurse","disableFreeze","disableSleep","disableMadness"};
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
@@ -11,6 +12,7 @@ static class UltimateUnstoppable {
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
   var r=clone("SpEffectParam",Source,Buff);
   Set(r,"effectEndurance",15f);Set(r,"spEffectTextId_1",Buff);foreach(var f in CutFields)Set(r,f,1f);
+  foreach(var field in ImmunityFields)Set(r,field,1);
  }
  static bool Removal(EMEVD.Instruction i,int effect)=>i.Bank==2004&&i.ID==21&&i.ArgData.Length==8&&BitConverter.ToInt32(i.ArgData)==20000&&BitConverter.ToInt32(i.ArgData,4)==effect;
  public static void Events(EMEVD ev){
@@ -28,6 +30,7 @@ static class UltimateUnstoppable {
   var origin=Table(native,"SpEffectParam");var actual=Table(current,"SpEffectParam");var source=origin.Rows.Single(r=>r.ID==Source);var buff=actual.Rows.Single(r=>r.ID==Buff);
   Check(CageAI.Same(source,actual.Rows.Single(r=>r.ID==Source)),"Original Endure changed");
   var expected=new PARAM.Row(source){ID=Buff};Set(expected,"effectEndurance",15f);Set(expected,"spEffectTextId_1",Buff);foreach(var f in CutFields)Set(expected,f,1f);
+  foreach(var field in ImmunityFields)Set(expected,field,1);
   Check(CageAI.Same(expected,buff),"Unstoppable differs from the reviewed native Endure clone");
   foreach(var f in CutFields)Check(Convert.ToSingle(buff[f].Value)==1f,"Unexpected damage reduction: "+f);
   Check(Convert.ToInt32(buff["spCategory"].Value)==1001&&Convert.ToInt32(buff["categoryPriority"].Value)==0&&Convert.ToInt32(buff["defFlickPower"].Value)==35,"Native Endure reaction metadata changed");
@@ -39,18 +42,39 @@ static class UltimateUnstoppable {
   var attach=Table(current,"AttachEffectParam").Rows.Single(r=>r.ID==Owner);var perm=Table(current,"PermanentBuffParam").Rows.Single(r=>r.ID==Owner);
   Check(Convert.ToInt32(attach["statusIconId"].Value)==22297&&Convert.ToInt32(attach["passiveSpEffectId_1"].Value)==Owner&&Convert.ToInt32(perm["spEffectId"].Value)==Owner&&Convert.ToInt32(perm["iconId"].Value)==21297,"Ability effect/icon wiring mismatch");
   var visual=Table(current,"SpEffectVfxParam").Rows.Single(r=>r.ID==8570);Check(CageAI.Same(visual,Table(native,"SpEffectVfxParam").Rows.Single(r=>r.ID==8570))&&Convert.ToInt32(visual["midstSfxId"].Value)==440111,"Native Endure visual changed");
-  return new{owner=Owner,buff=Buff,source=Source,seconds=15,historyBit=36,damageRates=CutFields.ToDictionary(f=>f,f=>buff[f].Value),nativeVfx=8570,nativeSfx=440111};
+  return new{owner=Owner,buff=Buff,source=Source,seconds=15,historyBit=36,damageRates=CutFields.ToDictionary(f=>f,f=>buff[f].Value),immunity=ImmunityFields.ToDictionary(f=>f,f=>buff[f].Value),nativeVfx=8570,nativeSfx=440111};
  }
  static void ValidateEvents(EMEVD ev){foreach(int id in new[]{1111,9100941})foreach(int effect in new[]{Owner,Buff})Check(ev.Events.Single(e=>e.ID==id).Instructions.Count(i=>Removal(i,effect))==1,"Missing/duplicate Unstoppable reset");}
  static void Fixture(string directory,BND4 current,Func<string,Memory<byte>,PARAM> parse){
-  var sp=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);sp.Rows=sp.Rows.Where(r=>new[]{Owner,Buff,Source,UltimateAwakening.Owner,UltimateAwakening.Buff,SwordPoise.Effect,SwordPoise.Source}.Contains(r.ID)).ToList();Directory.CreateDirectory(directory);File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),sp.Write());
+  var sp=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);sp.Rows=sp.Rows.Where(r=>new[]{Owner,Buff,Source,UltimateAwakening.Owner,UltimateAwakening.Buff,SwordPoise.Effect,SwordPoise.Source,3051,3056,3061,3066,3071,3090,3093}.Contains(r.ID)).ToList();Directory.CreateDirectory(directory);File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),sp.Write());
  }
  public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   var current=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));Validate(native,current,parse);Fixture(Path.Combine(root,"work/ultimate-unstoppable"),current,parse);
   string path=Path.Combine(root,"dist/mod/event/common.emevd.dcx");
   var raw=Environment.GetEnvironmentVariable("NRHEX_HEARTSTEALER_COMMON_RAW");EMEVD ev;
   if(!OperatingSystem.IsWindows()&&raw!=null){Check(Hash(path).Equals(Environment.GetEnvironmentVariable("NRHEX_HEARTSTEALER_COMMON_SHA256"),StringComparison.OrdinalIgnoreCase),"Common-event raw fixture does not match current package");ev=EMEVD.Read(raw);}else ev=EMEVD.Read(path);
-  ValidateEvents(ev);Console.WriteLine("PASS: installed Ultimate Unstoppable native Endure reactions without damage reduction, reward wiring, VFX and guarded run resets");
+  ValidateEvents(ev);Console.WriteLine("PASS: installed Ultimate Unstoppable native Endure reactions without damage reduction, seven native buildup immunities, reward wiring, VFX and guarded run resets");
+ }
+ public static void StageImmunity(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/ultimate-unstoppable/immunity-staged");Directory.CreateDirectory(dir);
+  var current=SFUtil.DecryptNightreignRegulation(input);var before=current.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var member=current.Files.Single(f=>Name(f)=="SpEffectParam.param");var effects=parse("SpEffectParam",member.Bytes);
+  var buff=effects.Rows.Single(r=>r.ID==Buff);
+  foreach(var field in ImmunityFields){Check(Convert.ToInt32(buff[field].Value) is 0 or 1,"Unexpected immunity flag");Set(buff,field,1);}
+  member.Bytes=effects.Write();Validate(native,current,parse);
+  string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,current,current.Compression);var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Version==current.Version&&final.Compression==current.Compression&&final.Files.Count==current.Files.Count,"Regulation metadata changed");
+  foreach(var file in final.Files){
+   var intended=current.Files.Single(f=>f.ID==file.ID);Check(file.Name==intended.Name&&file.Flags==intended.Flags&&file.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Regulation readback mismatch");
+   if(file.ID!=member.ID){Check(file.Bytes.Span.SequenceEqual(before[file.ID]),"Unrelated table changed");continue;}
+   var old=parse("SpEffectParam",before[file.ID]);var now=parse("SpEffectParam",file.Bytes);
+   Check(old.Rows.Count==now.Rows.Count,"Unexpected row count change");
+   foreach(var previous in old.Rows){var expected=new PARAM.Row(previous);if(previous.ID==Buff)foreach(var field in ImmunityFields)Set(expected,field,1);Check(CageAI.Same(expected,now.Rows.Single(r=>r.ID==previous.ID)),"Unrelated row/field changed");}
+  }
+  var audit=Validate(native,final,parse);Fixture(dir,final,parse);
+  HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner});
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),audit,changedFields=ImmunityFields,onlySevenBuffFlagsChanged=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Ultimate Unstoppable seven native buildup immunities staged; other parameter fields unchanged");
  }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/ultimate-unstoppable/staged");Directory.CreateDirectory(dir);

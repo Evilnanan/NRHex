@@ -82,7 +82,12 @@ PARAM Parse(string name,Memory<byte> bytes){
 if(args.Contains("--sword-poise-stage")){SwordPoise.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sword-poise-check")){SwordPoise.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-unstoppable-stage")){UltimateUnstoppable.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--ultimate-unstoppable-immunity-stage")){UltimateUnstoppable.StageImmunity(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--ultimate-timing-stage")){UltimateTiming.Stage(root,bnd,Parse);return;}
+if(args.Contains("--ultimate-timing-actions")){UltimateTiming.Actions(root);return;}
 if(args.Contains("--ultimate-unstoppable-check")){UltimateUnstoppable.Verify(root,bnd,Parse);return;}
+if(args.Contains("--ultimate-challenge-stage")){UltimateChallenge.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--ultimate-challenge-check")){UltimateChallenge.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
@@ -92,6 +97,8 @@ if(args.Contains("--momentum-delivery-stage")){Momentum.FixDelivery(root,bnd,Par
 if(args.Contains("--snack-stage")){Snack.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--snack-rework-stage")){Snack.StageRework(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--snack-check")){Snack.Verify(root,bnd,Parse);return;}
+if(args.Contains("--snack-odds-stage")){Snack.StageOdds(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--snack-odds-check")){Snack.Verify(root,bnd,Parse,Path.Combine(root,"work/extra-practice-odds/staged/regulation.bin"));return;}
 if(args.Contains("--snack-rarity-stage")){Snack.StageRarity(root,bnd,Parse);return;}
 if(args.Contains("--echo-cast-stage")){EchoCast.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--echo-cast-cost-stage")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),true);return;}
@@ -128,6 +135,10 @@ if(args.Contains("--reward-reroll")){RewardReroll.Stage(root,Parse);return;}
 if(args.Contains("--cat-wall-check")){CatWall.Probe(root,bnd,Parse);return;}
 if(args.Contains("--heart-mist-stage")){HeartMist.Stage(root,bnd,Parse);return;}
 if(args.Contains("--heart-mist-check")){HeartMist.Verify(root,bnd,Parse);return;}
+if(args.Contains("--heart-ready-probe")){HeartReady.Probe(root,bnd,Parse);return;}
+if(args.Contains("--heart-ready-stage")){HeartReady.Stage(root,bnd,Parse);return;}
+if(args.Contains("--heart-ready-fog")){HeartReadyFog.StageResources(root,smith,game);HeartReady.Stage(root,bnd,Parse);return;}
+if(args.Contains("--heart-ready-fog-resources")){HeartReadyFog.StageResources(root,smith,game);return;}
 if(args.Contains("--cage-hp-probe")){CageHealth.Probe(root,Parse);return;}
 if(args.Contains("--cage-hp-sync")){CageCoop.Stage(root,Parse);return;}
 if(args.Contains("--cage-hp-check")){CageCoop.Export(root,Parse);return;}
@@ -165,6 +176,10 @@ if(args.Contains("--red-envelope-probe")){RedEnvelope.Probe(root,bnd,Parse);retu
 if(args.Contains("--red-envelope-only")){RedEnvelope.Stage(root,Parse);return;}
 if(args.Contains("--ultimate-vfx-probe")){UltimateRefreshVfx.Probe(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-vfx-only")){UltimateRefreshVfx.Stage(root,Parse);return;}
+if(args.Contains("--ultimate-cooldown-stage")){
+ UltimateRefreshVfx.Stage(root,Parse,cooldownOnly:true);
+ HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/ultimate-refresh-cooldown/staged/texts"),onlyIds:new[]{95000400});return;
+}
 if(args.Contains("--escape-duchess-probe")){EscapeVfx.Probe(root,bnd,Parse);return;}
 if(args.Contains("--escape-resource-probe")){EscapeVfx.ResourceProbe(root);return;}
 if(args.Contains("--escape-audio-probe")){EscapeVfx.AudioProbe(root,game);return;}
@@ -690,6 +705,7 @@ if(args.Contains("--parry-followup-actions")){ParryFollowup.Actions(root,Parse("
 if(args.Contains("--contract-heart")){HeartMist.Stage(root,bnd,Parse);return;}
 if(args.Contains("--night-blessing")){NightBlessing.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--night-blessing-rework")){NightBlessing.Rework(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--night-blessing-rate")){NightBlessing.Rate(root,bnd,Parse);return;}
 if(args.Contains("--night-blessing-actions")){NightBlessing.Assets(root);return;}
 if(args.Contains("--parry-actions")){Parry.BuildActions(root,bnd,Parse);return;}
 if(args.Contains("--parry-support")){Parry.StageSupport(root,Parse);return;}
@@ -799,6 +815,8 @@ Snack.Mechanics(Clone);
 Momentum.Mechanics(Clone,pars["SpEffectParam"]);
 UltimateAwakening.Mechanics(Clone);
 UltimateUnstoppable.Mechanics(Clone);
+UltimateChallenge.Mechanics(Clone);
+UltimateTiming.Mechanics(Clone);
 Ambulance.RecoveryEffect(Clone,pars["SpEffectParam"]);
 Erosion.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
@@ -809,6 +827,7 @@ PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
 foreach(var fissionParam in new[]{"ItemTableParam","ItemLotParam_enemy"})added[fissionParam].AddRange(pars[fissionParam].Rows.Where(r=>r.ID>=PotentialFission.FirstTable&&r.ID<99000000).Select(r=>r.ID));
 EchoCast.Areas(root,Clone,pars);
 ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
+HeartReady.Mechanics(Clone,pars["SpEffectVfxParam"]);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
 foreach(var m in CageEncounters.Load(root).groups.SelectMany(g=>g.members))foreach(string n in new[]{"NpcParam","NpcThinkParam"})added[n].Add(95300000+m.index);
 Cages.MutationParameters(pars,Cages.TowerSources(root,cageBosses));
@@ -864,7 +883,7 @@ RedEnvelope.Rewards(Clone);
 // Retain the old refill row for compatibility; the DLL uses the native
 // percentage API in 0.2.2. Only the saved cooldown remains active here.
 var refill=Clone("SpEffectParam",99823,95000401);
-var cooldown=Clone("SpEffectParam",8000000,95000402);Set(cooldown,"maxHpRate",1f);Set(cooldown,"effectEndurance",45f);Set(cooldown,"iconId",-1);Set(cooldown,"displayIconForPermamentEffect",0);Set(cooldown,"spEffectTextId_1",95000400);
+var cooldown=Clone("SpEffectParam",8000000,95000402);Set(cooldown,"maxHpRate",1f);Set(cooldown,"effectEndurance",60f);Set(cooldown,"iconId",-1);Set(cooldown,"displayIconForPermamentEffect",0);Set(cooldown,"spEffectTextId_1",95000400);
 UltimateRefreshVfx.Apply(pars["SpEffectParam"],pars["SpEffectVfxParam"]);
 var ultimateReady=Clone("SpEffectParam",8000000,95000403);Set(ultimateReady,"maxHpRate",1f);Set(ultimateReady,"saveCategory",-1);Set(ultimateReady,"iconId",20297);Set(ultimateReady,"displayIconForPermamentEffect",1);Set(ultimateReady,"spEffectTextId_1",95000403);
 Set(ultimateReady,"spCategory",20);Set(ultimateReady,"effectEndurance",2f);
@@ -1027,7 +1046,7 @@ foreach(var f in drinkingRates)Require(Convert.ToSingle(Effect(95000300)[f].Valu
 foreach(var f in drinkingPowerRates)Require(Convert.ToSingle(Effect(95000300)[f].Value)==1f,"Glass Cannon must not also change pre-defense attack power");
 foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Require(Convert.ToInt32(Effect(95000300)[f].Value)==1,"Glass Cannon spell applicability mismatch");
 Require(Convert.ToSingle(Effect(95000401)["ultimateArtGauge"].Value)==100f&&Convert.ToSingle(Effect(95000401)["effectEndurance"].Value)==0f,"Ultimate pulse is not an instant +100 refill");
-Require(Convert.ToSingle(Effect(95000402)["effectEndurance"].Value)==45f,"Ultimate cooldown is not 45 seconds");
+Require(Convert.ToSingle(Effect(95000402)["effectEndurance"].Value)==60f,"Ultimate cooldown is not 60 seconds");
 Require(Convert.ToInt32(Effect(95000400)["iconId"].Value)==22297&&Convert.ToInt32(Effect(95000400)["displayIconForPermamentEffect"].Value)==0&&Convert.ToInt32(Effect(95000402)["iconId"].Value)==-1&&Convert.ToInt32(Effect(95000402)["displayIconForPermamentEffect"].Value)==0&&Convert.ToInt32(Effect(95000403)["iconId"].Value)==20297&&Convert.ToInt32(Effect(95000403)["displayIconForPermamentEffect"].Value)==1,"Ultimate must have its special-effects icon and only its ready HUD icon");
 Require(Convert.ToInt32(Effect(95000800)["stateInfo"].Value)==54&&Convert.ToSingle(Effect(95000800)["hearingSearchEnemyRate"].Value)==0f&&Convert.ToSingle(Effect(95000800)["sightSearchEnemyRate"].Value)==1f,"Cat silence must not introduce permanent invisibility");
 Require(Convert.ToInt32(Effect(95000801)["stateInfo"].Value)==600&&Convert.ToSingle(Effect(95000801)["effectEndurance"].Value)==1f&&Convert.ToInt32(Effect(95000801)["vfxId"].Value)==503500&&Convert.ToInt32(Effect(95000801)["spCategory"].Value)==20,"Cat invisibility must be one second and must not replace native Art category");
@@ -1201,6 +1220,7 @@ Cages.Terrain(ev);
 ContractHeart.Events(ev);
 UltimateAwakening.Events(ev);
 UltimateUnstoppable.Events(ev);
+UltimateChallenge.Events(ev);
 NightBlessing.ResetReceipt(ev);
 RewardCycle.Events(ev,RewardCatalog.PackedIds(RewardCatalog.HistoricalOwners.Length));
 RewardReroll.Events(ev);
