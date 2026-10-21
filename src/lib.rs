@@ -33,6 +33,7 @@ mod demons_lottery;
 mod red_envelope;
 mod snack;
 mod momentum;
+mod perfumer;
 mod reward_recovery;
 mod strength;
 mod strength_sword;
@@ -382,7 +383,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);195] {
+fn signatures()->[(&'static str,u32);199] {
  [(sword_projectile::BIND_PATTERN,sword_projectile::BIND_RVA as u32),
   (sword_projectile::CHILD_PATTERN,sword_projectile::CHILD_RVA as u32),
   (sword_projectile::RESET_PATTERN,sword_projectile::RESET_RVA as u32),
@@ -412,6 +413,7 @@ fn signatures()->[(&'static str,u32);195] {
   (storm_audio::REQUEST_PATTERN,storm_audio::REQUEST_RVA as u32),
   (erosion::COLLECT_PATTERN,erosion::COLLECT_RVA as u32),
   (archmage_cost::SELECT_PATTERN,archmage_cost::SELECT_RVA as u32),(archmage_cost::COST_PATTERN,archmage_cost::COST_RVA as u32),(archmage_runtime::PATTERN,archmage_runtime::RVA as u32),(glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
+  (perfumer::INVENTORY_PATTERN,perfumer::INVENTORY_RVA as u32),(perfumer::USE_PATTERN,perfumer::USE_RVA as u32),(perfumer::TARGET_PATTERN,perfumer::TARGET_RVA as u32),(perfumer::CAN_USE_PATTERN,perfumer::CAN_USE_RVA as u32),
   (ACTION_REQUEST_PATTERN,ACTION_REQUEST_RVA as u32),
   (FLASK_COUNT_PATTERN,FLASK_COUNT_RVA as u32),
   (GAME_DATA_PATTERN,0x1fd598),(REWARD_CREATE_PATTERN,REWARD_CREATE_RVA as u32),
@@ -630,6 +632,9 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (snack::SPEND_RVA,snack::spent as *const u8,&snack::SPEND_ORIGINAL),
    (echo_cost::RVA,echo_cost::detour as *const u8,&echo_cost::ORIGINAL),
    (echo_cast::EMIT_RVA,echo_cast::emit as *const u8,&echo_cast::EMIT_ORIGINAL),
+   (perfumer::INVENTORY_RVA,perfumer::inventory as *const u8,&perfumer::INVENTORY_ORIGINAL),
+   (perfumer::USE_RVA,perfumer::used as *const u8,&perfumer::USE_ORIGINAL),
+   (perfumer::CAN_USE_RVA,perfumer::can_use as *const u8,&perfumer::CAN_USE_ORIGINAL),
    (echo_cast::FACTORY_RVA,echo_cast::factory as *const u8,&echo_cast::FACTORY_ORIGINAL),
    (echo_cast::INITIALIZE_RVA,echo_cast::initialize as *const u8,&echo_cast::INITIALIZE_ORIGINAL),
    (echo_cast::FINISH_RVA,echo_cast::finish as *const u8,&echo_cast::FINISH_ORIGINAL),
@@ -2282,6 +2287,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  reward_cycle_runtime::update(player,base,dt);
  snack::update(player,base,dt);
  momentum::update(player,base,dt);
+ perfumer::update(player,base,dt);
  reward_reroll::update(player,base,dt);
  update_level_rewards(player,base);
  refresh_owned_status(player,base);

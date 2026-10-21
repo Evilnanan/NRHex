@@ -88,6 +88,8 @@ if(args.Contains("--ultimate-timing-actions")){UltimateTiming.Actions(root);retu
 if(args.Contains("--ultimate-unstoppable-check")){UltimateUnstoppable.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-challenge-stage")){UltimateChallenge.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-challenge-check")){UltimateChallenge.Verify(root,bnd,Parse);return;}
+if(args.Contains("--perfumer-stage")){Perfumer.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--perfumer-check")){Perfumer.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
@@ -814,6 +816,7 @@ DeathDance.Mechanics(Clone);
 Snack.Mechanics(Clone);
 Momentum.Mechanics(Clone,pars["SpEffectParam"]);
 UltimateAwakening.Mechanics(Clone);
+Perfumer.Mechanics(Clone);
 UltimateUnstoppable.Mechanics(Clone);
 UltimateChallenge.Mechanics(Clone);
 UltimateTiming.Mechanics(Clone);
@@ -1219,6 +1222,7 @@ reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),ne
 Cages.Terrain(ev);
 ContractHeart.Events(ev);
 UltimateAwakening.Events(ev);
+Perfumer.Events(ev);
 UltimateUnstoppable.Events(ev);
 UltimateChallenge.Events(ev);
 NightBlessing.ResetReceipt(ev);
