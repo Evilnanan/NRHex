@@ -1,0 +1,22 @@
+{
+  "version": "0.17.219",
+  "dllSha256": "3230823d11acd8c8370a8e03317d40e5fc2fb8880298c43d7f44e79398b6c098",
+  "backup": "D:\\Projects\\NRMod\\NRHex\\.work\\chant-219-before-20261021-220044",
+  "changedDistFiles": [
+    "mod\\action\\script\\c0000.hks",
+    "mod\\msg\\engus\\item_dlc01.msgbnd.dcx",
+    "mod\\msg\\engus\\menu_dlc01.msgbnd.dcx",
+    "mod\\msg\\zhocn\\item_dlc01.msgbnd.dcx",
+    "mod\\msg\\zhocn\\menu_dlc01.msgbnd.dcx",
+    "mod\\natives\\NRHex.dll",
+    "mod\\regulation.bin"
+  ],
+  "groupUnchanged": true,
+  "installed": true,
+  "buildPassed": true,
+  "unitTestsPassed": 429,
+  "unitTestsIgnored": 24,
+  "nativeStaminaCases": 9216,
+  "gameplayVerified": false,
+  "loadingVerified": false
+}

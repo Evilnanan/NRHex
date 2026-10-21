@@ -1,7 +1,7 @@
 """Execute only the native positive stamina add/clamp path, never the game."""
 from pathlib import Path
 import ctypes as c,hashlib,json,struct,os
-import pefile
+import pefile,tomllib
 root=Path(__file__).resolve().parents[1]
 game=Path(os.environ.get('NRHEX_GAME',str(Path(root.anchor)/'Program Files (x86)/Steam/steamapps/common/ELDEN RING NIGHTREIGN/Game')))
 raw=(game/'nightreign.exe').read_bytes();digest=hashlib.sha256(raw).hexdigest()
@@ -20,14 +20,15 @@ try:
  call=c.CFUNCTYPE(None,c.c_void_p,c.c_int,c.c_ubyte)(arena)
  stats=c.create_string_buffer(0x200);cases=0
  for current in [-50,-1,0,1,99,100]:
-  for amount in [1,2,46,69,1000]:
+  for amount in [1,2,30,46,69,1000]:
    for flags in range(256):
     c.memset(stats,0,0x200);stats[0x189]=flags;struct.pack_into('<ii',stats,0x15c,current,100)
     before=stats.raw;call(stats,amount,0)
     assert struct.unpack_from('<i',stats,0x15c)[0]==min(100,current+amount)
     assert stats.raw[:0x15c]==before[:0x15c] and stats.raw[0x160:]==before[0x160:]
     cases+=1
- stage=root/'.work/angel-chant-01740/staged'
- (stage/'native-validation.json').write_text(json.dumps(dict(version='0.17.40',exeSha256=digest,cases=cases,integerStaminaAddRva='4261D0',clampRva='427F00',positiveAdditionAndCapVerified=True,otherStatsUnchanged=True,gameplayVerified=False),indent=2))
+ stage=root/'work/chant-rework/staged';stage.mkdir(parents=True,exist_ok=True)
+ version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
+ (stage/'native-validation.json').write_text(json.dumps(dict(version=version,exeSha256=digest,cases=cases,integerStaminaAddRva='4261D0',clampRva='427F00',positiveAdditionAndCapVerified=True,otherStatsUnchanged=True,gameplayVerified=False),indent=2))
  print(f'PASS: {cases} native stamina addition and cap cases; no live game accessed')
 finally:k.VirtualFree(arena,0,0x8000)

@@ -8,6 +8,7 @@ static INIT:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 static DESTROY:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 static INVOKE:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 static SELECT:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+static REQUEST:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 static RECORDS:OnceLock<Mutex<HashMap<usize,Record>>>=OnceLock::new();
 thread_local!{static CONTEXT:Cell<usize>=const{Cell::new(0)};}
 
@@ -221,9 +222,27 @@ unsafe fn ensure(generator:usize){
   if !success&&!value.reported{value.reported=true;crate::nlog_warn!("CageDemand waiting for selected actor map={:#x} npc={}",record.map,record.npc);}
  }}
 }
-unsafe extern "system" fn invoke(generator:usize){
+unsafe fn request_actor(generator:usize){
  if let Ok(mut entries)=records().lock(){if let Some(value)=entries.get_mut(&generator){value.requested=true;value.reported=false;}}
  ensure(generator);
+}
+unsafe fn requested_generator(collection:usize,entity:u32)->Option<usize>{
+ if collection==0||!cage_map(read_i32(collection+0x10)as u32){return None;}
+ let count=read_i32(collection+0xd0);let begin=read_ptr(collection+0xd8);
+ if !(1..=4096).contains(&count)||begin==0{return None;}
+ for index in 0..count as usize{
+  let generator=read_ptr(begin+index*8);
+  if generator!=0&&read_i32(generator+0x210)as u32==entity{return Some(generator);}
+ }
+ None
+}
+unsafe extern "system" fn request(collection:usize,entity:*const u32)->u8{
+ if !entity.is_null(){if let Some(generator)=requested_generator(collection,ptr::read_unaligned(entity)){request_actor(generator);}}
+ let original:unsafe extern "system" fn(usize,*const u32)->u8=std::mem::transmute(REQUEST.load(Ordering::Acquire));
+ original(collection,entity)
+}
+unsafe extern "system" fn invoke(generator:usize){
+ request_actor(generator);
  let original:unsafe extern "system" fn(usize)=std::mem::transmute(INVOKE.load(Ordering::Acquire));original(generator);
 }
 unsafe extern "system" fn select(generator:usize,frame:usize){
@@ -233,6 +252,7 @@ unsafe extern "system" fn select(generator:usize,frame:usize){
 
 pub unsafe fn prepare(base:usize)->Result<Vec<(usize,hook::PreparedHook)>,String>{
  let calls:&[(usize,&[u8])]=&[
+  (0x4ddc90,&[0x8b,0x81,0x10,0x02,0x00,0x00,0x89,0x02,0x48,0x8b,0xc2,0xc3]),
   (0x518f30,&[0x48,0x89,0x5c,0x24,0x18,0x56,0x48,0x83,0xec,0x20]),
   (0xe35620,&[0x48,0x89,0x4c,0x24,0x08,0x53,0x48,0x83,0xec,0x30]),
   (0xe35690,&[0x48,0x89,0x4c,0x24,0x08,0x48,0x83,0xec,0x28]),
@@ -263,7 +283,8 @@ pub unsafe fn prepare(base:usize)->Result<Vec<(usize,hook::PreparedHook)>,String
  for &(rva,signature)in calls{
   if std::slice::from_raw_parts((base+rva)as*const u8,signature.len())!=signature{return Err(format!("Cage demand native ABI signature mismatch at {rva:#x}"));}
  }
- let targets:[(usize,*const u8,&AtomicPtr<u8>,&[u8]);7]=[
+ let targets:[(usize,*const u8,&AtomicPtr<u8>,&[u8]);8]=[
+  (0x528330,request as*const u8,&REQUEST,&[0x48,0x89,0x5c,0x24,0x10,0x48,0x89,0x6c,0x24,0x20]),
   (0x529530,preload as*const u8,&PRELOAD,&[0x48,0x89,0x5c,0x24,0x10,0x48,0x89,0x6c,0x24,0x18]),
   (0x4ad480,batch as*const u8,&BATCH,&[0x40,0x55,0x53,0x56,0x57,0x41,0x54]),
   (0x519d20,gate as*const u8,&GATE,&[0x48,0x89,0x5c,0x24,0x08,0x57,0x48,0x83,0xec,0x30]),
@@ -285,6 +306,23 @@ pub unsafe fn prepare(base:usize)->Result<Vec<(usize,hook::PreparedHook)>,String
 
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn demand_request_resolves_only_exact_generator_in_cage_map(){unsafe{
+  let mut collection=[0usize;28];let address=collection.as_mut_ptr()as usize;
+  let mut first=[0usize;67];let mut second=[0usize;67];
+  let first_address=first.as_mut_ptr()as usize;let second_address=second.as_mut_ptr()as usize;
+  let generators=[0,first_address,second_address];
+  ptr::write((first_address+0x210)as*mut u32,146603800);
+  ptr::write((second_address+0x210)as*mut u32,146603801);
+  ptr::write((address+0x10)as*mut u32,0x2e3c0605);
+  ptr::write((address+0xd0)as*mut i32,3);collection[0xd8/8]=generators.as_ptr()as usize;
+  assert_eq!(requested_generator(address,146603800),Some(first_address));
+  assert_eq!(requested_generator(address,146603801),Some(second_address));
+  assert_eq!(requested_generator(address,146603802),None);
+  ptr::write((address+0x10)as*mut u32,0x340a0605);assert_eq!(requested_generator(address,146603800),None);
+  ptr::write((address+0x10)as*mut u32,0x2e3c0605);
+  for count in [-1,0,4097]{ptr::write((address+0xd0)as*mut i32,count);assert_eq!(requested_generator(address,146603800),None);}
+  assert_eq!(requested_generator(0,146603800),None);
+ }}
  #[test]fn reward_tree_filters_instance_and_custom_group_without_mutation(){unsafe{
   let map=0x2e461a07u32;
   let mut manager=[0usize;3];let mut head=[0usize;6];

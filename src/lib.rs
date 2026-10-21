@@ -33,7 +33,6 @@ mod demons_lottery;
 mod red_envelope;
 mod snack;
 mod momentum;
-mod perfumer;
 mod reward_recovery;
 mod strength;
 mod strength_sword;
@@ -383,7 +382,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);200] {
+fn signatures()->[(&'static str,u32);196] {
  [(sword_projectile::BIND_PATTERN,sword_projectile::BIND_RVA as u32),
   (sword_projectile::CHILD_PATTERN,sword_projectile::CHILD_RVA as u32),
   (sword_projectile::RESET_PATTERN,sword_projectile::RESET_RVA as u32),
@@ -413,7 +412,6 @@ fn signatures()->[(&'static str,u32);200] {
   (storm_audio::REQUEST_PATTERN,storm_audio::REQUEST_RVA as u32),
   (erosion::COLLECT_PATTERN,erosion::COLLECT_RVA as u32),
   (archmage_cost::SELECT_PATTERN,archmage_cost::SELECT_RVA as u32),(archmage_cost::COST_PATTERN,archmage_cost::COST_RVA as u32),(archmage_runtime::PATTERN,archmage_runtime::RVA as u32),(glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
-  (perfumer::INVENTORY_PATTERN,perfumer::INVENTORY_RVA as u32),(perfumer::USE_PATTERN,perfumer::USE_RVA as u32),(perfumer::TARGET_PATTERN,perfumer::TARGET_RVA as u32),(perfumer::CAN_USE_PATTERN,perfumer::CAN_USE_RVA as u32),
   (ACTION_REQUEST_PATTERN,ACTION_REQUEST_RVA as u32),
   (FLASK_COUNT_PATTERN,FLASK_COUNT_RVA as u32),
   (GAME_DATA_PATTERN,0x1fd598),(REWARD_CREATE_PATTERN,REWARD_CREATE_RVA as u32),
@@ -633,9 +631,6 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (snack::PRICE_RVA,snack::price as *const u8,&snack::PRICE_ORIGINAL),
    (echo_cost::RVA,echo_cost::detour as *const u8,&echo_cost::ORIGINAL),
    (echo_cast::EMIT_RVA,echo_cast::emit as *const u8,&echo_cast::EMIT_ORIGINAL),
-   (perfumer::INVENTORY_RVA,perfumer::inventory as *const u8,&perfumer::INVENTORY_ORIGINAL),
-   (perfumer::USE_RVA,perfumer::used as *const u8,&perfumer::USE_ORIGINAL),
-   (perfumer::CAN_USE_RVA,perfumer::can_use as *const u8,&perfumer::CAN_USE_ORIGINAL),
    (echo_cast::FACTORY_RVA,echo_cast::factory as *const u8,&echo_cast::FACTORY_ORIGINAL),
    (echo_cast::INITIALIZE_RVA,echo_cast::initialize as *const u8,&echo_cast::INITIALIZE_ORIGINAL),
    (echo_cast::FINISH_RVA,echo_cast::finish as *const u8,&echo_cast::FINISH_ORIGINAL),
@@ -1484,14 +1479,13 @@ unsafe fn sword_hit_point(hit:usize)->[f32;4]{ptr::read_unaligned((hit+0x1f0) as
 unsafe fn update_sword(player:usize,base:usize){
  let modules=read_ptr(player+0x1b8);if modules==0{return;}
  let stats=read_ptr(modules);if stats==0{return;}
- let owned=has_effect(player,sword::OWNER,base);let alive=read_i32(stats+0x140)>0;
+ let owned=has_effect(player,sword::OWNER,base);let alive=!native_actor::incapacitated(player,stats);
  let marker=has_effect(player,sword::CAST_OWNER,base);
  let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+APPLY_SELF_RVA);
  let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+REMOVE_EFFECT_RVA);
- if owned&&alive {
-  if !marker {apply(player,sword::CAST_OWNER,0);}
- }else{
-  for id in [sword::CAST_OWNER,sword::GUARD,sword::POISE]{if has_effect(player,id,base){remove(read_ptr(player+0x190),id);}}
+ if let Some(desired)=sword::regain_marker_change(owned,alive,marker){
+  if desired {apply(player,sword::CAST_OWNER,0);}
+  else {remove(read_ptr(player+0x190),sword::CAST_OWNER);}
  }
  let casting=sword_casting(player,owned,alive);
  for id in [sword::GUARD,sword::POISE,sword::WEAPON_RIGHT,sword::WEAPON_LEFT]{
@@ -2234,21 +2228,24 @@ unsafe fn promote_cage_mutation(actor:usize,base:usize,notified:bool){
 unsafe fn combat_alive(player:usize,stats:usize,base:usize)->bool{
  read_i32(stats+0x140)>0&&!has_effect(player,102100,base)&&!has_effect(player,102150,base)
 }
-unsafe fn update_chant(player:usize,base:usize,dt:f32){
+unsafe fn update_chant(player:usize,base:usize){
  let modules=read_ptr(player+0x1b8);if modules==0{return;}let stats=read_ptr(modules);if stats==0{return;}
  let alive=combat_alive(player,stats,base);
- let enabled=alive&&has_effect(player,chant::OWNER,base);
- if let Ok(mut s)=CHANT.get_or_init(||Mutex::new(chant::Chant::default())).lock(){s.frame(player,stats,enabled,dt);}
+ let enabled=alive&&!native_actor::incapacitated(player,stats)&&has_effect(player,chant::OWNER,base);
+ if let Ok(mut s)=CHANT.get_or_init(||Mutex::new(chant::Chant::default())).lock(){s.frame(player,stats,enabled);}
  let present=has_effect(player,chant::ENABLED,base);
  if enabled&&!present{let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+APPLY_SELF_RVA);apply(player,chant::ENABLED,0);}
  else if !enabled&&present{let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+REMOVE_EFFECT_RVA);remove(read_ptr(player+0x190),chant::ENABLED);}
 }
 unsafe fn chant_pulse(player:usize,base:usize){
  let modules=read_ptr(player+0x1b8);if modules==0{return;}let stats=read_ptr(modules);if stats==0{return;}
- let active=combat_alive(player,stats,base)&&has_effect(player,chant::OWNER,base)&&has_effect(player,100610,base);
- let amount=CHANT.get().and_then(|s|s.lock().ok().map(|mut s|s.pulse(player,stats,active,read_i32(stats+0x15c)>=read_i32(stats+0x160)))).unwrap_or(0);
+ let active=combat_alive(player,stats,base)&&!native_actor::incapacitated(player,stats)&&has_effect(player,chant::OWNER,base);
+ let completed=CHANT.get().and_then(|s|s.lock().ok().map(|mut s|s.pulse(player,stats,active,has_effect(player,100610,base)))).unwrap_or(false);
  // Same signed integer addition/clamping API as native HKS act(1001).
- if amount>0{let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+STAMINA_ADD_RVA);add(stats,amount,0);}
+ if completed{
+  let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+STAMINA_ADD_RVA);add(stats,chant::RESTORE,0);
+  let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+APPLY_SELF_RVA);apply(player,chant::VISUAL,0);
+ }
 }
 unsafe extern "system" fn on_update(player:usize,dt:f32) {
  if !ACTIVE.load(Ordering::Acquire)||player==0{return;}
@@ -2269,7 +2266,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  heartstealer::update(player,base,dt);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
- update_chant(player,base,dt);
+ update_chant(player,base);
  update_runtime(player,base,dt);
  update_sword(player,base);
  update_escape(player,base,dt);
@@ -2288,7 +2285,6 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  reward_cycle_runtime::update(player,base,dt);
  snack::update(player,base,dt);
  momentum::update(player,base,dt);
- perfumer::update(player,base,dt);
  reward_reroll::update(player,base,dt);
  update_level_rewards(player,base);
  refresh_owned_status(player,base);

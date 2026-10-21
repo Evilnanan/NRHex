@@ -25,6 +25,14 @@ fn main(){unsafe{
   tick(s,0.1);state("after_0.2_seconds",s);assert!((number(s+0x168)-if clear==1{100.}else{300.}).abs()<0.01);
   queue(s,999.);tick(s,0.016);state("attack_recovery",s);assert_eq!(ptr::read_unaligned((s+0x140)as*const i32),if clear==1{800}else{1000});
  }
+ ptr::write_bytes(s as*mut u8,0,0x200);int(s+0x140,200);int(s+0x144,200);
+ set(s,0,1,1.,1.,1);queue(s,999.);tick(s,0.016);state("zero_hp_with_regain_state_present",s);
+ assert_eq!(ptr::read_unaligned((s+0x140)as*const i32),0);
+ assert_eq!(number(s+0x168),200.);assert_eq!(number(s+0x174),200.);
+ tick(s,5.);state("dead_pool_expires",s);
+ assert_eq!(ptr::read_unaligned((s+0x140)as*const i32),0);assert_eq!(number(s+0x168),0.);assert_eq!(number(s+0x174),0.);
+ set(s,200,1,0.,1.,1);queue(s,999.);tick(s,0.016);state("revival_without_old_pool",s);
+ assert_eq!(ptr::read_unaligned((s+0x140)as*const i32),200);assert_eq!(number(s+0x168),0.);
  VirtualFree(memory,0,0x8000);
  println!("PASS: original native setter and settlement confirm only the new hit remains protected when clear=1; clear=0 preserves protection of both");
 }}

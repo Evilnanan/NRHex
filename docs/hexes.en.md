@@ -102,7 +102,7 @@ Stores the soul of a powerful enemy defeated by the party, replacing it only wit
 <!-- hex:95002000 -->
 ## Don't Change the Channel
 
-Restores 30 stamina per second while charging sorceries or incantations.
+Restores 30 stamina upon fully charging a sorcery or incantation.
 
 <!-- hex:95002100 -->
 ## Archmage
@@ -198,8 +198,3 @@ Greatly increases poise and grants immunity to status buildup for 15 seconds aft
 ## Ultimate Challenge
 
 Raises maximum HP by 50% and makes you more likely to be targeted by enemies for 15 seconds after activating an Ultimate Art.
-
-<!-- hex:95004100 -->
-## Perfumer
-
-Use a random aromatic every 30 seconds, only when it is safe to do so.

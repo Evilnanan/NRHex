@@ -116,10 +116,6 @@ unsafe fn toward_down(owner:Identity,base:usize,angle:f32,speed:f32)->bool{
 }
 type Env=unsafe extern "system" fn(usize,i32,usize)->i32;
 pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
- if matches!(code,crate::perfumer::BEGIN|crate::perfumer::CLIP_ACTIVE|crate::perfumer::CLIP_INACTIVE|crate::perfumer::MANUAL){
-  if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}
-  return crate::perfumer::query(read_ptr(context),code,BASE.load(Ordering::Acquire));
- }
  if code==crate::cat_wall::QUERY{
   if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}
   return i32::from(crate::cat_wall::enabled(read_ptr(context),BASE.load(Ordering::Acquire)));

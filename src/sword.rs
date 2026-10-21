@@ -78,6 +78,11 @@ pub fn heal_amount(damage:i32,percentage:f32,nullified:bool)->u32{
 pub fn casting(player:usize,owned:bool,alive:bool,pulse_player:usize,last:u64,now:u64)->bool{
  owned&&alive&&player!=0&&player==pulse_player&&last!=0&&now>=last&&now-last<100
 }
+pub fn regain_marker_change(owned:bool,alive:bool,present:bool)->Option<bool>{
+ if !owned&&present {Some(false)}
+ else if owned&&alive&&!present {Some(true)}
+ else {None}
+}
 pub fn casting_effect(id:i32,casting:bool,_hand:i32)->bool{
  // Retired hand visuals stay in the runtime cleanup list, but are never applied.
  casting&&matches!(id,GUARD|POISE)
@@ -90,6 +95,34 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn regain_marker_is_not_removed_at_zero_hp_or_readded_while_incapacitated(){
+  for owned in [false,true]{for alive in [false,true]{for present in [false,true]{
+   let expected=match (owned,alive,present){
+    (false,_,true)=>Some(false),
+    (true,true,false)=>Some(true),
+    _=>None,
+   };
+   assert_eq!(regain_marker_change(owned,alive,present),expected);
+  }}}
+ }
+ #[test]fn regain_lifecycle_keeps_native_cleanup_separate_from_casting_protection(){
+  let mut present=false;
+  for (owned,alive,native_cleanup,expected) in [
+   (true,true,false,true),
+   (true,false,false,true),
+   (true,false,true,false),
+   (true,false,false,false),
+   (true,true,false,true),
+   (false,true,false,false),
+   (false,false,false,false),
+  ]{
+   if native_cleanup {present=false;}
+   if let Some(desired)=regain_marker_change(owned,alive,present){present=desired;}
+   assert_eq!(present,expected);
+   let active=casting(1,owned,alive,1,100,101);
+   for effect in [GUARD,POISE]{assert_eq!(casting_effect(effect,active,0),owned&&alive);}
+  }
+ }
  #[test]fn recovery_retains_cast_spell_without_reviving_stale_protection(){
   assert_eq!(pulse_magic(true,true,4000,5000),Some(4000));
   assert_eq!(pulse_magic(true,true,4000,-1),Some(4000));

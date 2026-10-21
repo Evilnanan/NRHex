@@ -254,16 +254,20 @@ unsafe fn suspend_other_threads() -> SuspendedThreads {
         if entry.th32OwnerProcessID == pid && entry.th32ThreadID != me {
             let h = OpenThread(THREAD_SUSPEND_RESUME, 0, entry.th32ThreadID);
             if !h.is_null() && h != INVALID_HANDLE_VALUE {
-                if SuspendThread(h) != u32::MAX {
-                    handles.push(h);
-                } else {
-                    CloseHandle(h);
-                }
+                handles.push(h);
             }
         }
         ok = Thread32Next(snapshot, &mut entry) != 0;
     }
     CloseHandle(snapshot);
+    handles.retain(|&handle| {
+        if SuspendThread(handle) != u32::MAX {
+            true
+        } else {
+            CloseHandle(handle);
+            false
+        }
+    });
     SuspendedThreads(handles)
 }
 
@@ -346,4 +350,37 @@ pub fn spin_hint() {
 
 pub fn report_failure(what: &str, err: &str) {
     error!("{what}: {err}");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::{Arc, atomic::{AtomicBool, AtomicUsize, Ordering}};
+
+    #[test]
+    #[ignore = "suspends this test process; run alone"]
+    fn native_thread_freeze_resumes_large_thread_set() {
+        let stop = Arc::new(AtomicBool::new(false));
+        let ready = Arc::new(AtomicUsize::new(0));
+        let workers: Vec<_> = (0..136).map(|_| {
+            let stop = Arc::clone(&stop);
+            let ready = Arc::clone(&ready);
+            std::thread::spawn(move || {
+                ready.fetch_add(1, Ordering::Release);
+                while !stop.load(Ordering::Acquire) {
+                    std::thread::sleep(std::time::Duration::from_millis(5));
+                }
+            })
+        }).collect();
+        while ready.load(Ordering::Acquire) != workers.len() {
+            std::thread::yield_now();
+        }
+        let visits = AtomicUsize::new(0);
+        for _ in 0..3 {
+            with_threads_frozen(true, || { visits.fetch_add(1, Ordering::Relaxed); });
+        }
+        stop.store(true, Ordering::Release);
+        for worker in workers { worker.join().unwrap(); }
+        assert_eq!(visits.load(Ordering::Relaxed), 3);
+    }
 }

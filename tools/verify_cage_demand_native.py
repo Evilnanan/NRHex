@@ -14,7 +14,7 @@ binary = pefile.PE(data=raw, fast_load=True)
 binary.parse_data_directories(directories=[5])
 source = (ROOT / 'src/cage_demand.rs').read_text(encoding='utf-8')
 signatures = re.findall(r'\(0x([0-9a-f]+),[^\n]*?&\[([0-9a-fx,]+)\]\)', source)
-assert len(signatures) == 33
+assert len(signatures) == 35
 for address, values in signatures:
     expected = bytes(int(value, 16) for value in values.split(','))
     assert binary.get_data(int(address, 16), len(expected)) == expected, address
@@ -186,6 +186,34 @@ try:
     assert native.c_int.from_buffer(generator, 0x224).value == 1
     assert native.c_ubyte.from_buffer(generator, 0x48).value == 1
     cases.append({'emptyWaits': True, 'boundDormantActorAdvancesToSpawn': True})
+
+    network = native.create_string_buffer(0x90)
+    peer_vector = native.create_string_buffer(3 * 0xf0)
+    generators = (native.c_void_p * 1)(native.addressof(generator))
+    requests = native.create_string_buffer(0xe0)
+    native.c_uint64.from_address(base + 0x3c21ec8).value = native.addressof(network)
+    pointer(network, 0x78, native.addressof(peer_vector))
+    pointer(requests, 0xd8, native.addressof(generators))
+    native.c_int.from_buffer(requests, 0xd0).value = 1
+    native.c_uint.from_buffer(requests, 0x10).value = 0x2e3c0605
+    native.c_uint.from_buffer(generator, 0x210).value = 146603800
+    patch(0xdf0af0, bytes.fromhex('0f b6 41 08 c3'))
+    patch(0x4de4d0, bytes.fromhex('ff 41 48 c3'))
+    invoke_request = native.WINFUNCTYPE(native.c_ubyte, native.c_void_p, native.c_void_p)(base + 0x528330)
+    for authority in [0, 1]:
+        native.c_ubyte.from_buffer(network, 8).value = authority
+        for count in [0, 1, 2, 3]:
+            pointer(network, 0x80, native.addressof(peer_vector) + count * 0xf0)
+            for entity in [146603800, 146603801]:
+                native.c_uint.from_buffer(generator, 0x48).value = 0
+                identifier = native.c_uint(entity)
+                result = invoke_request(native.addressof(requests), native.addressof(identifier))
+                expected = entity == 146603800
+                assert bool(result) == expected
+                calls = native.c_uint.from_buffer(generator, 0x48).value
+                assert calls == int(expected and (authority or count <= 1))
+                cases.append({'requestEntity': entity, 'authority': authority, 'peerEntries': count,
+                              'nativeReportedSuccess': bool(result), 'nativeInvokeCalls': calls})
 finally:
     assert kernel.VirtualFree(base, 0, 0x8000)
 

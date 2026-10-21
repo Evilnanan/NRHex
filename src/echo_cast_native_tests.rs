@@ -191,7 +191,7 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  // Each actual normal/charged/side-volley root gets one ticket. Descendants
  // and parented emissions cannot multiply the full native projectile chain.
  TARGET_DESC.store(np,Ordering::Relaxed);
- for magic in [4040,4050,4090,4220,4500,6820,6830]{
+ for magic in [4040,4050,4090,4220,4500,6001,6820,6830]{
   let roots=crate::echo_cast_data::ROOTS.iter().find(|r|r.0==magic).unwrap().1;
   int(dp+0x18,magic);let before=FACTORY_SHOTS.lock().unwrap().len();
   for &root in roots{int(dp+0x14,root);fire();}
@@ -244,12 +244,12 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  put(first_record+8,first_hits.as_mut_ptr()as usize);put(first_record+0x10,first_hits.as_ptr()as usize);put(first_record+0x18,first_hits.as_ptr()as usize+48);
  register(first_record,victim_pointer,&category,101);assert_eq!(allowed(first_record,victim_pointer,&category,101),1);
  consume(first_record,victim_pointer);assert_eq!(allowed(first_record,victim_pointer,&category,202),0);
- for magic in [6820,6830]{
-  int(dp+0x18,magic);let roots=crate::echo_cast_data::ROOTS.iter().find(|root|root.0==magic).unwrap().1;
+ for (magic,descriptor_magic) in [(6001,6001),(6001,-1),(6820,6820),(6830,6830)]{
+  int(dp+0x18,descriptor_magic);let roots=crate::echo_cast_data::ROOTS.iter().find(|root|root.0==magic).unwrap().1;
   for &root in roots{int(dp+0x14,root);fire();}
   let queue=QUEUE.lock().unwrap();assert_eq!(queue.pending.len(),roots.len());
   let replay=read_ptr(queue.pending[0].descriptor.0.as_ptr()as usize+0xa0);
-  assert_ne!(replay,first_record);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),1);
+  assert_ne!(replay,first_record);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),1);assert_eq!(read_ptr(dp+0xa0),first_record);
   assert!(queue.pending.iter().all(|ticket|read_ptr(ticket.descriptor.0.as_ptr()as usize+0xa0)==replay));drop(queue);
   let mut replay_hits=[0u64;6];put(replay+8,replay_hits.as_mut_ptr()as usize);put(replay+0x10,replay_hits.as_ptr()as usize);put(replay+0x18,replay_hits.as_ptr()as usize+48);
   register(replay,victim_pointer,&category,202);assert_eq!(allowed(replay,victim_pointer,&category,202),1);
@@ -265,6 +265,9 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
   assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);assert_eq!(second[10],0x80000006);
   VOLLEY_FAIL.store(true,Ordering::Relaxed);fire();VOLLEY_FAIL.store(false,Ordering::Relaxed);
   assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(second[10],0x80000006);
+  put(dp+0xa0,0);fire();
+  {let queue=QUEUE.lock().unwrap();assert_eq!(queue.pending.len(),1);assert!(queue.pending[0].volley.is_none());assert_eq!(read_ptr(queue.pending[0].descriptor.0.as_ptr()as usize+0xa0),0);}
+  update(p,base,0.5);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);put(dp+0xa0,first_record);
  }
  assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);
  BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(allocation,0,MEM_RELEASE),0);

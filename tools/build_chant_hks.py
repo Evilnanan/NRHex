@@ -1,11 +1,19 @@
-"""Gate native spell charge callbacks without altering native transitions."""
+"""Observe native charge completion without altering native transitions."""
 from hks_bytecode import *
 import argparse,json,itertools,tomllib
 from verify_chant_hks import verify
 parser=argparse.ArgumentParser();parser.add_argument('--inplace',action='store_true');options=parser.parse_args()
 root=Path(__file__).resolve().parents[1];path=root/'dist/mod/action/script/c0000.hks'
 source=path.read_bytes();r=Reader(source);r.function();edits=[];changed={};reports=[];cases=0
-stage=root/'.work/angel-chant-01740/staged';stage.mkdir(parents=True,exist_ok=True)
+stage=root/'work/chant-rework/staged';stage.mkdir(parents=True,exist_ok=True)
+if any(6999921 in function['constants'] for function in r.functions):
+ from rework_chant_hks import upgrade
+ patched=upgrade(source)
+ (stage/'before.hks').write_bytes(source);(stage/'c0000.hks').write_bytes(patched)
+ verify(stage/'c0000.hks',stage/'before.hks')
+ (stage/'hks-validation.json').write_text(json.dumps(dict(inputSha256=hashlib.sha256(source).hexdigest(),outputSha256=hashlib.sha256(patched).hexdigest(),chargeCompletionObserved=True,originalBranchesUnchanged=True,gameplayVerified=False),indent=2))
+ if options.inplace:path.write_bytes(patched)
+ raise SystemExit(0)
 def abx(op,a,bx):return op<<25|bx<<8|a
 def abc(op,a,b,c):return op<<25|b<<17|c<<8|a
 for f in r.functions:
@@ -32,7 +40,7 @@ for f in r.functions:
  prefix=[];exits=[]
  def require_true(words,invert=False):
   prefix.extend(words+glob(s+1,'TRUE')+[abc(4,1 if invert else 0,s,s+1),0]);exits.append(len(prefix)-1)
- for effect in [6999920,100610]:require_true(glob(s,'env')+[abx(25,s+1,constant(1116)),abx(25,s+2,constant(effect)),abc(2,s,3,2)])
+ for effect in [6999920]:require_true(glob(s,'env')+[abx(25,s+1,constant(1116)),abx(25,s+2,constant(effect)),abc(2,s,3,2)])
  require_true(glob(s,'IsChargeMagic')+[abc(2,s,1,2)])
  require_true(glob(s,'CheckIfHoldMagic')+[abc(2,s,1,2)],True)
  # Insert after the native input/FP/cancellation checks, which return on
@@ -56,7 +64,7 @@ for f in r.functions:
     if (regs[b]==regs[c])!=bool(a):pc+=1
    elif op==28:pc+=bx-0x10000+1
    else:raise AssertionError(op)
-  expected=owned and charge and charge_spell and not held_spell and slot!=2
+  expected=owned and charge_spell and not held_spell and slot!=2
   assert calls==([(2002,6999921)] if expected else [])
   assert all(regs[i]==v for i,v in saved.items());cases+=1
  while len(encoded)%4:encoded.extend(b'\0');extra.append(None)
@@ -97,7 +105,7 @@ for a,b in zip(r.functions,new.functions):
 (stage/'before.hks').write_bytes(source)
 verify(stage/'c0000.hks',stage/'before.hks')
 version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
-(stage/'hks-validation.json').write_text(json.dumps(dict(version=version,functions=reports,cases=cases,inputSha256=hashlib.sha256(source).hexdigest(),outputSha256=hashlib.sha256(patched).hexdigest(),inverseRestoresInput=True,originalBranchesUnchanged=True,registersPreserved=True,heldChargeOnly=True,ordinarySpellAndSkillAndContinuousHoldExcluded=True,independentDecompilerMatchesAllOriginalBodies=True,gameplayVerified=False),indent=2))
+(stage/'hks-validation.json').write_text(json.dumps(dict(version=version,functions=reports,cases=cases,inputSha256=hashlib.sha256(source).hexdigest(),outputSha256=hashlib.sha256(patched).hexdigest(),inverseRestoresInput=True,originalBranchesUnchanged=True,registersPreserved=True,chargeCompletionObserved=True,ordinarySpellAndSkillAndContinuousHoldExcluded=True,independentDecompilerMatchesAllOriginalBodies=True,gameplayVerified=False),indent=2))
 if options.inplace:
  assert path.read_bytes()==source,'Input changed during verification'
  path.write_bytes(patched)

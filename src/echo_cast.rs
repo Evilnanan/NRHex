@@ -94,7 +94,7 @@ unsafe fn retain_counter(pointer:usize,offset:usize,mask:u32){
 }
 unsafe fn replay_volley(scope:Scope,magic:i32,base:usize)->Result<Option<Arc<Volley>>,()>{
  let source=read_ptr(scope.descriptor+0xa0);
- if !matches!(magic,6820|6830)||source==0{return Ok(None);}
+ if !matches!(magic,6001|6820|6830)||source==0{return Ok(None);}
  let existing=QUEUE.lock().ok().and_then(|queue|queue.pending.iter()
   .filter(|ticket|ticket.owner==scope.owner)
   .filter_map(|ticket|ticket.volley.as_ref()).find(|volley|volley.source==source).cloned());

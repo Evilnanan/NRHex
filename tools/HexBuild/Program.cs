@@ -88,8 +88,7 @@ if(args.Contains("--ultimate-timing-actions")){UltimateTiming.Actions(root);retu
 if(args.Contains("--ultimate-unstoppable-check")){UltimateUnstoppable.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-challenge-stage")){UltimateChallenge.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-challenge-check")){UltimateChallenge.Verify(root,bnd,Parse);return;}
-if(args.Contains("--perfumer-stage")){Perfumer.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
-if(args.Contains("--perfumer-check")){Perfumer.Verify(root,bnd,Parse);return;}
+if(args.Contains("--retire-ability")){var index=Array.IndexOf(args,"--retire-ability");RetiredAbility.Stage(root,Parse,int.Parse(args[index+1]),args.Skip(index+2).Select(int.Parse).ToArray());return;}
 if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
@@ -195,6 +194,8 @@ var files=names.ToDictionary(n=>n,n=>bnd.Files.Single(f=>Path.GetFileName(f.Name
 var pars=files.ToDictionary(k=>k.Key,k=>Parse(k.Key,k.Value.Bytes));
 if(args.Contains("--spirit-rework-probe")){SpiritRework.Probe(root,bnd,Parse);return;}
 if(args.Contains("--angel-chant-probe")){AngelChant.Probe(root,bnd,Parse);return;}
+if(args.Contains("--chant-rework-probe")){ChantRework.Probe(root,bnd,Parse);return;}
+if(args.Contains("--chant-rework-stage")){ChantRework.Stage(root,bnd,Parse);return;}
 if(args.Contains("--new-hexes-probe")){
  NewHexes.Probe(root,bnd,Parse,Hash(source));return;
 }
@@ -816,7 +817,6 @@ DeathDance.Mechanics(Clone);
 Snack.Mechanics(Clone);
 Momentum.Mechanics(Clone,pars["SpEffectParam"]);
 UltimateAwakening.Mechanics(Clone);
-Perfumer.Mechanics(Clone);
 UltimateUnstoppable.Mechanics(Clone);
 UltimateChallenge.Mechanics(Clone);
 UltimateTiming.Mechanics(Clone);
@@ -979,6 +979,7 @@ DevilsGaze.Mechanics(pars,Clone);
 foreach(int id in new[]{6999920,6999921}){
  var row=Clone("SpEffectParam",8000000,id);Set(row,"maxHpRate",1f);Set(row,"saveCategory",-1);Set(row,"spCategory",20);Set(row,"iconId",-1);Set(row,"spEffectTextId_1",-1);Set(row,"displayIconForPermamentEffect",0);Set(row,"effectEndurance",id==6999920?-1f:.001f);
 }
+ChantRework.Mechanics(Clone,pars["SpEffectParam"],pars["SpEffectVfxParam"]);
 // One native three-choice template; the DLL fills the selected goods before creation.
 var rewardEntries=new[]{new RewardCatalog.Entry(RewardCatalog.TemplateLot,new[]{0,1,2})};
 var orders=rewardEntries.Select(e=>e.Order).ToArray();
@@ -1222,7 +1223,6 @@ reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),ne
 Cages.Terrain(ev);
 ContractHeart.Events(ev);
 UltimateAwakening.Events(ev);
-Perfumer.Events(ev);
 UltimateUnstoppable.Events(ev);
 UltimateChallenge.Events(ev);
 NightBlessing.ResetReceipt(ev);
