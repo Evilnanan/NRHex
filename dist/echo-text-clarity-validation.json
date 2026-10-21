@@ -1,0 +1,161 @@
+{
+  "version": "0.17.205",
+  "change": "Echo Casting description clarification only",
+  "owner": 95003500,
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "B22ACCB5932E319CBCF202D020454CE98DE66AA7F70FBB41E899901F84B4A89F",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "868DDB26C592C47102796C255E66C4F6D720DCAA7AFA5B87A3069F5700D1D774",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "8C47C313AAE734DBBABB5E710BB4C1A3946F2C06AE764E3876BCDEF4BD23B83D",
+        "outputSha256": "A41F76680E77616D6E2729442BD996394E93B555FA080CCFB5BAD252E88C6C4D",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003500,
+            "before": "魔法、祷告的专注值和精力消耗提升100%，施法后额外产生一次弹体",
+            "after": "魔法、祷告的专注值和精力消耗提升100%。脱手类弹道法术额外产生一次弹体"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003500,
+            "before": "魔法、祷告的专注值和精力消耗提升100%，施法后额外产生一次弹体",
+            "after": "魔法、祷告的专注值和精力消耗提升100%。脱手类弹道法术额外产生一次弹体"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003500,
+            "before": "魔法、祷告的专注值和精力消耗提升100%，施法后额外产生一次弹体",
+            "after": "魔法、祷告的专注值和精力消耗提升100%。脱手类弹道法术额外产生一次弹体"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "A1E03B902E8F654231E3BDCA19E0869B45ECB3B71E9D1B72CDB1B44C0FE6FB0F",
+        "outputSha256": "FDEE1F73BAD19DA309F97520F0672A2020AEEC7079093D8DE0884E537CBB6CC2",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003500,
+            "before": "魔法、祷告的专注值和精力消耗提升100%，施法后额外产生一次弹体",
+            "after": "魔法、祷告的专注值和精力消耗提升100%。脱手类弹道法术额外产生一次弹体"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "DA0F4FC382A6ACF664D03FC5F7BF5F42456C5328FBE6D903016CE9367E041351",
+        "outputSha256": "E487199AAB3DA872A255B56B68EEA80E931154C744159BAFA72D23B8F0A3AF53",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and stamina and produce an additional projectile after casting.",
+            "after": "Sorceries and incantations cost 100% more FP and stamina. Free-flying projectile spells produce an additional projectile."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and stamina and produce an additional projectile after casting.",
+            "after": "Sorceries and incantations cost 100% more FP and stamina. Free-flying projectile spells produce an additional projectile."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and stamina and produce an additional projectile after casting.",
+            "after": "Sorceries and incantations cost 100% more FP and stamina. Free-flying projectile spells produce an additional projectile."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "E0B44109B47063FB1749AC52DF2F37DA00A4E63D253727CCAA1BF1B3C2C56367",
+        "outputSha256": "1CE6797C4E5AFAF353053AE2BAB2DFA4D3DB0689221A021C076CFAFC26660416",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and stamina and produce an additional projectile after casting.",
+            "after": "Sorceries and incantations cost 100% more FP and stamina. Free-flying projectile spells produce an additional projectile."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "containers": [
+    {
+      "path": "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+      "inputSha256": "24227f28bc619450d5783cb763e29e9bd64b971a6eff573ce947a0222914c5c8",
+      "outputSha256": "683c213df1769291c5b42ee8ba93301b41180763eeaf8e3f6e0eef62f81e5bf6",
+      "containerRoundTripPassed": true
+    },
+    {
+      "path": "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+      "inputSha256": "1a479084e0f7a730263d29074bd97829eb3870a44958b2f5a2ce6eec2cc439ce",
+      "outputSha256": "9130b75f42003d59b5c23536d2cfa7a3b0029cbaf5dab6fcc202cecb01eed821",
+      "containerRoundTripPassed": true
+    },
+    {
+      "path": "mod/msg/engus/item_dlc01.msgbnd.dcx",
+      "inputSha256": "ac8dc17fb3296f694ab2612b51e4a7bf4af76fc86d78c4eec69b897b06286ffe",
+      "outputSha256": "a91732172d6e77a99130f282b0cf66ba4c017e9712d70e6e8f086f1a26b9b23e",
+      "containerRoundTripPassed": true
+    },
+    {
+      "path": "mod/msg/engus/menu_dlc01.msgbnd.dcx",
+      "inputSha256": "4ca46822461881663f09fc551904e0038a8fa968be443aa2a281481bb118509a",
+      "outputSha256": "45a7f5d04c0018a67dd6d561cb744f924ca096b2c01ce772e0c89caeb90a674c",
+      "containerRoundTripPassed": true
+    }
+  ],
+  "all37AbilityAndStatusTextsMatch": true,
+  "changedExistingDistributionFiles": {
+    "README.md": {
+      "inputSha256": "183a8b18f037142b3b9a69c8799f8306588b0c83a33d3b3caed74da1e08cadd1",
+      "outputSha256": "b9b260902a4ab51ff12442e5cc81203b4a89bdd2e42821611d82acb87623c2fa"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "ac8dc17fb3296f694ab2612b51e4a7bf4af76fc86d78c4eec69b897b06286ffe",
+      "outputSha256": "a91732172d6e77a99130f282b0cf66ba4c017e9712d70e6e8f086f1a26b9b23e"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "4ca46822461881663f09fc551904e0038a8fa968be443aa2a281481bb118509a",
+      "outputSha256": "45a7f5d04c0018a67dd6d561cb744f924ca096b2c01ce772e0c89caeb90a674c"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "24227f28bc619450d5783cb763e29e9bd64b971a6eff573ce947a0222914c5c8",
+      "outputSha256": "683c213df1769291c5b42ee8ba93301b41180763eeaf8e3f6e0eef62f81e5bf6"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "1a479084e0f7a730263d29074bd97829eb3870a44958b2f5a2ce6eec2cc439ce",
+      "outputSha256": "9130b75f42003d59b5c23536d2cfa7a3b0029cbaf5dab6fcc202cecb01eed821"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "unchangedExistingDistributionFileCount": 293,
+  "dllUnchangedSha256": "1450b535121312eb73491e6b139431bcc5bcfa84c81aeccf799a49bd8ee7e7ce",
+  "regulationUnchangedSha256": "999511fdccd6f61e9ae244cc9dae2c30317a634c718aca0edff85e64a09f15c4",
+  "sources": {
+    "docs/hexes.md": "b22accb5932e319cbcf202d020454ce98de66aa7f70fbb41e899901f84b4a89f",
+    "docs/hexes.en.md": "868ddb26c592c47102796c255e66c4f6d720dcaa7afa5b87a3069f5700d1d774",
+    "docs/research/echo-cast.md": "47acc1a14df4cfa2be057ecdfbca2ca46deaae944a36c03b5356ac462b592318",
+    "dist/README.md": "b9b260902a4ab51ff12442e5cc81203b4a89bdd2e42821611d82acb87623c2fa",
+    "CHANGELOG.md": "2311673f9a66c14e35fe18fcb7d449baa5c77ad3295b4c76223fa88d3a9a73ad"
+  },
+  "gameplayChanged": false
+}
