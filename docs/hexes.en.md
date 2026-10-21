@@ -198,3 +198,8 @@ Greatly increases poise and grants immunity to status buildup for 15 seconds aft
 ## Ultimate Challenge
 
 Raises maximum HP by 50% and makes you more likely to be targeted by enemies for 15 seconds after activating an Ultimate Art.
+
+<!-- hex:95004200 -->
+## Enhanced Marking
+
+Your sliding kick can launch small enemies into the air.

@@ -41,6 +41,7 @@ pub fn weapon_exclusions(mut unavailable:HexSet,affinity:Option<i32>)->HexSet{
 pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  for (id,excluded)in [
   (95001800,hero!=Some(6)),
+  (crate::marking::OWNER,hero!=Some(3)),
   (95001300,matches!(hero,Some(2|4|6))),
   (95000400,!matches!(hero,Some(1|3|5|7|8))),
  ]{if excluded{unavailable.insert(index(id));}}

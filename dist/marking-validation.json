@@ -1,0 +1,370 @@
+{
+  "version": "0.17.220",
+  "owner": 95004200,
+  "zhName": "强化【标记】",
+  "zhDescription": "你的滑铲可以踢飞小型敌人",
+  "attack": 600000110,
+  "referenceAttack": 300000290,
+  "impact": 9,
+  "ironeyeOnly": true,
+  "historyBit": 39,
+  "historyBytes": 5,
+  "activeCatalogSize": 38,
+  "retiredHistorySlotsPreserved": true,
+  "sharedConstructorHookReused": true,
+  "noNewNativeHooks": true,
+  "nativeTargetReactionsPreserved": true,
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "35915d861b98017690d0d2bfa34eadcb6c3e87c2eb529bfb325488b81d29a991",
+        "outputSha256": "eab814308e9e40af52363c2616334a4d177fc77dd8ca70d3f9bc6c4d2de9114c"
+      },
+      "mod/event/common.emevd.dcx": {
+        "inputSha256": "d764bd20ddfbbd229e7addff92f45399a798ca91d6489c04aa4686fe1ce36ec2",
+        "outputSha256": "6ddf91ed9e28818b57e4840d6fe94f0fb8fdb5229bb93076a8f8000639ea9c61"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "e06d6dc0cfbebc753e26f58ee68297ba4e4466366c492e6bbe87623f2fc1d099",
+        "outputSha256": "ac041e33bc414620f7c69f705e2e0ed4db21b22e2ce3e236423366d6177e6857"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "a9a10e75417c07c8fb1b2eaad6a1e994347f2853c8f02dbfb477a45ebb275db4",
+        "outputSha256": "5e53312bd3e6ff72f671bc52ff0988fac9889f43746e1c07d50939dce573d267"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "92f6a98873644308e8bafa68ba70cd80ec71f311987906324f2175afc30afb39",
+        "outputSha256": "16f500a5e95f555531ab800b2cdbc72d4b34f3acb0f190f34138f180f25b254b"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "a729a7c8e3f6e463c4968c8ce0ce375cfecdc6928dbe9b52cac586704cbd1577",
+        "outputSha256": "aeb05c3683f2f812d05180d7735ee750f0f3211a0ad6e3d612070b2f2bcc4d93"
+      }
+    },
+    "containers": {
+      "mod/event/common.emevd.dcx": {
+        "rawSha256": "45f71aef0e2fefeb5f7b9d842844501e1e7b3ddd5f0d3cfe2f72b2f34fa8d808",
+        "containerSha256": "6ddf91ed9e28818b57e4840d6fe94f0fb8fdb5229bb93076a8f8000639ea9c61",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "696a4dd14a50c78d4d1d8f041d96de28700f5631d03cee785b73d954990d5c3f",
+        "containerSha256": "ac041e33bc414620f7c69f705e2e0ed4db21b22e2ce3e236423366d6177e6857",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "1d109578f605e428f345cd1752e3e15374e8ab36e72af3f6340917aafacf39f7",
+        "containerSha256": "5e53312bd3e6ff72f671bc52ff0988fac9889f43746e1c07d50939dce573d267",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "29dfae4147d26131fb85c7b32e560f93e2ee6cb97bf61afda6cdc4799c028ccb",
+        "containerSha256": "16f500a5e95f555531ab800b2cdbc72d4b34f3acb0f190f34138f180f25b254b",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "003e92c3d492816f41ba6e989adc9a9f296db1015ab76b62f77a47782fc1fba3",
+        "containerSha256": "aeb05c3683f2f812d05180d7735ee750f0f3211a0ad6e3d612070b2f2bcc4d93",
+        "roundTripPassed": true
+      }
+    },
+    "generator": {
+      "inputSha256": "35915D861B98017690D0D2BFA34EADCB6C3E87C2EB529BFB325488B81D29A991",
+      "outputSha256": "EAB814308E9E40AF52363C2616334A4D177FC77DD8CA70D3F9BC6C4D2DE9114C",
+      "eventInputSha256": "9DDC9D26641B5698E631C6DD1C1FAB08E63496CFEDAAF0FDCBA530C3D9C7D9DD",
+      "eventOutputSha256": "45F71AEF0E2FEFEB5F7B9D842844501E1E7B3DDD5F0D3CFE2F72B2F34FA8D808",
+      "hexCount": 38,
+      "addedRows": {
+        "SpEffectParam": [
+          95004200
+        ],
+        "AttachEffectParam": [
+          95004200
+        ],
+        "PermanentBuffParam": [
+          95004200
+        ],
+        "EquipParamGoods": [
+          95004200
+        ],
+        "ItemTableParam": [
+          95110139
+        ]
+      },
+      "rowCounts": {
+        "SpEffectParam": 16088,
+        "AttachEffectParam": 2117,
+        "PermanentBuffParam": 161,
+        "EquipParamGoods": 471,
+        "ItemTableParam": 34906
+      },
+      "audit": {
+        "owner": 95004200,
+        "attack": 600000110,
+        "reference": 300000290,
+        "impact": 9,
+        "ironeyeOnly": true,
+        "historyBit": 39,
+        "historyBytes": 5,
+        "sharedAttacksUnchanged": true
+      },
+      "existingRowsAndUnrelatedTablesUnchanged": true,
+      "onlyTwoGuardedCleanupEventsExtended": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "0B49271E5AAEBB9CE1354FD9F31EBA6616F6D0E0F78CB337D816A6E58BC6379F",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "B36DC9F3FF18CF021D897E8EF8B5EEF0436661618239F14CC90A2684E298BB8B",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "4D0093AE82CBEE11DF241C1AFEE912B95B40CA53014ADA5C6BDAE9534AE94D25",
+          "outputSha256": "696A4DD14A50C78D4D1D8F041D96DE28700F5631D03CEE785B73D954990D5C3F",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "强化【标记】"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "你的滑铲可以踢飞小型敌人"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "强化【标记】"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "你的滑铲可以踢飞小型敌人"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "你的滑铲可以踢飞小型敌人"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "F4A446525CF2A651BD382F84ABCEC24EC5359CFA01DF20A42D30A3E52CDA2B78",
+          "outputSha256": "1D109578F605E428F345CD1752E3E15374E8AB36E72AF3F6340917AAFACF39F7",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "强化【标记】"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "你的滑铲可以踢飞小型敌人"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "F0FDD5C051A22074890EA6CB41C190553D6029C1267B749B8DCD30B494311B3E",
+          "outputSha256": "29DFAE4147D26131FB85C7B32E560F93E2EE6CB97BF61AFDA6CDC4799C028CCB",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "Enhanced Marking"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "Your sliding kick can launch small enemies into the air."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "Enhanced Marking"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "Your sliding kick can launch small enemies into the air."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "Your sliding kick can launch small enemies into the air."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "9526FA8B5D554F3C64F38ABE0DCAFF63446D32CA645B90205E43928DF8C76A75",
+          "outputSha256": "003E92C3D492816F41BA6E989ADC9A9F296DB1015AB76B62F77A47782FC1FBA3",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "Enhanced Marking"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004200,
+              "before": null,
+              "after": "Your sliding kick can launch small enemies into the air."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "native": {
+    "nativeExecutionPassed": true,
+    "installedReadbackPassed": true,
+    "owner": 95004200,
+    "attack": 600000110,
+    "referenceAttack": 300000290,
+    "impact": 9,
+    "originalImpact": 1,
+    "ironeyeOnly": true,
+    "historyBit": 39,
+    "originalAttackRowsPreserved": true,
+    "nativeInstructions": [
+      "E709D4 AtkParam+72 read",
+      "E709D8 native branch",
+      "E709E8 outgoing hit+24 write"
+    ],
+    "compiledSharedConstructorWrapperExecuted": true,
+    "nativeRecipientReactionSignaturesChecked": true,
+    "sevenNativeArgumentsAndReturnPreserved": true,
+    "cases": [
+      "owned/unowned, local/remote, both attack table kinds",
+      "Marking, poison relic follow-up, Upward Cut",
+      "Mighty coexistence, native attack immutability, cached copies retain input",
+      "all hero/affinity/party combinations in regular reward-filter tests"
+    ],
+    "stubs": [
+      "full constructor uses fixture prologue around original native impact copy instructions",
+      "actor/effect lookup, no real animation/collision/network transport"
+    ],
+    "sources": {
+      "src/marking.rs": "abaf0451ffec04024c0b029738355269a0a889b2a58e10e8986bf139a0bb3b97",
+      "src/marking_native_tests.rs": "5b242c58adddb6fe65aaa964b8868f41d2a4360dfcf4a71f283480a04b88151f",
+      "src/lib.rs": "fac464959d54d3178bf34d6764b4918e9a6043812eb965be2bd581360e6a4869",
+      "src/reward_choices.rs": "a92911cb9b429694e82ee0b1e9d1e5c7274698b382812655804c1bd81ee660cd",
+      "src/hex_pool.rs": "297602252f776edca9cfcb1f1c6d5e68d397a3b2c6d4efa33ca8421b5aacf785",
+      "tools/HexBuild/Marking.cs": "5ff28a0415ab590705d944d3a12fee11eec7b86bbb57ac4421e00dd4a45880de",
+      "tools/HexBuild/HexCatalog.cs": "142fad080ddad4cbf089541ce81c4db2b70fc0bef0442512e75fa7f1c11863a6",
+      "tools/HexBuild/RewardCatalog.cs": "263e7cc7e26ad09a48614d8cc4cdb791ae4692cc8a5ddb82a24c01da818bcc39",
+      "tools/verify_marking.py": "60e63ae403672d7d40b0da12808dc447a442e299f381c85599356012efec10c5"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "gameProcessAccessed": false
+  },
+  "build": {
+    "version": "0.17.220",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "a29f948b864d99ff5b95832cdc2142bfda74f0d2fa2df205af56d3ed946ee1c3",
+    "installed": true,
+    "installedDllSha256": "a29f948b864d99ff5b95832cdc2142bfda74f0d2fa2df205af56d3ed946ee1c3",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 436,
+  "regularIgnoredTests": 25,
+  "runtimeSuitesPassed": 16,
+  "exeSignaturesPassed": 196,
+  "changedExistingDistributionFiles": {
+    "README.md": {
+      "inputSha256": "5991ac28f959454f54c8d3d77b83e4a00d22c068fd46d84a04d76fc79a39f33a",
+      "outputSha256": "d113e6e3e97c491b642341b2425efb4d4828d199792861fab93fe3ac8a1de3eb"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "35915d861b98017690d0d2bfa34eadcb6c3e87c2eb529bfb325488b81d29a991",
+      "outputSha256": "eab814308e9e40af52363c2616334a4d177fc77dd8ca70d3f9bc6c4d2de9114c"
+    },
+    "mod/event/common.emevd.dcx": {
+      "inputSha256": "d764bd20ddfbbd229e7addff92f45399a798ca91d6489c04aa4686fe1ce36ec2",
+      "outputSha256": "6ddf91ed9e28818b57e4840d6fe94f0fb8fdb5229bb93076a8f8000639ea9c61"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "3230823d11acd8c8370a8e03317d40e5fc2fb8880298c43d7f44e79398b6c098",
+      "outputSha256": "a29f948b864d99ff5b95832cdc2142bfda74f0d2fa2df205af56d3ed946ee1c3"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "92f6a98873644308e8bafa68ba70cd80ec71f311987906324f2175afc30afb39",
+      "outputSha256": "16f500a5e95f555531ab800b2cdbc72d4b34f3acb0f190f34138f180f25b254b"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "a729a7c8e3f6e463c4968c8ce0ce375cfecdc6928dbe9b52cac586704cbd1577",
+      "outputSha256": "aeb05c3683f2f812d05180d7735ee750f0f3211a0ad6e3d612070b2f2bcc4d93"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "e06d6dc0cfbebc753e26f58ee68297ba4e4466366c492e6bbe87623f2fc1d099",
+      "outputSha256": "ac041e33bc414620f7c69f705e2e0ed4db21b22e2ce3e236423366d6177e6857"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "a9a10e75417c07c8fb1b2eaad6a1e994347f2853c8f02dbfb477a45ebb275db4",
+      "outputSha256": "5e53312bd3e6ff72f671bc52ff0988fac9889f43746e1c07d50939dce573d267"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "unchangedExistingDistributionFileCount": 297,
+  "sourceHashes": {
+    "Cargo.toml": "05cd84a59c599be5ee45212416caaffde98f7fbb82fccdeaffc0c6b847cc3ea6",
+    "Cargo.lock": "ff8824cf71d4b9b5ea4f5e39b94dcf1001b8eacb9545fba7704d21b34198149b",
+    "build.ps1": "0e1cdcc98fc49be4187cfa8f141d955638c8f4dab386f1739d79446089461e99",
+    "README.md": "e37f3a5b289642b4e087063345d4656fa4130e8c3e970c925a0793a421c16624",
+    "dist/README.md": "d113e6e3e97c491b642341b2425efb4d4828d199792861fab93fe3ac8a1de3eb",
+    "CHANGELOG.md": "ebd146a0558ddde27dfbc6997e08b83e66473c141e3e06276a649badaedb78b7",
+    "docs/hexes.md": "0b49271e5aaebb9ce1354fd9f31eba6616f6d0e0f78cb337d816a6e58bc6379f",
+    "docs/hexes.en.md": "b36dc9f3ff18cf021d897e8ef8b5eef0436661618239f14cc90a2684e298bb8b",
+    "docs/research/marking.md": "08be712681bf90807c44e98623505ef8f09b3926ae0d1107816829220054ec33",
+    "src/marking.rs": "abaf0451ffec04024c0b029738355269a0a889b2a58e10e8986bf139a0bb3b97",
+    "src/marking_native_tests.rs": "5b242c58adddb6fe65aaa964b8868f41d2a4360dfcf4a71f283480a04b88151f",
+    "src/lib.rs": "fac464959d54d3178bf34d6764b4918e9a6043812eb965be2bd581360e6a4869",
+    "src/reward_choices.rs": "a92911cb9b429694e82ee0b1e9d1e5c7274698b382812655804c1bd81ee660cd",
+    "src/hex_pool.rs": "297602252f776edca9cfcb1f1c6d5e68d397a3b2c6d4efa33ca8421b5aacf785",
+    "tools/HexBuild/Marking.cs": "5ff28a0415ab590705d944d3a12fee11eec7b86bbb57ac4421e00dd4a45880de",
+    "tools/HexBuild/Program.cs": "66f5b67e62d898b6a81950644685520547559c8c37e84994a1957214910d05a3",
+    "tools/HexBuild/HexCatalog.cs": "142fad080ddad4cbf089541ce81c4db2b70fc0bef0442512e75fa7f1c11863a6",
+    "tools/HexBuild/RewardCatalog.cs": "263e7cc7e26ad09a48614d8cc4cdb791ae4692cc8a5ddb82a24c01da818bcc39",
+    "tools/verify_marking.py": "60e63ae403672d7d40b0da12808dc447a442e299f381c85599356012efec10c5"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "loadingVerified": false
+}

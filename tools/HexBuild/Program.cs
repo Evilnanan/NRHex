@@ -79,6 +79,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--marking-stage")){Marking.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--marking-check")){Marking.Verify(root,bnd,Parse);return;}
 if(args.Contains("--sword-poise-stage")){SwordPoise.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sword-poise-check")){SwordPoise.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-unstoppable-stage")){UltimateUnstoppable.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -1223,6 +1225,7 @@ reset.Instructions.AddRange([InMap(1,false,10),InMap(1,false,11),WaitGroup(1),ne
 Cages.Terrain(ev);
 ContractHeart.Events(ev);
 UltimateAwakening.Events(ev);
+Marking.Events(ev);
 UltimateUnstoppable.Events(ev);
 UltimateChallenge.Events(ev);
 NightBlessing.ResetReceipt(ev);
