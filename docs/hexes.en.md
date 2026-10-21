@@ -57,7 +57,7 @@ Allows unlimited climbing. Boosts jump attack damage based on fall height. Silen
 <!-- hex:95000900 -->
 ## Draw Your Sword
 
-Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%.
+Your sorceries and incantations count as melee attacks. The range of spells cast is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%.
 
 <!-- hex:95001100 -->
 ## Blunt Force

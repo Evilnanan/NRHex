@@ -1,0 +1,162 @@
+{
+  "version": "0.17.207",
+  "change": "Draw Your Sword description only",
+  "owner": 95000900,
+  "zhDescription": "你的魔法、祷告被视为近战攻击。施放的法术射程会被转化为攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "4864B7482C188238FB844BF774A9E87D2B9B628BBD4B39C4EC30CEB4F89A100D",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "A24B51A60E54235EC542AAAA596678B54A00793B95AD0191DD2CD6514B765791",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "A0DFFF82718E1E594D308CE68AD7F1D5B65750A86CDCD260A2B04336E55FB2B1",
+        "outputSha256": "36D5B394B656E886F216846454E42914F059E326CD3B121A5C2C33CEAC7A25FF",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000900,
+            "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于法术射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+            "after": "你的魔法、祷告被视为近战攻击。施放的法术射程会被转化为攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000900,
+            "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于法术射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+            "after": "你的魔法、祷告被视为近战攻击。施放的法术射程会被转化为攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000900,
+            "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于法术射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+            "after": "你的魔法、祷告被视为近战攻击。施放的法术射程会被转化为攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "C48B2A4C895EF6639989762AD8BACCF902E91224B67C3CEC0083A06B465AE6AA",
+        "outputSha256": "F046BF31C4DEAFE6B588856F81E79E3D2DA33AFCBF309F3DFD4EFE21A3C78350",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000900,
+            "before": "你的魔法、祷告被视为近战攻击，只能命中近身敌人。施法时基于法术射程提升攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力",
+            "after": "你的魔法、祷告被视为近战攻击。施放的法术射程会被转化为攻击力、吸血率、减伤率与强韧度。提升15%近战攻击力"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "E487199AAB3DA872A255B56B68EEA80E931154C744159BAFA72D23B8F0A3AF53",
+        "outputSha256": "AFEFF68BB7448D3B2DD3E677D4B313217730526DD20853BFAABA058993A5F522",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000900,
+            "before": "Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%.",
+            "after": "Your sorceries and incantations count as melee attacks. The range of spells cast is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000900,
+            "before": "Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%.",
+            "after": "Your sorceries and incantations count as melee attacks. The range of spells cast is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000900,
+            "before": "Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%.",
+            "after": "Your sorceries and incantations count as melee attacks. The range of spells cast is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "1CE6797C4E5AFAF353053AE2BAB2DFA4D3DB0689221A021C076CFAFC26660416",
+        "outputSha256": "75689E2F95E07FC543D903BFE9DC38B2D125F5FBF2B058DA1CD80C00383611B7",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000900,
+            "before": "Your sorceries and incantations count as melee attacks and can only hit nearby enemies. While casting, boosts attack power, HP recovery rate, damage negation, and poise based on spell range. Boosts melee attack power by 15%.",
+            "after": "Your sorceries and incantations count as melee attacks. The range of spells cast is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "containers": [
+    {
+      "path": "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+      "inputSha256": "6f9b46a859431ecdf4c4ea73a02e8930391c8ea470f8e10ff0b4b61da75bf543",
+      "outputSha256": "0de2a91568c77e0402379113181e35210df439c9f72cf523eda6b4e410791983",
+      "containerRoundTripPassed": true
+    },
+    {
+      "path": "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+      "inputSha256": "887ba16b31ba93a33ac4c0bff66d02caea1488381c8e6dc89db5a31aec11031d",
+      "outputSha256": "1a7f2b855fc7dccea88a78ba23ce85d84fce92c1be7ec07f0ce8e2dfa6e93be2",
+      "containerRoundTripPassed": true
+    },
+    {
+      "path": "mod/msg/engus/item_dlc01.msgbnd.dcx",
+      "inputSha256": "a91732172d6e77a99130f282b0cf66ba4c017e9712d70e6e8f086f1a26b9b23e",
+      "outputSha256": "2a3cfa32bea674d1f95f97d2cedf5571cb750d7ae114367302c587c3d8c5920c",
+      "containerRoundTripPassed": true
+    },
+    {
+      "path": "mod/msg/engus/menu_dlc01.msgbnd.dcx",
+      "inputSha256": "45a7f5d04c0018a67dd6d561cb744f924ca096b2c01ce772e0c89caeb90a674c",
+      "outputSha256": "a2c187a7c765cd7a310d9f43176ee9ea5e1e8bc1a36d932c08664cb7194bbdff",
+      "containerRoundTripPassed": true
+    }
+  ],
+  "all37AbilityAndStatusTextsMatch": true,
+  "changedExistingDistributionFiles": {
+    "README.md": {
+      "inputSha256": "790b2fc17a02865e529d03d5758f835d865ed7ef911b4c8d56edf007853f8894",
+      "outputSha256": "35fa7710b0f288efceeea3adb0e837c41053d211548741dc5eb8cafdcadcd1da"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "a91732172d6e77a99130f282b0cf66ba4c017e9712d70e6e8f086f1a26b9b23e",
+      "outputSha256": "2a3cfa32bea674d1f95f97d2cedf5571cb750d7ae114367302c587c3d8c5920c"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "45a7f5d04c0018a67dd6d561cb744f924ca096b2c01ce772e0c89caeb90a674c",
+      "outputSha256": "a2c187a7c765cd7a310d9f43176ee9ea5e1e8bc1a36d932c08664cb7194bbdff"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "6f9b46a859431ecdf4c4ea73a02e8930391c8ea470f8e10ff0b4b61da75bf543",
+      "outputSha256": "0de2a91568c77e0402379113181e35210df439c9f72cf523eda6b4e410791983"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "887ba16b31ba93a33ac4c0bff66d02caea1488381c8e6dc89db5a31aec11031d",
+      "outputSha256": "1a7f2b855fc7dccea88a78ba23ce85d84fce92c1be7ec07f0ce8e2dfa6e93be2"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "unchangedExistingDistributionFileCount": 296,
+  "dllUnchangedSha256": "efd240d34af15fff4438cc023f777f2c459f2412f718ab57f18598d707d85699",
+  "regulationUnchangedSha256": "999511fdccd6f61e9ae244cc9dae2c30317a634c718aca0edff85e64a09f15c4",
+  "sources": {
+    "docs/hexes.md": "4864b7482c188238fb844bf774a9e87d2b9b628bbd4b39c4ec30ceb4f89a100d",
+    "docs/hexes.en.md": "a24b51a60e54235ec542aaaa596678b54a00793b95ad0191dd2cd6514b765791",
+    "docs/research/sword-projectile-range.md": "fa0d24519bc5f1b566ca5a37654cabae2edb4bc5a467e7f785bc141c3194b79b",
+    "dist/README.md": "35fa7710b0f288efceeea3adb0e837c41053d211548741dc5eb8cafdcadcd1da",
+    "CHANGELOG.md": "9593a0226b19fd38c70b34db930133df47ad565ec5ef73e03132472c1f490bb7"
+  },
+  "gameplayChanged": false
+}
