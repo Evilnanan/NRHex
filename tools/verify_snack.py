@@ -2,6 +2,8 @@
 
 No game process is accessed. Effects, item creation and the rest of the shop UI
 are fixtures; native price multiplication/statistics and compiled hooks execute.
+The quote fixture also executes the original discount and currency affordability
+code before testing the fixed weapon surcharge.
 """
 import argparse,hashlib,json,os,subprocess
 from local_paths import ROOT,GAME
@@ -20,13 +22,15 @@ output=result.stdout+result.stderr;(work/'installed-resource-check.log').write_t
 assert result.returncode==0 and 'PASS: installed Extra Practice'in output,output
 sources=['src/snack.rs','src/snack_native_tests.rs','src/lib.rs','src/hex_pool.rs','src/reward_cycle_runtime.rs','src/reward_recovery.rs','tools/HexBuild/Snack.cs','tools/HexBuild/RewardCatalog.cs','tools/verify_snack.py']
 report=dict(nativeExecutionPassed=True,installedParameterReadbackPassed=not args.staged_odds,stagedParameterReadbackPassed=args.staged_odds,
- nativeFunctions=['1FC0C0 settled shop statistic increment','A7CBC6 price * quantity and A7CBCF call','A7CFC6 price * quantity and A7CFCF call'],
+ weaponSurcharge=7000,surchargeOrder='native discounted unit price + 7000',quoteHook='8C2534, once per fresh merchant buy-list descriptor',surchargeRequiresLocalOwnerAndExpedition=True,nonRuneCurrenciesAndSellListsUnchanged=True,
+ nativeFunctions=['8C24A6 both native discount branches','7E9AC0 native wallet / quoted unit price affordability','1FC0C0 settled shop statistic increment','A7CBC6 price * quantity and A7CBCF call','A7CFC6 price * quantity and A7CFCF call'],
  successfulPurchaseReturnSites=['A7CBD4','A7CFD4'],excludedOtherSpendReturnSite='A403EF',rewardsPerWeapon=1,priceThreshold=None,countsPurchasedQuantity=True,
  purchaseContext='RBX at the two signature-guarded native successful-purchase CALL sites',itemFields={'A7CBD4':'64','A7CFD4':'5C'},quantityFields={'A7CBD4':'118','A7CFD4':'110'},weaponEncodedKind=0,
  choices=[{'basic':100},{'basic':100},{'basic':90,'mechanism':5,'high':5}],premiumChoices=[{'basic':100},{'basic':100},{'basic':0,'mechanism':50,'high':50}],premiumRarities=[2,3,9],purchaseRarityGetter='8BB780 native shop UI; record=shop+10 / shop+8',qualityCapturedAtPurchase=True,lotRarityOverride=-1,usesResolvedItemRarity=True,
  qualityCases=['both purchase callers execute original shop quality getter and native weapon rarity arithmetic','white/blue/purple/gold, red with white/purple base, unsupported grades','two rewards per purchase preserve mixed-quality order','quality changes after purchase do not change pending reward tiers'],
+ quoteCases=['8 item codes, 3 currencies, 5 prices, 3 discount factors','both native purchase layouts receive the quoted descriptor and multiply by quantity','exact balance, insufficient balance, and quantity limits from native affordability','reopening shop does not compound surcharge','missing owner, inactive, outside expedition, reset, invalid price and saturating addition'],
  cases=['actual native item loads and both successful purchase callbacks','one reward per purchased weapon independent of rune price','zero/1/3499/3500/20000 unit prices','shields and catalysts use native weapon category','consumables/accessories/armor/invalid item codes excluded','native price multiplication and capped statistic preserved','other spending forwarded without item-record access','missing ownership/inactive/outside expedition ignored','zero and negative quantities ignored','negative payment ignored','multiple weapon purchases accumulate pending rewards','no currency credit or persistent spending markers','existing private reward does not block delivery','next-frame delivery without closing shop','death/near-death defer delivery','all three local player slots','zero creations refunded','partial creation consumes one reward','multiple purchased weapons delivered in one update without duplicates','new-run reset drops pending rewards'],
- stubs=['purchase callback prologues and return around original item loads, amount multiplication and CALL','native ownership queries','weapon parameter lookup, shop cached-item validity and stack-cookie check; original shop rarity and base rarity query execute','native item-spawn service; no real shop UI or inventory grant'],
+ stubs=['native price object/vector allocation, cleanup and destructor bookkeeping; original float multiplication, truncation, no-discount path and affordability division execute','stock event services absent (native no-stock-event branch executes)', 'purchase callback prologues and return around original item loads, amount multiplication and CALL','native ownership queries','weapon parameter lookup, shop cached-item validity and stack-cookie check; original shop rarity and base rarity query execute','native item-spawn service; no real shop UI or inventory grant'],
  sources={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest()for p in sources},gameProcessAccessed=False,gameplayVerified=False,multiplayerVerified=False)
 (work/'native-validation.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf8')
-print('PASS: Extra Practice native weapon purchases, quantity, private lotteries and installed parameters; no game process')
+print('PASS: Set Meal fixed weapon surcharge, native discounts and affordability; Extra Practice native weapon purchases, quantity, private lotteries and installed parameters; no game process')

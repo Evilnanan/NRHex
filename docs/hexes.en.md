@@ -175,9 +175,9 @@ Sprinting, dashing, and running toward a near-death ally consume no stamina. Res
 Sorceries and incantations cost 100% more FP and stamina. Free-flying projectile spells produce an additional projectile.
 
 <!-- hex:95003600 -->
-## Extra Practice
+## Set Meal
 
-Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant.
+Shop weapons cost more and come with a stat-boosting latent power when purchased.
 
 <!-- hex:95003700 -->
 ## Burst of Momentum

@@ -1,0 +1,363 @@
+{
+  "version": "0.17.209",
+  "owner": 95003600,
+  "name": "套餐",
+  "zhDescription": "商店武器的价格提升，购买时附赠一个锻体类潜在能力",
+  "weaponSurcharge": 7000,
+  "formula": "native discounted unit price + 7000",
+  "onlyLocalOwnerDuringExpedition": true,
+  "priceDisplayAffordabilityAndPaymentShareDescriptor": true,
+  "allOtherGoodsAndSalePricesPreserved": true,
+  "rewardTablesAndParameterRowsUnchanged": true,
+  "regulationEventsHksAndSfxUnchanged": true,
+  "previousOwnerAndHistoryBitPreserved": true,
+  "assets": {
+    "containers": {
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "9b6c972cf74f7c2f529a111963cbf37d6cb2d99048ea8bdea46c33541cb34feb",
+        "outputSha256": "03b116003dcae4bc8e0578c945c1830abe94b7b17c8d71931b575720e7def925",
+        "rawSha256": "2c78fa63269019f3769d4528b74a1440d6b3360030d15dc95d5ab65e5cd114d2",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "04b5111d4c524585db358664e4c7a70b3a667388da431e1ac7b7301eed07eeef",
+        "outputSha256": "70fe79133a96c15e1da04bc3bfbc84813e093accd54f8ac1b0e22df9b22eb2ff",
+        "rawSha256": "f27f6f3d2789f26a9bf91f3839dc4e8373862d88690ac808f2d0d8ecaa80d4a8",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "23c2b0b661e8c2c469a2139316c44c38fdaed615b900c19e6b6a932c17ec2771",
+        "outputSha256": "3ec3082d99bd805babcb7e93b203f6bdfb0d9d42c547ee6528c32240ea3a5b65",
+        "rawSha256": "c9b6de623e6436866c1fc8dad68f57d004ef9f81fb937609c11f18d12cf4e494",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "7715dbaec85b5e858fb76add9c7a760d22737f4ee6e84f59bb338593ddbad0f7",
+        "outputSha256": "9d4217b58b148fb8a6901a42fc2c19d51b7071f729aec910f10992f9f20ad2ff",
+        "rawSha256": "ec84878a876b53c2794d72ba519e934cb4ddeded1f4e90b6e1355d83c78d463d",
+        "roundTripPassed": true
+      }
+    },
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "9E643EDCF25F4DEFB5701A3C1C7302DD2719BAE8ADF1CF7BD9EF51CD5D6C402C",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "3D233FFE8EB790EDFC45F2E980D630E49CB07480AC97A62E81766DD4A80B6368",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "992593A06B8C95418137B64323A8565EB1BEB7851CC94A0B3134397AC19F9E6A",
+          "outputSha256": "2C78FA63269019F3769D4528B74A1440D6B3360030D15DC95D5AB65E5CD114D2",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003600,
+              "before": "额外练习",
+              "after": "套餐"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003600,
+              "before": "在商人处购买武器时，额外获得一个锻体类潜在能力",
+              "after": "商店武器的价格提升，购买时附赠一个锻体类潜在能力"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003600,
+              "before": "额外练习",
+              "after": "套餐"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003600,
+              "before": "在商人处购买武器时，额外获得一个锻体类潜在能力",
+              "after": "商店武器的价格提升，购买时附赠一个锻体类潜在能力"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003600,
+              "before": "在商人处购买武器时，额外获得一个锻体类潜在能力",
+              "after": "商店武器的价格提升，购买时附赠一个锻体类潜在能力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "EE2B6AC93AB79437A4ACB166705998EBF72AB4B7E36D87607CD5FD2E93AA86AD",
+          "outputSha256": "F27F6F3D2789F26A9BF91F3839DC4E8373862D88690AC808F2D0D8ECAA80D4A8",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003600,
+              "before": "额外练习",
+              "after": "套餐"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003600,
+              "before": "在商人处购买武器时，额外获得一个锻体类潜在能力",
+              "after": "商店武器的价格提升，购买时附赠一个锻体类潜在能力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "5BD644C2E522DBC90982949D91E09D78EC3A2269AFB00AA08EE51C8697FC7BC5",
+          "outputSha256": "C9B6DE623E6436866C1FC8DAD68F57D004EF9F81FB937609C11F18D12CF4E494",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95003600,
+              "before": "Extra Practice",
+              "after": "Set Meal"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003600,
+              "before": "Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant.",
+              "after": "Shop weapons cost more and come with a stat-boosting latent power when purchased."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95003600,
+              "before": "Extra Practice",
+              "after": "Set Meal"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003600,
+              "before": "Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant.",
+              "after": "Shop weapons cost more and come with a stat-boosting latent power when purchased."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003600,
+              "before": "Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant.",
+              "after": "Shop weapons cost more and come with a stat-boosting latent power when purchased."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "3E4A35A0DAE0A6146F2A81B0B8E9E08F12E24807DF89E5EE4C695A34DE246BCD",
+          "outputSha256": "EC84878A876B53C2794D72BA519E934CB4DDEDED1F4E90B6E1355D83C78D463D",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95003600,
+              "before": "Extra Practice",
+              "after": "Set Meal"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003600,
+              "before": "Receive an additional stat-boosting latent power whenever you purchase a weapon from a merchant.",
+              "after": "Shop weapons cost more and come with a stat-boosting latent power when purchased."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "native": {
+    "nativeExecutionPassed": true,
+    "installedParameterReadbackPassed": true,
+    "stagedParameterReadbackPassed": false,
+    "weaponSurcharge": 7000,
+    "surchargeOrder": "native discounted unit price + 7000",
+    "quoteHook": "8C2534, once per fresh merchant buy-list descriptor",
+    "surchargeRequiresLocalOwnerAndExpedition": true,
+    "nonRuneCurrenciesAndSellListsUnchanged": true,
+    "nativeFunctions": [
+      "8C24A6 both native discount branches",
+      "7E9AC0 native wallet / quoted unit price affordability",
+      "1FC0C0 settled shop statistic increment",
+      "A7CBC6 price * quantity and A7CBCF call",
+      "A7CFC6 price * quantity and A7CFCF call"
+    ],
+    "successfulPurchaseReturnSites": [
+      "A7CBD4",
+      "A7CFD4"
+    ],
+    "excludedOtherSpendReturnSite": "A403EF",
+    "rewardsPerWeapon": 1,
+    "priceThreshold": null,
+    "countsPurchasedQuantity": true,
+    "purchaseContext": "RBX at the two signature-guarded native successful-purchase CALL sites",
+    "itemFields": {
+      "A7CBD4": "64",
+      "A7CFD4": "5C"
+    },
+    "quantityFields": {
+      "A7CBD4": "118",
+      "A7CFD4": "110"
+    },
+    "weaponEncodedKind": 0,
+    "choices": [
+      {
+        "basic": 100
+      },
+      {
+        "basic": 100
+      },
+      {
+        "basic": 90,
+        "mechanism": 5,
+        "high": 5
+      }
+    ],
+    "premiumChoices": [
+      {
+        "basic": 100
+      },
+      {
+        "basic": 100
+      },
+      {
+        "basic": 0,
+        "mechanism": 50,
+        "high": 50
+      }
+    ],
+    "premiumRarities": [
+      2,
+      3,
+      9
+    ],
+    "purchaseRarityGetter": "8BB780 native shop UI; record=shop+10 / shop+8",
+    "qualityCapturedAtPurchase": true,
+    "lotRarityOverride": -1,
+    "usesResolvedItemRarity": true,
+    "qualityCases": [
+      "both purchase callers execute original shop quality getter and native weapon rarity arithmetic",
+      "white/blue/purple/gold, red with white/purple base, unsupported grades",
+      "two rewards per purchase preserve mixed-quality order",
+      "quality changes after purchase do not change pending reward tiers"
+    ],
+    "quoteCases": [
+      "8 item codes, 3 currencies, 5 prices, 3 discount factors",
+      "both native purchase layouts receive the quoted descriptor and multiply by quantity",
+      "exact balance, insufficient balance, and quantity limits from native affordability",
+      "reopening shop does not compound surcharge",
+      "missing owner, inactive, outside expedition, reset, invalid price and saturating addition"
+    ],
+    "cases": [
+      "actual native item loads and both successful purchase callbacks",
+      "one reward per purchased weapon independent of rune price",
+      "zero/1/3499/3500/20000 unit prices",
+      "shields and catalysts use native weapon category",
+      "consumables/accessories/armor/invalid item codes excluded",
+      "native price multiplication and capped statistic preserved",
+      "other spending forwarded without item-record access",
+      "missing ownership/inactive/outside expedition ignored",
+      "zero and negative quantities ignored",
+      "negative payment ignored",
+      "multiple weapon purchases accumulate pending rewards",
+      "no currency credit or persistent spending markers",
+      "existing private reward does not block delivery",
+      "next-frame delivery without closing shop",
+      "death/near-death defer delivery",
+      "all three local player slots",
+      "zero creations refunded",
+      "partial creation consumes one reward",
+      "multiple purchased weapons delivered in one update without duplicates",
+      "new-run reset drops pending rewards"
+    ],
+    "stubs": [
+      "native price object/vector allocation, cleanup and destructor bookkeeping; original float multiplication, truncation, no-discount path and affordability division execute",
+      "stock event services absent (native no-stock-event branch executes)",
+      "purchase callback prologues and return around original item loads, amount multiplication and CALL",
+      "native ownership queries",
+      "weapon parameter lookup, shop cached-item validity and stack-cookie check; original shop rarity and base rarity query execute",
+      "native item-spawn service; no real shop UI or inventory grant"
+    ],
+    "sources": {
+      "src/snack.rs": "da96dc9b06407a5a5a3004f6720773ba04164062e47543124be47c5788c4f4c4",
+      "src/snack_native_tests.rs": "5d9ad77d6fdc8d290ef800343c882d8a3728b005d77bb7015d05d982c79a782d",
+      "src/lib.rs": "10431d7c10de3fd61c6e0dc5e80dbcb01282a4f99b2706062a9e04555edb8962",
+      "src/hex_pool.rs": "0f9a2ec6461778be4053fa940ae3c94d781cb6b66d8f47eacc08f1668615aa42",
+      "src/reward_cycle_runtime.rs": "9569ccb044fb92ad6e2de1f8e0ae90e36d6de543b85463b7e0bfd554e77dc694",
+      "src/reward_recovery.rs": "4d75f8333fdf91bcbc3c2bcb5aa5151b8138d81a62d710be702baa474b5f0693",
+      "tools/HexBuild/Snack.cs": "a1dbe7ea932ba2fa33287c301094d70370e18ec75e1f2807df08d04b679d16af",
+      "tools/HexBuild/RewardCatalog.cs": "b1c97610ad944557013618cb6ea51ae820e503425e3e06d6927b8cfc7a8f3e0d",
+      "tools/verify_snack.py": "305c84aef0f726d28a3e939442fc69e679be761f09ee0533defaf81b12493a86"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.209",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "1fe1e5f65828dc7bbe4e1559af63feaf3e5d6db9502e675c7074f40c62bed398",
+    "installed": true,
+    "installedDllSha256": "1fe1e5f65828dc7bbe4e1559af63feaf3e5d6db9502e675c7074f40c62bed398",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 431,
+  "regularIgnoredTests": 24,
+  "runtimeSuitesPassed": 16,
+  "exeSignaturesPassed": 200,
+  "changedExistingDistributionFiles": {
+    "README.md": {
+      "inputSha256": "aff52b5cec99ec4cf7d685748464edd9e61a8adc2abb7f3abe8755bef26e8a7d",
+      "outputSha256": "5991ac28f959454f54c8d3d77b83e4a00d22c068fd46d84a04d76fc79a39f33a"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "ed9e95381041edbb00e2d80291fa340191c7a0aba1d9a6f05e49e1fefb79a752",
+      "outputSha256": "1fe1e5f65828dc7bbe4e1559af63feaf3e5d6db9502e675c7074f40c62bed398"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "23c2b0b661e8c2c469a2139316c44c38fdaed615b900c19e6b6a932c17ec2771",
+      "outputSha256": "3ec3082d99bd805babcb7e93b203f6bdfb0d9d42c547ee6528c32240ea3a5b65"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "7715dbaec85b5e858fb76add9c7a760d22737f4ee6e84f59bb338593ddbad0f7",
+      "outputSha256": "9d4217b58b148fb8a6901a42fc2c19d51b7071f729aec910f10992f9f20ad2ff"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "9b6c972cf74f7c2f529a111963cbf37d6cb2d99048ea8bdea46c33541cb34feb",
+      "outputSha256": "03b116003dcae4bc8e0578c945c1830abe94b7b17c8d71931b575720e7def925"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "04b5111d4c524585db358664e4c7a70b3a667388da431e1ac7b7301eed07eeef",
+      "outputSha256": "70fe79133a96c15e1da04bc3bfbc84813e093accd54f8ac1b0e22df9b22eb2ff"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "unchangedExistingDistributionFileCount": 297,
+  "sourceHashes": {
+    "Cargo.toml": "e7f2b3d0f9927c651fc8b3e20965105c64e4abc51d9e71bac65ae8425d108029",
+    "Cargo.lock": "395ec06d35d7e88984938c0667bf4a53f150e3a1f921a5ebe4e92c89e5610f42",
+    "README.md": "8e210b3017d55a8d367c7204d935f375d4e9e7f6a610e6979d3928a9716e8530",
+    "dist/README.md": "5991ac28f959454f54c8d3d77b83e4a00d22c068fd46d84a04d76fc79a39f33a",
+    "CHANGELOG.md": "42fceffdd9176e6e628938fb323383846b1d2817ab3ecf7e1cf139fcbcaaf9c9",
+    "docs/hexes.md": "9e643edcf25f4defb5701a3c1c7302dd2719bae8adf1cf7bd9ef51cd5d6c402c",
+    "docs/hexes.en.md": "3d233ffe8eb790edfc45f2e980d630e49cb07480ac97a62e81766dd4a80b6368",
+    "docs/research/set-meal.md": "24753dd025196806c24432ec05920b44b0538a5d620cca65f0692ef93a5167f3",
+    "src/snack.rs": "da96dc9b06407a5a5a3004f6720773ba04164062e47543124be47c5788c4f4c4",
+    "src/snack_native_tests.rs": "5d9ad77d6fdc8d290ef800343c882d8a3728b005d77bb7015d05d982c79a782d",
+    "src/lib.rs": "10431d7c10de3fd61c6e0dc5e80dbcb01282a4f99b2706062a9e04555edb8962",
+    "tools/verify_snack.py": "305c84aef0f726d28a3e939442fc69e679be761f09ee0533defaf81b12493a86"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "loadingVerified": false
+}

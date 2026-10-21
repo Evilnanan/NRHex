@@ -1,4 +1,4 @@
-//! Successful local merchant weapon purchases fund immediate personal rewards.
+//! Set Meal: local merchant weapons cost extra and include a personal reward.
 //! Keep the historical owner/lot IDs; no spending threshold or price filter.
 use crate::{has_effect,read_i32,read_ptr,ptr};
 use std::sync::{Mutex,atomic::{AtomicPtr,Ordering}};
@@ -6,6 +6,12 @@ use std::collections::VecDeque;
 pub const OWNER:i32=95003600;
 pub const LOT:i32=95420000;
 pub const PREMIUM_LOT:i32=95420010;
+pub const SURCHARGE:i32=7000;
+// 8C22B0 creates the buy list. Both the unmodified-price and native-discount
+// branches converge here, BEFORE stock checks and copying into the shop UI.
+pub const PRICE_RVA:usize=0x8c2534;
+pub const PRICE_PATTERN:&str="83 7D 44 FF 74 19 83 CE 08 89 74 24 20 48 8D 55 F0 48 8D 4C 24 38 E8 51 7B F2 FF";
+pub static PRICE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub const RARITY_RVA:usize=0x8bb780;
 pub const RARITY_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 57 48 81 EC A0 00 00 00 48 8B 05 CF A7 22 03 48 33 C4 48 89 84 24 90 00 00 00 48 8B D9 48 8D 79 54 F7 07 00 00 00 F0";
 pub const SPEND_RVA:usize=0x1fc0c0;
@@ -21,6 +27,40 @@ pub const ITEM_B_PATTERN:&str="8B 41 5C 89 44 24 30 48 83 3D 4D A3 19 03 00";
 pub static SPEND_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 fn fields(caller:usize)->Option<(usize,usize)>{match caller{0xa7cbd4=>Some((0x64,0x118)),0xa7cfd4=>Some((0x5c,0x110)),_=>None}}
 fn weapon(encoded:u32)->bool{encoded>0&&encoded<0x0fff_ffff} // Native item kind 0; includes shields, bows and catalysts.
+// Mid-function RSP is 16-byte aligned; RBP-10 is the freshly built descriptor.
+// Preserve live GP/XMM registers and flags before resuming the native stock test.
+#[unsafe(naked)]
+pub unsafe extern "system" fn price(){
+ core::arch::naked_asm!(
+  "pushfq","sub rsp,0xc8",
+  "mov [rsp+0x20],rax","mov [rsp+0x28],rcx","mov [rsp+0x30],rdx",
+  "mov [rsp+0x38],r8","mov [rsp+0x40],r9","mov [rsp+0x48],r10","mov [rsp+0x50],r11",
+  "movdqu [rsp+0x60],xmm0","movdqu [rsp+0x70],xmm1","movdqu [rsp+0x80],xmm2",
+  "movdqu [rsp+0x90],xmm3","movdqu [rsp+0xa0],xmm4","movdqu [rsp+0xb0],xmm5",
+  "lea rcx,[rbp-0x10]","call {callback}",
+  "movdqu xmm0,[rsp+0x60]","movdqu xmm1,[rsp+0x70]","movdqu xmm2,[rsp+0x80]",
+  "movdqu xmm3,[rsp+0x90]","movdqu xmm4,[rsp+0xa0]","movdqu xmm5,[rsp+0xb0]",
+  "mov rax,[rsp+0x20]","mov rcx,[rsp+0x28]","mov rdx,[rsp+0x30]",
+  "mov r8,[rsp+0x38]","mov r9,[rsp+0x40]","mov r10,[rsp+0x48]","mov r11,[rsp+0x50]",
+  "add rsp,0xc8","popfq","jmp qword ptr [rip+{original}]",
+  callback=sym quote,original=sym PRICE_ORIGINAL
+ );
+}
+unsafe extern "system" fn quote(record:usize){
+ let base=crate::BASE.load(Ordering::Acquire);
+ if !crate::ACTIVE.load(Ordering::Acquire)||base==0||record==0
+  ||!weapon(read_i32(record+0x54)as u32)
+  ||ptr::read((record+0x20)as*const u8)!=0{return;}
+ let value=read_i32(record+0x24);if value<0{return;}
+ let world=read_ptr(base+crate::WORLD_RVA);if world==0{return;}
+ let player=read_ptr(world+0x174e8);
+ if player==0||!has_effect(player,OWNER,base)
+  ||!has_effect(player,crate::level_rewards::EXPEDITION,base)
+  ||has_effect(player,crate::reward_cycle_runtime::RESET,base){return;}
+ // Only this fresh per-menu descriptor changes; never parameters, inventory,
+ // sale values, global currency deductions, or an already adjusted cached row.
+ ptr::write_unaligned((record+0x24)as*mut i32,value.saturating_add(SURCHARGE));
+}
 pub fn bonus_lot(lot:i32)->bool{[LOT,PREMIUM_LOT].iter().any(|start|(*start..*start+3).contains(&lot))}
 fn premium(rarity:u8)->bool{matches!(rarity,2|3|9)}
 pub fn pending_for(lot:i32,owner:u16,slot:u8)->bool{
@@ -87,7 +127,7 @@ pub unsafe fn update(player:usize,base:usize,_dt:f32){
   let Some(lot)=PENDING.lock().ok().and_then(|mut state|state.reserve())else{break;};
   let created=crate::spawn_personal_lot(player,base,lot,None);
   if let Ok(mut state)=PENDING.lock(){state.complete(lot,created);}
-  if created!=3{crate::nlog_error!("Extra Practice created {created} choices; reserved={}",created>0);break;}
+  if created!=3{crate::nlog_error!("Set Meal created {created} choices; reserved={}",created>0);break;}
  }
  crate::CALLBACK_LOCK.store(false,Ordering::Release);
 }
