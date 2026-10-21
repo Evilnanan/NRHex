@@ -1,0 +1,98 @@
+{
+  "version": "0.17.206",
+  "name": "玻璃大炮",
+  "owner": 95000300,
+  "rule": "per damage element, multiply model/equipment resistance by the three native DamageCutRate groups, then retain max(net coefficient, 1)",
+  "examples": [
+    {
+      "finalResistance": 0.4,
+      "damageMultiplier": 1
+    },
+    {
+      "finalResistance": 0,
+      "damageMultiplier": 1
+    },
+    {
+      "finalResistance": -0.2,
+      "damageMultiplier": 1.2
+    }
+  ],
+  "objectDefenseAndGuardStillBypassed": true,
+  "nonHolderNativeArgumentsUnchanged": true,
+  "sharedHitAndParameterDataUnchanged": true,
+  "native": {
+    "nativeExecutionPassed": true,
+    "nativeFunctions": [
+      "6C5FC0 native damage combiner with compiled inline hook",
+      "506700 native object-defense query with compiled recipient hook"
+    ],
+    "rule": "combine model/equipment resistance and three native DamageCutRate groups per element, then retain only net coefficients above one",
+    "cases": [
+      "36 five-element cases: 30 owner/non-owner defensive-layer cases, two mixed repeated calculations, positive/neutral/negative intrinsic resistance and numerical immunity",
+      "physical, magic, fire, lightning and holy evaluated independently",
+      "model resistance cancels effect vulnerability before clamping",
+      "native attack rates, repeated-hit and positional multipliers preserved; guard/deflection/rebound/target-state bypass unchanged",
+      "16 native object-defense flag/value cases with nested scopes and exact recipient matching",
+      "24 shared Devil’s Gaze scale/guard cases with native defenses intact",
+      "input arrays remain unchanged and repeated evaluations do not compound"
+    ],
+    "nativeCalculatorCases": 36,
+    "objectDefenseCases": 16,
+    "sharedGazeCases": 24,
+    "dependencyStubs": [],
+    "scopeIdentityIsFixture": true,
+    "sourceHashes": {
+      "src/glass_cannon.rs": "3623fe59878563c7593ee6b1c60fffd02ae57c137bbb23435e5d86fd0490a032",
+      "src/glass_cannon_native_tests.rs": "3a2edcabbc5cba54f4a7a89832b9795068fabecd2e4450e2bda29ff06e1cdc9f",
+      "tools/verify_glass_cannon_native.py": "774e3ea0241b52627fcabbdd0a81153f3a61d5c7ec52a2473568897dafb84f7d",
+      "build.ps1": "ca339962e9820a67e17be70f6074c6ea7a0b998fb60a9bc36b04ac19340de27a"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.206",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "b0512517693b4d1ce4b8bfe578be83cccb77459035d3f055dbfa6229c841056c",
+    "installed": true,
+    "installedDllSha256": "b0512517693b4d1ce4b8bfe578be83cccb77459035d3f055dbfa6229c841056c",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 425,
+  "regularIgnoredTests": 22,
+  "runtimeNativeSuitesPassed": 14,
+  "runtimeSignatureCount": 189,
+  "changedExistingDistributionFiles": {
+    "README.md": {
+      "inputSha256": "e7fc91d8acc588d252975096a63c48807c86b8b031331212e3273f1afeb63839",
+      "outputSha256": "da283c600705729708aa5caba42b6babf0d0725ec56b68b447f194c46adbd322"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "1450b535121312eb73491e6b139431bcc5bcfa84c81aeccf799a49bd8ee7e7ce",
+      "outputSha256": "b0512517693b4d1ce4b8bfe578be83cccb77459035d3f055dbfa6229c841056c"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "unchangedExistingDistributionFileCount": 297,
+  "sources": {
+    "src/glass_cannon.rs": "3623fe59878563c7593ee6b1c60fffd02ae57c137bbb23435e5d86fd0490a032",
+    "src/glass_cannon_native_tests.rs": "3a2edcabbc5cba54f4a7a89832b9795068fabecd2e4450e2bda29ff06e1cdc9f",
+    "tools/verify_glass_cannon_native.py": "774e3ea0241b52627fcabbdd0a81153f3a61d5c7ec52a2473568897dafb84f7d",
+    "build.ps1": "ca339962e9820a67e17be70f6074c6ea7a0b998fb60a9bc36b04ac19340de27a",
+    "docs/implementation.md": "371dccc3ee9f4163952ec8f09c9b1d0172a4e8ba026ddd8290d185abc5690d05",
+    "docs/research/glass-cannon-01769.md": "13a2a1a0e99cbc5317ed906ef2a5d486364f79645263dd6c746b5b708110257a",
+    "README.md": "6e2bf1a25697625917566bb26f657c711e75763288739c61c10e084ce4b04ce4",
+    "dist/README.md": "da283c600705729708aa5caba42b6babf0d0725ec56b68b447f194c46adbd322",
+    "CHANGELOG.md": "71fd5ae7ce6e0791c6b79cddc13c3aaf08e89e35809176897d29c9d651e18a16",
+    "Cargo.toml": "7cf52d566c14d3dbbb9fac6f3f8ab51788d6ae7503b7d30bb1811c8cefcde205",
+    "Cargo.lock": "50af202d60272133db1ff627f1828b42b0ff1cb478bd6189de2d8a8a00e44630"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

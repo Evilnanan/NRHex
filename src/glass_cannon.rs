@@ -66,12 +66,13 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
  // 503800 separates DamageCutRate into ordinary, category 110 and category
  // 434 groups. Combine these BEFORE clamping: reduction and vulnerability
  // must cancel normally, rather than preserving each vulnerability alone.
- // Equipment/model resistance and shield guard are separate and stay neutral.
+ // Include equipment/model resistance in that same net coefficient. Shield
+ // guard and the separate object-defense query remain bypassed.
  // Keep attack components/rates, hit-specific offensive multipliers and the
  // native balance factor. No shared rows, recipient stats or HP are modified.
  let neutral=[1f32;5];let n=neutral.as_ptr();
  let vulnerability=std::array::from_fn::<_,5,_>(|i|
-  (*effects.add(i)* *conditional.add(i)* *additional.add(i)).max(1.));
+  (*effects.add(i)* *conditional.add(i)* *additional.add(i)* *armor.add(i)).max(1.));
  original(out,attack,rates,vulnerability.as_ptr(),n,n,n,n,1.,repeated,1.,attack_rate,positional,1.,balance)
 }
 
@@ -88,7 +89,7 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
   for cuts in [[0.;5],[0.1,0.2,0.3,0.4,0.5],[2.;5]]{
    let saved=cuts;let mut out=[0.;5];
    let value=calculate(native,true,out.as_mut_ptr(),a.as_ptr(),rates.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),cuts.as_ptr(),0.25,0.5,0.,2.,1.5,0.,0.75);
-   let mut expected=[0.;5];for i in 0..5{expected[i]=a[i]*rates[i]*(cuts[i]*cuts[i]*cuts[i]).max(1.)*0.5*2.*1.5*0.75;}
+   let mut expected=[0.;5];for i in 0..5{expected[i]=a[i]*rates[i]*(cuts[i]*cuts[i]*cuts[i]*cuts[i]).max(1.)*0.5*2.*1.5*0.75;}
    assert_eq!(out,expected);assert_eq!(value,expected.iter().sum::<f32>());assert_eq!(cuts,saved);
   }
  }}
@@ -98,12 +99,13 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
   let conditional=[1.5,2.,1.,4.,1.];
   let additional=[1.,1.,0.5,2.,2.];
   let saved=(effects,conditional,additional);
-  // Opposing reductions produce .75,1.5,.75,0,2. Only the net >1 survives.
-  // Even >1 model resistance, guard and target-state factors stay bypassed.
+  // Native model resistance and the three effect groups combine before the
+  // clamp. Guard and target-state vulnerabilities remain bypassed.
+  let armor=[0.5,1.2,2.,1.,2.];
   let ignored=[3.;5];
   for _ in 0..2{
-   let total=calculate(native,true,out.as_mut_ptr(),a.as_ptr(),one.as_ptr(),effects.as_ptr(),ignored.as_ptr(),ignored.as_ptr(),conditional.as_ptr(),additional.as_ptr(),2.,1.,2.,1.,1.,2.,1.);
-   assert_eq!(out,[100.,150.,100.,100.,200.]);assert_eq!(total,650.);
+   let total=calculate(native,true,out.as_mut_ptr(),a.as_ptr(),one.as_ptr(),effects.as_ptr(),armor.as_ptr(),ignored.as_ptr(),conditional.as_ptr(),additional.as_ptr(),2.,1.,2.,1.,1.,2.,1.);
+   assert!(out.iter().zip([100.,180.,150.,100.,400.]).all(|(a,b)|(a-b).abs()<0.001));assert!((total-930.).abs()<0.001);
   }
   assert_eq!((effects,conditional,additional),saved);
  }}
@@ -155,3 +157,5 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
   assert_eq!(attack,[0.,0.,0.,0.,252.]);
  }}
 }
+
+#[cfg(test)]#[path="glass_cannon_native_tests.rs"]mod native_tests;
