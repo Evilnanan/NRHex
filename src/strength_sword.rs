@@ -7,8 +7,8 @@ pub const RVA:usize=0x43d260;
 pub const PATTERN:&str="48 8B C4 48 89 58 20 55 56 57 41 54 41 55 41 56 41 57 48 8D 68 A9 48 81 EC 00 01 00 00 0F 29 70 B8 0F 29 78 A8";
 pub static ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 thread_local!{static SCOPES:RefCell<Vec<usize>>=const{RefCell::new(Vec::new())};}
-fn eligible(local:bool,other:bool,mighty:bool,sword:bool,ranged:bool,distance:Option<f32>)->bool{
- local&&other&&mighty&&sword&&ranged&&crate::sword::near(distance,crate::sword::NEAR_DISTANCE)
+fn eligible(local:bool,other:bool,mighty:bool,sword:bool,spell:bool,ranged:bool,distance:Option<f32>)->bool{
+ local&&other&&mighty&&sword&&(spell||(ranged&&crate::sword::near(distance,crate::sword::NEAR_DISTANCE)))
 }
 unsafe fn projectile(hit:usize,actor:usize)->bool{
  // Native 5363A0 copies the original collision source into hit+228; the
@@ -36,18 +36,26 @@ pub unsafe extern "system" fn detour(module:usize,source:usize,hit:usize,a:u8,b:
  let base=BASE.load(Ordering::Acquire);
  let enabled=if ACTIVE.load(Ordering::Acquire)&&module!=0&&hit!=0&&is_local(source,base)
   &&ptr::read((hit+0x2c1)as*const u8)&8==0{
+  let spell=spell_percentage(hit).is_some();
+  let (ranged,distance)=if spell{(false,None)}else{(projectile(hit,source),sword_hit_distance(source,hit,base))};
   eligible(true,read_ptr(module+8)!=source,has_effect(source,crate::strength::OWNER,base),
-   has_effect(source,sword::OWNER,base),spell_percentage(hit).is_some()||projectile(hit,source),sword_hit_distance(source,hit,base))
+   has_effect(source,sword::OWNER,base),spell,ranged,distance)
  }else{false};
  with_impact(hit,enabled,||original(module,source,hit,a,b));
 }
 
 #[cfg(test)]mod tests{
  use super::*;
- #[test]fn only_both_owners_spells_or_projectiles_and_sword_contact_range_qualify(){
+ #[test]fn ordinary_projectiles_retain_contact_range_but_spells_follow_native_hits(){
   for bits in 0..32{for distance in [None,Some(f32::NAN),Some(0.),Some(4.),Some(4.001),Some(5.),Some(5.001),Some(f32::INFINITY)]{
-   assert_eq!(eligible(bits&1!=0,bits&2!=0,bits&4!=0,bits&8!=0,bits&16!=0,distance),bits==31&&matches!(distance,Some(d)if d.is_finite()&&d<=5.));
+   assert_eq!(eligible(bits&1!=0,bits&2!=0,bits&4!=0,bits&8!=0,false,bits&16!=0,distance),bits==31&&matches!(distance,Some(d)if d.is_finite()&&d<=5.));
   }}
+ }
+ #[test]fn spell_synergy_does_not_follow_moving_caster(){
+  for distance in [None,Some(0.),Some(5.001),Some(100.)]{
+   assert!(eligible(true,true,true,true,true,false,distance));
+   assert!(!eligible(true,true,true,false,true,false,distance));
+  }
  }
  #[test]fn native_bullet_sources_qualify_without_double_boosting_direct_weapons(){unsafe{
   unsafe extern "system" fn kind(source:usize)->i32{crate::read_i32(source+8)}

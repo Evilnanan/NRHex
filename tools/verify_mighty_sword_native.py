@@ -33,7 +33,8 @@ source=(ROOT/'src/strength_sword.rs').read_text()
 assert source.index('if let Some(level)=original{ptr::write')<source.index('call();')<source.index('if let Some(level)=original{ptr::write',source.index('call();'))
 assert 'SCOPES.with(|s|!s.borrow().contains(&hit))' in source
 assert 'sword_hit_distance(source,hit,base)' in source and 'spell_percentage(hit).is_some()' in source
-assert 'spell_percentage(hit).is_some()||projectile(hit,source)' in source
+assert 'if spell{(false,None)}else{(projectile(hit,source),sword_hit_distance(source,hit,base))}' in source
+assert 'spell||(ranged&&crate::sword::near(distance,crate::sword::NEAR_DISTANCE))' in source
 assert 'read_ptr(hit+0x228)' in source and 'kind(source)==3' in source
 assert 'source==0||source==actor' in source and 'hit+0x2c1' in source
 assert 'has_effect(source,crate::strength::OWNER,base)' in source and 'has_effect(source,sword::OWNER,base)' in source
@@ -41,6 +42,6 @@ lib=(ROOT/'src/lib.rs').read_text()
 assert 'if spell_percentage(hit).is_some()&&has_effect(local,sword::OWNER,base){return;}' in lib
 assert 'strength_sword::ORIGINAL.store(combination_prepared.trampoline' in lib
 assert 'hook::write_code(combination_target,&combination_prepared.patch)' in lib
-report=dict(wholeNativeDispatch='0x43d260',stackArgumentsPreserved=5,consumers={hex(k):hex(v)for k,v in consumers.items()},recipientNativeReactionMappingPreserved=True,hitInput='0x24',nativeReactionOutput='0x2b6',spellAndProjectileContactRange=4,collisionSource='0x228',nativeBulletKind=3,cachedHitsNotReboosted=True,sourceDirectSpellsNotDoubleBoosted=True,gameplayVerified=False,multiplayerVerified=False)
+report=dict(wholeNativeDispatch='0x43d260',stackArgumentsPreserved=5,consumers={hex(k):hex(v)for k,v in consumers.items()},recipientNativeReactionMappingPreserved=True,hitInput='0x24',nativeReactionOutput='0x2b6',ordinaryProjectileContactRange=5,spellCasterDistanceGate=False,collisionSource='0x228',nativeBulletKind=3,cachedHitsNotReboosted=True,sourceDirectSpellsNotDoubleBoosted=True,gameplayVerified=False,multiplayerVerified=False)
 (ROOT/'dist/mighty-sword-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print('PASS: five-argument native dispatch encloses damage/reactions; native projectile source, spell scope, cached replay and constructor exclusion verified')

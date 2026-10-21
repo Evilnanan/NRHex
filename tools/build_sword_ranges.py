@@ -87,6 +87,14 @@ lines=['// Generated from current regulation and the preserved user bonus CSV.',
 lines += [f" ({mid},{value:.9g}f32)," for mid,value in sorted(bonus_values.items())]
 lines += ['];','pub const ATTACKS: &[(i32,&[i32])] = &[']
 lines += [f" ({a},&[{','.join(map(str,ids))}])," for a,ids in sorted(mapping.items())]
+lines += ['];','// Exact Magic root references, including roots with native MagicID=-1.','pub const ROOTS: &[(i32,&[i32])] = &[']
+roots={}
+for mid,r in ((int(k),v) for k,v in g['Magic'].items()):
+    if mid not in eligible_ids:continue
+    for n in range(1,11):
+        bid=r.get(f'refId{n}',-1)
+        if r.get(f'refCategory{n}')==1 and bid in bullets:roots.setdefault(bid,set()).add(mid)
+lines += [f" ({bid},&[{','.join(map(str,sorted(ids)))}])," for bid,ids in sorted(roots.items())]
 lines += ['];']
 (root/'src/sword_map.rs').write_text('\n'.join(lines)+'\n',encoding='utf-8')
 report={'spellCount':len(spells),'mappedAttacks':len(mapping),'sharedSpellAttacks':{str(a):ids for a,ids in mapping.items() if len(ids)>1},'cometRange':comet,'warning':'Upper reach estimates, not measured in-game range. Spell/weapon shared Bullet IDs can remain ambiguous. dist is attenuation, not travel range.','spells':spells}

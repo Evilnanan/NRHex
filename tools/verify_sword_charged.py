@@ -51,15 +51,15 @@ try:
       for off,v in [(8,begin),(16,begin),(24,begin+16)]:put(out,off,'<Q',v)
       before=(bytes(row),bytes(node),bytes(hit))
       copied=c.create_string_buffer(bytes(hit),0x2c8)
-      if kind in [3,4] and owns and close:
+      if kind in [3,4] and owns:
        put(copied,0x122,'<B',1)
        off=0x124+130//8;put(copied,off,'<B',copied.raw[off]|(1<<(130%8)))
        if tag==110:
         off=0x124+100//8;put(copied,off,'<B',copied.raw[off]|(1<<(100%8)))
       select(c.addressof(manager),c.addressof(out),c.addressof(copied))
       count=(c.c_uint64.from_buffer(out,16).value-begin)//4
-      expected=valid and ((kind==1 and tag==100)or(kind in [3,4]and tag in [100,110] and owns and close))
-      if tier in [8600200,95002600]:expected=valid and (kind==1 or(kind in [3,4] and owns and close))
+      expected=valid and ((kind==1 and tag==100)or(kind in [3,4]and tag in [100,110] and owns))
+      if tier in [8600200,95002600]:expected=valid and (kind==1 or(kind in [3,4] and owns))
       assert count==int(expected),(tier,kind,tag,owns,close,valid,count)
       if count:assert ids[0]==rows[tier]['atkOccurrenceSpEffectId']
       assert before==(bytes(row),bytes(node),bytes(hit))
@@ -67,9 +67,9 @@ try:
 finally:
  assert k.VirtualFree(m,0,0x8000)
 source=(ROOT/'src/sword_hit_rules.rs').read_text()
-assert 'sword_hit_distance(owner,hit,base)' in source and 'dispatch(hit,enabled' in source and 'hit[0x122]=1' in source
-report=dict(nativeCases=len(cases),nativeSelector='0x505e90',effectFilter='0x511010',weaponChargeCategory=100,spellChargeCategory=110,tiers=[8320400,8320410,8320420],durationSeconds=10,negation=[.24,.32,.4],range=4,additionalOnHitReference=8600200,privateWeaponHitDescriptor=True,sharedRowsAndHitsUnchanged=True,gameplayVerified=False,multiplayerVerified=False)
+assert 'sword_hit_distance' not in source and 'dispatch(hit,enabled' in source and 'hit[0x122]=1' in source
+report=dict(nativeCases=len(cases),nativeSelector='0x505e90',effectFilter='0x511010',weaponChargeCategory=100,spellChargeCategory=110,tiers=[8320400,8320410,8320420],durationSeconds=10,negation=[.24,.32,.4],spellCasterDistanceGate=False,additionalOnHitReference=8600200,privateWeaponHitDescriptor=True,sharedRowsAndHitsUnchanged=True,gameplayVerified=False,multiplayerVerified=False)
 report.update(contractNativeFlagsUnchanged=True,contractNoSeparateSpellFilter=True,externalHitEligibilityStubbed=True)
 assert 'spell_filter' not in (ROOT/'src/ominous_pact.rs').read_text()
 (ROOT/'dist/sword-hit-rules-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
-print(f'PASS: {len(cases)} native selector/filter cases; three ward tiers plus native FP-on-hit, charged/uncharged spells, range/ownership gates and original weapon triggers')
+print(f'PASS: {len(cases)} native selector/filter cases; three ward tiers plus native FP-on-hit, charged/uncharged spells, ownership and native eligibility gates and original weapon triggers')

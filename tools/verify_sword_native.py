@@ -185,9 +185,9 @@ assert 'let mut melee=ptr::read_unaligned(descriptor as *const [u8;0x3c]);melee[
 assert source.index('\"call {before}\"',source.index('fn rear_detour'))<source.index('\"call qword ptr [rip+{original}]\"',source.index('fn rear_detour'))
 assert 'is_local(source,base)||!has_effect(source,sword::OWNER,base)||spell_percentage(hit).is_none()' in source
 sword_healing=(root/'src/sword_regain.rs').read_text()
-assert 'select(original,spell_percentage(hit),sword_hit_distance(source,hit,base),read_i32(hit+0x280),ptr::read((hit+0x2c3)as*const u8)&2!=0,||native_rate(source,hit,base))' in sword_healing
+assert 'select(original,spell_percentage(hit),read_i32(hit+0x280),ptr::read((hit+0x2c3)as*const u8)&2!=0,||native_rate(source,hit,base))' in sword_healing
 assert 'sword::heal_amount(damage,percentage,nullified)' in sword_healing
-assert 'sword::near(distance,sword::NEAR_DISTANCE)' in sword_healing
+assert 'sword_hit_distance' not in sword_healing
 assert 'sword::HEAL_BASE' not in source and 'sword::Healing' not in source
 report=dict(version='0.10.3',effectFilterRva='0x511010',attackRateCalculationRva='0x502830',sourceMaskOffset='0x14',cachedRateOffsets=damage_offsets,nativeAttackRateTests=rate_tests,isolatedFixtureLookupStub='E6D630 absent PARAM row; additive melee filter retry at 511010 calls original native predicate; fixture assumes eligible Sword owner',nativeCategoryPredicateRva='0xea1b00',hitMaskOffset='0x124',maskBytes=32,additionalCategories=[130],removedAddedCategories=[111,112],nativeCategoryTests=tests,originalCategoriesRetained=True,originalSkillCategoryChecksPassed=4,unrelatedFiltersExcluded=True,originalSpellApplicationRetained=True,nativeWeaponRestrictionsRetained=True,originalEligibleEffectsNotDoubled=True,activeMagicGetter='ChrIns+1b8 -> module+60 -> virtual+18 -> i32 MagicID',gameplayVerified=False,multiplayerVerified=False)
 report.update(healingUsesCompletedDamage=True,healingRequiresRecipientHpLoss=False,nullifiedHitsExcludedFromHealing=True,healingConsumesNativeRegain=True,lockedHpGameplayVerified=False)

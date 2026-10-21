@@ -158,7 +158,9 @@ pub unsafe extern "system" fn factory(manager:usize,payload:usize,error:usize)->
   ptr::copy_nonoverlapping(ticket.pose.as_ptr(),(payload+0x190)as*mut u8,0x40);
  }
  let ticket=if replay.ticket==0&&scope.descriptor!=0&&!scope.consumed{snapshot(scope,payload,base)}else{None};
+ let _flight=crate::sword_projectile::factory_scope(payload);
  let result=original(manager,payload,error);
+ crate::sword_projectile::factory_done(result);
  if result!=0&&replay.ticket!=0&&!replay.consumed{
   let ticket=&*(replay.ticket as*const Ticket);
   if !ticket.area{if let Ok(mut queue)=QUEUE.lock(){if queue.owner==ticket.owner{bind(&mut queue,result,true,Arc::clone(&ticket.shots));}}}
@@ -179,6 +181,10 @@ pub unsafe extern "system" fn initialize(group:usize,out:usize,transform:usize,t
  }else{None};
  let frozen=binding.as_ref().filter(|(replay,_)|*replay).and_then(|(_,shots)|shots.lock().ok()?.get(&index).copied());
  let source=frozen.as_ref().map_or(transform,|pose|pose.0.as_ptr()as usize);
+ let Some(_flight)=crate::sword_projectile::initialize_scope(group,source)else{
+  if out!=0{ptr::write_unaligned(out as*mut u64,u64::MAX);}
+  return out;
+ };
  let result=original(group,out,source,target,index);
  if out!=0&&read_ptr(out)!=usize::MAX{
   if let Some((false,shots))=binding{if let Ok(mut shots)=shots.lock(){shots.entry(index).or_insert_with(||Transform(ptr::read_unaligned(transform as*const[u8;0x30])));}}
@@ -186,6 +192,7 @@ pub unsafe extern "system" fn initialize(group:usize,out:usize,transform:usize,t
  result
 }
 pub unsafe extern "system" fn finish(group:usize){
+ crate::sword_projectile::finish_group(group);
  if let Ok(mut queue)=QUEUE.lock(){queue.groups.retain(|binding|binding.group!=group);}
  let original:Finish=std::mem::transmute(FINISH_ORIGINAL.load(Ordering::Acquire));original(group);
 }

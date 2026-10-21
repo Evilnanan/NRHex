@@ -1,0 +1,147 @@
+{
+  "version": "0.17.207",
+  "name": "亮出你的剑",
+  "owner": 95000900,
+  "rule": "independent spell projectiles retire beyond 5m in 3D straight-line distance from their fixed actual launch point; flying descendants inherit that origin",
+  "nativeBoundAndStationaryRangesPreserved": true,
+  "casterHitDistanceGatesRemoved": true,
+  "noHitDistanceFallback": true,
+  "nativeImpactChildrenSkippedOnRetirement": true,
+  "spellBonusCsvPreserved": true,
+  "gameTextsUnchanged": true,
+  "rootBulletCount": 342,
+  "magicIdentities": 160,
+  "parameterReadback": [
+    {
+      "isDisableNetSync": 0
+    },
+    {
+      "field": "isSyncBulletCulcDumypolyPos",
+      "value": 0,
+      "changed": [
+        {
+          "offset": 156,
+          "mask": 32
+        }
+      ]
+    },
+    {
+      "field": "FollowType",
+      "value": 0,
+      "changed": [
+        {
+          "offset": 154,
+          "mask": 1
+        }
+      ]
+    }
+  ],
+  "native": {
+    "nativeExecutionPassed": true,
+    "rangeMetres": 5,
+    "distance": "3D straight-line distance from fixed actual launch point",
+    "casterPositionReadForFlight": false,
+    "damageDistanceFallback": false,
+    "nativeFunctions": [
+      "34E750 native initialize dispatcher and stack arguments",
+      "34F130 native per-instance update with compiled 34F593 post-motion hook",
+      "3559C0 native free-flight integration and orientation math",
+      "354AA0 current Bullet row selection",
+      "355270 direct transition to state 4, skipping impact state 3",
+      "35F5C0 native manager cleanup and 342FB0 group unlink",
+      "34A6F0 native handle generation reset, active flag clear and collision unregister calls"
+    ],
+    "cases": [
+      "exact 5m boundary in three axes followed by native out-of-range retirement",
+      "changing source position does not change launch point",
+      "full native cleanup: generation increment, inactive flag, group handle removal, two collision unregister calls",
+      "native state-4 transition invokes component exit without impact-child generation",
+      "looping flight counts radial displacement rather than cumulative trajectory",
+      "child emissions and delayed group initializations inherit initial parent origin",
+      "outside children are rejected before allocation; non-spell parents cannot infer a new root",
+      "attached and synchronized effects retain native range; zero-speed generators remain unanchored until independent motion",
+      "release after attachment motion anchors the release position",
+      "generation mismatch, group finish, missing native Magic ID, mismatched Magic and source ownership"
+    ],
+    "stubs": [
+      "actor/effect and parameter lookup",
+      "354AF0 lower-level instance setup; real 34E750 dispatcher executes",
+      "native component update/exit fixture vtables",
+      "child creation body; compiled child detour executes",
+      "355D20/355FE0/350410 motion-related scene and collider-transform services",
+      "rendering, empty payload/target construction and reference teardown, component release and collision manager storage; native reset invokes both unregister fixture callbacks",
+      "stack cookie checker"
+    ],
+    "sourceHashes": {
+      "src/sword_projectile.rs": "844eca9e121153235accc4eee678ca154d60e12db43cfcd2fb6dc721c858674a",
+      "src/sword_projectile_native_tests.rs": "bb453ad81d51fea09849797a0dab4e950c255b157a252b3eb821dca1b3565d6c",
+      "src/sword_map.rs": "cad378685f0c1414d1055bdc0ac61b60a2c9d898cc6cff23c889998b4d4bef95",
+      "src/sword_regain.rs": "2e500316de3118c6dca43f10eaede8bde3b8e5802789a0ac97fca28c4797a5e3",
+      "src/sword_hit_rules.rs": "d980c0715afc44903b8453883164aa615f82aa357622c55916783e4e56f7b956",
+      "src/strength_sword.rs": "519fe73068adce9031691ca390c62c6f425dee244289fb158b08f64e2510b66a",
+      "src/echo_cast.rs": "570d9ef341328b3c7984dfbf2d927794dc04d43b237b29ac0e2e80f70e2e22b8",
+      "src/lib.rs": "393f976cc4aa97433b345e1f790a987c79bd080a54cd79570e547093de78fb95",
+      "tools/build_sword_ranges.py": "0da8ab28dce99d3c6eec43cf4b532f242a57d71caa52064c3e6f259ba6f5cf76",
+      "tools/verify_sword_projectile.py": "d1bafeee93c8f3c246f9b57c6bc7518f938cae8049d3aa5c91df23befddd53f2"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.207",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "efd240d34af15fff4438cc023f777f2c459f2412f718ab57f18598d707d85699",
+    "installed": true,
+    "installedDllSha256": "efd240d34af15fff4438cc023f777f2c459f2412f718ab57f18598d707d85699",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 427,
+  "regularIgnoredTests": 23,
+  "runtimeNativeSuitesPassed": 15,
+  "runtimeSignatureCount": 195,
+  "changedExistingDistributionFiles": {
+    "README.md": {
+      "inputSha256": "da283c600705729708aa5caba42b6babf0d0725ec56b68b447f194c46adbd322",
+      "outputSha256": "790b2fc17a02865e529d03d5758f835d865ed7ef911b4c8d56edf007853f8894"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "b0512517693b4d1ce4b8bfe578be83cccb77459035d3f055dbfa6229c841056c",
+      "outputSha256": "efd240d34af15fff4438cc023f777f2c459f2412f718ab57f18598d707d85699"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "unchangedExistingDistributionFileCount": 298,
+  "sources": {
+    "CHANGELOG.md": "afdaf0756d8ce00c87fff8ccafee7577ce3f9479a9bde9f7774f6c835501315e",
+    "Cargo.lock": "961b934f5757cbe7bea083df9d70f99abc9f5ca38698a5f62076479d6b8bddc5",
+    "Cargo.toml": "76e4b56b805cd53df36ca82c07fc1487a22087f0ef1b1c79b4b07f262e4725fd",
+    "README.md": "bdd45bb30bd4a29bb0dbaadfc0eb9942346699a19b8783dcbddf757ac0d5a728",
+    "build.ps1": "c270f2cc9ed0f8ceb57120d8e0185c35f01641b13ae86ace99ff771a6c0970f2",
+    "dist/README.md": "790b2fc17a02865e529d03d5758f835d865ed7ef911b4c8d56edf007853f8894",
+    "docs/implementation.md": "29abeaddebfb6d83968b980e37ef41e21b9223b371696eea5e20bc356a5c0294",
+    "docs/research/sword-projectile-range.md": "3f3f9c1856ef6b314cc33657976684f7acd8e656e4222d0ac210ed1f87213a09",
+    "src/echo_cast.rs": "570d9ef341328b3c7984dfbf2d927794dc04d43b237b29ac0e2e80f70e2e22b8",
+    "src/lib.rs": "393f976cc4aa97433b345e1f790a987c79bd080a54cd79570e547093de78fb95",
+    "src/strength_sword.rs": "519fe73068adce9031691ca390c62c6f425dee244289fb158b08f64e2510b66a",
+    "src/sword.rs": "e5e73509450381fb1b47678badcf9435678ab249a6c1e682d7525bc5e0cf1a0f",
+    "src/sword_hit_rules.rs": "d980c0715afc44903b8453883164aa615f82aa357622c55916783e4e56f7b956",
+    "src/sword_map.rs": "cad378685f0c1414d1055bdc0ac61b60a2c9d898cc6cff23c889998b4d4bef95",
+    "src/sword_projectile.rs": "844eca9e121153235accc4eee678ca154d60e12db43cfcd2fb6dc721c858674a",
+    "src/sword_projectile_native_tests.rs": "bb453ad81d51fea09849797a0dab4e950c255b157a252b3eb821dca1b3565d6c",
+    "src/sword_regain.rs": "2e500316de3118c6dca43f10eaede8bde3b8e5802789a0ac97fca28c4797a5e3",
+    "tools/build_sword_ranges.py": "0da8ab28dce99d3c6eec43cf4b532f242a57d71caa52064c3e6f259ba6f5cf76",
+    "tools/record_build.py": "b8b69f18ee53833167d4862cbefb261d399295c46448a2bb9a2f044f20a5f45f",
+    "tools/verify_mighty_sword_native.py": "a11e9c7fd0528f69bc962a737aae908e9db1b214a70a5fc64cb5fe342149c82a",
+    "tools/verify_sword_charged.py": "a846ffeb51b2d6383c6749c2574a1120502154ce93ff06d80b5d20c6291fc0f9",
+    "tools/verify_sword_native.py": "1e7e45bdaac77891bf17285a0eb57cf68fc25e50afa8991fa1b4a94eb5c925dc",
+    "tools/verify_sword_projectile.py": "d1bafeee93c8f3c246f9b57c6bc7518f938cae8049d3aa5c91df23befddd53f2"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

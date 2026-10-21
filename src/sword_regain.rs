@@ -1,4 +1,4 @@
-use crate::{has_effect,is_local,read_i32,read_ptr,sword,spell_percentage,sword_hit_distance,ACTIVE,BASE};
+use crate::{has_effect,is_local,read_i32,read_ptr,sword,spell_percentage,ACTIVE,BASE};
 use std::{ptr,sync::atomic::{AtomicPtr,Ordering}};
 
 pub const DIRECT_RVA:usize=0x33c4b0;
@@ -12,9 +12,8 @@ pub const RATE_PATTERN:&str="48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 40 48 8B 
 pub static DIRECT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static RECEIVED_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 
-fn select(original:u32,percentage:Option<f32>,distance:Option<f32>,damage:i32,nullified:bool,rate:impl FnOnce()->f32)->u32{
+fn select(original:u32,percentage:Option<f32>,damage:i32,nullified:bool,rate:impl FnOnce()->f32)->u32{
  let Some(percentage)=percentage else{return original;};
- if !sword::near(distance,sword::NEAR_DISTANCE){return 0;}
  let requested=sword::heal_amount(damage,percentage,nullified);
  if requested==0{return 0;}
  let rate=rate();let rate=if rate.is_finite()&&rate>=0.{rate}else{1.};
@@ -33,7 +32,7 @@ unsafe extern "system" fn amount(source:usize,hit:usize,original:u32)->u32{
  if !ACTIVE.load(Ordering::Acquire)||hit==0{return original;}
  let base=BASE.load(Ordering::Acquire);
  if !is_local(source,base)||!has_effect(source,sword::OWNER,base){return original;}
- select(original,spell_percentage(hit),sword_hit_distance(source,hit,base),read_i32(hit+0x280),ptr::read((hit+0x2c3)as*const u8)&2!=0,||native_rate(source,hit,base))
+ select(original,spell_percentage(hit),read_i32(hit+0x280),ptr::read((hit+0x2c3)as*const u8)&2!=0,||native_rate(source,hit,base))
 }
 
 macro_rules! regain_detour {
@@ -63,23 +62,22 @@ regain_detour!(received,"r14","rdi",RECEIVED_ORIGINAL);
 #[cfg(test)]mod tests{
  use super::*;
  #[test]fn native_weapon_amounts_are_untouched(){
-  for original in [0,20,40,140,65535]{for distance in [None,Some(4.),Some(5.)]{assert_eq!(select(original,None,distance,300,false,||panic!("Weapon rate must not be applied twice")),original);}}
+  for original in [0,20,40,140,65535]{assert_eq!(select(original,None,300,false,||panic!("Weapon rate must not be applied twice")),original);}
  }
- #[test]fn sword_spells_replace_instead_of_adding_native_regain(){
-  for original in [0,20,25,27,140]{for distance in [4.,4.001,4.75,5.]{assert_eq!(select(original,Some(30.),Some(distance),300,false,||1.),180);}}
-  assert_eq!(select(20,Some(0.),Some(1.),300,false,||panic!("Zero regain")),0);
-  for distance in [None,Some(5.001),Some(f32::NAN),Some(f32::INFINITY)]{assert_eq!(select(20,Some(30.),distance,300,false,||panic!("Out of range")),0);}
-  for damage in [-1,0,300]{assert_eq!(select(20,Some(30.),Some(1.),damage,true,||panic!("Nullified")),0);}
-  assert_eq!(select(20,Some(30.),Some(1.),0,false,||panic!("No damage")),0);
+ #[test]fn accepted_sword_hits_replace_native_regain_without_caster_distance_gate(){
+  for original in [0,20,25,27,140]{assert_eq!(select(original,Some(30.),300,false,||1.),180);}
+  assert_eq!(select(20,Some(0.),300,false,||panic!("Zero regain")),0);
+  for damage in [-1,0,300]{assert_eq!(select(20,Some(30.),damage,true,||panic!("Nullified")),0);}
+  assert_eq!(select(20,Some(30.),0,false,||panic!("No damage")),0);
  }
  #[test]fn spell_regain_uses_native_tier_once_and_retains_cap(){
   for original in [0,20,25,27,140]{for (rate,expected) in [(1.,180),(1.25,225),(1.35,243)]{
-   let mut calls=0;assert_eq!(select(original,Some(30.),Some(4.),300,false,||{calls+=1;rate}),expected);assert_eq!(calls,1);
+   let mut calls=0;assert_eq!(select(original,Some(30.),300,false,||{calls+=1;rate}),expected);assert_eq!(calls,1);
   }}
-  assert_eq!(select(20,Some(30.),Some(1.),3,false,||1.35),1);
-  assert_eq!(select(20,Some(100.),Some(1.),100000,false,||1.35),65535);
-  assert_eq!(select(20,Some(30.),Some(1.),300,false,||0.),0);
-  for rate in [f32::NAN,f32::INFINITY,-1.]{assert_eq!(select(20,Some(30.),Some(1.),300,false,||rate),180);}
+  assert_eq!(select(20,Some(30.),3,false,||1.35),1);
+  assert_eq!(select(20,Some(100.),100000,false,||1.35),65535);
+  assert_eq!(select(20,Some(30.),300,false,||0.),0);
+  for rate in [f32::NAN,f32::INFINITY,-1.]{assert_eq!(select(20,Some(30.),300,false,||rate),180);}
  }
  #[unsafe(naked)]
  unsafe extern "system" fn fixture_direct(_:usize)->u32{

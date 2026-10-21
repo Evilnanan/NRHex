@@ -15,10 +15,9 @@ pub const WEAPON_RIGHT:i32=95000940;
 pub const WEAPON_LEFT:i32=95000941;
 pub const GUARD:i32=95000908; // Native int only; not passed through HKS f32.
 pub const POISE:i32=95000916; // Leaden Hardtear reactions during casting, category 1001.
-pub const GLANCE_RATE:f32=0.01; // Native 8821000's five AttackRate fields.
 pub const LIFESTEAL_SCALE:f64=2.;
 pub const NEAR_DISTANCE:f32=5.;
-pub const CASTER_HEIGHT:f32=1.; // Range origin at the torso, in metres above the physics root.
+pub const CASTER_HEIGHT:f32=1.; // Mighty + Sword ordinary projectile synergy only.
 
 pub struct Bonuses {percentages:BTreeMap<i32,f32>}
 impl Bonuses {
@@ -49,12 +48,6 @@ pub fn hit_distance(mut feet:[f32;4],contact:[f32;4])->Option<f32>{
  distance(feet,contact)
 }
 pub fn near(distance:Option<f32>,limit:f32)->bool{distance.is_some_and(|d|d<=limit)}
-pub fn glancing_display(damage:i32)->i32{
- if damage<=0{return 0;}
- // Native final damage truncates to integer. Keep a visible 1 for a positive
- // hit below 100; HP/impact still use the separate native nullification bit.
- ((damage as f32*GLANCE_RATE) as i32).max(1)
-}
 pub fn boosted(damage:i32,factor:f32)->i32{((damage as f64*factor as f64).round()).clamp(0.,i32::MAX as f64) as i32}
 // Native categories are a 256-bit mask. Add tags while retaining all spell tags.
 pub fn add_melee_category(mask:&mut [u32;8]){
@@ -168,5 +161,5 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
  }
  #[test]fn range_is_three_dimensional_and_rejects_nan(){assert_eq!(distance([0.;4],[0.,3.,4.,0.]),Some(5.));assert_eq!(distance([f32::NAN;4],[0.;4]),None);}
  #[test]fn near_boundary_includes_limit_but_rejects_far_and_unknown(){assert!(near(distance([0.;4],[0.,0.,5.,0.]),5.));assert!(!near(distance([0.;4],[0.,0.,5.001,0.]),5.));assert!(!near(distance([0.;4],[0.,5.001,0.,0.]),5.));assert!(!near(distance([f32::NAN;4],[0.;4]),5.));assert!(!near(None,5.));}
- #[test]fn distant_display_uses_native_glance_ratio_without_forcing_single_digits(){for (d,n) in [(-1,0),(0,0),(1,1),(99,1),(100,1),(199,1),(500,5),(999,9),(1000,10)]{assert_eq!(glancing_display(d),n);}}
+
 }

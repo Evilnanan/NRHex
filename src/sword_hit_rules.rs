@@ -1,6 +1,6 @@
-//! Nearby Sword spells use native weapon classifications in on-hit selection.
+//! Sword spells use native weapon classifications in on-hit selection.
 //! The private descriptor changes no damage, element, projectile or shared data.
-use crate::{has_effect,is_local,read_ptr,sword,spell_percentage,sword_hit_distance,ACTIVE,BASE};
+use crate::{has_effect,is_local,read_ptr,sword,spell_percentage,ACTIVE,BASE};
 use std::{ptr,sync::atomic::{AtomicPtr,Ordering}};
 pub const RVA:usize=0x505e90;
 pub const PATTERN:&str="40 53 55 56 57 48 81 EC 88 00 00 00 48 8B 05 C5 00 5E 03 48 33 C4 48 89 44 24 78";
@@ -29,7 +29,6 @@ pub unsafe extern "system" fn detour(manager:usize,out:usize,hit:usize){
  let enabled=if ACTIVE.load(Ordering::Acquire)&&manager!=0&&hit!=0{
   let owner=read_ptr(manager+0x10);
   is_local(owner,base)&&has_effect(owner,sword::OWNER,base)&&spell_percentage(hit).is_some()
-   &&sword::near(sword_hit_distance(owner,hit,base),sword::NEAR_DISTANCE)
  }else{false};
  // 505E90 consumes hit data synchronously and appends native effect IDs to
  // out. Eligibility/tiers/duplicates/delivery remain the game's own rules.
