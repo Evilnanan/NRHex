@@ -10,6 +10,8 @@ pub fn pool_exclusions(mut unavailable:HexSet)->HexSet{
 // Run on actual ownership before role/terrain restrictions add unavailable
 // entries: a role-ineligible ability must not imply that it is owned.
 pub fn ownership_exclusions(mut owned:HexSet)->HexSet{
+ let sniper=index(crate::sniper::OWNER);let sword=index(crate::sword::OWNER);
+ if owned.contains(&sniper)||owned.contains(&sword){owned.extend([sniper,sword]);}
  let basics=index(crate::basics::OWNER);
  let ultimate=crate::basics::CONFLICTS.map(index);
  if owned.contains(&basics){owned.extend(ultimate);}
@@ -51,6 +53,13 @@ pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  ]{if excluded{unavailable.insert(index(id));}}
  unavailable
 }
+// Evaluate owned exceptions before conflict/role exclusions can impersonate
+// ownership (Sniper excludes Sword but does not grant Sword's melee access).
+pub fn combat_exclusions(owned:HexSet,hero:Option<u8>,affinity:Option<i32>)->HexSet{
+ let mut unavailable=weapon_exclusions(owned.clone(),affinity);
+ unavailable.extend(role_exclusions(HexSet::new(),hero));
+ unavailable.extend(ownership_exclusions(owned));unavailable
+}
 pub fn eligible(order:[usize;3],owned:&HexSet)->bool{
  let unavailable=pool_exclusions(owned.clone());
  order.iter().all(|i|*i<HEX_COUNT&&!unavailable.contains(i))&&mask(order).len()==3
@@ -71,7 +80,7 @@ pub fn is_hex_good(encoded:u32)->bool{
  #[test]fn live_weapon_affinity_controls_seven_abilities_and_keeps_owned_exceptions(){
   for hero in std::iter::once(None).chain((0..=10).map(Some)){for affinity in [None,Some(57),Some(61),Some(1600),Some(1700),Some(1),Some(1100),Some(1400),Some(2000)]{for flags in 0..4{
    let owned=mask([(95002100,flags&1!=0),(95000900,flags&2!=0)].into_iter().filter_map(|(id,on)|on.then_some(index(id))));
-   let excluded=weapon_exclusions(role_exclusions(ownership_exclusions(owned.clone()),hero),affinity);
+   let excluded=combat_exclusions(owned.clone(),hero,affinity);
    let caster=matches!(affinity,Some(57|61|1600|1700));let physical=affinity.is_some()&&!caster;
    let expected=[(95000900,(caster||flags&1!=0)&&flags&2==0),(95002000,caster||flags&1!=0),(95003500,caster||flags&1!=0),
     (95001100,physical||flags&2!=0),(95002600,physical||flags&2!=0),(95002400,physical),(95003100,physical),
@@ -82,7 +91,7 @@ pub fn is_hex_good(encoded:u32)->bool{
      assert_eq!(round.preferred([ability,0,1]).unwrap().contains(&ability),allowed);
      assert_eq!(crate::reward_cycle::Single::new(&excluded,&seen,&mask([0,1])).candidates.contains(&ability),allowed);
      let mut owned_ability=owned.clone();owned_ability.insert(ability);
-     let blocked=weapon_exclusions(role_exclusions(ownership_exclusions(owned_ability),hero),affinity);
+     let blocked=combat_exclusions(owned_ability,hero,affinity);
      assert!(!crate::reward_cycle::Round::new(&blocked,&seen).candidates.contains(&ability));
     }
    }

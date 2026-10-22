@@ -316,3 +316,7 @@ tools/HexBuild/StormAudio.cs直接从当前sd.bhd／sd.bdt选择性提取cs_m19�
 ## 回归基本功
 
 `basics.rs`、`basics_native_tests.rs`、`HexBuild/Basics.cs`、`build_basics_hks.py`与`verify_basics.py`负责绝招发动封印、按角色强化技艺，以及与四项终极系列的双向抽取互斥。冷却沿用原生乘算，女爵使用独立复演历史伤害路径，家人通过本人三槽完整句柄识别。具体边界和原生依据见[研究记录](research/basics.md)。
+
+## 老练狙神
+
+`sniper.rs`与`HexBuild/Sniper.cs`提供原生攻击力惩罚、距离修正及本次命中的距离增伤。复用已有伤害回调与签名，不新增原生钩子；与亮剑共用抽取互斥入口，角色与武器池例外只读取真实拥有状态。具体计算、箭雨范围与验证限制见[研究记录](research/sniper.md)。

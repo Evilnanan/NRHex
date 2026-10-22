@@ -79,6 +79,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--sniper-stage")){Sniper.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--sniper-check")){Sniper.Verify(root,bnd,Parse);return;}
 if(args.Contains("--basics-family-stage")){Basics.StageFamily(root,bnd,Parse);return;}
 if(args.Contains("--basics-stage")){Basics.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--basics-check")){Basics.Verify(root,bnd,Parse);return;}
@@ -786,6 +788,7 @@ foreach(var h in hexes){
  if(h.Id==EssenceReaver.Owner)EssenceReaver.Owners(s);
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==Erosion.Owner)Erosion.Owners(s);
+ if(h.Id==Sniper.Owner)Sniper.OwnerEffect(s);
  if(h.Id==DemonsCall.Owner)Set(s,"stateInfo",2278);
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
@@ -1236,6 +1239,7 @@ UltimateAwakening.Events(ev);
 Marking.Events(ev);
 Wraith.Events(ev);
 Basics.Events(ev);
+Sniper.Events(ev);
 UltimateUnstoppable.Events(ev);
 UltimateChallenge.Events(ev);
 NightBlessing.ResetReceipt(ev);

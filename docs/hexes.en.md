@@ -213,3 +213,8 @@ Wraith-calling items consume no FP. After enough successful uses that hit enemie
 ## Back to Basics
 
 Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage.
+
+<!-- hex:95004500 -->
+## Experienced Sniper
+
+Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff.

@@ -1,0 +1,389 @@
+{
+  "version": "0.17.225",
+  "owner": 95004500,
+  "name": "老练狙神",
+  "baseCommit": "000455bb82c3b74742d4c3da0658c42aa6a3a38c",
+  "allHeroesEligible": true,
+  "attackRate": 0.7,
+  "distanceCap": 50,
+  "maxDistanceBonus": 1.5,
+  "rainBonusRate": 0.6,
+  "maxCombinedNormalMultiplier": 1.75,
+  "maxCombinedRainMultiplier": 1.33,
+  "nativeBowDistRate": 200,
+  "conflicts": [
+    95000900
+  ],
+  "conflictsBidirectionalAndSharedByAllDrawRoutes": true,
+  "eligibilityUsesActualOwnership": true,
+  "historyBit": 42,
+  "historyBytes": 6,
+  "activeCatalogSize": 41,
+  "drawEnabledSize": 40,
+  "singleNativeRewardTemplateRetained": true,
+  "newNativeHooks": 0,
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "92754353e35e2a0cc3e26644123a450a5e9a94195e7d33ed03435f48a612cede",
+        "outputSha256": "45d857637cd1cdea2a6c9c295ed5257b7036b28d57adc0edfaf0e6d9c2b340cd"
+      },
+      "mod/event/common.emevd.dcx": {
+        "inputSha256": "d6695f92fbc7d88564550f45a9a323b43bda892de006865b507a4d064642fc7b",
+        "outputSha256": "3d8a2d05a04d7e8eac2483e019f880c0419bfeb19754ff920c8c78982f2cb87b"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "e9ec1e7911af8c56527137cc0b5cc7db6fb5825c1544688089186f221f4ce4bc",
+        "outputSha256": "aef1e12cd1545fd5c3ada39582d5d59a9fa02e7d16f6f372f409bf84d4bc40c2"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "f8b8378c759a38bea1876af656579c0fe9916688b278b7d6a78b4297696a99e6",
+        "outputSha256": "9440e6f60520517a05bc9312db21f4faeb2a697316de1d821ab57b5ccc691776"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "18c8ad52cd989cd3238e2e288dff816598d5d0f5ad0aa30e85b680f02aa34f10",
+        "outputSha256": "e0125c732138a335c9610adaacbbb8e5aa50c3a9075dc0883ee418a48d44c579"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "b69d226c298d5c05edb99361e0baa51ea6746f0580ade9e752bf871595d10407",
+        "outputSha256": "44ecbc64c5d9076d0d4323c46a36e63903a83678c552c8660686c9d82b40cbee"
+      }
+    },
+    "containers": {
+      "mod/event/common.emevd.dcx": {
+        "rawSha256": "af2eb94dd017dd4293dd346fcf90d1f58bc2f12090b7ea3f26bb846510ab2bab",
+        "containerSha256": "3d8a2d05a04d7e8eac2483e019f880c0419bfeb19754ff920c8c78982f2cb87b",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "1c854d3caa1ebf374a298f0035eac55e56d57ff49faf8bb31c05a639b950624d",
+        "containerSha256": "aef1e12cd1545fd5c3ada39582d5d59a9fa02e7d16f6f372f409bf84d4bc40c2",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "602c167e8b469fef797f288f6334b19b35f5e88f5e7fd24f8a04404408e41ecd",
+        "containerSha256": "9440e6f60520517a05bc9312db21f4faeb2a697316de1d821ab57b5ccc691776",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "63d2e81de0cad10196cb27e498f938971fe85e468f5f1fda4830d3b535b47f64",
+        "containerSha256": "e0125c732138a335c9610adaacbbb8e5aa50c3a9075dc0883ee418a48d44c579",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "349067d9a0c1b7383f2d3538351eccbc30ff866b34d6b49cdeda0e02e65ade50",
+        "containerSha256": "44ecbc64c5d9076d0d4323c46a36e63903a83678c552c8660686c9d82b40cbee",
+        "roundTripPassed": true
+      }
+    },
+    "generator": {
+      "inputSha256": "92754353E35E2A0CC3E26644123A450A5E9A94195E7D33ED03435F48A612CEDE",
+      "outputSha256": "45D857637CD1CDEA2A6C9C295ED5257B7036B28D57ADC0EDFAF0E6D9C2B340CD",
+      "eventInputSha256": "8AA5BA299184B28086C96A76B0C57EE5CE75AE34F109E4C40CA96BB29CDC710D",
+      "eventOutputSha256": "AF2EB94DD017DD4293DD346FCF90D1F58BC2F12090B7EA3F26BB846510AB2BAB",
+      "hexCount": 41,
+      "addedRows": {
+        "SpEffectParam": [
+          95004500
+        ],
+        "AttachEffectParam": [
+          95004500
+        ],
+        "PermanentBuffParam": [
+          95004500
+        ],
+        "EquipParamGoods": [
+          95004500
+        ],
+        "ItemTableParam": [
+          95110142
+        ]
+      },
+      "rowCounts": {
+        "SpEffectParam": 16424,
+        "AttachEffectParam": 2120,
+        "PermanentBuffParam": 164,
+        "EquipParamGoods": 477,
+        "ItemTableParam": 34909
+      },
+      "audit": {
+        "owner": 95004500,
+        "attackRate": 0.7,
+        "bowDistRate": 200,
+        "capDistance": 50,
+        "maxDistanceBonus": 1.5,
+        "rainBonusRate": 0.6,
+        "conflicts": [
+          95000900
+        ],
+        "historyBit": 42,
+        "historyBytes": 6,
+        "sharedProjectilesUnchanged": true
+      },
+      "existingRowsAndUnrelatedTablesUnchanged": true,
+      "onlyTwoGuardedCleanupEventsExtended": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "ownerTexts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "961278614C8F8AB201666FE8EA92F013B80BF35F63942DD304C2E3CEE327181F",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "7FFF9E5A5364353CAAF298325B6DF743008437D47272EB81029DF8E9217FEA3D",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "D1CC3ABDAC7C63E4C3316CB80193A4240B224B0E71ACCC12EF2514C558F3A160",
+          "outputSha256": "1C854D3CAA1EBF374A298F0035EAC55E56D57FF49FAF8BB31C05A639B950624D",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "老练狙神"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害距离衰减"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "老练狙神"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害距离衰减"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害距离衰减"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "4087A484CAA11C76A584C0C0B7B289FA06D635C57B5557744F8AB60B71D9A3E3",
+          "outputSha256": "602C167E8B469FEF797F288F6334B19B35F5E88F5E7FD24F8A04404408E41ECD",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "老练狙神"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害距离衰减"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "F6176BD57AA3AC281235DBDF70E4EBBA6AFDFF831DE0B13AC5E45ECA6074AC3E",
+          "outputSha256": "63D2E81DE0CAD10196CB27E498F938971FE85E468F5F1FDA4830D3B535B47F64",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "Experienced Sniper"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "Experienced Sniper"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "F1F45F2D06BD7ACD6322D4F380716F7E9F25F8E4FA1EC899248457BBE52A460C",
+          "outputSha256": "349067D9A0C1B7383F2D3538351ECCBC30FF866B34D6B49CDEDA0E02E65ADE50",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "Experienced Sniper"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004500,
+              "before": null,
+              "after": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "native": {
+    "owner": 95004500,
+    "installedReadbackPassed": true,
+    "nativeExecutionPassed": true,
+    "attackRate": 0.7,
+    "bowDistRate": 200,
+    "distanceCap": 50,
+    "maxDistanceBonus": 1.5,
+    "rainBonusRate": 0.6,
+    "conflicts": [
+      95000900
+    ],
+    "historyBit": 42,
+    "historyBytes": 6,
+    "nativeFunctions": [
+      "5065C0 active distance modifiers summed",
+      "E875A0 native range threshold",
+      "compiled shared on_rear_calculated callback, including native cache guard"
+    ],
+    "cases": [
+      "normal arrow 12 to 36m; arrow-rain positioning 43 to 129m",
+      "native 50 distance modifier adds to owner 200",
+      "all five native AttackRate fields are 0.7 in installed row",
+      "ordinary, spell and skill hits receive distance bonus",
+      "four exact rain attack IDs receive 60% of the increment",
+      "current player to collision point; launch position and target pivot excluded",
+      "local ownership, reset, cache, foreign sources, self hits, zero damage, missing position",
+      "only final HP damage changes; status, poise, stamina and other hit bytes preserved",
+      "regular tests cover bidirectional Sword exclusion and actual-ownership exceptions"
+    ],
+    "stubs": [
+      "weapon PARAM lookup, effect ownership, world and actors are fixtures",
+      "native collision, defense calculation, network transport and real actors not executed"
+    ],
+    "sourceHashes": {
+      "src/sniper.rs": "8079b2b95caaff17ab198f5c7965e31fadd3e4ebf44c8b2911c2f8bf7a1d5946",
+      "src/sniper_native_tests.rs": "18b5c8e052d63f4fb60a189d2234484089272a08d1fdd45b01ec5653dc212c84",
+      "src/lib.rs": "84dbd83bf0c53c016b9297d9d1e27902c9d674a18a67a80b90f1dcf8374b1713",
+      "src/reward_choices.rs": "b820963c5f5d7ccceee4ebc053f335276465f6d041d2e0bf9751adce3fe0e93c",
+      "src/hex_pool.rs": "46488e6767250a5942f58247338714aa62a364fe7ba33e06ce39979186477c72",
+      "tools/HexBuild/Sniper.cs": "abbfdaf9d68ee2b2032f91393c2ca412da25c1176c0ea6ec28e06b2c2b1da158",
+      "tools/HexBuild/Program.cs": "97883e8706a0896b2574d6b2b8c11693b3940c6c0f83453352f209f979def0ee",
+      "tools/HexBuild/HexCatalog.cs": "de353b0447ad2fbe37b81cfbe7c0e2d6707db2b12e350179b914f70a750697b4",
+      "tools/HexBuild/RewardCatalog.cs": "a5d549c3020cf58f88c63711300112d3c5f3e25708b1f5b5e4b3b0c291df7a71",
+      "tools/verify_sniper.py": "acded8cefc369e256a4fab7c5e6288f258382602d50abb0095857a626f7b4a2c",
+      "docs/hexes.md": "961278614c8f8ab201666fe8ea92f013b80bf35f63942dd304c2e3cee327181f",
+      "docs/hexes.en.md": "7fff9e5a5364353caaf298325b6df743008437d47272eb81029df8e9217fea3d"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.225",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "d24fdd8ebaadeb9b5f88eb9609291132e5884269ffec8ef3d9f762a7671f5a22",
+    "installed": true,
+    "installedDllSha256": "d24fdd8ebaadeb9b5f88eb9609291132e5884269ffec8ef3d9f762a7671f5a22",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 443,
+  "regularIgnoredTests": 28,
+  "runtimeSuitesPassed": 19,
+  "exeSignaturesPassed": 206,
+  "changedExistingDistributionFiles": {
+    "README.md": {
+      "inputSha256": "aac2aed341af234d49ead4382bd590768a9e127156aaa0173da2c898df65533c",
+      "outputSha256": "0a5667135731a7dacfd7112c5464967e196a16ac1ac3d1150832d5ab699e9e37"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "92754353e35e2a0cc3e26644123a450a5e9a94195e7d33ed03435f48a612cede",
+      "outputSha256": "45d857637cd1cdea2a6c9c295ed5257b7036b28d57adc0edfaf0e6d9c2b340cd"
+    },
+    "mod/event/common.emevd.dcx": {
+      "inputSha256": "d6695f92fbc7d88564550f45a9a323b43bda892de006865b507a4d064642fc7b",
+      "outputSha256": "3d8a2d05a04d7e8eac2483e019f880c0419bfeb19754ff920c8c78982f2cb87b"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "577860fe672c344c9b554c22acdaf413b65b68962ec6526c22afc5ef6d8ee7c4",
+      "outputSha256": "d24fdd8ebaadeb9b5f88eb9609291132e5884269ffec8ef3d9f762a7671f5a22"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "18c8ad52cd989cd3238e2e288dff816598d5d0f5ad0aa30e85b680f02aa34f10",
+      "outputSha256": "e0125c732138a335c9610adaacbbb8e5aa50c3a9075dc0883ee418a48d44c579"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "b69d226c298d5c05edb99361e0baa51ea6746f0580ade9e752bf871595d10407",
+      "outputSha256": "44ecbc64c5d9076d0d4323c46a36e63903a83678c552c8660686c9d82b40cbee"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "e9ec1e7911af8c56527137cc0b5cc7db6fb5825c1544688089186f221f4ce4bc",
+      "outputSha256": "aef1e12cd1545fd5c3ada39582d5d59a9fa02e7d16f6f372f409bf84d4bc40c2"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "f8b8378c759a38bea1876af656579c0fe9916688b278b7d6a78b4297696a99e6",
+      "outputSha256": "9440e6f60520517a05bc9312db21f4faeb2a697316de1d821ab57b5ccc691776"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "sourceHashes": {
+    "Cargo.toml": "68c3d686ab4a9bc8c9cba17e7a8cb614cb3e3c4417cf0aa0309e3a87dca6b468",
+    "Cargo.lock": "a805e4df02d4ca7bf05e0b8aeebab6620d72910b0c2984df69e67fe021094832",
+    "build.ps1": "a6cd2523fc258b8b38527f75bf3e8ba876e9d910858c4c50369b15ed832dfc3f",
+    "README.md": "6ee2c19520f839c22b410c68ff89a422820226c20b0b72216b5d33981ecb8023",
+    "dist/README.md": "0a5667135731a7dacfd7112c5464967e196a16ac1ac3d1150832d5ab699e9e37",
+    "CHANGELOG.md": "c3e6563aca66306fd1d21fbcf5674dce4db999e6700cc2b41ab7f9b032c655e9",
+    "docs/hexes.md": "961278614c8f8ab201666fe8ea92f013b80bf35f63942dd304c2e3cee327181f",
+    "docs/hexes.en.md": "7fff9e5a5364353caaf298325b6df743008437d47272eb81029df8e9217fea3d",
+    "docs/research/sniper.md": "d23442e975f3d6c986abad5d7a0f3aec92b0444b72ec28c7c593206dac86a96b",
+    "docs/implementation.md": "efdf0e3719fe4f1fa36194e043a5b3707f260f9e7872715fe8d797dbb5d69001",
+    "src/sniper.rs": "8079b2b95caaff17ab198f5c7965e31fadd3e4ebf44c8b2911c2f8bf7a1d5946",
+    "src/sniper_native_tests.rs": "18b5c8e052d63f4fb60a189d2234484089272a08d1fdd45b01ec5653dc212c84",
+    "src/lib.rs": "84dbd83bf0c53c016b9297d9d1e27902c9d674a18a67a80b90f1dcf8374b1713",
+    "src/reward_choices.rs": "b820963c5f5d7ccceee4ebc053f335276465f6d041d2e0bf9751adce3fe0e93c",
+    "src/hex_pool.rs": "46488e6767250a5942f58247338714aa62a364fe7ba33e06ce39979186477c72",
+    "tools/HexBuild/Sniper.cs": "abbfdaf9d68ee2b2032f91393c2ca412da25c1176c0ea6ec28e06b2c2b1da158",
+    "tools/HexBuild/Program.cs": "97883e8706a0896b2574d6b2b8c11693b3940c6c0f83453352f209f979def0ee",
+    "tools/HexBuild/HexCatalog.cs": "de353b0447ad2fbe37b81cfbe7c0e2d6707db2b12e350179b914f70a750697b4",
+    "tools/HexBuild/RewardCatalog.cs": "a5d549c3020cf58f88c63711300112d3c5f3e25708b1f5b5e4b3b0c291df7a71",
+    "tools/verify_sniper.py": "acded8cefc369e256a4fab7c5e6288f258382602d50abb0095857a626f7b4a2c"
+  },
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

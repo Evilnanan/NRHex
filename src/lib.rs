@@ -37,6 +37,7 @@ mod reward_recovery;
 mod strength;
 mod marking;
 mod basics;
+mod sniper;
 mod wraith;
 mod strength_sword;
 mod sword_hit_rules;
@@ -1049,8 +1050,9 @@ unsafe extern "system" fn on_rear_calculated(module:usize,source:usize,hit:usize
   }
  }
  basics::calculated(local,target,source,hit,base);
- damage=read_i32(hit+0x280);
  if source!=local{return;}
+ sniper::calculated(local,target,source,hit,base);
+ damage=read_i32(hit+0x280);
  if damage>0&&noisy::lava_attack(read_i32(hit+0x40),read_i32(hit+0x44)){
   // Native calculation already includes eligible fire/ordinary attack buffs.
   // Apply only the self-ping stack factor here, never those buffs a second time.
@@ -2044,12 +2046,11 @@ unsafe fn local_hero(base:usize)->Option<u8> {
  player_data_hero(read_ptr(base+GAME_DATA_RVA))
 }
 unsafe fn unavailable_hexes(player:usize,base:usize)->HexSet {
- let unavailable=reward_choices::ownership_exclusions(owned_hexes(player,base));
- let unavailable=reward_choices::terrain_exclusions(unavailable,reward_terrain::exclude_cage(reward_terrain::great_hollow(base)));
- let unavailable=reward_choices::party_exclusions(unavailable,native_party::difficulty_count(base));
  let hero=local_hero(base);
  let affinity=weapon_affinity::current(player,base,hero);
- reward_choices::weapon_exclusions(reward_choices::role_exclusions(unavailable,hero),affinity)
+ let unavailable=reward_choices::combat_exclusions(owned_hexes(player,base),hero,affinity);
+ let unavailable=reward_choices::terrain_exclusions(unavailable,reward_terrain::exclude_cage(reward_terrain::great_hollow(base)));
+ reward_choices::party_exclusions(unavailable,native_party::difficulty_count(base))
 }
 fn random_index(count:usize)->Option<usize>{
  let count=u64::try_from(count).ok()?;if count==0{return None;}

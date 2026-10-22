@@ -64,6 +64,7 @@ static class HexCatalog {
    (95004200,21295,22295),
    (95004300,21267,22267),
    (95004400,21297,22297),
+   (95004500,21278,20278),
   };
   foreach(var (file,texts) in new[]{("docs/hexes.md",zh),("docs/hexes.en.md",en)}){
    var missing=icons.Select(h=>h.Id).Except(texts.Keys).ToArray();
