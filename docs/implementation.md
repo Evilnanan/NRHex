@@ -54,7 +54,6 @@
 | 不祥契约、偷心者 | `HexBuild/ContractHeart.cs`、`HexBuild/HeartMist.cs`、`ominous_pact.rs`、`heartstealer.rs`、`heartstealer_native_tests.rs`、`verify_contract_heart_native.py`、`verify_heartstealer.py` |
 | 夺萃之镰 | `essence_reaver.rs`、`HexBuild/EssenceReaver.cs`、`verify_essence_reaver.py`；原生击杀状态199计数，在本地角色原生专注值上限倍率查询 `0x50c230` 返回值上统一乘以 `1.01^击杀数`，其他原生倍率和属性结算保持不变。不再向Buff栏单独显示小图标：95002900的displayIconForPermamentEffect为0，潜在能力／词条图标仍保留；不显示层数、不创建逐杀增益，移除95002902层参数。击杀数以至多4个隐藏本地保存记录编码，复活／重载恢复，新远征／圆桌守卫内通知重置。 |
 | 交锋 | `parry.rs`、`parry_turn.rs`、`parry_data.rs`、`HexBuild/Parry.cs`、`verify_parry_native.py` |
-| 恶魔的召唤 | `demons.rs`、`demons_runtime.rs`、`demons_params.rs`、`demons_lottery.rs`、`HexBuild/DemonsCall.cs`；[机制与验证](research/demons-call.md) |
 | PE／特征／挂钩 | `pe.rs`、`pattern.rs`、`hook.rs`、`win.rs` |
 
 小点心0.17.190分组修复：原生57A840会将同来源／归属的连续发放接入同一选择链，旧球不领时创建数量为3也不能证明新增了一份奖励。复用`potential_fission::group`的既有入口，`PERSONAL_REWARD`只在一次同步发放期间记录三个实际创建节点；本次小点心只能与这些节点聚合，其他批次和其他奖励均隔离。原生来源、UID、位置与领取流程不变，调用结束即恢复TLS，不新增跨帧指针缓存。原生回归包括无范围隔离的合并负对照、三次即时发放形成三条独立三选一链、其他奖励穿插和三个玩家槽；此前snack测试以生成桩统计数量，未覆盖原生分组，不能据其通过声称多球领取已验证。实机与联机领取仍待验收。

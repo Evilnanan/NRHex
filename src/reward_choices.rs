@@ -4,9 +4,7 @@ pub type HexSet=std::collections::BTreeSet<usize>;
 pub fn all(count:usize)->HexSet{(0..count).collect()}
 pub fn mask(items:impl IntoIterator<Item=usize>)->HexSet{items.into_iter().collect()}
 fn index(owner:i32)->usize{OWNER_IDS.iter().position(|&id|id==owner).expect("Missing ability in catalog")}
-pub fn pool_exclusions(mut unavailable:HexSet)->HexSet{
- unavailable.insert(index(95003300));unavailable
-}
+pub fn pool_exclusions(unavailable:HexSet)->HexSet{unavailable}
 // Run on actual ownership before role/terrain restrictions add unavailable
 // entries: a role-ineligible ability must not imply that it is owned.
 pub fn ownership_exclusions(mut owned:HexSet)->HexSet{
@@ -157,21 +155,12 @@ pub fn is_hex_good(encoded:u32)->bool{
    assert!(excluded.contains(&pact));
   }
  }
- #[test]fn disabled_ability_keeps_its_stable_slot_but_never_appears_in_draws_or_refreshes(){
-  let disabled=index(95003300);assert_eq!(disabled,29);assert_eq!(crate::hex_pool::HISTORY_BITS[disabled],30);
-  assert!(is_hex_good(0x40000000|95003300));
-  for hero in std::iter::once(None).chain((0..=255).map(Some)){
-   let unavailable=default_filters(HexSet::new(),hero);
-   for seen in [HexSet::new(),all(HEX_COUNT)]{
-    let round=crate::reward_cycle::Round::new(&unavailable,&seen);
-    assert!(!round.candidates.contains(&disabled));
-    assert!(!round.preferred([disabled,0,1]).unwrap().contains(&disabled));
-    assert!(!round.draw(|count|Some(count-1)).unwrap().contains(&disabled));
-    assert!(!crate::reward_cycle::Single::new(&unavailable,&seen,&mask([0,1])).candidates.contains(&disabled));
-   }
-  }
-  assert!(!eligible([disabled,0,1],&HexSet::new()));
-  assert_eq!(crate::reward_cycle::Round::new(&HexSet::new(),&HexSet::new()).candidates.len(),HEX_COUNT-1);
+ #[test]fn retired_ability_is_absent_without_reusing_its_history_bit(){
+  assert!(!OWNER_IDS.contains(&95003300));assert!(!is_hex_good(0x40000000|95003300));
+  assert!(!crate::hex_pool::HISTORY_BITS.contains(&30));
+  assert_eq!(crate::hex_pool::HISTORY_BITS[index(95003400)],31);
+  assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004500)],42);
+  assert_eq!(crate::reward_cycle::Round::new(&HexSet::new(),&HexSet::new()).candidates.len(),HEX_COUNT);
  }
  #[test]fn all_roles_preserve_their_filters_in_random_focused_and_refresh_paths(){
   for hero in std::iter::once(None).chain((0..=255).map(Some)){

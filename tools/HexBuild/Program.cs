@@ -103,6 +103,9 @@ if(args.Contains("--ultimate-timing-actions")){UltimateTiming.Actions(root);retu
 if(args.Contains("--ultimate-unstoppable-check")){UltimateUnstoppable.Verify(root,bnd,Parse);return;}
 if(args.Contains("--ultimate-challenge-stage")){UltimateChallenge.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-challenge-check")){UltimateChallenge.Verify(root,bnd,Parse);return;}
+if(args.Contains("--remove-demons-call")){
+ RetiredAbility.Stage(root,Parse,95003300,Array.Empty<int>(),new(){["SpEffectParam"]=new[]{95003301,95003302},["NpcParam"]=Enumerable.Range(98300000,60).ToArray()});return;
+}
 if(args.Contains("--retire-ability")){var index=Array.IndexOf(args,"--retire-ability");RetiredAbility.Stage(root,Parse,int.Parse(args[index+1]),args.Skip(index+2).Select(int.Parse).ToArray());return;}
 if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
@@ -127,8 +130,6 @@ if(args.Contains("--echo-cast-areas-check")){EchoCast.AreaResources(root,Parse,f
 if(args.Contains("--ambulance-stage")){Ambulance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
-if(args.Contains("--demons-call-catalog")){DemonsCall.Catalog(bnd,Parse,Path.Combine(root,"work/demons-call/demons_data.rs"));return;}
-if(args.Contains("--demons-call-stage")){DemonsCall.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ability-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--erosion-items-stage")){Erosion.StageItems(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--erosion-items-check")){Erosion.VerifyItems(root,bnd,Parse);return;}
@@ -800,7 +801,6 @@ foreach(var h in hexes){
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==Erosion.Owner)Erosion.Owners(s);
  if(h.Id==Sniper.Owner)Sniper.OwnerEffect(s);
- if(h.Id==DemonsCall.Owner)Set(s,"stateInfo",2278);
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
  if(h.Id==EchoCast.Owner)EchoCast.OwnerEffect(s);
@@ -844,8 +844,6 @@ UltimateTiming.Mechanics(Clone);
 Ambulance.RecoveryEffect(Clone,pars["SpEffectParam"]);
 Erosion.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
-DemonsCall.Mechanics(Clone);
-DemonsCall.Catalog(bnd,Parse,Path.Combine(root,"src/demons_data.rs"));
 foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
 foreach(var fissionParam in new[]{"ItemTableParam","ItemLotParam_enemy"})added[fissionParam].AddRange(pars[fissionParam].Rows.Where(r=>r.ID>=PotentialFission.FirstTable&&r.ID<99000000).Select(r=>r.ID));

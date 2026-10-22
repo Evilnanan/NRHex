@@ -513,12 +513,12 @@ fn native_spawn_uses_a_free_slot_and_preserves_six_argument_creation_and_four_ar
             }
         }
         // Human NPCs use the same safe slot/placement and original 48-byte
-        // network descriptor. The virtual CharaInit seed must survive intact.
-        let seed=42;let roll=crate::demons::roll(seed).unwrap();let ci=crate::demons::chara_id(seed).unwrap();
+        // network descriptor. The native CharaInit must survive intact.
+        let human=700035000;let ci=35000;
         ptr::write((entry+8)as*mut u8,255);
-        CALLS.with(|c|{let mut c=c.borrow_mut();c.npc=roll.npc();c.chara_init=Some(ci);c.events.clear();});
-        assert_eq!(summon_descriptor(player_ptr,spirit::Soul{npc:roll.npc(),think:0,chara_init:ci},base),Some(123));
-        CALLS.with(|c|{let mut c=c.borrow_mut();let p=c.packet.unwrap();assert_eq!((p.npc,p.think,p.chara_init),(roll.npc(),0,ci));assert_eq!(crate::demons::seed_from_chara(p.chara_init),Some(seed));c.npc=npc;c.chara_init=None;c.events.clear();});
+        CALLS.with(|c|{let mut c=c.borrow_mut();c.npc=human;c.chara_init=Some(ci);c.events.clear();});
+        assert_eq!(summon_descriptor(player_ptr,spirit::Soul{npc:human,think:0,chara_init:ci},base),Some(123));
+        CALLS.with(|c|{let mut c=c.borrow_mut();let p=c.packet.unwrap();assert_eq!((p.npc,p.think,p.chara_init),(human,0,ci));c.npc=npc;c.chara_init=None;c.events.clear();});
         // Every non-free byte must refuse creation, including the old >1 bug.
         // No native create/teardown, packet, or slot write may happen on refusal.
         for state in 0u8..255 {

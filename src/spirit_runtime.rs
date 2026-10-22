@@ -81,7 +81,6 @@ unsafe fn model_call(original: ModelFn, out: *mut i32, npc: i32, active: bool) -
 }
 
 pub(crate) unsafe fn observe_soul(actor: usize, base: usize, settled: bool) {
-    if crate::demons_runtime::is_actor(actor) { return; }
     let Some(npc) = npc_id(actor, base) else {
         return;
     };

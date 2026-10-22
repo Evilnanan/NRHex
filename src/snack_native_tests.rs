@@ -82,7 +82,7 @@ fn native_extra_practice_rewards_merchant_weapon_purchases(){unsafe{
  let mut stats=[0usize;0x150/8];let stats=stats.as_mut_ptr()as usize;put(modules,stats);int(stats+0x140,100);
  let mut items=[0usize;0x60/8];let items=items.as_mut_ptr()as usize;put(base+crate::ITEMS_RVA,items);
  FIXTURE.with(|f|{*f.borrow_mut()=Fixture{created:3,slot:1,row:vec![0;0x280],..Default::default()};f.borrow_mut().ids.extend([OWNER,crate::level_rewards::EXPEDITION]);});
- jump(base,crate::demons_params::WEAPON_RVA,weapon_param as*const()as usize);
+ jump(base,0xea7fc0,weapon_param as*const()as usize);
  for rva in [0xea9a60,0x26909a0]{ptr::write((base+rva)as*mut u8,0xc3);}
  ptr::copy_nonoverlapping([0xb0,1,0xc3].as_ptr(),(base+0x6c12f0)as*mut u8,3);
  jump(base,crate::HAS_EFFECT_RVA,has as*const()as usize);jump(base,crate::SPAWN_RVA,spawn as*const()as usize);

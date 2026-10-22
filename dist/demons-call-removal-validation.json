@@ -1,0 +1,269 @@
+{
+  "version": "0.17.234",
+  "removedAbility": "恶魔的召唤 / Demon’s Summoning",
+  "owner": 95003300,
+  "activeAbilities": 40,
+  "history": {
+    "retiredBit": 30,
+    "tombstoneRetained": true,
+    "bytes": 6,
+    "otherOwnerMappingsUnchanged": true
+  },
+  "resourceAudit": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "19846d56473ed0763a39d1b514a795f7e561ff2730e225d4542b168b98f4f073",
+        "outputSha256": "a1d52991a7749829786ef71d9dc496f080a00520e96e6a7620502dd3b53b3467"
+      },
+      "mod/event/common.emevd.dcx": {
+        "inputSha256": "b53500f36560abcbbedc61b53d0650db307afd8ac23b52e00e766407d62467c6",
+        "outputSha256": "fcdc5683f708de22543787f7613affe6cf34b5739aaf55677d1b97169418b095"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "d3be13a90225e874fcc3d3aee425d6e062d1042dd1b473f648993438dd796d92",
+        "outputSha256": "d9bfb019224c76aee8d0b47bac9bfc03c433cac86a13a0922cf707c6577f1212"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "f121734f9aa111bb78089ded8211920645d71c26185203f221d826ef40898601",
+        "outputSha256": "604d199a943bd1acde58ebc687ab1440069bc5a4c0bbc00a666d571e16866368"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "71df65fa52d2f02107826e89c3aafbe7112723cb297361fe2c4bd37ee55edfc5",
+        "outputSha256": "5274f948b90f990e836d36f0f943383fe743c747d644679ef38a33102b266193"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "f15317a7a8e902c9e9717f4a302cd22031123b2130d6a17828febf2c1d3ce538",
+        "outputSha256": "8defa2f9d7a48060e18d6cbaaca781d71f82e555743f9e2fafaf9ce1ce97677f"
+      }
+    },
+    "containers": {
+      "mod/event/common.emevd.dcx": {
+        "containerSha256": "fcdc5683f708de22543787f7613affe6cf34b5739aaf55677d1b97169418b095",
+        "rawSha256": "303506bb41ed44ac1bba85382433aa508e55baee5137ec503d615cde34668c47",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "containerSha256": "d9bfb019224c76aee8d0b47bac9bfc03c433cac86a13a0922cf707c6577f1212",
+        "rawSha256": "4955536066677da32376d74d20fff23262268224e36a9b44064a7d2dbe82f19b",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "containerSha256": "604d199a943bd1acde58ebc687ab1440069bc5a4c0bbc00a666d571e16866368",
+        "rawSha256": "d7fbb3b30cbc877c4aaa79f1dc3b261c111435b11a2f112ed1cf15c66ca32bc0",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "containerSha256": "5274f948b90f990e836d36f0f943383fe743c747d644679ef38a33102b266193",
+        "rawSha256": "0b9c77b213c5cdcab2512441766dbab7cf8ecd242f03485a407746811896f44f",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "containerSha256": "8defa2f9d7a48060e18d6cbaaca781d71f82e555743f9e2fafaf9ce1ce97677f",
+        "rawSha256": "30dca0d1a3c870dcc066e5b391ca2650976aad5d9846c436d7c07827da067219",
+        "roundTripPassed": true
+      }
+    },
+    "generator": {
+      "owner": 95003300,
+      "privateGoods": [],
+      "removedRows": {
+        "SpEffectParam": [
+          95003300,
+          95003301,
+          95003302
+        ],
+        "AttachEffectParam": [
+          95003300
+        ],
+        "PermanentBuffParam": [
+          95003300
+        ],
+        "EquipParamGoods": [
+          95003300
+        ],
+        "ItemTableParam": [
+          95110130
+        ],
+        "NpcParam": [
+          98300000,
+          98300001,
+          98300002,
+          98300003,
+          98300004,
+          98300005,
+          98300006,
+          98300007,
+          98300008,
+          98300009,
+          98300010,
+          98300011,
+          98300012,
+          98300013,
+          98300014,
+          98300015,
+          98300016,
+          98300017,
+          98300018,
+          98300019,
+          98300020,
+          98300021,
+          98300022,
+          98300023,
+          98300024,
+          98300025,
+          98300026,
+          98300027,
+          98300028,
+          98300029,
+          98300030,
+          98300031,
+          98300032,
+          98300033,
+          98300034,
+          98300035,
+          98300036,
+          98300037,
+          98300038,
+          98300039,
+          98300040,
+          98300041,
+          98300042,
+          98300043,
+          98300044,
+          98300045,
+          98300046,
+          98300047,
+          98300048,
+          98300049,
+          98300050,
+          98300051,
+          98300052,
+          98300053,
+          98300054,
+          98300055,
+          98300056,
+          98300057,
+          98300058,
+          98300059
+        ]
+      },
+      "removedCleanupInstructions": 3,
+      "texts": [
+        {
+          "language": "zhocn",
+          "category": "item",
+          "count": 5
+        },
+        {
+          "language": "zhocn",
+          "category": "menu",
+          "count": 2
+        },
+        {
+          "language": "engus",
+          "category": "item",
+          "count": 5
+        },
+        {
+          "language": "engus",
+          "category": "menu",
+          "count": 2
+        }
+      ],
+      "activeAbilities": 40,
+      "otherRowsEventsAndTextsUnchanged": true,
+      "gameplayVerified": false
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "dllBuild": {
+    "version": "0.17.234",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "32dd095f24c30ec890281c83ed8034b34d15204e6be448232e33e45551fb22b9",
+    "installed": true,
+    "installedDllSha256": "32dd095f24c30ec890281c83ed8034b34d15204e6be448232e33e45551fb22b9",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "validation": {
+    "unitTestsPassed": 437,
+    "unitTestsFailed": 0,
+    "unitTestsIgnored": 26,
+    "nativeVerificationScripts": [
+      "verify_sword_projectile.py",
+      "verify_glass_cannon_native.py",
+      "verify_death_dance.py",
+      "verify_erosion.py",
+      "verify_potential_fission.py",
+      "verify_reward_template.py",
+      "verify_ambulance.py",
+      "verify_echo_cast.py",
+      "verify_weapon_affinity.py",
+      "verify_snack.py",
+      "verify_marking.py",
+      "verify_wraith.py",
+      "verify_basics.py",
+      "verify_sniper.py",
+      "verify_momentum.py",
+      "verify_heartstealer.py",
+      "verify_cat_arena.py",
+      "verify_ultimate_awakening.py",
+      "verify_ultimate_unstoppable.py"
+    ],
+    "signatureCount": 196,
+    "signatureUniquenessPassed": true,
+    "generatedCatalogMatchesRuntime": true,
+    "otherDistributionFilesUnchanged": true
+  },
+  "changedDistributionAssets": {
+    "mod/regulation.bin": {
+      "inputSha256": "19846d56473ed0763a39d1b514a795f7e561ff2730e225d4542b168b98f4f073",
+      "outputSha256": "a1d52991a7749829786ef71d9dc496f080a00520e96e6a7620502dd3b53b3467"
+    },
+    "mod/event/common.emevd.dcx": {
+      "inputSha256": "b53500f36560abcbbedc61b53d0650db307afd8ac23b52e00e766407d62467c6",
+      "outputSha256": "fcdc5683f708de22543787f7613affe6cf34b5739aaf55677d1b97169418b095"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "a4f22d39982f3d144cbd64d945326afb1c63b41dcab8059b20163a5b0afef7db",
+      "outputSha256": "32dd095f24c30ec890281c83ed8034b34d15204e6be448232e33e45551fb22b9"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "71df65fa52d2f02107826e89c3aafbe7112723cb297361fe2c4bd37ee55edfc5",
+      "outputSha256": "5274f948b90f990e836d36f0f943383fe743c747d644679ef38a33102b266193"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "f15317a7a8e902c9e9717f4a302cd22031123b2130d6a17828febf2c1d3ce538",
+      "outputSha256": "8defa2f9d7a48060e18d6cbaaca781d71f82e555743f9e2fafaf9ce1ce97677f"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "d3be13a90225e874fcc3d3aee425d6e062d1042dd1b473f648993438dd796d92",
+      "outputSha256": "d9bfb019224c76aee8d0b47bac9bfc03c433cac86a13a0922cf707c6577f1212"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "f121734f9aa111bb78089ded8211920645d71c26185203f221d826ef40898601",
+      "outputSha256": "604d199a943bd1acde58ebc687ab1440069bc5a4c0bbc00a666d571e16866368"
+    }
+  },
+  "deletedFiles": [
+    "dist/demons-call-validation.json",
+    "docs/research/demons-call.md",
+    "src/demons.rs",
+    "src/demons_data.rs",
+    "src/demons_lottery.rs",
+    "src/demons_lottery/native_tests.rs",
+    "src/demons_params.rs",
+    "src/demons_params/native_tests.rs",
+    "src/demons_runtime.rs",
+    "tools/HexBuild/DemonsCall.cs",
+    "tools/install_demons_call.py",
+    "tools/verify_demons_call.py"
+  ],
+  "requiresFullPackageUpdate": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

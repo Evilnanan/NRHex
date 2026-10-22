@@ -4,11 +4,15 @@ using System.Text.Json;
 static class RetiredAbility {
  static void Check(bool value,string message){if(!value)throw new InvalidDataException(message);}
  static string Name(BinderFile file)=>file.Name.Replace('\\','/').Split('/').Last();
- public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,int owner,int[] privateGoods){
+ public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,int owner,int[] privateGoods,Dictionary<string,int[]>? extraRows=null){
   var hexes=HexCatalog.Load(root);Check(!hexes.Any(hex=>hex.Id==owner),"Remove the ability from the active catalog first");
   Check(privateGoods.Distinct().Count()==privateGoods.Length&&privateGoods.All(id=>id>owner&&id<owner+100),"Private goods must belong to this ability");
   string output=Path.Combine(root,"work/retired-ability");Directory.CreateDirectory(output);
   var wanted=new Dictionary<string,int[]>{{"SpEffectParam",new[]{owner}},{"AttachEffectParam",new[]{owner}},{"PermanentBuffParam",new[]{owner}},{"EquipParamGoods",new[]{owner}.Concat(privateGoods).ToArray()},{"ItemTableParam",new[]{RewardCatalog.Table(owner)}}};
+  foreach(var (table,ids) in extraRows??new Dictionary<string,int[]>()){
+   Check(ids.Length>0&&ids.Distinct().Count()==ids.Length,"Invalid private row list");
+   wanted[table]=wanted.TryGetValue(table,out var previous)?previous.Concat(ids).Distinct().ToArray():ids;
+  }
   var binder=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));
   var before=binder.Files.ToDictionary(file=>file.ID,file=>file.Bytes.ToArray());
   foreach(var (table,ids) in wanted){
@@ -27,12 +31,16 @@ static class RetiredAbility {
    Check(previous.Length==remaining.Length&&previous.Zip(remaining).All(pair=>CageAI.Same(pair.First,pair.Second)),"Unrelated parameter row changed");
   }
   var eventSource=Path.Combine(root,"dist/mod/event/common.emevd.dcx");var events=EMEVD.Read(eventSource);var originalEvents=EMEVD.Read(eventSource);int removed=0;
+  var removedEffects=wanted["SpEffectParam"].ToHashSet();
   foreach(var entry in events.Events.Where(entry=>entry.ID is 1111 or 9100941)){
    Check(entry.Parameters.Count==0,"Parameterized cleanup requires relocation");
-   int count=entry.Instructions.RemoveAll(instruction=>instruction.Bank==2004&&instruction.ID==21&&instruction.ArgData.Length==8&&BitConverter.ToUInt32(instruction.ArgData)==20000&&BitConverter.ToInt32(instruction.ArgData,4)==owner);
-   Check(count==1,"Expected one retired-owner cleanup per reset event");removed+=count;
+   bool Removal(EMEVD.Instruction instruction,int effect)=>instruction.Bank==2004&&instruction.ID==21&&instruction.ArgData.Length==8&&BitConverter.ToUInt32(instruction.ArgData)==20000&&BitConverter.ToInt32(instruction.ArgData,4)==effect;
+   int ownerRemovals=entry.Instructions.Count(instruction=>Removal(instruction,owner));
+   Check(extraRows==null?ownerRemovals==1:ownerRemovals<=1,$"Unexpected retired-owner cleanup count: event {entry.ID}, {ownerRemovals}");
+   Check(removedEffects.All(effect=>entry.Instructions.Count(instruction=>Removal(instruction,effect))<=1),"Duplicated private cleanup");
+   removed+=entry.Instructions.RemoveAll(instruction=>removedEffects.Any(effect=>Removal(instruction,effect)));
   }
-  Check(removed==2,"Missing cleanup event");string eventOutput=Path.Combine(output,"common.emevd.dcx");events.Write(eventOutput);var actualEvents=EMEVD.Read(eventOutput);
+  Check(removed>0,"Missing cleanup event");string eventOutput=Path.Combine(output,"common.emevd.dcx");events.Write(eventOutput);var actualEvents=EMEVD.Read(eventOutput);
   Check(actualEvents.Format==originalEvents.Format&&actualEvents.Compression==originalEvents.Compression&&actualEvents.Events.Count==originalEvents.Events.Count&&actualEvents.StringData.SequenceEqual(originalEvents.StringData)&&actualEvents.LinkedFileOffsets.SequenceEqual(originalEvents.LinkedFileOffsets),"Event metadata changed");
   foreach(var entry in actualEvents.Events){Check(Cages.Same(events.Events.Single(previous=>previous.ID==entry.ID),entry),"Event readback mismatch");if(entry.ID is not (1111 or 9100941))Check(Cages.Same(originalEvents.Events.Single(previous=>previous.ID==entry.ID),entry),"Unrelated event changed");}
   var texts=new List<object>();
