@@ -1,7 +1,7 @@
 using SoulsFormats;
 // Stable per-ability references; exactly one three-row native spawn template.
 static class RewardCatalog {
- public static readonly int[] HistoricalOwners=Enumerable.Range(1,27).Where(i=>i!=10).Select(i=>95000000+i*100).Concat(new[]{95002900,95003000,95003100,95003200,95003300,95003400,95003500,95003600,95003700,95003800,95003900,95004000,95004100,95004200}).ToArray();
+ public static readonly int[] HistoricalOwners=Enumerable.Range(1,27).Where(i=>i!=10).Select(i=>95000000+i*100).Concat(new[]{95002900,95003000,95003100,95003200,95003300,95003400,95003500,95003600,95003700,95003800,95003900,95004000,95004100,95004200,95004300}).ToArray();
  public const int Retired=95001900,TemplateLot=95200000;
  public sealed record Entry(int Lot,int[] Order);
  public sealed record Serialized(int Lot,int[] Owners);

@@ -44,7 +44,7 @@ unsafe fn records(manager:usize)->Vec<i32>{
 }
 pub unsafe fn update(player:usize,base:usize,dt:f32){
  let manager=read_ptr(player+0x190);if manager==0{return;}
- let reset=has_effect(player,RESET,base);if reset{crate::reward_reroll::reset();crate::potential_fission::reset(player,base);crate::demons_runtime::reset(player,base);crate::snack::reset(player,base);crate::momentum::reset(player,base);crate::heartstealer::reset(player,base);}
+ let reset=has_effect(player,RESET,base);if reset{crate::wraith::reset();crate::reward_reroll::reset();crate::potential_fission::reset(player,base);crate::demons_runtime::reset(player,base);crate::snack::reset(player,base);crate::momentum::reset(player,base);crate::heartstealer::reset(player,base);}
  let due=HISTORY.lock().map(|mut s|s.due(reset,dt)).unwrap_or(false);if !due{return;}
  let existing=records(manager);let native=decode(&existing,&crate::hex_pool::HISTORY_BITS);
  let wanted=HISTORY.lock().ok().and_then(|mut s|{s.observe(&native,reset);s.seen.clone()});

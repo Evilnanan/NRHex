@@ -33,7 +33,7 @@ static class Marking {
   Check(Convert.ToInt32(item["itemId"].Value)==Owner&&Convert.ToInt32(item["itemCategory"].Value)==1&&Convert.ToInt32(item["chanceWeight"].Value)==1000,"Reward wiring mismatch");
   var attach=Table(current,"AttachEffectParam").Rows.Single(r=>r.ID==Owner);var permanent=Table(current,"PermanentBuffParam").Rows.Single(r=>r.ID==Owner);
   Check(Convert.ToInt32(attach["passiveSpEffectId_1"].Value)==Owner&&Convert.ToInt32(attach["statusIconId"].Value)==22295&&Convert.ToInt32(permanent["spEffectId"].Value)==Owner&&Convert.ToInt32(permanent["iconId"].Value)==21295,"Ability icon/effect mismatch");
-  return new{owner=Owner,attack=Attack,reference=Stamp,impact=Impact,ironeyeOnly=true,historyBit=39,historyBytes=5,sharedAttacksUnchanged=true};
+  return new{owner=Owner,attack=Attack,reference=Stamp,impact=Impact,ironeyeOnly=true,historyBit=39,historyBytes=(RewardCatalog.HistoricalOwners.Length+7)/8,sharedAttacksUnchanged=true};
  }
  static void Fixture(string directory,BND4 current,Func<string,Memory<byte>,PARAM> parse){
   Directory.CreateDirectory(directory);var rows=parse("AtkParam_Pc",current.Files.Single(f=>Name(f)=="AtkParam_Pc.param").Bytes);rows.Rows=rows.Rows.Where(r=>new[]{Stamp,300000295,Attack,600000120}.Contains(r.ID)).ToList();File.WriteAllBytes(Path.Combine(directory,"native-attacks.param"),rows.Write());

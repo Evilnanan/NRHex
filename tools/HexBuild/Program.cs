@@ -79,6 +79,8 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--wraith-stage")){Wraith.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--wraith-check")){Wraith.Verify(root,Parse);return;}
 if(args.Contains("--marking-stage")){Marking.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--marking-check")){Marking.Verify(root,bnd,Parse);return;}
 if(args.Contains("--sword-poise-stage")){SwordPoise.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -976,6 +978,7 @@ for(int i=0;i<8;i++){
  Set(bullet,"atkId_Bullet",95001560+(i<=4?i:i==7?6:5));
  Set(bullet,"HitBulletID",i==7?-1:95001551+i);
 }
+Wraith.Mechanics(Clone,pars["ItemLotParam_map"]);
 NewHexes.AddMechanics(pars,Clone,Path.Combine(root,"src"));
 DevilsGaze.Mechanics(pars,Clone);
 foreach(int id in new[]{6999920,6999921}){
@@ -1120,6 +1123,7 @@ foreach(var lang in new[]{"zhocn","engus"}){
  }
  var output=Path.Combine(root,"dist/mod/msg",lang,"item_dlc01.msgbnd.dcx");Directory.CreateDirectory(Path.GetDirectoryName(output)!);tb.Write(output);var read=BND4.Read(output);Require(read.Files.Count==tb.Files.Count,"Text binder count changed");
  foreach(var f in read.Files)Require(f.Bytes.Span.SequenceEqual(tb.Files.Single(v=>v.ID==f.ID).Bytes.Span),"Text binder readback failed");
+ Wraith.GoodsTexts(output,output);
  textReports.Add(new{language=lang,inputSha256=Hash(input),outputSha256=Hash(output),changedFiles=tb.Files.Where(f=>!f.Bytes.Span.SequenceEqual(originals[f.ID])).Select(f=>Path.GetFileName(f.Name)).ToArray()});
 }
 // Temporary SpEffect labels live in the menu binder, unlike permanent rewards.
@@ -1226,6 +1230,7 @@ Cages.Terrain(ev);
 ContractHeart.Events(ev);
 UltimateAwakening.Events(ev);
 Marking.Events(ev);
+Wraith.Events(ev);
 UltimateUnstoppable.Events(ev);
 UltimateChallenge.Events(ev);
 NightBlessing.ResetReceipt(ev);

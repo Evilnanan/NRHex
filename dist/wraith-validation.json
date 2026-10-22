@@ -1,0 +1,871 @@
+{
+  "version": "0.17.222",
+  "owner": 95004300,
+  "name": "王室幽魂",
+  "baseCommit": "8b5feeef9e311d4253860c1c7cbbcaebcb6be5f5",
+  "stages": [
+    "召咒魂铃",
+    "恶兆幼子像",
+    "王室恶兆幼子像"
+  ],
+  "effectiveUsesPerStage": [
+    20,
+    10
+  ],
+  "allHeroesEligible": true,
+  "onlyFirstQualifyingContactPerUse": true,
+  "emptyUseDoesNotProgress": true,
+  "lateLowerTierFlightsCannotAdvanceHigherTier": true,
+  "upgradeDeferredUntilItemActionEnds": true,
+  "oldProjectilesPreserved": true,
+  "existingOriginalToolsPreserved": true,
+  "scholarNativeProficiencyPreserved": true,
+  "progressRetainedAcrossDeathAndRevival": true,
+  "expeditionResetOnly": true,
+  "historyBit": 40,
+  "historyBytes": 6,
+  "activeCatalogSize": 39,
+  "singleNativeRewardTemplateRetained": true,
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "8b56f338f79ee9562a9637fc28bbbbbf5a2442085caeb6ef11260954e7f01364",
+        "outputSha256": "ab9a47d6bc6d3b1d1d63d5548cb141071774d936c92f391114c250a2ff314a6c"
+      },
+      "mod/event/common.emevd.dcx": {
+        "inputSha256": "6ddf91ed9e28818b57e4840d6fe94f0fb8fdb5229bb93076a8f8000639ea9c61",
+        "outputSha256": "d4eabd7267cf8e14a9a18b7835ac76579e2c2ac1386ee19f183c9ff93dbe0873"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "e67318366d88b7bdd2b15192f22ab26dfffd6f40f3994511223bc488997c5bb7",
+        "outputSha256": "55a04a64e5acbdebdcdc1d3e708156a90848c4c462cf400be5308401f33b5915"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "599527a5976f9ad96d413dce38cd20657888371cf0cca8595a8983daa8c2a819",
+        "outputSha256": "6fefe568104fffed503d8fb66aae496ad24051473717cd26bcfee93d66e65296"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "b596de96b8af137974ead892207bcfc9729c035dc63bc870a40745565d7c0e9a",
+        "outputSha256": "45da9d1d8fe3a3ac24dac05c60a659def747c486c32055f5727e97f7d2785fdd"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "7c4ef7e8043673946bdce7f746901ce4ce388401f4721e38ec258b8d9456f387",
+        "outputSha256": "8a761349ea4ad3ad2b8949f7760b3f96079afe487b2b45e326446af844330e88"
+      },
+      "mod/action/script/c0000.hks": {
+        "inputSha256": "daa29d4c04c30bc5b8540949e58c37d5d67c935e062a7ef41c059406bf4c4587",
+        "outputSha256": "ecc038fba7a824fea2d13217ed5fc3059f781013d3a627e9c8fa750c074e0016"
+      }
+    },
+    "containers": {
+      "mod/event/common.emevd.dcx": {
+        "rawSha256": "2c8d369a946425f2e14ecd17250442d9a3603dafdc847b17a7a5d18fb5a4fec0",
+        "containerSha256": "d4eabd7267cf8e14a9a18b7835ac76579e2c2ac1386ee19f183c9ff93dbe0873",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "8790a73959ed980f18610b4596835764e387edc7d013ad0ba0cb8a4489a28965",
+        "containerSha256": "55a04a64e5acbdebdcdc1d3e708156a90848c4c462cf400be5308401f33b5915",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "528ec57802fa1f51149a973b675994a8bca9cbfd3111b735e25959cbc4805b9e",
+        "containerSha256": "6fefe568104fffed503d8fb66aae496ad24051473717cd26bcfee93d66e65296",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "d79924058ab37e770c7868307b07aed45473159aebad32dcac9b672546b57248",
+        "containerSha256": "45da9d1d8fe3a3ac24dac05c60a659def747c486c32055f5727e97f7d2785fdd",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "1f678fb7c433c189b639be7591633ddc178a76a38085bab4e76a781ccace970c",
+        "containerSha256": "8a761349ea4ad3ad2b8949f7760b3f96079afe487b2b45e326446af844330e88",
+        "roundTripPassed": true
+      }
+    },
+    "generator": {
+      "owner": 95004300,
+      "historyBit": 40,
+      "historyBytes": 6,
+      "addedRows": {
+        "SpEffectParam": [
+          95004300,
+          95004301,
+          95004302,
+          95004303,
+          95004304,
+          95004305,
+          95004306,
+          95004307,
+          95004308,
+          95004309,
+          95004311,
+          95004312,
+          95004313,
+          95004314,
+          95004315,
+          95004316,
+          95004317,
+          95004318,
+          95004319,
+          95004320,
+          95004321,
+          95004322,
+          95004323,
+          95004324,
+          95004325,
+          95004326,
+          95004327,
+          95004328,
+          95004329,
+          95004330,
+          95004331,
+          95004332,
+          95004333,
+          95004334,
+          95004335,
+          95004336,
+          95004337,
+          95004338,
+          95004339,
+          95004340,
+          95004341,
+          95004342,
+          95004343,
+          95004344,
+          95004345,
+          95004346,
+          95004347,
+          95004348,
+          95004349,
+          95004350,
+          95004351,
+          95004352,
+          95004353,
+          95004354,
+          95004355,
+          95004356,
+          95004357,
+          95004358,
+          95004359,
+          95004360,
+          95004361,
+          95004362,
+          95004363,
+          95004364,
+          95004365,
+          95004366,
+          95004367,
+          95004368,
+          95004369,
+          95004370,
+          95004390,
+          95004391,
+          95004392,
+          96001281,
+          96001282,
+          96001283,
+          96001284,
+          96001285,
+          96001286,
+          96001287,
+          96001288,
+          96001289,
+          96001290,
+          96001291,
+          96001292,
+          96001293,
+          96001294,
+          96001295,
+          96001296,
+          96001297,
+          96001298,
+          96001299,
+          96001300,
+          96001301,
+          96001302,
+          96001303,
+          96001304,
+          96001305,
+          96001306,
+          96001307,
+          96001308,
+          96001309,
+          96001310,
+          96001311,
+          96001312,
+          96001313,
+          96001314,
+          96001315,
+          96001316,
+          96001317,
+          96001318,
+          96001319,
+          96001320,
+          96001321,
+          96001322,
+          96001323,
+          96001324,
+          96001325,
+          96001326,
+          96001327,
+          96001328,
+          96001329,
+          96001330,
+          96001331,
+          96001332,
+          96001333,
+          96001334,
+          96001335,
+          96001336,
+          96001337,
+          96001338,
+          96001339,
+          96001340,
+          96001341,
+          96001342,
+          96001343,
+          96001344,
+          96001345,
+          96001346,
+          96001347,
+          96001348,
+          96001349,
+          96001350,
+          96001351,
+          96001352,
+          96001353,
+          96001354,
+          96001355,
+          96001356,
+          96001357,
+          96001358,
+          96001359,
+          96001360,
+          96001361,
+          96001362,
+          96001363,
+          96001364,
+          96001365,
+          96001366,
+          96001367,
+          96001368,
+          96001369,
+          96001370,
+          96001371,
+          96001372,
+          96001373,
+          96001374,
+          96001375,
+          96001376,
+          96001377,
+          96001378,
+          96001379,
+          96001380,
+          96001381,
+          96001382,
+          96001383,
+          96001384,
+          96001385,
+          96001386,
+          96001387,
+          96001388,
+          96001389,
+          96001390,
+          96001391,
+          96001392,
+          96001393,
+          96001394,
+          96001395,
+          96001396,
+          96001397,
+          96001398,
+          96001399,
+          96001400,
+          96001401,
+          96001402,
+          96001403,
+          96001404,
+          96001405,
+          96001406,
+          96001407,
+          96001408,
+          96001409,
+          96001410,
+          96001411,
+          96001412,
+          96001413,
+          96001414,
+          96001415,
+          96001416,
+          96001417,
+          96001418,
+          96001419,
+          96001420,
+          96001421,
+          96001422,
+          96001423,
+          96001424,
+          96001425,
+          96001426,
+          96001427,
+          96001428,
+          96001429,
+          96001430,
+          96001431,
+          96001432,
+          96001433,
+          96001434,
+          96001435,
+          96001436,
+          96001437,
+          96001438,
+          96001439,
+          96001440,
+          96001441,
+          96001442,
+          96001443,
+          96001444,
+          96001445,
+          96001446,
+          96001447,
+          96001448,
+          96001449,
+          96001450,
+          96001451,
+          96001452,
+          96001453,
+          96001454,
+          96001455,
+          96001456,
+          96001457,
+          96001458,
+          96001459,
+          96001460,
+          96001461,
+          96001462,
+          96001463,
+          96001464,
+          96001465,
+          96001466,
+          96001467,
+          96001468,
+          96001469,
+          96001470,
+          96001471,
+          96001472,
+          96001473,
+          96001474,
+          96001475,
+          96001476,
+          96001477,
+          96001478,
+          96001479,
+          96001480,
+          96001481,
+          96001482,
+          96001483,
+          96001484,
+          96001485,
+          96001486,
+          96001487,
+          96001488,
+          96001489,
+          96001490,
+          96001491,
+          96001492,
+          96001493,
+          96001494,
+          96001495,
+          96001496,
+          96001497,
+          96001498,
+          96001499,
+          96001500,
+          96001501,
+          96001502,
+          96001503,
+          96001504,
+          96001505,
+          96001506,
+          96001507,
+          96001508,
+          96001509,
+          96001510,
+          96001511,
+          96001512,
+          96001513,
+          96001514,
+          96001515,
+          96001516,
+          96001517,
+          96001518,
+          96001519,
+          96001520,
+          96001521,
+          96001522,
+          96001523,
+          96001524,
+          96001525,
+          96001526,
+          96001527,
+          96001528,
+          96001529,
+          96001530,
+          96001531,
+          96001532,
+          96001533,
+          96001534,
+          96001535
+        ],
+        "AttachEffectParam": [
+          95004300
+        ],
+        "PermanentBuffParam": [
+          95004300
+        ],
+        "EquipParamGoods": [
+          95004300,
+          95004380,
+          95004381,
+          95004382
+        ],
+        "ItemTableParam": [
+          95110140
+        ],
+        "ItemLotParam_map": [
+          95543000,
+          95543010,
+          95543020
+        ]
+      },
+      "originalRowsAndUnrelatedTablesPreserved": true,
+      "originalEventsPreserved": true,
+      "privateGoods": [
+        95004380,
+        95004381,
+        95004382
+      ],
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "ownerTexts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "B0D0D7DB0704704E7A7F3BA496CC421CFB488E54854EF8DF6AD904002E43B2E4",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "DEC5E3BD53BE6419643339DE04AF82D975D27A40C0B33E84A7996ECDEC3CEDA3",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "D92AE6616455B10D41D6975A14F08750435B3BA2B1AC8FE89E25D47D971BE8F9",
+          "outputSha256": "75116061CDEC9002752751345E1D3A54509614994B7F325DA08C58EFB67D25F0",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "王室幽魂"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "使用咒魂类道具不消耗专注值。命中一定次数后，升级为可以释放更多咒魂的新道具。获得召咒魂铃"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "王室幽魂"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "使用咒魂类道具不消耗专注值。命中一定次数后，升级为可以释放更多咒魂的新道具。获得召咒魂铃"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "使用咒魂类道具不消耗专注值。命中一定次数后，升级为可以释放更多咒魂的新道具。获得召咒魂铃"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "F61BCC93D94681F63C7C8590E741ADCB25EE1A38CCF28FA4495BB6FEE51DC015",
+          "outputSha256": "528EC57802FA1F51149A973B675994A8BCA9CBFD3111B735E25959CBC4805B9E",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "王室幽魂"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "使用咒魂类道具不消耗专注值。命中一定次数后，升级为可以释放更多咒魂的新道具。获得召咒魂铃"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "5B2648A9678123FAA6B85A83CA5B93C5A8464719535D3CBF7BAD6A8DBB72D2A4",
+          "outputSha256": "9B96EB7B8EEB7D0F4091B70007E07E71E5FC95B239B09EE4DC3AEB16CB117D1C",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "Royal Revenant"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "Royal Revenant"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "A517B906DF2F9E0FDB7B7480EA85FDCD950F60A5536774190F218582C10CB405",
+          "outputSha256": "1F678FB7C433C189B639BE7591633DDC178A76A38085BAB4E76A781CCACE970C",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "Royal Revenant"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004300,
+              "before": null,
+              "after": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "goodsTextsCopiedFromNative": true,
+    "allBilingualDescriptionsMatch": true
+  },
+  "hks": {
+    "inputSha256": "daa29d4c04c30bc5b8540949e58c37d5d67c935e062a7ef41c059406bf4c4587",
+    "outputSha256": "ecc038fba7a824fea2d13217ed5fc3059f781013d3a627e9c8fa750c074e0016",
+    "functions": {
+      "1255": {
+        "name": "Update",
+        "query": 990043,
+        "originalInstructions": 657,
+        "addedInstructions": 4
+      },
+      "208": {
+        "name": "ItemCommonFunction",
+        "query": 990044,
+        "originalInstructions": 246,
+        "addedInstructions": 4
+      },
+      "209": {
+        "name": "StealthItemCommonFunction",
+        "query": 990044,
+        "originalInstructions": 210,
+        "addedInstructions": 4
+      },
+      "210": {
+        "name": "QuickItemCommonFunction",
+        "query": 990044,
+        "originalInstructions": 212,
+        "addedInstructions": 4
+      },
+      "723": {
+        "name": "Item_Upper_Activate",
+        "query": 990044,
+        "originalInstructions": 6,
+        "addedInstructions": 4
+      },
+      "1308": {
+        "name": "RideItemDrinkStart_onUpdate",
+        "query": 990044,
+        "originalInstructions": 128,
+        "addedInstructions": 4
+      },
+      "1310": {
+        "name": "RideItemDrinking_onUpdate",
+        "query": 990044,
+        "originalInstructions": 89,
+        "addedInstructions": 4
+      },
+      "1312": {
+        "name": "RideItemDrinkEnd_onUpdate",
+        "query": 990044,
+        "originalInstructions": 75,
+        "addedInstructions": 4
+      },
+      "1314": {
+        "name": "RideItemDrinkEmpty_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1316": {
+        "name": "RideItemInvalid_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1318": {
+        "name": "RideItemDrinkNothing_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1320": {
+        "name": "RideItemWhistle_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1322": {
+        "name": "RideItemElixir_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1324": {
+        "name": "RideItemHorn_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1326": {
+        "name": "RideItemQuick1_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1328": {
+        "name": "RideItemQuick2_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1330": {
+        "name": "RideItemQuick3_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1332": {
+        "name": "RideItemOneShot_onUpdate",
+        "query": 990044,
+        "originalInstructions": 99,
+        "addedInstructions": 4
+      },
+      "1335": {
+        "name": "RideItemLanternOff_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1337": {
+        "name": "RideItemCombo_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      },
+      "1338": {
+        "name": "RideItemMeganeStart_onUpdate",
+        "query": 990044,
+        "originalInstructions": 54,
+        "addedInstructions": 4
+      },
+      "1339": {
+        "name": "RideItemMeganeLoop_onUpdate",
+        "query": 990044,
+        "originalInstructions": 84,
+        "addedInstructions": 4
+      },
+      "1340": {
+        "name": "RideItemMeganeEnd_onUpdate",
+        "query": 990044,
+        "originalInstructions": 88,
+        "addedInstructions": 4
+      }
+    },
+    "allOriginalInstructionsRetained": true,
+    "exactInversePassed": true
+  },
+  "native": {
+    "owner": 95004300,
+    "nativeExecutionPassed": true,
+    "installedReadbackPassed": true,
+    "stages": [
+      3080,
+      3010,
+      3011
+    ],
+    "effectiveUsesPerStage": [
+      20,
+      10
+    ],
+    "freeFpOnlyForLocalOwner": true,
+    "nativeFunctions": [
+      "66F040 pending-token registration (existing-record branch)",
+      "66D3B0 token lookup",
+      "669A20 consume token",
+      "34E0B0 original XP call and compiled hook",
+      "1F7840 quickslot setter"
+    ],
+    "cases": [
+      "root registration preserves native source identity and rejects parent/foreign emissions",
+      "misses do not progress; first-contact token consumed once",
+      "Scholar retains native category XP; other heroes receive only independent progress",
+      "FP eligibility/use scopes and original parameter immutability",
+      "continuous actions defer; three empty frame samples; original slot and selection retained",
+      "late lower-tier flights cannot progress a higher tier"
+    ],
+    "stubs": [
+      "native item inventory grant/removal command execution and network transport not executed",
+      "source/effect lookup and native FP legality consumer fixtures",
+      "pending-list allocator release and inventory lookup/UID lookup fixtures",
+      "native category XP body replaced by recording fixture"
+    ],
+    "sourceHashes": {
+      "src/wraith.rs": "a1495f4c941c0da62d21ef5c0eabb350060a0718d9fe0003621f32fc81760633",
+      "src/wraith_native_tests.rs": "17fa2c98200c84ea71e51132f01306afc0f95c1a47634cfab861938534122091",
+      "src/lib.rs": "bb7ea60f53b071f0516dfc2f5bb60c21cbf4cf543a59e2f5f90c7c8a2f485b0a",
+      "src/echo_cast.rs": "4c3390a33550eb43b73124571868f263951d48df78fb2a5bf9530a4940cc77fc",
+      "src/ambulance.rs": "e7ec27e041b623a88a83b4372938e48ed138aa3d23b9776ab2164fe884969a93",
+      "src/reward_cycle_runtime.rs": "a0ef71a58b794876de82900885d5f91234d2058a69f497f89f019b9dca1671d9",
+      "src/hex_pool.rs": "426fc1cd79366013c750b6eea6e754f235ce9234d2c67762b68c0b023e78f18d",
+      "tools/HexBuild/Wraith.cs": "5d7495d32661a511283ba62505cde2183d07f828c2995f916757542893957598",
+      "tools/HexBuild/Program.cs": "46864a6273c999a66c743fcca03119693664fa4c4ab48ca876e6a7f12cc57fc5",
+      "tools/build_wraith_hks.py": "5e2ef64aa2bc97f49a61765c8cc5b6fe052ee8a89e194094f33067e804dec537",
+      "tools/verify_wraith.py": "1e73e986b8633ce98da2c45bc85c45684d033cf2f415bc78b704cc48881bd1bf",
+      "docs/hexes.md": "b0d0d7db0704704e7a7f3ba496cc421cfb488e54854ef8df6ad904002e43b2e4",
+      "docs/hexes.en.md": "dec5e3bd53be6419643339de04af82d975d27a40c0b33e84a7996ecdec3ceda3"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.222",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "95b9e4b9bde8dfd6673d7f1db2d2ff7aab043df0848a006db5a369c6020204cc",
+    "installed": true,
+    "installedDllSha256": "95b9e4b9bde8dfd6673d7f1db2d2ff7aab043df0848a006db5a369c6020204cc",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 438,
+  "regularIgnoredTests": 26,
+  "runtimeSuitesPassed": 17,
+  "exeSignaturesPassed": 205,
+  "changedExistingDistributionFiles": {
+    "README.md": {
+      "inputSha256": "90db19d7d0c17ba5ebd9b16aa5477311c4772c19794e537f88f6e59ffcffe826",
+      "outputSha256": "c828b983f64e5437e1f1524a475c7a05772b8f55359e9918162e92ff0acef7a6"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "8b56f338f79ee9562a9637fc28bbbbbf5a2442085caeb6ef11260954e7f01364",
+      "outputSha256": "ab9a47d6bc6d3b1d1d63d5548cb141071774d936c92f391114c250a2ff314a6c"
+    },
+    "mod/event/common.emevd.dcx": {
+      "inputSha256": "6ddf91ed9e28818b57e4840d6fe94f0fb8fdb5229bb93076a8f8000639ea9c61",
+      "outputSha256": "d4eabd7267cf8e14a9a18b7835ac76579e2c2ac1386ee19f183c9ff93dbe0873"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "7c8663359f72e7cf4220298ca3c8db3511b9f19e900f407d6ff9748353ec345a",
+      "outputSha256": "95b9e4b9bde8dfd6673d7f1db2d2ff7aab043df0848a006db5a369c6020204cc"
+    },
+    "mod/action/script/c0000.hks": {
+      "inputSha256": "daa29d4c04c30bc5b8540949e58c37d5d67c935e062a7ef41c059406bf4c4587",
+      "outputSha256": "ecc038fba7a824fea2d13217ed5fc3059f781013d3a627e9c8fa750c074e0016"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "b596de96b8af137974ead892207bcfc9729c035dc63bc870a40745565d7c0e9a",
+      "outputSha256": "45da9d1d8fe3a3ac24dac05c60a659def747c486c32055f5727e97f7d2785fdd"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "7c4ef7e8043673946bdce7f746901ce4ce388401f4721e38ec258b8d9456f387",
+      "outputSha256": "8a761349ea4ad3ad2b8949f7760b3f96079afe487b2b45e326446af844330e88"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "e67318366d88b7bdd2b15192f22ab26dfffd6f40f3994511223bc488997c5bb7",
+      "outputSha256": "55a04a64e5acbdebdcdc1d3e708156a90848c4c462cf400be5308401f33b5915"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "599527a5976f9ad96d413dce38cd20657888371cf0cca8595a8983daa8c2a819",
+      "outputSha256": "6fefe568104fffed503d8fb66aae496ad24051473717cd26bcfee93d66e65296"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "sourceHashes": {
+    "Cargo.toml": "cfeb615f2e0d10d30ba47232e9aeb101c509e36badd408026de4be84f5834dce",
+    "Cargo.lock": "36338023c3f448a2395c1f0e2667aabb94f46992da6519a6c65635f6066db1df",
+    "build.ps1": "a349563886544729c1173dcb55124cd8fbeb6dcdc7a58913ae096d729500e372",
+    "README.md": "ec731697a4261b1d9f631bdb7b9531d0e486c69945b5a3920572c9b4310f7f23",
+    "dist/README.md": "c828b983f64e5437e1f1524a475c7a05772b8f55359e9918162e92ff0acef7a6",
+    "CHANGELOG.md": "eab345934fc6a5c46bcdcc8e2fbebeabcaa5ed5fe3077a0cbf9f12b55ffdb04c",
+    "docs/hexes.md": "b0d0d7db0704704e7a7f3ba496cc421cfb488e54854ef8df6ad904002e43b2e4",
+    "docs/hexes.en.md": "dec5e3bd53be6419643339de04af82d975d27a40c0b33e84a7996ecdec3ceda3",
+    "docs/research/wraith.md": "115bf661c0130b64e47945185f6ace83279928ba201583e95106135d661f1233",
+    "docs/implementation.md": "cbfb03c26140303dbb533d19abe00b06902fdc2322c949ff162b079e0a0930b2",
+    "src/wraith.rs": "a1495f4c941c0da62d21ef5c0eabb350060a0718d9fe0003621f32fc81760633",
+    "src/wraith_native_tests.rs": "17fa2c98200c84ea71e51132f01306afc0f95c1a47634cfab861938534122091",
+    "src/lib.rs": "bb7ea60f53b071f0516dfc2f5bb60c21cbf4cf543a59e2f5f90c7c8a2f485b0a",
+    "src/echo_cast.rs": "4c3390a33550eb43b73124571868f263951d48df78fb2a5bf9530a4940cc77fc",
+    "src/ambulance.rs": "e7ec27e041b623a88a83b4372938e48ed138aa3d23b9776ab2164fe884969a93",
+    "src/reward_cycle_runtime.rs": "a0ef71a58b794876de82900885d5f91234d2058a69f497f89f019b9dca1671d9",
+    "src/hex_pool.rs": "426fc1cd79366013c750b6eea6e754f235ce9234d2c67762b68c0b023e78f18d",
+    "tools/HexBuild/Wraith.cs": "5d7495d32661a511283ba62505cde2183d07f828c2995f916757542893957598",
+    "tools/HexBuild/Program.cs": "46864a6273c999a66c743fcca03119693664fa4c4ab48ca876e6a7f12cc57fc5",
+    "tools/HexBuild/HexCatalog.cs": "9364fba18068f27e1440f105d4e9a567924525f97c49f32ad8d9bed99b15b9de",
+    "tools/HexBuild/RewardCatalog.cs": "bf2d97d7fb8823d6188112c8fe138bcc16e1bbc88446e8eec95cb3a80ab1188e",
+    "tools/HexBuild/Marking.cs": "760924baa8d2b4e1b29dca80f8034557d53400e626e243aa1df0199392f6b962",
+    "tools/build_wraith_hks.py": "5e2ef64aa2bc97f49a61765c8cc5b6fe052ee8a89e194094f33067e804dec537",
+    "tools/verify_wraith.py": "1e73e986b8633ce98da2c45bc85c45684d033cf2f415bc78b704cc48881bd1bf"
+  },
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

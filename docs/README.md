@@ -30,3 +30,5 @@
 | 什么删掉了、今后资料如何归档 | [维护约定](maintenance.md) |
 
 通用研究五篇由本仓库已有调查及 Nightreign 开发技能参考整合而来。技能仍在 `C:/Users/OwO/.codex/skills/nightreign-mod-dev/`，本次只整理项目，不修改全局技能。参数夹具和原始输入各有哈希清单；关键机器码检查仍在 `tools/verify_*.py` 中，可以重新执行。
+
+- [王室幽魂](research/wraith.md)：咒魂工具命中成长、局内保存、免蓝及动作结束后替换。

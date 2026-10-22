@@ -203,3 +203,8 @@ Raises maximum HP by 50% and makes you more likely to be targeted by enemies for
 ## Enhanced Marking
 
 Your sliding kick can launch small enemies into the air.
+
+<!-- hex:95004300 -->
+## Royal Revenant
+
+Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell.

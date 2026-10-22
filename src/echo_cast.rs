@@ -85,7 +85,9 @@ pub unsafe extern "system" fn emit(manager:usize,out:usize,descriptor:usize,erro
  let original:Emit=std::mem::transmute(EMIT_ORIGINAL.load(Ordering::Acquire));
  let value=if ACTIVE.load(Ordering::Acquire)&&REPLAY.with(Cell::get).ticket==0{scope(descriptor,BASE.load(Ordering::Acquire))}else{None};
  let _guard=ScopeGuard(SCOPE.with(|s|s.replace(value.map_or(Scope::default(),|owner|Scope{descriptor,owner,consumed:false}))));
- original(manager,out,descriptor,error)
+ let result=original(manager,out,descriptor,error);
+ crate::wraith::emitted(descriptor,out,BASE.load(Ordering::Acquire));
+ result
 }
 unsafe fn retain_counter(pointer:usize,offset:usize,mask:u32){
  if pointer==0{return;}
