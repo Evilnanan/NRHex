@@ -1,5 +1,5 @@
 {
-  "version": "0.16.2",
+  "version": "0.17.220",
   "selfPositionMarkRva": "B9EA10",
   "nativeInputCaller": "BA186E",
   "itemMarkExcluded": true,
@@ -13,8 +13,8 @@
   "stackPercent": 30,
   "maxStacks": 15,
   "maxMultiplier": 5.5,
-  "baseExplosionFireAttack": 200,
-  "baseBurningFireAttack": 40,
+  "baseExplosionFireAttack": 140,
+  "baseBurningFireAttack": 20,
   "visualScale": "sqrt(damage multiplier)",
   "nativeHitRadiiPreserved": true,
   "bulletReferenceKind": 2,

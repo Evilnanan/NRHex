@@ -1,6 +1,6 @@
 """Check original self-marker routing, lava identity and visual-only matrices."""
 from pathlib import Path
-import json,runpy,sys,struct,re
+import json,runpy,sys,struct,re,tomllib
 root=Path(__file__).resolve().parents[1]
 sys.argv=['probe','dis','0','0'];d=runpy.run_path(str(root/'tools/native_probe.py'))
 def check(r,b):assert d['read'](r,len(bytes.fromhex(b)))==bytes.fromhex(b),hex(r)
@@ -55,7 +55,7 @@ assert bullets[95001554]['hitRadius']==3.5
 assert [bullets[95001550+i]['sfxId_Bullet'] for i in range(2,8)]==[334084,334085,334086,334088,334088,334089]
 for i in range(7):
     a=attacks[95001560+i]
-    assert a['atkFire']==(200 if i==4 else 40 if i==6 else 0)
+    assert a['atkFire']==(140 if i==4 else 20 if i==6 else 0)
     assert a['isAddBaseAtk']==0 and a['selfTarget']==0 and a['friendlyTarget']==0
 source=(root/'src/lib.rs').read_text(encoding='utf8')
 assert 'LavaVisualGuard::enter(lava_visual_scale(bullet,true))' in source
@@ -66,11 +66,11 @@ noisy=(root/'src/noisy.rs').read_text()
 assert 'PARAM_ID_OFFSET:usize=0x5d0' in noisy and 'kind==2' in noisy
 assert 'noisy_trace' not in source and 'trace_state' not in noisy
 assert 'nlog_' not in (root/'src/noisy.rs').read_text()
-report=dict(version='0.16.2',selfPositionMarkRva='B9EA10',nativeInputCaller='BA186E',itemMarkExcluded=True,
+report=dict(version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version'],selfPositionMarkRva='B9EA10',nativeInputCaller='BA186E',itemMarkExcluded=True,
     originalLavaEffect=8630502,privateLavaEffect=95001501,privateBehavior=950015000,
     chargeSeconds=4,eruptionDelaySeconds=0.8,cooldownSeconds=None,rearm='last native lava instance cleanup',stackPercent=30,maxStacks=15,maxMultiplier=5.5,
-    baseExplosionFireAttack=200,baseBurningFireAttack=40,visualScale='sqrt(damage multiplier)',nativeHitRadiiPreserved=True,
+    baseExplosionFireAttack=140,baseBurningFireAttack=20,visualScale='sqrt(damage multiplier)',nativeHitRadiiPreserved=True,
     bulletReferenceKind=2,bulletReferenceIdOffset='5D0',childReferenceExcluded=True,temporaryCaptureRemoved=True,
     sourceAndFriendlyDamageDisabled=True,gameplayVerified=False,multiplayerVerified=False)
 (root/'dist/noisy-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
-print('PASS: actual native self-mark route, eight private lava phases, separate 200 eruption / 40 burning fire attack and owned visual matrix copy; collision sizes preserved.')
+print('PASS: actual native self-mark route, eight private lava phases, separate 140 eruption / 20 burning fire attack and owned visual matrix copy; collision sizes preserved.')

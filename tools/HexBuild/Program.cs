@@ -960,14 +960,14 @@ for(int bit=0;bit<16;bit++){
 }
 // Private copy of the native 8630500 lava chain: preserve phases, SFX,
 // collision and scattering. The placement seed has no damage; the eruption
-// uses base 100 fire attack; remaining patches use base 20 (native mitigation).
+// uses base 140 fire attack; remaining patches use base 20 (native mitigation).
 var lavaEmit=Clone("SpEffectParam",8630502,95001501);
 Set(lavaEmit,"behaviorId",950015000);Set(lavaEmit,"replaceSpEffectId",-1);
 Set(lavaEmit,"saveCategory",-1);Set(lavaEmit,"iconId",-1);Set(lavaEmit,"spEffectTextId_1",-1);
 var lavaBehavior=Clone("BehaviorParam_PC",863050000,950015000);Set(lavaBehavior,"refId",95001550);
 for(int i=0;i<7;i++){
  var attack=Clone("AtkParam_Pc",12048210+i,95001560+i);
- Set(attack,"atkFire",i==4?200:i==6?40:0);
+ Set(attack,"atkFire",i==4?140:i==6?20:0);
  Require(Convert.ToInt32(attack["isAddBaseAtk"].Value)==0,"Lava must use flat native attack, not held-weapon attack");
  Require(Convert.ToInt32(attack["selfTarget"].Value)==0&&Convert.ToInt32(attack["friendlyTarget"].Value)==0,"Lava source/friendly targeting mismatch");
 }
