@@ -57,7 +57,7 @@ Allows unlimited climbing. Boosts jump attack damage based on fall height. Silen
 <!-- hex:95000900 -->
 ## Draw Your Sword
 
-Your sorceries and incantations count as melee attacks. The range of spells cast is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%.
+Your sorceries and incantations become melee attacks. Their original range is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%.
 
 <!-- hex:95001100 -->
 ## Blunt Force
@@ -172,7 +172,7 @@ Sprinting, dashing, and running toward a near-death ally consume no stamina. Res
 <!-- hex:95003500 -->
 ## Echo Casting
 
-Sorceries and incantations cost 100% more FP and 50% more stamina. Free-flying projectile spells produce an additional projectile.
+Sorceries and incantations cost 100% more FP and 50% more stamina, and produce an additional projectile after casting.
 
 <!-- hex:95003600 -->
 ## Set Meal
@@ -205,7 +205,7 @@ Raises maximum HP by 50% and makes you more likely to be targeted by enemies for
 Your sliding kick can launch small enemies into the air.
 
 <!-- hex:95004300 -->
-## Royal Revenant
+## Wraithcaller
 
 Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell.
 

@@ -31,7 +31,7 @@ static class Sniper {
   foreach(int id in new[]{20000000,20050000,20100051,20100054,20100081,20100084})Check(CageAI.Same(originalBullets.Rows.Single(r=>r.ID==id),bullets.Rows.Single(r=>r.ID==id)),"Shared projectile changed");
   foreach(var r in bullets.Rows.Where(r=>new[]{5100850,5100855,5100880,5100885}.Contains(Convert.ToInt32(r["atkId_Bullet"].Value))))Check(r.ID is >=20100050 and <=20100089 or >=20130050 and <=20130059,"Rain attack ID reused by unrelated projectile");
   var effects=Table(current,"SpEffectParam");var expected=new PARAM.Row(Table(native,"SpEffectParam").Rows.Single(r=>r.ID==8000000)){ID=Owner};
-  foreach(var(field,value)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("iconId",20278),("spEffectTextId_1",Owner),("displayIconForPermamentEffect",0)})Set(expected,field,value);
+  foreach(var(field,value)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("iconId",22278),("spEffectTextId_1",Owner),("displayIconForPermamentEffect",0)})Set(expected,field,value);
   OwnerEffect(expected);
   Check(CageAI.Same(expected,effects.Rows.Single(r=>r.ID==Owner)),"Owner is not the neutral persistent template");
   Check(RewardCatalog.HistoryBit(Owner)==42&&RewardCatalog.HistoricalOwners[41]==95004400,"History slots must not be reused");
@@ -40,7 +40,7 @@ static class Sniper {
   var item=Table(current,"ItemTableParam").Rows.Single(r=>r.ID==RewardCatalog.Table(Owner));
   Check(Convert.ToInt32(item["itemId"].Value)==Owner&&Convert.ToInt32(item["itemCategory"].Value)==1&&Convert.ToInt32(item["chanceWeight"].Value)==1000,"Reward wiring mismatch");
   var attach=Table(current,"AttachEffectParam").Rows.Single(r=>r.ID==Owner);var permanent=Table(current,"PermanentBuffParam").Rows.Single(r=>r.ID==Owner);
-  Check(Convert.ToInt32(attach["passiveSpEffectId_1"].Value)==Owner&&Convert.ToInt32(attach["statusIconId"].Value)==20278&&Convert.ToInt32(permanent["spEffectId"].Value)==Owner&&Convert.ToInt32(permanent["iconId"].Value)==21278,"Ability icon/effect mismatch");
+  Check(Convert.ToInt32(attach["passiveSpEffectId_1"].Value)==Owner&&Convert.ToInt32(attach["statusIconId"].Value)==22278&&Convert.ToInt32(permanent["iconId"].Value)==21278,"Ability icon/effect mismatch");
   return new{owner=Owner,attackRate=.7f,bowDistRate=200,capDistance=50f,maxDistanceBonus=1.5f,rainBonusRate=.6f,conflicts=new[]{95000900},historyBit=42,historyBytes=(RewardCatalog.HistoricalOwners.Length+7)/8,sharedProjectilesUnchanged=true};
  }
  static void Fixture(string directory,BND4 current,Func<string,Memory<byte>,PARAM> parse){

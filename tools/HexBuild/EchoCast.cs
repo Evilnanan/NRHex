@@ -51,6 +51,18 @@ static class EchoCast {
   Console.WriteLine("PASS: native Beast Claw and Gurranq's Beast Claw bullet/attack fields exported");
  }
  public sealed record Area(int Magic,int Root,int AreaBullet,int Replay);
+ public static void ReleaseProbe(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
+  var magic=parse("Magic",native.Files.Single(entry=>Name(entry)=="Magic.param").Bytes);
+  var bullets=parse("Bullet",native.Files.Single(entry=>Name(entry)=="Bullet.param").Bytes);
+  var selected=bullets.Rows.Where(row=>row.ID is >=10406000 and <=10406099 or >=10430000 and <=10430299 or >=10451000 and <=10451099 or >=10503000 and <=10503099 or >=10603000 and <=10603099 or >=10622000 and <=10622099 or >=10624000 and <=10624099 or >=10671000 and <=10671099 or >=10700000 and <=10705099 or >=10724000 and <=10724099 or >=10752000 and <=10752099).ToArray();
+  var spells=magic.Rows.Where(row=>row.ID is 4060 or 4300 or 4301 or 4302 or 4510 or 5030 or 6030 or 6220 or 6270 or 6710 or 7000 or 7050 or 7240 or 7520).ToArray();
+  object Dump(PARAM.Row row)=>new{row.ID,fields=row.Cells.Where(cell=>cell!=null).ToDictionary(cell=>cell.Def.InternalName,cell=>cell.Value)};
+  var directory=Path.Combine(root,"work/echo-release");Directory.CreateDirectory(directory);
+  var animations=BND4.Read(Path.Combine(root,"assets/original/chr/c0000.anibnd.dcx"));
+  var records=spells.Select(spell=>{var name=$"a{400+Convert.ToInt32(spell["refType"].Value):D3}.tae";var file=animations.Files.SingleOrDefault(file=>file.Name.EndsWith(name))??throw new InvalidDataException(name);return new{magic=spell.ID,name,animations=TAE.Read(file.Bytes).Animations.Select(anim=>new{anim.ID,events=anim.Events.Select(evt=>new{evt.Type,evt.StartTime,evt.EndTime,hex=Convert.ToHexString(evt.GetParameterBytes(false))})})};});
+  File.WriteAllText(Path.Combine(directory,"spell-tae.json"),JsonSerializer.Serialize(records,new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(directory,"native.json"),JsonSerializer.Serialize(new{version=native.Version,magic=spells.Select(Dump),bullets=selected.Select(Dump)},new JsonSerializerOptions{WriteIndented=true}));
+ }
  public static Area[] ReadAreas(string root){
   using var d=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"data/balance/echo-cast-areas.json")));
   Check(d.RootElement.GetProperty("version").GetInt32()==10350000,"Echo area version mismatch");

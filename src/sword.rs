@@ -14,7 +14,7 @@ pub const RECOVERY_LEFT:i32=95000968;
 pub const WEAPON_RIGHT:i32=95000940;
 pub const WEAPON_LEFT:i32=95000941;
 pub const GUARD:i32=95000908; // Native int only; not passed through HKS f32.
-pub const POISE:i32=95000916; // Leaden Hardtear reactions during casting, category 1001.
+pub const POISE:i32=95000916;
 pub const LIFESTEAL_SCALE:f64=2.;
 pub const NEAR_DISTANCE:f32=5.;
 pub const CASTER_HEIGHT:f32=1.; // Mighty + Sword ordinary projectile synergy only.
@@ -52,13 +52,14 @@ pub fn boosted(damage:i32,factor:f32)->i32{((damage as f64*factor as f64).round(
 // Native categories are a 256-bit mask. Add tags while retaining all spell tags.
 pub fn add_melee_category(mask:&mut [u32;8]){
  let category=130usize;mask[category/32]|=1u32<<(category%32);
+ if mask[110/32]&(1<<(110%32))!=0{mask[100/32]|=1<<(100%32);}
 }
 // Retry only category-restricted melee effects on tagged spell descriptors.
 // Native apply-type 3/4 filtering otherwise rejects those effects before tags.
 pub fn extra_melee_application(apply_type:u8,mask:&[u32;8],filters:[u8;3])->bool{
  let contains=|category:u32|mask[category as usize/32]&(1<<(category%32))!=0;
  matches!(apply_type,3|4)&&contains(130)
-  &&filters.contains(&130)
+  &&(filters.contains(&130)||(contains(110)&&contains(100)&&filters.contains(&100)))
 }
 pub fn reduced(damage:i32,percentage:f32)->i32{
  if damage<=0{return damage;}
@@ -161,6 +162,15 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
   assert!(!extra_melee_application(3,&[0;8],[130,0,0]));
   mask[130/32]&=!(1<<(130%32));assert!(!extra_melee_application(3,&mask,[111,112,0]));
  }
+ #[test]fn charged_spell_damage_retry_requires_sword_and_native_charge_tags(){
+  for charged in [false,true]{
+   let mut mask=[0;8];if charged{mask[110/32]|=1<<(110%32);}
+   add_melee_category(&mut mask);
+   for kind in 0..=12{assert_eq!(extra_melee_application(kind,&mask,[100,0,0]),charged&&matches!(kind,3|4));}
+   assert!(!extra_melee_application(3,&mask,[111,112,0]));
+   if charged{for missing in [100,110,130]{let mut incomplete=mask;incomplete[missing/32]&=!(1<<(missing%32));assert!(!extra_melee_application(3,&incomplete,[100,0,0]));}}
+  }
+ }
  fn table(override_id:i32,value:&str)->String{"MagicID,增伤百分比\n".to_string()+&sword_map::DEFAULT_BONUSES.iter().map(|(id,v)|format!("{id},{}\n",if *id==override_id{value.to_string()}else{v.to_string()})).collect::<String>()}
  #[test]fn table_bonus_keeps_damage_and_scales_lifesteal(){for (value,factor) in [("0",1.),("10",1.1),("30",1.3),("50",1.5),("100",2.)]{let b=Bonuses::read(&table(4021,value)).unwrap();assert_eq!(b.factor(40210,1),Some(factor));assert_eq!(b.factor(40210,0),None);assert_eq!(b.factor(-1,1),None);let p=b.for_magic(4021).unwrap();assert_eq!(b.for_attack(40210,1),Some(p));assert_eq!(heal_amount(100,p,false),(p as f64*2.).floor() as u32);}}
  #[test]fn recorded_recluse_staff_hits_use_pc_kind_one(){let r=Bonuses::defaults();for attack in [40000,40070]{assert!(r.factor(attack,1).unwrap()>=1.);assert_eq!(r.factor(attack,0),None);}}
@@ -170,7 +180,7 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
  #[test]fn compiled_table_preserves_user_values_for_every_spell_and_mapped_attack(){let expected=Bonuses::read(include_str!("../data/balance/sword.csv")).unwrap();let b=Bonuses::defaults();assert_eq!(b.percentages,expected.percentages);for (attack,ids) in sword_map::ATTACKS{let p=ids.iter().map(|id|expected.percentages[id]).fold(f32::INFINITY,f32::min);assert_eq!(b.factor(*attack,1),Some(1.+p/100.));}assert_eq!(b.percentages.len(),160);}
  #[test]fn healing_uses_full_hit_damage_without_requiring_target_hp_loss(){assert_eq!(heal_amount(300,30.,false),180);assert_eq!(heal_amount(65,20.,false),26);assert_eq!(heal_amount(0,30.,false),0);assert_eq!(heal_amount(-1,30.,false),0);assert_eq!(heal_amount(i32::MAX,100.,false),65535);assert_eq!(heal_amount(300,0.,false),0);assert_eq!(heal_amount(300,12.5,false),75);assert_eq!(heal_amount(100,100.,false),200);}
  #[test]fn glancing_and_immune_hits_never_heal_despite_displayed_damage(){for damage in [1,5,300,i32::MAX]{assert_eq!(heal_amount(damage,100.,true),0);}}
- #[test]fn added_melee_category_keeps_all_original_tags_without_adding_skill_and_is_idempotent(){for original in 0..256{let mut mask=[0u32;8];mask[original/32]|=1<<(original%32);let saved=mask;add_melee_category(&mut mask);for n in [original,130]{assert_ne!(mask[n/32]&(1<<(n%32)),0);}for bit in 0..256{if bit!=130{assert_eq!(mask[bit/32]&(1<<(bit%32)),saved[bit/32]&(1<<(bit%32)));}}let once=mask;add_melee_category(&mut mask);assert_eq!(mask,once);}}
+ #[test]fn added_melee_category_keeps_all_original_tags_without_adding_skill_and_is_idempotent(){for original in 0..256{let mut mask=[0u32;8];mask[original/32]|=1<<(original%32);let saved=mask;add_melee_category(&mut mask);for category in [original,130]{assert_ne!(mask[category/32]&(1<<(category%32)),0);}for bit in 0..256{let expected=saved[bit/32]&(1<<(bit%32))!=0||bit==130||(original==110&&bit==100);assert_eq!(mask[bit/32]&(1<<(bit%32))!=0,expected);}let once=mask;add_melee_category(&mut mask);assert_eq!(mask,once);}}
  #[test]fn shared_percentage_headers_are_unambiguous(){for name in ["加成","吸血百分比","效果百分比","增伤百分比"]{assert!(Bonuses::read(&table(4021,"30").replace("增伤百分比",name)).is_ok());}assert!(Bonuses::read("MagicID,吸血百分比,增伤百分比\n4021,20,30").is_err());assert!(Bonuses::read("MagicID,加成,吸血百分比\n4021,20,30").is_err());}
  #[test]fn incoming_reduction_is_linear_and_preserves_non_damage(){assert_eq!(reduced(65,30.),45);assert_eq!(reduced(100,0.),100);assert_eq!(reduced(100,100.),0);assert_eq!(reduced(-5,50.),-5);assert_eq!(reduced(0,50.),0);assert_eq!(reduced(100,12.5),87);}
  #[test]fn torso_range_handles_elevated_contacts_without_expanding_horizontal_range(){

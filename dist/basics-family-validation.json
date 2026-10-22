@@ -1,0 +1,54 @@
+{
+  "version": "0.17.227",
+  "backup": "D:\\Projects\\NRMod\\NRHex\\.work\\basics-before-227-20261022-185307.dll",
+  "dllSha256": "4d99e67e74418f4bd8fb395d0dfdda2d0408e86a4c46cd1d4612da87a48f362e",
+  "onlyDistDllUpdated": true,
+  "otherAssetsConfigsAndGroupPreserved": true,
+  "validation": {
+    "owner": 95004400,
+    "nativeExecutionPassed": true,
+    "installedReadbackPassed": true,
+    "nativeFunctions": [
+      "508480 native cooldown product",
+      "449AC7 native Restage ratio, sum and truncation with compiled wrapper",
+      "519140 native family reference resolution through 4AC710/4AC770"
+    ],
+    "cases": [
+      "0.7/0.8/0.5 cooldown multipliers stack with native relic 0.9",
+      "local-only ground/air and two-button Ultimate gates; gauge unchanged",
+      "native Restage history multiplier retains 0.5/0.6 base and truncation",
+      "all ten hero damage scopes; ordinary attacks, healing, support and foreign actors unchanged",
+      "three resolved family actors with different reference/internal identity formats; +100% means x2",
+      "empty slots, invalid references and foreign actors with copied identity bytes do not match",
+      "only final HP damage changed; status, stamina and poise untouched",
+      "private native idle effects halve all three intervals; original and active rows preserved",
+      "acquisition upgrades existing idle effects once; 100 updates never restart healing ticks",
+      "native active transition retained; owner loss and expedition reset restore idle effects"
+    ],
+    "stubs": [
+      "native availability dispatcher result fixture",
+      "category-201 effect allocation/replacement fixture",
+      "ownership/effect lookups",
+      "actor collections and family slots are memory fixtures, not live actors",
+      "full collision, inventory awards, game transport and animation state machine not executed"
+    ],
+    "sourceHashes": {
+      "src/basics.rs": "a94f90e462a754dbb0f3689e2ce8f752a2a79c88bb0538d44082a61c2b03670c",
+      "src/basics_native_tests.rs": "6eff48db64064f759dd8bc72c9a043f9ac2db1ecf24cadbbc6af2fa2dabc2504",
+      "src/lib.rs": "7216a2d475dec0c1fa10902df17ff4812fdf01fb1aaf16a4eec9b4823676d3af",
+      "src/ambulance.rs": "33c3881c5af294d829ac96935be421a8cef2dcaf9d3cad8c6f40d6cc3d530646",
+      "src/reward_choices.rs": "c5f5701278ff569858d2d7cbe4899a3fce782dbe14c39c942f20d2506be59437",
+      "src/hex_pool.rs": "c0a5f47a41c050c12ddd143f104ef25ff578d97a7b652849e05c42901a6eb112",
+      "tools/HexBuild/Basics.cs": "c6080c941e114eedfc3efece6e4b050a9082c27e0307365a89cdd62758d52f48",
+      "tools/HexBuild/Program.cs": "5b691af38df02edb2cd759f70bb9669615b3017f8945349ea8f971cdb7811161",
+      "tools/build_basics_hks.py": "b51b04c7be1ef8b1f2fb71a117b9232f68f50347f2ce1ca9dc79079e50f74fd3",
+      "tools/verify_basics.py": "eee28e276d92f99a81d9eef7a819b837aa88d4d63ebe45a79b80a57ac4e32358",
+      "docs/hexes.md": "179077675c6726d93bff4b820b024a0b8d99d3ae96b605deff2de235182b4e0d",
+      "docs/hexes.en.md": "cbc6c69d7f377f93e95eece670e94a0672adf9f8a630902d26d78dc8a88c2177"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -15,7 +15,7 @@
     0.32,
     0.4
   ],
-  "range": 4,
+  "spellCasterDistanceGate": false,
   "additionalOnHitReference": 8600200,
   "privateWeaponHitDescriptor": true,
   "sharedRowsAndHitsUnchanged": true,

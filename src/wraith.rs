@@ -1,10 +1,9 @@
 //! Royal Revenant: native item-use provenance and first-contact Bagcraft credit.
-//! Inventory transitions are acknowledged before old private goods are removed.
+//! Inventory transitions are acknowledged before the previous native tool is removed.
 use crate::{ptr,read_i32,read_ptr,has_effect,is_local,native_actor,ACTIVE,BASE};
 use std::{cell::Cell,collections::BTreeMap,sync::{Mutex,OnceLock,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95004300;
 pub const ORIGINALS:[i32;3]=[3080,3010,3011];
-pub const GOODS:[i32;3]=[OWNER+80,OWNER+81,OWNER+82];
 pub const FRAME:i32=990043;pub const BUSY:i32=990044;
 pub const CAN_RVA:usize=0x3d49a0;pub const USE_RVA:usize=0x3979b0;pub const PARAM_RVA:usize=0xe8d840;
 pub const TOKEN_RVA:usize=0x66d3b0;pub const XP_RVA:usize=0x209490;
@@ -29,7 +28,7 @@ struct FreeGuard(bool);impl FreeGuard{fn enter(value:bool)->Self{Self(FREE.with(
 static SHADOWS:[OnceLock<Box<GoodRow>>;3]=[OnceLock::new(),OnceLock::new(),OnceLock::new()];
 #[derive(Default)]struct State{actor:usize,handle:u64,units:Option<u8>,stage:u8,given:Option<u8>,tokens:BTreeMap<i32,i32>,ages:BTreeMap<i32,f64>,saw_item:bool,idle_frames:u8,ready:bool,requested:Option<u8>,request_frames:u8}
 static STATE:Mutex<State>=Mutex::new(State{actor:0,handle:0,units:None,stage:0,given:None,tokens:BTreeMap::new(),ages:BTreeMap::new(),saw_item:false,idle_frames:0,ready:false,requested:None,request_frames:0});
-fn tier(good:i32)->Option<usize>{ORIGINALS.iter().position(|&id|id==good).or_else(||GOODS.iter().position(|&id|id==good))}
+fn tier(good:i32)->Option<usize>{ORIGINALS.iter().position(|&id|id==good)}
 fn progressed(units:u8,stage:u8,good:i32)->u8{
  if tier(good)!=Some(stage as usize){return units;}
  match stage{0=>units.saturating_add(1).min(20),1=>units.saturating_add(4).min(60),_=>units}
@@ -112,17 +111,15 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  if !ready||native_actor::incapacitated(actor,stats){return;}
  let Some((root,slots))=inventory(actor)else{return;};
  let desired=match stage{None=>0,Some(0)if units>=20=>1,Some(1)if units>=60=>2,_=>return};
- let index=find(root,GOODS[desired as usize],base);
+ let index=find(root,ORIGINALS[desired as usize],base);
  if index<0{
   if requested!=Some(desired as u8)||(request_frames>=30&&!has_effect(actor,OWNER+1+desired,base)){set(actor,OWNER+1+desired,true,base);if let Ok(mut s)=STATE.lock(){s.requested=Some(desired as u8);s.request_frames=0;}}
   return;
  }
  if let Some(old_stage)=stage{
-  let old=find(root,GOODS[old_stage as usize],base);
+  let old=find(root,ORIGINALS[old_stage as usize],base);
   if old>=0{let old_slots:Vec<_>=(0..18).filter(|&i|read_i32(slots+12+i*8)==old).collect();
-   // An award can auto-equip into a free slot. Remove only such duplicates of
-   // this private item, then transplant it to the existing slots in place.
-   if !old_slots.is_empty(){for i in 0..18{if read_i32(slots+12+i*8)==index{equip(slots,i as i32,-1,base);}}for i in old_slots{equip(slots,i as i32,index,base);}}
+   if !old_slots.is_empty(){if requested==Some(desired as u8){for i in 0..18{if read_i32(slots+12+i*8)==index{equip(slots,i as i32,-1,base);}}}for i in old_slots{equip(slots,i as i32,index,base);}}
   }
   set(actor,OWNER+7+old_stage,true,base);
  }
@@ -132,7 +129,7 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
 }
 #[cfg(test)]mod tests{
  use super::*;
- #[test]fn only_matching_tier_first_contact_counts_and_old_flights_cannot_skip_upgrades(){let mut n=0;for _ in 0..20{n=progressed(n,0,3080);}assert_eq!(n,20);assert_eq!(progressed(n,0,GOODS[0]),20);assert_eq!(progressed(n,1,3080),20);for _ in 0..10{n=progressed(n,1,GOODS[1]);}assert_eq!(n,60);assert_eq!(progressed(n,2,3011),60);assert_eq!(progressed(0,0,3011),0);}
+ #[test]fn only_matching_tier_first_contact_counts_and_old_flights_cannot_skip_upgrades(){let mut n=0;for _ in 0..20{n=progressed(n,0,3080);}assert_eq!(n,20);assert_eq!(progressed(n,0,3080),20);assert_eq!(progressed(n,1,3080),20);for _ in 0..10{n=progressed(n,1,3010);}assert_eq!(n,60);assert_eq!(progressed(n,2,3011),60);assert_eq!(progressed(0,0,3011),0);assert_eq!(tier(OWNER+80),None);}
  #[test]fn chained_actions_and_first_two_empty_samples_cannot_replace_and_rebinding_keeps_progress(){let mut s=State::default();s.units=Some(20);s.bind(1,10);for _ in 0..100{s.saw_item=true;s.frame();assert!(!s.ready);}s.frame();assert!(!s.ready);s.frame();assert!(!s.ready);s.frame();assert!(s.ready);s.saw_item=true;s.frame();assert!(!s.ready);s.tokens.insert(7,3080);s.bind(2,11);assert_eq!(s.units,Some(20));assert!(s.tokens.is_empty());assert!(!s.ready);}
 }
 #[cfg(test)]#[path="wraith_native_tests.rs"]mod native_tests;

@@ -1,0 +1,1229 @@
+{
+  "version": "0.17.228",
+  "backup": "D:\\Projects\\NRMod\\NRHex\\.work\\echo-expanded-before-20261022-192034",
+  "dllSha256": "eb4f4379ed00199de179fd6fd07df4f1254abe11c3e8013273b1f82e9d00e339",
+  "files": {
+    "mod/natives/NRHex.dll": "eb4f4379ed00199de179fd6fd07df4f1254abe11c3e8013273b1f82e9d00e339",
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "93a45a9661d557ef2136c0a0a758ffe3beaa0387799c34c5b3f6cf3ddba1b92f",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "eaaab12ea18e063ff2c823d99409d16158f3914304c5a7d6392e28876645eff2",
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": "bdb5dd5af1e3dd3d0b4189600caa0b21c4a714dc144f1a7ba8ac493440b6855e",
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": "2b8806ea9bb5abe1b7f1502898d48aae02eb4aa2bb16547b3ce36fd7d3ed30c0"
+  },
+  "parametersEventsConfigsAndGroupPreserved": true,
+  "validation": {
+    "nativeExecutionPassed": true,
+    "delaySeconds": 0.5,
+    "replayDelayOverrides": {},
+    "independentVolleySpells": [
+      6001,
+      6820,
+      6830,
+      4060,
+      4120,
+      4510,
+      4810,
+      6030,
+      6220,
+      7000,
+      7001,
+      7010,
+      7011,
+      7020,
+      7021,
+      7030,
+      7031,
+      7040,
+      7041,
+      7050,
+      7060,
+      7090,
+      7240,
+      7310,
+      7311,
+      7330,
+      7520
+    ],
+    "spellFpRate": 2,
+    "spellStaminaRate": 1.5,
+    "installedCostReadback": {
+      "installedSha256": "3920EF698A71E8AD261A5FBB655819046E1E6F50B08C25C6F47F6B6E7805AB98",
+      "spellFpRate": 2,
+      "artsFpRate": 1,
+      "installedReadbackPassed": true
+    },
+    "eligibleWeaponAffinities": [
+      57,
+      61,
+      1600,
+      1700
+    ],
+    "archmageUnlockOwner": 95002100,
+    "eligibleSpells": 122,
+    "eligibleRoots": 269,
+    "groupEffects": 11,
+    "catalog": {
+      "eligibleSpells": 122,
+      "eligibleRoots": 269,
+      "groupEffects": 11,
+      "expanded": {
+        "version": 10350000,
+        "excluded": [
+          4110,
+          4200,
+          4520,
+          4700,
+          4701
+        ],
+        "spells": [
+          {
+            "magic": 4060,
+            "roots": [
+              10406000,
+              10406001
+            ]
+          },
+          {
+            "magic": 4120,
+            "roots": [
+              10412000,
+              10412001
+            ],
+            "worldArea": true
+          },
+          {
+            "magic": 4510,
+            "roots": [
+              10451000,
+              10451010,
+              10451020
+            ]
+          },
+          {
+            "magic": 4810,
+            "roots": [
+              10481000,
+              10481002,
+              10481004,
+              10481011
+            ]
+          },
+          {
+            "magic": 6030,
+            "roots": [
+              10603000,
+              10603050
+            ]
+          },
+          {
+            "magic": 6220,
+            "roots": [
+              10622000
+            ]
+          },
+          {
+            "magic": 7000,
+            "roots": [
+              10700000,
+              10700002
+            ]
+          },
+          {
+            "magic": 7001,
+            "roots": [
+              10700100,
+              10700101
+            ]
+          },
+          {
+            "magic": 7010,
+            "roots": [
+              10701000,
+              10701009
+            ]
+          },
+          {
+            "magic": 7011,
+            "roots": [
+              10701100,
+              10701109
+            ]
+          },
+          {
+            "magic": 7020,
+            "roots": [
+              10702000,
+              10702002
+            ]
+          },
+          {
+            "magic": 7021,
+            "roots": [
+              10702100,
+              10702101
+            ]
+          },
+          {
+            "magic": 7030,
+            "roots": [
+              10703000,
+              10703002
+            ]
+          },
+          {
+            "magic": 7031,
+            "roots": [
+              10703100,
+              10703101
+            ]
+          },
+          {
+            "magic": 7040,
+            "roots": [
+              10704000,
+              10704002
+            ]
+          },
+          {
+            "magic": 7041,
+            "roots": [
+              10704100,
+              10704101
+            ]
+          },
+          {
+            "magic": 7050,
+            "roots": [
+              10705000,
+              10705002,
+              10705004,
+              10705010
+            ]
+          },
+          {
+            "magic": 7060,
+            "roots": [
+              10706000,
+              10706002
+            ],
+            "worldArea": true
+          },
+          {
+            "magic": 7090,
+            "roots": [
+              10709000
+            ],
+            "worldArea": true
+          },
+          {
+            "magic": 7240,
+            "roots": [
+              10724000
+            ],
+            "worldArea": true
+          },
+          {
+            "magic": 7310,
+            "roots": [
+              10731000,
+              10731005,
+              10731050,
+              10731055
+            ]
+          },
+          {
+            "magic": 7311,
+            "roots": [
+              10731100,
+              10731105,
+              10731106,
+              10731107,
+              10731108,
+              10731115
+            ]
+          },
+          {
+            "magic": 7330,
+            "roots": [
+              10733000
+            ],
+            "worldArea": true
+          },
+          {
+            "magic": 7520,
+            "roots": [
+              10752000
+            ]
+          }
+        ]
+      },
+      "noCostConsumptionType": 2,
+      "roots": {
+        "4000": [
+          10400000
+        ],
+        "4001": [
+          10400100
+        ],
+        "4010": [
+          10401000
+        ],
+        "4020": [
+          10402000,
+          10402050
+        ],
+        "4021": [
+          10402100,
+          10402150
+        ],
+        "4030": [
+          10403000,
+          10403050
+        ],
+        "4040": [
+          10404000,
+          10404050
+        ],
+        "4050": [
+          10405000,
+          10405050
+        ],
+        "4060": [
+          10406000,
+          10406001
+        ],
+        "4070": [
+          10407000
+        ],
+        "4080": [
+          10408000,
+          10408050
+        ],
+        "4090": [
+          10409000,
+          10409001,
+          10409002,
+          10409050,
+          10409051,
+          10409052
+        ],
+        "4100": [
+          10410000,
+          10410001,
+          10410002
+        ],
+        "4120": [
+          10412000,
+          10412001
+        ],
+        "4210": [
+          10421007,
+          10421010,
+          10421020,
+          10421030,
+          10421057,
+          10421060,
+          10421070,
+          10421080
+        ],
+        "4220": [
+          10422000,
+          10422050
+        ],
+        "4360": [
+          10436000
+        ],
+        "4361": [
+          10436100
+        ],
+        "4370": [
+          10437000,
+          10437003,
+          10437050,
+          10437053
+        ],
+        "4380": [
+          10438000,
+          10438050
+        ],
+        "4381": [
+          10438100,
+          10438110,
+          10438150,
+          10438160
+        ],
+        "4390": [
+          10439002,
+          10439052
+        ],
+        "4400": [
+          10440000
+        ],
+        "4410": [
+          10441000,
+          10441050
+        ],
+        "4420": [
+          10442000,
+          10442050
+        ],
+        "4431": [
+          10443100,
+          10443110,
+          10443120,
+          10443130
+        ],
+        "4500": [
+          10450010,
+          10450011,
+          10450012,
+          10450060,
+          10450061,
+          10450062
+        ],
+        "4510": [
+          10451000,
+          10451010,
+          10451020
+        ],
+        "4600": [
+          10460000
+        ],
+        "4610": [
+          10461000
+        ],
+        "4620": [
+          10462000,
+          10462050
+        ],
+        "4640": [
+          10464000
+        ],
+        "4641": [
+          10464010
+        ],
+        "4642": [
+          10464020
+        ],
+        "4650": [
+          10465000
+        ],
+        "4710": [
+          10471000,
+          10471001,
+          10471002,
+          10471050,
+          10471051,
+          10471052
+        ],
+        "4720": [
+          10472000,
+          10472050
+        ],
+        "4721": [
+          10472100,
+          10472101,
+          10472150,
+          10472151
+        ],
+        "4800": [
+          10480000,
+          10480050
+        ],
+        "4810": [
+          10481000,
+          10481002,
+          10481004,
+          10481011
+        ],
+        "4820": [
+          10482000,
+          10482050
+        ],
+        "4830": [
+          10483000
+        ],
+        "4900": [
+          10490000,
+          10490001,
+          10490002
+        ],
+        "4910": [
+          10491000
+        ],
+        "5000": [
+          10500000,
+          10500001,
+          10500002,
+          10500050,
+          10500051,
+          10500052
+        ],
+        "5001": [
+          10500110,
+          10500111,
+          10500112,
+          10500160,
+          10500161,
+          10500162
+        ],
+        "5010": [
+          10501000,
+          10501001
+        ],
+        "5030": [
+          10503000
+        ],
+        "5040": [
+          10504000,
+          10504050
+        ],
+        "5100": [
+          10510000,
+          10510001,
+          10510050,
+          10510051
+        ],
+        "5110": [
+          10511000,
+          10511050
+        ],
+        "6000": [
+          10600000,
+          10600001,
+          10600002,
+          10600005
+        ],
+        "6001": [
+          10600100,
+          10600105,
+          10600150,
+          10600155
+        ],
+        "6010": [
+          10601000,
+          10601050
+        ],
+        "6020": [
+          10602000,
+          10602050
+        ],
+        "6030": [
+          10603000,
+          10603050
+        ],
+        "6100": [
+          10610000,
+          10610050
+        ],
+        "6110": [
+          10611000
+        ],
+        "6120": [
+          10612000,
+          10612005,
+          10612050,
+          10612055
+        ],
+        "6210": [
+          10621000,
+          10621050
+        ],
+        "6220": [
+          10622000
+        ],
+        "6230": [
+          10623000,
+          10623001,
+          10623050,
+          10623051
+        ],
+        "6240": [
+          10625000,
+          10625050
+        ],
+        "6270": [
+          10624001,
+          10624051
+        ],
+        "6300": [
+          10630000
+        ],
+        "6310": [
+          10631000,
+          10631005
+        ],
+        "6400": [
+          10640000,
+          10640050
+        ],
+        "6410": [
+          10641000,
+          10641050
+        ],
+        "6500": [
+          10650000,
+          10650050
+        ],
+        "6520": [
+          10652000
+        ],
+        "6530": [
+          10653000
+        ],
+        "6700": [
+          10670000
+        ],
+        "6701": [
+          10670100
+        ],
+        "6710": [
+          10671000,
+          10671050
+        ],
+        "6720": [
+          10672000
+        ],
+        "6750": [
+          10675000
+        ],
+        "6800": [
+          10680000,
+          10680001
+        ],
+        "6810": [
+          10681000
+        ],
+        "6820": [
+          10682010,
+          10682011,
+          10682012,
+          10682070,
+          10682071,
+          10682072
+        ],
+        "6830": [
+          10683010,
+          10683011,
+          10683012,
+          10683013,
+          10683014,
+          10683015
+        ],
+        "6900": [
+          10690000,
+          10690050
+        ],
+        "6910": [
+          10691000,
+          10691020,
+          10691050,
+          10691070
+        ],
+        "6920": [
+          10692000
+        ],
+        "6921": [
+          10692100
+        ],
+        "6930": [
+          10693000
+        ],
+        "6940": [
+          10694000
+        ],
+        "6941": [
+          10694100,
+          10694150
+        ],
+        "6950": [
+          10695000
+        ],
+        "7000": [
+          10700000,
+          10700002
+        ],
+        "7001": [
+          10700100,
+          10700101
+        ],
+        "7010": [
+          10701000,
+          10701009
+        ],
+        "7011": [
+          10701100,
+          10701109
+        ],
+        "7020": [
+          10702000,
+          10702002
+        ],
+        "7021": [
+          10702100,
+          10702101
+        ],
+        "7030": [
+          10703000,
+          10703002
+        ],
+        "7031": [
+          10703100,
+          10703101
+        ],
+        "7040": [
+          10704000,
+          10704002
+        ],
+        "7041": [
+          10704100,
+          10704101
+        ],
+        "7050": [
+          10705000,
+          10705002,
+          10705004,
+          10705010
+        ],
+        "7060": [
+          10706000,
+          10706002
+        ],
+        "7090": [
+          10709000
+        ],
+        "7200": [
+          10720000,
+          10720001,
+          10720002,
+          10720003,
+          10720004,
+          10720005
+        ],
+        "7210": [
+          10721000
+        ],
+        "7220": [
+          10722000
+        ],
+        "7240": [
+          10724000
+        ],
+        "7310": [
+          10731000,
+          10731005,
+          10731050,
+          10731055
+        ],
+        "7311": [
+          10731100,
+          10731105,
+          10731106,
+          10731107,
+          10731108,
+          10731115
+        ],
+        "7320": [
+          10732000,
+          10732050
+        ],
+        "7330": [
+          10733000
+        ],
+        "7520": [
+          10752000
+        ],
+        "7530": [
+          10753000,
+          10753010,
+          10753020,
+          10753030
+        ]
+      },
+      "unsupportedMagic": [
+        4110,
+        4200,
+        4520,
+        4700,
+        4701
+      ],
+      "nativeChainSha256": "05204b7deb7d02212abbc923462925fd33325114031000415eb0a2a4354ce67b"
+    },
+    "groupReadback": {
+      "installedSha256": "3920EF698A71E8AD261A5FBB655819046E1E6F50B08C25C6F47F6B6E7805AB98",
+      "installedReadbackPassed": true,
+      "profiles": [
+        {
+          "Magic": 6330,
+          "Root": 10633000,
+          "AreaBullet": 10633001,
+          "Replay": 95003510
+        },
+        {
+          "Magic": 6340,
+          "Root": 10634000,
+          "AreaBullet": 10634001,
+          "Replay": 95003511
+        },
+        {
+          "Magic": 6421,
+          "Root": 10642100,
+          "AreaBullet": 10642101,
+          "Replay": 95003512
+        },
+        {
+          "Magic": 6422,
+          "Root": 10642200,
+          "AreaBullet": 10642201,
+          "Replay": 95003513
+        },
+        {
+          "Magic": 6423,
+          "Root": 10642300,
+          "AreaBullet": 10642301,
+          "Replay": 95003514
+        },
+        {
+          "Magic": 6424,
+          "Root": 10642400,
+          "AreaBullet": 10642401,
+          "Replay": 95003515
+        },
+        {
+          "Magic": 6430,
+          "Root": 10643000,
+          "AreaBullet": 10643001,
+          "Replay": 95003516
+        },
+        {
+          "Magic": 6431,
+          "Root": 10643100,
+          "AreaBullet": 10643101,
+          "Replay": 95003517
+        },
+        {
+          "Magic": 6490,
+          "Root": 10649000,
+          "AreaBullet": 10649001,
+          "Replay": 95003518
+        },
+        {
+          "Magic": 6600,
+          "Root": 10660000,
+          "AreaBullet": 10660000,
+          "Replay": 95003519
+        },
+        {
+          "Magic": 7903,
+          "Root": 10790300,
+          "AreaBullet": 10790301,
+          "Replay": 95003520
+        }
+      ],
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "cases": [
+      "compiled emit/factory detours with real native BulletMan root dispatch",
+      "original resolved pose and aim restored before allocation despite recalculation selecting a changed pose/lock",
+      "forward-only sentinel, fixed aim point, and point at local origin replay without an entity-validity requirement",
+      "recalculation changing the number of independent targets cancels rather than selecting the first one",
+      "zero dt and 0.49-second hold followed by 0.5-second replay",
+      "all normal/charged/no-cost side roots for Glintstone Stars, Star Shower, Crystal Barrage, Stars of Ruin, Shattering Crystal, Beast Claw, and Gurranq Beast Claw replay once each",
+      "unsupported/child catalog roots and nested factories cannot reschedule a full volley; replay is not recursive",
+      "native target copy/refcount atomics and descriptor release balance flagged counters, including replacing a newly selected enemy with original untargeted aim",
+      "failed creation, owner loss, and changed expedition context discard retained references",
+      "native network enqueue branch retained; peer transport is not simulated",
+      "all 11 group effects replay dedicated area IDs at the captured position with empty/multiple original targets and a dead enemy lock",
+      "group replays retain no enemy target reference; source/weapon context references balance",
+      "installed group parameter readback retains native ally amounts, modifiers, radii and category rules; enables self and independent hit records",
+      "native pose resolver uses captured world matrix for replay instead of current catalyst dummy; first emission flags remain unchanged",
+      "all 269 catalog roots with native Magic=-1 replay exactly once while preserving that sentinel; auxiliary, child, excluded, behavioral, foreign-owner and explicit mismatched-Magic emissions are rejected",
+      "temporary Auto-Target reference becoming invalid does not cancel root replay; original target descriptors remain available to native homing",
+      "compiled initializer detour executes real 343CB0 and preserves both target-index and stack-passed shot-index ABI; actual per-shot 3x4 matrices are captured only after successful native allocation",
+      "two volley indices retain independent launch matrices across current-aim changes and source-group completion; replay group generation mismatch passes through untouched",
+      "compiled native group-finish detour releases matrix bindings; owner changes clear bindings; no engine calls occur under the state lock",
+      "native Auto-Target roots with descriptor+90 nonzero are accepted; only delayed copies clear the borrowed context, original input is untouched, and resolved targets plus actual launch matrices remain retained",
+      "O Flame, Beast Claw and Gurranq Beast Claw use the standard 0.5-second delay; roots sharing an original volley share one fresh replay volley; native 52D590/52DB50/52D660 prove a consumed original does not block replay and replay still rejects a second root after its first accepted hit",
+      "O Flame normal/charged roots isolate volley records with explicit Magic=6001 and native Magic=-1; original descriptor retains its original record, and absent source records do not allocate a synthetic volley",
+      "volley references balance on replay, owner loss, failed root creation and failed native volley allocation; original volley data is never reset",
+      "normal Comet costs 52 and charged Comet costs 69; final native modifiers are applied before multiplying by 1.5, rounded down",
+      "only local owned sorcery/incantation costs increase by 50%; foreign actor, ownerless, inactive, null row, non-spell and non-positive costs pass through",
+      "volatile GPR/XMM and nonvolatile frame/weapon/mode registers survive the compiled mid-function hook",
+      "reused cached cost charges each native interval without compounding; native no-consumption flags and -50 floor remain; ordinary behavior constructor unpatched",
+      "five requested whole-spell exceptions and personal-only support remain excluded",
+      "expanded offensive world areas replay at the captured pose with empty/multiple target vectors",
+      "all 24 expanded spells isolate non-null volley records with explicit Magic and Magic=-1; original hits remain untouched",
+      "ten repeated channel root emissions produce exactly ten delayed replays, drain after stopping and balance retained references"
+    ],
+    "nativeFunctions": [
+      "35A460 root dispatch",
+      "3482E0 target copy",
+      "3482B0 target release",
+      "214EAF0 / 214EB90 reference atomics",
+      "33E650 descriptor release",
+      "3494C0 target validity",
+      "345ED0 native dummy-polygon pose resolver with moving-source fixtures",
+      "343CB0 native projectile initialize dispatcher with child allocation/metadata/34E750 fixtures",
+      "52D590 volley candidate registration",
+      "52DB50 volley eligibility",
+      "52D660 volley consumption",
+      "E92250 installed normal/charged Magic stamina getter",
+      "3849AD actor virtual stamina modifier dispatch; 3849CF compiled hook; original NEG/cache store",
+      "4261D0 / 427F00 native stamina consumption and floor/guard flags"
+    ],
+    "stubs": [
+      "actor/effect lookup and target resolution",
+      "33D010 projectile calculation including deliberate current-lock/pose changes; 35DA70 allocation and scatter/child production",
+      "network packet serialization/copy and transport consumers",
+      "fixture target-vector allocation/cleanup; allocator/string/rendering context teardown",
+      "342590 group reset body and its generation bump fixture; compiled cleanup detour executes",
+      "52EF20 volley allocation and final 52DBF0 disposal use owned fixture records; pool allocation itself is not executed",
+      "spell cost actor virtual method and local effect lookup; native normal/charged getter, final cost cache and stamina deduction execute"
+    ],
+    "sourceHashes": {
+      "src/echo_cast.rs": "c7c034b61f80add776b0b9ca165937b37518f01437e161844e0d425cb511d3b2",
+      "src/echo_cast_native_tests.rs": "b5b8e8a036897b65aca780a79cf4f6a83296168cf8acc92468cbc9700d207ed1",
+      "src/echo_cast_data.rs": "68ed9050a0a2f8cb294f1648dffbf7367b9483a057378dde9a05f86c5dc080b1",
+      "src/lib.rs": "7216a2d475dec0c1fa10902df17ff4812fdf01fb1aaf16a4eec9b4823676d3af",
+      "src/reward_choices.rs": "c5f5701278ff569858d2d7cbe4899a3fce782dbe14c39c942f20d2506be59437",
+      "src/weapon_affinity.rs": "a7567e63de55a902b24824f51a8ccce0d53079fdc1f7bb6b07ffc2728b27f5af",
+      "src/hex_pool.rs": "c0a5f47a41c050c12ddd143f104ef25ff578d97a7b652849e05c42901a6eb112",
+      "tools/build_echo_cast.py": "3bbb3325cdcde899e22ccffc2fa0a0cba744a1e2d71843a4a5a7ab8f2217189f",
+      "tools/verify_echo_cast.py": "1b95776a45d06ef426883dc3498a8d433dacaf66fb7c96578d858abeaacf6af4",
+      "data/reference/combat/echo-cast.json": "6b67fdbc3c0782aba72cf2f4ec85702b5f2010ab11991a2125fb86aa17325620",
+      "data/reference/combat/sword-graph.json": "05204b7deb7d02212abbc923462925fd33325114031000415eb0a2a4354ce67b",
+      "data/balance/echo-cast-areas.json": "3d91319fb0424162df6c4ebe855a250fae7f2a84d1d75b0298a16722ad8f39e5",
+      "tools/HexBuild/EchoCast.cs": "13678d4240df8b499f5feb8c9f63bc74f7d3894fbe6161956b3466a7e56c1032",
+      "src/echo_cost.rs": "68653476be91915ec69b62bcf741fc55417e9102ccf11773ce375684a80f02df",
+      "src/echo_cost_native_tests.rs": "90664765bbd7d910e561a5998888a8c52f839f65db162bf5230a125e73040ce3",
+      "data/balance/echo-cast-expanded.json": "f9999eb822abc21c1c9e87886a59f8daa4d7c4ab03850c9a218b4a5281956f6b"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "directRootMagicSentinel": -1,
+    "directRootsChecked": 269,
+    "nativeFixedPoseFlag": 2,
+    "nativeDummyPoseResolverExecuted": true,
+    "autoTargetSetting": {
+      "zh": "\u81ea\u52a8\u9501\u5b9a\u653b\u51fb\u76ee\u6807",
+      "en": "Auto-Target",
+      "nameTextId": 110015,
+      "helpTextId": 110006
+    },
+    "temporaryTargetExpiryCancelsReplay": false,
+    "initializedLaunchTransformBytes": 48,
+    "sourceGenerationChecked": true,
+    "nativeHomingTargetPreserved": true,
+    "multiplayerLaunchMatrixVerified": false,
+    "autoTargetContextOffset": 144,
+    "autoTargetContextRejected": false,
+    "borrowedContextClearedInReplay": true,
+    "expandedProfiles": {
+      "version": 10350000,
+      "excluded": [
+        4110,
+        4200,
+        4520,
+        4700,
+        4701
+      ],
+      "spells": [
+        {
+          "magic": 4060,
+          "roots": [
+            10406000,
+            10406001
+          ]
+        },
+        {
+          "magic": 4120,
+          "roots": [
+            10412000,
+            10412001
+          ],
+          "worldArea": true
+        },
+        {
+          "magic": 4510,
+          "roots": [
+            10451000,
+            10451010,
+            10451020
+          ]
+        },
+        {
+          "magic": 4810,
+          "roots": [
+            10481000,
+            10481002,
+            10481004,
+            10481011
+          ]
+        },
+        {
+          "magic": 6030,
+          "roots": [
+            10603000,
+            10603050
+          ]
+        },
+        {
+          "magic": 6220,
+          "roots": [
+            10622000
+          ]
+        },
+        {
+          "magic": 7000,
+          "roots": [
+            10700000,
+            10700002
+          ]
+        },
+        {
+          "magic": 7001,
+          "roots": [
+            10700100,
+            10700101
+          ]
+        },
+        {
+          "magic": 7010,
+          "roots": [
+            10701000,
+            10701009
+          ]
+        },
+        {
+          "magic": 7011,
+          "roots": [
+            10701100,
+            10701109
+          ]
+        },
+        {
+          "magic": 7020,
+          "roots": [
+            10702000,
+            10702002
+          ]
+        },
+        {
+          "magic": 7021,
+          "roots": [
+            10702100,
+            10702101
+          ]
+        },
+        {
+          "magic": 7030,
+          "roots": [
+            10703000,
+            10703002
+          ]
+        },
+        {
+          "magic": 7031,
+          "roots": [
+            10703100,
+            10703101
+          ]
+        },
+        {
+          "magic": 7040,
+          "roots": [
+            10704000,
+            10704002
+          ]
+        },
+        {
+          "magic": 7041,
+          "roots": [
+            10704100,
+            10704101
+          ]
+        },
+        {
+          "magic": 7050,
+          "roots": [
+            10705000,
+            10705002,
+            10705004,
+            10705010
+          ]
+        },
+        {
+          "magic": 7060,
+          "roots": [
+            10706000,
+            10706002
+          ],
+          "worldArea": true
+        },
+        {
+          "magic": 7090,
+          "roots": [
+            10709000
+          ],
+          "worldArea": true
+        },
+        {
+          "magic": 7240,
+          "roots": [
+            10724000
+          ],
+          "worldArea": true
+        },
+        {
+          "magic": 7310,
+          "roots": [
+            10731000,
+            10731005,
+            10731050,
+            10731055
+          ]
+        },
+        {
+          "magic": 7311,
+          "roots": [
+            10731100,
+            10731105,
+            10731106,
+            10731107,
+            10731108,
+            10731115
+          ]
+        },
+        {
+          "magic": 7330,
+          "roots": [
+            10733000
+          ],
+          "worldArea": true
+        },
+        {
+          "magic": 7520,
+          "roots": [
+            10752000
+          ]
+        }
+      ]
+    },
+    "directMeleeNotReplayed": [
+      4430,
+      4440,
+      4450,
+      7080,
+      7500,
+      7510
+    ],
+    "mixedSpellsReplayOnlyBulletComponent": [
+      4120,
+      7060,
+      7240
+    ],
+    "persistentAttachedNotReplayed": [
+      4300,
+      4301,
+      4302
+    ]
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "1526757760B0027FD98FF9696FCF30028DC847AF6EF608AC87E5B2DCE69BE7CF",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "74A8646D98163C1CC0CE57EBA7EE691D6E99A793F1DD76DB78B27BDF26194887",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "6CA9536B6B9DF92647D2E7E0761361C17BC58A52863FF0318FD8A89343E4D46A",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "F993D6AC454DA5DEC247D8F35FF23A45BC80096349414AC3F045347C7F27F8B3",
+        "outputSha256": "93A45A9661D557EF2136C0A0A758FFE3BEAA0387799C34C5B3F6CF3DDBA1B92F",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003500,
+            "before": "\u9b54\u6cd5\u3001\u7977\u544a\u7684\u4e13\u6ce8\u503c\u6d88\u8017\u63d0\u5347100%\uff0c\u7cbe\u529b\u6d88\u8017\u63d0\u534750%\u3002\u8131\u624b\u5f39\u9053\u6cd5\u672f\u989d\u5916\u4ea7\u751f\u4e00\u6b21\u5f39\u4f53",
+            "after": "\u9b54\u6cd5\u3001\u7977\u544a\u7684\u4e13\u6ce8\u503c\u6d88\u8017\u63d0\u5347100%\uff0c\u7cbe\u529b\u6d88\u8017\u63d0\u534750%\u3002\u6cd5\u672f\u7684\u5f39\u4f53\u4e0e\u8303\u56f4\u6548\u679c\u989d\u5916\u89e6\u53d1\u4e00\u6b21\u56de\u54cd"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003500,
+            "before": "\u9b54\u6cd5\u3001\u7977\u544a\u7684\u4e13\u6ce8\u503c\u6d88\u8017\u63d0\u5347100%\uff0c\u7cbe\u529b\u6d88\u8017\u63d0\u534750%\u3002\u8131\u624b\u5f39\u9053\u6cd5\u672f\u989d\u5916\u4ea7\u751f\u4e00\u6b21\u5f39\u4f53",
+            "after": "\u9b54\u6cd5\u3001\u7977\u544a\u7684\u4e13\u6ce8\u503c\u6d88\u8017\u63d0\u5347100%\uff0c\u7cbe\u529b\u6d88\u8017\u63d0\u534750%\u3002\u6cd5\u672f\u7684\u5f39\u4f53\u4e0e\u8303\u56f4\u6548\u679c\u989d\u5916\u89e6\u53d1\u4e00\u6b21\u56de\u54cd"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003500,
+            "before": "\u9b54\u6cd5\u3001\u7977\u544a\u7684\u4e13\u6ce8\u503c\u6d88\u8017\u63d0\u5347100%\uff0c\u7cbe\u529b\u6d88\u8017\u63d0\u534750%\u3002\u8131\u624b\u5f39\u9053\u6cd5\u672f\u989d\u5916\u4ea7\u751f\u4e00\u6b21\u5f39\u4f53",
+            "after": "\u9b54\u6cd5\u3001\u7977\u544a\u7684\u4e13\u6ce8\u503c\u6d88\u8017\u63d0\u5347100%\uff0c\u7cbe\u529b\u6d88\u8017\u63d0\u534750%\u3002\u6cd5\u672f\u7684\u5f39\u4f53\u4e0e\u8303\u56f4\u6548\u679c\u989d\u5916\u89e6\u53d1\u4e00\u6b21\u56de\u54cd"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "9440E6F60520517A05BC9312DB21F4FAEB2A697316DE1D821AB57B5CCC691776",
+        "outputSha256": "EAAAB12EA18E063FF2C823D99409D16158F3914304C5A7D6392E28876645EFF2",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003500,
+            "before": "\u9b54\u6cd5\u3001\u7977\u544a\u7684\u4e13\u6ce8\u503c\u6d88\u8017\u63d0\u5347100%\uff0c\u7cbe\u529b\u6d88\u8017\u63d0\u534750%\u3002\u8131\u624b\u5f39\u9053\u6cd5\u672f\u989d\u5916\u4ea7\u751f\u4e00\u6b21\u5f39\u4f53",
+            "after": "\u9b54\u6cd5\u3001\u7977\u544a\u7684\u4e13\u6ce8\u503c\u6d88\u8017\u63d0\u5347100%\uff0c\u7cbe\u529b\u6d88\u8017\u63d0\u534750%\u3002\u6cd5\u672f\u7684\u5f39\u4f53\u4e0e\u8303\u56f4\u6548\u679c\u989d\u5916\u89e6\u53d1\u4e00\u6b21\u56de\u54cd"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "EEDD8798F0A6F4316FF3E6F30D26D7A65809CB75BC4F78C830B829D4E5123D97",
+        "outputSha256": "BDB5DD5AF1E3DD3D0B4189600CAA0B21C4A714DC144F1A7BA8AC493440B6855E",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and 50% more stamina. Free-flying projectile spells produce an additional projectile.",
+            "after": "Sorceries and incantations cost 100% more FP and 50% more stamina. Spell projectiles and area effects echo once."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and 50% more stamina. Free-flying projectile spells produce an additional projectile.",
+            "after": "Sorceries and incantations cost 100% more FP and 50% more stamina. Spell projectiles and area effects echo once."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and 50% more stamina. Free-flying projectile spells produce an additional projectile.",
+            "after": "Sorceries and incantations cost 100% more FP and 50% more stamina. Spell projectiles and area effects echo once."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "44ECBC64C5D9076D0D4323C46A36E63903A83678C552C8660686C9D82B40CBEE",
+        "outputSha256": "2B8806EA9BB5ABE1B7F1502898D48AAE02EB4AA2BB16547B3CE36FD7D3ED30C0",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and 50% more stamina. Free-flying projectile spells produce an additional projectile.",
+            "after": "Sorceries and incantations cost 100% more FP and 50% more stamina. Spell projectiles and area effects echo once."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -3,9 +3,8 @@ use super::*;
 use crate::win::*;
 use sha2::{Digest,Sha256};
 use std::{cell::{Cell,RefCell},sync::atomic::Ordering};
-thread_local!{static OWNED:Cell<bool>=const{Cell::new(false)};static RESET:Cell<bool>=const{Cell::new(false)};static QUERY:Cell<i32>=const{Cell::new(0)};static FAMILY_ACTORS:Cell<[usize;3]>=const{Cell::new([0;3])};static EFFECTS:RefCell<Vec<(usize,i32)>>=const{RefCell::new(Vec::new())};static APPLIED:RefCell<Vec<(usize,i32)>>=const{RefCell::new(Vec::new())};}
+thread_local!{static OWNED:Cell<bool>=const{Cell::new(false)};static RESET:Cell<bool>=const{Cell::new(false)};static QUERY:Cell<i32>=const{Cell::new(0)};static EFFECTS:RefCell<Vec<(usize,i32)>>=const{RefCell::new(Vec::new())};static APPLIED:RefCell<Vec<(usize,i32)>>=const{RefCell::new(Vec::new())};}
 unsafe extern "system" fn has(manager:usize,id:i32)->u8{u8::from(if id==OWNER{OWNED.with(Cell::get)}else if id==crate::reward_cycle_runtime::RESET{RESET.with(Cell::get)}else{EFFECTS.with(|s|s.borrow().contains(&(manager,id)))})}
-unsafe extern "system" fn resolve(_:usize,handle:*const u64)->usize{FAMILY_ACTORS.with(Cell::get).into_iter().find(|&p|p!=0&&ptr::read_unaligned((p+8)as*const u64)==ptr::read_unaligned(handle)).unwrap_or(0)}
 unsafe extern "system" fn applied(actor:usize,id:i32,source:usize,a4:usize,a5:usize,a6:u8,a7:u8,a8:u8,a9:u8,a10:u8,a11:i32)->u8{
  assert_eq!((source,a4,a5,a6,a7,a8,a9,a10,a11),(actor,1,2,3,4,5,6,7,-8));
  APPLIED.with(|s|s.borrow_mut().push((actor,id)));
@@ -54,20 +53,23 @@ fn native_basics_cooldown_product_seal_and_damage(){unsafe{
    for i in 0..hit.len(){if !(0x280..0x284).contains(&i){assert_eq!(hit[i],before[i]);}}
   }
  }}
- // Only the holder's three exact native family handles receive x2. Other
- // summons, passive charmed spirits and another player's family do not match.
  data[0xc7]=6;OWNED.with(|s|s.set(true));RESET.with(|s|s.set(false));
  let mut modules=vec![0usize;0x168/8];let mut wrapper=[0usize;3];let mut family=vec![0u64;0x140/8];let mut summon=[0u64;2];
  ptr::write_unaligned((actor+0x1b8)as*mut usize,modules.as_mut_ptr()as usize);modules[0x160/8]=wrapper.as_mut_ptr()as usize;wrapper[2]=family.as_mut_ptr()as usize;
- family[0x10/8]=100;family[0x70/8]=101;family[0xd0/8]=102;
- for handle in [100,101,102,103,0x100000064]{summon[1]=handle;let mut hit=[0u8;0x300];hit[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());calculated(actor,actor+8,summon.as_ptr()as usize,hit.as_mut_ptr()as usize,base);assert_eq!(read_i32(hit.as_ptr()as usize+0x280),if (100..=102).contains(&handle){200}else{100});}
+ let handles=[0x701effffffff,0x701fffffffff,0x7020ffffffff];
+ let mut npcs=[vec![0usize;0x200/8],vec![0usize;0x200/8],vec![0usize;0x200/8]];let actors:[usize;3]=std::array::from_fn(|slot|npcs[slot].as_mut_ptr()as usize);
+ let mut session=vec![0u32;0x128/4];session[0x120/4]=12;world[0x9910/8]=session.as_mut_ptr()as usize;
+ let mut entries=vec![0usize;60*2];let mut collection=[0usize;4];let table=[base+0x4ac780,base+0x4ac710,base+0x4ac770];
+ collection[0]=table.as_ptr()as usize;collection[2]=60;collection[3]=entries.as_mut_ptr()as usize;world[(0x170b8+14*8)/8]=collection.as_mut_ptr()as usize;
+ for slot in 0..3{family[(0x10+slot*0x60)/8]=handles[slot];npcs[slot][1]=0xffffffff10e0001e+slot;npcs[slot][0x190/8]=actors[slot];entries[(30+slot)*2]=actors[slot];assert_ne!(npcs[slot][1]as u64,handles[slot]);assert_eq!(native_actor::resolve(base,handles[slot]),actors[slot]);assert_eq!(family_slot(actor,actors[slot],base),Some(slot));}
+ for source in actors.into_iter().chain([summon.as_ptr()as usize,0]){let mut hit=[0u8;0x300];hit[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());calculated(actor,actor+8,source,hit.as_mut_ptr()as usize,base);assert_eq!(read_i32(hit.as_ptr()as usize+0x280),if actors.contains(&source){200}else{100});}
+ for copied in [handles[0],npcs[0][1]as u64]{summon[1]=copied;assert!(!family_source(actor,summon.as_ptr()as usize,base));}
+ entries[30*2]=0;assert!(!family_source(actor,actors[0],base));entries[30*2]=actors[0];
+ let saved_handle=family[0x10/8];for invalid in [0,u64::MAX]{family[0x10/8]=invalid;assert!(!family_source(actor,actors[0],base));}family[0x10/8]=saved_handle;
  // Preserve every native regeneration field apart from the halved interval.
  for i in 0..3{let native=row(&params,FAMILY_IDLE[i]);let private=row(&params,FAMILY_RELOAD[i]);let interval=|b:&[u8]|f32::from_le_bytes(b[12..16].try_into().unwrap());assert_eq!(interval(private),interval(native)*0.5);}
- let mut npcs=[vec![0usize;0x200/8],vec![0usize;0x200/8],vec![0usize;0x200/8]];let actors=std::array::from_fn(|i|npcs[i].as_mut_ptr()as usize);
- for i in 0..3{npcs[i][1]=100+i as usize;npcs[i][0x190/8]=actors[i];}
- FAMILY_ACTORS.with(|s|s.set(actors));
  let saved_apply=crate::APPLY_ORIG.swap(applied as*mut u8,Ordering::AcqRel);
- for (address,target)in [(0x519140,resolve as*const()as usize),(crate::APPLY_SELF_RVA,apply as*const()as usize)]{let mut j=vec![0x48,0xb8];j.extend_from_slice(&target.to_le_bytes());j.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(j.as_ptr(),(base+address)as*mut u8,j.len());}
+ for (address,target)in [(crate::APPLY_SELF_RVA,apply as*const()as usize)]{let mut j=vec![0x48,0xb8];j.extend_from_slice(&target.to_le_bytes());j.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(j.as_ptr(),(base+address)as*mut u8,j.len());}
  for hero in [1,6]{data[0xc7]=hero;for owned in [false,true]{for reset in [false,true]{OWNED.with(|s|s.set(owned));RESET.with(|s|s.set(reset));for i in 0..3{for j in 0..3{
   assert_eq!(route_effect(actors[i],FAMILY_IDLE[j],base),if i==j&&hero==6&&owned&&!reset{FAMILY_RELOAD[j]}else{FAMILY_IDLE[j]});
   assert_eq!(route_effect(actors[i],FAMILY_RELOAD[j],base),if i==j&&!(hero==6&&owned&&!reset){FAMILY_IDLE[j]}else{FAMILY_RELOAD[j]});

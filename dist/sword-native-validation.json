@@ -107,6 +107,350 @@
     {
       "applyType": 3,
       "effects": [
+        321300
+      ],
+      "categories": [
+        110
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        321300
+      ],
+      "categories": [
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        321300
+      ],
+      "categories": [
+        110,
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        321300
+      ],
+      "categories": [
+        100,
+        110,
+        130
+      ],
+      "after": 1.1200000047683716
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320100
+      ],
+      "categories": [
+        110
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320100
+      ],
+      "categories": [
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320100
+      ],
+      "categories": [
+        110,
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320100
+      ],
+      "categories": [
+        100,
+        110,
+        130
+      ],
+      "after": 1.159999966621399
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320101
+      ],
+      "categories": [
+        110
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320101
+      ],
+      "categories": [
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320101
+      ],
+      "categories": [
+        110,
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320101
+      ],
+      "categories": [
+        100,
+        110,
+        130
+      ],
+      "after": 1.190000057220459
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320102
+      ],
+      "categories": [
+        110
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320102
+      ],
+      "categories": [
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320102
+      ],
+      "categories": [
+        110,
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 3,
+      "effects": [
+        8320102
+      ],
+      "categories": [
+        100,
+        110,
+        130
+      ],
+      "after": 1.2200000286102295
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        321300
+      ],
+      "categories": [
+        110
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        321300
+      ],
+      "categories": [
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        321300
+      ],
+      "categories": [
+        110,
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        321300
+      ],
+      "categories": [
+        100,
+        110,
+        130
+      ],
+      "after": 1.1200000047683716
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320100
+      ],
+      "categories": [
+        110
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320100
+      ],
+      "categories": [
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320100
+      ],
+      "categories": [
+        110,
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320100
+      ],
+      "categories": [
+        100,
+        110,
+        130
+      ],
+      "after": 1.159999966621399
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320101
+      ],
+      "categories": [
+        110
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320101
+      ],
+      "categories": [
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320101
+      ],
+      "categories": [
+        110,
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320101
+      ],
+      "categories": [
+        100,
+        110,
+        130
+      ],
+      "after": 1.190000057220459
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320102
+      ],
+      "categories": [
+        110
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320102
+      ],
+      "categories": [
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320102
+      ],
+      "categories": [
+        110,
+        130
+      ],
+      "after": 1.0
+    },
+    {
+      "applyType": 4,
+      "effects": [
+        8320102
+      ],
+      "categories": [
+        100,
+        110,
+        130
+      ],
+      "after": 1.2200000286102295
+    },
+    {
+      "applyType": 3,
+      "effects": [
         7006600
       ],
       "before": 1.0,
@@ -305,5 +649,19 @@
   "healingRequiresRecipientHpLoss": false,
   "nullifiedHitsExcludedFromHealing": true,
   "healingConsumesNativeRegain": true,
-  "lockedHpGameplayVerified": false
+  "lockedHpGameplayVerified": false,
+  "chargedDamageVersion": "0.17.231",
+  "chargedSpellTag": 110,
+  "addedChargedWeaponTag": 100,
+  "gravityWellAttacks": [
+    47200,
+    47205
+  ],
+  "chargedDamageTiers": [
+    1.16,
+    1.19,
+    1.22
+  ],
+  "chargedDamageNativeCases": 64,
+  "chargedSpellBonusRetained": true
 }

@@ -12,6 +12,8 @@ static TARGET_COUNT:AtomicUsize=AtomicUsize::new(1);
 static HANDLE:AtomicUsize=AtomicUsize::new(0);
 static FAIL:AtomicBool=AtomicBool::new(false);
 static NESTED:AtomicBool=AtomicBool::new(false);
+static STREAM:AtomicBool=AtomicBool::new(false);
+static STREAM_SHARED:AtomicUsize=AtomicUsize::new(0);
 static SHOTS:Mutex<Vec<[u8;0x110]>>=Mutex::new(Vec::new());
 struct FactoryShot{bullet:i32,pose:[u8;0x40],targets:Vec<[u8;0x50]>}
 static FACTORY_SHOTS:Mutex<Vec<FactoryShot>>=Mutex::new(Vec::new());
@@ -54,7 +56,8 @@ unsafe extern "system" fn metadata(group:usize,out:usize,index:u32)->usize{
  let initialize:unsafe extern "system" fn(usize)->usize=std::mem::transmute(BASE.load(Ordering::Relaxed)+0x348260);initialize(out);
  let copy:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(BASE.load(Ordering::Relaxed)+TARGET_COPY_RVA);copy(out,group+0x280)
 }
-unsafe extern "system" fn child_initialize(_:usize,_:usize,target:usize,transform:usize,_:u32,target_index:u32){
+unsafe extern "system" fn child_initialize(instance:usize,_:usize,target:usize,transform:usize,_:u32,target_index:u32){
+ held_bound(instance);
  INITIALIZED.lock().unwrap().push(Initialized{transform:ptr::read_unaligned(transform as*const[u8;0x30]),target:ptr::read_unaligned(target as*const[u8;0x50]),index:SHOT_INDEX.load(Ordering::Relaxed)as u32,target_index});
 }
 unsafe extern "system" fn group_finish(group:usize){int(group,read_i32(group).wrapping_add(0x10000));}
@@ -65,7 +68,7 @@ unsafe extern "system" fn parse(out:usize,input:usize,_ctx:usize)->usize{
  // Deliberately simulate native recalculation using a changed current pose.
  // The compiled factory hook must restore the original resolved matrix.
  if REPLAY.with(Cell::get).ticket!=0{int(out+0x1c0,999f32.to_bits()as i32);}
- int(out+0x1d0,-1);ptr::write((out+0x169)as*mut u8,((read_i32(input+0x44)>>1)&1)as u8);
+ int(out+0x1d0,-1);ptr::write((out+0x164)as*mut u8,u8::from(!STREAM.load(Ordering::Relaxed)||REPLAY.with(Cell::get).ticket!=0));ptr::write((out+0x169)as*mut u8,((read_i32(input+0x44)>>1)&1)as u8);
  *DUMMY_POSE.lock().unwrap()=ptr::read_unaligned((out+0x190)as*const[u8;0x40]);
  let target=TARGET_DESC.load(Ordering::Relaxed);let count=TARGET_COUNT.load(Ordering::Relaxed);
  if count!=0{
@@ -85,6 +88,7 @@ unsafe extern "system" fn create(manager:usize,payload:usize,error:usize)->usize
  let start=read_ptr(payload+0x148);let count=read_ptr(payload+0x150).wrapping_sub(start)/0x50;
  let mut group=NativeGroup([0;0x5a0]);ptr::copy_nonoverlapping(payload as*const u8,group.0.as_mut_ptr().add(0x330),0x220);
  let allocated=HANDLE.load(Ordering::Relaxed);ptr::copy_nonoverlapping(group.0.as_ptr().add(0x330),(allocated+0x330)as*mut u8,0x220);
+ if REPLAY.with(Cell::get).ticket!=0&&STREAM.load(Ordering::Relaxed){put(allocated+0x528,STREAM_SHARED.load(Ordering::Relaxed));}
  if count==1{ptr::copy_nonoverlapping(start as*const u8,(allocated+0x280)as*mut u8,0x50);}
  let mut pose=NativePose([0;0x40]);let get:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(BASE.load(Ordering::Relaxed)+0x345ed0);
  get(group.0.as_ptr()as usize,pose.0.as_mut_ptr()as usize);
@@ -108,7 +112,7 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  let mut target_ref=vec![0u32;0x90/4];target_ref[0x78/4]=2;target_ref[0x80/4]=u32::MAX;
  let mut target=[0u64;0x50/8];let tp=target.as_mut_ptr()as usize;ptr::write(tp as*mut u8,1);put(tp+8,22);put(tp+0x10,target_ref.as_mut_ptr()as usize);TARGET_DESC.store(tp,Ordering::Relaxed);
  let mut first=[0u32;16];first[6]=0xc0000005;let mut second=[0u32;16];second[10]=0x80000006;
- let mut manager=vec![0usize;0x200/8];let mp=manager.as_mut_ptr()as usize;let mut network=vec![0u8;0xc0*1024];manager[0x90/8]=network.as_mut_ptr()as usize;manager[0x98/8]=network.as_ptr()as usize+network.len();put(base+0x3c0ae30,mp);
+ let mut manager=vec![0usize;0x200/8];let mp=manager.as_mut_ptr()as usize;let mut network=vec![0u8;0xc0*8192];manager[0x90/8]=network.as_mut_ptr()as usize;manager[0x98/8]=network.as_ptr()as usize+network.len();put(base+0x3c0ae30,mp);
  let mut allocated=NativeGroup([0;0x5a0]);let gp=allocated.0.as_mut_ptr()as usize;int(gp,17);HANDLE.store(gp,Ordering::Relaxed);
  let mut child=[0usize,88];CHILD.store(child.as_mut_ptr()as usize,Ordering::Relaxed);
  for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(0x63f840,resolve as*const()as usize),(0x3d2f30,yes as*const()as usize),(0x33d010,parse as*const()as usize),(FACTORY_RVA,create as*const()as usize),(0x33e140,packet as*const()as usize),(0x357e00,packet_copy as*const()as usize)]{jump(base,rva,f);}
@@ -139,13 +143,14 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  // not depend on the original enemy lock or even the existence of targets.
  TARGET_COUNT.store(2,Ordering::Relaxed);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
  TARGET_ALIVE.store(false,Ordering::Relaxed);put(dp+0xc0,target_ref.as_mut_ptr()as usize);
- for(i,&(magic,root,replay))in crate::echo_cast_data::AREAS.iter().enumerate(){
+ for(i,(magic,root,replay))in crate::echo_cast_data::AREAS.iter().copied().chain(crate::echo_cast_data::ROOTS.iter().filter(|(magic,_)|crate::echo_cast_data::WORLD_AREAS.contains(magic)).flat_map(|&(magic,roots)|roots.iter().map(move|&root|(magic,root,root)))).enumerate(){
   TARGET_COUNT.store(if i%2==0{0}else{2},Ordering::Relaxed);
   int(dp+0x18,magic);int(dp+0x14,root);int(dp+0x80,7f32.to_bits()as i32);
   let before=SHOTS.lock().unwrap().len();fire();assert_eq!(QUEUE.lock().unwrap().pending.len(),1);
   assert_eq!(target_ref[0x78/4],2);assert_eq!(first[6],0xc0000006);
   int(dp+0x80,99f32.to_bits()as i32);update(p,base,0.49);assert_eq!(SHOTS.lock().unwrap().len(),before+1);update(p,base,0.01);
-  let shots=SHOTS.lock().unwrap();assert_eq!(shots.len(),before+2);
+  let visual=crate::echo_cast_data::VISUALS.iter().find(|row|row.0==root);
+  let shots=SHOTS.lock().unwrap();assert_eq!(shots.len(),before+2+usize::from(visual.is_some()));
   let shot=&shots[before+1];assert_eq!(i32::from_le_bytes(shot[0x14..0x18].try_into().unwrap()),replay);
   assert_eq!(i32::from_le_bytes(shot[0x18..0x1c].try_into().unwrap()),magic);
   assert_eq!(f32::from_le_bytes(shot[0x80..0x84].try_into().unwrap()),7.);
@@ -158,7 +163,7 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  int(dp+0x18,6421);int(dp+0x14,95003512);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
  // All explicitly excluded spells retain their original native emission,
  // without an immediate duplicate, delayed ticket, or retained references.
- for (magic,roots)in [(4120,&[10412000,10412001][..]),(4130,&[10413000][..]),(4510,&[10451000,10451010,10451020][..]),(4700,&[10470000,10470005,10470010,10470020,10470030,10470040][..]),(4701,&[10470100,10470110,10470120,10470150,10470151,10470152][..]),(7060,&[10706000,10706002][..]),(7090,&[10709000,10709001][..]),(7240,&[10724000][..]),(7330,&[10733000,10733001,10999999][..])]{
+ for (magic,roots)in [(4110,&[10411000,10411010,10411012,10411014][..]),(4200,&[10420000,10420001,10420002,10420003,10420004][..]),(4520,&[10452000,10452001,10452002][..]),(4700,&[10470000,10470005,10470010,10470020,10470030,10470040][..]),(4701,&[10470100,10470110,10470120,10470150,10470151,10470152][..]),(4130,&[10413000][..]),(7900,&[10790001,10790051,10790099][..])]{
   int(dp+0x18,magic);
   for &root in roots{
    int(dp+0x14,root);let before=SHOTS.lock().unwrap().len();fire();
@@ -209,11 +214,12 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  for (root,replayed)in crate::echo_cast_data::ROOTS.iter().flat_map(|(_,roots)|roots.iter().map(|&root|(root,root))).chain(crate::echo_cast_data::AREAS.iter().map(|&(_,root,replay)|(root,replay))){
   int(dp+0x14,root);let before=SHOTS.lock().unwrap().len();fire();assert_eq!(QUEUE.lock().unwrap().pending.len(),1);
   update(p,base,0.49);assert_eq!(SHOTS.lock().unwrap().len(),before+1);update(p,base,0.01);
-  let shots=SHOTS.lock().unwrap();assert_eq!(shots.len(),before+2);assert_eq!(i32::from_le_bytes(shots[before+1][0x14..0x18].try_into().unwrap()),replayed);
+  let visual=crate::echo_cast_data::VISUALS.iter().find(|row|row.0==root);
+  let shots=SHOTS.lock().unwrap();assert_eq!(shots.len(),before+2+usize::from(visual.is_some()));assert_eq!(i32::from_le_bytes(shots[before+1][0x14..0x18].try_into().unwrap()),replayed);
   assert_eq!(i32::from_le_bytes(shots[before+1][0x18..0x1c].try_into().unwrap()),-1);drop(shots);
   assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);assert_eq!(target_ref[0x78/4],2);
  }
- for bullet in [10400099,10402151,10422015,10412000,10413000,10451000,10470000,10470100,10706000,10709000,10724000,10733000,10642000,10420000,10700000,95003512]{
+ for bullet in [10400099,10402151,10422015,10413000,10470000,10470100,10411010,10452000,10642000,10420000,10700001,10790001,95003512]{
   int(dp+0x14,bullet);let before=SHOTS.lock().unwrap().len();fire();update(p,base,0.5);assert_eq!(SHOTS.lock().unwrap().len(),before+1);assert!(QUEUE.lock().unwrap().pending.is_empty());
  }
  int(dp+0x14,10400000);
@@ -244,13 +250,14 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  put(first_record+8,first_hits.as_mut_ptr()as usize);put(first_record+0x10,first_hits.as_ptr()as usize);put(first_record+0x18,first_hits.as_ptr()as usize+48);
  register(first_record,victim_pointer,&category,101);assert_eq!(allowed(first_record,victim_pointer,&category,101),1);
  consume(first_record,victim_pointer);assert_eq!(allowed(first_record,victim_pointer,&category,202),0);
- for (magic,descriptor_magic) in [(6001,6001),(6001,-1),(6820,6820),(6830,6830)]{
+ for (magic,descriptor_magic) in [(6001,6001),(6001,-1),(6710,6710),(6710,-1),(6820,6820),(6830,6830)].into_iter().chain(crate::echo_cast_data::EXPANDED.iter().flat_map(|&magic|[(magic,magic),(magic,-1)])){
   int(dp+0x18,descriptor_magic);let roots=crate::echo_cast_data::ROOTS.iter().find(|root|root.0==magic).unwrap().1;
   for &root in roots{int(dp+0x14,root);fire();}
   let queue=QUEUE.lock().unwrap();assert_eq!(queue.pending.len(),roots.len());
   let replay=read_ptr(queue.pending[0].descriptor.0.as_ptr()as usize+0xa0);
   assert_ne!(replay,first_record);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),1);assert_eq!(read_ptr(dp+0xa0),first_record);
   assert!(queue.pending.iter().all(|ticket|read_ptr(ticket.descriptor.0.as_ptr()as usize+0xa0)==replay));drop(queue);
+  if matches!(magic,6710|7520){assert!(QUEUE.lock().unwrap().pending.iter().all(|ticket|read_ptr(ticket.descriptor.0.as_ptr()as usize+0x98)==0));assert_eq!(first[6],0xc0000005);assert_eq!(read_ptr(dp+0x98),first.as_ptr()as usize);}
   let mut replay_hits=[0u64;6];put(replay+8,replay_hits.as_mut_ptr()as usize);put(replay+0x10,replay_hits.as_ptr()as usize);put(replay+0x18,replay_hits.as_ptr()as usize+48);
   register(replay,victim_pointer,&category,202);assert_eq!(allowed(replay,victim_pointer,&category,202),1);
   assert_eq!(allowed(first_record,victim_pointer,&category,202),0);
@@ -270,5 +277,78 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
   update(p,base,0.5);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);put(dp+0xa0,first_record);
  }
  assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);
+ int(dp+0x18,4060);int(dp+0x14,10406000);TARGET_COUNT.store(1,Ordering::Relaxed);TARGET_DESC.store(np,Ordering::Relaxed);
+ let before=SHOTS.lock().unwrap().len();
+ for step in 0..10{int(dp+0x80,(step as f32).to_bits()as i32);fire();update(p,base,0.1);}
+ update(p,base,0.5);
+ assert_eq!(SHOTS.lock().unwrap().len(),before+20);assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);assert_eq!(second[10],0x80000006);
+ STREAM.store(true,Ordering::Relaxed);
+ let mut stream_shared=[0u32;16];stream_shared[6]=1;STREAM_SHARED.store(stream_shared.as_mut_ptr()as usize,Ordering::Relaxed);
+ for magic in [4060,6030,7050,7520]{
+  int(dp+0x18,magic);int(dp+0x14,crate::echo_cast_data::ROOTS.iter().find(|row|row.0==magic).unwrap().1[0]);
+  TARGET_DESC.store(np,Ordering::Relaxed);let before=SHOTS.lock().unwrap().len();fire();
+  assert!(QUEUE.lock().unwrap().pending.is_empty());update(p,base,0.5);assert_eq!(SHOTS.lock().unwrap().len(),before+1);
+  FAIL.store(true,Ordering::Relaxed);init(gp,&mut emitted as*mut usize as usize,transform.0.as_ptr()as usize,0,0);FAIL.store(false,Ordering::Relaxed);
+  assert!(QUEUE.lock().unwrap().pending.is_empty());
+  for step in 0..27{
+   transform.0=expected;transform.0[12..16].copy_from_slice(&(step as f32).to_le_bytes());
+   init(gp,&mut emitted as*mut usize as usize,transform.0.as_ptr()as usize,0,0);
+   transform.0[12..16].copy_from_slice(&(100.+step as f32).to_le_bytes());
+   init(gp,&mut emitted as*mut usize as usize,transform.0.as_ptr()as usize,0,1);
+  }
+  {let queue=QUEUE.lock().unwrap();assert_eq!(queue.pending.len(),27);for(step,ticket)in queue.pending.iter().enumerate(){
+   assert_eq!(f32::from_le_bytes(ticket.pose[0x30..0x34].try_into().unwrap()),step as f32);
+   assert_eq!(ticket.shots.lock().unwrap().len(),2);
+  }}
+  finish(gp);update(p,base,0.49);assert_eq!(SHOTS.lock().unwrap().len(),before+1);update(p,base,0.01);
+  assert_eq!(SHOTS.lock().unwrap().len(),before+28);assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);
+  {let shots=SHOTS.lock().unwrap();assert_eq!(read_ptr(shots[before+1].as_ptr()as usize+0x98),0);for shot in &shots[before+2..]{assert_eq!(read_ptr(shot.as_ptr()as usize+0x98),stream_shared.as_ptr()as usize);}}
+  assert_eq!(stream_shared[6],1);
+  init(gp,&mut emitted as*mut usize as usize,transform.0.as_ptr()as usize,0,0);assert!(QUEUE.lock().unwrap().pending.is_empty());finish(gp);
+  fire();int(gp,read_i32(gp)+0x10000);init(gp,&mut emitted as*mut usize as usize,transform.0.as_ptr()as usize,0,0);assert!(QUEUE.lock().unwrap().pending.is_empty());
+  HAS.store(false,Ordering::Relaxed);update(p,base,0.5);HAS.store(true,Ordering::Relaxed);
+  assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);
+ }
+ STREAM.store(false,Ordering::Relaxed);
+ STREAM_SHARED.store(0,Ordering::Relaxed);
+ for &(root,visual)in crate::echo_cast_data::VISUALS{
+  int(dp+0x18,-1);int(dp+0x14,root);int(dp+0x80,37f32.to_bits()as i32);TARGET_DESC.store(tp,Ordering::Relaxed);
+  let before=SHOTS.lock().unwrap().len();fire();int(dp+0x80,99f32.to_bits()as i32);update(p,base,0.5);
+  let shots=SHOTS.lock().unwrap();assert_eq!(shots.len(),before+3);let shot=shots.last().unwrap();
+  assert_eq!(i32::from_le_bytes(shot[0x14..0x18].try_into().unwrap()),visual);assert_eq!(f32::from_le_bytes(shot[0x80..0x84].try_into().unwrap()),37.);
+  for offset in [0x90,0x98,0xa0,0xc0]{assert_eq!(u64::from_le_bytes(shot[offset..offset+8].try_into().unwrap()),0);}
+  drop(shots);assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);
+ }
+ for &(magic,hover,flight)in crate::echo_cast_data::RELEASES{for actual_magic in [magic,-1]{
+  put(dp+0xc0,0);int(dp+0x18,actual_magic);int(dp+0x14,hover);TARGET_DESC.store(np,Ordering::Relaxed);
+  let before=SHOTS.lock().unwrap().len();fire();update(p,base,3.);
+  assert_eq!(SHOTS.lock().unwrap().len(),before+1);assert!(QUEUE.lock().unwrap().pending.is_empty());
+  transform.0=expected;init(gp,&mut emitted as*mut usize as usize,transform.0.as_ptr()as usize,0,0);
+  let instance=child.as_mut_ptr()as usize;
+  finish(gp);
+  let mut payload=NativeGroup([0;0x5a0]);let payload_pointer=payload.0.as_mut_ptr()as usize;
+  int(payload_pointer,17);int(payload_pointer+4,flight);put(payload_pointer+0x10,11);
+  put(payload_pointer+0x148,np);put(payload_pointer+0x150,np+0x50);
+  put(payload_pointer+0x1f8,first.as_mut_ptr()as usize);put(payload_pointer+0x200,second.as_mut_ptr()as usize);
+  ptr::copy_nonoverlapping((dp+0x50)as*const u8,(payload_pointer+0x190)as*mut u8,0x40);
+  int(payload_pointer+0x1c0,42f32.to_bits()as i32);
+  let factory_call:Factory=std::mem::transmute(base+FACTORY_RVA);
+  let mut child_error=-1i32;int(payload_pointer+0x1d0,-1);
+  {let _child=child_scope(instance,10402151);factory_call(mp,payload_pointer,&mut child_error as*mut i32 as usize);}
+  assert!(QUEUE.lock().unwrap().pending.is_empty());
+  for _shot in 0..3{let _child=child_scope(instance,flight);factory_call(mp,payload_pointer,&mut child_error as*mut i32 as usize);}
+  assert_eq!(QUEUE.lock().unwrap().pending.len(),3);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),1);
+  held_reset(instance);assert_eq!(first[6],0xc0000008);update(p,base,0.49);
+  assert_eq!(SHOTS.lock().unwrap().len(),before+1);update(p,base,0.01);
+  assert_eq!(SHOTS.lock().unwrap().len(),before+4);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);
+  for shot in SHOTS.lock().unwrap().iter().skip(before+1){assert_eq!(i32::from_le_bytes(shot[0x14..0x18].try_into().unwrap()),flight);assert_eq!(f32::from_le_bytes(shot[0x80..0x84].try_into().unwrap()),42.);}
+  assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);
+  fire();init(gp,&mut emitted as*mut usize as usize,transform.0.as_ptr()as usize,0,0);
+  child[1]+=1;
+  {let _child=child_scope(instance,flight);factory_call(mp,payload_pointer,&mut child_error as*mut i32 as usize);}
+  assert!(QUEUE.lock().unwrap().pending.is_empty());
+  HAS.store(false,Ordering::Relaxed);update(p,base,0.5);HAS.store(true,Ordering::Relaxed);
+  assert_eq!(first[6],0xc0000005);assert_eq!(second[10],0x80000006);
+ }}
  BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(allocation,0,MEM_RELEASE),0);
 }}

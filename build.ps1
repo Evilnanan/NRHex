@@ -95,6 +95,8 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Native Crystal Shell cleanup validation failed.' }
         dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot --sword-category-probe --sword-test-probe --export-native-fixtures
         if ($LASTEXITCODE -ne 0) { throw 'Native sword AttackRate fixture export failed.' }
+        dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot --sword-charge-damage-probe
+        if ($LASTEXITCODE -ne 0) { throw 'Native sword charged damage fixture export failed.' }
         & python -X utf8 tools/verify_sword_native.py
         if ($LASTEXITCODE -ne 0) { throw 'Native sword category/magic binding validation failed.' }
         dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot --sword-regain-probe
@@ -232,7 +234,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Wraith item action observers missing.' }
     # Both modes verify the runtime; only Full regenerates game resources.
     dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-poise-check
-    if ($LASTEXITCODE -ne 0) { throw 'Sword Leaden Hardtear protection readback failed.' }
+    if ($LASTEXITCODE -ne 0) { throw 'Sword Endure protection readback failed.' }
     cargo test --release --lib @cargoTarget @cargoFeatures
     if ($LASTEXITCODE -ne 0) { throw 'Runtime regression checks failed.' }
     foreach ($runtimeCheck in @('verify_sword_projectile.py', 'verify_glass_cannon_native.py', 'verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_weapon_affinity.py', 'verify_snack.py', 'verify_marking.py', 'verify_wraith.py', 'verify_basics.py', 'verify_sniper.py', 'verify_momentum.py', 'verify_heartstealer.py', 'verify_cat_arena.py', 'verify_ultimate_awakening.py', 'verify_ultimate_unstoppable.py')) {

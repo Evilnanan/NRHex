@@ -1,0 +1,702 @@
+{
+  "version": "0.17.231",
+  "backup": "D:\\Projects\\NRMod\\NRHex\\.work\\sword-charge-before-20261022-214108",
+  "dllSha256": "87970a7d9e69269992e007ef91af642c96861c7659d3bc4c51b04fad6ea9025e",
+  "regulationSha256": "92786a85e68c332dae6a42fdd16a60de3a22d50059a7f19206d16c884f4bbf2c",
+  "otherResourcesConfigsAndGroupPreserved": true,
+  "poise": {
+    "inputSha256": "EC3713338E9CC6B09EF8B65B321CECE08565CBC5D6B2CFEA9AD67A13989B5F06",
+    "outputSha256": "92786A85E68C332DAE6A42FDD16A60DE3A22D50059A7F19206D16C884F4BBF2C",
+    "effect": 95000916,
+    "source": 1650,
+    "fields": {
+      "dmgLv_None": 0,
+      "dmgLv_S": 1,
+      "dmgLv_M": 1,
+      "dmgLv_L": 1,
+      "dmgLv_BlowM": 1,
+      "dmgLv_Push": 1,
+      "dmgLv_Strike": 1,
+      "dmgLv_BlowS": 1,
+      "dmgLv_Min": 1,
+      "dmgLv_Uppercut": 1,
+      "dmgLv_BlowLL": 1,
+      "dmgLv_Breath": 1,
+      "defFlickPower": 35,
+      "saReceiveDamageRate": 1
+    },
+    "onlySwordProtectionChanged": true,
+    "unrelatedRowsTablesAndFieldsPreserved": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "chargedDamage": {
+    "version": "0.10.3",
+    "effectFilterRva": "0x511010",
+    "attackRateCalculationRva": "0x502830",
+    "sourceMaskOffset": "0x14",
+    "cachedRateOffsets": [
+      "0x90",
+      "0xa4",
+      "0xa8",
+      "0xac",
+      "0xb0"
+    ],
+    "nativeAttackRateTests": [
+      {
+        "applyType": 0,
+        "effects": [],
+        "before": 1.0,
+        "after": 1.0
+      },
+      {
+        "applyType": 0,
+        "effects": [
+          8320500
+        ],
+        "before": 1.0,
+        "after": 1.090000033378601
+      },
+      {
+        "applyType": 0,
+        "effects": [
+          8350000
+        ],
+        "before": 1.0,
+        "after": 1.0
+      },
+      {
+        "applyType": 0,
+        "effects": [
+          8320500,
+          8350000
+        ],
+        "before": 1.0,
+        "after": 1.090000033378601
+      },
+      {
+        "applyType": 1,
+        "effects": [],
+        "before": 1.0,
+        "after": 1.0
+      },
+      {
+        "applyType": 1,
+        "effects": [
+          8320500
+        ],
+        "before": 1.0,
+        "after": 1.090000033378601
+      },
+      {
+        "applyType": 1,
+        "effects": [
+          8350000
+        ],
+        "before": 1.0,
+        "after": 1.0
+      },
+      {
+        "applyType": 1,
+        "effects": [
+          8320500,
+          8350000
+        ],
+        "before": 1.0,
+        "after": 1.090000033378601
+      },
+      {
+        "applyType": 2,
+        "effects": [],
+        "before": 1.0,
+        "after": 1.0
+      },
+      {
+        "applyType": 2,
+        "effects": [
+          8320500
+        ],
+        "before": 1.0,
+        "after": 1.090000033378601
+      },
+      {
+        "applyType": 2,
+        "effects": [
+          8350000
+        ],
+        "before": 1.0,
+        "after": 1.0
+      },
+      {
+        "applyType": 2,
+        "effects": [
+          8320500,
+          8350000
+        ],
+        "before": 1.0,
+        "after": 1.090000033378601
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          321300
+        ],
+        "categories": [
+          110
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          321300
+        ],
+        "categories": [
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          321300
+        ],
+        "categories": [
+          110,
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          321300
+        ],
+        "categories": [
+          100,
+          110,
+          130
+        ],
+        "after": 1.1200000047683716
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320100
+        ],
+        "categories": [
+          110
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320100
+        ],
+        "categories": [
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320100
+        ],
+        "categories": [
+          110,
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320100
+        ],
+        "categories": [
+          100,
+          110,
+          130
+        ],
+        "after": 1.159999966621399
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320101
+        ],
+        "categories": [
+          110
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320101
+        ],
+        "categories": [
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320101
+        ],
+        "categories": [
+          110,
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320101
+        ],
+        "categories": [
+          100,
+          110,
+          130
+        ],
+        "after": 1.190000057220459
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320102
+        ],
+        "categories": [
+          110
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320102
+        ],
+        "categories": [
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320102
+        ],
+        "categories": [
+          110,
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320102
+        ],
+        "categories": [
+          100,
+          110,
+          130
+        ],
+        "after": 1.2200000286102295
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          321300
+        ],
+        "categories": [
+          110
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          321300
+        ],
+        "categories": [
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          321300
+        ],
+        "categories": [
+          110,
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          321300
+        ],
+        "categories": [
+          100,
+          110,
+          130
+        ],
+        "after": 1.1200000047683716
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320100
+        ],
+        "categories": [
+          110
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320100
+        ],
+        "categories": [
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320100
+        ],
+        "categories": [
+          110,
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320100
+        ],
+        "categories": [
+          100,
+          110,
+          130
+        ],
+        "after": 1.159999966621399
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320101
+        ],
+        "categories": [
+          110
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320101
+        ],
+        "categories": [
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320101
+        ],
+        "categories": [
+          110,
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320101
+        ],
+        "categories": [
+          100,
+          110,
+          130
+        ],
+        "after": 1.190000057220459
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320102
+        ],
+        "categories": [
+          110
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320102
+        ],
+        "categories": [
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320102
+        ],
+        "categories": [
+          110,
+          130
+        ],
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320102
+        ],
+        "categories": [
+          100,
+          110,
+          130
+        ],
+        "after": 1.2200000286102295
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          7006600
+        ],
+        "before": 1.0,
+        "after": 1.059999942779541
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          7006700
+        ],
+        "before": 1.0,
+        "after": 1.0
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          7006600,
+          7006700
+        ],
+        "before": 1.0,
+        "after": 1.059999942779541
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          8320500,
+          8350000
+        ],
+        "before": 1.0,
+        "after": 1.090000033378601
+      },
+      {
+        "applyType": 3,
+        "effects": [
+          7006600,
+          7006600,
+          7006700,
+          7006700
+        ],
+        "before": 1.0,
+        "after": 1.123599886894226
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          7006600
+        ],
+        "before": 1.0,
+        "after": 1.059999942779541
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          7006700
+        ],
+        "before": 1.0,
+        "after": 1.0
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          7006600,
+          7006700
+        ],
+        "before": 1.0,
+        "after": 1.059999942779541
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          8320500,
+          8350000
+        ],
+        "before": 1.0,
+        "after": 1.090000033378601
+      },
+      {
+        "applyType": 4,
+        "effects": [
+          7006600,
+          7006600,
+          7006700,
+          7006700
+        ],
+        "before": 1.0,
+        "after": 1.123599886894226
+      }
+    ],
+    "isolatedFixtureLookupStub": "E6D630 absent PARAM row; additive melee filter retry at 511010 calls original native predicate; fixture assumes eligible Sword owner",
+    "nativeCategoryPredicateRva": "0xea1b00",
+    "hitMaskOffset": "0x124",
+    "maskBytes": 32,
+    "additionalCategories": [
+      130
+    ],
+    "removedAddedCategories": [
+      111,
+      112
+    ],
+    "nativeCategoryTests": [
+      {
+        "original": 1,
+        "effect": 8320500,
+        "before": false,
+        "after": true
+      },
+      {
+        "original": 1,
+        "effect": 8350000,
+        "before": false,
+        "after": false
+      },
+      {
+        "original": 6,
+        "effect": 8320500,
+        "before": false,
+        "after": true
+      },
+      {
+        "original": 6,
+        "effect": 8350000,
+        "before": false,
+        "after": false
+      },
+      {
+        "original": 7,
+        "effect": 8320500,
+        "before": false,
+        "after": true
+      },
+      {
+        "original": 7,
+        "effect": 8350000,
+        "before": false,
+        "after": false
+      },
+      {
+        "original": 12,
+        "effect": 8320500,
+        "before": false,
+        "after": true
+      },
+      {
+        "original": 12,
+        "effect": 8350000,
+        "before": false,
+        "after": false
+      },
+      {
+        "original": 30,
+        "effect": 8320500,
+        "before": false,
+        "after": true
+      },
+      {
+        "original": 30,
+        "effect": 8350000,
+        "before": false,
+        "after": false
+      },
+      {
+        "original": 129,
+        "effect": 8320500,
+        "before": false,
+        "after": true
+      },
+      {
+        "original": 129,
+        "effect": 8350000,
+        "before": false,
+        "after": false
+      },
+      {
+        "original": 200,
+        "effect": 8320500,
+        "before": false,
+        "after": true
+      },
+      {
+        "original": 200,
+        "effect": 8350000,
+        "before": false,
+        "after": false
+      }
+    ],
+    "originalCategoriesRetained": true,
+    "originalSkillCategoryChecksPassed": 4,
+    "unrelatedFiltersExcluded": true,
+    "originalSpellApplicationRetained": true,
+    "nativeWeaponRestrictionsRetained": true,
+    "originalEligibleEffectsNotDoubled": true,
+    "activeMagicGetter": "ChrIns+1b8 -> module+60 -> virtual+18 -> i32 MagicID",
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "healingUsesCompletedDamage": true,
+    "healingRequiresRecipientHpLoss": false,
+    "nullifiedHitsExcludedFromHealing": true,
+    "healingConsumesNativeRegain": true,
+    "lockedHpGameplayVerified": false,
+    "chargedDamageVersion": "0.17.231",
+    "chargedSpellTag": 110,
+    "addedChargedWeaponTag": 100,
+    "gravityWellAttacks": [
+      47200,
+      47205
+    ],
+    "chargedDamageTiers": [
+      1.16,
+      1.19,
+      1.22
+    ],
+    "chargedDamageNativeCases": 64,
+    "chargedSpellBonusRetained": true
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

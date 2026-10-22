@@ -1,0 +1,9 @@
+{
+  "version": 10350000,
+  "template": 10503011,
+  "visuals": [
+    {"magic": 6710, "root": 10671000, "bullet": 95003590, "sfx": 528132, "life": 2, "tae": "a448.tae", "animation": 45011},
+    {"magic": 6710, "root": 10671050, "bullet": 95003591, "sfx": 528137, "life": 2, "tae": "a448.tae", "animation": 45010},
+    {"magic": 7240, "root": 10724000, "bullet": 95003592, "sfx": 530704, "life": 3, "tae": "a522.tae", "animation": 45010}
+  ]
+}

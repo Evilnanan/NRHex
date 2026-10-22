@@ -8,7 +8,7 @@ catalog=json.loads((w/'catalog.json').read_text())
 subprocess.run(['dotnet','run','--project',str(ROOT/'tools/HexBuild'),'--',str(ROOT),'--echo-cast-areas-check'],check=True)
 subprocess.run(['dotnet','run','--project',str(ROOT/'tools/HexBuild'),'--',str(ROOT),'--echo-cast-cost-check'],check=True)
 env=os.environ.copy();env.setdefault('NRHEX_NATIVE_EXE',str(GAME/'nightreign.exe'))
-command=['cargo','test','--release']
+command=['cargo','test','--release','--features','cage-demand']
 if env.get('NRHEX_CARGO_TARGET'):command+=['--target',env['NRHEX_CARGO_TARGET']]
 command+=['--lib','echo_compiled_hooks_replay_native_dispatch_and_release_references','--','--ignored','--test-threads=1']
 r=subprocess.run(command,cwd=ROOT,env=env,capture_output=True,text=True,errors='replace');log=r.stdout+r.stderr
@@ -49,5 +49,20 @@ report['sourceHashes'].update({p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest
 report['nativeFunctions'].extend(['E92250 installed normal/charged Magic stamina getter','3849AD actor virtual stamina modifier dispatch; 3849CF compiled hook; original NEG/cache store','4261D0 / 427F00 native stamina consumption and floor/guard flags'])
 report['cases'].extend(['normal Comet costs 52 and charged Comet costs 69; final native modifiers are applied before multiplying by 1.5, rounded down','only local owned sorcery/incantation costs increase by 50%; foreign actor, ownerless, inactive, null row, non-spell and non-positive costs pass through','volatile GPR/XMM and nonvolatile frame/weapon/mode registers survive the compiled mid-function hook','reused cached cost charges each native interval without compounding; native no-consumption flags and -50 floor remain; ordinary behavior constructor unpatched'])
 report['stubs'].append('spell cost actor virtual method and local effect lookup; native normal/charged getter, final cost cache and stamina deduction execute')
+report['independentVolleySpells']=[4300,4301,4302,6001,6710,6820,6830]+[profile['magic']for profile in catalog['expanded']['spells']]
+report['expandedProfiles']=catalog['expanded']
+report['directMeleeNotReplayed']=[4430,4440,4450,7080,7500,7510]
+report['mixedSpellsReplayOnlyBulletComponent']=[4120,7060,7240]
+report['persistentAttachedNotReplayed']=[]
+report['releaseOnlySpells']=catalog['expanded']['releases']
+report['cases'].extend(['phalanx hovering roots do not echo; actual supported child creation schedules one 0.5-second flight replay per released sword, retaining source until instance reset; original group finish does not discard live swords','released swords retain native resolved target and launch pose; mismatched child, reused instance generation, owner loss and replay dispatch do not schedule another round','Tibia and Noble Presence replay their reviewed native visual-only roots as well as their unchanged damage roots','Radagon normal/charged rings and Scarlet Aeonia release burst each add one visual-only carrier per successful replay at the frozen cast pose, without target or hit-record references','Crucible Breath delayed copies clear only their borrowed shared-hit list; source descriptor and source list remain unchanged, native within-root deduplication remains enabled'])
+report['cases']=[case for case in report['cases'] if 'held channels' not in case and 'nine explicitly excluded' not in case]
+report['cases']=[case.replace('all 215 catalog roots',f"all {catalog['eligibleRoots']} catalog roots")for case in report['cases']]
+report['cases'].extend(['five requested whole-spell exceptions and personal-only support remain excluded','expanded offensive world areas replay at the captured pose with empty/multiple target vectors',f"all {len(catalog['expanded']['spells'])} expanded spells isolate non-null volley records with explicit Magic and Magic=-1; original hits remain untouched",'ten fixture root emissions through the hooked entry produce exactly ten delayed replays, drain after stopping and balance retained references; actual native channel continuation routing is not verified by this fixture'])
+report['sourceHashes'].update({path:hashlib.sha256((ROOT/path).read_bytes()).hexdigest()for path in ['data/balance/echo-cast-expanded.json','data/balance/echo-cast-visuals.json','src/echo_cast_held.rs','src/sword_projectile.rs','tools/HexBuild/EchoVisuals.cs']})
+report['sourceHashes']['src/echo_cast_stream.rs']=hashlib.sha256((ROOT/'src/echo_cast_stream.rs').read_bytes()).hexdigest()
+report['streamSpells']=catalog['expanded']['streams']
+report['cases'].append('Radagon Rings of Light normal/charged roots, explicit Magic=6710 and Magic=-1, use an independent volley and clear the source shared-hit-list reference only in replay; the consumed original cannot block replay, while native within-replay volley deduplication and visual carriers remain')
+report['cases'].extend(['continuous source group schedules no replay before successful initialization; 27 native initializer rounds with two matrices each schedule 27 burst replays, not one truncated root or 54 whole volleys','continuous replay first group owns a fresh shared hit list; subsequent rounds retain that same list, preserving native repeated-hit gating without borrowing the original list','continuous round matrices transpose back to their captured world pose, group finish drains pending rounds, stale generation and failed allocation do not enqueue, owner loss releases template references'])
 (w/'native-validation.json').write_text(json.dumps(report,indent=2)+'\n')
 print('PASS: Echo Casting compiled hooks, native dispatch/network enqueue and target/reference lifecycle; actual gameplay/multiplayer untested')

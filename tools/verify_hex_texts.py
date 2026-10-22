@@ -49,6 +49,12 @@ with tempfile.TemporaryDirectory(prefix='text-check-', dir=root / '.work') as fo
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(root / name, target)
     shutil.copytree(root / 'dist/mod/msg', work / 'dist/mod/msg')
+    status_path = work / 'data/text/status-effects.json'
+    statuses = json.loads(status_path.read_text(encoding='utf-8'))
+    collision = next(status for status in statuses if status['textId'] == 95000800)
+    collision['enName'] = 'Dedicated invisibility status'
+    collision['enInfo'] = 'Dedicated status description, not the ability description.'
+    status_path.write_text(json.dumps(statuses, ensure_ascii=False), encoding='utf-8')
     run(work, '--stage-translations')
     install_stage(work)
     run(work, '--check-descriptions')
@@ -60,7 +66,7 @@ with tempfile.TemporaryDirectory(prefix='text-check-', dir=root / '.work') as fo
     second_name = re.search(r'^## .+$', blocks[2], re.M).group()
     first_description = re.search(r'^## [^\n]+\n(.*)', blocks[1], re.M | re.S).group(1).strip()
     invalid = [
-        ('missing ID', ''.join(blocks[:-1]), 'missing [95002000]'),
+        ('missing ID', ''.join(blocks[:-1]), 'missing [' + re.search(r'hex:(\d+)', blocks[-1]).group(1) + ']'),
         ('extra ID', original + '\n<!-- hex:95009900 -->\n## Extra\n\nExtra text.\n', 'extra [95009900]'),
         ('duplicate ID', original + blocks[-1], 'Duplicate hex text ID'),
         ('duplicate name', original.replace(second_name, first_name), 'Duplicate hex names'),
@@ -99,8 +105,9 @@ with tempfile.TemporaryDirectory(prefix='text-check-', dir=root / '.work') as fo
     assert len(item['changes']) == 5
     assert all(c['id'] == 95000700 and c['after'] == (name if 'Name' in c['fmg'] else info) for c in item['changes'])
     menu = next(r for r in report['reports'] if r['language'] == 'engus' and r['file'].startswith('menu'))
-    assert len(menu['changes']) == 2
-    assert all(c['id'] == 95000701 and c['after'] == (name if 'Name' in c['fmg'] else 'Edited shield status.') for c in menu['changes'])
+    assert len(menu['changes']) == 4
+    assert {(change['id'], change['fmg']) for change in menu['changes']} == {(effect, member) for effect in (95000700, 95000701) for member in ('SpEffectName.fmg', 'SpEffectInfo.fmg')}
+    assert all(change['after'] == (name if 'Name' in change['fmg'] else info if change['id'] == 95000700 else 'Edited shield status.') for change in menu['changes'])
     install_stage(work)
     run(work, '--check-descriptions')
     print('PASS: bilingual FMG round trip; seven invalid inputs rejected without package writes; BOM/CRLF/reordering; English edits and inherited status names; unrelated Chinese/native text preserved.')

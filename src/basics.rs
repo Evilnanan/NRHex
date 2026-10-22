@@ -32,8 +32,6 @@ pub unsafe fn update(actor:usize,base:usize){
  for id in OWNER+1..=OWNER+3{crate::maintain_status_effect(actor,stats,id,wanted==Some(id),base);}
  update_family(actor,base);
 }
-// Native 3864A0 returns family+10+index*60; its first eight bytes are the
-// original actor handle. Compare full handles, never NPC kind or allegiance.
 unsafe fn family_handles(owner:usize)->Option<[u64;3]>{
  if owner==0{return None;}
  let modules=read_ptr(owner+0x1b8);if modules==0{return None;}
@@ -41,24 +39,22 @@ unsafe fn family_handles(owner:usize)->Option<[u64;3]>{
  let family=read_ptr(wrapper+0x10);if family==0{return None;}
  Some(std::array::from_fn(|slot|ptr::read_unaligned((family+0x10+slot*0x60)as*const u64)))
 }
-unsafe fn family_slot(owner:usize,source:usize)->Option<usize>{
+unsafe fn family_slot(owner:usize,source:usize,base:usize)->Option<usize>{
  if source==0||source==owner{return None;}
- let handle=ptr::read_unaligned((source+8)as*const u64);
- if handle==0||handle==u64::MAX{return None;}
- family_handles(owner)?.iter().position(|&h|h==handle)
+ family_handles(owner)?.iter().position(|&handle|native_actor::resolve(base,handle)==source)
 }
-unsafe fn family_source(owner:usize,source:usize)->bool{family_slot(owner,source).is_some()}
+unsafe fn family_source(owner:usize,source:usize,base:usize)->bool{family_slot(owner,source,base).is_some()}
 pub unsafe fn route_effect(target:usize,effect:i32,base:usize)->i32{
  let Some(slot)=FAMILY_IDLE.iter().position(|&v|v==effect).or_else(||FAMILY_RELOAD.iter().position(|&v|v==effect))else{return effect;};
  let world=read_ptr(base+crate::WORLD_RVA);if world==0{return effect;}
- let owner=read_ptr(world+0x174e8);if family_slot(owner,target)!=Some(slot){return effect;}
+ let owner=read_ptr(world+0x174e8);if family_slot(owner,target,base)!=Some(slot){return effect;}
  if local_hero(base)==Some(6)&&sealed(owner,base){FAMILY_RELOAD[slot]}else{FAMILY_IDLE[slot]}
 }
 unsafe fn update_family(owner:usize,base:usize){
  let Some(handles)=family_handles(owner)else{return;};
  let enabled=local_hero(base)==Some(6)&&sealed(owner,base);
  for (slot,handle)in handles.into_iter().enumerate(){
-  let actor=native_actor::resolve(base,handle);if actor==0||family_slot(owner,actor)!=Some(slot){continue;}
+  let actor=native_actor::resolve(base,handle);if actor==0||actor==owner{continue;}
   // Swap only an existing inactive effect. Never apply regeneration to a
   // deployed family member or periodically refresh its healing tick timer.
   let (old,new)=if enabled{(FAMILY_IDLE[slot],FAMILY_RELOAD[slot])}else{(FAMILY_RELOAD[slot],FAMILY_IDLE[slot])};
@@ -72,7 +68,7 @@ pub unsafe fn calculated(local:usize,target:usize,source:usize,hit:usize,base:us
  if hit==0||source==0||source==target||read_i32(hit+0x280)<=0||!sealed(local,base){return;}
  let hero=local_hero(base);
  let factor=if source==local{multiplier(hero,read_i32(hit+0x40),read_i32(hit+0x44))}
-  else if hero==Some(6)&&family_source(local,source){2.}else{1.};
+  else if hero==Some(6)&&family_source(local,source,base){2.}else{1.};
  if factor!=1.{ptr::write_unaligned((hit+0x280)as*mut i32,crate::sword::boosted(read_i32(hit+0x280),factor));}
 }
 // Restage replays recorded damage, with its own proportion and network payload.
@@ -132,13 +128,14 @@ pub unsafe extern "system" fn restage_detour(){
   }
   assert_eq!(crate::hex_pool::HISTORY_BITS[basics],41);
  }
- #[test]fn only_exact_family_handles_match_even_before_or_after_summoning(){unsafe{
-  let mut owner=vec![0usize;0x1c0/8];let mut modules=vec![0usize;0x168/8];let mut wrapper=[0usize;3];let mut family=vec![0u64;0x140/8];let mut source=[0u64;2];
+ #[test]fn family_records_preserve_native_reference_handles(){unsafe{
+  let mut owner=vec![0usize;0x1c0/8];let mut modules=vec![0usize;0x168/8];let mut wrapper=[0usize;3];let mut family=vec![0u64;0x140/8];
   owner[0x1b8/8]=modules.as_mut_ptr()as usize;modules[0x160/8]=wrapper.as_mut_ptr()as usize;wrapper[2]=family.as_mut_ptr()as usize;
-  let owner=owner.as_ptr()as usize;let src=source.as_ptr()as usize;
-  for i in 0..3{family[(0x10+i*0x60)/8]=100+i as u64;}
-  for handle in [0,u64::MAX,100,101,102,103,0x100000064]{source[1]=handle;assert_eq!(family_source(owner,src),(100..=102).contains(&handle));}
-  assert!(!family_source(owner,owner));assert!(!family_source(owner,0));
+  let owner=owner.as_ptr()as usize;
+  let handles=[0x701effffffff,0x701fffffffff,0x7020ffffffff];
+  for (slot,handle)in handles.into_iter().enumerate(){family[(0x10+slot*0x60)/8]=handle;}
+  assert_eq!(family_handles(owner),Some(handles));assert_eq!(family_handles(0),None);
+  assert!(!family_source(owner,owner,0));assert!(!family_source(owner,0,0));
  }}
 }
 #[cfg(test)]#[path="basics_native_tests.rs"]mod native_tests;

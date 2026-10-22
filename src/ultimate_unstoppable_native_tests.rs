@@ -1,6 +1,5 @@
 //! Execute installed Endure reactions and real native same-ID candidate search,
 //! list removal and duration initialization through the compiled ultimate hook.
-//! Also compare installed Sword reactions with native Leaden Hardtear.
 use super::*;use crate::ptr;use crate::win::*;use sha2::{Digest,Sha256};
 use std::{cell::Cell,sync::atomic::Ordering};
 thread_local!{
@@ -106,7 +105,7 @@ fn native_ultimate_unstoppable_buildup_immunity(){unsafe{
 #[ignore="requires NRHEX_NATIVE_EXE and NRHEX_UNSTOPPABLE_FIXTURES; run alone"]
 fn native_ultimate_unstoppable_endure_reaction_and_private_replacement(){unsafe{
  let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
- let params=std::fs::read(std::env::var_os("NRHEX_UNSTOPPABLE_FIXTURES").unwrap()).unwrap();let buff=row(&params,BUFF);let endure=row(&params,1650);let sword=row(&params,crate::sword::POISE);let leaden=row(&params,3519);let fp=row(&params,crate::ultimate_awakening::BUFF);
+ let params=std::fs::read(std::env::var_os("NRHEX_UNSTOPPABLE_FIXTURES").unwrap()).unwrap();let buff=row(&params,BUFF);let endure=row(&params,1650);let sword=row(&params,crate::sword::POISE);let fp=row(&params,crate::ultimate_awakening::BUFF);
  let rows=[(BUFF,buff.as_ptr()as usize),(1650,endure.as_ptr()as usize),(crate::ultimate_awakening::BUFF,fp.as_ptr()as usize)];ROWS.with(|s|s.set(rows.as_ptr()as usize));
  let headers=crate::pe::Headers::parse(&raw,0).unwrap();let memory=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!memory.is_null());let base=memory as usize;
  for section in &headers.sections{ptr::copy_nonoverlapping(raw[section.raw_offset as usize..].as_ptr(),(base+section.virtual_address as usize)as*mut u8,section.raw_size as usize);}
@@ -131,14 +130,9 @@ fn native_ultimate_unstoppable_endure_reaction_and_private_replacement(){unsafe{
  let reaction:unsafe extern "system" fn(usize,u8,u8)->u8=std::mem::transmute(base+0x507c40);
  let mut original_manager=[0usize;8];let reference=original_manager.as_mut_ptr()as usize;put(reference+8,end_node);
  for level in 0..=12{for flag in [0,1]{assert_eq!(reaction(manager,level,flag),reaction(reference,level,flag));}}
- // Sword now follows Leaden Hardtear: ordinary stagger is suppressed, but
- // strong forced reactions remain. Execute both actual installed rows through
- // native category selection rather than only checking serialized field values.
- let mut ln=[0usize;0x88/8];let leaden_node=ln.as_mut_ptr()as usize;put(leaden_node,leaden.as_ptr()as usize);int(leaden_node+8,3519);
  let mut sm=[0usize;8];let sword_manager=sm.as_mut_ptr()as usize;put(sword_manager+8,sword_node);
- let mut lm=[0usize;8];let leaden_manager=lm.as_mut_ptr()as usize;put(leaden_manager+8,leaden_node);
- for level in 0..=12{for flag in [0,1]{assert_eq!(reaction(sword_manager,level,flag),reaction(leaden_manager,level,flag),"Sword/Leaden mismatch at reaction {level}, flag {flag}");}}
- assert_eq!(reaction(sword_manager,3,0),1);assert_eq!(reaction(sword_manager,4,0),0);assert_eq!(reaction(reference,4,0),1);
+ for level in 0..=12{for flag in [0,1]{assert_eq!(reaction(sword_manager,level,flag),reaction(reference,level,flag),"Sword/Endure mismatch at reaction {level}, flag {flag}");}}
+ assert_eq!(reaction(sword_manager,3,0),1);assert_eq!(reaction(sword_manager,4,0),1);assert_eq!(reaction(reference,4,0),1);
  // A naive category20 conversion loses the real no-stagger reaction entirely.
  let mut wrong=buff;wrong[0x13e..0x140].copy_from_slice(&20u16.to_le_bytes());put(node,wrong.as_ptr()as usize);assert_eq!(reaction(manager,1,0),0);put(node,buff.as_ptr()as usize);assert_eq!(reaction(manager,1,0),1);
  // Add independent vanilla Endure and Sword. Repeated ultimates replace only

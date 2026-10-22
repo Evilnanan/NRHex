@@ -20,6 +20,9 @@ if(args.Contains("--stage-translations")){
 if(args.Contains("--snack-text-stage")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/snack-price/texts"),allRewards:true,onlyIds:new[]{Snack.Owner});return;
 }
+if(args.Contains("--echo-expanded-text-stage")){
+ HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,"work/echo-expanded/texts"),allRewards:true,onlyIds:new[]{95003500});return;
+}
 if(args.Contains("--combat-protection-texts")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,"work/combat-protection/texts"),allRewards:true,onlyIds:new[]{95003000});return;
 }
@@ -79,12 +82,15 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sniper-stage")){Sniper.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sniper-check")){Sniper.Verify(root,bnd,Parse);return;}
 if(args.Contains("--basics-family-stage")){Basics.StageFamily(root,bnd,Parse);return;}
 if(args.Contains("--basics-stage")){Basics.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--basics-check")){Basics.Verify(root,bnd,Parse);return;}
 if(args.Contains("--wraith-stage")){Wraith.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--wraith-native-stage")){Wraith.StageNative(root,bnd,Parse);return;}
+if(args.Contains("--wraith-native-check")){Wraith.Verify(root,Parse,true);return;}
 if(args.Contains("--wraith-check")){Wraith.Verify(root,Parse);return;}
 if(args.Contains("--marking-stage")){Marking.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--marking-check")){Marking.Verify(root,bnd,Parse);return;}
@@ -114,6 +120,8 @@ if(args.Contains("--echo-cast-stage")){EchoCast.Stage(root,bnd,Parse,HexCatalog.
 if(args.Contains("--echo-cast-cost-stage")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),true);return;}
 if(args.Contains("--echo-cast-cost-check")){EchoCast.CostResources(root,Parse,HexCatalog.Load(root),false);return;}
 if(args.Contains("--echo-cast-claw-probe")){EchoCast.ClawProbe(root,bnd,Parse);return;}
+if(args.Contains("--echo-release-probe")){EchoCast.ReleaseProbe(root,bnd,Parse);return;}
+if(args.Contains("--echo-visuals-stage")){EchoVisuals.Stage(root,Parse);return;}
 if(args.Contains("--echo-cast-areas-stage")){EchoCast.AreaResources(root,Parse,true);return;}
 if(args.Contains("--echo-cast-areas-check")){EchoCast.AreaResources(root,Parse,false);return;}
 if(args.Contains("--ambulance-stage")){Ambulance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -130,6 +138,7 @@ if(args.Contains("--death-dance-flask-check")){DeathDance.FlaskCheck(root,bnd,Pa
 if(args.Contains("--sword-regain-stage")){SwordRegain.Stage(root,bnd,Parse);return;}
 if(args.Contains("--sword-regain-probe")){SwordRegain.Export(root,bnd,Parse);return;}
 if(args.Contains("--sword-charged-probe")){SwordCharged.Probe(root,bnd,Parse);return;}
+if(args.Contains("--sword-charge-damage-probe")){SwordCharged.DamageProbe(root,bnd,Parse);return;}
 if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
 if(args.Contains("--essence-reaver-probe")){EssenceReaver.Probe(root,bnd,Parse);return;}
 if(args.Contains("--essence-reaver-single")){EssenceReaver.StageSingle(root,Parse);return;}
@@ -725,7 +734,7 @@ if(args.Contains("--parry-counter")){Parry.StageCounter(root,Parse);return;}
 if(args.Contains("--slingshot-stage")){Slingshot.Stage(root,bnd,Parse,hexes);return;}
 if(args.Contains("--archmage-stage")){Archmage.Stage(root,bnd,Parse,hexes);return;}
 if(args.Contains("--devils-gaze-stage")){DevilsGaze.Stage(root,bnd,Parse,hexes);return;}
-if(args.Contains("--hex-icons-only")){HexIcons.Stage(root,Parse,hexes.Single(h=>h.Id==int.Parse(args[Array.IndexOf(args,"--hex-icons-only")+1])));return;}
+if(args.Contains("--hex-icons-only")){HexIcons.Stage(root,Parse,hexes.Single(h=>h.Id==int.Parse(args[Array.IndexOf(args,"--hex-icons-only")+1])),args.Contains("--icon-input")?Path.GetFullPath(args[Array.IndexOf(args,"--icon-input")+1]):null);return;}
 if(args.Contains("--glass-cannon-only")){GlassCannon.Stage(root,Parse,HexCatalog.Load(root));return;}
 if((args.Contains("--balloon-balance-only")||args.Contains("--balloon-resistance-only")||args.Contains("--balloon-01754-only"))){BalloonBalance.Stage(root,Parse,hexes);return;}
 if(args.Contains("--balance-01750-only")){Balance1750.Stage(root,Parse,hexes);return;}
@@ -839,6 +848,7 @@ foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pa
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
 foreach(var fissionParam in new[]{"ItemTableParam","ItemLotParam_enemy"})added[fissionParam].AddRange(pars[fissionParam].Rows.Where(r=>r.ID>=PotentialFission.FirstTable&&r.ID<99000000).Select(r=>r.ID));
 EchoCast.Areas(root,Clone,pars);
+EchoVisuals.Parameters(root,Clone);
 ContractHeart.Mechanics(Clone);ContractHeart.Branches(pars["Bullet"]);ContractHeart.Lots(pars["ItemLotParam_map"],Clone);
 HeartReady.Mechanics(Clone,pars["SpEffectVfxParam"]);
 var cageBosses=Cages.AddNpcs(root,pars,Clone,Set);
@@ -1015,6 +1025,7 @@ foreach(var n in names){
 // Check the serialized reward graph, including the actual UI classification.
 var serialized=files.ToDictionary(k=>k.Key,k=>Parse(k.Key,k.Value.Bytes));
 EchoCast.VerifyAreas(root,serialized);
+EchoVisuals.Verify(root,serialized["Bullet"]);
 for(int g=0;g<orders.Length;g++)for(int slot=0;slot<3;slot++){
  var lot=serialized["ItemLotParam_enemy"].Rows.Single(r=>r.ID==rewardEntries[g].Lot+slot);
  Require(Convert.ToInt32(lot["lotItemCategory01"].Value)==7&&Convert.ToInt32(lot["lotItemId01"].Value)==RewardCatalog.Table(hexes[orders[g][slot]].Id)&&Convert.ToInt32(lot["lotItemBasePoint01"].Value)==1000,"Serialized choice pool mismatch");
@@ -1247,6 +1258,7 @@ RewardCycle.Events(ev,RewardCatalog.PackedIds(RewardCatalog.HistoricalOwners.Len
 RewardReroll.Events(ev);
 EssenceReaver.Events(ev);
 RedEnvelope.RewardEvents(ev);
+HubCleanup.Events(ev,hexes,effects);
 var eventDest=Path.Combine(root,"dist/mod/event/common.emevd.dcx");Directory.CreateDirectory(Path.GetDirectoryName(eventDest)!);ev.Write(eventDest);var outEv=EMEVD.Read(eventDest);
 bool Same(EMEVD.Event a,EMEVD.Event b)=>a.ID==b.ID&&a.RestBehavior==b.RestBehavior&&a.Name==b.Name&&a.Instructions.Count==b.Instructions.Count&&a.Instructions.Zip(b.Instructions).All(v=>v.First.Bank==v.Second.Bank&&v.First.ID==v.Second.ID&&v.First.Layer==v.Second.Layer&&v.First.ArgData.SequenceEqual(v.Second.ArgData))&&JsonSerializer.Serialize(a.Parameters)==JsonSerializer.Serialize(b.Parameters);
 Require(outEv.Format==origEv.Format&&outEv.Compression==origEv.Compression&&outEv.StringData.SequenceEqual(origEv.StringData)&&outEv.LinkedFileOffsets.SequenceEqual(origEv.LinkedFileOffsets),"EMEVD metadata changed");

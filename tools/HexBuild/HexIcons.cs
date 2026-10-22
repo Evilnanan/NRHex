@@ -3,13 +3,13 @@ using System.Text.Json;
 using System.Security.Cryptography;
 
 static class HexIcons {
- public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,Hex hex){
+ public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,Hex hex,string? source=null){
   void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
   string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
   using var catalog=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"data/reference/ui/icon-ids.json")));
   var icons=catalog.RootElement.EnumerateArray().Select(e=>(e.GetProperty("kind").GetString(),e.GetProperty("id").GetInt32())).ToHashSet();
   Check(icons.Contains(("item",hex.LargeIcon))&&icons.Contains(("status",hex.SmallIcon)),"Requested icon missing from native atlas");
-  string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,".work/hex-icons",hex.Id.ToString());Directory.CreateDirectory(dir);
+  string input=source??Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,".work/hex-icons",hex.Id.ToString());Directory.CreateDirectory(dir);
   var binder=SFUtil.DecryptNightreignRegulation(input);var originals=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
   var changes=new Dictionary<int,(string Table,string Field,int Value)>();
   foreach(var (table,field,value) in new[]{("SpEffectParam","iconId",hex.SmallIcon),("AttachEffectParam","statusIconId",hex.SmallIcon),("PermanentBuffParam","iconId",hex.LargeIcon),("EquipParamGoods","iconId",hex.LargeIcon-1000)}){

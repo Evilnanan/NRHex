@@ -45,6 +45,15 @@ check(0x43e3b5,'66 0F 6E 86 80 02 00 00 0F 5B C0 F3 0F 59 C8 F3 0F 2C F9')
 
 reference=json.loads((root/'data/reference/combat/sword-categories.json').read_text(encoding='utf-8'))
 rows={r['ID']:r['fields'] for r in reference['effects']}
+charged_reference=json.loads((root/'data/reference/combat/sword-charge-damage.json').read_text(encoding='utf-8'))
+charged_rows={row['ID']:row['fields'] for row in charged_reference['SpEffectParam']}
+charged_attacks={row['ID']:row['fields'] for row in charged_reference['AtkParam_Pc']}
+assert charged_attacks[47200]['subCategory1']==0
+assert charged_attacks[47205]['subCategory1']==110
+for effect,rate in [(321300,1.12),(8320100,1.16),(8320101,1.19),(8320102,1.22)]:
+    assert charged_rows[effect]['magicSubCategoryChange1']==100
+    assert charged_rows[effect]['magParamChange']==charged_rows[effect]['miracleParamChange']==0
+    assert charged_rows[effect]['magicAttackRate']==rate
 assert rows[8320500]['magicSubCategoryChange1']==130
 assert {rows[8350000]['magicSubCategoryChange1'],rows[8350000]['magicSubCategoryChange2']}=={111,112}
 
@@ -140,13 +149,28 @@ try:
         if result:return result
         desc=c.string_at(descriptor,0x3c);param=c.string_at(c.c_void_p.from_address(node).value,0x400)
         mask=desc[4:36];filters=[param[0x13a],param[0x13b],param[0x328]]
-        if desc[0] not in [3,4] or 130 not in filters:return result
+        charged=all(mask[category//8]&(1<<(category%8)) for category in [100,110])
+        if desc[0] not in [3,4] or not (130 in filters or (charged and 100 in filters)):return result
         if not mask[130//8]&(1<<(130%8)):return result
         copied=c.create_string_buffer(desc,0x3c);copied[0]=1
         return original_filter(node,c.addressof(copied),owner,weapon,extra)
     callback_address=c.cast(additive_filter,c.c_void_p).value
     c.memmove(memory+0x511010,b'\x48\xb8'+struct.pack('<Q',callback_address)+b'\xff\xe0'+b'\x90'*3,15)
     try:
+        for kind in [3,4]:
+            for effect,expected in [(321300,1.12),(8320100,1.16),(8320101,1.19),(8320102,1.22)]:
+                for categories,rate in [([110],1.0),([130],1.0),([110,130],1.0),([100,110,130],expected)]:
+                    values=attack_rates([effect],categories,kind)
+                    assert all(abs(values[offset]-rate)<1e-6 for offset in damage_offsets),(effect,kind,categories,values)
+                    rate_tests.append(dict(applyType=kind,effects=[effect],categories=categories,after=values['0xa4']))
+                values=attack_rates([effect,330900],[100,110,130],kind)
+                assert all(abs(values[offset]-expected*1.18)<1e-6 for offset in damage_offsets),values
+                values=attack_rates([effect],[100,110,130],kind,{effect:{0x160:0x80,0x161:1}})
+                assert abs(values['0xa4']-expected)<1e-6,values
+                values=attack_rates([effect],[100,110,130],kind,{effect:{0x3a4:1}})
+                assert abs(values['0xa4']-1.0)<1e-6,values
+                values=attack_rates([effect],[100],1)
+                assert abs(values['0xa4']-expected)<1e-6,values
         for kind in [3,4]:
             for ids,expected in [([7006600],1.06),([7006700],1.0),([7006600,7006700],1.06),([8320500,8350000],1.09),([7006600,7006600,7006700,7006700],1.06**2)]:
                 values=attack_rates(ids,[7,130],kind)
@@ -191,5 +215,6 @@ assert 'sword_hit_distance' not in sword_healing
 assert 'sword::HEAL_BASE' not in source and 'sword::Healing' not in source
 report=dict(version='0.10.3',effectFilterRva='0x511010',attackRateCalculationRva='0x502830',sourceMaskOffset='0x14',cachedRateOffsets=damage_offsets,nativeAttackRateTests=rate_tests,isolatedFixtureLookupStub='E6D630 absent PARAM row; additive melee filter retry at 511010 calls original native predicate; fixture assumes eligible Sword owner',nativeCategoryPredicateRva='0xea1b00',hitMaskOffset='0x124',maskBytes=32,additionalCategories=[130],removedAddedCategories=[111,112],nativeCategoryTests=tests,originalCategoriesRetained=True,originalSkillCategoryChecksPassed=4,unrelatedFiltersExcluded=True,originalSpellApplicationRetained=True,nativeWeaponRestrictionsRetained=True,originalEligibleEffectsNotDoubled=True,activeMagicGetter='ChrIns+1b8 -> module+60 -> virtual+18 -> i32 MagicID',gameplayVerified=False,multiplayerVerified=False)
 report.update(healingUsesCompletedDamage=True,healingRequiresRecipientHpLoss=False,nullifiedHitsExcludedFromHealing=True,healingConsumesNativeRegain=True,lockedHpGameplayVerified=False)
+report.update(chargedDamageVersion='0.17.231',chargedSpellTag=110,addedChargedWeaponTag=100,gravityWellAttacks=[47200,47205],chargedDamageTiers=[1.16,1.19,1.22],chargedDamageNativeCases=64,chargedSpellBonusRetained=True)
 (root/'dist/sword-native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
-print('PASS: 14 native category cases, 22 native AttackRate cases; added melee works, skill bonuses excluded, four original skill checks preserved; no duplicate multiplication.')
+print('PASS: native category/AttackRate regression and 64 charged damage cases; original spell bonuses and weapon restrictions retained; no duplicate multiplication.')

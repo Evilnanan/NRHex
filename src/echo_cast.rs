@@ -2,6 +2,9 @@
 //! target/snapshot references. Descendants and replay dispatch are not echoed.
 use crate::{ptr,read_ptr,read_i32,has_effect,is_local,native_actor,ACTIVE,BASE};
 use std::{cell::Cell,collections::BTreeMap,sync::{Arc,Mutex,atomic::{AtomicPtr,Ordering}}};
+#[path="echo_cast_held.rs"]mod held;
+#[path="echo_cast_stream.rs"]mod stream;
+pub(crate) use held::{bound as held_bound,child_scope,reset as held_reset};
 pub const OWNER:i32=95003500;
 pub const EMIT_RVA:usize=0x35a460;
 pub const FACTORY_RVA:usize=0x35da70;
@@ -40,7 +43,7 @@ impl Drop for Volley{fn drop(&mut self){unsafe{
   release(descriptor.0.as_mut_ptr()as usize);
  }
 }}}
-struct Ticket{descriptor:Box<Descriptor>,pose:[u8;0x40],base:usize,wait:f64,area:bool,shots:Shots,owner:Owner,volley:Option<Arc<Volley>>}
+struct Ticket{descriptor:Box<Descriptor>,pose:[u8;0x40],base:usize,wait:f64,area:bool,shots:Shots,owner:Owner,volley:Option<Arc<Volley>>,shared:Option<Arc<stream::Shared>>}
 impl Drop for Ticket{fn drop(&mut self){unsafe{
  let release:unsafe extern "system" fn(usize)=std::mem::transmute(self.base+RELEASE_RVA);
  release(self.descriptor.0.as_mut_ptr()as usize);
@@ -56,6 +59,7 @@ impl Drop for ScopeGuard{fn drop(&mut self){SCOPE.with(|s|s.set(self.0));}}
 struct ReplayGuard(Replay);
 impl Drop for ReplayGuard{fn drop(&mut self){REPLAY.with(|s|s.set(self.0));}}
 fn eligible(magic:i32,bullet:i32)->bool{
+ if crate::echo_cast_data::EXCLUDED.binary_search(&magic).is_ok(){return false;}
  area_replay(magic,bullet).is_some()||crate::echo_cast_data::ROOTS.binary_search_by_key(&magic,|r|r.0).ok().is_some_and(|i|crate::echo_cast_data::ROOTS[i].1.binary_search(&bullet).is_ok())
 }
 fn root_magic(magic:i32,bullet:i32)->Option<i32>{
@@ -64,6 +68,9 @@ fn root_magic(magic:i32,bullet:i32)->Option<i32>{
   .or_else(||crate::echo_cast_data::AREAS.iter().find(|(_,root,_)|*root==bullet).map(|(magic,_,_)|*magic))
 }
 fn area_replay(magic:i32,bullet:i32)->Option<i32>{
+ if crate::echo_cast_data::WORLD_AREAS.binary_search(&magic).is_ok(){
+  return crate::echo_cast_data::ROOTS.binary_search_by_key(&magic,|row|row.0).ok().and_then(|index|crate::echo_cast_data::ROOTS[index].1.binary_search(&bullet).ok()).map(|_|bullet);
+ }
  crate::echo_cast_data::AREAS.binary_search_by_key(&magic,|r|r.0).ok().and_then(|i|{
   let (_,root,replay)=crate::echo_cast_data::AREAS[i];(root==bullet).then_some(replay)
  })
@@ -76,7 +83,7 @@ unsafe fn owner(actor:usize,base:usize)->Option<Owner>{
 }
 unsafe fn scope(descriptor:usize,base:usize)->Option<Owner>{
  if descriptor==0||read_i32(descriptor+8)>=0{return None;}
- root_magic(read_i32(descriptor+0x18),read_i32(descriptor+0x14))?;
+ root_magic(read_i32(descriptor+0x18),read_i32(descriptor+0x14)).or_else(||held::magic(read_i32(descriptor+0x18),read_i32(descriptor+0x14)))?;
  let world=read_ptr(base+crate::WORLD_RVA);if world==0{return None;}
  let actor=read_ptr(world+0x174e8);let value=owner(actor,base)?;
  (ptr::read_unaligned(descriptor as*const u64)==value.handle).then_some(value)
@@ -96,10 +103,10 @@ unsafe fn retain_counter(pointer:usize,offset:usize,mask:u32){
 }
 unsafe fn replay_volley(scope:Scope,magic:i32,base:usize)->Result<Option<Arc<Volley>>,()>{
  let source=read_ptr(scope.descriptor+0xa0);
- if !matches!(magic,6001|6820|6830)||source==0{return Ok(None);}
+ if source==0||!matches!(magic,4300..=4302|6001|6710|6820|6830)&&crate::echo_cast_data::EXPANDED.binary_search(&magic).is_err(){return Ok(None);}
  let existing=QUEUE.lock().ok().and_then(|queue|queue.pending.iter()
   .filter(|ticket|ticket.owner==scope.owner)
-  .filter_map(|ticket|ticket.volley.as_ref()).find(|volley|volley.source==source).cloned());
+  .filter_map(|ticket|ticket.volley.as_ref()).find(|volley|volley.source==source).cloned()).or_else(||stream::volley(source,scope.owner));
  if let Some(volley)=existing{return Ok(Some(volley));}
  let manager=read_ptr(base+VOLLEY_MANAGER_RVA);if manager==0{return Err(());}
  let create:unsafe extern "system" fn(usize,*const u16)->usize=std::mem::transmute(base+VOLLEY_CREATE_RVA);
@@ -111,7 +118,7 @@ unsafe fn replay_volley(scope:Scope,magic:i32,base:usize)->Result<Option<Arc<Vol
 unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
  if payload==0||ptr::read_unaligned((payload+0x10)as*const u64)!=scope.owner.handle{return None;}
  let bullet=read_i32(scope.descriptor+0x14);
- let magic=root_magic(read_i32(scope.descriptor+0x18),bullet)?;
+ let magic=root_magic(read_i32(scope.descriptor+0x18),bullet).or_else(||held::released(read_i32(scope.descriptor+0x18),bullet))?;
  let replay=area_replay(magic,bullet);
  let targets=read_ptr(payload+0x148);let end=read_ptr(payload+0x150);
  // Independent root shots use one native target descriptor. Multi-target
@@ -119,6 +126,7 @@ unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
  if replay.is_none()&&(targets==0||end.wrapping_sub(targets)!=0x50){return None;}
  let volley=replay_volley(scope,magic,base).ok()?;
  let mut d=Box::new(Descriptor(ptr::read_unaligned(scope.descriptor as*const[u8;0x110])));
+ if matches!(magic,6710|7520){d.0[0x98..0xa0].fill(0);}
  if let Some(volley)=volley.as_ref(){ptr::write_unaligned(d.0.as_mut_ptr().add(0xa0)as*mut usize,volley.replay);}
  d.0[0x90..0x98].fill(0);
  // The copied target is replaced with the target already resolved by native
@@ -134,12 +142,12 @@ unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
   let copy:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+TARGET_COPY_RVA);
   copy(d.0.as_mut_ptr().add(0xb0)as usize,targets);
  }
- retain_counter(read_ptr(scope.descriptor+0x98),0x18,0x3fffffff);
+ retain_counter(read_ptr(d.0.as_ptr()as usize+0x98),0x18,0x3fffffff);
  retain_counter(read_ptr(d.0.as_ptr()as usize+0xa0),0x28,0x7fffffff);
  // Native flag0 requests an independent shot; bit3 retains native networking.
  let flags=read_i32(scope.descriptor+0x44)as u32|3;
  d.0[0x44..0x48].copy_from_slice(&flags.to_le_bytes());
- Some(Ticket{descriptor:d,pose:ptr::read_unaligned((payload+0x190)as*const[u8;0x40]),base,wait:replay_delay(magic),area:replay.is_some(),shots:Arc::default(),owner:scope.owner,volley})
+ Some(Ticket{descriptor:d,pose:ptr::read_unaligned((payload+0x190)as*const[u8;0x40]),base,wait:replay_delay(magic),area:replay.is_some(),shots:Arc::default(),owner:scope.owner,volley,shared:None})
 }
 pub unsafe extern "system" fn factory(manager:usize,payload:usize,error:usize)->usize{
  let original:Factory=std::mem::transmute(FACTORY_ORIGINAL.load(Ordering::Acquire));
@@ -159,24 +167,34 @@ pub unsafe extern "system" fn factory(manager:usize,payload:usize,error:usize)->
   }
   ptr::copy_nonoverlapping(ticket.pose.as_ptr(),(payload+0x190)as*mut u8,0x40);
  }
- let ticket=if replay.ticket==0&&scope.descriptor!=0&&!scope.consumed{snapshot(scope,payload,base)}else{None};
+ let seed=if replay.ticket==0{held::capture(scope,payload,base)}else{None};
+ let mut ticket=if replay.ticket==0{if scope.descriptor!=0&&!scope.consumed{snapshot(scope,payload,base)}else{held::snapshot(payload,base)}}else{None};
+ let continuous=if ticket.as_ref().is_some_and(|ticket|stream::eligible(ticket,payload)){ticket.take().map(|ticket|stream::seed(ticket))}else{None};
+ let _stream=stream::factory(continuous.clone());
+ let _held=held::factory(seed.clone());
  let _flight=crate::sword_projectile::factory_scope(payload);
  let result=original(manager,payload,error);
+ held::group(result,seed);
+ stream::group(result,continuous);
  crate::sword_projectile::factory_done(result);
  if result!=0&&replay.ticket!=0&&!replay.consumed{
   let ticket=&*(replay.ticket as*const Ticket);
+  stream::created(ticket,result);
   if !ticket.area{if let Ok(mut queue)=QUEUE.lock(){if queue.owner==ticket.owner{bind(&mut queue,result,true,Arc::clone(&ticket.shots));}}}
  }
- if result!=0{if let Some(ticket)=ticket{
-  let stale=if let Ok(mut q)=QUEUE.lock(){let old=if q.owner!=scope.owner{q.owner=scope.owner;q.groups.clear();std::mem::take(&mut q.pending)}else{Vec::new()};if !ticket.area{bind(&mut q,result,false,Arc::clone(&ticket.shots));}q.pending.push(ticket);old}else{Vec::new()};drop(stale);
- }}
+ if result!=0{if let Some(ticket)=ticket{enqueue(ticket,Some(result));}}
  result
+}
+fn enqueue(ticket:Ticket,group:Option<usize>){
+ let stale=if let Ok(mut queue)=QUEUE.lock(){let old=if queue.owner!=ticket.owner{queue.owner=ticket.owner;queue.groups.clear();std::mem::take(&mut queue.pending)}else{Vec::new()};if !ticket.area{if let Some(group)=group{unsafe{bind(&mut queue,group,false,Arc::clone(&ticket.shots));}}}queue.pending.push(ticket);old}else{Vec::new()};drop(stale);
 }
 unsafe fn bind(queue:&mut Queue,group:usize,replay:bool,shots:Shots){
  queue.groups.retain(|binding|binding.group!=group);
  queue.groups.push(Binding{group,id:read_i32(group),replay,shots});
 }
 pub unsafe extern "system" fn initialize(group:usize,out:usize,transform:usize,target:u32,index:u32)->usize{
+ let _held=held::initialize(group);
+ let continuous=stream::source(group);
  let original:Initialize=std::mem::transmute(INITIALIZE_ORIGINAL.load(Ordering::Acquire));
  let binding=if ACTIVE.load(Ordering::Acquire)&&group!=0&&transform!=0{
   let id=read_i32(group);QUEUE.lock().ok().and_then(|queue|queue.groups.iter().find(|binding|binding.group==group&&binding.id==id).map(|binding|(binding.replay,Arc::clone(&binding.shots))))
@@ -189,17 +207,22 @@ pub unsafe extern "system" fn initialize(group:usize,out:usize,transform:usize,t
  };
  let result=original(group,out,source,target,index);
  if out!=0&&read_ptr(out)!=usize::MAX{
+  stream::initialized(group,continuous,transform,index);
   if let Some((false,shots))=binding{if let Ok(mut shots)=shots.lock(){shots.entry(index).or_insert_with(||Transform(ptr::read_unaligned(transform as*const[u8;0x30])));}}
  }
  result
 }
 pub unsafe extern "system" fn finish(group:usize){
+ held::finish(group);
+ stream::finish(group);
  crate::sword_projectile::finish_group(group);
  if let Ok(mut queue)=QUEUE.lock(){queue.groups.retain(|binding|binding.group!=group);}
  let original:Finish=std::mem::transmute(FINISH_ORIGINAL.load(Ordering::Acquire));original(group);
 }
 pub unsafe fn update(actor:usize,base:usize,dt:f32){
  let current=owner(actor,base);
+ held::update(current);
+ stream::update(current);
  let (mut ready,discard)=if let Ok(mut q)=QUEUE.lock(){
   if current!=Some(q.owner){q.groups.clear();(Vec::new(),std::mem::take(&mut q.pending))}else{
    let mut ready=Vec::new();let mut waiting=Vec::new();
@@ -210,10 +233,26 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  let manager=read_ptr(base+0x3c0ae30);if manager==0{return;}
  let emit:Emit=std::mem::transmute(EMIT_ORIGINAL.load(Ordering::Acquire));
  for ticket in &mut ready{
+  stream::prepare(ticket);
   let descriptor=ticket.descriptor.0.as_mut_ptr()as usize;
   let _replay=ReplayGuard(REPLAY.with(|r|r.replace(Replay{ticket:ticket as*const Ticket as usize,consumed:false})));
   let mut out=-1i32;let mut error=-1i32;emit(manager,&mut out as*mut i32 as usize,descriptor,&mut error as*mut i32 as usize);
+  if out>=0{emit_visual(ticket,manager,emit);}
  }
+}
+unsafe fn emit_visual(ticket:&Ticket,manager:usize,emit:Emit){
+ let root=read_i32(ticket.descriptor.0.as_ptr()as usize+0x14);
+ let Some(&(_,bullet))=crate::echo_cast_data::VISUALS.iter().find(|row|row.0==root)else{return;};
+ let mut descriptor=Box::new(Descriptor(ticket.descriptor.0));
+ descriptor.0[0x14..0x18].copy_from_slice(&bullet.to_le_bytes());
+ descriptor.0[0x18..0x1c].copy_from_slice(&(-1i32).to_le_bytes());
+ descriptor.0[0x90..0x100].fill(0);
+ descriptor.0[0xb8..0xc0].fill(0xff);descriptor.0[0xe0..0xe4].fill(0xff);descriptor.0[0xf0..0xf4].fill(0xff);
+ descriptor.0[0x50..0x90].copy_from_slice(&ticket.pose);
+ let mut visual=Ticket{descriptor,pose:ticket.pose,base:ticket.base,wait:0.,area:true,shots:Arc::default(),owner:ticket.owner,volley:None,shared:None};
+ let _replay=ReplayGuard(REPLAY.with(|state|state.replace(Replay{ticket:&visual as*const Ticket as usize,consumed:false})));
+ let mut out=-1i32;let mut error=-1i32;
+ emit(manager,&mut out as*mut i32 as usize,visual.descriptor.0.as_mut_ptr()as usize,&mut error as*mut i32 as usize);
 }
 #[cfg(test)]mod tests{
  use super::*;
@@ -228,9 +267,9 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
   for &(magic,_,_)in crate::echo_cast_data::AREAS{assert_eq!(replay_delay(magic),0.5);}
   assert_eq!(replay_delay(6830),0.5);
  }
- #[test]fn root_filter_does_not_echo_children_or_sustained_casts(){
-  assert!(eligible(4021,10402100));assert!(eligible(4021,10402150));assert!(!eligible(4021,10402151));assert!(!eligible(4200,10420000));assert!(!eligible(7000,10700000));assert!(!eligible(4021,10462000));
-  for (magic,roots)in [(4120,&[10412000,10412001][..]),(4130,&[10413000][..]),(4510,&[10451000,10451010,10451020][..]),(4700,&[10470000,10470005,10470010,10470020,10470030,10470040][..]),(4701,&[10470100,10470110,10470120,10470150,10470151,10470152][..]),(7060,&[10706000,10706002][..]),(7090,&[10709000,10709001][..]),(7240,&[10724000][..]),(7330,&[10733000,10733001,10999999][..])]{
+ #[test]fn root_filter_preserves_requested_exclusions_and_rejects_children(){
+  assert!(eligible(4021,10402100));assert!(eligible(4021,10402150));assert!(!eligible(4021,10402151));assert!(!eligible(4200,10420000));assert!(eligible(7000,10700000));assert!(!eligible(4021,10462000));
+  for (magic,roots)in [(4110,&[10411000,10411010,10411012,10411014][..]),(4200,&[10420000,10420001,10420002,10420003,10420004][..]),(4520,&[10452000,10452001,10452002][..]),(4700,&[10470000,10470005,10470010,10470020,10470030,10470040][..]),(4701,&[10470100,10470110,10470120,10470150,10470151,10470152][..]),(4130,&[10413000][..]),(7900,&[10790001,10790051,10790099][..])]{
    for &root in roots{assert!(!eligible(magic,root));}
   }
  }
@@ -242,7 +281,7 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
   for &(magic,bullet,_)in crate::echo_cast_data::AREAS{
    assert!(roots.insert(bullet));assert_eq!(root_magic(-1,bullet),Some(magic));
   }
-  for bullet in [10400099,10402151,10422015,10412000,10413000,10451000,10470000,10470100,10706000,10709000,10724000,10733000,10642000,10420000,10700000,95003512]{assert_eq!(root_magic(-1,bullet),None);}
+  for bullet in [10400099,10402151,10422015,10413000,10470000,10470100,10411010,10452000,10642000,10420000,10700001,10790001,95003512]{assert_eq!(root_magic(-1,bullet),None);}
   assert_eq!(root_magic(4021,10400000),None);assert_eq!(root_magic(-2,10400000),None);
  }
  #[test]fn retain_preserves_native_high_flag_bits(){unsafe{
@@ -256,13 +295,29 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
   }
   for magic in [6420,6760,6971]{assert!(!eligible(magic,10000000+magic*100));}
  }
+ #[test]fn expanded_world_areas_keep_native_roots_without_echoing_personal_effects(){
+  assert_eq!(crate::echo_cast_data::EXPANDED.len(),26);
+  assert_eq!(crate::echo_cast_data::EXCLUDED,&[4110,4200,4520,4700,4701]);
+  for &magic in crate::echo_cast_data::EXPANDED{
+   let roots=crate::echo_cast_data::ROOTS.iter().find(|row|row.0==magic).unwrap().1;
+   for &root in roots{assert!(eligible(magic,root));assert_eq!(area_replay(magic,root),crate::echo_cast_data::WORLD_AREAS.contains(&magic).then_some(root));}
+  }
+  for magic in [4130,4300,4301,4302,4430,4440,4450,4460,4470,6420,7080,7500,7510,7900]{assert!(!crate::echo_cast_data::ROOTS.iter().any(|row|row.0==magic));}
+ }
  #[test]fn volley_roots_include_no_cost_sides_but_not_helpers_or_descendants(){
+  for (magic,held,flight)in crate::echo_cast_data::RELEASES{
+   assert_eq!(held::magic(*magic,*held),Some(*magic));assert_eq!(held::magic(-1,*held),Some(*magic));
+   assert_eq!(held::released(*magic,*flight),Some(*magic));assert_eq!(held::released(-1,*flight),Some(*magic));
+   assert_eq!(held::released(*magic,*held),None);assert_eq!(held::released(4021,*flight),None);
+   assert!(!eligible(*magic,*held));assert!(!eligible(*magic,*flight));
+  }
+  for (magic,visuals)in [(5030,&[10503010][..]),(6270,&[10624000,10624050][..])]{for &visual in visuals{assert!(eligible(magic,visual));}}
   for root in [10409000,10409001,10409002,10409050,10409051,10409052]{assert!(eligible(4090,root));}
   for root in [10450010,10450011,10450012,10450060,10450061,10450062]{assert!(eligible(4500,root));}
   for root in [10682010,10682011,10682012,10682070,10682071,10682072]{assert!(eligible(6820,root));}
   assert!(eligible(4220,10422000));assert!(eligible(4220,10422050));assert!(!eligible(4220,10422015));
   assert!(!eligible(4220,10422098));assert!(!eligible(4220,10422099));assert!(!eligible(4050,10404099));
-  assert!(!eligible(4060,10406000));assert!(!eligible(4520,10452000));assert!(!eligible(7900,10790001));
+  assert!(eligible(4060,10406000));assert!(!eligible(4520,10452000));assert!(!eligible(7900,10790001));
  }
 }
 #[cfg(test)]
