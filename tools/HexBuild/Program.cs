@@ -79,6 +79,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--basics-family-stage")){Basics.StageFamily(root,bnd,Parse);return;}
 if(args.Contains("--basics-stage")){Basics.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--basics-check")){Basics.Verify(root,bnd,Parse);return;}
 if(args.Contains("--wraith-stage")){Wraith.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}

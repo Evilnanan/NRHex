@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 static class Basics {
  public const int Owner=95004400;
+ public static readonly int[] FamilyIdle={705061,705071,705081};
  static string Name(BinderFile file)=>file.Name.Replace('\\','/').Split('/').Last();
  static void Check(bool value,string message){if(!value)throw new InvalidDataException(message);}
  static void Set(PARAM.Row row,string field,object value)=>row[field].Value=Convert.ChangeType(value,row[field].Value.GetType());
@@ -11,6 +12,10 @@ static class Basics {
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
   float[] rates={0.7f,0.8f,0.5f};
   for(int i=0;i<3;i++){var r=clone("SpEffectParam",8000000,Owner+1+i);foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("effectEndurance",2f),("saveCategory",-1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("characterSkillCooldownReduction",rates[i])})Set(r,f,v);}
+  FamilyMechanics(clone);
+ }
+ public static void FamilyMechanics(Func<string,int,int,PARAM.Row> clone){
+  for(int i=0;i<3;i++){var r=clone("SpEffectParam",FamilyIdle[i],Owner+4+i);Set(r,"motionInterval",Convert.ToSingle(r["motionInterval"].Value)*0.5f);}
  }
  public static void Events(EMEVD events){
   foreach(int id in new[]{1111,9100941}){
@@ -24,15 +29,34 @@ static class Basics {
   PARAM Table(BND4 b,string name)=>parse(name,b.Files.Single(f=>Name(f)==name+".param").Bytes);
   var effects=Table(current,"SpEffectParam");var original=Table(native,"SpEffectParam");
   for(int i=0;i<3;i++){var r=effects.Rows.Single(r=>r.ID==Owner+1+i);Check(Convert.ToSingle(r["characterSkillCooldownReduction"].Value)==new[]{0.7f,0.8f,0.5f}[i]&&Convert.ToSingle(r["effectEndurance"].Value)==2f&&Convert.ToInt32(r["saveCategory"].Value)==-1,"Native skill cooldown multiplier mismatch");}
-  foreach(int id in new[]{7000800,7000801,7000802,7290000,7290001})Check(CageAI.Same(original.Rows.Single(r=>r.ID==id),effects.Rows.Single(r=>r.ID==id)),"Native relic changed");
+  foreach(int id in new[]{7000800,7000801,7000802,7290000,7290001,705060,705070,705080})Check(CageAI.Same(original.Rows.Single(r=>r.ID==id),effects.Rows.Single(r=>r.ID==id)),"Native relic changed");
+  for(int i=0;i<3;i++){
+   var nativeRow=original.Rows.Single(r=>r.ID==FamilyIdle[i]);Check(CageAI.Same(nativeRow,effects.Rows.Single(r=>r.ID==FamilyIdle[i])),"Native family regeneration changed");
+   var expected=new PARAM.Row(nativeRow){ID=Owner+4+i};Set(expected,"motionInterval",Convert.ToSingle(nativeRow["motionInterval"].Value)*0.5f);
+   Check(CageAI.Same(expected,effects.Rows.Single(r=>r.ID==Owner+4+i)),"Private inactive effect differs beyond its healing interval");
+   Check(Convert.ToSingle(nativeRow["changeHpRate"].Value)==-1f&&Convert.ToSingle(nativeRow["motionInterval"].Value)==new[]{0.6f,1.5f,2f}[i],"Native family healing baseline changed");
+  }
   Check(Convert.ToInt32(effects.Rows.Single(r=>r.ID==Owner)["iconId"].Value)==22297,"Wrong ability status icon");
   Check(RewardCatalog.HistoryBit(Owner)==41&&RewardCatalog.HistoricalOwners[40]==95004300,"History slots must not be reused");
   var good=Table(current,"EquipParamGoods").Rows.Single(r=>r.ID==Owner);var attach=Table(current,"AttachEffectParam").Rows.Single(r=>r.ID==Owner);var permanent=Table(current,"PermanentBuffParam").Rows.Single(r=>r.ID==Owner);
   Check(Convert.ToInt32(good["vagrantItemLotId"].Value)==Owner&&Convert.ToInt32(good["iconId"].Value)==20297&&Convert.ToInt32(attach["passiveSpEffectId_1"].Value)==Owner&&Convert.ToInt32(permanent["iconId"].Value)==21297,"Ultimate-series reward wiring mismatch");
-  return new{owner=Owner,cooldownMultipliers=new[]{0.7f,0.8f,0.5f},familyDamageMultiplier=3f,historyBit=41};
+  return new{owner=Owner,cooldownMultipliers=new[]{0.7f,0.8f,0.5f},familyDamageMultiplier=2f,familyReloadSpeed=2f,historyBit=41};
  }
  static void Fixture(string directory,BND4 current,Func<string,Memory<byte>,PARAM> parse){
-  Directory.CreateDirectory(directory);var rows=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);rows.Rows=rows.Rows.Where(r=>r.ID>=Owner&&r.ID<=Owner+3||new[]{7000800,7000801,7000802}.Contains(r.ID)).ToList();File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),rows.Write());
+  Directory.CreateDirectory(directory);var rows=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);rows.Rows=rows.Rows.Where(r=>r.ID>=Owner&&r.ID<=Owner+6||new[]{7000800,7000801,7000802,705060,705070,705080}.Concat(FamilyIdle).Contains(r.ID)).ToList();File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),rows.Write());
+ }
+ public static void StageFamily(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/basics-family/staged");Directory.CreateDirectory(dir);
+  var b=SFUtil.DecryptNightreignRegulation(input);var before=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());var member=b.Files.Single(f=>Name(f)=="SpEffectParam.param");var old=parse("SpEffectParam",member.Bytes);var rows=parse("SpEffectParam",member.Bytes);
+  var originals=parse("SpEffectParam",native.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);
+  FamilyMechanics((name,source,id)=>{Check(name=="SpEffectParam"&&!rows.Rows.Any(r=>r.ID==id),"Family effect ID collision");var row=new PARAM.Row(originals.Rows.Single(r=>r.ID==source)){ID=id};rows.Rows.Add(row);return row;});
+  rows.Rows=rows.Rows.OrderBy(r=>r.ID).ToList();member.Bytes=rows.Write();string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,b,b.Compression);var actual=SFUtil.DecryptNightreignRegulation(output);
+  Check(actual.Version==b.Version&&actual.Compression==b.Compression&&actual.Files.Count==b.Files.Count,"Regulation metadata changed");
+  foreach(var f in actual.Files){var intended=b.Files.Single(x=>x.ID==f.ID);Check(f.Name==intended.Name&&f.Flags==intended.Flags&&f.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Parameter serialization mismatch");if(f.ID!=member.ID){Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated table changed");continue;}
+   var now=parse("SpEffectParam",f.Bytes);Check(now.Rows.Count==old.Rows.Count+3&&old.Rows.OrderBy(r=>r.ID).Zip(now.Rows.Where(r=>r.ID<Owner+4||r.ID>Owner+6).OrderBy(r=>r.ID)).All(p=>CageAI.Same(p.First,p.Second)),"Old effect rows changed");}
+  var audit=Validate(native,actual,parse);Fixture(dir,actual,parse);
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),addedEffects=Enumerable.Range(4,3).Select(n=>Owner+n),onlyNewEffectsAdded=true,originalRowsAndUnrelatedTablesPreserved=true,audit,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: three private native family idle effects staged; only regeneration intervals halved");
  }
  public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   var current=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));Validate(native,current,parse);Fixture(Path.Combine(root,"work/basics"),current,parse);

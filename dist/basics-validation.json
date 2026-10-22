@@ -1,8 +1,8 @@
 {
-  "version": "0.17.223",
+  "version": "0.17.224",
+  "baseCommit": "5744fce69fd971e21f2f6df0c054e625addf54be",
   "owner": 95004400,
   "name": "回归基本功",
-  "baseCommit": "8200a51b341c3801dabc1a305f53bb5b3209fd0f",
   "allHeroesEligible": true,
   "ultimateGaugePreserved": true,
   "conflicts": [
@@ -34,7 +34,8 @@
       "damage": 2
     },
     "6": {
-      "familyDamage": 3
+      "familyDamage": 2,
+      "familyReloadSpeed": 2
     },
     "7": {
       "damage": 1.5
@@ -57,243 +58,28 @@
   "drawEnabledSize": 39,
   "singleNativeRewardTemplateRetained": true,
   "assets": {
-    "changedAssets": {
-      "mod/regulation.bin": {
-        "inputSha256": "ab9a47d6bc6d3b1d1d63d5548cb141071774d936c92f391114c250a2ff314a6c",
-        "outputSha256": "b3276ce9f397f9d139132614d04e624666b6e8c7048578032165cdfb5931fe4a"
-      },
-      "mod/event/common.emevd.dcx": {
-        "inputSha256": "d4eabd7267cf8e14a9a18b7835ac76579e2c2ac1386ee19f183c9ff93dbe0873",
-        "outputSha256": "d6695f92fbc7d88564550f45a9a323b43bda892de006865b507a4d064642fc7b"
-      },
-      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
-        "inputSha256": "55a04a64e5acbdebdcdc1d3e708156a90848c4c462cf400be5308401f33b5915",
-        "outputSha256": "e9ec1e7911af8c56527137cc0b5cc7db6fb5825c1544688089186f221f4ce4bc"
-      },
-      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
-        "inputSha256": "6fefe568104fffed503d8fb66aae496ad24051473717cd26bcfee93d66e65296",
-        "outputSha256": "f8b8378c759a38bea1876af656579c0fe9916688b278b7d6a78b4297696a99e6"
-      },
-      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
-        "inputSha256": "45da9d1d8fe3a3ac24dac05c60a659def747c486c32055f5727e97f7d2785fdd",
-        "outputSha256": "18c8ad52cd989cd3238e2e288dff816598d5d0f5ad0aa30e85b680f02aa34f10"
-      },
-      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
-        "inputSha256": "8a761349ea4ad3ad2b8949f7760b3f96079afe487b2b45e326446af844330e88",
-        "outputSha256": "b69d226c298d5c05edb99361e0baa51ea6746f0580ade9e752bf871595d10407"
-      },
-      "mod/action/script/c0000.hks": {
-        "inputSha256": "ecc038fba7a824fea2d13217ed5fc3059f781013d3a627e9c8fa750c074e0016",
-        "outputSha256": "3c731b9f327d292f63cea07df2a86f401b7c7755dd1c3d7b1cad7335911c4667"
-      }
+    "inputSha256": "B3276CE9F397F9D139132614D04E624666B6E8C7048578032165CDFB5931FE4A",
+    "outputSha256": "92754353E35E2A0CC3E26644123A450A5E9A94195E7D33ED03435F48A612CEDE",
+    "addedEffects": [
+      95004404,
+      95004405,
+      95004406
+    ],
+    "onlyNewEffectsAdded": true,
+    "originalRowsAndUnrelatedTablesPreserved": true,
+    "audit": {
+      "owner": 95004400,
+      "cooldownMultipliers": [
+        0.7,
+        0.8,
+        0.5
+      ],
+      "familyDamageMultiplier": 2,
+      "familyReloadSpeed": 2,
+      "historyBit": 41
     },
-    "containers": {
-      "mod/event/common.emevd.dcx": {
-        "rawSha256": "8aa5ba299184b28086c96a76b0c57ee5ce75ae34f109e4c40ca96bb29cdc710d",
-        "containerSha256": "d6695f92fbc7d88564550f45a9a323b43bda892de006865b507a4d064642fc7b",
-        "roundTripPassed": true
-      },
-      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
-        "rawSha256": "d1cc3abdac7c63e4c3316cb80193a4240b224b0e71accc12ef2514c558f3a160",
-        "containerSha256": "e9ec1e7911af8c56527137cc0b5cc7db6fb5825c1544688089186f221f4ce4bc",
-        "roundTripPassed": true
-      },
-      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
-        "rawSha256": "4087a484caa11c76a584c0c0b7b289fa06d635c57b5557744f8ab60b71d9a3e3",
-        "containerSha256": "f8b8378c759a38bea1876af656579c0fe9916688b278b7d6a78b4297696a99e6",
-        "roundTripPassed": true
-      },
-      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
-        "rawSha256": "f6176bd57aa3ac281235dbdf70e4ebba6afdff831de0b13ac5e45eca6074ac3e",
-        "containerSha256": "18c8ad52cd989cd3238e2e288dff816598d5d0f5ad0aa30e85b680f02aa34f10",
-        "roundTripPassed": true
-      },
-      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
-        "rawSha256": "f1f45f2d06bd7acd6322d4f380716f7e9f25f8e4fa1ec899248457bbe52a460c",
-        "containerSha256": "b69d226c298d5c05edb99361e0baa51ea6746f0580ade9e752bf871595d10407",
-        "roundTripPassed": true
-      }
-    },
-    "generator": {
-      "inputSha256": "AB9A47D6BC6D3B1D1D63D5548CB141071774D936C92F391114C250A2FF314A6C",
-      "outputSha256": "B3276CE9F397F9D139132614D04E624666B6E8C7048578032165CDFB5931FE4A",
-      "eventInputSha256": "2C8D369A946425F2E14ECD17250442D9A3603DAFDC847B17A7A5D18FB5A4FEC0",
-      "eventOutputSha256": "8AA5BA299184B28086C96A76B0C57EE5CE75AE34F109E4C40CA96BB29CDC710D",
-      "hexCount": 40,
-      "addedRows": {
-        "SpEffectParam": [
-          95004400,
-          95004401,
-          95004402,
-          95004403
-        ],
-        "AttachEffectParam": [
-          95004400
-        ],
-        "PermanentBuffParam": [
-          95004400
-        ],
-        "EquipParamGoods": [
-          95004400
-        ],
-        "ItemTableParam": [
-          95110141
-        ]
-      },
-      "rowCounts": {
-        "SpEffectParam": 16420,
-        "AttachEffectParam": 2119,
-        "PermanentBuffParam": 163,
-        "EquipParamGoods": 476,
-        "ItemTableParam": 34908
-      },
-      "audit": {
-        "owner": 95004400,
-        "cooldownMultipliers": [
-          0.7,
-          0.8,
-          0.5
-        ],
-        "familyDamageMultiplier": 3,
-        "historyBit": 41
-      },
-      "existingRowsAndUnrelatedTablesUnchanged": true,
-      "onlyTwoGuardedCleanupEventsExtended": true,
-      "gameplayVerified": false,
-      "multiplayerVerified": false
-    },
-    "ownerTexts": {
-      "source": "docs/hexes.md",
-      "sourceSha256": "653F919F1D575592A11C8ECE149C024006C82C9D33222AF5ABF916A593F323E9",
-      "englishSource": "docs/hexes.en.md",
-      "englishSourceSha256": "2392166F14B96DC9A0F8B5D71AEB3D61F02660FC4A4692B31290B668432E5AA0",
-      "statusSource": "data/text/status-effects.json",
-      "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
-      "statusOnly": false,
-      "reports": [
-        {
-          "language": "zhocn",
-          "file": "item_dlc01.msgbnd.dcx",
-          "inputSha256": "8790A73959ED980F18610B4596835764E387EDC7D013AD0BA0CB8A4489A28965",
-          "outputSha256": "D1CC3ABDAC7C63E4C3316CB80193A4240B224B0E71ACCC12EF2514C558F3A160",
-          "changes": [
-            {
-              "fmg": "AttachEffectName.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "回归基本功"
-            },
-            {
-              "fmg": "AttachEffectInfo.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "你的绝招已被封印。技艺的冷却速度和伤害大幅增强"
-            },
-            {
-              "fmg": "PermanentBuffName.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "回归基本功"
-            },
-            {
-              "fmg": "PermanentBuffInfo.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "你的绝招已被封印。技艺的冷却速度和伤害大幅增强"
-            },
-            {
-              "fmg": "PermanentBuffCaption.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "你的绝招已被封印。技艺的冷却速度和伤害大幅增强"
-            }
-          ],
-          "unrelatedEntriesAndMembersUnchanged": true
-        },
-        {
-          "language": "zhocn",
-          "file": "menu_dlc01.msgbnd.dcx",
-          "inputSha256": "528EC57802FA1F51149A973B675994A8BCA9CBFD3111B735E25959CBC4805B9E",
-          "outputSha256": "4087A484CAA11C76A584C0C0B7B289FA06D635C57B5557744F8AB60B71D9A3E3",
-          "changes": [
-            {
-              "fmg": "SpEffectName.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "回归基本功"
-            },
-            {
-              "fmg": "SpEffectInfo.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "你的绝招已被封印。技艺的冷却速度和伤害大幅增强"
-            }
-          ],
-          "unrelatedEntriesAndMembersUnchanged": true
-        },
-        {
-          "language": "engus",
-          "file": "item_dlc01.msgbnd.dcx",
-          "inputSha256": "D79924058AB37E770C7868307B07AED45473159AEBAD32DCAC9B672546B57248",
-          "outputSha256": "F6176BD57AA3AC281235DBDF70E4EBBA6AFDFF831DE0B13AC5E45ECA6074AC3E",
-          "changes": [
-            {
-              "fmg": "AttachEffectName.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "Back to Basics"
-            },
-            {
-              "fmg": "AttachEffectInfo.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage."
-            },
-            {
-              "fmg": "PermanentBuffName.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "Back to Basics"
-            },
-            {
-              "fmg": "PermanentBuffInfo.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage."
-            },
-            {
-              "fmg": "PermanentBuffCaption.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage."
-            }
-          ],
-          "unrelatedEntriesAndMembersUnchanged": true
-        },
-        {
-          "language": "engus",
-          "file": "menu_dlc01.msgbnd.dcx",
-          "inputSha256": "1F678FB7C433C189B639BE7591633DDC178A76A38085BAB4E76A781CCACE970C",
-          "outputSha256": "F1F45F2D06BD7ACD6322D4F380716F7E9F25F8E4FA1EC899248457BBE52A460C",
-          "changes": [
-            {
-              "fmg": "SpEffectName.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "Back to Basics"
-            },
-            {
-              "fmg": "SpEffectInfo.fmg",
-              "id": 95004400,
-              "before": null,
-              "after": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage."
-            }
-          ],
-          "unrelatedEntriesAndMembersUnchanged": true
-        }
-      ]
-    },
-    "allBilingualDescriptionsMatch": true
+    "gameplayVerified": false,
+    "multiplayerVerified": false
   },
   "hks": {
     "inputSha256": "ecc038fba7a824fea2d13217ed5fc3059f781013d3a627e9c8fa750c074e0016",
@@ -346,26 +132,30 @@
       "local-only ground/air and two-button Ultimate gates; gauge unchanged",
       "native Restage history multiplier retains 0.5/0.6 base and truncation",
       "all ten hero damage scopes; ordinary attacks, healing, support and foreign actors unchanged",
-      "exact three family handles including generation; +200% means x3",
-      "only final HP damage changed; status, stamina and poise untouched"
+      "exact three family handles including generation; +100% means x2",
+      "only final HP damage changed; status, stamina and poise untouched",
+      "private native idle effects halve all three intervals; original and active rows preserved",
+      "acquisition upgrades existing idle effects once; 100 updates never restart healing ticks",
+      "native active transition retained; owner loss and expedition reset restore idle effects"
     ],
     "stubs": [
       "native availability dispatcher result fixture",
+      "category-201 effect allocation/replacement and world handle lookup fixtures",
       "ownership/effect lookups",
       "actors and family slots are memory fixtures, not live actors",
       "full collision, inventory awards, game transport and animation state machine not executed"
     ],
     "sourceHashes": {
-      "src/basics.rs": "008b99cfcf2f9b7a8e5187a5b3d94368b619639c794ed8e2527b73db85fe5c5d",
-      "src/basics_native_tests.rs": "8ffb543718051440a676abc488bc45eb14da4880098c69003c772ae40dc97d74",
-      "src/lib.rs": "1fa0e28f6c8e7d6e4f3a7054d788ef7820f24004aa0fcb52b1974a19798cecb3",
+      "src/basics.rs": "b31257a622539e82f03ec777884574608457af080c72ee56e253184ac00301fe",
+      "src/basics_native_tests.rs": "9c433ee770bf155716aa8bd969a90526bdd2ecd660f7a622ccc0ffffdadc621f",
+      "src/lib.rs": "6412a62c43bbd65b2d5f697186349549c3a44b7740788f2ce6050660f3b1c886",
       "src/ambulance.rs": "7418753e126f0b55fc5eb7137095497a7ec666f8f08a041f9176924e4b184db6",
       "src/reward_choices.rs": "28bab7cb09fd50baafad143966fa86d32f997206396257296bf770d2fd1b9be6",
       "src/hex_pool.rs": "1e9d4f18db3d4a7056d5ae4eb923f363edfc5df2dbda2b64d17b6f65869cee66",
-      "tools/HexBuild/Basics.cs": "fd8ed0a120ed6cfca19826fdf2fee8765b3b00ac20c689e8ee5c441a995670b7",
-      "tools/HexBuild/Program.cs": "69fa7befba9f26baa63a3d537b460fc25ac38d8d9697605cacf4e15f5cb150d2",
+      "tools/HexBuild/Basics.cs": "6fdc7ec6ebace58506426f2bf031d7bb3644f2990d8fccd99d7f1d5d344283f2",
+      "tools/HexBuild/Program.cs": "0f5a97d7c0f690acf100ec68ea7fe457befbfeecfd6674d584c6df9b0614f95c",
       "tools/build_basics_hks.py": "db61f6afb2d8a2f009b906ae7409c7dcc701066d8b1f3c830a613ca4c8c4aa58",
-      "tools/verify_basics.py": "39854f966d70fd1039937fb56b80d3a2659116242eb0e390bb6e8681c2f7c97e",
+      "tools/verify_basics.py": "6d767588682f2ec7cf4cf93166451b8eba2d1a16035db2436d2aa272d1cc2b05",
       "docs/hexes.md": "653f919f1d575592a11c8ece149c024006c82c9d33222af5abf916a593f323e9",
       "docs/hexes.en.md": "2392166f14b96dc9a0f8b5d71aeb3d61f02660fc4a4692b31290b668432e5aa0"
     },
@@ -373,13 +163,13 @@
     "multiplayerVerified": false
   },
   "build": {
-    "version": "0.17.223",
+    "version": "0.17.224",
     "mode": "dll-only",
     "buildPassed": true,
     "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
-    "dllSha256": "06e5d98bbae05bb4791e2c07ba8b6565253dea980eb06ee6d9ea2bc638af6338",
+    "dllSha256": "577860fe672c344c9b554c22acdaf413b65b68962ec6526c22afc5ef6d8ee7c4",
     "installed": true,
-    "installedDllSha256": "06e5d98bbae05bb4791e2c07ba8b6565253dea980eb06ee6d9ea2bc638af6338",
+    "installedDllSha256": "577860fe672c344c9b554c22acdaf413b65b68962ec6526c22afc5ef6d8ee7c4",
     "resourcesRebuilt": false,
     "gameplayVerified": false,
     "multiplayerVerified": false,
@@ -389,70 +179,52 @@
   "regularIgnoredTests": 27,
   "runtimeSuitesPassed": 18,
   "exeSignaturesPassed": 206,
+  "onlyNativeIdleIntervalsChanged": true,
+  "onlyOwnThreeFamilySlotsRouted": true,
+  "existingIdleFamilyUpgradedOnAcquisition": true,
+  "noFrameRefreshOfRegenerationTimer": true,
+  "originalActiveFamilyEffectsPreserved": true,
+  "ownerLossAndResetRestoreNativeIdleEffects": true,
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
   "changedExistingDistributionFiles": {
     "README.md": {
-      "inputSha256": "c828b983f64e5437e1f1524a475c7a05772b8f55359e9918162e92ff0acef7a6",
-      "outputSha256": "ce0841fb0bd3030de04dc206c8aff9721bb0a545e67c96c50d9d0cca525736d6"
+      "inputSha256": "ce0841fb0bd3030de04dc206c8aff9721bb0a545e67c96c50d9d0cca525736d6",
+      "outputSha256": "aac2aed341af234d49ead4382bd590768a9e127156aaa0173da2c898df65533c"
     },
     "mod/regulation.bin": {
-      "inputSha256": "ab9a47d6bc6d3b1d1d63d5548cb141071774d936c92f391114c250a2ff314a6c",
-      "outputSha256": "b3276ce9f397f9d139132614d04e624666b6e8c7048578032165cdfb5931fe4a"
-    },
-    "mod/event/common.emevd.dcx": {
-      "inputSha256": "d4eabd7267cf8e14a9a18b7835ac76579e2c2ac1386ee19f183c9ff93dbe0873",
-      "outputSha256": "d6695f92fbc7d88564550f45a9a323b43bda892de006865b507a4d064642fc7b"
+      "inputSha256": "b3276ce9f397f9d139132614d04e624666b6e8c7048578032165cdfb5931fe4a",
+      "outputSha256": "92754353e35e2a0cc3e26644123a450a5e9a94195e7d33ed03435f48a612cede"
     },
     "mod/natives/NRHex.dll": {
-      "inputSha256": "95b9e4b9bde8dfd6673d7f1db2d2ff7aab043df0848a006db5a369c6020204cc",
-      "outputSha256": "06e5d98bbae05bb4791e2c07ba8b6565253dea980eb06ee6d9ea2bc638af6338"
-    },
-    "mod/action/script/c0000.hks": {
-      "inputSha256": "ecc038fba7a824fea2d13217ed5fc3059f781013d3a627e9c8fa750c074e0016",
-      "outputSha256": "3c731b9f327d292f63cea07df2a86f401b7c7755dd1c3d7b1cad7335911c4667"
-    },
-    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
-      "inputSha256": "45da9d1d8fe3a3ac24dac05c60a659def747c486c32055f5727e97f7d2785fdd",
-      "outputSha256": "18c8ad52cd989cd3238e2e288dff816598d5d0f5ad0aa30e85b680f02aa34f10"
-    },
-    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
-      "inputSha256": "8a761349ea4ad3ad2b8949f7760b3f96079afe487b2b45e326446af844330e88",
-      "outputSha256": "b69d226c298d5c05edb99361e0baa51ea6746f0580ade9e752bf871595d10407"
-    },
-    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
-      "inputSha256": "55a04a64e5acbdebdcdc1d3e708156a90848c4c462cf400be5308401f33b5915",
-      "outputSha256": "e9ec1e7911af8c56527137cc0b5cc7db6fb5825c1544688089186f221f4ce4bc"
-    },
-    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
-      "inputSha256": "6fefe568104fffed503d8fb66aae496ad24051473717cd26bcfee93d66e65296",
-      "outputSha256": "f8b8378c759a38bea1876af656579c0fe9916688b278b7d6a78b4297696a99e6"
+      "inputSha256": "06e5d98bbae05bb4791e2c07ba8b6565253dea980eb06ee6d9ea2bc638af6338",
+      "outputSha256": "577860fe672c344c9b554c22acdaf413b65b68962ec6526c22afc5ef6d8ee7c4"
     }
   },
   "allOtherExistingDistributionFilesPreserved": true,
   "sourceHashes": {
-    "Cargo.toml": "56b1f0f17b663db99715077ddb457c921e7bda75561ee0aa410eb88bcb2b482e",
-    "Cargo.lock": "8e63e9046431842f8995084701bf085d70b7991a6005cb5e0b4ff63881249d79",
+    "Cargo.toml": "689d5b00323714d976994df3a028f7061a4be7f5c93ad5260559deb9b0209eb3",
+    "Cargo.lock": "9e4bc1e08dbc9c72c685dde7a222712058b5f5ae6d1ea71582fd19d4be87f312",
     "build.ps1": "481c481d540c0b328fbd709b3cf49f87a39108e1ac4ae59b3a18cccb82f7ac09",
-    "README.md": "1f7a67b11d5c794e0e123965b639db0a8b935aafd28eddce266d88c4f520ffd8",
-    "dist/README.md": "ce0841fb0bd3030de04dc206c8aff9721bb0a545e67c96c50d9d0cca525736d6",
-    "CHANGELOG.md": "9129c6d7a2d70697b42247131c71b104d8b3f83dad8a14a7d667f52674c992e7",
+    "README.md": "11f471d43626c9a0efb39adb3cda3d6f959e66d50cbdf38960a5b88004a4119b",
+    "dist/README.md": "aac2aed341af234d49ead4382bd590768a9e127156aaa0173da2c898df65533c",
+    "CHANGELOG.md": "cde9d3aa191401c90a2a070fa091b4fc9b597670c96e4f0355bb95f664ac8289",
     "docs/hexes.md": "653f919f1d575592a11c8ece149c024006c82c9d33222af5abf916a593f323e9",
     "docs/hexes.en.md": "2392166f14b96dc9a0f8b5d71aeb3d61f02660fc4a4692b31290b668432e5aa0",
-    "docs/research/basics.md": "e8d7c5520a90b9c5c662e09e707af8f043f72d4febed6028f60dd735fd78e59f",
+    "docs/research/basics.md": "a417ef0e04d15de481fa51d65e5d3381943fbf5d15fa7323b94d5b257bd85d54",
     "docs/implementation.md": "4673a73f46a03a54af8e34f1cfcb84ea91675b33b77032e8b617e808c9ddf3d8",
-    "src/basics.rs": "008b99cfcf2f9b7a8e5187a5b3d94368b619639c794ed8e2527b73db85fe5c5d",
-    "src/basics_native_tests.rs": "8ffb543718051440a676abc488bc45eb14da4880098c69003c772ae40dc97d74",
-    "src/lib.rs": "1fa0e28f6c8e7d6e4f3a7054d788ef7820f24004aa0fcb52b1974a19798cecb3",
+    "src/basics.rs": "b31257a622539e82f03ec777884574608457af080c72ee56e253184ac00301fe",
+    "src/basics_native_tests.rs": "9c433ee770bf155716aa8bd969a90526bdd2ecd660f7a622ccc0ffffdadc621f",
+    "src/lib.rs": "6412a62c43bbd65b2d5f697186349549c3a44b7740788f2ce6050660f3b1c886",
     "src/ambulance.rs": "7418753e126f0b55fc5eb7137095497a7ec666f8f08a041f9176924e4b184db6",
     "src/reward_choices.rs": "28bab7cb09fd50baafad143966fa86d32f997206396257296bf770d2fd1b9be6",
     "src/hex_pool.rs": "1e9d4f18db3d4a7056d5ae4eb923f363edfc5df2dbda2b64d17b6f65869cee66",
-    "tools/HexBuild/Basics.cs": "fd8ed0a120ed6cfca19826fdf2fee8765b3b00ac20c689e8ee5c441a995670b7",
-    "tools/HexBuild/Program.cs": "69fa7befba9f26baa63a3d537b460fc25ac38d8d9697605cacf4e15f5cb150d2",
+    "tools/HexBuild/Basics.cs": "6fdc7ec6ebace58506426f2bf031d7bb3644f2990d8fccd99d7f1d5d344283f2",
+    "tools/HexBuild/Program.cs": "0f5a97d7c0f690acf100ec68ea7fe457befbfeecfd6674d584c6df9b0614f95c",
     "tools/HexBuild/HexCatalog.cs": "bcc13bfb5c91409e86739473165fb5f7136659ac8cda87ee81100b77964c9933",
     "tools/HexBuild/RewardCatalog.cs": "744bb051344e4198c0780a3305098f269a208452342989d6b0fdc1d48edae5ed",
     "tools/build_basics_hks.py": "db61f6afb2d8a2f009b906ae7409c7dcc701066d8b1f3c830a613ca4c8c4aa58",
-    "tools/verify_basics.py": "39854f966d70fd1039937fb56b80d3a2659116242eb0e390bb6e8681c2f7c97e"
-  },
-  "loadingVerified": false,
-  "gameplayVerified": false,
-  "multiplayerVerified": false
+    "tools/verify_basics.py": "6d767588682f2ec7cf4cf93166451b8eba2d1a16035db2436d2aa272d1cc2b05"
+  }
 }

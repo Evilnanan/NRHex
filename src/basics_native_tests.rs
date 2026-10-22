@@ -2,9 +2,18 @@
 use super::*;
 use crate::win::*;
 use sha2::{Digest,Sha256};
-use std::{cell::Cell,sync::atomic::Ordering};
-thread_local!{static OWNED:Cell<bool>=const{Cell::new(false)};static RESET:Cell<bool>=const{Cell::new(false)};static QUERY:Cell<i32>=const{Cell::new(0)};}
-unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(if id==OWNER{OWNED.with(Cell::get)}else if id==crate::reward_cycle_runtime::RESET{RESET.with(Cell::get)}else{false})}
+use std::{cell::{Cell,RefCell},sync::atomic::Ordering};
+thread_local!{static OWNED:Cell<bool>=const{Cell::new(false)};static RESET:Cell<bool>=const{Cell::new(false)};static QUERY:Cell<i32>=const{Cell::new(0)};static FAMILY_ACTORS:Cell<[usize;3]>=const{Cell::new([0;3])};static EFFECTS:RefCell<Vec<(usize,i32)>>=const{RefCell::new(Vec::new())};static APPLIED:RefCell<Vec<(usize,i32)>>=const{RefCell::new(Vec::new())};}
+unsafe extern "system" fn has(manager:usize,id:i32)->u8{u8::from(if id==OWNER{OWNED.with(Cell::get)}else if id==crate::reward_cycle_runtime::RESET{RESET.with(Cell::get)}else{EFFECTS.with(|s|s.borrow().contains(&(manager,id)))})}
+unsafe extern "system" fn resolve(_:usize,handle:*const u64)->usize{FAMILY_ACTORS.with(Cell::get).into_iter().find(|&p|p!=0&&ptr::read_unaligned((p+8)as*const u64)==ptr::read_unaligned(handle)).unwrap_or(0)}
+unsafe extern "system" fn applied(actor:usize,id:i32,source:usize,a4:usize,a5:usize,a6:u8,a7:u8,a8:u8,a9:u8,a10:u8,a11:i32)->u8{
+ assert_eq!((source,a4,a5,a6,a7,a8,a9,a10,a11),(actor,1,2,3,4,5,6,7,-8));
+ APPLIED.with(|s|s.borrow_mut().push((actor,id)));
+ // Native category-201 allocation/replacement is a fixture; parameter
+ // verification separately proves active/private/native all retain category201/priority51.
+ EFFECTS.with(|s|{let mut s=s.borrow_mut();s.retain(|&(p,_)|p!=actor);s.push((actor,id));});1
+}
+unsafe extern "system" fn apply(actor:usize,id:i32,flag:u8)->u8{assert_eq!(flag,0);crate::effect_detour(actor,id,actor,1,2,3,4,5,6,7,-8)}
 unsafe extern "system" fn env(_:usize,code:i32,vm:usize)->i32{assert_eq!(vm,17);QUERY.with(|s|s.set(code));1}
 #[unsafe(naked)]unsafe extern "system" fn restage_fixture(_:usize,_:f32)->i32{
  core::arch::naked_asm!("push rdi","push r14","sub rsp,0x28","mov rdi,rcx","xor r14d,r14d","jmp {detour}",detour=sym restage_detour);
@@ -45,13 +54,36 @@ fn native_basics_cooldown_product_seal_and_damage(){unsafe{
    for i in 0..hit.len(){if !(0x280..0x284).contains(&i){assert_eq!(hit[i],before[i]);}}
   }
  }}
- // Only the holder's three exact native family handles receive x3. Other
+ // Only the holder's three exact native family handles receive x2. Other
  // summons, passive charmed spirits and another player's family do not match.
  data[0xc7]=6;OWNED.with(|s|s.set(true));RESET.with(|s|s.set(false));
  let mut modules=vec![0usize;0x168/8];let mut wrapper=[0usize;3];let mut family=vec![0u64;0x140/8];let mut summon=[0u64;2];
  ptr::write_unaligned((actor+0x1b8)as*mut usize,modules.as_mut_ptr()as usize);modules[0x160/8]=wrapper.as_mut_ptr()as usize;wrapper[2]=family.as_mut_ptr()as usize;
  family[0x10/8]=100;family[0x70/8]=101;family[0xd0/8]=102;
- for handle in [100,101,102,103,0x100000064]{summon[1]=handle;let mut hit=[0u8;0x300];hit[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());calculated(actor,actor+8,summon.as_ptr()as usize,hit.as_mut_ptr()as usize,base);assert_eq!(read_i32(hit.as_ptr()as usize+0x280),if (100..=102).contains(&handle){300}else{100});}
+ for handle in [100,101,102,103,0x100000064]{summon[1]=handle;let mut hit=[0u8;0x300];hit[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());calculated(actor,actor+8,summon.as_ptr()as usize,hit.as_mut_ptr()as usize,base);assert_eq!(read_i32(hit.as_ptr()as usize+0x280),if (100..=102).contains(&handle){200}else{100});}
+ // Preserve every native regeneration field apart from the halved interval.
+ for i in 0..3{let native=row(&params,FAMILY_IDLE[i]);let private=row(&params,FAMILY_RELOAD[i]);let interval=|b:&[u8]|f32::from_le_bytes(b[12..16].try_into().unwrap());assert_eq!(interval(private),interval(native)*0.5);}
+ let mut npcs=[vec![0usize;0x200/8],vec![0usize;0x200/8],vec![0usize;0x200/8]];let actors=std::array::from_fn(|i|npcs[i].as_mut_ptr()as usize);
+ for i in 0..3{npcs[i][1]=100+i as usize;npcs[i][0x190/8]=actors[i];}
+ FAMILY_ACTORS.with(|s|s.set(actors));
+ let saved_apply=crate::APPLY_ORIG.swap(applied as*mut u8,Ordering::AcqRel);
+ for (address,target)in [(0x519140,resolve as*const()as usize),(crate::APPLY_SELF_RVA,apply as*const()as usize)]{let mut j=vec![0x48,0xb8];j.extend_from_slice(&target.to_le_bytes());j.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(j.as_ptr(),(base+address)as*mut u8,j.len());}
+ for hero in [1,6]{data[0xc7]=hero;for owned in [false,true]{for reset in [false,true]{OWNED.with(|s|s.set(owned));RESET.with(|s|s.set(reset));for i in 0..3{for j in 0..3{
+  assert_eq!(route_effect(actors[i],FAMILY_IDLE[j],base),if i==j&&hero==6&&owned&&!reset{FAMILY_RELOAD[j]}else{FAMILY_IDLE[j]});
+  assert_eq!(route_effect(actors[i],FAMILY_RELOAD[j],base),if i==j&&!(hero==6&&owned&&!reset){FAMILY_IDLE[j]}else{FAMILY_RELOAD[j]});
+  assert_eq!(route_effect(actors[i],FAMILY_IDLE[j]-1,base),FAMILY_IDLE[j]-1);
+ }}}}}
+ data[0xc7]=6;OWNED.with(|s|s.set(true));RESET.with(|s|s.set(false));
+ EFFECTS.with(|s|*s.borrow_mut()=(0..3).map(|i|(actors[i],FAMILY_IDLE[i])).collect());APPLIED.with(|s|s.borrow_mut().clear());
+ update_family(actor,base);assert_eq!(APPLIED.with(|s|s.borrow().clone()),(0..3).map(|i|(actors[i],FAMILY_RELOAD[i])).collect::<Vec<_>>());
+ for _ in 0..100{update_family(actor,base);}assert_eq!(APPLIED.with(|s|s.borrow().len()),3,"native healing tick must never be refreshed every frame");
+ // Native summon/withdraw transitions switch category normally. A deployed
+ // family member stays on the unmodified active effect.
+ apply(actors[0],705060,0);update_family(actor,base);assert!(EFFECTS.with(|s|s.borrow().contains(&(actors[0],705060))));
+ OWNED.with(|s|s.set(false));update_family(actor,base);for i in 1..3{assert!(EFFECTS.with(|s|s.borrow().contains(&(actors[i],FAMILY_IDLE[i]))));}
+ OWNED.with(|s|s.set(true));apply(actors[0],705061,0);assert!(EFFECTS.with(|s|s.borrow().contains(&(actors[0],FAMILY_RELOAD[0]))));
+ RESET.with(|s|s.set(true));update_family(actor,base);assert!(EFFECTS.with(|s|s.borrow().contains(&(actors[0],705061))));RESET.with(|s|s.set(false));
+ crate::APPLY_ORIG.store(saved_apply,Ordering::Release);
  // A remote context always retains the original native availability result.
  OWNED.with(|s|s.set(true));RESET.with(|s|s.set(false));let remote=[actor+8];assert_eq!(crate::ambulance::env(remote.as_ptr()as usize,ULTIMATE_QUERY,17),1);
  RESTAGE_ORIGINAL.store(saved_rest,Ordering::Release);crate::ambulance::ENV_ORIGINAL.store(saved_env,Ordering::Release);crate::BASE.store(saved_base,Ordering::Release);crate::ACTIVE.store(saved_active,Ordering::Release);assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);

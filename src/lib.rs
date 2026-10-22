@@ -1569,6 +1569,7 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  let original:ApplyEffect=std::mem::transmute(APPLY_ORIG.load(Ordering::Acquire));
  let base=BASE.load(Ordering::Acquire);
  if ACTIVE.load(Ordering::Acquire){match demons_runtime::route_effect(player,effect){Some(id)=>effect=id,None=>return 1}}
+ if ACTIVE.load(Ordering::Acquire){effect=basics::route_effect(player,effect,base);}
  if ACTIVE.load(Ordering::Acquire)&&slingshot_runtime::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&heartstealer::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&essence_reaver::pulse(player,effect,base){return 1;}

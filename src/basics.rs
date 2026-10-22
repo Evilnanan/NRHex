@@ -7,6 +7,8 @@ pub static RESTAGE_ORIGINAL:std::sync::atomic::AtomicPtr<u8>=std::sync::atomic::
 pub const ULTIMATE_QUERY:i32=990045;
 pub const READY_QUERY:i32=990046;
 pub const CONFLICTS:[i32;4]=[95000400,95003800,95003900,95004000];
+pub const FAMILY_IDLE:[i32;3]=[705061,705071,705081];
+pub const FAMILY_RELOAD:[i32;3]=[OWNER+4,OWNER+5,OWNER+6];
 pub fn cooldown_effect(hero:Option<u8>)->Option<i32>{match hero{Some(1|2|3)=>Some(OWNER+1),Some(4|5)=>Some(OWNER+2),Some(9|10)=>Some(OWNER+3),_=>None}}
 pub fn multiplier(hero:Option<u8>,attack:i32,table:i32)->f32{
  if table!=1{return 1.;}
@@ -28,22 +30,49 @@ pub unsafe fn update(actor:usize,base:usize){
  let stats=native_actor::stats(actor);if stats==0{return;}
  let wanted=if sealed(actor,base){cooldown_effect(local_hero(base))}else{None};
  for id in OWNER+1..=OWNER+3{crate::maintain_status_effect(actor,stats,id,wanted==Some(id),base);}
+ update_family(actor,base);
 }
 // Native 3864A0 returns family+10+index*60; its first eight bytes are the
 // original actor handle. Compare full handles, never NPC kind or allegiance.
-unsafe fn family_source(owner:usize,source:usize)->bool{
- if source==0||source==owner{return false;}
- let modules=read_ptr(owner+0x1b8);if modules==0{return false;}
- let wrapper=read_ptr(modules+0x160);if wrapper==0{return false;}
- let family=read_ptr(wrapper+0x10);if family==0{return false;}
+unsafe fn family_handles(owner:usize)->Option<[u64;3]>{
+ if owner==0{return None;}
+ let modules=read_ptr(owner+0x1b8);if modules==0{return None;}
+ let wrapper=read_ptr(modules+0x160);if wrapper==0{return None;}
+ let family=read_ptr(wrapper+0x10);if family==0{return None;}
+ Some(std::array::from_fn(|slot|ptr::read_unaligned((family+0x10+slot*0x60)as*const u64)))
+}
+unsafe fn family_slot(owner:usize,source:usize)->Option<usize>{
+ if source==0||source==owner{return None;}
  let handle=ptr::read_unaligned((source+8)as*const u64);
- handle!=0&&handle!=u64::MAX&&(0..3).any(|slot|ptr::read_unaligned((family+0x10+slot*0x60)as*const u64)==handle)
+ if handle==0||handle==u64::MAX{return None;}
+ family_handles(owner)?.iter().position(|&h|h==handle)
+}
+unsafe fn family_source(owner:usize,source:usize)->bool{family_slot(owner,source).is_some()}
+pub unsafe fn route_effect(target:usize,effect:i32,base:usize)->i32{
+ let Some(slot)=FAMILY_IDLE.iter().position(|&v|v==effect).or_else(||FAMILY_RELOAD.iter().position(|&v|v==effect))else{return effect;};
+ let world=read_ptr(base+crate::WORLD_RVA);if world==0{return effect;}
+ let owner=read_ptr(world+0x174e8);if family_slot(owner,target)!=Some(slot){return effect;}
+ if local_hero(base)==Some(6)&&sealed(owner,base){FAMILY_RELOAD[slot]}else{FAMILY_IDLE[slot]}
+}
+unsafe fn update_family(owner:usize,base:usize){
+ let Some(handles)=family_handles(owner)else{return;};
+ let enabled=local_hero(base)==Some(6)&&sealed(owner,base);
+ for (slot,handle)in handles.into_iter().enumerate(){
+  let actor=native_actor::resolve(base,handle);if actor==0||family_slot(owner,actor)!=Some(slot){continue;}
+  // Swap only an existing inactive effect. Never apply regeneration to a
+  // deployed family member or periodically refresh its healing tick timer.
+  let (old,new)=if enabled{(FAMILY_IDLE[slot],FAMILY_RELOAD[slot])}else{(FAMILY_RELOAD[slot],FAMILY_IDLE[slot])};
+  if has_effect(actor,old,base)&&!has_effect(actor,new,base){
+   let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);
+   apply(actor,new,0);
+  }
+ }
 }
 pub unsafe fn calculated(local:usize,target:usize,source:usize,hit:usize,base:usize){
  if hit==0||source==0||source==target||read_i32(hit+0x280)<=0||!sealed(local,base){return;}
  let hero=local_hero(base);
  let factor=if source==local{multiplier(hero,read_i32(hit+0x40),read_i32(hit+0x44))}
-  else if hero==Some(6)&&family_source(local,source){3.}else{1.};
+  else if hero==Some(6)&&family_source(local,source){2.}else{1.};
  if factor!=1.{ptr::write_unaligned((hit+0x280)as*mut i32,crate::sword::boosted(read_i32(hit+0x280),factor));}
 }
 // Restage replays recorded damage, with its own proportion and network payload.
