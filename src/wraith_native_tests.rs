@@ -1,14 +1,44 @@
 //! Native pending-contact lookup/removal, compiled FP scopes, and slot setter.
 use super::*;use crate::win::*;use sha2::{Digest,Sha256};use std::cell::{Cell,RefCell};
-thread_local!{static EFFECTS:RefCell<Vec<i32>>=const{RefCell::new(Vec::new())};static NATIVE_XP:Cell<u32>=const{Cell::new(0)};static ROWS:RefCell<Vec<(i32,usize)>>=const{RefCell::new(Vec::new())};static EVENTS:RefCell<Vec<i32>>=const{RefCell::new(Vec::new())};static INVENTORY:RefCell<Vec<(i32,i32)>>=const{RefCell::new(Vec::new())};}
+thread_local!{static EFFECTS:RefCell<Vec<i32>>=const{RefCell::new(Vec::new())};static NATIVE_XP:Cell<u32>=const{Cell::new(0)};static ROWS:RefCell<Vec<(i32,usize)>>=const{RefCell::new(Vec::new())};static EVENTS:RefCell<Vec<i32>>=const{RefCell::new(Vec::new())};static INVENTORY:RefCell<Vec<(i32,i32)>>=const{RefCell::new(Vec::new())};static ITEM_INTERFACE:Cell<usize>=const{Cell::new(0)};static OTHER_LEGAL:Cell<bool>=const{Cell::new(true)};static LAST_CAN:Cell<(i32,usize,usize,i32,i32,i32,u8)>=const{Cell::new((0,0,0,0,0,0,0))};}
 unsafe fn put(p:usize,v:usize){ptr::write_unaligned(p as*mut usize,v);}unsafe fn int(p:usize,v:i32){ptr::write_unaligned(p as*mut i32,v);}
 unsafe fn jump(base:usize,rva:usize,target:usize){let mut b=vec![0xff,0x25,0,0,0,0];b.extend_from_slice(&target.to_le_bytes());ptr::copy_nonoverlapping(b.as_ptr(),(base+rva)as*mut u8,b.len());}
 unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(EFFECTS.with(|s|s.borrow().contains(&id)))}
 unsafe extern "system" fn add(_:usize,id:i32,_:u8)->u8{EVENTS.with(|s|s.borrow_mut().push(id));EFFECTS.with(|s|{if !s.borrow().contains(&id){s.borrow_mut().push(id);}});1}
 unsafe extern "system" fn remove(_:usize,id:i32)->u8{EFFECTS.with(|s|s.borrow_mut().retain(|&v|v!=id));1}
 unsafe extern "system" fn param_original(out:usize,id:i32)->usize{int(out,id);put(out+8,ROWS.with(|s|s.borrow().iter().find(|r|r.0==id).map_or(0,|r|r.1)));out}
-unsafe extern "system" fn legality(_:usize,item:*const i32)->u8{let mut out=[0usize;2];param(out.as_mut_ptr()as usize,*item&0x0fffffff);u8::from(out[1]!=0&&ptr::read_unaligned((out[1]+0x80)as*const i16)==0)}
-unsafe extern "system" fn use_item(_:usize,good:i32,_:usize,_:u8,_:u8,_:f32)->u8{let item=good|0x40000000;legality(0,&item)}
+// Execute the real native FP read/cost read and final insufficient-FP branch.
+// Other legality conditions are an explicit fixture, rather than silently
+// replacing the entire usability result with consumeMP == 0.
+core::arch::global_asm!(r#"
+.global wraith_native_fp
+wraith_native_fp:
+ push rbp
+ push r12
+ sub rsp,0xc8
+ lea rbp,[rsp+0x80]
+ mov r12,rcx
+ mov rcx,rdx
+ mov qword ptr [rbp-0x70],0
+ mov [rsp+0x90],r9
+ call r8
+ call qword ptr [rsp+0x90]
+ add rsp,0xc8
+ pop r12
+ pop rbp
+ ret
+"#);
+unsafe extern "system"{fn wraith_native_fp(actor:usize,row:usize,read:usize,compare:usize)->u8;}
+unsafe extern "system" fn legality(good:i32,actor:usize,manager:usize,kind:i32,right:i32,left:i32,flag:u8)->u8{
+ LAST_CAN.with(|s|s.set((good,actor,manager,kind,right,left,flag)));
+ if actor==0||!OTHER_LEGAL.with(Cell::get){return 0;}
+ let mut out=[0usize;2];param(out.as_mut_ptr()as usize,good);if out[1]==0{return 0;}
+ let base=BASE.load(Ordering::Acquire);wraith_native_fp(actor,out[1],base+0x6d10f3,base+0x6d124a)
+}
+unsafe extern "system" fn use_item(context:usize,good:i32,_:usize,_:u8,_:u8,_:f32)->u8{legality(good,read_ptr(context),0,0,-1,-2,0)}
+unsafe extern "system" fn weapon(_:usize,_:i32)->i32{-1}
+unsafe extern "system" fn item_interface(_:usize)->usize{ITEM_INTERFACE.with(Cell::get)}
+unsafe extern "system" fn interface_enabled(_:usize)->u8{1}
 unsafe extern "system" fn native_xp(_:usize,kind:u8,points:u16){assert_eq!(kind,9);NATIVE_XP.with(|s|s.set(s.get()+u32::from(points)));}
 unsafe extern "system" fn free(_:usize,_:usize){}
 unsafe extern "system" fn lookup(_:usize,id:*const i32,_:i32)->i32{INVENTORY.with(|items|items.borrow().iter().find(|item|item.0==(*id&0x0fffffff)).map_or(-1,|item|item.1))}
@@ -25,15 +55,50 @@ fn native_wraith_hit_credit_fp_scopes_and_deferred_slot_upgrade(){unsafe{
  // Execute the original CALL at the actual credit return site; the naked
  // wrapper sees 34E0B5, exactly as in the real contact stack frame.
  jump(base,XP_RVA,xp as*const()as usize);ptr::copy_nonoverlapping([0x48,0x83,0xc4,0x28,0xc3].as_ptr(),(base+0x34e0b5)as*mut u8,5);XP_ENTRY.store((base+0x34e0b0)as*mut u8,Ordering::Release);
+ // Stop after native cost calculation, then retain the actual native CMP/JL.
+ // HP, state and inventory gates are represented by OTHER_LEGAL below.
+ ptr::write((base+0x6d116c)as*mut u8,0xc3);
+ ptr::copy_nonoverlapping([0xb0,1,0xc3].as_ptr(),(base+0x6d1253)as*mut u8,3);
+ ptr::copy_nonoverlapping([0x30,0xc0,0xc3].as_ptr(),(base+0x6d1260)as*mut u8,3);
+ let shared=crate::hook::prepare((base+CAN_RVA)as*mut u8,can_use as*const u8,64).unwrap();
+ crate::hook::write_code((base+CAN_RVA)as*mut u8,&shared.patch).unwrap();
+ jump(base,PARAM_RVA,param as*const()as usize);
+ let selected:unsafe extern "system" fn(usize)->i32=std::mem::transmute(base+0x3cfdb0);
+ let common:CanUse=std::mem::transmute(base+CAN_RVA);
+ let can=|actor:usize,good:i32|common(good,actor,0x12345678,-33,-44,-55,0x86);
  let saved_base=BASE.swap(base,Ordering::AcqRel);let saved_active=ACTIVE.swap(true,Ordering::AcqRel);
  PARAM_ORIGINAL.store(param_original as*mut u8,Ordering::Release);CAN_ORIGINAL.store(legality as*mut u8,Ordering::Release);USE_ORIGINAL.store(use_item as*mut u8,Ordering::Release);TOKEN_ORIGINAL.store((base+TOKEN_RVA)as*mut u8,Ordering::Release);XP_ORIGINAL.store(native_xp as*mut u8,Ordering::Release);
  let mut world=vec![0usize;0x17500/8];let mut actor=vec![0usize;0x800/8];let actor=actor.as_mut_ptr()as usize;put(actor+8,123);world[0x174e8/8]=actor;put(base+crate::WORLD_RVA,world.as_ptr()as usize);
  let mut manager=[0usize;16];put(actor+0x190,manager.as_mut_ptr()as usize);let mut gd=vec![0u8;0x800];let g=gd.as_mut_ptr()as usize;put(actor+0x5a0,g);let mut gm=[0usize;4];gm[1]=g;put(base+crate::GAME_DATA_RVA,gm.as_ptr()as usize);ptr::write((g+0xc7)as*mut u8,1);
  let mut modules=vec![0usize;0x200/8];let mut stats=vec![0u8;0x200];int(stats.as_mut_ptr()as usize+0x140,100);modules[0]=stats.as_mut_ptr()as usize;put(actor+0x1b8,modules.as_ptr()as usize);
+ let mut actor_vtable=vec![0usize;0x610/8];actor_vtable[0x250/8]=weapon as*const()as usize;actor_vtable[0x608/8]=item_interface as*const()as usize;put(actor,actor_vtable.as_ptr()as usize);
+ let mut interface_vtable=vec![0usize;0x110/8];interface_vtable[0x108/8]=interface_enabled as*const()as usize;let interface=[interface_vtable.as_ptr()as usize];ITEM_INTERFACE.with(|s|s.set(interface.as_ptr()as usize));
  EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,OWNER+90]);reset();
+ // Reproduce the missed path: the original selected-item getter calls the
+ // common gate directly, bypassing the old 3D49A0 wrapper entirely.
+ int(actor+0x174,3080|0x40000000);jump(base,CAN_RVA,legality as*const()as usize);assert_eq!(selected(actor),255);
+ crate::hook::write_code((base+CAN_RVA)as*mut u8,&shared.patch).unwrap();
+
  INVENTORY.with(|items|*items.borrow_mut()=vec![(3080,5),(3010,7)]);
- for &(good,ref original)in &rows{let item=good|0x40000000;assert_eq!(can_use(actor,&item),1);let ctx=[actor];assert_eq!(used(ctx.as_ptr()as usize,good,0,0,0,0.),1);let mut out=[0usize;2];param(out.as_mut_ptr()as usize,good);assert_eq!(out[1],original.as_ptr()as usize);assert_ne!(ptr::read_unaligned((out[1]+0x80)as*const i16),0);}
- EFFECTS.with(|s|s.borrow_mut().clear());assert_eq!(can_use(actor,&(3080|0x40000000)),0);EFFECTS.with(|s|s.borrow_mut().push(OWNER));assert_eq!(can_use(actor+8,&(3080|0x40000000)),0);
+ for &(good,ref original)in &rows{
+  let cost=i16::from_le_bytes(original[0x80..0x82].try_into().unwrap())as i32;assert!(cost>0);
+  for fp in [0,1,cost-1,cost,cost+1]{
+   int(stats.as_mut_ptr()as usize+0x150,fp);assert_eq!(can(actor,good),1,"owner good {good}, FP {fp}");
+   assert_eq!(LAST_CAN.with(Cell::get),(good,actor,0x12345678,-33,-44,-55,0x86));
+   assert!(!FREE.with(Cell::get));assert_eq!(read_i32(stats.as_ptr()as usize+0x150),fp);
+   int(actor+0x174,good|0x40000000);assert_eq!(selected(actor),i32::from(original[0x42]),"native selected item no longer reports unusable");
+  }
+  int(stats.as_mut_ptr()as usize+0x150,0);let ctx=[actor];assert_eq!(used(ctx.as_ptr()as usize,good,0,0,0,0.),1);
+  let mut out=[0usize;2];param(out.as_mut_ptr()as usize,good);assert_eq!(out[1],original.as_ptr()as usize);assert_ne!(ptr::read_unaligned((out[1]+0x80)as*const i16),0);
+  EFFECTS.with(|s|s.borrow_mut().clear());
+  for fp in [0,cost-1,cost,cost+1]{int(stats.as_mut_ptr()as usize+0x150,fp);assert_eq!(can(actor,good),u8::from(fp>=cost));assert_eq!(selected(actor),if fp>=cost{i32::from(original[0x42])}else{255});}
+  EFFECTS.with(|s|s.borrow_mut().push(OWNER));
+ }
+ int(stats.as_mut_ptr()as usize+0x150,0);OTHER_LEGAL.with(|s|s.set(false));assert_eq!(can(actor,3080),0);OTHER_LEGAL.with(|s|s.set(true));
+ let mut remote=vec![0usize;0x800/8];let remote=remote.as_mut_ptr()as usize;put(remote+0x1b8,modules.as_ptr()as usize);assert_eq!(can(remote,3080),0);
+ ACTIVE.store(false,Ordering::Release);assert_eq!(can(actor,3080),0);ACTIVE.store(true,Ordering::Release);
+ EFFECTS.with(|s|s.borrow_mut().push(crate::reward_cycle_runtime::RESET));assert_eq!(can(actor,3080),0);EFFECTS.with(|s|s.borrow_mut().retain(|&id|id!=crate::reward_cycle_runtime::RESET));
+ let other=Box::new(*rows[0].1);ROWS.with(|s|s.borrow_mut().push((3050,other.as_ptr()as usize)));assert_eq!(can(actor,3050),0);assert_eq!(can(actor,-1),0);assert_eq!(can(0,3080),0);
  // A pending use token is consumed exactly once by native contact bookkeeping.
  let mut sentinel=[0usize;3];let mut node=[0usize;3];let sent=sentinel.as_mut_ptr()as usize;let n=node.as_mut_ptr()as usize;put(sent,n);put(sent+8,n);put(n,sent);put(n+8,sent);int(n+0x10,77);put(actor+0x748,sent);put(actor+0x750,1);let mut allocator=[0usize;1];let mut vt=[0usize;14];vt[13]=free as*const()as usize;allocator[0]=vt.as_ptr()as usize;put(actor+0x740,allocator.as_ptr()as usize);
  {let mut s=STATE.lock().unwrap();s.bind(actor,123);s.units=Some(0);s.stage=0;}

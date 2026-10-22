@@ -5,9 +5,9 @@ use std::{cell::Cell,collections::BTreeMap,sync::{Mutex,OnceLock,atomic::{Atomic
 pub const OWNER:i32=95004300;
 pub const ORIGINALS:[i32;3]=[3080,3010,3011];
 pub const FRAME:i32=990043;pub const BUSY:i32=990044;
-pub const CAN_RVA:usize=0x3d49a0;pub const USE_RVA:usize=0x3979b0;pub const PARAM_RVA:usize=0xe8d840;
+pub const CAN_RVA:usize=0x6d0470;pub const USE_RVA:usize=0x3979b0;pub const PARAM_RVA:usize=0xe8d840;
 pub const TOKEN_RVA:usize=0x66d3b0;pub const XP_RVA:usize=0x209490;
-pub const CAN_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 20 56 57 41 56 48 83 EC 50 48 8B FA 48 8B D9 45 32 F6 83 3A FF";
+pub const CAN_PATTERN:&str="48 89 5C 24 20 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 10 FF FF FF 48 81 EC F0 01 00 00 48 8B 05 D2 5A 41 03 48 33 C4 48 89 85 E0 00 00 00 41 8B D9 4C 89 45 90 4C 8B E2 44 8B E9";
 pub const USE_PATTERN:&str="48 89 5C 24 10 44 88 4C 24 20 55 56 57 41 54 41 55 41 56 41 57 48 81 EC 10 01 00 00 4D 8B E0 44";
 pub const PARAM_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 30 8B FA 48 8B F1 33 DB 85 D2 0F 88 27 01 00 00 48 8B 0D 16 B0 D9 02 48 85 C9 75";
 pub const TOKEN_PATTERN:&str="4C 8B 81 48 07 00 00 49 8B 08 49 3B C8 74 0F 8B 12 3B 51 10 74 0B 48";
@@ -53,10 +53,14 @@ pub unsafe extern "system" fn param(out:usize,id:i32)->usize{
  }}}
  result
 }
-pub unsafe extern "system" fn can_use(actor:usize,item:*const i32)->u8{
- let original:unsafe extern "system" fn(usize,*const i32)->u8=std::mem::transmute(CAN_ORIGINAL.load(Ordering::Acquire));let base=BASE.load(Ordering::Acquire);
- let free=ACTIVE.load(Ordering::Acquire)&&!item.is_null()&&tier(ptr::read_unaligned(item)&0x0fffffff).is_some()&&enabled(actor,base);
- let _guard=FreeGuard::enter(free);original(actor,item)
+// Shared eligibility is called directly by selected-item input (3CFE48),
+// action checks (3D4A3F) and UI checks (6D0437). Scoping only 3D49A0 misses
+// the earlier input gate, so an empty FP bar never reaches actual use.
+type CanUse=unsafe extern "system" fn(i32,usize,usize,i32,i32,i32,u8)->u8;
+pub unsafe extern "system" fn can_use(good:i32,actor:usize,manager:usize,kind:i32,right:i32,left:i32,flag:u8)->u8{
+ let original:CanUse=std::mem::transmute(CAN_ORIGINAL.load(Ordering::Acquire));let base=BASE.load(Ordering::Acquire);
+ let free=ACTIVE.load(Ordering::Acquire)&&tier(good).is_some()&&enabled(actor,base);
+ let _guard=FreeGuard::enter(free);original(good,actor,manager,kind,right,left,flag)
 }
 type Use=unsafe extern "system" fn(usize,i32,usize,u8,u8,f32)->u8;
 pub unsafe extern "system" fn used(context:usize,good:i32,data:usize,flag:u8,entry:u8,elapsed:f32)->u8{
