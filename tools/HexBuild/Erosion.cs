@@ -2,7 +2,7 @@ using SoulsFormats;
 using System.Text.Json;
 static class Erosion {
  public const int Owner=95003100;
- public const int Carrier=Owner+1,First=Owner+10;
+ public const int Carrier=Owner+1,First=Owner+10,ItemCarrier=Owner+2,ItemFirst=Owner+20;
  const float AttackRate=.8f;
  static readonly string[] AttackRates={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"};
  static readonly int[] Sources={8110002,8110402,8110102,6800,8110502,8110202,6750};
@@ -17,12 +17,57 @@ static class Erosion {
   foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(r,f,1);
  }
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
-  var carrier=clone("SpEffectParam",8000000,Carrier);
+  foreach(int id in new[]{Carrier,ItemCarrier}){
+  var carrier=clone("SpEffectParam",8000000,id);
   foreach(var (f,v) in new (string,object)[]{("maxHpRate",1f),("effectEndurance",0f),("saveCategory",-1),("spCategory",-1),("isUseStatusAilmentAtkPowerCorrect",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(carrier,f,v);
-  for(int i=0;i<7;i++){
-   var r=clone("SpEffectParam",Sources[i],First+i);
-   foreach(var f in Powers)Set(r,f,0);Set(r,Powers[i],30);Set(r,"isUseStatusAilmentAtkPowerCorrect",1);
   }
+  foreach(var(first,power)in new[]{(First,30),(ItemFirst,10)})for(int i=0;i<7;i++){
+   var r=clone("SpEffectParam",Sources[i],first+i);
+   foreach(var f in Powers)Set(r,f,0);Set(r,Powers[i],power);Set(r,"isUseStatusAilmentAtkPowerCorrect",1);
+  }
+ }
+ static PARAM.Row[] ItemRows(PARAM table){
+  var rows=new List<PARAM.Row>{new(table.Rows.Single(r=>r.ID==Carrier)){ID=ItemCarrier}};
+  for(int i=0;i<7;i++){
+   var source=table.Rows.Single(r=>r.ID==First+i);
+   Check(Convert.ToInt32(source[Powers[i]].Value)==30,"Weapon buildup changed");
+   var row=new PARAM.Row(source){ID=ItemFirst+i};Set(row,Powers[i],10);rows.Add(row);
+  }
+  return rows.ToArray();
+ }
+ static object ValidateItems(BND4 native,BND4 binder,Func<string,Memory<byte>,PARAM> parse,string directory){
+  var table=parse("SpEffectParam",binder.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);
+  foreach(var row in ItemRows(table))Check(CageAI.Same(row,table.Rows.Single(r=>r.ID==row.ID)),"Item payload readback mismatch");
+  var owner=table.Rows.Single(r=>r.ID==Owner);
+  Check(AttackRates.All(f=>Convert.ToSingle(owner[f].Value)==AttackRate)&&Convert.ToInt32(owner["atkOccurrenceSpEffectId"].Value)==Carrier,"Owner changed");
+  var source=parse("SpEffectParam",native.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);
+  foreach(int id in Sources)Check(CageAI.Same(source.Rows.Single(r=>r.ID==id),table.Rows.Single(r=>r.ID==id)),"Native ailment reference changed");
+  var ids=new[]{Carrier,ItemCarrier}.Concat(Enumerable.Range(First,7)).Concat(Enumerable.Range(ItemFirst,7)).ToHashSet();
+  table.Rows=table.Rows.Where(r=>ids.Contains(r.ID)).ToList();Directory.CreateDirectory(directory);File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),table.Write());
+  return new{owner=Owner,weaponBuildup=30,itemBuildup=10,nativeStatusCorrectionRetained=true,nativeReferencesUnchanged=true};
+ }
+ public static void VerifyItems(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
+  ValidateItems(native,SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin")),parse,Path.Combine(root,"work/erosion-items"));
+  Console.WriteLine("PASS: installed Erosion 30-point weapon / 10-point item payloads and native ailment references");
+ }
+ public static void StageItems(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,"work/erosion-items/staged");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=binder.Files.Single(f=>Name(f)=="SpEffectParam.param");var table=parse("SpEffectParam",file.Bytes);var added=ItemRows(table);
+  foreach(var row in added){Check(!table.Rows.Any(r=>r.ID==row.ID),"Item payload ID collision");table.Rows.Add(row);}
+  Check(table.Rows.Count<65536,"SpEffectParam row capacity exceeded");table.Rows=table.Rows.OrderBy(r=>r.ID).ToList();file.Bytes=table.Write();
+  string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);var actual=SFUtil.DecryptNightreignRegulation(output);
+  Check(actual.Version==binder.Version&&actual.Compression==binder.Compression&&actual.Files.Count==binder.Files.Count,"Binder metadata changed");
+  foreach(var pair in binder.Files.Zip(actual.Files)){
+   Check(pair.First.ID==pair.Second.ID&&pair.First.Name==pair.Second.Name&&pair.First.Flags==pair.Second.Flags&&pair.First.Bytes.Span.SequenceEqual(pair.Second.Bytes.Span),"Regulation readback mismatch");
+   if(pair.Second.ID!=file.ID)Check(pair.Second.Bytes.Span.SequenceEqual(before[pair.Second.ID]),"Unrelated table changed");
+  }
+  var old=parse("SpEffectParam",before[file.ID]);var now=parse("SpEffectParam",actual.Files.Single(f=>f.ID==file.ID).Bytes);var ids=added.Select(r=>r.ID).ToHashSet();
+  Check(now.Rows.Count==old.Rows.Count+8&&old.Rows.OrderBy(r=>r.ID).Zip(now.Rows.Where(r=>!ids.Contains(r.ID)).OrderBy(r=>r.ID)).All(p=>CageAI.Same(p.First,p.Second)),"Existing parameter rows changed");
+  var audit=ValidateItems(native,actual,parse,directory);
+  HexTexts.Stage(root,hexes,Path.Combine(directory,"texts"),allRewards:true,onlyIds:new[]{Owner});
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),audit,addedRows=ids.Order().ToArray(),existingRowsAndOtherTablesUnchanged=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Erosion item payloads and bilingual text staged; all existing parameters preserved");
  }
  public static void Tune(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   var hex=hexes.Single(entry=>entry.Id==Owner);

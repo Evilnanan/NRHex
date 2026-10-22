@@ -14,6 +14,11 @@ unsafe extern "system" fn receiver(t:usize,e:i32,s:usize,b:u8,d:usize,c:usize,x:
  CALLS.lock().unwrap().push((t,e,s,d,c));0x91
 }
 unsafe extern "system" fn character(_:usize)->i32{1}
+static MANAGER:std::sync::atomic::AtomicUsize=std::sync::atomic::AtomicUsize::new(0);
+unsafe extern "system" fn contact_receiver(descriptor:usize,out:usize,_:usize)->u8{
+ super::collect(MANAGER.load(Ordering::Acquire),out,descriptor);0x97
+}
+
 // Set up the native fragment's RBP/R14/XMM6 register contract while respecting
 // the Win64 nonvolatile ABI. The fragment exits at the replaced next instruction.
 core::arch::global_asm!(r#"
@@ -111,6 +116,32 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
   collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);
   ACTIVE.store(true,Ordering::Release);ptr::write((row+offset)as*mut u8,0);
  }
+
+ // Execute the compiled BulletIns collision hook around the real native
+ // collector. Only the continuation dispatch is a fixture; no world/AI runs.
+ MANAGER.store(manager,Ordering::Release);
+ let collision=crate::hook::prepare((base+CONTACT_RVA)as*mut u8,super::contact as*const u8,64).unwrap();
+ CONTACT_ORIGINAL.store(contact_receiver as*mut u8,Ordering::Release);
+ crate::hook::write_code((base+CONTACT_RVA)as*mut u8,&collision.patch).unwrap();
+ let collide:unsafe extern "system" fn(usize,usize,usize)->u8=std::mem::transmute(base+CONTACT_RVA);
+ let mut projectile=[0u64;0x300/8];let bullet=projectile.as_mut_ptr()as usize;
+ integer(context+0x34,10308000);integer(context+0x38,1);
+ ptr::write(context as*mut u8,0);
+ for good in [-1,300,3080,3010,3011]{
+  integer(bullet+0x2c0,good);values[0]=CARRIER;vector[2]=start+4;
+  assert_eq!(collide(context,vector.as_mut_ptr()as usize,bullet),0x97);
+  assert_eq!(vector[2],start+8);assert_eq!(values[0],CARRIER,"Existing vector entries stay intact");
+  assert_eq!(values[1],if good>=0{ITEM_CARRIER}else{CARRIER});
+  assert!(!ITEM_CONTACT.with(Cell::get));
+ }
+ integer(bullet+0x2c0,3080);
+ for(kind,offset,mask)in [(3u8,0x160,128u8),(4,0x161,1),(10,0x259,32)]{
+  ptr::write(context as*mut u8,kind);ptr::write((row+offset)as*mut u8,mask);vector[2]=start;
+  collide(context,vector.as_mut_ptr()as usize,bullet);assert_eq!(vector[2],start,"Spell exclusion precedes item tier");ptr::write((row+offset)as*mut u8,0);
+ }
+ ptr::write(context as*mut u8,0);integer(row+0x12c,8110002);vector[2]=start;
+ collide(context,vector.as_mut_ptr()as usize,bullet);assert_eq!(values[0],8110002,"Other native ailment additions stay intact");integer(row+0x12c,CARRIER);
+ ACTIVE.store(false,Ordering::Release);vector[2]=start;collide(context,vector.as_mut_ptr()as usize,bullet);assert_eq!(values[0],CARRIER);ACTIVE.store(true,Ordering::Release);
  ptr::write(context as*mut u8,0);
  integer(hit+0x40,304);integer(hit+0x44,1);describe(context,hit);
  integer(row+0x12c,8110002);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);
@@ -134,15 +165,21 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
  let apply:Apply=std::mem::transmute(base+RVA);
  let call=|id|{apply(target,id,source,0x81,0x12345678,context,0x82,0x83,0x84,0x85,0x86,0x87,-99)};
  let expected=|id|{assert_eq!(call(CARRIER),0x91);assert_eq!(CALLS.lock().unwrap().pop(),Some((target,id,source,0x12345678,context)));};
+ for selected in 0..7{
+  for i in 0..7{integer(resist+0x2c+i*4,if i==selected{84}else{400});integer(resist+0x10+i*4,400);}
+  assert_eq!(call(ITEM_CARRIER),0x91);assert_eq!(CALLS.lock().unwrap().pop().unwrap().1,ITEM_FIRST+selected as i32);
+  expected(FIRST+selected as i32);
+ }
  for i in 0..7{integer(resist+0x2c+i*4,400);integer(resist+0x10+i*4,400);}
  integer(resist+0x2c,154);integer(resist+0x10,1);integer(resist+0x2c+4,84);expected(FIRST+1); // full threshold, not remaining
+ assert_eq!(call(ITEM_CARRIER),0x91);assert_eq!(CALLS.lock().unwrap().pop().unwrap().1,ITEM_FIRST+1);
  integer(resist+0x2c+4,252);expected(FIRST); // native escalation takes effect immediately
  integer(resist+0x2c+8,154);integer(resist+0x10+8,0);expected(FIRST+2); // tie prefers progress
  integer(resist+0x10,0);expected(FIRST); // stable exact tie
  ptr::write((row+0x163)as*mut u8,4);expected(FIRST+2); // native immunity
  integer(resist+0x2c+12,10);expected(FIRST+3); // death not hard excluded
  ptr::write((row+0x163)as*mut u8,0x3c);ptr::write((row+0x259)as*mut u8,8);ptr::write((row+0x15f)as*mut u8,128);ptr::write((row+0x160)as*mut u8,1);
- assert_eq!(call(CARRIER),0);assert!(CALLS.lock().unwrap().is_empty()); // all immune
+ assert_eq!(call(CARRIER),0);assert_eq!(call(ITEM_CARRIER),0);assert!(CALLS.lock().unwrap().is_empty()); // all immune
  ptr::write_bytes(row as*mut u8,0,0x400);
  // In-progress debuffs excluded via native state presence; no immune case is
  // disguised as a magic 999 threshold.
@@ -151,7 +188,7 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
  float(context+0x38,f32::NAN);assert_eq!(call(CARRIER),0);float(context+0x38,1.);
  integer(stats+0x140,0);assert_eq!(call(CARRIER),0);integer(stats+0x140,1000);
  patch(base,crate::HAS_EFFECT_RVA,&[0x31,0xc0,0xc3]);assert_eq!(call(CARRIER),0);patch(base,crate::HAS_EFFECT_RVA,&[0xb0,1,0xc3]);
- for id in [FIRST,FIRST+6,8110402]{assert_eq!(call(id),0x91);assert_eq!(CALLS.lock().unwrap().pop().unwrap().1,id);} // selected network payload never reselects
+ for id in [FIRST,FIRST+6,ITEM_FIRST,ITEM_FIRST+6,8110402]{assert_eq!(call(id),0x91);assert_eq!(CALLS.lock().unwrap().pop().unwrap().1,id);} // selected network payload never reselects
  ACTIVE.store(false,Ordering::Release);assert_eq!(call(CARRIER),0x91);assert_eq!(CALLS.lock().unwrap().pop().unwrap().1,CARRIER);
  ACTIVE.store(previous_active,Ordering::Release);BASE.store(previous_base,Ordering::Release);
  VirtualFree(allocation,0,MEM_RELEASE);

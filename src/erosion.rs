@@ -6,7 +6,25 @@ use std::cell::Cell;
 pub const COLLECT_RVA:usize=0x506200;
 pub const COLLECT_PATTERN:&str="48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 48 83 EC 30 48 8B 59 08";
 pub static COLLECT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-thread_local!{static COLLECT_SPELL:Cell<bool>=const{Cell::new(false)};}
+pub const CONTACT_RVA:usize=0x33c120;
+pub const CONTACT_PATTERN:&str="48 89 5C 24 20 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 60 FD FF FF 48 81 EC A0 03 00 00 48 8B 05 22 9E 7A 03 48 33 C4 48 89 85 90 02 00 00 4D 8B F8 48 8B F2 48 8B D9 45 32 F6 F6 82 50 05 00 00 08 0F 85 63 03 00 00";
+pub static CONTACT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+thread_local!{
+ static COLLECT_SPELL:Cell<bool>=const{Cell::new(false)};
+ static ITEM_CONTACT:Cell<bool>=const{Cell::new(false)};
+}
+struct ItemGuard(bool);
+impl ItemGuard{fn enter(item:bool)->Self{Self(ITEM_CONTACT.with(|value|value.replace(item)))}}
+impl Drop for ItemGuard{fn drop(&mut self){ITEM_CONTACT.with(|value|value.set(self.0));}}
+// 33C120 receives the colliding BulletIns in R8. Its +2C0 is the same
+// source-good ID used by native Bagcraft at 34E071. Read the original source
+// of this collision, never the character's current item/action or attack ID.
+pub unsafe extern "system" fn contact(hit:usize,target:usize,bullet:usize)->u8{
+ let original:unsafe extern "system" fn(usize,usize,usize)->u8=std::mem::transmute(CONTACT_ORIGINAL.load(Ordering::Acquire));
+ let item=ACTIVE.load(Ordering::Acquire)&&bullet!=0&&read_i32(bullet+0x2c0)>=0;
+ let _scope=ItemGuard::enter(item);
+ original(hit,target,bullet)
+}
 struct CollectGuard(bool);
 impl CollectGuard{
  fn enter(spell:bool)->Self{Self(COLLECT_SPELL.with(|value|value.replace(spell)))}
@@ -18,7 +36,21 @@ pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
  let original:unsafe extern "system" fn(usize,usize,usize)=std::mem::transmute(COLLECT_ORIGINAL.load(Ordering::Acquire));
  let spell=ACTIVE.load(Ordering::Acquire)&&descriptor!=0&&matches!(ptr::read(descriptor as*const u8),3|4|10);
  let _scope=CollectGuard::enter(spell);
+ let item=ACTIVE.load(Ordering::Acquire)&&ITEM_CONTACT.with(Cell::get);
+ let begin=if item&&out!=0{read_ptr(out+8)}else{0};
+ let appended=if item&&out!=0{read_ptr(out+0x10).saturating_sub(begin)/4}else{0};
  original(manager,out,descriptor);
+ if item&&out!=0{
+  // Native collection may reallocate. Re-read begin/end, retain existing
+  // entries and replace only newly appended Erosion carriers.
+  let begin=read_ptr(out+8);let end=read_ptr(out+0x10);
+  if begin!=0&&end>=begin&&(end-begin)%4==0{
+   for i in appended..(end-begin)/4{
+    let entry=(begin+i*4)as*mut i32;
+    if ptr::read_unaligned(entry)==CARRIER{ptr::write_unaligned(entry,ITEM_CARRIER);}
+   }
+  }
+ }
 }
 pub unsafe fn spell_contact(node:usize,descriptor:usize)->bool{
  if node==0||descriptor==0||!COLLECT_SPELL.with(Cell::get)||!matches!(ptr::read(descriptor as*const u8),3|4|10){return false;}
@@ -28,6 +60,8 @@ pub unsafe fn spell_contact(node:usize,descriptor:usize)->bool{
 pub const OWNER:i32=95003100;
 pub const CARRIER:i32=OWNER+1;
 pub const FIRST:i32=OWNER+10;
+pub const ITEM_CARRIER:i32=OWNER+2;
+pub const ITEM_FIRST:i32=OWNER+20;
 pub const RVA:usize=0x3c80a0;
 pub const PATTERN:&str="48 89 5C 24 10 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 60 FF FF FF 48 81 EC A0 01 00 00 45 0F B6 E1 4D 8B E8 44 8B FA 48 8B F9 33 DB";
 pub const IMMUNE_RVA:usize=0x509790;
@@ -88,8 +122,8 @@ pub unsafe fn body_contact(node:usize,descriptor:usize)->bool{
 type Apply=unsafe extern "system" fn(usize,i32,usize,u8,usize,usize,u8,u8,u8,u8,u8,u8,i32)->u8;
 pub unsafe extern "system" fn detour(target:usize,mut effect:i32,source:usize,a4:u8,a5:usize,a6:usize,a7:u8,a8:u8,a9:u8,a10:u8,a11:u8,a12:u8,a13:i32)->u8{
  let original:Apply=std::mem::transmute(ORIGINAL.load(Ordering::Acquire));
- if effect==CARRIER&&ACTIVE.load(Ordering::Acquire){
-  let Some(chosen)=select(target,source,a6,BASE.load(Ordering::Acquire))else{return 0;};effect=chosen;
+ if matches!(effect,CARRIER|ITEM_CARRIER)&&ACTIVE.load(Ordering::Acquire){
+  let Some(chosen)=select(target,source,a6,BASE.load(Ordering::Acquire))else{return 0;};effect=chosen+if effect==ITEM_CARRIER{ITEM_FIRST-FIRST}else{0};
  }
  original(target,effect,source,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
 }
@@ -98,6 +132,13 @@ pub unsafe extern "system" fn detour(target:usize,mut effect:i32,source:usize,a4
 mod native_tests;
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn nested_non_item_contacts_do_not_inherit_an_outer_item_scope(){
+  assert!(!ITEM_CONTACT.with(Cell::get));
+  {let _outer=ItemGuard::enter(true);assert!(ITEM_CONTACT.with(Cell::get));
+   {let _inner=ItemGuard::enter(false);assert!(!ITEM_CONTACT.with(Cell::get));}
+   assert!(ITEM_CONTACT.with(Cell::get));
+  }assert!(!ITEM_CONTACT.with(Cell::get));
+ }
  #[test]fn spell_filter_is_limited_to_erosion_collection_and_restores_nested_scopes(){unsafe{
   let mut row=vec![0u64;0x400/8];let param=row.as_mut_ptr()as usize;
   let node=[param];let mut descriptor=[0u8;0x3c];

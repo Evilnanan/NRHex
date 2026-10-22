@@ -130,6 +130,8 @@ if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,P
 if(args.Contains("--demons-call-catalog")){DemonsCall.Catalog(bnd,Parse,Path.Combine(root,"work/demons-call/demons_data.rs"));return;}
 if(args.Contains("--demons-call-stage")){DemonsCall.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ability-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--erosion-items-stage")){Erosion.StageItems(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--erosion-items-check")){Erosion.VerifyItems(root,bnd,Parse);return;}
 if(args.Contains("--erosion-stage")){Erosion.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--erosion-tuning-stage")){Erosion.Tune(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--death-dance-stage")){DeathDance.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}

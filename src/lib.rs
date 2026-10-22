@@ -386,7 +386,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);206] {
+fn signatures()->[(&'static str,u32);207] {
  [(basics::RESTAGE_PATTERN,basics::RESTAGE_RVA as u32),
   (sword_projectile::BIND_PATTERN,sword_projectile::BIND_RVA as u32),
   (sword_projectile::CHILD_PATTERN,sword_projectile::CHILD_RVA as u32),
@@ -418,6 +418,7 @@ fn signatures()->[(&'static str,u32);206] {
   (hero_audio::PATTERN,hero_audio::RVA as u32),
   (storm_audio::REQUEST_PATTERN,storm_audio::REQUEST_RVA as u32),
   (erosion::COLLECT_PATTERN,erosion::COLLECT_RVA as u32),
+  (erosion::CONTACT_PATTERN,erosion::CONTACT_RVA as u32),
   (archmage_cost::SELECT_PATTERN,archmage_cost::SELECT_RVA as u32),(archmage_cost::COST_PATTERN,archmage_cost::COST_RVA as u32),(archmage_runtime::PATTERN,archmage_runtime::RVA as u32),(glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
   (ACTION_REQUEST_PATTERN,ACTION_REQUEST_RVA as u32),
   (FLASK_COUNT_PATTERN,FLASK_COUNT_RVA as u32),
@@ -676,6 +677,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (parry::REPEL_RVA,parry::repel as *const u8,&parry::REPEL_ORIGINAL),
    (parry::RVA,parry::detour as *const u8,&parry::ORIGINAL),
    (erosion::COLLECT_RVA,erosion::collect as *const u8,&erosion::COLLECT_ORIGINAL),
+   (erosion::CONTACT_RVA,erosion::contact as *const u8,&erosion::CONTACT_ORIGINAL),
    (slingshot_runtime::RVA,slingshot_runtime::detour as *const u8,&slingshot_runtime::ORIGINAL),
    (slingshot_runtime::HORIZONTAL_RVA,slingshot_runtime::horizontal as *const u8,&slingshot_runtime::HORIZONTAL_ORIGINAL),
    (devils_gaze_hit::RVA,devils_gaze_hit::detour as *const u8,&devils_gaze_hit::ORIGINAL),
