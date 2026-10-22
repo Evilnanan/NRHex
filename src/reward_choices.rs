@@ -10,6 +10,10 @@ pub fn pool_exclusions(mut unavailable:HexSet)->HexSet{
 // Run on actual ownership before role/terrain restrictions add unavailable
 // entries: a role-ineligible ability must not imply that it is owned.
 pub fn ownership_exclusions(mut owned:HexSet)->HexSet{
+ let basics=index(crate::basics::OWNER);
+ let ultimate=crate::basics::CONFLICTS.map(index);
+ if owned.contains(&basics){owned.extend(ultimate);}
+ else if ultimate.iter().any(|i|owned.contains(i)){owned.insert(basics);}
  let pact=index(95002600);let shell=index(95000700);let jiahao=index(95001300);
  if owned.contains(&pact){owned.extend([shell,jiahao]);}
  else if owned.contains(&shell)||owned.contains(&jiahao){owned.insert(pact);}

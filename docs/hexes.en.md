@@ -208,3 +208,8 @@ Your sliding kick can launch small enemies into the air.
 ## Royal Revenant
 
 Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell.
+
+<!-- hex:95004400 -->
+## Back to Basics
+
+Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage.

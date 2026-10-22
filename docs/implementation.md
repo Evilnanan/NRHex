@@ -312,3 +312,7 @@ tools/HexBuild/StormAudio.cs直接从当前sd.bhd／sd.bdt选择性提取cs_m19�
 ## 王室幽魂
 
 使用原生命中记录累计三阶段道具成长，按道具动作结束后确认入栏、原生栏位设置和延迟清理顺序升级。免专注值限定本机持有者的三种工具，原版道具与原生学者经验保留。实现及边界见[王室幽魂](research/wraith.md)。
+
+## 回归基本功
+
+`basics.rs`、`basics_native_tests.rs`、`HexBuild/Basics.cs`、`build_basics_hks.py`与`verify_basics.py`负责绝招发动封印、按角色强化技艺，以及与四项终极系列的双向抽取互斥。冷却沿用原生乘算，女爵使用独立复演历史伤害路径，家人通过本人三槽完整句柄识别。具体边界和原生依据见[研究记录](research/basics.md)。
