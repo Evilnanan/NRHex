@@ -144,7 +144,7 @@ fn native_ultimate_unstoppable_endure_reaction_and_private_replacement(){unsafe{
  // An expired node is invisible to has_effect but still blocks native add.
  int(node+0x68,2);assert_eq!(has(manager,BUFF),0);assert_eq!(candidate(base,manager,BUFF),1);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(has(manager,BUFF),1);assert_eq!(value(node+0x4c),15.);
  // Coexistence with Ultimate Awakening keeps native FP protection independent.
- AWAKENED.with(|s|s.set(true));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(fp_node+0x4c),10.);assert_eq!(value(node+0x4c),15.);let fp_rate:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+0x507310);assert_eq!(fp_rate(manager),0.);AWAKENED.with(|s|s.set(false));
+ AWAKENED.with(|s|s.set(true));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(fp_node+0x4c),15.);assert_eq!(value(node+0x4c),15.);let fp_rate:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+0x507310);assert_eq!(fp_rate(manager),0.);AWAKENED.with(|s|s.set(false));
  for(owned,reset,hp,down)in [(false,false,100,0),(true,true,100,0),(true,false,0,0),(true,false,100,1),(true,false,100,2)]{
   OWNED.with(|s|s.set(owned));RESET.with(|s|s.set(reset));int(stats+0x140,hp);ptr::write((player+0x710)as*mut u8,down);let count=APPLICATIONS.with(Cell::get);float(node+0x4c,7.);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);assert_eq!(value(node+0x4c),7.);
  }

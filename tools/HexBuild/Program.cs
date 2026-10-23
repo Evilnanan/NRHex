@@ -107,6 +107,7 @@ if(args.Contains("--remove-demons-call")){
  RetiredAbility.Stage(root,Parse,95003300,Array.Empty<int>(),new(){["SpEffectParam"]=new[]{95003301,95003302},["NpcParam"]=Enumerable.Range(98300000,60).ToArray()});return;
 }
 if(args.Contains("--retire-ability")){var index=Array.IndexOf(args,"--retire-ability");RetiredAbility.Stage(root,Parse,int.Parse(args[index+1]),args.Skip(index+2).Select(int.Parse).ToArray());return;}
+if(args.Contains("--ultimate-awakening-duration-stage")){UltimateAwakening.StageDuration(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}

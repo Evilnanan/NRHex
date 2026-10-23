@@ -1,4 +1,4 @@
-//! Native ten-second Cerulean Hidden Tear clone; native category20 refreshes
+//! Native fifteen-second Cerulean Hidden Tear clone; native category20 refreshes
 //! only this ID. No custom timer, FP writes, or modifications to the item buff.
 use crate::{has_effect,is_local,native_actor};
 pub const OWNER:i32=95003800;

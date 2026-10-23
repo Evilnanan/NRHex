@@ -1,0 +1,365 @@
+{
+  "version": "0.17.235",
+  "owner": 95003800,
+  "buff": 95003801,
+  "seconds": 15,
+  "previousSeconds": 10,
+  "refreshesWithoutStacking": true,
+  "nativeTearPreserved": true,
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "a1d52991a7749829786ef71d9dc496f080a00520e96e6a7620502dd3b53b3467",
+        "outputSha256": "da692a69c0fc2b7cbc3a2ca3429a558d254b1b8e35644950555b253ec71b6dee"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "d9bfb019224c76aee8d0b47bac9bfc03c433cac86a13a0922cf707c6577f1212",
+        "outputSha256": "ed81b43c634588be30afa5a1ed4548ec8f35c8352ffa3cf8a986b1596c2e1621"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "604d199a943bd1acde58ebc687ab1440069bc5a4c0bbc00a666d571e16866368",
+        "outputSha256": "81f109923b0a7601e570608ce945ab76996a066f46ba55d03b23816c18ce0b4e"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "5274f948b90f990e836d36f0f943383fe743c747d644679ef38a33102b266193",
+        "outputSha256": "e505160cdb527051e7009819709bbfa61135df57228589696c0a029d4e85ef89"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "8defa2f9d7a48060e18d6cbaaca781d71f82e555743f9e2fafaf9ce1ce97677f",
+        "outputSha256": "4e127b72bf47548738ec90fd321689922f9a9b1e6871a195130c418efbc3b7d7"
+      }
+    },
+    "containers": {
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "c53b0e7c5ee8eba69c7eb72c390eae3cf495742dc3b2bd93ab4628bb3525e01f",
+        "containerSha256": "ed81b43c634588be30afa5a1ed4548ec8f35c8352ffa3cf8a986b1596c2e1621",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "253402e607f3351fea7a191c7504403c6cf03458d3f6fabe64d0f9ff4cdeb48b",
+        "containerSha256": "81f109923b0a7601e570608ce945ab76996a066f46ba55d03b23816c18ce0b4e",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "27d9d0bcc82c3f24ae6d0705602d85c58d1171b8bab4257ee7c9b4d0cf1659e8",
+        "containerSha256": "e505160cdb527051e7009819709bbfa61135df57228589696c0a029d4e85ef89",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "94474addeb4b48b0d0be310434417c92b5050b3f599475ae426c0469624228ca",
+        "containerSha256": "4e127b72bf47548738ec90fd321689922f9a9b1e6871a195130c418efbc3b7d7",
+        "roundTripPassed": true
+      }
+    },
+    "parameters": {
+      "inputSha256": "A1D52991A7749829786EF71D9DC496F080A00520E96E6A7620502DD3B53B3467",
+      "outputSha256": "DA692A69C0FC2B7CBC3A2CA3429A558D254B1B8E35644950555B253EC71B6DEE",
+      "effectId": 95003801,
+      "field": "effectEndurance",
+      "before": 10,
+      "after": 15,
+      "audit": {
+        "owner": 95003800,
+        "buff": 95003801,
+        "source": 511060,
+        "seconds": 15,
+        "historyBit": 35,
+        "fpRates": {
+          "artsConsumptionRate": 0,
+          "magicConsumptionRate": 0,
+          "shamanConsumptionRate": 0,
+          "miracleConsumptionRate": 0,
+          "goodsConsumptionRate": 0
+        },
+        "nativeVfx": 5860,
+        "nativeSfx": 330111
+      },
+      "unrelatedRowsFieldsAndTablesUnchanged": true,
+      "gameplayVerified": false
+    },
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "456E8C6B10BCC6D81F9D717F604ED633E50C10A5ED7D7F9037C3C7987A772627",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "792A25B2A6A72C57633A12869CF2777C5C4435A3FE63D1F7912A58679784E7F7",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "4955536066677DA32376D74D20FFF23262268224E36A9B44064A7D2DBE82F19B",
+          "outputSha256": "C53B0E7C5EE8EBA69C7EB72C390EAE3CF495742DC3B2BD93AB4628BB3525E01F",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003800,
+              "before": "发动绝招后的10秒内，专注值消耗归零",
+              "after": "发动绝招后的15秒内，专注值消耗归零"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003800,
+              "before": "发动绝招后的10秒内，专注值消耗归零",
+              "after": "发动绝招后的15秒内，专注值消耗归零"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003800,
+              "before": "发动绝招后的10秒内，专注值消耗归零",
+              "after": "发动绝招后的15秒内，专注值消耗归零"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "D7FBB3B30CBC877C4AAA79F1DC3B261C111435B11A2F112ED1CF15C66CA32BC0",
+          "outputSha256": "253402E607F3351FEA7A191C7504403C6CF03458D3F6FABE64D0F9FF4CDEB48B",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003800,
+              "before": "发动绝招后的10秒内，专注值消耗归零",
+              "after": "发动绝招后的15秒内，专注值消耗归零"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "0B9C77B213C5CDCAB2512441766DBAB7CF8ECD242F03485A407746811896F44F",
+          "outputSha256": "27D9D0BCC82C3F24AE6D0705602D85C58D1171B8BAB4257EE7C9B4D0CF1659E8",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95003800,
+              "before": "Eliminates FP consumption for 10 seconds after activating an Ultimate Art.",
+              "after": "Eliminates FP consumption for 15 seconds after activating an Ultimate Art."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95003800,
+              "before": "Eliminates FP consumption for 10 seconds after activating an Ultimate Art.",
+              "after": "Eliminates FP consumption for 15 seconds after activating an Ultimate Art."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95003800,
+              "before": "Eliminates FP consumption for 10 seconds after activating an Ultimate Art.",
+              "after": "Eliminates FP consumption for 15 seconds after activating an Ultimate Art."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "30DCA0D1A3C870DCC066E5B391CA2650976AAD5D9846C436D7C07827DA067219",
+          "outputSha256": "94474ADDEB4B48B0D0BE310434417C92B5050B3F599475AE426C0469624228CA",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95003800,
+              "before": "Eliminates FP consumption for 10 seconds after activating an Ultimate Art.",
+              "after": "Eliminates FP consumption for 15 seconds after activating an Ultimate Art."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "native": {
+    "installedParameterReadbackPassed": true,
+    "nativeExecutionPassed": true,
+    "seconds": 15,
+    "trigger": 95000404,
+    "owner": 95003800,
+    "buff": 95003801,
+    "nativeSource": 511060,
+    "nativeVfx": 5860,
+    "nativeSfx": 330111,
+    "nativeFunctions": [
+      "510B20 same-ID refresh eligibility",
+      "511450 category20 ID isolation",
+      "511700 original duration refresh",
+      "5061B0 arts FP multiplier",
+      "507310 magic FP multiplier",
+      "5081E0 shaman FP multiplier",
+      "507410 miracle FP multiplier"
+    ],
+    "cases": [
+      "accepted ultimate notification via compiled shared effect hook",
+      "rejected/other notifications do not activate",
+      "nested self-application does not loop",
+      "refresh remaining duration to 15, never add time",
+      "installed zero multipliers override Echo Casting x2",
+      "inactive native node restores normal FP rates",
+      "native tear coexists and its remaining duration stays unchanged",
+      "ownerless, reset, down, dead, reviving, remote and inactive calls rejected",
+      "missing stats and failed effect submission",
+      "all-hero/affinity/party random/focused/reroll eligibility"
+    ],
+    "stubs": [
+      "native effect submission and accepted application result",
+      "effect-row lookup called by native lifetime reset",
+      "actor/effect storage and expiry flags; full update loop not simulated"
+    ],
+    "sources": {
+      "src/ultimate_awakening.rs": "4313bdc23abbe9047853c4d59a185f9b3c7e383c0917d2d832e2b661e8ee4fdb",
+      "src/ultimate_awakening_native_tests.rs": "3d7636bcbe20492cecaef515756fd810082067ff1c5487d22b43e7923e1e5239",
+      "src/lib.rs": "7e10e080d4575d57b418e0dea18ba2f46d1c5fa4df3b65e255b94621fa4dc3e5",
+      "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
+      "tools/HexBuild/UltimateAwakening.cs": "80f0398f781a851244007caaf079e1be518952f14b4353b9003227836668923e",
+      "tools/HexBuild/RewardCatalog.cs": "a5d549c3020cf58f88c63711300112d3c5f3e25708b1f5b5e4b3b0c291df7a71",
+      "tools/verify_ultimate_awakening.py": "6f8f31a729f2ee5d7a924f5d911fcc29207610ad77694d8547382788c3682c79"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "coexistence": {
+    "installedParameterReadbackPassed": true,
+    "stagedImmunity": false,
+    "fixtureSha256": "1d9ac911c2b233357c21b7447823bac3fc381dd65b84f087afee883a7b31f900",
+    "nativeExecutionPassed": true,
+    "seconds": 15,
+    "trigger": 95000404,
+    "owner": 95003900,
+    "buff": 95003901,
+    "nativeSource": 1650,
+    "nativeVfx": 8570,
+    "nativeSfx": 440111,
+    "buildupCases": [
+      "all seven native immunity flags execute through 509790 and 42D110 before meter writes",
+      "positive and negative buildup amounts leave existing meters and proc counters unchanged while immune",
+      "native Endure, expired and removed buff controls permit real meter writes",
+      "native bolus negative-buildup rows are also blocked while immune and clear meters without immunity"
+    ],
+    "buildupStubs": [
+      "security cookie check disabled in isolated EXE",
+      "post-meter notification/network tail skipped; natural decay, active-status cure and game update not executed"
+    ],
+    "nativeFunctions": [
+      "50D060 native collision selection before allocation",
+      "510B20 same-ID candidate",
+      "510BD0 category conflicts",
+      "507C40 and EA0CF0 original Endure reaction mapping",
+      "504E80 remove by effect ID",
+      "50B5B0 native doubly-linked list removal",
+      "511700 native duration initialization"
+    ],
+    "cases": [
+      "compiled shared successful-ultimate hook",
+      "other/rejected notifications do not activate",
+      "nested self-application does not loop",
+      "native category1001 reaction mapping matches Endure for 13 levels and two flags",
+      "Sword matches native Endure for 13 levels and two flags, including strong forced reactions",
+      "category20 negative control loses stagger resistance",
+      "eight native damage multipliers restored to one",
+      "same-ID category1001 collision found before replacement",
+      "only private buff removed before reapplication",
+      "refresh lifetime to 15 rather than add time",
+      "vanilla Endure and Sword IDs and durations preserved",
+      "one private instance after repeated ultimates",
+      "expired but not yet removed node does not block the next activation",
+      "Ultimate Awakening remains active at its own fifteen-second duration",
+      "ownerless/reset/down/dead/reviving/remote/inactive/missing-stats calls ignored",
+      "failed application does not create a permanent reservation",
+      "all-hero/affinity/party choice eligibility"
+    ],
+    "stubs": [
+      "native accepted application result and row lookup",
+      "effect allocation/storage; native add routine returns at collision decision before allocator",
+      "native removal executes list splice but skips allocator destruction/category bookkeeping",
+      "elapsed game-time update and network replication not executed"
+    ],
+    "sources": {
+      "src/ultimate_unstoppable.rs": "c54d4805db0ce4cafbe3e031dbca634f896263d60a8288e297368eaa094d695d",
+      "src/ultimate_unstoppable_native_tests.rs": "f36942dd2feb558bb122aa2f77ac73303529c005b214aa7fa99ee68094c07147",
+      "src/lib.rs": "7e10e080d4575d57b418e0dea18ba2f46d1c5fa4df3b65e255b94621fa4dc3e5",
+      "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
+      "tools/HexBuild/UltimateUnstoppable.cs": "780aa1a7964e33a55967cdeacb722364140be3f94845731488ee034d5dbdd35b",
+      "tools/HexBuild/RewardCatalog.cs": "a5d549c3020cf58f88c63711300112d3c5f3e25708b1f5b5e4b3b0c291df7a71",
+      "tools/verify_ultimate_unstoppable.py": "186025470c84165b2578efdb6ed5207d9156f85b3fa6776b6ace650358d4d332"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.235",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "baf902f58dfab5a4f9548bd033a4acf3d8d3063a63d7d5c1177031fd62258ee7",
+    "installed": true,
+    "installedDllSha256": "baf902f58dfab5a4f9548bd033a4acf3d8d3063a63d7d5c1177031fd62258ee7",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 437,
+  "regularIgnoredTests": 26,
+  "runtimeNativeSuitesPassed": [
+    "verify_sword_projectile.py",
+    "verify_glass_cannon_native.py",
+    "verify_death_dance.py",
+    "verify_erosion.py",
+    "verify_potential_fission.py",
+    "verify_reward_template.py",
+    "verify_ambulance.py",
+    "verify_echo_cast.py",
+    "verify_weapon_affinity.py",
+    "verify_snack.py",
+    "verify_marking.py",
+    "verify_wraith.py",
+    "verify_basics.py",
+    "verify_sniper.py",
+    "verify_momentum.py",
+    "verify_heartstealer.py",
+    "verify_cat_arena.py",
+    "verify_ultimate_awakening.py",
+    "verify_ultimate_unstoppable.py"
+  ],
+  "signatureCount": 196,
+  "changedDistributionFiles": {
+    "README.md": {
+      "inputSha256": "1420cdb59421fd3251c61cc724760d4c27b675e25d07f332627bb1b1e6d923eb",
+      "outputSha256": "e402737558f10580703024df4742eae5085576381f45c52a213faa2919f7c51f"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "a1d52991a7749829786ef71d9dc496f080a00520e96e6a7620502dd3b53b3467",
+      "outputSha256": "da692a69c0fc2b7cbc3a2ca3429a558d254b1b8e35644950555b253ec71b6dee"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "32dd095f24c30ec890281c83ed8034b34d15204e6be448232e33e45551fb22b9",
+      "outputSha256": "baf902f58dfab5a4f9548bd033a4acf3d8d3063a63d7d5c1177031fd62258ee7"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "5274f948b90f990e836d36f0f943383fe743c747d644679ef38a33102b266193",
+      "outputSha256": "e505160cdb527051e7009819709bbfa61135df57228589696c0a029d4e85ef89"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "8defa2f9d7a48060e18d6cbaaca781d71f82e555743f9e2fafaf9ce1ce97677f",
+      "outputSha256": "4e127b72bf47548738ec90fd321689922f9a9b1e6871a195130c418efbc3b7d7"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "d9bfb019224c76aee8d0b47bac9bfc03c433cac86a13a0922cf707c6577f1212",
+      "outputSha256": "ed81b43c634588be30afa5a1ed4548ec8f35c8352ffa3cf8a986b1596c2e1621"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "604d199a943bd1acde58ebc687ab1440069bc5a4c0bbc00a666d571e16866368",
+      "outputSha256": "81f109923b0a7601e570608ce945ab76996a066f46ba55d03b23816c18ce0b4e"
+    }
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -182,7 +182,7 @@ For 10 seconds after landing an attack, boosts attack power by 30% for the first
 <!-- hex:95003800 -->
 ## Ultimate Awakening
 
-Eliminates FP consumption for 10 seconds after activating an Ultimate Art.
+Eliminates FP consumption for 15 seconds after activating an Ultimate Art.
 
 <!-- hex:95003900 -->
 ## Ultimate Unstoppable
