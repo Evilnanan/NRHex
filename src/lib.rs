@@ -998,7 +998,7 @@ unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  // Sword spells are evaluated at contact, across the complete impact dispatch.
  // Do not pre-boost a direct spell here and boost it a second time there.
  if spell_percentage(hit).is_some()&&has_effect(local,sword::OWNER,base){return;}
- if has_effect(local,strength::OWNER,base){strengthen_constructed_hit(hit);}
+ if strength::applies(read_i32(context+8),read_i32(context+12))&&has_effect(local,strength::OWNER,base){strengthen_constructed_hit(hit);}
  marking::constructed(hit,context,||has_effect(local,marking::OWNER,base));
 }
 

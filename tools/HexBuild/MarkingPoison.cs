@@ -29,13 +29,10 @@ static class MarkingPoison {
  static object StageActions(string root,string output){
   var before=ActionsInput(root);var b=ActionsInput(root);var file=b.Files.Single(f=>Name(f)=="a902.tae");var tae=TAE.Read(file.Bytes);
   Check(!tae.Animations.SelectMany(a=>a.Events).Any(Pulse),"Marking begin pulse already installed");
-  var template=tae.Animations.SelectMany(a=>a.Events).First(e=>e.Type==302&&e.Group!=null);
   foreach(long id in Starts){
    var a=tae.Animations.Single(a=>a.ID==id);Check(a.Events.Count(e=>e.Type==1001)==1&&a.Events.Any(e=>e.Type==1),"Native Marking start/collision missing");
-   var group=new TAE.EventGroup(302){GroupData=template.Group!.GroupData};a.EventGroups.Add(group);var bytes=new byte[16];BitConverter.GetBytes(Begin).CopyTo(bytes,0);
-   a.Events.Insert(0,new TAE.Event(0,1f/30f,302,template.Unk04,bytes,false){Group=group});
   }
-  file.Bytes=tae.Write();b.Write(output);var final=BND4.Read(output);CheckActions(final);
+  file.Bytes=TaeEventAppend.PrependEffect(file.Bytes.ToArray(),Starts,Begin,1f/30f);b.Write(output);var final=BND4.Read(output);CheckActions(final);
   Check(final.Version==before.Version&&final.Format==before.Format&&final.Compression==before.Compression&&final.Files.Count==before.Files.Count,"Animation binder metadata changed");
   foreach(var member in final.Files){
    var old=before.Files.Single(f=>f.ID==member.ID);Check(member.Name==old.Name&&member.Flags==old.Flags,"Animation member metadata changed");
@@ -50,7 +47,7 @@ static class MarkingPoison {
    }
    Check(restored.Write().AsSpan().SequenceEqual(previous.Write()),"Existing animation metadata changed");
   }
-  return new{starts=Starts,effect=Begin,onlyBeginPulsesAdded=true,originalEventsAndAnimationsPreserved=true,outputSha256=Hash(output)};
+  return new{starts=Starts,effect=Begin,onlyBeginPulsesAdded=true,originalEventsAndAnimationsPreserved=true,originalBinaryLayoutPreserved=true,outputSha256=Hash(output)};
  }
  public static void Actions(string root){
   try{CheckActions(ActionsInput(root));Console.WriteLine("PASS: Marking animation begin observers already installed");return;}catch(InvalidDataException){}
@@ -69,7 +66,7 @@ static class MarkingPoison {
   Directory.CreateDirectory(dir);effects.Rows=effects.Rows.Where(r=>expected.ContainsKey(r.ID)||new[]{Marking.Owner,Source,8320700}.Contains(r.ID)).ToList();File.WriteAllBytes(Path.Combine(dir,"installed-effects.param"),effects.Write());
   return new{source=Source,burst=Burst,requiresPoison=false,nativeDamageAndVisualPreserved=true,damageRate=effects.Rows.Single(r=>r.ID==Burst)["changeHpRate"].Value,damagePoints=effects.Rows.Single(r=>r.ID==Burst)["changeHpPoint"].Value,vfx=8500202};
  }
- public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){Validate(native,SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin")),parse,Path.Combine(root,"work/marking-poison"));CheckActions(ActionsInput(root));Console.WriteLine("PASS: Marking native poison burst clone, rolling-attack reference and three guarded skill starts");}
+ public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){Validate(native,SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin")),parse,Path.Combine(root,"work/marking-poison"));CheckActions(ActionsInput(root));Console.WriteLine("PASS: Marking native poison burst clone, backstep-attack reference and three guarded skill starts");}
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string dir=Path.Combine(root,"work/marking-poison/staged"),input=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(dir);
   var b=SFUtil.DecryptNightreignRegulation(input);var before=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());var file=b.Files.Single(f=>Name(f)=="SpEffectParam.param");var rows=parse("SpEffectParam",file.Bytes);var old=parse("SpEffectParam",file.Bytes);var source=parse("SpEffectParam",native.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);

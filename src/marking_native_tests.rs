@@ -33,11 +33,27 @@ fn native_marking_constructor_uses_upward_cut_and_retains_copies(){unsafe{
   let native=row(&params,attack);let mut context=[0usize;0x120/8];context[0]=if local{player}else{player+8};ptr::write_unaligned((context.as_mut_ptr()as usize+8)as*mut i32,attack);ptr::write_unaligned((context.as_mut_ptr()as usize+12)as*mut i32,table);
   let mut hit=[0u8;0x300];let h=hit.as_mut_ptr()as usize;let context=context.as_mut_ptr()as usize;
   assert_eq!(call(h,native.as_ptr()as usize,context,173,-249,0x12345678,1.25),0xabcdef0123456789);
-  let expected=if local&&owned&&table==1&&attack==ATTACK{IMPACT}else if local&&mighty{crate::strength::remap(native[0x72])}else{native[0x72]};assert_eq!(hit[0x24],expected);assert_eq!(crate::read_i32(h+0x280),0x12345678);
+  let expected=if local&&owned&&table==1&&attack==ATTACK{IMPACT}else if local&&mighty&&!(table==1&&attack==600000120){crate::strength::remap(native[0x72])}else{native[0x72]};assert_eq!(hit[0x24],expected);assert_eq!(crate::read_i32(h+0x280),0x12345678);
   // Native cached/network copies keep the constructed input, independently
   // of later ownership changes; no target mapping is overwritten here.
   let copied=hit;OWNED.with(|s|s.set(!owned));assert_eq!(copied[0x24],expected);OWNED.with(|s|s.set(owned));assert_eq!(hit[0x2b6],0);
  }}}}}
  assert_eq!(marking[0x72],1);assert_eq!(stamp[0x72],9);
+ let notification_bytes=[0x0f,0xb6,0x47,0x24,0x84,0xc0,0x7e,0x03,0x88,0x43,0x1d,0x41,0x81,0xfe,0x9f,0x86,0x01,0x00,0x75,0x05,0x45,0x84,0xff,0x7e,0x18,0x44,0x89,0x73,0x38,0x44,0x88,0x7b,0x1c,0x8b,0x87,0x68,0x02,0x00,0x00,0x89,0x43,0x20,0x0f,0xb6,0x47,0x25,0x88,0x43,0x26];
+ assert_eq!(std::slice::from_raw_parts((base+0x4382ec)as*const u8,notification_bytes.len()),notification_bytes);
+ let notification_entry=0x438100;
+ let mut notification_code=vec![0x53,0x57,0x41,0x56,0x41,0x57,0x48,0x89,0xcb,0x48,0x89,0xd7,0x45,0x89,0xc7,0x41,0xbe,0x9f,0x86,0x01,0x00,0xe9];
+ notification_code.extend_from_slice(&((0x4382eci64-(notification_entry+notification_code.len()+4)as i64)as i32).to_le_bytes());
+ ptr::copy_nonoverlapping(notification_code.as_ptr(),(base+notification_entry)as*mut u8,notification_code.len());
+ let notification_return=[0x41,0x5f,0x41,0x5e,0x5f,0x5b,0xc3];ptr::copy_nonoverlapping(notification_return.as_ptr(),(base+0x43831d)as*mut u8,notification_return.len());
+ let notify:unsafe extern "system" fn(usize,usize,u32)=std::mem::transmute(base+notification_entry);
+ for impact in [0u8,1]{
+  let mut action=[0u8;0x80];action[0x1c]=IMPACT;action[0x1d]=IMPACT;action[0x38..0x3c].copy_from_slice(&11i32.to_le_bytes());
+  let mut hit=[0u8;0x300];hit[0x24]=impact;hit[0x25]=20;
+  notify(action.as_mut_ptr()as usize,hit.as_mut_ptr()as usize,impact as u32);
+  assert_eq!((action[0x1c],action[0x1d]),if impact==0{(IMPACT,IMPACT)}else{(1,1)});
+  assert_eq!(i32::from_le_bytes(action[0x38..0x3c].try_into().unwrap()),if impact==0{11}else{99999});
+  assert_eq!(action[0x26],if impact==0{0}else{20});
+ }
  crate::HIT_BUILD_ORIG.store(saved_original,Ordering::Release);crate::BASE.store(saved_base,Ordering::Release);crate::ACTIVE.store(saved_active,Ordering::Release);assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
 }}

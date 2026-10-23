@@ -42,14 +42,15 @@ fn native_marking_followup_targets_and_original_collector_are_scoped(){unsafe{
  let saved_collect=crate::erosion::COLLECT_ORIGINAL.swap((base+crate::erosion::COLLECT_RVA)as*mut u8,Ordering::AcqRel);
  let mut desc=[0u8;0x48];let d=desc.as_mut_ptr()as usize;desc[0]=1;int(d+0x38,1);
  let mut values=[0i32;16];let start=values.as_mut_ptr()as usize;let mut vector=[0usize,start,start,start+64];
- let collect=|attack:i32,rolling:bool,values:&mut[i32;16],vector:&mut[usize;4]|{int(d+0x34,attack);ptr::write((d+20)as*mut u8,u8::from(rolling));values.fill(0);values[0]=12345;vector[2]=start+4;crate::erosion::collect(manager.as_ptr()as usize,vector.as_mut_ptr()as usize,d);};
+ let collect=|attack:i32,backstep:bool,values:&mut[i32;16],vector:&mut[usize;4]|{int(d+0x34,attack);ptr::write((d+20)as*mut u8,u8::from(backstep)*2);values.fill(0);values[0]=12345;vector[2]=start+4;crate::erosion::collect(manager.as_ptr()as usize,vector.as_mut_ptr()as usize,d);};
  collect(ATTACK,false,&mut values,&mut vector);assert_eq!(vector[2],start+8);assert_eq!(&values[..2],&[12345,MARK_HIT]);
  collect(10000,false,&mut values,&mut vector);assert_eq!(vector[2],start+4);
  collect(10000,true,&mut values,&mut vector);assert_eq!(vector[2],start+8);assert_eq!(values[1],CARRIER);
+ desc[0]=2;desc[4+105/8]|=1<<(105%8);collect(10000,true,&mut values,&mut vector);assert_eq!(values[1],CARRIER);desc[0]=1;desc[4+105/8]=0;
  for attack in [304,600000120]{collect(attack,false,&mut values,&mut vector);assert_eq!(vector[2],start+4);}
  let apply=|t,e|crate::erosion::detour(t,e,player,0x81,0x12345678,d,0x82,0x83,0x84,0x85,0x86,0x87,-99);
  let context=[player];let query=|mode:i32|{MODE.with(|v|v.set(mode as f32));assert_eq!(crate::ambulance::env(context.as_ptr()as usize,QUERY,1),0);};
- for mode in 1..=5{
+ for mode in 1..=4{
   reset();assert!(pulse(player,BEGIN,base));assert_eq!(apply(target,MARK_HIT),0);query(mode);query(mode+10);
   CALLS.with(|v|v.borrow_mut().clear());assert_eq!(apply(target,CARRIER),0x91);assert_eq!(apply(target,CARRIER),0);CALLS.with(|v|assert_eq!(&*v.borrow(),&[(target,BURST,player)]));
   assert!(pulse(player,BEGIN,base));apply(target,MARK_HIT);query(mode);CALLS.with(|v|v.borrow_mut().clear());assert_eq!(apply(other,CARRIER),0);assert_eq!(apply(target,CARRIER),0);CALLS.with(|v|assert!(v.borrow().is_empty()));

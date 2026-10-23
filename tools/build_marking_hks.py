@@ -1,9 +1,9 @@
-"""Observe requested rolling-attack transitions; preserve native event dispatch."""
+"""Observe native Marking follow-up transitions; preserve native event dispatch."""
 import argparse,hashlib,json,struct
 from pathlib import Path
 from hks_bytecode import Reader,decode
 ROOT=Path(__file__).resolve().parents[1];QUERY=990042
-EVENTS=['W_AttackRightLightStep','W_AttackBothLightStep','W_AttackDualRolling','W_AttackArrowBothFireStep','W_AttackBothLeftStep']
+EVENTS=['W_AttackRightBackstep','W_AttackBothBackstep','W_AttackDualBackStep','W_AttackArrowBothFireBackStep']
 def abx(op,a,bx):return op<<25|bx<<8|a
 def abc(op,a,b,c):return op<<25|b<<17|c<<8|a
 def patch(source):

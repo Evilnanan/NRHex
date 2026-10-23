@@ -5,7 +5,13 @@ from hks_bytecode import instructions
 
 def verify(data):
  r=check(data);cases=0
- events=[*EVENTS,*(s+'_Upper'for s in EVENTS),'W_Rolling','W_Stealth_Rolling','W_SwordArtsRolling','W_AttackRightLight1','W_AttackRightLight2','W_AttackRightBackstep','W_Move','W_Idle','W_DamageLv3','UpperDefaultState0','W_MagicFireRight']
+ for name in ['HurtDaggerAttack_onUpdate','AirHurtDaggerAttack_onUpdate']:
+  constants=next(f['constants']for f in r.functions if f['name']==name)
+  assert 'W_AttackRightBackstep'in constants and 'W_AttackBothBackstep'in constants
+  assert 'W_AttackRightLightStep'not in constants
+ constants=next(f['constants']for f in r.functions if f['name']=='ExecAttack')
+ assert all(name in constants for name in [EVENTS[0],EVENTS[2],EVENTS[3]])
+ events=[*EVENTS,*(s+'_Upper'for s in EVENTS),'W_Rolling','W_Stealth_Rolling','W_SwordArtsRolling','W_AttackRightLight1','W_AttackRightLight2','W_AttackRightLightStep','W_AttackBothLightStep','W_AttackDualRolling','W_AttackArrowBothFireStep','W_Move','W_Idle','W_DamageLv3','UpperDefaultState0','W_MagicFireRight']
  for fid in [1,2,3,4]:
   f=r.functions[fid];words=instructions(f);callsites=[i for i,x in enumerate(words)if x['op']==2 and x['c']==1]
   # The first call is the observer; native callbacks follow it unchanged.

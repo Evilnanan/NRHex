@@ -1,0 +1,26 @@
+{
+  "version": "0.17.237",
+  "owner": 95004200,
+  "burst": 95004203,
+  "nativeFollowupCategory": 129,
+  "nativeActions": [
+    "W_AttackRightBackstep",
+    "W_AttackBothBackstep",
+    "W_AttackDualBackStep",
+    "W_AttackArrowBothFireBackStep"
+  ],
+  "nativeSlideCallbacksChecked": ["HurtDaggerAttack_onUpdate", "AirHurtDaggerAttack_onUpdate"],
+  "readOnlyObservation": "Slide recorded targets but returned to Idle instead of retaining Followup",
+  "requiresPoison": false,
+  "sameTargetAndSingleConsumptionPreserved": true,
+  "regularTestsPassed": 440,
+  "regularTestsIgnored": 27,
+  "isolatedNativeTestsPassed": 2,
+  "hksTransitionCases": 88,
+  "projectileAndRangedCategoryCollectorCovered": true,
+  "dllSha256": "5aa61facceb9199ce1414c557f9255faae3362194ff1776bcaabd8b90c0cee6f",
+  "hksSha256": "610ae197186870b122c6112e3cbf3023c89670a5223e4d1e7f2ea773981e240d",
+  "otherResourcesConfigAndGroupHashesPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

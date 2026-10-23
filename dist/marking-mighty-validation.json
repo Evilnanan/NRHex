@@ -1,0 +1,25 @@
+{
+  "version": "0.17.238",
+  "date": "2026-10-23",
+  "toolchain": "x86_64-pc-windows-msvc",
+  "features": ["test-hotkeys", "cage-demand"],
+  "dllSha256": "3D31025A8778AF12B84CD0477D4B1DA0272D9A19206186A2503E457851A2A33B",
+  "fix": "Exclude PC AtkParam 600000120 from Mighty impact remapping; preserve native non-interrupting poison contact",
+  "regularTests": {"passed": 441, "failed": 0, "ignored": 27},
+  "nativeIsolatedTests": {
+    "constructorAndNotificationProtection": "passed",
+    "followupAndEffectCollector": "passed",
+    "limitation": "Notification fixture supplies resolved impact; does not simulate complete target AI, animation or networking"
+  },
+  "diagnosticCodeRemoved": true,
+  "protectedFilesUnchanged": 58,
+  "deployment": {
+    "target": "dist DLL only",
+    "restarted": true,
+    "processId": 18712,
+    "mainUpdateHookInitialized": true,
+    "relatedEntryHooksVerified": ["E70350", "43D260", "3F7B50", "4381F0"],
+    "groupBuildUnchanged": true
+  },
+  "gameplayValidation": "user confirmed successful dist retest on 2026-10-23; multiplayer not verified"
+}

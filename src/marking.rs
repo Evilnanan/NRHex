@@ -10,9 +10,6 @@ pub unsafe fn constructed(hit:usize,context:usize,owned:impl FnOnce()->bool){
   ptr::write((hit+0x24)as*mut u8,IMPACT);
  }
 }
-// The two private notifications ride the native state152 recipient-effect
-// path. Only a real Marking contact records a target; HKS transition requests
-// bind that set to the immediately following rolling-attack motion.
 pub const CARRIER:i32=OWNER+1;
 pub const MARK_HIT:i32=OWNER+2;
 pub const BURST:i32=OWNER+3;
@@ -29,10 +26,10 @@ impl Combo{
  fn mark(&mut self,target:Identity){if self.phase==Phase::Slide&&!self.targets.contains(&target){self.targets.push(target);}}
  fn event(&mut self,mode:i32){
   let family=mode%10;let layer=if mode>=11{2}else{1};
-  let rolling=(1..=5).contains(&family)&&(mode==family||mode==family+10);
+  let followup=(1..=4).contains(&family)&&(mode==family||mode==family+10);
   self.phase=match self.phase{
-   Phase::Slide if rolling&&!self.targets.is_empty()=>Phase::Followup{family,layers:layer},
-   Phase::Followup{family:old,layers}if rolling&&family==old&&layers&layer==0=>Phase::Followup{family,layers:layers|layer},
+   Phase::Slide if followup&&!self.targets.is_empty()=>Phase::Followup{family,layers:layer},
+   Phase::Followup{family:old,layers}if followup&&family==old&&layers&layer==0=>Phase::Followup{family,layers:layers|layer},
    _=>Phase::Idle
   };
   if self.phase==Phase::Idle{self.targets.clear();}
@@ -62,9 +59,7 @@ pub unsafe fn inapplicable(node:usize,descriptor:usize)->bool{
  let table=read_i32(descriptor+0x38);let attack=read_i32(descriptor+0x34);
  if table==1&&attack==ATTACK{return false;}
  let mask=ptr::read_unaligned((descriptor+4)as*const[u32;8]);
- // Native Improved Rolling Attacks uses categories 128/129. The transition
- // gate separately excludes backsteps and ordinary rolls, even if tagged.
- !matches!(ptr::read(descriptor as*const u8),1|2)||mask[4]&3==0||table==1&&matches!(attack,300..=307|310..=313|322|550|551|560|561)
+ !matches!(ptr::read(descriptor as*const u8),1|2)||mask[4]&2==0||table==1&&matches!(attack,300..=307|310..=313|322|550|551|560|561)
 }
 pub unsafe fn route(target:usize,effect:i32,source:usize,context:usize,base:usize)->Option<i32>{
  let owner=owned(source,base)?;
@@ -89,7 +84,7 @@ pub unsafe fn route(target:usize,effect:i32,source:usize,context:usize,base:usiz
  }}
  fn id(actor:usize)->Identity{Identity{actor,handle:actor as u64,stats:actor+100}}
  #[test]fn followup_is_one_attack_and_only_the_slid_target_can_burst(){
-  for mode in 1..=5{
+  for mode in 1..=4{
    let mut s=Combo::default();s.sync(id(1));s.begin();s.mark(id(2));s.mark(id(2));assert_eq!(s.targets.len(),1);
    s.event(mode);s.event(mode+10);assert!(s.hit(id(2)));assert!(!s.hit(id(2)));
    s.begin();s.mark(id(2));s.event(mode);assert!(!s.hit(id(3)));assert!(!s.hit(id(2)));
@@ -106,15 +101,15 @@ pub unsafe fn route(target:usize,effect:i32,source:usize,context:usize,base:usiz
   s.begin();s.mark(id(2));s.event(1);s.sync(Identity{stats:999,..id(1)});assert!(!s.hit(id(2)));
   s.begin();s.mark(id(2));s.event(1);s.sync(Identity{handle:999,..id(1)});assert!(!s.hit(id(2)));
  }
- #[test]fn carrier_accepts_native_rolling_categories_and_only_real_marking_contacts(){unsafe{
+ #[test]fn carrier_accepts_native_backstep_category_and_only_real_marking_contacts(){unsafe{
   let mut row=[0u64;0x400/8];let rp=row.as_mut_ptr()as usize;ptr::write_unaligned((rp+0x12c)as*mut i32,CARRIER);let node=[rp];
   let mut descriptor=[0u8;0x40];let d=descriptor.as_mut_ptr()as usize;descriptor[0]=1;
   for category in 0..256{
    descriptor[4..36].fill(0);descriptor[4+category/8]|=1<<(category%8);ptr::write_unaligned((d+0x34)as*mut i32,10000);ptr::write_unaligned((d+0x38)as*mut i32,1);
-   assert_eq!(inapplicable(node.as_ptr()as usize,d),!matches!(category,128|129));
+   assert_eq!(inapplicable(node.as_ptr()as usize,d),category!=129);
   }
   for attack in [ATTACK,600000120,304]{ptr::write_unaligned((d+0x34)as*mut i32,attack);descriptor[4..36].fill(0);assert_eq!(inapplicable(node.as_ptr()as usize,d),attack!=ATTACK);}
-  ptr::write_unaligned((d+0x34)as*mut i32,10000);descriptor[20]=1;
+  ptr::write_unaligned((d+0x34)as*mut i32,10000);descriptor[20]=2;
   for kind in 0..12{descriptor[0]=kind;assert_eq!(inapplicable(node.as_ptr()as usize,d),!matches!(kind,1|2));}
  }}
  #[test]fn only_ironeye_draws_marking_even_after_affinity_overrides(){
