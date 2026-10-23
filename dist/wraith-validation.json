@@ -13,85 +13,145 @@
   ],
   "freeFpOnlyForLocalOwner": true,
   "nativeFunctions": [
+    "3CFDB0 native selected-item getter, including original direct call at3CFE48",
+    "6D0470 shared eligibility; 6D10F3 FP/cost reads; 6D124A native FP branch",
     "66F040 pending-token registration (existing-record branch)",
     "66D3B0 token lookup",
     "669A20 consume token",
     "34E0B0 original XP call and compiled hook",
-    "1F7840 quickslot setter"
+    "1F7840 quickslot setter",
+    "E8F910 native map/enemy parameter-table selector"
   ],
   "cases": [
+    "native selected-item getter reproduces the old low-FP rejection before the shared hook; passes after it",
     "root registration preserves native source identity and rejects parent/foreign emissions",
     "misses do not progress; first-contact token consumed once",
     "Scholar retains native category XP; other heroes receive only independent progress",
-    "FP eligibility/use scopes and original parameter immutability",
+    "shared native eligibility at6D0470: zero/low/exact/surplus FP for all three tools; actual native FP read/cost/compare",
+    "seven native eligibility arguments forwarded; non-FP rejection retained; inactive/reset/remote/other goods excluded",
+    "FP use scopes and original parameter immutability",
     "continuous actions defer; three empty frame samples; original slot and selection retained",
-    "late lower-tier flights cannot progress a higher tier",
-    "existing native bell acknowledged without duplicate grant",
+    "bell and bairn independently count effective uses, including after the royal tool was obtained",
+    "existing native bell receives exactly one extra ordinary placed-item gift without changing the original inventory item",
     "missing native tool waits for inventory acknowledgment",
-    "preowned upgrade target reused with its existing slots preserved",
-    "newly granted target waits for item-chain exit and clears automatic duplicate slot"
+    "preowned upgrade target and slots preserved; each additional upgrade output placed on the ground",
+    "newly granted target waits for item-chain exit and clears automatic duplicate slot",
+    "20 bell / 10 bairn independent thresholds; upgrading bell preserves 9/10 bairn progress",
+    "each completed upgrade resets only its own track; both types can upgrade repeatedly",
+    "old pending projectiles and stale TLS credit cannot carry into the next cycle; provenance retained to preserve native Scholar-only XP filtering",
+    "asynchronous removal must complete before the next replacement; no duplicate grant/removal requests",
+    "a newly acquired bell starts at zero after a previous royal upgrade; 19 contacts do not upgrade it",
+    "ground gift retries after zero creation, then never repeats while unclaimed",
+    "native map selector 1 reads parameter table 21; enemy selector 0 retains table 20",
+    "no automatic replacement after dropping the initial gift"
   ],
   "stubs": [
     "native item inventory grant/removal command execution and network transport not executed",
-    "source/effect lookup and native FP legality consumer fixtures",
+    "source/effect lookup; eligibility conditions outside the real native FP fragments are fixtures",
     "pending-list allocator release and inventory lookup/UID lookup fixtures",
-    "native category XP body replaced by recording fixture"
+    "native category XP body replaced by recording fixture",
+    "ground-spawn service records success/failure here; ordinary-item dispatch/copy/grouping and drop UID format checked separately by verify_potential_fission.py"
   ],
   "sourceHashes": {
-    "src/wraith.rs": "eb05e1216905fe825204d3742602cc2325ba43261fcc4dff341c67590122a9df",
-    "src/wraith_native_tests.rs": "a8cd046356aa7da677c10dd6dba72a69e5d3c01ad7dcc1f5d084a5ea19553632",
-    "src/lib.rs": "7216a2d475dec0c1fa10902df17ff4812fdf01fb1aaf16a4eec9b4823676d3af",
-    "src/echo_cast.rs": "5b68de382e85e8d1bc72cb8a9240691fa3d680976e26cd212b084fffeaa01753",
-    "src/ambulance.rs": "33c3881c5af294d829ac96935be421a8cef2dcaf9d3cad8c6f40d6cc3d530646",
-    "src/reward_cycle_runtime.rs": "bc1fa56961c08a399c1080d18b07eb4e8fb096cb06d4a42b3b5ccd05c9de6ba8",
-    "src/hex_pool.rs": "c0a5f47a41c050c12ddd143f104ef25ff578d97a7b652849e05c42901a6eb112",
-    "tools/HexBuild/Wraith.cs": "d98b7221f7d0d0145cead02d28bccafbfbfc86630779fce118b9ba6f798ca114",
-    "tools/HexBuild/Program.cs": "5b691af38df02edb2cd759f70bb9669615b3017f8945349ea8f971cdb7811161",
-    "tools/build_wraith_hks.py": "42e2de87f740bb24361599469d9d2a4fd5aa51a6f51986d7a42ab22e471bca53",
-    "tools/verify_wraith.py": "9061b016c454b994d4c8b935d17d2d95aa142bbbd6ed825b16f120aa148a6d00",
-    "docs/hexes.md": "179077675c6726d93bff4b820b024a0b8d99d3ae96b605deff2de235182b4e0d",
-    "docs/hexes.en.md": "cbc6c69d7f377f93e95eece670e94a0672adf9f8a630902d26d78dc8a88c2177"
+    "src/wraith.rs": "48cee1230793e2e5f696ea6f0ba45af7b5e409040a971cd55c158fb840b36bda",
+    "src/wraith_native_tests.rs": "4f744e60d2aedd2c49e40443f37ab4b748848ea436690b4f75137d6b8758ec46",
+    "src/potential_fission.rs": "d081352e5a9ee3d612621f043ddfd7ed52f410414b9d4f6954fde82017748fa5",
+    "src/potential_fission_native_tests.rs": "e4266d1fec030093ae49b5d09e19c09e1a3964cd567ac7298975931f6730c4f8",
+    "src/lib.rs": "fdc53f7241283f8723b0e26803a45701c4755779d70dccc121bcf0ba1a30071f",
+    "src/echo_cast.rs": "64c5a018b249df543b9aa7060384702c1a058e210d7ae071ee9303e55c6833e7",
+    "src/ambulance.rs": "8101a2a0581d6dddfac93202afe6e8f6817b2dff855c2b03515c44d44bfe2551",
+    "src/reward_cycle_runtime.rs": "1f948a6c839d4bf1ce8f1f712bb949dc5c0b3ebd63ce51a7c9f991dbf29f90a2",
+    "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
+    "tools/HexBuild/Wraith.cs": "693a1ef2879d6faa6d25062a2a027776858508cc379841f16f96e825b9e14890",
+    "tools/HexBuild/Program.cs": "cfa131f49a4e8c152bad3d69a2fa495f55fab3172c71843e7664b9fb2f65268e",
+    "tools/build_wraith_hks.py": "5e2ef64aa2bc97f49a61765c8cc5b6fe052ee8a89e194094f33067e804dec537",
+    "tools/verify_wraith.py": "d7c0ea0b013a28486a46afeb479f2b715e76406779882033bb254225fea44519",
+    "docs/hexes.md": "7fb7b1c3d1a09713c2584a8c736b16844bb4ebef36bd4307baf516f208ba1e82",
+    "docs/hexes.en.md": "1211d8e62a0eda0b451586a481da9a0bd3247638a3e3091888304494148f0706"
   },
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "stagedReadbackPassed": false,
   "nativeGoodsOnly": true,
-  "version": "0.17.226",
-  "assetValidation": {
-    "owner": 95004300,
-    "nativeGoods": [
-      3080,
-      3010,
-      3011
+  "extraInitialBellOnGroundWhenAlreadyOwned": true,
+  "independentRepeatableProgress": true,
+  "progressResetsOnlyForCompletedTool": true,
+  "version": "0.17.239",
+  "ordinaryPlacedItems": true,
+  "nativePlacedItemKind": 1,
+  "nativeDropUidBit": 29,
+  "groundVisibility": "local player only",
+  "upgradeOverflowPlacedOnGround": true,
+  "preownedUpgradeTargetsPreserved": true,
+  "placementNativeValidation": {
+    "nativeExecutionPassed": true,
+    "compiledHooksExecuted": true,
+    "nativeFunctions": [
+      "5759E0 reward dispatch",
+      "6A1BA0 network-bit predicate",
+      "570410 descriptor copy",
+      "57A840 choice grouping"
     ],
-    "removedPrivateGoods": [
-      95004380,
-      95004381,
-      95004382
+    "cases": [
+      "all three local recipient slots and offline slot zero",
+      "teammate rewards unchanged",
+      "pre-acquisition group stays original even if the hook missed its first creation",
+      "one charge per multi-option source",
+      "three charges only",
+      "two separate native choice chains",
+      "partial creation retries missing options only",
+      "caller buffers unchanged",
+      "saved counter restored",
+      "explicit expedition reset",
+      "negative control: repeated unscoped Snack emissions merge into one native choice chain",
+      "three immediate Snack emissions with identical source and position create three independent three-choice chains for every recipient slot",
+      "native linked-choice traversal never reaches a different Snack reward",
+      "unrelated reward emitted between Snack rewards stays separate in both directions",
+      "temporary grouping scope restored after each emission",
+      "all three native wraith tools converted to ordinary placed-item kind 1 for each local recipient slot; two independent copies of each",
+      "all three original tool good IDs preserved; foreign recipient descriptors suppressed; native ItemMan drop counter allocates unique bit29 UIDs",
+      "ordinary placed tools clear choice source/lot/option metadata; real native grouping leaves each separate from nearby choices and other bells"
     ],
-    "inputSha256": "45D857637CD1CDEA2A6C9C295ED5257B7036B28D57ADC0EDFAF0E6D9C2B340CD",
-    "outputSha256": "C312B3986AAA5B76D4CCDA41783F3DCA3AFA13D61CDE2372655B0DB41947DEF9",
-    "originalGoodsUnchanged": true,
-    "onlyThreeGrantIdsChanged": true,
-    "onlyTwoRemovalIdsChanged": true,
-    "privateGoodsTextsRemoved": true,
-    "unrelatedContentPreserved": true,
+    "stubs": [
+      "allocation/rendering replaced by fixture invoking native descriptor copy",
+      "lottery emits deterministic descriptors; actual native lottery requires game parameter managers",
+      "character/effect state and UID lookup fixtures"
+    ],
+    "sources": {
+      "src/lib.rs": "fdc53f7241283f8723b0e26803a45701c4755779d70dccc121bcf0ba1a30071f",
+      "src/potential_fission.rs": "d081352e5a9ee3d612621f043ddfd7ed52f410414b9d4f6954fde82017748fa5",
+      "src/potential_fission_native_tests.rs": "e4266d1fec030093ae49b5d09e19c09e1a3964cd567ac7298975931f6730c4f8",
+      "src/fission_catalog.rs": "27246b2aff7a2d79b26eaa6419d17a92e6fcb006032d3e93723477cc4299964c",
+      "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
+      "src/personal_reward.rs": "09c29e62d2912832b215870bba46543c90fc66eaff567166f82afbc0dd621944",
+      "src/reward_cycle_runtime.rs": "1f948a6c839d4bf1ce8f1f712bb949dc5c0b3ebd63ce51a7c9f991dbf29f90a2",
+      "src/snack.rs": "da96dc9b06407a5a5a3004f6720773ba04164062e47543124be47c5788c4f4c4",
+      "src/wraith.rs": "48cee1230793e2e5f696ea6f0ba45af7b5e409040a971cd55c158fb840b36bda"
+    },
+    "gameProcessAccessed": false,
     "gameplayVerified": false,
     "multiplayerVerified": false
   },
-  "deployment": {
-    "version": "0.17.226",
-    "backup": "D:\\Projects\\NRMod\\NRHex\\.work\\wraith-native-before-20261022-182235",
-    "files": {
-      "mod/natives/NRHex.dll": "dd38572869bfbc8615859ad44dc149413b7335722136c77ab3e4b3e9b3c755c2",
-      "mod/regulation.bin": "c312b3986aaa5b76d4ccda41783f3dca3afa13d61cde2372655b0db41947def9",
-      "mod/event/common.emevd.dcx": "80ee6e0a24955e643ac8c254e2953b577f0a4fb985247ab619322ceb14909657",
-      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "f993d6ac454da5dec247d8f35ff23a45bc80096349414ac3f045347c7f27f8b3",
-      "mod/msg/engus/item_dlc01.msgbnd.dcx": "eedd8798f0a6f4316ff3e6f30d26d7a65809cb75bc4f78c830b829d4e5123d97"
-    },
-    "otherAssetsConfigsAndGroupPreserved": true,
-    "gameplayVerified": false
+  "build": {
+    "version": "0.17.239",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "ffc07b13fc9efb6245931305044d6d8b5096149b96f824dbaf33b2643a535e13",
+    "installed": true,
+    "installedDllSha256": "ffc07b13fc9efb6245931305044d6d8b5096149b96f824dbaf33b2643a535e13",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
   },
-  "regressionPassed": 443,
-  "regressionIgnored": 28
+  "regularTests": {
+    "passed": 441,
+    "failed": 0,
+    "ignored": 27
+  },
+  "runtimeVerificationSuites": 19,
+  "signatureCount": 196,
+  "exeSignaturesPassed": true,
+  "allOtherTrackedGameResourcesUnchanged": true
 }

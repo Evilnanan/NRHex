@@ -2001,6 +2001,7 @@ fn pressed_edge(state:&AtomicBool,down:bool)->bool {
 // returns the reward node from 57D0A0 in RAX. Preserve unrelated calls verbatim.
 unsafe extern "system" fn reward_create_detour(manager:usize,descriptor:usize)->usize {
  let original:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(REWARD_CREATE_ORIG.load(Ordering::Acquire));
+ if let Some(result)=wraith::place(manager,descriptor,original){return result;}
  if let Some(result)=potential_fission::route(manager,descriptor,original){return result;}
  arts_bind_drop(descriptor);
  red_envelope::observe_dispatch(manager,descriptor);
@@ -2096,6 +2097,10 @@ unsafe fn spawn_personal(player:usize,base:usize,chosen:[usize;3])->bool {
  created>0
 }
 unsafe fn spawn_personal_lot(player:usize,base:usize,lot:i32,choices:Option<[i32;3]>)->u32 {
+ spawn_personal_lot_kind(player,base,lot,choices,0)
+}
+// Native E8F910 selects ItemLotParam_enemy at kind 0, map at kind 1.
+unsafe fn spawn_personal_lot_kind(player:usize,base:usize,lot:i32,choices:Option<[i32;3]>,kind:u8)->u32 {
  let item_man=read_ptr(base+ITEMS_RVA);let game_data=read_ptr(base+GAME_DATA_RVA);
  if item_man==0||game_data==0{return 0;}
  let data=read_ptr(game_data+8);if data==0{return 0;}
@@ -2109,7 +2114,7 @@ unsafe fn spawn_personal_lot(player:usize,base:usize,lot:i32,choices:Option<[i32
  let reward_position=[0f32;4];
  // Keep native lottery, character position and choice aggregation. Only our
  // descriptors are routed locally; other party slots never create nodes.
- spawn(item_man,player,scope.lot,0,1,1,0,reward_position.as_ptr());
+ spawn(item_man,player,scope.lot,kind,1,1,0,reward_position.as_ptr());
  let created=PERSONAL_REWARD.with(|c|{let result=c.get().created;c.set(previous);result});
  created
 }
