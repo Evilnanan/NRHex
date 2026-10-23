@@ -23,8 +23,9 @@ static class RegulationCompression {
   // Avoid rewriting an already compatible file (encryption uses a fresh IV).
   if(previous!=Format){File.WriteAllBytes(Path.Combine(work,"before-regulation.bin"),input);File.Copy(staged,source,true);}
   var report=new{inputCompression=previous.ToString(),outputCompression=Format.ToString(),inputSha256=Convert.ToHexString(SHA256.HashData(input)),outputSha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(source))),decompressedSha256=Convert.ToHexString(SHA256.HashData(before)),decompressedBytes=before.Length,parameterFiles=binder.Files.Count,allDecompressedContentsPreserved=true,gameplayVerified=false};
-  File.WriteAllText(Path.Combine(root,"dist/regulation-compression-validation.json"),JsonSerializer.Serialize(report,new JsonSerializerOptions{WriteIndented=true}));
-  var validationPath=Path.Combine(root,"dist/validation.json");
+  Directory.CreateDirectory(Path.Combine(root,"dist/reports"));
+  File.WriteAllText(Path.Combine(root,"dist/reports/regulation-compression-validation.json"),JsonSerializer.Serialize(report,new JsonSerializerOptions{WriteIndented=true}));
+  var validationPath=Path.Combine(root,"dist/reports/validation.json");
   if(File.Exists(validationPath)){
    var validation=System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(validationPath))!;
    validation["outputRegulationSha256"]=report.outputSha256;

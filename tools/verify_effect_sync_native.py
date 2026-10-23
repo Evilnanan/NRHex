@@ -105,5 +105,5 @@ report = dict(version=version, exeSha256=digest, originalCategoryPredicatesExecu
               pendingChecks=['Both teammate detail list and HUD after owner and viewer revival',
                              'Repeated Escape and Ultimate cooldown transitions',
                              'Crystal one-hit consumption, 40-second cooldown and aura continuity'])
-(ROOT / 'dist/effect-sync-validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/effect-sync-validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf8')
 print('PASS: original native matching/query execution, 600 receive refreshes, replica rebuild and current parameter readback; coop remains unverified.')

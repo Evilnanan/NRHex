@@ -5,7 +5,7 @@ root=Path(__file__).resolve().parents[1]
 exe=Path(r'D:\Program Files\DSLuaDecompiler\DSLuaDecompiler.exe')
 old=root/'.work/hks/walljump-original.lua'
 new=root/'.work/hks/walljump-patched.lua'
-report=json.loads((root/'dist/hks-validation.json').read_text(encoding='utf-8'))
+report=json.loads((root/'dist/reports/hks-validation.json').read_text(encoding='utf-8'))
 ids=sorted({1255,*[f['functionId'] for f in report['functions']]})
 for source,dest in [(root/'assets/original/action/script/c0000.hks',old),(root/'dist/mod/action/script/c0000.hks',new)]:
  subprocess.run([str(exe),str(source),'--included-function-ids',*[str(i) for i in ids],'-o',str(dest)],check=True,cwd=root)
@@ -33,7 +33,7 @@ assert b.count(cast)==sum('castOwnerGuardPathsVerified' in f for f in report['fu
 b=b.replace(cast,'')
 assert b==a, 'Decompiler found a change outside the wall-request guards'
 assert all(str(pulse) not in new.read_text(encoding='utf-8-sig') for pulse in [95000808,95000816,95000824,95000832]), 'Diagnostic pulses remain'
-path=root/'dist/hks-validation.json';report=json.loads(path.read_text(encoding='utf-8'))
+path=root/'dist/reports/hks-validation.json';report=json.loads(path.read_text(encoding='utf-8'))
 report['independentDecompilerReadbackPassed']=True
 report['decompiledSourceDiff']='Only Cat wall guards plus Sword casting prefixes; no weapon-skill/cancel/recovery protection. All remaining decompiled source identical.'
 path.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')

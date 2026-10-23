@@ -7,7 +7,7 @@ from cage_usage_events import OPS as usage_ops, verify_open
 root=Path(__file__).resolve().parents[1]
 data=json.loads(Path(os.environ.get('NRHEX_CAGE_REPORT',root/'.work/cage/built.json')).read_text(encoding='utf8'))
 mod_root=Path(os.environ.get('NRHEX_CAGE_MOD_ROOT',root/'dist/mod'))
-validation_root=Path(os.environ.get('NRHEX_VALIDATION_ROOT',root/'dist'))
+validation_root=Path(os.environ.get('NRHEX_VALIDATION_ROOT',root/'dist/reports'))
 boss_count=len(data['bosses'])
 assert boss_count==37
 schema=json.loads((root/'data/reference/world/cage-opcodes.json').read_text(encoding='utf8'))

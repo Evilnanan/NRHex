@@ -270,5 +270,5 @@ report=dict(version=tomllib.loads((root/'Cargo.toml').read_text())['package']['v
 (validation_root/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
 if stage.resolve()==(root/'dist/mod').resolve():
  for src,dest in [('validation.json','cage-groups-validation.json'),('cage-validation.json','cage-validation.json'),('cage-mutation-validation.json','cage-mutation-validation.json')]:
-  (root/'dist'/dest).write_text((validation_root/src).read_text(encoding='utf8'),encoding='utf8')
+  (root/'dist/reports'/dest).write_text((validation_root/src).read_text(encoding='utf8'),encoding='utf8')
 print(f'PASS: {cases} group event cases; 13 groups, native reward flags, whole-group HUD reservation and cleanup; gameplay pending')

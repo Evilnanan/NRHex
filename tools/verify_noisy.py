@@ -37,7 +37,7 @@ assert call(0xed6101)==0xc80f50
 check(0xc80f7a,'0F 28 03 0F 11 47 70 0F 28 4B 10 0F 11 8F 80 00 00 00')
 data=json.loads((root/'.work/noisy/serialized.json').read_text())
 assert [r['id'] for r in data['effects']]==[95001501]
-package=json.loads((root/'dist/validation.json').read_text(encoding='utf8'))
+package=json.loads((root/'dist/reports/validation.json').read_text(encoding='utf8'))
 hexes={h['Id']:h for h in package['hexes']}
 assert (hexes[95001500]['LargeIcon'],hexes[95001500]['SmallIcon'])==(21229,22229)
 description=re.search(r'^<!-- hex:95001500 -->\n## [^\n]+\n(.*?)(?=^<!-- hex:|\Z)',(root/'docs/hexes.md').read_text(encoding='utf8'),re.M|re.S)
@@ -72,5 +72,5 @@ report=dict(version=tomllib.loads((root/'Cargo.toml').read_text())['package']['v
     baseExplosionFireAttack=140,baseBurningFireAttack=20,visualScale='sqrt(damage multiplier)',nativeHitRadiiPreserved=True,
     bulletReferenceKind=2,bulletReferenceIdOffset='5D0',childReferenceExcluded=True,temporaryCaptureRemoved=True,
     sourceAndFriendlyDamageDisabled=True,gameplayVerified=False,multiplayerVerified=False)
-(root/'dist/noisy-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+(root/'dist/reports/noisy-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print('PASS: actual native self-mark route, eight private lava phases, separate 140 eruption / 20 burning fire attack and owned visual matrix copy; collision sizes preserved.')

@@ -105,14 +105,14 @@ report = dict(version=version, eligibleHeroes={'Duchess': 4, 'Revenant': 6, 'Rec
               changedAssets=changed, originalRegulationAndUserEditedCsvUnchanged=True,
               csvSha256=after['source:data/balance/sword.csv'], rustTestsPassed=test_count,
               gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/sword-balance-validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/sword-balance-validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf8')
 build = dict(version=version, buildPassed=True, incremental=True,
              scope='Sword role-gated draws and lifesteal x1.5; DLL and two description bundles',
              signatureCount=50, rustTestsPassed=test_count, changedAssets=changed,
              originalExeSha256=exe_hash, dllSha256=dll_hash, installedDllSha256=dll_hash,
              dllInstalled=True, regulationSha256=after['mod/regulation.bin'], functionChecks=checks,
              unrelatedAssetsAndUserConfigsUnchanged=True, gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
 runtime = dict(version=version, active=None, pid=None, allFourNativeDllsLoaded=False,
                build='build-validation.json', dllSha256=dll_hash, dllInstalled=True,
                gameplayVerified=False, multiplayerVerified=False,
@@ -120,5 +120,5 @@ runtime = dict(version=version, active=None, pid=None, allFourNativeDllsLoaded=F
                               'Sword lifesteal x1.5 with unchanged damage/casting reduction',
                               'Previously pending HUD, balance, visual and multiplayer checks'],
                notes='Code, native getter fixture and text readback checked; no game session used.')
-(ROOT / 'dist/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
 print('PASS: native role anchors; DLL/text-only patch; regulation and current user CSV preserved.')

@@ -37,5 +37,5 @@ report=dict(version=version,originalExeSha256=hashlib.sha256(raw).hexdigest(),
  runtimeSignaturesVerified=63,gameplayAssetsUnchanged=unchanged,
  dllSha256=digest(ROOT/'dist/mod/natives/NRHex.dll'),gameUiVerified=False,multiplayerVerified=False,
  notes='Private native selector + real detour tests and build/static checks. Actual own/peer status pages pending user validation.')
-(ROOT/'dist/status-routing-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
+(ROOT/'dist/reports/status-routing-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
 print(f'PASS: current UI selector, state range, installed DLL and {len(unchanged)} unchanged gameplay assets.')

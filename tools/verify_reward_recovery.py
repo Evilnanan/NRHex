@@ -66,5 +66,5 @@ assert '102100' in recovery and '102150' in recovery
 assert 'map==u32::MAX' in recovery and 'MAP_CONTEXT_RVA' in recovery
 md=Cs(CS_ARCH_X86,CS_MODE_64)
 evidence={hex(r):[f'{i.address-pe.OPTIONAL_HEADER.ImageBase:08X} {i.mnemonic} {i.op_str}' for i in md.disasm(read(r,n),pe.OPTIONAL_HEADER.ImageBase+r)] for r,n in [(0x3d0e60,27),(0x39bd50,38),(0x466470,11),(0x5749e0,116),(0x572220,64),(0x57b58c,71),(0x580b20,123)]}
-(root/'dist/reward-recovery-validation.json').write_text(json.dumps(dict(version='0.12.5',nativePositionAbiIsolatedExecutionPassed=True,nativeMapConversionAndVisualRefreshReadBack=True,existingChoicesAndReceiptsNotRerolled=True,localPrivateOwnerGuardPresent=True,deadAndNearDeathGuards=True,evidence=evidence,gameplayVerified=False,multiplayerVerified=False),indent=2),encoding='utf8')
+(root/'dist/reports/reward-recovery-validation.json').write_text(json.dumps(dict(version='0.12.5',nativePositionAbiIsolatedExecutionPassed=True,nativeMapConversionAndVisualRefreshReadBack=True,existingChoicesAndReceiptsNotRerolled=True,localPrivateOwnerGuardPresent=True,deadAndNearDeathGuards=True,evidence=evidence,gameplayVerified=False,multiplayerVerified=False),indent=2),encoding='utf8')
 print('PASS: native position ABI, map conversion, grouped visual cleanup/rebuild and no-reroll recovery scope.')

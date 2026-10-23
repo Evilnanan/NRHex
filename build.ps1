@@ -16,6 +16,7 @@ $compiledDll = Join-Path $releaseFolder 'NRHex.dll'
 Push-Location $PSScriptRoot
 try {
     if (-not $DllOnly) {
+        New-Item -ItemType Directory -Path 'dist/reports' -Force | Out-Null
         foreach ($taskFolder in @('.work/arts', '.work/hks', '.work/actions', '.work/effects', '.work/combat', '.work/rewards', '.work/defs', '.work/backstep', '.work/behavior', '.work/icons')) {
             New-Item -ItemType Directory -Path $taskFolder -Force | Out-Null
         }
@@ -192,14 +193,18 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Parry native guard window generation failed.' }
         Copy-Item -LiteralPath '.work/parry/staged/c0000.anibnd.dcx' -Destination 'dist/mod/chr/c0000.anibnd.dcx' -Force
         Copy-Item -LiteralPath '.work/parry/staged/parry_data.rs' -Destination 'src/parry_data.rs' -Force
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-paired-probe
+        if ($LASTEXITCODE -ne 0) { throw 'Parry paired weapon parameter verification failed.' }
+        python -X utf8 tools/verify_parry_native.py
+        if ($LASTEXITCODE -ne 0) { throw 'Parry native guard and paired weapon verification failed.' }
         dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-followup-actions
         if ($LASTEXITCODE -ne 0) { throw "Parry follow-up actions failed." }
         python -X utf8 tools/verify_parry_feedback_native.py
         if ($LASTEXITCODE -ne 0) { throw 'Parry native spark instance verification failed.' }
         python -X utf8 tools/verify_parry_turn_native.py
         if ($LASTEXITCODE -ne 0) { throw 'Parry native turn verification failed.' }
-        Copy-Item -LiteralPath '.work/parry-fix/turn-native-validation.json' -Destination 'dist/parry-turn-native-validation.json' -Force
-        Copy-Item -LiteralPath '.work/parry-fix/spark-native-validation.json' -Destination 'dist/parry-spark-native-validation.json' -Force
+        Copy-Item -LiteralPath '.work/parry-fix/turn-native-validation.json' -Destination 'dist/reports/parry-turn-native-validation.json' -Force
+        Copy-Item -LiteralPath '.work/parry-fix/spark-native-validation.json' -Destination 'dist/reports/parry-spark-native-validation.json' -Force
         Copy-Item -LiteralPath ".work/parry-fix/staged/c0000.anibnd.dcx" -Destination "dist/mod/chr/c0000.anibnd.dcx" -Force
         dotnet run --project tools/HexBuild -- $PSScriptRoot --night-blessing-actions
         if ($LASTEXITCODE -ne 0) { throw 'Night blessing asset generation failed.' }
@@ -262,7 +267,7 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Sword native weapon-hit rules check failed.' }
         python -X utf8 tools/verify_devils_gaze_immunity.py
         if ($LASTEXITCODE -ne 0) { throw 'Native bullet contact immunity validation failed.' }
-        Copy-Item -LiteralPath '.work/devils-gaze-iframes/native-validation.json' -Destination 'dist/devils-gaze-immunity-validation.json' -Force
+        Copy-Item -LiteralPath '.work/devils-gaze-iframes/native-validation.json' -Destination 'dist/reports/devils-gaze-immunity-validation.json' -Force
     }
     if (-not $NoInstall) {
         New-Item -ItemType Directory -Path (Join-Path $PSScriptRoot 'dist/mod/natives') -Force | Out-Null

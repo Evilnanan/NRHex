@@ -59,5 +59,6 @@ for(int i=0;i<original.Files.Count;i++){
  }
 }
 var report=new{version="0.14.8",sourceSha256=Hash(File.ReadAllBytes(source)),sha256=Hash(File.ReadAllBytes(output)),ownerMarker=6999700,ownerState,sourceDuchessClip=27060,nativeJumpTableFlag=8,nativeGroupType=0,allNewEventsHaveSerializedGroupMembership=true,originalGroupAssociationsUnchanged=true,motionSeconds=iframeDuration,frames=iframeFrames,referenceFps=30,originalEventsAndAnimationHeadersUnchanged=true,unrelatedBinderMembersUnchanged=true,duchessAnimationsUnchanged=true,changes,gameplayVerified=false};
-File.WriteAllText(Path.Combine(root,"dist/jiahao-tae-validation.json"),JsonSerializer.Serialize(report,new JsonSerializerOptions{WriteIndented=true}));
+Directory.CreateDirectory(Path.Combine(root,"dist/reports"));
+File.WriteAllText(Path.Combine(root,"dist/reports/jiahao-tae-validation.json"),JsonSerializer.Serialize(report,new JsonSerializerOptions{WriteIndented=true}));
 Console.WriteLine("PASS: 36 owner-gated native backstep iframe events and their native event groups reopened; original animations preserved.");

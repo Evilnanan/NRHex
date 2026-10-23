@@ -8,7 +8,7 @@
 
 原生隔离回归增加显式Magic6710／Magic=-1、普通／满蓄两根：首发记录已消耗后，独立回响仍获准；回响内部第二次命中仍受原生门控限制；源描述符、引用计数、取消和分配失败路径继续核对。0.5秒延迟、费用、伤害参数和0.17.229视觉载体不变。实际游戏命中仍待验收。
 
-444项常规测试、回响及精力费用原生隔离验证、EXE签名检查通过。按授权仅替换dist DLL并重启，0.17.230 PID10268中ACTIVE=1，主更新与回响入口正常，DLL SHA256为80ed2b8042693575d0737d6da8c6648eacfc8fcd8dacc8648413a2b3570584d9；资源、配置、群友版哈希保持。部署记录`dist/echo-radagon-validation.json`，加载记录`work/echo-release/loaded-radagon.json`，不代表游戏内伤害已验收。
+444项常规测试、回响及精力费用原生隔离验证、EXE签名检查通过。按授权仅替换dist DLL并重启，0.17.230 PID10268中ACTIVE=1，主更新与回响入口正常，DLL SHA256为80ed2b8042693575d0737d6da8c6648eacfc8fcd8dacc8648413a2b3570584d9；资源、配置、群友版哈希保持。部署记录`dist/reports/echo-radagon-validation.json`，加载记录`work/echo-release/loaded-radagon.json`，不代表游戏内伤害已验收。
 
 ## 0.17.229：连续发射、圆阵释放与视觉入口
 
@@ -26,7 +26,7 @@
 
 以下0.17.228的持续完整性和圆阵排除说明已被本节更正，保留为历史记录。
 
-本轮通过444项常规测试、回响／精力费用与亮剑弹体原生隔离回归、EXE签名检查。资源逐层回读确认仅新增三行视觉载体，再叠加用户指定的王室幽魂与夺萃之镰图标；回响文案同步为用户指定版本。已更新并重启dist 0.17.229，PID29748中ACTIVE=1，主更新、回响及相关弹体入口均已加载，DLL SHA256为64667927d95abaf71343641effa65b26883a8f6e6e912dcb6c80e668902116ef。部署记录`dist/echo-release-validation.json`，加载记录`work/echo-release/loaded.json`；群友版、事件、动作及配置保持，修复后的实际持续效果仍待用户验收。
+本轮通过444项常规测试、回响／精力费用与亮剑弹体原生隔离回归、EXE签名检查。资源逐层回读确认仅新增三行视觉载体，再叠加用户指定的王室幽魂与夺萃之镰图标；回响文案同步为用户指定版本。已更新并重启dist 0.17.229，PID29748中ACTIVE=1，主更新、回响及相关弹体入口均已加载，DLL SHA256为64667927d95abaf71343641effa65b26883a8f6e6e912dcb6c80e668902116ef。部署记录`dist/reports/echo-release-validation.json`，加载记录`work/echo-release/loaded.json`；群友版、事件、动作及配置保持，修复后的实际持续效果仍待用户验收。
 
 ## 0.17.228：持续发射与范围攻击
 
@@ -68,7 +68,7 @@
 
 ## 已撤回的陨石适配
 
-0.17.173曾为陨石4700和艾丝缇陨石4701增加即时追加原生生成，0.17.175按用户要求撤回。当前目录、运行时和原生隔离夹具均移除DENSITY路径，两种陨石不进入延迟队列，也不会即时双发。旧实现与验证范围保留在历史提交和dist/echo-cast-meteors-validation.json，不能代表当前版本支持。
+0.17.173曾为陨石4700和艾丝缇陨石4701增加即时追加原生生成，0.17.175按用户要求撤回。当前目录、运行时和原生隔离夹具均移除DENSITY路径，两种陨石不进入延迟队列，也不会即时双发。旧实现与验证范围保留在历史提交和dist/reports/echo-cast-meteors-validation.json，不能代表当前版本支持。
 
 ## 多弹、散射与连续发射
 
@@ -163,6 +163,6 @@ hook 35A460只为本机存活拥有者、角色来源句柄匹配、行为编号
 
 0.17.175在既有排除验证上扩展到九种法术的全部26条原生Bullet引用，验证原发射仍执行、没有即时追加和延迟记录、0.5秒后不补发及引用计数平衡；目录生成器和常规筛选测试同时阻止重新纳入。陨石即时双发专用测试随实现一并移除，其他多弹／群体辅助回归保留。
 
-统一DLL构建包含既有5组原生回归、回响原生验证和171条EXE签名，回响验证同时检查实际安装的范围参数。0.17.170资源以当时dist为基线增加拥有／奖励与第五组历史行，中英文文本逐项回读；0.17.171以首版dist为基线仅增加上述28条范围配置，不改文本、奖励或事件；0.17.172～0.17.175仅更新DLL与目录生成，参数保持。没有重建缺失原始资源的全量特效包。当前角色例外证明见dist/archmage-unlocks-validation.json；弹体范围证明见dist/echo-cast-trim-validation.json，前版证明保留在dist/echo-cast-exclusions-validation.json、dist/echo-cast-meteors-validation.json、dist/echo-cast-volleys-validation.json、dist/echo-cast-areas-validation.json及dist/echo-cast-validation.json。
+统一DLL构建包含既有5组原生回归、回响原生验证和171条EXE签名，回响验证同时检查实际安装的范围参数。0.17.170资源以当时dist为基线增加拥有／奖励与第五组历史行，中英文文本逐项回读；0.17.171以首版dist为基线仅增加上述28条范围配置，不改文本、奖励或事件；0.17.172～0.17.175仅更新DLL与目录生成，参数保持。没有重建缺失原始资源的全量特效包。当前角色例外证明见dist/reports/archmage-unlocks-validation.json；弹体范围证明见dist/reports/echo-cast-trim-validation.json，前版证明保留在dist/reports/echo-cast-exclusions-validation.json、dist/reports/echo-cast-meteors-validation.json、dist/reports/echo-cast-volleys-validation.json、dist/reports/echo-cast-areas-validation.json及dist/reports/echo-cast-validation.json。
 
 上述不代表已在游戏中看到第二发、执行实际范围碰撞或HP恢复、验证伤害／蓄力／切换触媒后的补正、确认全部98种候选配置表现，或完成主客机联机验收。需实测原地／转向／切锁／无锁定、普通／蓄力弹幕数量与节奏、自己／队友进出治疗范围、满血、缓回／增益刷新及主客机同步。其他持续和绑定类型仍有后续适配范围，不能把存在Bullet引用或进入静态目录等同于已通过全部实机表现验收。

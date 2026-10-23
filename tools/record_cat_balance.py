@@ -32,7 +32,7 @@ assert set(changed) <= {'mod/natives/NRHex.dll'}, changed
 dll_hash = digest(ROOT / 'target/release/NRHex.dll')
 assert dll_hash == after['mod/natives/NRHex.dll']
 version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
-native = json.loads((ROOT / 'dist/cat-jump-native-validation.json').read_text())
+native = json.loads((ROOT / 'dist/reports/cat-jump-native-validation.json').read_text())
 assert native['version'] == version and len(native['isolatedNativeHeightCases']) == 6
 source = (ROOT / 'src/cat_jump.rs').read_text()
 coefficient = float(re.search(r'HEIGHT_BONUS_COEFFICIENT:f64=([0-9.]+)', source)[1])
@@ -46,7 +46,7 @@ checks = dict(version=version, oldCoefficient=0.4, coefficient=coefficient,
               nativeHeightChecks='cat-jump-native-validation.json', changedAssets=changed,
               previousJiahaoSyncCageAssetsAndUserConfigurationUnchanged=True,
               gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/cat-balance-validation.json').write_text(json.dumps(checks, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/cat-balance-validation.json').write_text(json.dumps(checks, indent=2), encoding='utf8')
 build = dict(version=version, buildPassed=True, incremental=True,
              scope='Cat jumping damage coefficient; DLL only', signatureCount=49,
              rustTestsPassed=test_count, changedAssets=changed,
@@ -56,12 +56,12 @@ build = dict(version=version, buildPassed=True, incremental=True,
              functionChecks=['cat-balance-validation.json', 'cat-jump-native-validation.json',
                              'jiahao-balance-validation.json', 'effect-sync-validation.json', 'cage-patch-validation.json'],
              unrelatedAssetsAndUserConfigsUnchanged=True, gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
 runtime = dict(version=version, active=None, pid=None, allFourNativeDllsLoaded=False,
                build='build-validation.json', dllSha256=dll_hash, dllInstalled=True,
                gameplayVerified=False, multiplayerVerified=False,
                pendingChecks=['Cat damage at normal jumps and elevated drops, multi-hit and spiritspring',
                               'Previously pending Jiahao balance and coop cage/effect-list checks'],
                notes='No game session was used for this DLL-only balance build.')
-(ROOT / 'dist/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
 print('PASS: Cat coefficient 100%; DLL-only patch; previous assets and user configuration preserved.')

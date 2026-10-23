@@ -1,4 +1,5 @@
 """Install validated spirit-only parameter/text changes and current DLL."""
+from distribution_paths import distribution_file
 from pathlib import Path
 import hashlib,json,shutil,subprocess,tomllib
 root=Path(__file__).resolve().parents[1]
@@ -23,13 +24,13 @@ for source,target in files:
     saved=backup/target.relative_to(dist);saved.parent.mkdir(parents=True,exist_ok=True)
     if not saved.exists():shutil.copy2(target,saved)
     shutil.copy2(source,target);assert sha(source)==sha(target)
-for source,target in [('parameter-validation.json','spirit-rework-parameter-validation.json'),('texts/validation.json','spirit-rework-text-validation.json')]:shutil.copy2(stage/source,dist/target)
+for source,target in [('parameter-validation.json','spirit-rework-parameter-validation.json'),('texts/validation.json','spirit-rework-text-validation.json')]:shutil.copy2(stage/source,distribution_file(dist,target))
 report=dict(version='0.17.43',rustTestsPassed=198,signatureChecksPassed=88,
             mechanics=dict(trigger='Ultimate Art',nativeDrainMaxHpFractionPerSecond=1/60,damageMultiplier=.1,forcedExpiry=False,captureSfx=461351,summonSfx=460801,placementHelpers=['3886A0','385410'],nativeSlotSelector='3922C0',failedPlacementPreservesSoul=True),
             files={str(t.relative_to(dist)).replace('\\','/'):sha(t) for _,t in files},gameplayVerified=False,multiplayerVerified=False,gameLaunched=False,
             limitations='Placement ABI tested with controlled geometry callbacks; full geometry, visible cues and damage need in-game testing. Native HP loss obeys native healing/immunity rules.')
-(dist/'spirit-rework-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
-p=dist/'validation.json';v=json.loads(p.read_text(encoding='utf8'));h=next(h for h in v['hexes'] if h['Id']==95001800)
+(dist/'reports'/'spirit-rework-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+p=dist/'reports'/'validation.json';v=json.loads(p.read_text(encoding='utf8'));h=next(h for h in v['hexes'] if h['Id']==95001800)
 for r in texts['reports']:
     for change in r['changes']:
         if change['id']!=95001800:continue

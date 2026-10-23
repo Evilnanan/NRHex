@@ -2,7 +2,7 @@
 from pathlib import Path
 import json,subprocess,runpy,sys,struct,hashlib
 root=Path(__file__).resolve().parents[1]
-report=json.loads((root/'dist/arts-hks-validation.json').read_text())
+report=json.loads((root/'dist/reports/arts-hks-validation.json').read_text())
 ids=[x['id'] for x in report['functions']];out=root/'.work/hks/arts-decompiled.lua'
 subprocess.run([r'D:\Program Files\DSLuaDecompiler\DSLuaDecompiler.exe',str(root/'dist/mod/action/script/c0000.hks'),'--included-function-ids',*[str(x) for x in ids],'-o',str(out)],capture_output=True,check=True)
 text=out.read_text(encoding='utf8')
@@ -36,7 +36,7 @@ assert any(x['ID']==360200 and x['fields']['artsConsumptionRate']==.75 for x in 
 stormTables={x['ID'] for x in params['artTables'] if x['fields']['swordArtsId']==1200}
 storm=[x for x in params['custom'] if x['fields']['swordArtsTableId'] in stormTables]
 assert len(storm)==10
-pool=json.loads((root/'dist/arts-pool.json').read_text(encoding='utf8'))
+pool=json.loads((root/'dist/reports/arts-pool.json').read_text(encoding='utf8'))
 texts=json.loads((root/'.work/arts/arts-names.json').read_text())
 assert pool['poolCount']==182 and pool['protectedOriginalSkills']==[1200,303]
 assert pool['ordinaryPoolCount']==175 and pool['bowPoolCount']==7
@@ -55,5 +55,5 @@ assert 'const TEST_REWARD: [usize;3] = [14,6,12];' in source and 'Some(TEST_REWA
 assert 'ptr::write_unaligned((entry.as_mut_ptr()' in source
 assert 'ptr::write_unaligned((r[1]' not in source # Native instance never modified.
 report.update(independentDecompilePassed=True,nativeFpMultiplierField='artsConsumptionRate',nativeFpCostUsesEffectMultiplier=True,instanceOverrideOffset='1c',weaponHandleGenerationValidated=True,nativeInventoryAndDropBytesNeverModified=True,localSixWeaponSlotsOnly=True,protectedOriginalSkills=[1200,303],protectedWeaponTemplates=[x['ID'] for x in storm],uniqueSkillPool=pool['poolCount'],actualNameTextChecked=True,excludedPreviouslyRandomUnnamedSkills=[104,121,407,1180,1181],gameplayVerified=False,multiplayerVerified=False)
-(root/'dist/arts-hks-validation.json').write_text(json.dumps(report,indent=2))
+(root/'dist/reports/arts-hks-validation.json').write_text(json.dumps(report,indent=2))
 print('PASS: skill callback readback, both native skill-ID/parameter paths, original FP multiplier and 10 Storm Ruler templates.')

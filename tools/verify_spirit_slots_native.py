@@ -57,7 +57,7 @@ try:
                   regression='Old >1 predicate selected dying/removing states 2 and 3.',
                   gameplayVerified=False, multiplayerVerified=False,
                   limits='Executes the real selector only. Does not reproduce a full physics crash or prove game-thread safety.')
-    (root / 'dist/spirit-slot-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
+    (root / 'dist/reports/spirit-slot-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
     print(f'PASS: {cases} original native slot-selection cases; no gameplay claim')
 finally:
     k.VirtualFree(arena, 0, 0x8000)

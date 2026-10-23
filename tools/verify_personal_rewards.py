@@ -129,5 +129,5 @@ report = dict(exeSha256=digest, gameVersion=pe.VS_FIXEDFILEINFO[0].FileVersionLS
         'localDispatchTail': lines(0x575b2e, 0x16), 'pickupOwnerGuard': lines(0x5754ce, 0x22),
         'pickupNetworkBranch': lines(0x5755f4, 0x17), 'localPickup': lines(0x5757a3, 0x35),
         'localRemoval': lines(0x5759be, 0x1b)})
-(root/'dist/personal-reward-validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf8')
+(root/'dist/reports/personal-reward-validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf8')
 print('PASS: exact native visibility/pickup guard, all24 slot cases; exact native no-network dispatch reaches only local creator. Static pickup/removal paths match. No game modifications; multiplayer still pending.')

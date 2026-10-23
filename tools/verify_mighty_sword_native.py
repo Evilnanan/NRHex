@@ -43,5 +43,5 @@ assert 'if spell_percentage(hit).is_some()&&has_effect(local,sword::OWNER,base){
 assert 'strength_sword::ORIGINAL.store(combination_prepared.trampoline' in lib
 assert 'hook::write_code(combination_target,&combination_prepared.patch)' in lib
 report=dict(wholeNativeDispatch='0x43d260',stackArgumentsPreserved=5,consumers={hex(k):hex(v)for k,v in consumers.items()},recipientNativeReactionMappingPreserved=True,hitInput='0x24',nativeReactionOutput='0x2b6',ordinaryProjectileContactRange=5,spellCasterDistanceGate=False,collisionSource='0x228',nativeBulletKind=3,cachedHitsNotReboosted=True,sourceDirectSpellsNotDoubleBoosted=True,gameplayVerified=False,multiplayerVerified=False)
-(ROOT/'dist/mighty-sword-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+(ROOT/'dist/reports/mighty-sword-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print('PASS: five-argument native dispatch encloses damage/reactions; native projectile source, spell scope, cached replay and constructor exclusion verified')

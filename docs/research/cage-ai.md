@@ -25,6 +25,6 @@
 
 `HexBuild --cage-ai-probe` 导出原值与同原型变体；`--cage-ai-only` 在 `.work/cage-ai/staged` 独立生成参数包与四张地图。重新解密／回读检查原有 AI 行、所有其他参数表与 binder 成员保留，新增 37 行正确；地图撤销 37 个 Think 引用修改后，序列化内容与修改前一致。整包生成和 cage-only 后续生成也使用相同独立 AI。
 
-实际对照在 `.work/cage-ai/native.json`、`.work/cage-ai/patch.json`；交付范围记录在 dist/cage-ai-validation.json。构建和文件验证不代替游戏追击、返程或联机验收。
+实际对照在 `.work/cage-ai/native.json`、`.work/cage-ai/patch.json`；交付范围记录在 dist/reports/cage-ai-validation.json。构建和文件验证不代替游戏追击、返程或联机验收。
 
 已安装 0.17.24 并按项目 ME3 配置重启。当前进程 PID 22472，确认 DLL ACTIVE=1、四个原生 Mod 和十五处 hook 正常加载；参数包覆盖路径已出现在当前启动记录中。用户配置、原有平衡和事件哈希保留。尚未收到本版索敌／返程的实际游戏反馈。

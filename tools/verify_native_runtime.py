@@ -242,6 +242,6 @@ evidence = {
     "inGameAbilityEffectsVerified": False,
 }
 assert evidence["hksOverridePresent"], "Exact validated original-bytecode wall jump patch required"
-(root / "dist/native-validation.json").write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding="utf-8")
+(root / "dist/reports/native-validation.json").write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding="utf-8")
 print("PASS: current EXE runtime bindings, per-hit rear bonus ABI, spatial getters and surgical original-bytecode HKS patch.")
 

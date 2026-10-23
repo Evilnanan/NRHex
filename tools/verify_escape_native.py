@@ -45,5 +45,5 @@ assert 'read_ptr(controller+8)!=player' in getter and 'read_ptr(modules+0x28).ch
 assert 'ptr::write' not in getter and '2.0}else{rate}' in getter
 assert 'speed_prepared.stolen!=5' in source
 report=dict(version='0.13.0',originalSpeedGetterIsolatedExecutionPassed=True,originalLowHpComparisonIsolatedExecutionPassed=True,hpCases=cases,ctPointerChain='player+1B8 -> module+28 -> controller+1800 -> rate+18',onlyLocalActiveOwner=True,noSpeedFieldWrites=True,readyHudIcon=20222,ultimateReadyHudIcon=20297,gameplayVerified=False,multiplayerVerified=False)
-(root/'dist/escape-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+(root/'dist/reports/escape-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print('PASS: original speed getter and low-HP predicate execution; local-only 2x rate, ready HUD and serialized buff scope.')

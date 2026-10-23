@@ -93,8 +93,8 @@ report = dict(version=version, spellCount=len(expected), csvPath='data/balance/s
               isolatedBuildScriptCases=cases, rustTestsPassed=tests,
               changedAssets=changed, unrelatedAssetsAndUserConfigsUnchanged=True,
               gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/sword-static-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
-build_path = ROOT / 'dist/build-validation.json'
+(ROOT / 'dist/reports/sword-static-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
+build_path = ROOT / 'dist/reports/build-validation.json'
 build = json.loads(build_path.read_text())
 build.update(version=version, scope='Compile data/balance/sword.csv into DLL; CSV excluded from dist',
              changedAssets=changed, dllSha256=dll_hash, installedDllSha256=dll_hash,
@@ -102,7 +102,7 @@ build.update(version=version, scope='Compile data/balance/sword.csv into DLL; CS
              unrelatedAssetsAndUserConfigsUnchanged=True, gameplayVerified=False, multiplayerVerified=False)
 build['functionChecks'] = list(dict.fromkeys(build.get('functionChecks', []) + ['sword-static-validation.json']))
 build_path.write_text(json.dumps(build, indent=2), encoding='utf8')
-runtime_path = ROOT / 'dist/runtime-validation.json'
+runtime_path = ROOT / 'dist/reports/runtime-validation.json'
 runtime = json.loads(runtime_path.read_text())
 runtime.update(version=version, active=None, pid=None, allFourNativeDllsLoaded=False,
                dllSha256=dll_hash, dllInstalled=True, gameplayVerified=False, multiplayerVerified=False,

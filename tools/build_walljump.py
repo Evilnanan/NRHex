@@ -218,7 +218,7 @@ else:
   'inversePatchReconstructsOriginal':True,'ownerAndNonownerPathsVerified':True,'serializedDebugLineCountMatchesInstructions':True,
   'argumentRegistersPreserved':True,'removedWallDiagnosticPulses':[95000808,95000816,95000824,95000832],
   'ownerGroundRequestAcceptedPathsVerified':True,'earlyRetryOwnerGroundAcceptedPathsVerified':True,'gameplayVerified':False}
- (root/'dist/hks-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
+ (root/'dist/reports/hks-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 print(f'PASS: original HKS +{shift} bytes; early and cancel retries, live registers, control flow and inverse edits verified.')
 
 

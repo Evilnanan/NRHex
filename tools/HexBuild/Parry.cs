@@ -4,6 +4,35 @@ static class Parry {
  public const int Owner=95002400;
  public const int GuardJudge=95002400;
  public const float ChainSeconds=5f/30f;
+ public static void ProbePaired(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse){
+  var name="EquipParamWeapon";
+  var table=parse(name,original.Files.Single(file=>Path.GetFileName(file.Name)==name+".param").Bytes);
+  var rows=table.Rows.Select(row=>new{row.ID,paired=Convert.ToInt32(row["isDualBlade"].Value),category=Convert.ToInt32(row["wepType"].Value)}).ToArray();
+  var installed=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));
+  var current=parse(name,installed.Files.Single(file=>Path.GetFileName(file.Name)==name+".param").Bytes);
+  var nativeFlags=rows.ToDictionary(row=>row.ID,row=>row.paired);
+  Check(current.Rows.All(row=>nativeFlags.TryGetValue(row.ID,out var paired)&&paired==Convert.ToInt32(row["isDualBlade"].Value)),"Installed paired weapon flags differ from native");
+  var sample=table.Rows.First(row=>Convert.ToInt32(row["isDualBlade"].Value)==1);
+  table.Rows=new(){new PARAM.Row(sample)};
+  table.Rows[0]["isDualBlade"].Value=(byte)0;var before=table.Write();
+  table.Rows[0]["isDualBlade"].Value=(byte)1;var after=table.Write();
+  var changed=Enumerable.Range(0,before.Length).Where(index=>before[index]!=after[index]).ToArray();
+  Check(changed.Length==1&&(before[changed[0]]^after[changed[0]])==2,"Paired weapon bit changed");
+  var rowStart=checked((int)BitConverter.ToInt64(before,0x48));
+  Check(changed[0]-rowStart==0x17c,"Paired weapon offset changed");
+  Set(table.Rows[0],"wepType",0);var categoryBefore=table.Write();
+  Set(table.Rows[0],"wepType",0x1234);var categoryAfter=table.Write();
+  var categoryChanged=Enumerable.Range(0,categoryBefore.Length).Where(index=>categoryBefore[index]!=categoryAfter[index]).ToArray();
+  Check(categoryChanged.Length==2&&categoryChanged[1]==categoryChanged[0]+1&&BitConverter.ToUInt16(categoryAfter,categoryChanged[0])==0x1234,"Weapon category field changed");
+  var categoryOffset=categoryChanged[0]-rowStart;
+  Check(categoryOffset==0x1a6,"Weapon category offset changed");
+  var nativeCategories=rows.ToDictionary(row=>row.ID,row=>row.category);
+  Check(current.Rows.All(row=>nativeCategories.TryGetValue(row.ID,out var category)&&category==Convert.ToInt32(row["wepType"].Value)),"Installed weapon categories differ from native");
+  var directory=Path.Combine(root,".work/parry-paired");Directory.CreateDirectory(directory);
+  File.WriteAllText(Path.Combine(directory,"parameters.json"),JsonSerializer.Serialize(new{offset=0x17c,mask=2,categoryOffset,rows},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine($"PASS: weapon category u16 at +{categoryOffset:X}; {rows.Count(row=>row.category==33)} unarmed rows");
+  Console.WriteLine($"PASS: native paired weapon flag at +17C bit 1; {rows.Count(row=>row.paired!=0)} paired rows");
+ }
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row row,string field,object value){row[field].Value=Convert.ChangeType(value,row[field].Value.GetType());}
  static string Hash(string p)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(p)));
@@ -127,7 +156,7 @@ static class Parry {
  }
  public static void BuildActions(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse){
   const int first=14000,minTier=2,tiers=7,last=24000;
-  int[] totalMilliseconds={67,100,133,167,200,233,267};
+  int[] totalMilliseconds={90,134,178,222,266,310,356};
   var work=Path.Combine(root,".work/parry/staged");Directory.CreateDirectory(work);
   PARAM Table(string n)=>parse(n,original.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes);
   Check(!Table("SpEffectParam").Rows.Any(r=>Convert.ToInt32(r["stateInfo"].Value)>=first&&Convert.ToInt32(r["stateInfo"].Value)<last),"Private state range collides with native state");
@@ -165,7 +194,7 @@ static class Parry {
    var group=a.EventGroups.FirstOrDefault(g=>g.GroupType==0);
    if(group==null){group=new TAE.EventGroup(guardTemplate.Group!.GroupType){GroupData=guardTemplate.Group!.GroupData};a.EventGroups.Add(group);}
    foreach(var e in selected)for(int index=0;index<tiers;index++){
-    float beforeMilliseconds=MathF.Round(totalMilliseconds[index]*2f/3f);
+    float beforeMilliseconds=totalMilliseconds[index]/2f;
     float beforeSeconds=beforeMilliseconds/1000f,afterSeconds=(totalMilliseconds[index]-beforeMilliseconds)/1000f;
     var b=guardTemplate.GetParameterBytes(false).ToArray();BitConverter.GetBytes(GuardJudge).CopyTo(b,8);BitConverter.GetBytes((short)(first+indices[Key(e)]*tiers+index)).CopyTo(b,14);
     a.Events.Add(new TAE.Event(Math.Max(0,e.StartTime-beforeSeconds),e.StartTime+afterSeconds,0,guardTemplate.Unk04,b,false){Group=group});added++;
@@ -179,7 +208,7 @@ static class Parry {
   // Independent readback: enumerate original attack onsets, not newly written
   // windows. Explicit millisecond splits catch duration-based and unit errors.
   int verifiedWindows=0;
-  float[] pre={45f,67f,89f,111f,133f,155f,178f},post={22f,33f,44f,56f,67f,78f,89f};
+  float[] pre={45f,67f,89f,111f,133f,155f,178f},post={45f,67f,89f,111f,133f,155f,178f};
   foreach(var f in readback.Files.Where(f=>parsed.ContainsKey(f.ID))){
    var old=TAE.Read(before[f.ID]);var current=TAE.Read(f.Bytes);
    foreach(var pair in old.Animations.Zip(current.Animations)){

@@ -12,7 +12,7 @@
 
 描述约定：参照黑夜君临原生词条，优先使用 `Boosts`、`Restores`、`Reduces`、`Grants` 等简洁陈述句，减少直接称呼玩家的 `you/your`。术语统一为 `attack power`（攻击力）、`damage negation`（减伤率）、`Ultimate Art`（绝招）、`Art gauge`（绝招量表）、`sorceries and incantations`（魔法、祷告）、`critical hits`（处决）、`stance`（架势）、`near-death`（濒死）；圣杯瓶用 `Flask of Crimson Tears`，石剑钥匙用 `Stonesword Key`，资源用 `HP`、`FP`、`stamina`，潜在能力用 `Dormant Power`，赐福用 `Site of Grace`。武器战技用 `skill`，不要混同角色技艺 `Character Skill`。吸血写为命中时回复 HP，避免使用其他游戏的 `lifesteal`；冲击力保留 `impact`，不要改成表示削韧的 stance damage。
 
-以上用语已对照本地原版 `AttachEffectInfo.fmg`、`GoodsName.fmg` 和 `CL_MenuText.fmg`。适配原生措辞时仍须写清触发条件、作用对象、持续时间和现有数值，不套用被致敬游戏的机制；时长统一写 `seconds`，冷却统一用 `Cooldown: 60 seconds.` 形式；锻体奖励描述为 `a Dormant Power with a passive effect`。
+以上用语已对照本地原版 `AttachEffectInfo.fmg`、`GoodsName.fmg` 和 `CL_MenuText.fmg`。只缩减过长的英文描述，尽量不超过140个字符；原文已在此范围内的保留，超长时优先精简措辞并保留数值、触发条件和核心机制，必要时才省略次要细节。140字符是编辑目标，不是已确认的引擎上限，最终显示仍需游戏内检查。不套用被致敬游戏的机制；时长使用 `seconds`，冷却可用 `Cooldown: 60 seconds.`；锻体奖励描述为 `a Dormant Power with a passive effect`。
 
 <!-- hex:95000100 -->
 ## Red Envelope
@@ -27,7 +27,7 @@ Reduces attack power by 25%. Raises all attributes by 10.
 <!-- hex:95000300 -->
 ## Glass Cannon
 
-Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy defense, resistances, and damage negation, while retaining bonuses from negative resistances.
+Takes 10x damage. Attack power +20%. Ignores enemy defense, resistances and damage negation.
 
 <!-- hex:95000400 -->
 ## Ultimate Revolution
@@ -52,12 +52,12 @@ Absorbs damage with a crystal shell that shatters and regenerates after 40 secon
 <!-- hex:95000800 -->
 ## Humans Are Cats
 
-Allows unlimited climbing. Boosts jump attack damage based on fall height. Silences footsteps. Conceals the body for 1 second upon taking damage.
+Allows unlimited climbing. Boosts jump attacks based on fall height. Silences footsteps. Conceals the body for 1 second upon taking damage.
 
 <!-- hex:95000900 -->
 ## Draw Your Sword
 
-Treats sorceries and incantations as melee attacks. Converts their original range into attack power, HP restoration on hit, damage negation, and poise. Boosts melee attack power by 15%.
+Makes spells melee, converting range into attack power, HP on hit, damage negation and poise. Melee attack power +15%.
 
 <!-- hex:95001100 -->
 ## Blunt Force
@@ -72,7 +72,7 @@ Increases action speed and boosts damage negation by 60% for 10 seconds when HP 
 <!-- hex:95001300 -->
 ## Edgelord's Footwork
 
-Improves backstep evasion. Landing a backstep attack or frontal critical hit restores 25% of the Art gauge. Rolling or taking damage depletes 30% of the Art gauge. Boosts backstep attack damage based on the Art gauge's current charge.
+Better backstep evasion. Backstep hits/frontal crits restore 25% Art gauge; rolls/damage drain 30%. Charge boosts backstep attacks.
 
 <!-- hex:95001400 -->
 ## Master of Arms
@@ -82,22 +82,22 @@ Reduces FP consumption of weapon skills by 100%. Reforges the armament's skill a
 <!-- hex:95001500 -->
 ## Poltergeist
 
-Marking the player's own location creates lava that erupts after a brief delay. Repeating this action before the eruption increases its damage.
+Marking the player's own location creates lava that erupts after a delay. Repeating this action before the eruption increases its damage.
 
 <!-- hex:95001600 -->
 ## Spawner
 
-Allows evergaols to be opened without a Stonesword Key and increases enemy variety. No Site of Grace appears after clearing an evergaol. Each evergaol can be opened up to five times.
+Opens evergaols without keys, with varied enemies and up to 5 openings each. No Site of Grace appears after clearing.
 
 <!-- hex:95001700 -->
 ## Balloon
 
-Raises maximum HP by 50%. Reduces damage negation by 30%. Reduces resistance to piercing attacks by 100%. Triggers an explosion upon death or entering near-death, dealing damage equal to maximum HP to nearby enemies.
+Max HP +50%, damage negation -30%, piercing resistance -100%. Explodes on death or near-death, dealing max-HP damage to nearby foes.
 
 <!-- hex:95001800 -->
 ## Enhanced [Necromancy]
 
-Stores the soul of a recently defeated powerful enemy, prioritizing souls with higher maximum HP. Activating [Immortal March] summons its spirit to fight alongside the summoner for a short time.
+Stores a recently defeated strong enemy's soul, favoring higher max HP. [Immortal March] summons it to fight briefly.
 
 <!-- hex:95002000 -->
 ## Don't Change the Channel
@@ -122,12 +122,12 @@ Extends jumping distance after starting a sprint. Stacks up to three times. Each
 <!-- hex:95002400 -->
 ## Clash
 
-Allows attacks made while two-handing an armament to guard against enemy attacks. Guard counters after successfully guarding consume no stamina and deal 100% more damage.
+Two-handed attacks can guard enemy blows. On a successful guard, guard counters cost no stamina and deal 100% more damage.
 
 <!-- hex:95002500 -->
 ## Night's Blessing
 
-Boosts attack power by 20% in the Night's Tide. When HP is below 20% in the Night's Tide, gradually restores HP for 15 seconds. A backlash then gradually depletes HP until leaving the Night's Tide. Touching a Site of Grace resets this effect.
+Night's Tide: attack +20%. Below 20% HP, heals for 15 seconds, then drains HP until leaving. Touch a Site of Grace to reset.
 
 <!-- hex:95002600 -->
 ## Ominous Pact
@@ -147,7 +147,7 @@ Defeating an enemy raises maximum FP by 1% for the rest of the expedition.
 <!-- hex:95003000 -->
 ## Death's Dance
 
-The Flask of Crimson Tears restores HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacks restore a portion of recently lost HP.
+Healing flasks restore HP gradually. Recoverable damage is taken over 2 seconds. Attacks restore a portion of recently lost HP.
 
 <!-- hex:95003100 -->
 ## Erosion
@@ -177,7 +177,7 @@ Increases the price of armaments sold by merchants. Purchasing an armament also 
 <!-- hex:95003700 -->
 ## Burst of Momentum
 
-For 10 seconds after landing an attack, boosts attack power by 30% for the first 5 seconds, then reduces attack power and damage negation by 50% for the next 5 seconds.
+After a hit: attack power +30% for 5 seconds, then attack power and damage negation -50% for 5 seconds.
 
 <!-- hex:95003800 -->
 ## Ultimate Awakening
@@ -202,7 +202,7 @@ Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damag
 <!-- hex:95004300 -->
 ## Wraithcaller
 
-Eliminates FP consumption for wraith-calling items. Landing enough hits upgrades the item to one that releases more wraiths. Grants a Wraith Calling Bell.
+Wraith tools cost no FP. Enough hits upgrade them to release more wraiths. Grants a Wraith Calling Bell.
 
 <!-- hex:95004400 -->
 ## Back to Basics

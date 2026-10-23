@@ -92,7 +92,7 @@ checks = dict(version=version, exeSha256=exe_hash, nativeAnchorsPassed=True,
               changedAssets=changed, regulationUnchanged=True,
               previousSyncCageAssetsAndUserConfigurationUnchanged=True,
               gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/jiahao-balance-validation.json').write_text(json.dumps(checks, ensure_ascii=False, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/jiahao-balance-validation.json').write_text(json.dumps(checks, ensure_ascii=False, indent=2), encoding='utf8')
 build = dict(version=version, buildPassed=True, incremental=True,
              scope='Jiahao owning-player DLL balance and Chinese/English description only',
              signatureCount=int(re.search(r'fn signatures\(\)->\[\(&\x27static str,u32\);(\d+)\]', (ROOT / 'src/lib.rs').read_text()).group(1)), rustTestsPassed=test_count, changedAssets=changed,
@@ -100,7 +100,7 @@ build = dict(version=version, buildPassed=True, incremental=True,
              dllInstalled=True, regulationSha256=after['mod/regulation.bin'],
              functionChecks=['jiahao-balance-validation.json', 'sword-balance-validation.json', 'drinking-hud-validation.json', 'escape-vfx-validation.json', 'cat-balance-validation.json', 'effect-sync-validation.json', 'cage-patch-validation.json'],
              unrelatedAssetsAndUserConfigsUnchanged=True, gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
 runtime = dict(version=version, active=None, pid=None, allFourNativeDllsLoaded=False,
                build='build-validation.json', dllSha256=dll_hash, dllInstalled=True,
                gameplayVerified=False, multiplayerVerified=False,
@@ -108,5 +108,5 @@ runtime = dict(version=version, active=None, pid=None, allFourNativeDllsLoaded=F
                               '25% dodge loss, 25% backstep and 25% frontal critical recovery, dual-hit deduplication',
                               'Previously pending Cat/Escape visuals and coop cage/effect-list checks'],
                notes='No game session was used for this DLL/text-only balance build.')
-(ROOT / 'dist/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
 print('PASS: current native gauge/calculator anchors; 173 backstep rows; DLL/text-only patch; previous sync/cage assets preserved.')

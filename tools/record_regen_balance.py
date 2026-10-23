@@ -43,8 +43,8 @@ report = dict(version=version, **patch, intervalSeconds=0.25, changedAssets=chan
               runtimeMinimumFp=4, rustTestsPassed=test_count,
               eventsTextsAndUserConfigurationUnchanged=True,
               gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/regen-balance-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
-build_path = ROOT / 'dist/build-validation.json'
+(ROOT / 'dist/reports/regen-balance-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
+build_path = ROOT / 'dist/reports/build-validation.json'
 build = json.loads(build_path.read_text())
 build.update(version=version, scope='Regeneration spends 4 FP to heal 16 HP per 0.25 second; parameters and runtime FP gate',
              changedAssets=changed, regulationSha256=after['mod/regulation.bin'],
@@ -54,7 +54,7 @@ build.update(version=version, scope='Regeneration spends 4 FP to heal 16 HP per 
              gameplayVerified=False, multiplayerVerified=False)
 build['functionChecks'] = list(dict.fromkeys(build.get('functionChecks', []) + ['regen-balance-validation.json']))
 build_path.write_text(json.dumps(build, indent=2), encoding='utf8')
-runtime_path = ROOT / 'dist/runtime-validation.json'
+runtime_path = ROOT / 'dist/reports/runtime-validation.json'
 runtime = json.loads(runtime_path.read_text())
 runtime.update(version=version, active=None, pid=None, allFourNativeDllsLoaded=False,
                dllSha256=dll_hash, dllInstalled=True, gameplayVerified=False, multiplayerVerified=False,

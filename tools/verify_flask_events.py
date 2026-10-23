@@ -80,5 +80,5 @@ report={'version':'0.6.6','secondNightBothBranchesVerified':True,'churchNativePi
         'alreadyOpenedChurchesAndNonOwnersSkipped':True,'originalChurchInstructionsPreserved':True,'firstNightAndStolenFlaskEventsUnchanged':True,
         'fullCapacityProbeBeforeAcquisitionVerified':True,
         'acquisitionCountsVerified':list(range(21)),'inGameFlaskBehaviorVerified':False}
-(root/'dist/flask-event-validation.json').write_text(json.dumps(report,indent=2))
+(root/'dist/reports/flask-event-validation.json').write_text(json.dumps(report,indent=2))
 print('PASS: native church pickup tails and map namespace, owner/reload guards, capacity probe and preserved night/return flows verified.')

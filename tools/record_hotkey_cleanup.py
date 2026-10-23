@@ -66,8 +66,8 @@ report = dict(version=version, activeHotkeys={'Ctrl+F6': 'random reward',
               existingCooldownFocusOwnershipTerrainAndPendingBallGuardsPreserved=True,
               unrelatedAssetsAndUserBalanceUnchanged=True, rustTestsPassed=tests,
               changedAssets=changed, gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/hotkey-cleanup-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
-build_path = ROOT / 'dist/build-validation.json'
+(ROOT / 'dist/reports/hotkey-cleanup-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
+build_path = ROOT / 'dist/reports/build-validation.json'
 build = json.loads(build_path.read_text())
 build.update(version=version, scope='Keep random F6 and cage/crystal/arts F7; remove dedicated debug keys',
              changedAssets=changed, dllSha256=dll_hash, installedDllSha256=dll_hash,
@@ -75,14 +75,14 @@ build.update(version=version, scope='Keep random F6 and cage/crystal/arts F7; re
              unrelatedAssetsAndUserConfigsUnchanged=True, gameplayVerified=False, multiplayerVerified=False)
 build['functionChecks'] = list(dict.fromkeys(build.get('functionChecks', []) + ['hotkey-cleanup-validation.json']))
 build_path.write_text(json.dumps(build, indent=2), encoding='utf8')
-runtime_path = ROOT / 'dist/runtime-validation.json'
+runtime_path = ROOT / 'dist/reports/runtime-validation.json'
 runtime = json.loads(runtime_path.read_text())
 runtime.update(version=version, active=None, pid=None, allFourNativeDllsLoaded=False,
                dllSha256=dll_hash, dllInstalled=True, gameplayVerified=False, multiplayerVerified=False,
                notes='Debug key cleanup built and installed; actual game keypresses remain unverified.')
 runtime['pendingChecks'] = [check.replace('Ctrl+F10', 'random reward') for check in runtime.get('pendingChecks', [])]
 runtime_path.write_text(json.dumps(runtime, indent=2), encoding='utf8')
-integration_path = ROOT / 'dist/integration-validation.json'
+integration_path = ROOT / 'dist/reports/integration-validation.json'
 integration = json.loads(integration_path.read_text())
 for name in ['mod/natives/NRHex.dll', 'mod/natives/NRHex.ini']:
     integration['nativeFiles'][name] = after[name]

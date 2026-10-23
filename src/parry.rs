@@ -16,6 +16,10 @@ pub const REACTION:i32=95002405;
 // Read the current equipment style, not attack-hand or input/animation guesses.
 pub const HAND_STYLE_RVA:usize=0x66b060;
 pub const HAND_STYLE_PATTERN:&str="48 8B 81 70 06 00 00 8B 00 C3";
+pub const WEAPON_PARAM_RVA:usize=0xea7fc0;
+pub const WEAPON_PARAM_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 48 89 7C 24 20 41 54 41 56 41 57 48 83 EC 30 44 8B F2 48 8B F9 33 DB 8D 6B FF 85 D2 0F 88 67 01 00 00 B8 1F 85 EB 51 41 F7 E6 C1 EA 05 44 6B FA 64";
+#[repr(C)]struct WeaponRef{id:i32,padding:u32,row:usize,base_id:i32,base_padding:u32,reinforce_id:i32,reinforce_padding:u32,reinforce_row:usize,version:u32,version_padding:u32}
+type WeaponLookup=unsafe extern "system" fn(*mut WeaponRef,i32)->usize;
 // Native airborne query: current ground contact plus jump-controller and
 // action flags. Unlike jump-attack categories, this also covers aerial skills.
 pub const AIRBORNE_RVA:usize=0x4678e0;
@@ -31,7 +35,17 @@ pub unsafe fn grounded(player:usize)->bool{
 pub unsafe fn two_handed(player:usize)->bool{
  if player==0{return false;}
  let equipment=read_ptr(player+0x670);
- equipment!=0&&matches!(crate::read_i32(equipment),2|3)
+ if equipment==0{return false;}
+ let source=match crate::read_i32(equipment){2=>-2,3=>-1,_=>return false};
+ let Some(base)=active_base() else{return false;};
+ let vtable=read_ptr(player);if vtable==0{return false;}
+ let getter=read_ptr(vtable+0x250);if getter==0{return false;}
+ let weapon:unsafe extern "system" fn(usize,i32)->i32=std::mem::transmute(getter);
+ let id=weapon(player,source);if id<0{return false;}
+ let mut reference=WeaponRef{id:-1,padding:0,row:0,base_id:-1,base_padding:0,reinforce_id:-1,reinforce_padding:0,reinforce_row:0,version:0,version_padding:0};
+ let lookup:WeaponLookup=std::mem::transmute(base+WEAPON_PARAM_RVA);
+ lookup(&mut reference,id);
+ reference.row!=0&&!matches!(ptr::read_unaligned((reference.row+0x1a6) as *const u16),0|33)&&ptr::read((reference.row+0x17c) as *const u8)&2==0
 }
 pub const FEEDBACK_RIGHT:u16=24000;
 pub const FEEDBACK_LEFT:u16=24001;
@@ -373,6 +387,14 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   assert_ne!(crate::win::VirtualFree(base as *mut _,0,0x8000),0);
  }}
  unsafe extern "system" fn fixture_airborne(physics:usize)->u8{u8::from(ptr::read((physics+0x92) as *const u8)==0)}
+ const fn fixture_weapon_rows()->[[u8;0x1a8];2]{let mut rows=[[0;0x1a8];2];rows[0][0x1a6]=3;rows[1][0x1a6]=3;rows}
+ thread_local!{static WEAPON_ROWS:RefCell<[[u8;0x1a8];2]>=const{RefCell::new(fixture_weapon_rows())};}
+ unsafe extern "system" fn fixture_weapon(_:usize,source:i32)->i32{match source{-1=>0,-2=>1,_=>-1}}
+ unsafe extern "system" fn fixture_weapon_lookup(out:*mut WeaponRef,id:i32)->usize{
+  assert_eq!((*out).id,-1);assert_eq!((*out).base_id,-1);assert_eq!((*out).reinforce_id,-1);
+  (*out).row=WEAPON_ROWS.with(|rows|rows.borrow().get(id as usize).map_or(0,|row|row.as_ptr() as usize));
+  out as usize
+ }
  // Exercise the real accepted-hit callback with isolated native API stubs.
  #[test]fn counter_arms_only_on_accepted_attack_guards_and_ordinary_guard_clears_it(){unsafe{
   let _lock=NOTIFY_TEST.lock().unwrap();
@@ -389,8 +411,8 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
    ptr::write_unaligned((action+0x38) as *mut i32,k);
    0xfedcba9876543210
   }
-  let base=crate::win::VirtualAlloc(ptr::null_mut(),0x510000,0x3000,0x40) as usize;assert_ne!(base,0);
-  for(rva,address)in[(AIRBORNE_RVA,fixture_airborne as *const () as usize),(crate::HAS_EFFECT_RVA,has as *const () as usize),(crate::APPLY_SELF_RVA,add as *const () as usize),(crate::REMOVE_EFFECT_RVA,remove as *const () as usize)]{
+  let base=crate::win::VirtualAlloc(ptr::null_mut(),0xeb0000,0x3000,0x40) as usize;assert_ne!(base,0);
+  for(rva,address)in[(WEAPON_PARAM_RVA,fixture_weapon_lookup as *const () as usize),(AIRBORNE_RVA,fixture_airborne as *const () as usize),(crate::HAS_EFFECT_RVA,has as *const () as usize),(crate::APPLY_SELF_RVA,add as *const () as usize),(crate::REMOVE_EFFECT_RVA,remove as *const () as usize)]{
    let mut jump=vec![0x48,0xb8];jump.extend_from_slice(&address.to_le_bytes());jump.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(jump.as_ptr(),(base+rva) as *mut u8,jump.len());
   }
   TEST_CONTEXT.with(|s|s.set(Some((true,base))));
@@ -400,6 +422,7 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   let mut physics=[0u8;0x98];physics[0x92]=1;
   let mut modules=[0usize;0x70/8];modules[0]=stats.as_mut_ptr() as usize;modules[1]=action.as_mut_ptr() as usize;modules[0x68/8]=physics.as_mut_ptr() as usize;
   let a=actor.as_mut_ptr() as usize;vt[0x118/8]=base+0x4d2f00;vt[0x260/8]=source as *const () as usize;
+  vt[0x250/8]=fixture_weapon as *const () as usize;
   let mut equipment=2i32;ptr::write_unaligned((a+0x670) as *mut usize,&equipment as *const i32 as usize);
   effects.owner=a;
   ptr::write_unaligned(a as *mut usize,vt.as_ptr() as usize);
@@ -494,15 +517,16 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
  unsafe extern "system" fn owns(manager:usize,id:i32)->u8{u8::from((manager==1||manager==2)&&id==OWNER||manager==2&&id==CHAIN)}
  unsafe extern "system" fn native_repel(_:usize,behavior:i32)->i32{behavior}
  #[test]fn attack_guard_cost_hp_and_recoil_are_scoped_to_live_native_window(){unsafe{
-  let base=crate::win::VirtualAlloc(ptr::null_mut(),0x510000,0x3000,0x40) as usize;assert_ne!(base,0);
-  for(rva,address)in[(crate::HAS_EFFECT_RVA,owns as *const () as usize),(AIRBORNE_RVA,fixture_airborne as *const () as usize)]{
+  let base=crate::win::VirtualAlloc(ptr::null_mut(),0xeb0000,0x3000,0x40) as usize;assert_ne!(base,0);
+  for(rva,address)in[(WEAPON_PARAM_RVA,fixture_weapon_lookup as *const () as usize),(crate::HAS_EFFECT_RVA,owns as *const () as usize),(AIRBORNE_RVA,fixture_airborne as *const () as usize)]{
    let mut jump=vec![0x48,0xb8];jump.extend_from_slice(&address.to_le_bytes());jump.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(jump.as_ptr(),(base+rva) as *mut u8,jump.len());
   }
   TEST_CONTEXT.with(|s|s.set(Some((true,base))));
   let old_cost=COST_ORIGINAL.swap(unchanged as *const () as *mut u8,Ordering::AcqRel);
   let old_resume=COST_RESUME.swap(accepted as *const () as *mut u8,Ordering::AcqRel);
   let old_repel=REPEL_ORIGINAL.swap(native_repel as *const () as *mut u8,Ordering::AcqRel);
-  let mut actor=vec![0u8;0x718];let mut vt=vec![0usize;0x120/8];
+  let mut actor=vec![0u8;0x718];let mut vt=vec![0usize;0x258/8];
+  vt[0x250/8]=fixture_weapon as *const () as usize;
   let mut stats=vec![0u8;0x168];let mut action=vec![0u8;0x260];
   let mut physics=[0u8;0x98];physics[0x92]=1;
   let mut modules=[0usize;0x70/8];modules[0x68/8]=physics.as_mut_ptr() as usize;
@@ -561,6 +585,22 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
    action[0x24c..0x250].copy_from_slice(&460i32.to_le_bytes());
    enter(m,hit);assert_ne!(action[0x58]&0x20,0);leave();
   }
+  ptr::write_volatile(&mut equipment,2);
+  for style in [2,3]{for paired_hand in [0usize,1]{for (flags,category) in [(2,3),(0,33),(0,0)]{
+   ptr::write_volatile(&mut equipment,style);
+   WEAPON_ROWS.with(|rows|{let mut rows=rows.borrow_mut();rows[paired_hand][0x17c]=flags;rows[paired_hand][0x1a6]=category;});
+   let valid=paired_hand!=if style==3{0}else{1};
+   action[0x58]=0xa0;action[0x24c..0x250].copy_from_slice(&GUARD_JUDGE.to_le_bytes());
+   h[0x2b4]=1;h[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());
+   assert_eq!(attack_guard(a),valid);assert_eq!(followup(a,base),valid);
+   enter(m,hit);assert_eq!(action[0x58]&0x20!=0,valid);
+   assert_eq!(run_cost(m,hit),if valid{1}else{2});assert_eq!(repel(a,30),if valid{70}else{30});
+   finish_guard(m,hit);assert_eq!(crate::read_i32(hit+0x280),if valid{0}else{100});
+   leave();assert_eq!(action[0x58],0xa0);
+   action[0x24c..0x250].copy_from_slice(&460i32.to_le_bytes());
+   enter(m,hit);assert_ne!(action[0x58]&0x20,0);leave();
+   WEAPON_ROWS.with(|rows|*rows.borrow_mut()=fixture_weapon_rows());
+  }}}
   ptr::write_volatile(&mut equipment,2);
   action[0x58]=0xc0;action[0x24c..0x250].copy_from_slice(&123i32.to_le_bytes());
   ptr::write_unaligned((a+0x190) as *mut usize,1); // chain expired
@@ -651,10 +691,31 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   assert_eq!(source(1,-2),Some(-1));assert_eq!(source(2,-1),Some(-2));assert_eq!(source(3,0),None);
  }
  #[test]fn native_equipment_style_requires_right_or_left_two_handing(){unsafe{
+  let base=crate::win::VirtualAlloc(ptr::null_mut(),0xeb0000,0x3000,0x40) as usize;assert_ne!(base,0);
+  let mut jump=vec![0x48,0xb8];jump.extend_from_slice(&(fixture_weapon_lookup as *const () as usize).to_le_bytes());jump.extend_from_slice(&[0xff,0xe0]);
+  ptr::copy_nonoverlapping(jump.as_ptr(),(base+WEAPON_PARAM_RVA) as *mut u8,jump.len());
+  TEST_CONTEXT.with(|state|state.set(Some((true,base))));
   assert!(!two_handed(0));let mut actor=[0usize;0x678/8];let a=actor.as_mut_ptr() as usize;
   assert!(!two_handed(a));let mut style=0i32;
+  let mut vtable=[0usize;0x258/8];vtable[0x250/8]=fixture_weapon as *const () as usize;actor[0]=vtable.as_ptr() as usize;
   ptr::write_unaligned((a+0x670) as *mut usize,&mut style as *mut i32 as usize);
   for value in [-1,0,1,2,3,4,5,i32::MAX]{ptr::write_volatile(&mut style,value);assert_eq!(two_handed(a),matches!(value,2|3));}
+  for value in [2,3]{for flags in 0u8..=255{
+   ptr::write_volatile(&mut style,value);WEAPON_ROWS.with(|rows|rows.borrow_mut()[if value==3{0}else{1}][0x17c]=flags);
+   assert_eq!(two_handed(a),flags&2==0);
+   WEAPON_ROWS.with(|rows|*rows.borrow_mut()=fixture_weapon_rows());
+  }}
+  for value in [2,3]{for hand in [0usize,1]{for category in [0u16,1,3,33,35,37,0x121,0x100]{
+   ptr::write_volatile(&mut style,value);
+   WEAPON_ROWS.with(|rows|rows.borrow_mut()[hand][0x1a6..0x1a8].copy_from_slice(&category.to_le_bytes()));
+   let current=hand==if value==3{0}else{1};
+   assert_eq!(two_handed(a),!current||!matches!(category,0|33));
+   WEAPON_ROWS.with(|rows|*rows.borrow_mut()=fixture_weapon_rows());
+  }}}
+  unsafe extern "system" fn missing(_:usize,_:i32)->i32{2}
+  ptr::write_volatile(vtable.as_mut_ptr().add(0x250/8),missing as *const () as usize);assert!(!two_handed(a));
+  ptr::write_volatile(vtable.as_mut_ptr().add(0x250/8),0);assert!(!two_handed(a));
+  TEST_CONTEXT.with(|state|state.set(None));assert_ne!(crate::win::VirtualFree(base as *mut _,0,0x8000),0);
  }}
  #[test]fn only_generated_states_are_intercepted(){
   assert!(condition(data::FIRST-1).is_none());

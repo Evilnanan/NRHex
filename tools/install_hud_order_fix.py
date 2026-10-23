@@ -1,4 +1,5 @@
 """Install the HUD-only DLL update and prove all game/config assets unchanged."""
+from distribution_paths import distribution_file
 from pathlib import Path
 import hashlib
 import json
@@ -15,7 +16,7 @@ version = tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
 assert version == '0.17.28'
 assert (root/'data/balance/sword.csv').read_bytes() == (work/'before/data/balance/sword.csv').read_bytes()
 for name,sha in baseline.items():
-    if name != 'README.md':assert digest(dist/name) == sha, ('package changed before install',name)
+    if name != 'README.md':assert digest(distribution_file(dist,name)) == sha, ('package changed before install',name)
 report = json.loads((work/'validation.json').read_text())
 assert report['version']==version and report['nativeHudCases']==1761
 assert report['originalHudSwapReproduced'] and report['allCustomIconRowsAudited']
@@ -26,20 +27,20 @@ native = root/'target/release/NRHex.dll'
 assert digest(native) != baseline['mod/natives/NRHex.dll']
 for name in ['readiness-sort-validation.json','scope-validation.json','build-validation.json',
              'runtime-validation.json','integration-validation.json','icon-validation.json']:
-    path = dist/name
+    path = distribution_file(dist,name)
     if path.exists():
         backup = work/'before/reports'/name
         backup.parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(path,backup)
 shutil.copy2(native,dist/'mod/natives/NRHex.dll')
-write(dist/'readiness-sort-validation.json',report)
+write(dist/'reports'/'readiness-sort-validation.json',report)
 scope = dict(version=version,assets={'mod/natives/NRHex.dll':dict(before=baseline['mod/natives/NRHex.dll'],after=digest(native))},
              regulationEventsMapsAndHksUnchanged=True,allUserConfigurationsUnchanged=True,
              handEditedSwordCsvUnchanged=True,gameplayVerified=False,multiplayerVerified=False)
-write(dist/'scope-validation.json',scope)
+write(dist/'reports'/'scope-validation.json',scope)
 allow = {'mod/natives/NRHex.dll','README.md','readiness-sort-validation.json','scope-validation.json'}
 for name,sha in baseline.items():
-    if name not in allow:assert digest(dist/name)==sha, ('unrelated package changed',name)
+    if name not in allow:assert digest(distribution_file(dist,name))==sha, ('unrelated package changed',name)
 assert digest(dist/'mod/natives/NRHex.dll') == digest(native)
 write(work/'installed-assets.json',scope)
 print('PASS: installed HUD/list DLL fix; regulation, events, maps, HKS, CSV and configs unchanged.')

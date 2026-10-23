@@ -1,0 +1,57 @@
+{
+  "version": "0.17.241",
+  "date": "2026-10-23",
+  "toolchain": "x86_64-pc-windows-msvc",
+  "features": [
+    "test-hotkeys",
+    "cage-demand"
+  ],
+  "dllSha256": "8EF07ACC56F8F837292E95886F62DEDE3EFB5451D13660E48C07F6CD4CA617E5",
+  "directGrantsWithExistingCopies": true,
+  "fullBagDropsOneOrdinaryItem": true,
+  "removeBeforeUpgradeGrant": true,
+  "grantReceiptUsesAcquisitionSerial": true,
+  "goodsUidIsNotInstanceIdentity": true,
+  "blindGrantRetry": false,
+  "progressClearedOnlyAfterInventoryReceiptOrGroundCreation": true,
+  "nativeCapacityIncludesExpansion": true,
+  "regularTests": {
+    "passed": 443,
+    "failed": 0,
+    "ignored": 27
+  },
+  "nativeIsolatedTests": [
+    "wraith native executable guard, credit, FP, serial enumeration, capacity, deferred removal/grant and quickslots",
+    "potential fission native dispatch/copy/grouping and wraith ordinary ground descriptors"
+  ],
+  "nativeSignaturesValidated": 198,
+  "resourceReadback": "wraith parameters, events and HKS passed",
+  "protectedFilesUnchanged": 58,
+  "deployment": {
+    "target": "dist DLL only",
+    "restarted": true,
+    "processId": 19188,
+    "verifiedHooks": [
+      "3E0AB0",
+      "6D0470",
+      "3979B0",
+      "E8D840",
+      "66D3B0",
+      "209490"
+    ],
+    "groupBuildUnchanged": true
+  },
+  "gameplayVerified": true,
+  "multiplayerVerified": false,
+  "limitation": "Isolated tests fixture native lottery/rendering and inventory events. User confirmed the dist fix; group gameplay and multiplayer were not separately verified.",
+  "gameplayEvidence": "User reported this fix tested successfully; individual scenarios and multiplayer were not specified.",
+  "groupBuild": {
+    "version": "0.17.241",
+    "destination": "D:\\Users\\OwO\\Documents\\me3-profiles\\NRHex",
+    "dllSha256": "E83583259A357CC3CF1C538DFBF523DD945F299FA3C551B18481047283514593",
+    "testHotkeys": false,
+    "bilingualTextsRebuiltAndReadBack": true,
+    "profileAndOtherModsPreserved": true,
+    "gameLaunched": false
+  }
+}

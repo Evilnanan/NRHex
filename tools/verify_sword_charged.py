@@ -71,5 +71,5 @@ assert 'sword_hit_distance' not in source and 'dispatch(hit,enabled' in source a
 report=dict(nativeCases=len(cases),nativeSelector='0x505e90',effectFilter='0x511010',weaponChargeCategory=100,spellChargeCategory=110,tiers=[8320400,8320410,8320420],durationSeconds=10,negation=[.24,.32,.4],spellCasterDistanceGate=False,additionalOnHitReference=8600200,privateWeaponHitDescriptor=True,sharedRowsAndHitsUnchanged=True,gameplayVerified=False,multiplayerVerified=False)
 report.update(contractNativeFlagsUnchanged=True,contractNoSeparateSpellFilter=True,externalHitEligibilityStubbed=True)
 assert 'spell_filter' not in (ROOT/'src/ominous_pact.rs').read_text()
-(ROOT/'dist/sword-hit-rules-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+(ROOT/'dist/reports/sword-hit-rules-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print(f'PASS: {len(cases)} native selector/filter cases; three ward tiers plus native FP-on-hit, charged/uncharged spells, ownership and native eligibility gates and original weapon triggers')

@@ -157,5 +157,5 @@ output=dict(version=tomllib.loads((root/'Cargo.toml').read_text())['package']['v
             hostOnlyRoll=True,clientWaitAndReloadPassed=True,deathResetPassed=True,nativeGetterBitCases=256,
             nativeMutationAndRewardGettersExecutedInIsolation=True,towerSources=report['towers'],towerRewardPolicy=report['towerRewardPolicy'],
             markerNeutral=True,combatScalingAndRuneBonusUseNativeEffects=True,gameProcessAccessed=False,gameplayVerified=False,multiplayerVerified=False)
-(Path(os.environ.get('NRHEX_VALIDATION_ROOT',root/'dist'))/'cage-mutation-validation.json').write_text(json.dumps(output,ensure_ascii=False,indent=2),encoding='utf8')
+(Path(os.environ.get('NRHEX_VALIDATION_ROOT',root/'dist/reports'))/'cage-mutation-validation.json').write_text(json.dumps(output,ensure_ascii=False,indent=2),encoding='utf8')
 print(f'PASS: {cases} depth/map/host/replica decisions, native mutation/reward getters, seven tower weapon rewards; gameplay remains unverified.')

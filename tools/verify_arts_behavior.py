@@ -24,7 +24,7 @@ check(0x3818c9,'E8 52 F9 FF FF') # Full handle/base getters use the same source 
 check(0x40cb08,'41 FF 92 28 03 00 00') # Attack behavior uses the actor resolver.
 check(0x40ce7c,'41 FF 92 28 03 00 00') # Bullet behavior uses the same resolver.
 p=json.loads((root/'.work/arts/parameters.json').read_text())
-pool=json.loads((root/'dist/arts-pool.json').read_text(encoding='utf8'))
+pool=json.loads((root/'dist/reports/arts-pool.json').read_text(encoding='utf8'))
 weapons={x['ID']:x['fields'] for x in p['weapons']}
 arts={x['ID']:x['fields'] for x in p['arts']}
 behaviors={x['ID']:x['fields'] for x in p['behaviors']}
@@ -38,5 +38,5 @@ report=dict(resolverRva='668b30',actorVirtualOffset='328',behaviorLookupRva='e6f
  sameSourceDecoderForWeaponHandleAndBase=True,attackAndBulletUseSameResolver=True,canonicalSkillCount=182,
  nativeBehaviorRows=len(behaviors),ordinaryAttacksUseNativeResult=True,localOwnedOverlayOnly=True,
  nativeInventoryAndParametersUnchanged=True,gameplayVerified=False)
-(root/'dist/arts-behavior-validation.json').write_text(json.dumps(report,indent=2))
+(root/'dist/reports/arts-behavior-validation.json').write_text(json.dumps(report,indent=2))
 print('PASS: true PC behavior resolver, five native arguments, exact weapon source, attack/bullet mapping for 182 skills.')

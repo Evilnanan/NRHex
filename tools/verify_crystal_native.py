@@ -44,5 +44,5 @@ assert reference['deleteCriteriaDamage']==1 and reference['vfxId']==5867
 source=(root/'src/crystal.rs').read_text(encoding='utf8')
 assert 'VISUAL_REFRESH' not in source and 's.beast' in source
 version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
-(root/'dist/crystal-native-validation.json').write_text(json.dumps(dict(version=version,referenceEffect=8610702,referenceVisual=5867,customVisual=5866,deleteCriteriaDamage=1,isolatedNativeTests=results,allMatchingCopiesExpireOnNativePositiveDamage=True,viewerReplicaCleanupRemoved='clean_replica_crystal' not in (root/'src/lib.rs').read_text(),renewalValidation='effect-sync-validation.json',gameplayVerified=False,multiplayerVerified=False),indent=2),encoding='utf8')
+(root/'dist/reports/crystal-native-validation.json').write_text(json.dumps(dict(version=version,referenceEffect=8610702,referenceVisual=5867,customVisual=5866,deleteCriteriaDamage=1,isolatedNativeTests=results,allMatchingCopiesExpireOnNativePositiveDamage=True,viewerReplicaCleanupRemoved='clean_replica_crystal' not in (root/'src/lib.rs').read_text(),renewalValidation='effect-sync-validation.json',gameplayVerified=False,multiplayerVerified=False),indent=2),encoding='utf8')
 print('PASS: native 8610702 damage-expiry criterion; 6 isolated scenarios including 3 duplicate nodes; renewal checked separately.')

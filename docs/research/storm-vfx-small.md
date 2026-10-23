@@ -8,6 +8,6 @@
 
 `StormVfx.Stage` 改为在原始追加通用包上加入相同的 17 个原生 FXR 和资源清单。纹理/模型依赖优先复用追加包和游戏原始主通用包，只有二者都缺少的依赖才从征兆包复制。原始追加包成员的 ID、名称、flags 和字节，以及新成员与原始征兆资源的一致性，全部生成后回读验证；输出超过 4 MiB 时停止。
 
-输入沿用本轮从当前 data0 重新解密提取的原始资源。生成入口仍为 `HexBuild --storm-vfx-stage`，输出移到 `.work/storm-vfx-small`，不再生成大型主通用覆盖。详细计数和哈希见 `dist/storm-vfx-validation.json`。
+输入沿用本轮从当前 data0 重新解密提取的原始资源。生成入口仍为 `HexBuild --storm-vfx-stage`，输出移到 `.work/storm-vfx-small`，不再生成大型主通用覆盖。详细计数和哈希见 `dist/reports/storm-vfx-validation.json`。
 
 DLL 仍为 0.17.58，Ctrl+F10 保留。仅替换资源包，未停止或重启当前游戏；需要下次启动重新加载。静态加载链与资源检查不代表已验证场外或双方联机画面。

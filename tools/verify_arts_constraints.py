@@ -3,7 +3,7 @@ from pathlib import Path
 import json,runpy,sys,struct,hashlib,re,tomllib
 root=Path(__file__).resolve().parents[1]
 p=json.loads((root/'.work/arts/parameters.json').read_text())
-pool=json.loads((root/'dist/arts-pool.json').read_text(encoding='utf8'))
+pool=json.loads((root/'dist/reports/arts-pool.json').read_text(encoding='utf8'))
 assert pool['poolCount']==182 and pool['ordinaryPoolCount']==175 and pool['bowPoolCount']==7
 assert pool['bowSkills']==[400,401,402,404,405,406,1169]
 weapons={x['ID']:x['fields'] for x in p['weapons']};skills={x['ID']:x['fields'] for x in p['arts']}
@@ -46,5 +46,5 @@ report=dict(version=tomllib.loads((root/'Cargo.toml').read_text())['package']['v
  fireMuzzles={'1001':[10141,20141],'1002':[10142,20142]},fallbackBodyDummy=58,
  originalFireShieldMuzzlesUnchanged=True,nativeParametersAndTaeUnchanged=True,
  nativeMappingVerified=True,gameplayVerified=False,multiplayerVerified=False)
-(root/'dist/arts-constraints-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+(root/'dist/reports/arts-constraints-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print('PASS: 175 general / 7 bow skills, unusable skills excluded, fire emitter forwards ten native arguments with a private origin copy.')

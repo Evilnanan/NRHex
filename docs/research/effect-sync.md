@@ -46,4 +46,4 @@ PlayerIns的移除向量虚函数 `669020` 会收集装备控制对象的变化�
 
 需要全员同版、重启后做原生私服联机复测：反复经过可用→触发→冷却→可用，比较详情列表及小图标；持有者和查看者分别阵亡复活，检查永久海克斯在5秒补发周期加网络延迟内恢复。冷却／破盾后队友旧提示可能保留最多约2秒加网络延迟。结晶持续VFX是否平滑、是否被原生同ID刷新重启仍需观察，离线匹配测试无法验证渲染。
 
-证据脚本为 `tools/effect_sync_native.py`、`tools/EffectSyncReport.java`、`tools/verify_effect_sync_native.py`；研究导出位于 `.work/effect-sync`，成品报告 `dist/effect-sync-validation.json` 和 `dist/build-validation.json`。报告明确 `gameplayVerified=false`、`multiplayerVerified=false`。
+证据脚本为 `tools/effect_sync_native.py`、`tools/EffectSyncReport.java`、`tools/verify_effect_sync_native.py`；研究导出位于 `.work/effect-sync`，成品报告 `dist/reports/effect-sync-validation.json` 和 `dist/reports/build-validation.json`。报告明确 `gameplayVerified=false`、`multiplayerVerified=false`。

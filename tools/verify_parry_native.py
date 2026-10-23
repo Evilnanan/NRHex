@@ -31,6 +31,48 @@ try:
  for style in [-1,0,1,2,3,4,5,2147483647]:
   equipment.value=style;actual=style_get(c.addressof(style_actor));assert actual==style
   cases.append(dict(equipmentStyle=actual,twoHanded=actual in (2,3)))
+ paired=json.loads((ROOT/'.work/parry-paired/parameters.json').read_text())
+ assert (paired['offset'],paired['mask'])==(0x17c,2)
+ assert paired['categoryOffset']==0x1a6
+ weapon_rows={row['ID']:row for row in paired['rows']}
+ assert weapon_rows[110000]['category']==33 and weapon_rows[70110000]['category']==33
+ assert weapon_rows[21070000]['paired']==1 and weapon_rows[30750000]['paired']==0
+ paired_rows={row['ID'] for row in paired['rows'] if row['paired']}
+ assert {2060000,4050000,21000000,21750000,22000000}.issubset(paired_rows)
+ assert not {1000000,2000000,4000000}&paired_rows
+ index=p.get_data(0x3fb0d4+340-223,1)[0]
+ assert struct.unpack('<I',p.get_data(0x3fadf0+index*4,4))[0]==0x3f91f6
+ assert p.get_data(0x3f925c,11)==bytes.fromhex('0f b6 80 7c 01 00 00 d0 e8 24 01')
+ assert p.get_data(0x3cf020,22)==bytes.fromhex('4c 8b 01 8b c2 33 d2 85 c0 0f 95 c2 83 c2 fe 49 ff a0 50 02 00 00')
+ selector=c.WINFUNCTYPE(c.c_int,c.c_void_p,c.c_int)(m+0x3cf020)
+ vtable=c.create_string_buffer(0x258)
+ c.c_void_p.from_buffer(style_actor).value=c.addressof(vtable)
+ getter=c.WINFUNCTYPE(c.c_int,c.c_void_p,c.c_int)(lambda actor,source:source)
+ c.c_void_p.from_buffer(vtable,0x250).value=c.cast(getter,c.c_void_p).value
+ assert selector(c.addressof(style_actor),0)==-2
+ assert selector(c.addressof(style_actor),1)==-1
+ equipped=c.create_string_buffer(0x100)
+ c.c_void_p.from_buffer(style_actor,0x670).value=c.addressof(equipped)
+ equipped_get=c.WINFUNCTYPE(c.c_int,c.c_void_p,c.c_int)(m+0x66cde0)
+ c.c_int.from_buffer(equipped,4).value=0
+ c.c_int.from_buffer(equipped,8).value=1
+ c.c_int.from_buffer(equipped,0x9c).value=30750000
+ c.c_int.from_buffer(equipped,0xa8).value=21070000
+ for style,source,expected in [(2,-2,30750000),(3,-1,21070000)]:
+  c.c_int.from_buffer(equipped).value=style
+  actual=equipped_get(c.addressof(style_actor),source)
+  assert actual==expected
+  cases.append(dict(equipmentStyle=style,source=source,nativeWeapon=actual,paired=weapon_rows[actual]['paired']))
+ probe=k.VirtualAlloc(None,0x1000,0x3000,0x40);assert probe
+ try:
+  code=bytes.fromhex('48 89 c8')+p.get_data(0x3f925c,11)+b'\xc3'
+  c.memmove(probe,code,len(code))
+  paired_get=c.WINFUNCTYPE(c.c_ubyte,c.c_void_p)(probe)
+  weapon=c.create_string_buffer(0x180)
+  for flags in range(256):
+   c.c_ubyte.from_buffer(weapon,0x17c).value=flags
+   assert paired_get(c.addressof(weapon))==int(bool(flags&2))
+ finally:assert k.VirtualFree(probe,0,0x8000)
  # The native airborne query includes controller/action takeoff even while
  # collision contact is still set, covering jumping skills and edge frames.
  assert p.get_data(0x4678e0,25)==bytes.fromhex('40 57 48 83 ec 20 80 b9 92 00 00 00 00 48 8b f9 74 43 48 81 c1 00 04 00 00')
@@ -120,12 +162,13 @@ a=json.loads((stage/'actions-validation.json').read_text())
 assert a['guardJudge']==95002400 and a['nativeGuardJudge']==460
 assert a['endState']<=24000 and a['originalEventsPreserved'] and a['originalGuardClipsUntouched']
 assert a['minTier']==2 and a['tiers']==7 and a['timeUnit']=='milliseconds'
-assert a['totalMilliseconds']==[67,100,133,167,200,233,267]
+assert a['totalMilliseconds']==[90,134,178,222,266,310,356]
 assert a['beforeMilliseconds']==[45,67,89,111,133,155,178]
-assert a['afterMilliseconds']==[22,33,44,56,67,78,89]
+assert a['afterMilliseconds']==[45,67,89,111,133,155,178]
+assert a['beforeMilliseconds']==a['afterMilliseconds']
 assert [before+after for before,after in zip(a['beforeMilliseconds'],a['afterMilliseconds'])]==a['totalMilliseconds']
 assert a['endState']==a['firstState']+a['conditionCount']*7 and a['verifiedWindows']==a['added']
 assert (ROOT/'src/parry_data.rs').read_bytes()==(stage/'parry_data.rs').read_bytes()
-report=dict(nativeCases=len(cases),cases=cases,playerVirtualMethodsVerified=True,managerOwnerVerified=True,nativeStateQueryUsesUnsigned16Bit=True,nativeAttackAndGuardTaeGatesVerified=True,finalGuardNotificationVerified=True,nativeZeroImpactGuardMotionVerified=True,nativeFeedbackTaeConditionsVerified=True,guardDirectionRemainsNative=True,attackGuardStaminaWaived=True,gameMemoryWritten=False,gameplayVerified=False,multiplayerVerified=False)
+report=dict(nativeCases=len(cases),cases=cases,playerVirtualMethodsVerified=True,managerOwnerVerified=True,nativeStateQueryUsesUnsigned16Bit=True,nativeAttackAndGuardTaeGatesVerified=True,finalGuardNotificationVerified=True,nativeZeroImpactGuardMotionVerified=True,nativeFeedbackTaeConditionsVerified=True,nativePairedWeaponFlagVerified=True,pairedWeaponRows=len(paired_rows),pairedFlagCases=256,nativeEquippedHandSelectorVerified=True,guardDirectionRemainsNative=True,attackGuardStaminaWaived=True,gameMemoryWritten=False,gameplayVerified=False,multiplayerVerified=False)
 (work/'native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
-print(f'PASS: {len(cases)} native source/state cases; canonical owner and virtual methods verified; no game writes')
+print(f'PASS: {len(cases)} native source/state cases, 256 paired-flag cases, native equipped-hand selector; no game writes')

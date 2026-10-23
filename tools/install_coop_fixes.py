@@ -2,6 +2,7 @@
 
 Run after closing the game; all inputs are checked before any package writes.
 """
+from distribution_paths import distribution_file
 from pathlib import Path
 import hashlib,json,shutil,tomllib
 
@@ -24,7 +25,7 @@ for p in (work/'staged/mod').rglob('*'):
 assert set(changed) == expected
 for k,h in baseline.items():
     if k == 'README.md':continue
-    assert digest(dist/k) == h, ('installed input changed',k)
+    assert digest(distribution_file(dist,k)) == h, ('installed input changed',k)
 parameters = read(work/'parameter-patch.json')
 assert parameters['inputSha256'].lower() == baseline['mod/regulation.bin']
 assert parameters['outputSha256'].lower() == digest(changed['mod/regulation.bin'])
@@ -54,25 +55,25 @@ reports['readiness-sort-validation.json'] = dict(version='0.17.27',nativeCompara
     callerEntriesAndActualLeasesUnchanged=True,gameplayVerified=False)
 for name in [*reports,'arts-hks-validation.json','build-validation.json','runtime-validation.json',
              'integration-validation.json','icon-validation.json','scope-validation.json']:
-    p = dist/name
+    p = distribution_file(dist,name)
     if p.exists():
         destination = work/'before/reports'/name;destination.parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(p,destination)
-for k,p in changed.items():shutil.copy2(p,dist/k)
+for k,p in changed.items():shutil.copy2(p,distribution_file(dist,k))
 shutil.copy2(native,dist/'mod/natives/NRHex.dll')
-for name,report in reports.items():write(dist/name,report)
-old_arts = read(dist/'arts-hks-validation.json')
+for name,report in reports.items():write(distribution_file(dist,name),report)
+old_arts = read(dist/'reports'/'arts-hks-validation.json')
 old_arts.update(version='0.17.27',stanceReentryFix='arts-stance-validation.json',
                 gameplayVerified=False,multiplayerVerified=False)
-write(dist/'arts-hks-validation.json',old_arts)
+write(dist/'reports'/'arts-hks-validation.json',old_arts)
 allow = expected | {'mod/natives/NRHex.dll','README.md',*reports,'arts-hks-validation.json'}
 for k,h in baseline.items():
-    if k not in allow:assert digest(dist/k) == h, ('unrelated delivered file changed',k)
-for k,p in changed.items():assert digest(dist/k) == digest(p)
+    if k not in allow:assert digest(distribution_file(dist,k)) == h, ('unrelated delivered file changed',k)
+for k,p in changed.items():assert digest(distribution_file(dist,k)) == digest(p)
 assert digest(dist/'mod/natives/NRHex.dll') == digest(native)
-scope = dict(version='0.17.27',assets={k:dict(before=baseline[k],after=digest(dist/k))
+scope = dict(version='0.17.27',assets={k:dict(before=baseline[k],after=digest(distribution_file(dist,k)))
              for k in sorted(expected|{'mod/natives/NRHex.dll'})},originalMapsUnchanged=True,
              unrelatedPackageFilesUnchanged=True,handEditedSwordCsvUnchanged=True,
              originalParameterRowsAndOtherTablesUnchanged=True,gameplayVerified=False,multiplayerVerified=False)
-write(work/'installed-assets.json',scope);write(dist/'scope-validation.json',scope)
+write(work/'installed-assets.json',scope);write(dist/'reports'/'scope-validation.json',scope)
 print('PASS: installed seven verified game assets and DLL; maps, configs, CSV and unrelated files preserved.')

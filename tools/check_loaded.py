@@ -7,7 +7,7 @@ digest=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 command="$g=Get-Process nightreign -ErrorAction Stop; @{pid=$g.Id;modules=@($g.Modules | Where-Object {$_.ModuleName -in @('nightreign.exe','NRHex.dll','derandomizer.dll','StormControl_no_gui.dll','DeepUnlocker.dll')} | ForEach-Object {@{name=$_.ModuleName;base=$_.BaseAddress.ToInt64();path=$_.FileName}})} | ConvertTo-Json -Depth 4"
 info=json.loads(subprocess.run(['powershell','-NoProfile','-Command',command],capture_output=True,text=True,check=True).stdout)
 modules={m['name']:m for m in info['modules']};assert len(modules)==5
-dll=root/'dist/mod/natives/NRHex.dll';assert digest(dll)==json.loads((root/'dist/build-validation.json').read_text())['installedDllSha256']
+dll=root/'dist/mod/natives/NRHex.dll';assert digest(dll)==json.loads((root/'dist/reports/build-validation.json').read_text())['installedDllSha256']
 pe=pefile.PE(str(dll));exports={s.name:s.address for s in pe.DIRECTORY_ENTRY_EXPORT.symbols}
 k=c.WinDLL('kernel32');k.OpenProcess.argtypes=[c.c_uint,c.c_int,c.c_uint];k.OpenProcess.restype=c.c_void_p
 k.ReadProcessMemory.argtypes=[c.c_void_p,c.c_void_p,c.c_void_p,c.c_size_t,c.POINTER(c.c_size_t)];k.CloseHandle.argtypes=[c.c_void_p]
@@ -26,7 +26,7 @@ try:
  assert hooks['0x7df110'] != 'e99176f5ff'
 finally:k.CloseHandle(h)
 
-report=json.loads((root/'dist/runtime-validation.json').read_text())
+report=json.loads((root/'dist/reports/runtime-validation.json').read_text())
 report.update(active=1,pid=info['pid'],allFourNativeDllsLoaded=True,installedHooks=hooks)
-(root/'dist/runtime-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+(root/'dist/reports/runtime-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print('PASS: current installed DLL ACTIVE=1; twenty-six sampled hook entries including all four choice-reroll hooks, spirit model mapping and detailed status routing; four native Mods loaded. Gameplay not inferred.')

@@ -48,5 +48,5 @@ try:
 finally:k.VirtualFree(arena,0,0x8000)
 version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
 report=dict(version=version,nativeJumpCategory=102,nativeFallHeightGetter='0x442070',scriptEnvironmentId=224,worldMetresToScriptCentimetres=100,isolatedNativeHeightCases=cases,heightBaselineMetres=1,formula='max(0, 1.00 * (1 + log2(h / 1)))',nativeHeightOnlyOutsideSpiritspring=True,spiritspringUsesActualTrackedApex=True,landingGraceMilliseconds=250,groundedSamplesRenewGrace=False,multiHitUsesFirstConnectedHitHeight=False,eachHitUsesCurrentHeight=True,currentGroundFlagOffset='0x92',previousGroundFlagOffset='0x93',gameplayVerified=False,multiplayerVerified=False)
-(root/'dist/cat-jump-native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+(root/'dist/reports/cat-jump-native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 print('PASS: original category 102, env224, metre conversion, and six isolated native fall-height cases.')

@@ -16,7 +16,7 @@ assert 'f.probe()' in hot and 'r.note_refill_attempt(after.gauge>=99.9)' in hot
 assert 'let now=GetTickCount64();' in hot and 'SWORD_LAST_CAST.store(now,Ordering::Release)' in hot and 'sword::CAST_PULSE' in hot
 assert 'h.queue(source,caster_stats,amount)' in hot and 'shell.absorb(player,stats,s,eligible)' in hot
 assert 'sword::heal_amount(read_i32(hit+0x280),spell_percentage(hit).unwrap_or(0.),ptr::read((hit+0x2c3) as *const u8)&2!=0)' in hot
-hks=json.loads((root/'dist/hks-validation.json').read_text(encoding='utf8'))
+hks=json.loads((root/'dist/reports/hks-validation.json').read_text(encoding='utf8'))
 assert hks['removedWallDiagnosticPulses']==[95000808,95000816,95000824,95000832]
 assert hks['independentDecompilerReadbackPassed'] and hks['inversePatchReconstructsOriginal']
 assert hks['earlyRetryOwnerGroundAcceptedPathsVerified'] and hks['ownerGroundRequestAcceptedPathsVerified']
@@ -26,5 +26,5 @@ assert 'BACK_END' not in (root/'src/jiahao.rs').read_text() and 'ATTACK_START' n
 arts=(root/'src/arts.rs').read_text(encoding='utf8')
 assert not any(token in arts for token in ['nlog_', 'println!', 'std::fs', 'DIAGNOSTICS'])
 assert 'arts_source_weapon(player,source,base)' in source and 's.tick()' in source
-(root/'dist/quiet-runtime-validation.json').write_text(json.dumps({'version':'0.13.0','gameplayInfoLoggingAbsent':True,'diagnosticCountersAndOwnershipTraversalRemoved':True,'debuggerMirroringRemoved':True,'removedWallDiagnosticPulses':hks['removedWallDiagnosticPulses'],'functionalFlaskCapacityAndUltimateConfirmationAndCastingHeartbeatPresent':True,'wallOwnerGroundAcceptedBranchesVerified':True,'performanceMeasured':False},indent=2),encoding='utf8')
+(root/'dist/reports/quiet-runtime-validation.json').write_text(json.dumps({'version':'0.13.0','gameplayInfoLoggingAbsent':True,'diagnosticCountersAndOwnershipTraversalRemoved':True,'debuggerMirroringRemoved':True,'removedWallDiagnosticPulses':hks['removedWallDiagnosticPulses'],'functionalFlaskCapacityAndUltimateConfirmationAndCastingHeartbeatPresent':True,'wallOwnerGroundAcceptedBranchesVerified':True,'performanceMeasured':False},indent=2),encoding='utf8')
 print('PASS: gameplay diagnostics removed; native function triggers and wall retry control flow preserved.')

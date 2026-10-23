@@ -1,5 +1,5 @@
 {
-  "nativeCases": 103,
+  "nativeCases": 105,
   "cases": [
     {
       "equipmentStyle": -1,
@@ -32,6 +32,18 @@
     {
       "equipmentStyle": 2147483647,
       "twoHanded": false
+    },
+    {
+      "equipmentStyle": 2,
+      "source": -2,
+      "nativeWeapon": 30750000,
+      "paired": 0
+    },
+    {
+      "equipmentStyle": 3,
+      "source": -1,
+      "nativeWeapon": 21070000,
+      "paired": 1
     },
     {
       "contact": 0,
@@ -497,6 +509,10 @@
   "finalGuardNotificationVerified": true,
   "nativeZeroImpactGuardMotionVerified": true,
   "nativeFeedbackTaeConditionsVerified": true,
+  "nativePairedWeaponFlagVerified": true,
+  "pairedWeaponRows": 85,
+  "pairedFlagCases": 256,
+  "nativeEquippedHandSelectorVerified": true,
   "guardDirectionRemainsNative": true,
   "attackGuardStaminaWaived": true,
   "gameMemoryWritten": false,

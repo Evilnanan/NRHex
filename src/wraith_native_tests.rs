@@ -41,25 +41,38 @@ unsafe extern "system" fn item_interface(_:usize)->usize{ITEM_INTERFACE.with(Cel
 unsafe extern "system" fn interface_enabled(_:usize)->u8{1}
 unsafe extern "system" fn native_xp(_:usize,kind:u8,points:u16){assert_eq!(kind,9);NATIVE_XP.with(|s|s.set(s.get()+u32::from(points)));}
 unsafe extern "system" fn free(_:usize,_:usize){}
-thread_local!{static GROUND_CALLS:Cell<u32>=const{Cell::new(0)};static GROUND_FAIL:Cell<bool>=const{Cell::new(false)};}
-thread_local!{static PARAM_KIND:Cell<i32>=const{Cell::new(-1)};}
-unsafe extern "system" fn parameter_kind(_:usize,kind:i32,_:usize)->usize{PARAM_KIND.with(|s|s.set(kind));0}
-unsafe extern "system" fn ground(_:usize,_:usize,lot:i32,kind:u8,enabled:u8,from_actor:u8,positioned:u8,_:*const f32)->u8{
- assert!(ground_tier(lot).is_some());assert_eq!((kind,enabled,from_actor,positioned),(1,1,1,0));GROUND_CALLS.with(|s|s.set(s.get()+1));
- if GROUND_FAIL.with(Cell::get){return 0;}
- crate::PERSONAL_REWARD.with(|s|{let mut scope=s.get();scope.created=1;s.set(scope);});1
+unsafe extern "system" fn lookup(_:usize,id:*const i32,start:i32)->i32{INVENTORY.with(|items|items.borrow().iter().filter(|item|item.0==(*id&0x0fffffff)&&item.1>=start).map(|item|item.1).min().unwrap_or(-1))}
+unsafe extern "system" fn uid(_:usize,out:*mut u32,index:i32)->usize{*out=INVENTORY.with(|items|items.borrow().iter().find(|item|item.1==index).map_or(0,|item|0xb0000000|item.0 as u32));out as usize}
+unsafe extern "system" fn serial(_:usize,index:i32)->u32{1000+index as u32}
+thread_local!{static CAPACITY_ROW:Cell<usize>=const{Cell::new(0)};static GROUND:RefCell<Vec<i32>>=const{RefCell::new(Vec::new())};static GROUND_FAIL:Cell<bool>=const{Cell::new(false)};}
+unsafe extern "system" fn capacity_row(out:usize)->usize{put(out,CAPACITY_ROW.with(Cell::get));out}
+unsafe extern "system" fn ground(_:usize,_:usize,lot:i32,kind:u8,_:u8,_:u8,_:u8,_:*const f32)->u8{
+ assert_eq!(kind,1);assert!(ground_tier(lot).is_some());
+ if !GROUND_FAIL.with(Cell::get){GROUND.with(|items|items.borrow_mut().push(lot));crate::PERSONAL_REWARD.with(|scope|{let mut state=scope.get();state.created=1;scope.set(state);});}1
 }
-unsafe extern "system" fn lookup(_:usize,id:*const i32,_:i32)->i32{INVENTORY.with(|items|items.borrow().iter().find(|item|item.0==(*id&0x0fffffff)).map_or(-1,|item|item.1))}
-unsafe extern "system" fn uid(_:usize,out:*mut u32,index:i32)->usize{*out=if index>=0{1000+index as u32}else{0};out as usize}
 #[unsafe(naked)]unsafe extern "system" fn award_xp(_:usize,_:u8,_:u16){core::arch::naked_asm!("sub rsp,0x28","jmp qword ptr [rip+{target}]",target=sym XP_ENTRY);}
 static XP_ENTRY:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 fn fixture_row(data:&[u8],id:i32)->[u8;0xe0]{let count=u16::from_le_bytes(data[10..12].try_into().unwrap())as usize;for i in 0..count{let at=64+i*24;if i32::from_le_bytes(data[at..at+4].try_into().unwrap())==id{let off=u64::from_le_bytes(data[at+8..at+16].try_into().unwrap())as usize;return data[off..off+0xe0].try_into().unwrap();}}panic!("missing goods {id}")}
 #[test]#[ignore="requires current native EXE and installed Wraith goods fixture; run alone"]
 fn native_wraith_hit_credit_fp_scopes_and_deferred_slot_upgrade(){unsafe{
+ crate::verify_executable(std::path::Path::new(&std::env::var_os("NRHEX_NATIVE_EXE").unwrap())).unwrap();
  let bytes=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&bytes)),crate::EXE_HASH);
  let fixture=std::fs::read(std::env::var_os("NRHEX_WRAITH_FIXTURE").unwrap()).unwrap();let rows:Vec<_>=ORIGINALS.iter().map(|&id|(id,Box::new(fixture_row(&fixture,id)))).collect();ROWS.with(|s|*s.borrow_mut()=rows.iter().map(|(id,r)|(*id,r.as_ptr()as usize)).collect());
  let headers=crate::pe::Headers::parse(&bytes,0).unwrap();let image=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!image.is_null());let base=image as usize;for s in &headers.sections{ptr::copy_nonoverlapping(bytes[s.raw_offset as usize..].as_ptr(),(base+s.virtual_address as usize)as*mut u8,s.raw_size as usize);}
- for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(crate::APPLY_SELF_RVA,add as*const()as usize),(crate::REMOVE_EFFECT_RVA,remove as*const()as usize),(crate::SPAWN_RVA,ground as*const()as usize),(0x1f5610,lookup as*const()as usize),(0x1f59e0,uid as*const()as usize)]{jump(base,rva,f);}
+ let mut native_inventory=[0u64;16];let inventory_root=native_inventory.as_mut_ptr()as usize;
+ let mut entries=[0u32;16*5];let entries_address=entries.as_mut_ptr()as usize;
+ let mut buckets=vec![-1i16;0x7e1];let good=0x40000000|3080u32;buckets[(good%0x7e1)as usize]=0;
+ let mut cached=[good,5u32];put(inventory_root+0x50,buckets.as_ptr()as usize);put(inventory_root+0x60,cached.as_ptr()as usize);
+ int(inventory_root+0x1c,16);int(inventory_root+0x70,15);put(inventory_root+0x40,entries_address);
+ for (index,identity) in [(5usize,101u32),(6,102),(12,103)]{entries[index*5]=0xb0000c08;entries[index*5+1]=good;entries[index*5+2]=1;entries[index*5+3]=identity;}
+ assert_eq!(instances(inventory_root,3080,base),vec![(5,101),(6,102),(12,103)]);
+ let native_uid:unsafe extern "system" fn(usize,*mut u32,i32)->usize=std::mem::transmute(base+0x1f59e0);
+ for index in [5,6,12]{let mut identity=0;native_uid(inventory_root,&mut identity,index);assert_eq!(identity,0xb0000c08);}
+ entries[5*5]=0;entries[5*5+1]=u32::MAX;cached[1]=6;
+ assert_eq!(instances(inventory_root,3080,base),vec![(6,102),(12,103)]);
+ entries[5*5]=0xb0000c08;entries[5*5+1]=good;entries[5*5+3]=104;cached[1]=5;
+ assert_eq!(instances(inventory_root,3080,base),vec![(5,104),(6,102),(12,103)]);
+ for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(crate::APPLY_SELF_RVA,add as*const()as usize),(crate::REMOVE_EFFECT_RVA,remove as*const()as usize),(0x1f5610,lookup as*const()as usize),(0x1f59e0,uid as*const()as usize),(0x1f5700,serial as*const()as usize),(0xe81650,capacity_row as*const()as usize),(crate::SPAWN_RVA,ground as*const()as usize)]{jump(base,rva,f);}
  // Execute the original CALL at the actual credit return site; the naked
  // wrapper sees 34E0B5, exactly as in the real contact stack frame.
  jump(base,XP_RVA,xp as*const()as usize);ptr::copy_nonoverlapping([0x48,0x83,0xc4,0x28,0xc3].as_ptr(),(base+0x34e0b5)as*mut u8,5);XP_ENTRY.store((base+0x34e0b0)as*mut u8,Ordering::Release);
@@ -109,10 +122,6 @@ fn native_wraith_hit_credit_fp_scopes_and_deferred_slot_upgrade(){unsafe{
  ACTIVE.store(false,Ordering::Release);assert_eq!(can(actor,3080),0);ACTIVE.store(true,Ordering::Release);
  EFFECTS.with(|s|s.borrow_mut().push(crate::reward_cycle_runtime::RESET));assert_eq!(can(actor,3080),0);EFFECTS.with(|s|s.borrow_mut().retain(|&id|id!=crate::reward_cycle_runtime::RESET));
  let other=Box::new(*rows[0].1);ROWS.with(|s|s.borrow_mut().push((3050,other.as_ptr()as usize)));assert_eq!(can(actor,3050),0);assert_eq!(can(actor,-1),0);assert_eq!(can(0,3080),0);
- // Execute the native map/enemy table-selector entry used by ground spawning.
- put(base+0x3c28880,1);jump(base,0xe9e680,parameter_kind as*const()as usize);
- let native_lot:unsafe extern "system" fn(usize,i32,u8)->usize=std::mem::transmute(base+0xe8f910);
- for (kind,table)in [(0,20),(1,21)]{let mut out=[0usize;2];native_lot(out.as_mut_ptr()as usize,GROUND_LOT,kind);assert_eq!(PARAM_KIND.with(Cell::get),table);assert_eq!(read_i32(out.as_ptr()as usize),GROUND_LOT);assert_eq!(out[1],0);}
  // A pending use token is consumed exactly once by native contact bookkeeping.
  let mut sentinel=[0usize;3];let mut node=[0usize;3];let sent=sentinel.as_mut_ptr()as usize;let n=node.as_mut_ptr()as usize;put(sent,n);put(sent+8,n);put(n,sent);put(n+8,sent);int(n+0x10,77);put(actor+0x748,sent);put(actor+0x750,1);let mut allocator=[0usize;1];let mut vt=[0usize;14];vt[13]=free as*const()as usize;allocator[0]=vt.as_ptr()as usize;put(actor+0x740,allocator.as_ptr()as usize);
  {let mut s=STATE.lock().unwrap();s.bind(actor,123);s.units=Some([0;2]);}
@@ -123,70 +132,99 @@ fn native_wraith_hit_credit_fp_scopes_and_deferred_slot_upgrade(){unsafe{
  assert_eq!(STATE.lock().unwrap().units,Some([0;2]));assert_eq!(token(actor,&77),1);let consume:unsafe extern "system" fn(usize,*const i32)=std::mem::transmute(base+0x669a20);consume(actor,&77);award_xp(g,9,10);assert_eq!(STATE.lock().unwrap().units,Some([1,0]));assert_eq!(NATIVE_XP.with(Cell::get),0);assert_eq!(token(actor,&77),0);assert_eq!(STATE.lock().unwrap().units,Some([1,0]));
  // A Scholar forwards native XP as well; non-tool/unscoped XP is unchanged.
  ptr::write((g+0xc7)as*mut u8,9);CREDIT.with(|s|s.set(Some(Credit{actor,good:3080,cycle:0})));award_xp(g,9,10);assert_eq!(NATIVE_XP.with(Cell::get),10);assert_eq!(STATE.lock().unwrap().units,Some([2,0]));credited(g,9,40,base+1);assert_eq!(NATIVE_XP.with(Cell::get),50);
- // Native quickslot setter retains selected slot while upgrading in place.
- let slots=g+0x1d8+0x248;put(slots+0x98,1);for i in 0..18{int(slots+12+i*8,-1);}int(slots+12+3*8,5);int(slots+0xa0,3);
- EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,OWNER+90]);{let mut s=STATE.lock().unwrap();s.units=Some([20,0]);s.saw_item=true;s.ready=false;}
- update(actor,base,0.);assert_eq!(crate::read_i32(slots+12+3*8),5);assert!(!EFFECTS.with(|s|s.borrow().contains(&(OWNER+91))));
- for _ in 0..3{query(actor,FRAME,base);update(actor,base,0.);}assert_eq!(crate::read_i32(slots+12+3*8),5);query(actor,FRAME,base);update(actor,base,0.);assert_eq!(crate::read_i32(slots+12+3*8),7);assert_eq!(crate::read_i32(slots+0xa0),3);assert!(EFFECTS.with(|s|s.borrow().contains(&(OWNER+91))));assert!(EVENTS.with(|s|s.borrow().contains(&(OWNER+7))));
+ let slots=g+0x1d8+0x248;put(slots+0x98,1);int(slots+0xa0,3);
+ let mut cap_row=[0u8;16];cap_row[14]=4;cap_row[15]=8;CAPACITY_ROW.with(|row|row.set(cap_row.as_ptr()as usize));
+ put(g+0x1d8+0x2f8,stats.as_mut_ptr()as usize);
+ for slot in 0..18{int(slots+12+slot*8,-1);}
+ assert!(!bag_full(slots,base));for slot in 0..4{int(slots+12+slot*8,5+slot as i32);}assert!(bag_full(slots,base));
+ stats[0xd8]=1;assert!(!bag_full(slots,base));int(slots+12+4*8,9);assert!(bag_full(slots,base));
+ stats[0xd9]=1;assert!(!bag_full(slots,base));int(slots+12+5*8,10);assert!(bag_full(slots,base));
+ stats[0xd8]=10;stats[0xe4]=5;for slot in 0..10{int(slots+12+slot*8,5+slot as i32);}assert!(bag_full(slots,base));
+ int(slots+12+9*8,-1);assert!(!bag_full(slots,base));stats[0xd8]=0;stats[0xd9]=0;stats[0xe4]=0;
  for existing in [false,true]{
-  reset();GROUND_CALLS.with(|s|s.set(0));EFFECTS.with(|effects|*effects.borrow_mut()=vec![OWNER]);EVENTS.with(|events|events.borrow_mut().clear());
+  reset();EFFECTS.with(|effects|*effects.borrow_mut()=vec![OWNER]);EVENTS.with(|events|events.borrow_mut().clear());GROUND.with(|items|items.borrow_mut().clear());
+  INVENTORY.with(|items|*items.borrow_mut()=if existing{vec![(3080,5)]}else{vec![]});
+  for slot in 0..4{int(slots+12+slot*8,5+slot as i32);}
+  GROUND_FAIL.with(|flag|flag.set(true));for _ in 0..4{query(actor,FRAME,base);}update(actor,base,0.);
+  assert_eq!(STATE.lock().unwrap().given,None);assert!(GROUND.with(|items|items.borrow().is_empty()));assert!(EVENTS.with(|events|events.borrow().is_empty()));
+  GROUND_FAIL.with(|flag|flag.set(false));update(actor,base,0.);assert_eq!(STATE.lock().unwrap().given,Some(0));
+  for _ in 0..300{query(actor,FRAME,base);update(actor,base,0.);}
+  reset();for _ in 0..4{query(actor,FRAME,base);}update(actor,base,0.);
+  assert_eq!(GROUND.with(|items|items.borrow().clone()),vec![GROUND_LOT]);assert!(!EVENTS.with(|events|events.borrow().contains(&(OWNER+1))));
+ }
+ for existing in [false,true]{
+  for slot in 0..18{int(slots+12+slot*8,-1);}
+  reset();EFFECTS.with(|effects|*effects.borrow_mut()=vec![OWNER]);EVENTS.with(|events|events.borrow_mut().clear());
   INVENTORY.with(|items|*items.borrow_mut()=if existing{vec![(3080,5)]}else{vec![]});
   for _ in 0..3{query(actor,FRAME,base);}update(actor,base,0.);
-  assert_eq!(EVENTS.with(|events|events.borrow().contains(&(OWNER+1))),!existing);
-  if !existing{assert!(!EFFECTS.with(|effects|effects.borrow().contains(&(OWNER+90))));INVENTORY.with(|items|items.borrow_mut().push((3080,5)));update(actor,base,0.);}
-  assert!(EFFECTS.with(|effects|effects.borrow().contains(&(OWNER+90))));assert_eq!(GROUND_CALLS.with(Cell::get),u32::from(existing));
-  EVENTS.with(|events|events.borrow_mut().clear());update(actor,base,0.);assert!(EVENTS.with(|events|events.borrow().is_empty()));
+  assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==OWNER+1).count()),1);
+  assert_eq!(STATE.lock().unwrap().given,None);assert_eq!(STATE.lock().unwrap().requested,Some(0));
+  assert!(!EFFECTS.with(|effects|effects.borrow().contains(&(OWNER+90))));
+  remove(0,OWNER+1);
+  for _ in 0..300{query(actor,FRAME,base);update(actor,base,0.);}
+  assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==OWNER+1).count()),1);
+  assert_eq!(INVENTORY.with(|items|items.borrow().len()),usize::from(existing));
+  put(actor+8,456);for _ in 0..4{query(actor,FRAME,base);}update(actor,base,0.);
+  assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==OWNER+1).count()),1);
+  INVENTORY.with(|items|items.borrow_mut().push((3080,8)));update(actor,base,0.);
+  assert_eq!(STATE.lock().unwrap().given,Some(0));assert_eq!(STATE.lock().unwrap().requested,None);
+  reset();for _ in 0..4{query(actor,FRAME,base);}update(actor,base,0.);
+  EVENTS.with(|events|events.borrow_mut().clear());for _ in 0..35{query(actor,FRAME,base);update(actor,base,0.);}assert!(EVENTS.with(|events|events.borrow().is_empty()));
  }
- reset();EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER]);INVENTORY.with(|s|*s.borrow_mut()=vec![(3080,5)]);GROUND_CALLS.with(|s|s.set(0));GROUND_FAIL.with(|s|s.set(true));
- for _ in 0..3{query(actor,FRAME,base);}update(actor,base,0.);assert_eq!(GROUND_CALLS.with(Cell::get),1);assert_eq!(STATE.lock().unwrap().given,None);
- GROUND_FAIL.with(|s|s.set(false));update(actor,base,0.);assert_eq!(GROUND_CALLS.with(Cell::get),2);assert_eq!(STATE.lock().unwrap().given,Some(0));
- for _ in 0..30{update(actor,base,0.);}assert_eq!(GROUND_CALLS.with(Cell::get),2);assert_eq!(INVENTORY.with(|s|s.borrow().len()),1);
- for preowned in [false,true]{
-  reset();EFFECTS.with(|effects|*effects.borrow_mut()=vec![OWNER,OWNER+90]);EVENTS.with(|events|events.borrow_mut().clear());
-  INVENTORY.with(|items|*items.borrow_mut()=if preowned{vec![(3080,5),(3010,7)]}else{vec![(3080,5)]});
-  for slot in 0..18{int(slots+12+slot*8,-1);}int(slots+12+3*8,5);int(slots+12+6*8,7);
-  {let mut state=STATE.lock().unwrap();state.units=Some([20,0]);}for _ in 0..3{query(actor,FRAME,base);}update(actor,base,0.);
-  assert_eq!(EVENTS.with(|events|events.borrow().contains(&(OWNER+2))),!preowned);
-  if !preowned{
-   assert_eq!(read_i32(slots+12+3*8),5);assert!(!EVENTS.with(|events|events.borrow().contains(&(OWNER+7))));
-   INVENTORY.with(|items|items.borrow_mut().push((3010,7)));query(actor,BUSY,base);update(actor,base,0.);assert_eq!(read_i32(slots+12+3*8),5);
-   for _ in 0..4{query(actor,FRAME,base);}update(actor,base,0.);
-  }
-  assert_eq!(read_i32(slots+12+3*8),7);assert_eq!(read_i32(slots+12+6*8),if preowned{7}else{-1});assert_eq!(read_i32(slots+0xa0),3);
-  assert!(EVENTS.with(|events|events.borrow().contains(&(OWNER+7))));assert_eq!(STATE.lock().unwrap().given,Some(1));
+ for kind in 0..2{for target_count in 0..=2{
+  reset();EFFECTS.with(|effects|*effects.borrow_mut()=vec![OWNER,OWNER+90,OWNER+91,OWNER+92]);EVENTS.with(|events|events.borrow_mut().clear());
+  let source=ORIGINALS[kind];let target=ORIGINALS[kind+1];
+  INVENTORY.with(|items|{let mut items=items.borrow_mut();*items=vec![(source,5),(source,6)];for index in 0..target_count{items.push((target,7+index));}});
+  for slot in 0..18{int(slots+12+slot*8,-1);}int(slots+12+3*8,5);int(slots+12+4*8,6);if target_count>0{int(slots+12+10*8,7);}
+  let mut counts=[19,9];counts[kind]=LIMITS[kind];
+  {let mut state=STATE.lock().unwrap();state.units=Some(counts);state.saw_item=true;}
+   query(actor,FRAME,base);update(actor,base,0.);assert!(!EVENTS.with(|events|events.borrow().iter().any(|id|(OWNER+1..=OWNER+8).contains(id))));
+  for _ in 0..3{query(actor,FRAME,base);}update(actor,base,0.);
+  let removal=OWNER+7+kind as i32;let grant=OWNER+2+kind as i32;
+   assert_eq!(EVENTS.with(|events|events.borrow().iter().copied().filter(|id|(OWNER+1..=OWNER+8).contains(id)).collect::<Vec<_>>()),vec![removal]);
+  for _ in 0..35{query(actor,FRAME,base);update(actor,base,0.);}
+   assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|id|(OWNER+1..=OWNER+8).contains(id)).count()),1);assert_eq!(STATE.lock().unwrap().units,Some(counts));
+   remove(0,removal);update(actor,base,0.);assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|id|(OWNER+1..=OWNER+8).contains(id)).count()),1);
+  INVENTORY.with(|items|items.borrow_mut().retain(|item|item.1!=5));int(slots+12+3*8,-1);
+  put(actor+8,456);for _ in 0..4{query(actor,FRAME,base);}update(actor,base,0.);
+  assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==grant).count()),1);
+  assert_eq!(STATE.lock().unwrap().units,Some(counts));assert_eq!(STATE.lock().unwrap().cycles,[0,0]);
+  for _ in 0..5{update(actor,base,0.);}assert_eq!(STATE.lock().unwrap().units,Some(counts));
+  remove(0,grant);for _ in 0..300{query(actor,FRAME,base);update(actor,base,0.);}
+  assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==grant).count()),1);
+  assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==removal).count()),1);
+  CREDIT.with(|credit|credit.set(Some(Credit{actor,good:source,cycle:0})));award_xp(g,9,10);assert_eq!(STATE.lock().unwrap().units,Some(counts));
+  INVENTORY.with(|items|items.borrow_mut().push((target,11)));int(slots+12+12*8,11);
+  query(actor,BUSY,base);update(actor,base,0.);assert!(STATE.lock().unwrap().removing.is_some());
+  for _ in 0..4{query(actor,FRAME,base);}update(actor,base,0.);
+  counts[kind]=0;assert_eq!(STATE.lock().unwrap().units,Some(counts));assert!(STATE.lock().unwrap().removing.is_none());
+  assert_eq!(STATE.lock().unwrap().cycles[kind],1);assert_eq!(read_i32(slots+12+3*8),11);assert_eq!(read_i32(slots+12+4*8),6);assert_eq!(read_i32(slots+12+12*8),-1);
+  assert_eq!(read_i32(slots+12+10*8),if target_count>0{7}else{-1});assert_eq!(read_i32(slots+0xa0),3);
+  assert_eq!(INVENTORY.with(|items|items.borrow().iter().filter(|item|item.0==target).count()),target_count as usize+1);
+  CREDIT.with(|credit|credit.set(Some(Credit{actor,good:source,cycle:0})));award_xp(g,9,10);assert_eq!(STATE.lock().unwrap().units,Some(counts));
+  CREDIT.with(|credit|credit.set(Some(Credit{actor,good:source,cycle:1})));award_xp(g,9,10);counts[kind]=1;assert_eq!(STATE.lock().unwrap().units,Some(counts));
+  update(actor,base,0.);assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==removal).count()),1);
+  {let mut state=STATE.lock().unwrap();state.units.as_mut().unwrap()[kind]=LIMITS[kind];}
+  update(actor,base,0.);assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==removal).count()),2);
+  remove(0,removal);INVENTORY.with(|items|items.borrow_mut().retain(|item|item.1!=6));update(actor,base,0.);
+  INVENTORY.with(|items|items.borrow_mut().push((target,13)));update(actor,base,0.);
+  assert_eq!(STATE.lock().unwrap().cycles[kind],2);assert_eq!(read_i32(slots+12+4*8),13);assert_eq!(STATE.lock().unwrap().units.unwrap()[kind],0);
+ }}
+ for kind in 0..2{
+  reset();EFFECTS.with(|effects|*effects.borrow_mut()=vec![OWNER,OWNER+90]);EVENTS.with(|events|events.borrow_mut().clear());GROUND.with(|items|items.borrow_mut().clear());
+  INVENTORY.with(|items|*items.borrow_mut()=vec![(ORIGINALS[kind],5),(ORIGINALS[kind],6),(ORIGINALS[kind+1],7)]);
+  for slot in 0..4{int(slots+12+slot*8,5+slot as i32);}
+  let mut counts=[3,4];counts[kind]=LIMITS[kind];STATE.lock().unwrap().units=Some(counts);
+  for _ in 0..4{query(actor,FRAME,base);}update(actor,base,0.);
+  assert!(STATE.lock().unwrap().removing.is_some());assert!(GROUND.with(|items|items.borrow().is_empty()));
+  remove(0,OWNER+7+kind as i32);INVENTORY.with(|items|items.borrow_mut().retain(|item|item.1!=5));int(slots+12,42);
+  GROUND_FAIL.with(|flag|flag.set(true));update(actor,base,0.);assert_eq!(STATE.lock().unwrap().units,Some(counts));
+  GROUND_FAIL.with(|flag|flag.set(false));update(actor,base,0.);counts[kind]=0;assert_eq!(STATE.lock().unwrap().units,Some(counts));
+  for _ in 0..300{query(actor,FRAME,base);update(actor,base,0.);}
+  assert_eq!(GROUND.with(|items|items.borrow().clone()),vec![GROUND_LOT+(kind as i32+1)*10]);
+  assert!(!EVENTS.with(|events|events.borrow().contains(&(OWNER+2+kind as i32))));assert_eq!(read_i32(slots+12),42);assert_eq!(read_i32(slots+20),6);assert_eq!(read_i32(slots+28),7);
+  assert_eq!(EVENTS.with(|events|events.borrow().iter().filter(|&&id|id==OWNER+7+kind as i32).count()),1);
  }
- // Repeat both independent tracks after the highest grade was already obtained.
- reset();EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,OWNER+90,OWNER+91,OWNER+92]);
- INVENTORY.with(|s|*s.borrow_mut()=vec![(3080,5),(3010,7),(3011,9)]);
- for slot in 0..18{int(slots+12+slot*8,-1);}int(slots+12+3*8,5);
- for _ in 0..3{query(actor,FRAME,base);}update(actor,base,0.);
- for _ in 0..19{CREDIT.with(|s|s.set(Some(Credit{actor,good:3080,cycle:0})));award_xp(g,9,10);}
- for _ in 0..9{CREDIT.with(|s|s.set(Some(Credit{actor,good:3010,cycle:0})));award_xp(g,9,40);}
- update(actor,base,0.);assert_eq!(STATE.lock().unwrap().units,Some([19,9]));assert_eq!(read_i32(slots+12+3*8),5);
- CREDIT.with(|s|s.set(Some(Credit{actor,good:3080,cycle:0})));award_xp(g,9,10);
- {let mut s=STATE.lock().unwrap();s.tokens.insert(88,Credit{actor,good:3080,cycle:0});s.ages.insert(88,0.);s.tokens.insert(89,Credit{actor,good:3010,cycle:0});s.ages.insert(89,0.);}
- update(actor,base,0.);assert_eq!(read_i32(slots+12+3*8),7);
- {let s=STATE.lock().unwrap();assert_eq!(s.units,Some([0,9]));assert_eq!(s.cycles,[1,0]);assert_eq!(s.tokens.get(&88).map(|c|c.cycle),Some(0));assert!(s.tokens.contains_key(&89));}
- assert!(!EFFECTS.with(|s|s.borrow().contains(&marker(0,20))));assert!(EFFECTS.with(|s|s.borrow().contains(&marker(1,9))));
- // Old TLS credit cannot cross a completed cycle; native Scholar XP still
- // forwards for Scholar, and remains suppressed for every other hero.
- let native_before=NATIVE_XP.with(Cell::get);ptr::write((g+0xc7)as*mut u8,1);
- CREDIT.with(|s|s.set(Some(Credit{actor,good:3080,cycle:0})));award_xp(g,9,10);assert_eq!(NATIVE_XP.with(Cell::get),native_before);ptr::write((g+0xc7)as*mut u8,9);
-
- CREDIT.with(|s|s.set(Some(Credit{actor,good:3080,cycle:0})));award_xp(g,9,10);assert_eq!(STATE.lock().unwrap().units,Some([0,9]));
- CREDIT.with(|s|s.set(Some(Credit{actor,good:3010,cycle:0})));award_xp(g,9,40);
- EVENTS.with(|s|s.borrow_mut().clear());for _ in 0..5{update(actor,base,0.);}assert!(!EVENTS.with(|s|s.borrow().iter().any(|id|(OWNER+1..=OWNER+9).contains(id))));
- // The fixture acknowledges the actual asynchronous removal, then a new bell.
- remove(0,OWNER+7);INVENTORY.with(|s|s.borrow_mut().retain(|i|i.0!=3080));update(actor,base,0.);
- assert_eq!(STATE.lock().unwrap().units,Some([0,0]));assert_eq!(read_i32(slots+12+3*8),9);
- remove(0,OWNER+8);INVENTORY.with(|s|s.borrow_mut().retain(|i|i.0!=3010));update(actor,base,0.);
- INVENTORY.with(|s|s.borrow_mut().push((3080,11)));int(slots+12+3*8,11);
- for _ in 0..19{CREDIT.with(|s|s.set(Some(Credit{actor,good:3080,cycle:1})));award_xp(g,9,10);}
- update(actor,base,0.);assert_eq!(read_i32(slots+12+3*8),11);assert_eq!(STATE.lock().unwrap().units,Some([19,0]));
- CREDIT.with(|s|s.set(Some(Credit{actor,good:3080,cycle:1})));award_xp(g,9,10);update(actor,base,0.);
- assert_eq!(STATE.lock().unwrap().requested,Some(1));assert_eq!(read_i32(slots+12+3*8),11);
- INVENTORY.with(|s|s.borrow_mut().push((3010,13)));update(actor,base,0.);
- assert_eq!(STATE.lock().unwrap().units,Some([0,0]));assert_eq!(read_i32(slots+12+3*8),13);assert_eq!(STATE.lock().unwrap().cycles,[2,1]);
  // No automatic tool replacement after the initial gift was dropped.
  reset();EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,OWNER+90]);INVENTORY.with(|s|s.borrow_mut().clear());EVENTS.with(|s|s.borrow_mut().clear());
  for _ in 0..3{query(actor,FRAME,base);}update(actor,base,0.);assert!(EVENTS.with(|s|s.borrow().is_empty()));

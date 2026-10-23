@@ -1,4 +1,5 @@
 """Install the checked incremental Demon’s Gaze assets without unrelated edits."""
+from distribution_paths import distribution_file
 from pathlib import Path
 import hashlib,json,shutil,subprocess,tomllib
 
@@ -13,7 +14,7 @@ assert (root/'src/hex_pool.rs').read_bytes()==(stage/'hex_pool.rs').read_bytes()
 version=tomllib.loads((root/'Cargo.toml').read_text())['package']['version']
 updates={}
 def add(relative,source,before=None,after=None):
- if before:assert sha(dist/relative).upper()==before.upper(),f'Input changed: {relative}'
+ if before:assert sha(distribution_file(dist,relative)).upper()==before.upper(),f'Input changed: {relative}'
  if after:assert sha(source).upper()==after.upper(),f'Stage changed: {relative}'
  updates[relative]=source
 add('mod/regulation.bin',stage/'regulation.bin',params['inputSha256'],params['outputSha256'])
@@ -32,14 +33,14 @@ backup=work/'before-install'
 for rel in updates:
  dest=backup/rel;dest.parent.mkdir(parents=True,exist_ok=True)
  assert not dest.exists(),'Previous installation backup exists; inspect it before reinstalling'
- shutil.copy2(dist/rel,dest)
+ shutil.copy2(distribution_file(dist,rel),dest)
 try:
- for rel,source in updates.items():shutil.copy2(source,dist/rel);assert sha(dist/rel)==sha(source)
- assert all(sha(dist/rel)==digest for rel,digest in baseline.items() if rel not in updates)
+ for rel,source in updates.items():shutil.copy2(source,distribution_file(dist,rel));assert sha(distribution_file(dist,rel))==sha(source)
+ assert all(sha(distribution_file(dist,rel))==digest for rel,digest in baseline.items() if rel not in updates)
 except BaseException:
- for rel in updates:shutil.copy2(backup/rel,dist/rel)
+ for rel in updates:shutil.copy2(backup/rel,distribution_file(dist,rel))
  raise
-for source,name in [(stage/'validation.json','devils-gaze-parameter-validation.json'),(stage/'resources-validation.json','devils-gaze-resource-validation.json'),(stage/'texts/validation.json','devils-gaze-text-validation.json'),(work/'native-validation.json','devils-gaze-native-validation.json')]:shutil.copy2(source,dist/name)
-installed=dict(version=version,changedAssets={rel:sha(dist/rel) for rel in updates},otherAssetsAndSettingsPreserved=True,gameStarted=False,gameplayVerified=False,multiplayerVerified=False)
-(dist/'devils-gaze-validation.json').write_text(json.dumps(installed,indent=2),encoding='utf-8')
+for source,name in [(stage/'validation.json','devils-gaze-parameter-validation.json'),(stage/'resources-validation.json','devils-gaze-resource-validation.json'),(stage/'texts/validation.json','devils-gaze-text-validation.json'),(work/'native-validation.json','devils-gaze-native-validation.json')]:shutil.copy2(source,distribution_file(dist,name))
+installed=dict(version=version,changedAssets={rel:sha(distribution_file(dist,rel)) for rel in updates},otherAssetsAndSettingsPreserved=True,gameStarted=False,gameplayVerified=False,multiplayerVerified=False)
+(dist/'reports'/'devils-gaze-validation.json').write_text(json.dumps(installed,indent=2),encoding='utf-8')
 print(f'PASS: {version} installed, {len(updates)} assets verified; unrelated assets/settings preserved')

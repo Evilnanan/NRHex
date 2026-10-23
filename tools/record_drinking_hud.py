@@ -110,7 +110,7 @@ report = dict(version=version, hudIcon=20006, nativeReference=1681,
               allOtherEffectFieldsAndTablesUnchanged=True, changedAssets=changed,
               unrelatedAssetsAndUserConfigurationUnchanged=True, rustTestsPassed=test_count,
               gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/drinking-hud-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/drinking-hud-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
 checks = ['drinking-hud-validation.json', 'escape-vfx-validation.json', 'cat-balance-validation.json',
           'jiahao-balance-validation.json', 'effect-sync-validation.json', 'cage-patch-validation.json']
 build = dict(version=version, buildPassed=True, incremental=True,
@@ -119,12 +119,12 @@ build = dict(version=version, buildPassed=True, incremental=True,
              originalExeSha256=exe_hash, dllSha256=dll_hash, installedDllSha256=dll_hash,
              dllInstalled=True, regulationSha256=after['mod/regulation.bin'], functionChecks=checks,
              unrelatedAssetsAndUserConfigsUnchanged=True, gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
 runtime = dict(version=version, active=None, pid=None, allFourNativeDllsLoaded=False,
                build='build-validation.json', dllSha256=dll_hash, dllInstalled=True,
                gameplayVerified=False, multiplayerVerified=False,
                pendingChecks=['Drinking attack-up HUD icon and numeric badge after repeated flasks and individual expiry',
                               'Previously pending balance, visual and multiplayer checks'],
                notes='Native HUD collector executed on synthetic entries; no game session or actual renderer used.')
-(ROOT / 'dist/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
 print('PASS: native icon/count aggregation at 0-80 layers, expiry and slot reuse; HUD-only parameter scope.')

@@ -1,7 +1,7 @@
 """Independent HKS decompile + original critical-animation evidence readback."""
 from pathlib import Path
 import subprocess,json,struct
-root=Path(__file__).resolve().parents[1];report=json.loads((root/'dist/jiahao-hks-validation.json').read_text())
+root=Path(__file__).resolve().parents[1];report=json.loads((root/'dist/reports/jiahao-hks-validation.json').read_text())
 ids=[r['id'] for r in report['functions']];out=root/'.work/actions/jiahao-decompiled.lua'
 subprocess.run([r'D:\Program Files\DSLuaDecompiler\DSLuaDecompiler.exe',str(root/'dist/mod/action/script/c0000.hks'),'--included-function-ids',*[str(i) for i in ids],'-o',str(out)],check=True,capture_output=True)
 text=out.read_text(encoding='utf8')
@@ -22,7 +22,7 @@ evidence=json.loads((root/'data/reference/actions/critical-tae.json').read_text(
 clips=[r for r in evidence['wordHits'] if any(e['Type']==67 and int.from_bytes(bytes.fromhex(e['hex'])[:4],'little')==7030801 for e in r['events'])]
 assert len(clips)>=100 and all(31700<=r['ID']<=31799 for r in clips)
 report.update(independentDecompilerReadbackPassed=True,originalCriticalMarker=7030801,originalCriticalClips=len(clips),criticalRequiresKill=False,criticalNativeEffectUnmodified=True,backstepIframesMotionSeconds=11/30,backstepIframesAt30Fps=11,iframeMechanism='Duchess JumpTable 8 copied onto 36 normal backstep clips; private owner state 25013; animation time controls lifetime',backstepHitCategory=129,frontalCriticalOnly=True,frontalCriticalGaugePercent=50,damageGaugePercent=-30)
-tae=json.loads((root/'dist/jiahao-tae-validation.json').read_text())
+tae=json.loads((root/'dist/reports/jiahao-tae-validation.json').read_text())
 assert report['guardBackstepOwnerTaeRestored'] and report['nonownerGuardBackstepTaeDisablePreserved'] and report['upperGuardLayerPreserved']
 assert len(tae['changes'])==36 and tae['sourceDuchessClip']==27060 and abs(tae['motionSeconds']-11/30)<1e-7
 assert tae['frames']==11 and tae['referenceFps']==30
@@ -65,5 +65,5 @@ assert '(jiahao::BACK_START..=jiahao::ROLL)' not in source
 assert pe.get_data(0x508e20,4)==bytes.fromhex('440fb7d2') # full unsigned 16-bit state, no enum-array indexing
 assert pe.get_data(0x508e82,4)==bytes.fromhex('66413bd2') # exact state equality after generic hash/list lookup
 report.update(nativeBackstepTae=tae,nativeBackstepAttackRows=len(back),originalBackstabRowsExcluded=90,originalRiposteRowsAccepted=113,nativeThrowGetterRva='0x490890',oldJiahaoHitNullificationRemoved=True,timedIframeBuffRemoved=True)
-(root/'dist/jiahao-hks-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
+(root/'dist/reports/jiahao-hks-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
 print('PASS: independent action-script readback and original critical pulse in',len(clips),'locked critical animations.')

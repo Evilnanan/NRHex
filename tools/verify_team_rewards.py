@@ -59,5 +59,5 @@ assert 'spawn_personal_lot' not in source
 assert 'spawn(manager,player,lot,0,1,1,0,position.as_ptr())' in source
 assert 'red_envelope::observe_dispatch(manager,descriptor)' in (ROOT/'src/lib.rs').read_text()
 report=dict(nativeCases=len(cases),cases=cases,nativePartyLoop=True,descriptorOwnershipUidAndNetworkFlagsPreserved=True,networkReturnValueNotUsedAsCreationReceipt=True,fixtureStubs=['local node creator','host broadcast','guest forwarding','post-dispatch TLS maintenance bypass'],gameplayVerified=False,multiplayerVerified=False)
-(ROOT/'dist/team-reward-validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+(ROOT/'dist/reports/team-reward-validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 print(f'PASS: {len(cases)} native solo/host/guest dispatch cases; original per-slot owner and network flags unchanged; no packets sent')

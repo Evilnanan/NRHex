@@ -735,6 +735,7 @@ if(args.Contains("--night-blessing-rework")){NightBlessing.Rework(root,bnd,Parse
 if(args.Contains("--night-blessing-rate")){NightBlessing.Rate(root,bnd,Parse);return;}
 if(args.Contains("--night-blessing-actions")){NightBlessing.Assets(root);return;}
 if(args.Contains("--parry-actions")){Parry.BuildActions(root,bnd,Parse);return;}
+if(args.Contains("--parry-paired-probe")){Parry.ProbePaired(root,bnd,Parse);return;}
 if(args.Contains("--parry-support")){Parry.StageSupport(root,Parse);return;}
 if(args.Contains("--parry-counter")){Parry.StageCounter(root,Parse);return;}
 if(args.Contains("--slingshot-stage")){Slingshot.Stage(root,bnd,Parse,hexes);return;}
@@ -1305,4 +1306,5 @@ for(int index=0;index<churchSources.Length;index++){
 Cages.Build(root,cageBosses,serialized);
 var drinkingFields=drinkingRates.Concat(drinkingPowerRates).Concat(new[]{"magParamChange","miracleParamChange","shamanParamChange","conditionHpRate","effectEndurance"}).ToArray();
 var report=new{version="0.17.26",codeVersion="0.17.26",gameTested=false,sourceRegulationSha256=Hash(source),outputRegulationSha256=Hash(dest),changedParams=changed,addedRows=added,textReports,eventSourceSha256=Hash(eventSource),eventOutputSha256=Hash(eventDest),churchReports,modifiedEvents=new[]{0,1111,1304},newEvents=Enumerable.Range(9100910,21).Prepend(9100901).Prepend(9100900).Concat(new[]{9100940,9100941,9100960}),levelRewards=new{levels=new[]{2,7,10,13},receipts=new[]{95001000,95001001,95001002,95001003},goldRarity=3,perPlayer=true},hexes,orders,drinkingNativeReference=new{id=8670000,fields=drinkingFields.ToDictionary(f=>f,f=>fullHpAttack[f].Value)},drinkingSerialized=new{id=95000501,fields=drinkingFields.ToDictionary(f=>f,f=>Effect(95000501)[f].Value)},validation="Reopened outputs; original param rows, unrelated text and events preserved; Drinking matches native full-HP AttackRate and spell flags without its condition; stolen-flask events 1145/1146 and first-night 1303 unchanged; native church pickup tails and map-local event namespace; already-completed churches skipped; neutral native full-HP red aura."};
-File.WriteAllText(Path.Combine(root,"dist/validation.json"),JsonSerializer.Serialize(report,new JsonSerializerOptions{WriteIndented=true}));Console.WriteLine("Built and verified "+dest);
+Directory.CreateDirectory(Path.Combine(root,"dist/reports"));
+File.WriteAllText(Path.Combine(root,"dist/reports/validation.json"),JsonSerializer.Serialize(report,new JsonSerializerOptions{WriteIndented=true}));Console.WriteLine("Built and verified "+dest);

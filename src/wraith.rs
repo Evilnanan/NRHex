@@ -1,11 +1,13 @@
 //! Royal Revenant: native item-use provenance and first-contact Bagcraft credit.
-//! Inventory transitions are acknowledged before the previous native tool is removed.
+//! Upgrades acknowledge removal before requesting a replacement and await its arrival.
 use crate::{ptr,read_i32,read_ptr,has_effect,is_local,native_actor,ACTIVE,BASE};
 use std::{cell::Cell,collections::BTreeMap,sync::{Mutex,OnceLock,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95004300;
+pub const ORIGINALS:[i32;3]=[3080,3010,3011];
 pub const GROUND_LOT:i32=95543000;
 pub fn ground_tier(lot:i32)->Option<usize>{let offset=lot.checked_sub(GROUND_LOT)?;(matches!(offset,0|10|20)).then_some((offset/10)as usize)}
-pub const ORIGINALS:[i32;3]=[3080,3010,3011];
+pub const SERIAL_PATTERN:&str="40 53 48 83 EC 20 8B 41 1C 4C 8B C1 3B D0 73 10 8B C2 48 8D 14 80 48 8B 41 40 48 8D 1C 90 EB 0E 2B D0 49 8B 40 30 48 8D 0C 92 48 8D 1C 88 48 8B CB E8 7A E9 55 00 84 C0 74 09 8B 43 0C";
+pub const CAPACITY_PATTERN:&str="48 89 5C 24 10 57 48 83 EC 20 48 8B F9 48 8D 4C 24 30 E8 C9 F2 C8 00 48 8B 10 48 85 D2 74 07 44 0F B6 42 0E EB 03 45 33 C0";
 pub const FRAME:i32=990043;pub const BUSY:i32=990044;
 pub const CAN_RVA:usize=0x6d0470;pub const USE_RVA:usize=0x3979b0;pub const PARAM_RVA:usize=0xe8d840;
 pub const TOKEN_RVA:usize=0x66d3b0;pub const XP_RVA:usize=0x209490;
@@ -28,9 +30,11 @@ thread_local!{static FREE:Cell<bool>=const{Cell::new(false)};static CREDIT:Cell<
 struct FreeGuard(bool);impl FreeGuard{fn enter(value:bool)->Self{Self(FREE.with(|s|s.replace(value)))}}impl Drop for FreeGuard{fn drop(&mut self){FREE.with(|s|s.set(self.0));}}
 #[repr(C,align(16))]struct GoodRow([u8;0xe0]);
 static SHADOWS:[OnceLock<Box<GoodRow>>;3]=[OnceLock::new(),OnceLock::new(),OnceLock::new()];
-#[derive(Default)]struct State{actor:usize,handle:u64,units:Option<[u8;2]>,cycles:[u64;2],given:Option<u8>,removing:Option<(usize,i32)>,tokens:BTreeMap<i32,Credit>,ages:BTreeMap<i32,f64>,saw_item:bool,idle_frames:u8,ready:bool,requested:Option<u8>,request_frames:u8}
-static STATE:Mutex<State>=Mutex::new(State{actor:0,handle:0,units:None,cycles:[0;2],given:None,removing:None,tokens:BTreeMap::new(),ages:BTreeMap::new(),saw_item:false,idle_frames:0,ready:false,requested:None,request_frames:0});
+#[derive(Clone)]struct Transfer{kind:usize,items:Vec<(i32,u32)>,slots:Vec<(i32,u32)>,removed:Option<u32>}
+#[derive(Default)]struct State{actor:usize,handle:u64,units:Option<[u8;2]>,cycles:[u64;2],given:Option<u8>,removing:Option<Transfer>,tokens:BTreeMap<i32,Credit>,ages:BTreeMap<i32,f64>,saw_item:bool,idle_frames:u8,ready:bool,requested:Option<u8>,request_items:Vec<(i32,u32)>}
+static STATE:Mutex<State>=Mutex::new(State{actor:0,handle:0,units:None,cycles:[0;2],given:None,removing:None,tokens:BTreeMap::new(),ages:BTreeMap::new(),saw_item:false,idle_frames:0,ready:false,requested:None,request_items:Vec::new()});
 fn tier(good:i32)->Option<usize>{ORIGINALS.iter().position(|&id|id==good)}
+fn received(items:&[(i32,u32)],previous:&[(i32,u32)])->Option<i32>{items.iter().find(|(_,identity)|!previous.iter().any(|(_,old)|old==identity)).map(|(index,_)|*index)}
 const LIMITS:[u8;2]=[20,10];
 // Reuse the existing saved marker range: bell 11..30, bairn 31..40.
 fn marker(kind:usize,count:u8)->i32{OWNER+10+if kind==0{0}else{20}+i32::from(count)}
@@ -39,8 +43,8 @@ fn restored(markers:&[i32])->[u8;2]{
 }
 fn progressed(mut counts:[u8;2],good:i32)->[u8;2]{if let Some(i)=tier(good).filter(|&i|i<2){counts[i]=counts[i].saturating_add(1).min(LIMITS[i]);}counts}
 impl State{
- fn bind(&mut self,actor:usize,handle:u64){if self.actor!=actor||self.handle!=handle{self.actor=actor;self.handle=handle;self.tokens.clear();self.ages.clear();self.saw_item=false;self.idle_frames=0;self.ready=false;self.requested=None;}}
- fn frame(&mut self){if self.requested.is_some(){self.request_frames=self.request_frames.saturating_add(1);}self.idle_frames=if self.saw_item{0}else{self.idle_frames.saturating_add(1)};self.saw_item=false;self.ready=self.idle_frames>=3;}
+ fn bind(&mut self,actor:usize,handle:u64){if self.actor!=actor||self.handle!=handle{self.actor=actor;self.handle=handle;self.tokens.clear();self.ages.clear();self.saw_item=false;self.idle_frames=0;self.ready=false;}}
+ fn frame(&mut self){self.idle_frames=if self.saw_item{0}else{self.idle_frames.saturating_add(1)};self.saw_item=false;self.ready=self.idle_frames>=3;}
 }
 unsafe fn enabled(actor:usize,base:usize)->bool{actor!=0&&is_local(actor,base)&&has_effect(actor,OWNER,base)&&!has_effect(actor,crate::reward_cycle_runtime::RESET,base)}
 unsafe fn local(base:usize)->usize{let w=read_ptr(base+crate::WORLD_RVA);if w==0{0}else{read_ptr(w+0x174e8)}}
@@ -72,10 +76,6 @@ pub unsafe extern "system" fn used(context:usize,good:i32,data:usize,flag:u8,ent
  let original:Use=std::mem::transmute(USE_ORIGINAL.load(Ordering::Acquire));let base=BASE.load(Ordering::Acquire);let actor=if context==0{0}else{read_ptr(context)};
  let free=ACTIVE.load(Ordering::Acquire)&&tier(good).is_some()&&enabled(actor,base);let _guard=FreeGuard::enter(free);original(context,good,data,flag,entry,elapsed)
 }
-// Turn only our single-tool lottery result into the ordinary placed-item format.
-// Native 574B50 uses kind 1, ItemMan+1C drop UIDs (bit29), enabled bit6,
-// no source/lot and option index FF. Kind 2/bit30 belong to choice rewards.
-// Keep native item data and map/position, and never remove the preowned upgrade target.
 pub unsafe fn place(manager:usize,descriptor:usize,original:unsafe extern "system" fn(usize,usize)->usize)->Option<usize>{
  let scope=crate::PERSONAL_REWARD.with(Cell::get);
  let kind=ground_tier(scope.lot)?;
@@ -102,7 +102,7 @@ pub unsafe fn emitted(descriptor:usize,out:usize,base:usize){
  let actor=local(base);if !enabled(actor,base)||ptr::read_unaligned(descriptor as*const u64)!=ptr::read_unaligned((actor+8)as*const u64){return;}
  let token=read_i32(out);if token<0{return;}
  let register:unsafe extern "system" fn(usize,*const i32)=std::mem::transmute(base+0x66f040);register(actor,&token);
- if let Ok(mut s)=STATE.lock(){s.bind(actor,ptr::read_unaligned((actor+8)as*const u64));let cycle=tier(good).filter(|&i|i<2).map_or(0,|i|if s.removing.is_some_and(|(kind,_)|kind==i){s.cycles[i].wrapping_sub(1)}else{s.cycles[i]});s.tokens.insert(token,Credit{actor,good,cycle});s.ages.insert(token,0.);}
+ if let Ok(mut s)=STATE.lock(){s.bind(actor,ptr::read_unaligned((actor+8)as*const u64));let cycle=tier(good).filter(|&i|i<2).map_or(0,|i|s.cycles[i]);s.tokens.insert(token,Credit{actor,good,cycle});s.ages.insert(token,0.);}
 }
 pub unsafe extern "system" fn token(actor:usize,id:*const i32)->u8{
  CREDIT.with(|s|s.set(None));let original:unsafe extern "system" fn(usize,*const i32)->u8=std::mem::transmute(TOKEN_ORIGINAL.load(Ordering::Acquire));let result=original(actor,id);
@@ -116,7 +116,7 @@ pub unsafe extern "system" fn token(actor:usize,id:*const i32)->u8{
 unsafe extern "system" fn credited(data:usize,category:u8,points:u16,caller:usize){
  let original:unsafe extern "system" fn(usize,u8,u16)=std::mem::transmute(XP_ORIGINAL.load(Ordering::Acquire));let base=BASE.load(Ordering::Acquire);
  if caller==base+0x34e0b5&&category==9&&ACTIVE.load(Ordering::Acquire){if let Some(c)=CREDIT.with(|s|s.take()){
-  if enabled(c.actor,base){let markers=saved(c.actor);if let Ok(mut s)=STATE.lock(){if let Some(i)=tier(c.good).filter(|&i|i<2){if c.cycle==s.cycles[i]&&!s.removing.is_some_and(|(kind,_)|kind==i){let old=*s.units.get_or_insert_with(||restored(&markers));s.units=Some(progressed(old,c.good));}}}
+  if enabled(c.actor,base){let markers=saved(c.actor);if let Ok(mut s)=STATE.lock(){if let Some(i)=tier(c.good).filter(|&i|i<2){if c.cycle==s.cycles[i]&&!s.removing.as_ref().is_some_and(|pending|pending.kind==i){let old=*s.units.get_or_insert_with(||restored(&markers));s.units=Some(progressed(old,c.good));}}}
    // Scholar keeps its own native category XP. Other heroes gain only our progress.
   }
   if crate::local_hero(base)!=Some(9){return;}
@@ -124,7 +124,23 @@ unsafe extern "system" fn credited(data:usize,category:u8,points:u16,caller:usiz
 }
 unsafe fn inventory(actor:usize)->Option<(usize,usize)>{let gd=read_ptr(actor+0x5a0);(gd!=0).then_some((gd+0x1d8+0x1c8,gd+0x1d8+0x248))}
 unsafe fn find(root:usize,good:i32,base:usize)->i32{let find:unsafe extern "system" fn(usize,*const i32,i32)->i32=std::mem::transmute(base+0x1f5610);find(root,&(good|0x40000000),0)}
+unsafe fn instances(root:usize,good:i32,base:usize)->Vec<(i32,u32)>{
+ let lookup:unsafe extern "system" fn(usize,*const i32,i32)->i32=std::mem::transmute(base+0x1f5610);
+ let serial:unsafe extern "system" fn(usize,i32)->u32=std::mem::transmute(base+0x1f5700);
+ let mut items=Vec::new();let mut start=0;
+ for _ in 0..65536{
+  let index=lookup(root,&(good|0x40000000),start);if index<start{break;}
+  items.push((index,serial(root,index)));
+  let Some(next)=index.checked_add(1)else{break;};start=next;
+ }
+ items
+}
 unsafe fn equip(slots:usize,slot:i32,index:i32,base:usize){let f:unsafe extern "system" fn(usize,i32,i32)=std::mem::transmute(base+0x1f7840);f(slots,slot+0x20,index);}
+unsafe fn bag_full(slots:usize,base:usize)->bool{
+ let capacity:unsafe extern "system" fn(usize)->i32=std::mem::transmute(base+0x1f2370);
+ let count=capacity(slots-0x248);
+ !(1..=10).contains(&count)||(0..count as usize).all(|slot|read_i32(slots+12+slot*8)>=0)
+}
 // HKS observes every item common/activation frame, including the whole chained
 // animation. Three empty samples bridge ordering and same-frame blend callbacks.
 pub unsafe fn query(actor:usize,code:i32,base:usize){
@@ -138,55 +154,67 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  let expired=if let Ok(mut s)=STATE.lock(){s.bind(actor,ptr::read_unaligned((actor+8)as*const u64));if dt.is_finite()&&dt>0.&&dt<=1.{for age in s.ages.values_mut(){*age+=f64::from(dt);}}let expired:Vec<_>=s.ages.iter().filter_map(|(&id,&age)|(age>=30.).then_some(id)).collect();for id in &expired{s.ages.remove(id);s.tokens.remove(id);}expired}else{Vec::new()};
  if !expired.is_empty(){let remove:unsafe extern "system" fn(usize,*const i32)=std::mem::transmute(base+0x669a20);for id in expired{remove(actor,&id);}}
  let markers=saved(actor);let native_stage=(0..3).rev().find(|&i|has_effect(actor,OWNER+90+i,base));
- let (units,ready,requested,request_frames,given,removing)={let Ok(mut s)=STATE.lock()else{return;};s.bind(actor,ptr::read_unaligned((actor+8)as*const u64));let units=*s.units.get_or_insert_with(||restored(&markers));s.given=native_stage.map(|n|n as u8).max(s.given);(units,s.ready,s.requested,s.request_frames,s.given,s.removing)};
+ let (units,ready,requested,given,removing,request_items)={let Ok(mut s)=STATE.lock()else{return;};s.bind(actor,ptr::read_unaligned((actor+8)as*const u64));let units=*s.units.get_or_insert_with(||restored(&markers));s.given=native_stage.map(|n|n as u8).max(s.given);(units,s.ready,s.requested,s.given,s.removing.clone(),s.request_items.clone())};
  let wanted:Vec<_>=(0..2).filter(|&i|units[i]>0).map(|i|marker(i,units[i])).collect();for &id in &wanted{if !markers.contains(&id){set(actor,id,true,base);}}for id in markers{if !wanted.contains(&id){set(actor,id,false,base);}}
  if !ready||native_actor::incapacitated(actor,stats){return;}
  let Some((root,slots))=inventory(actor)else{return;};
- // Removal is asynchronous. Do not turn the same physical item into a second
- // upgrade while its previous remove command is still waiting to execute.
- if let Some((kind,index))=removing{
-  if has_effect(actor,OWNER+7+kind as i32,base)||find(root,ORIGINALS[kind],base)==index{return;}
-  if let Ok(mut s)=STATE.lock(){s.removing=None;}
+ let mut transfer=removing;
+ if let Some(pending)=transfer.as_mut(){
+  if pending.removed.is_none(){
+   if has_effect(actor,OWNER+7+pending.kind as i32,base){return;}
+   let remaining=instances(root,ORIGINALS[pending.kind],base);
+   let Some((_,identity))=pending.items.iter().find(|(_,identity)|!remaining.iter().any(|(_,current)|current==identity))else{return;};
+   pending.removed=Some(*identity);
+   if let Ok(mut state)=STATE.lock(){state.removing=Some(pending.clone());}else{return;}
+  }
  }
- let desired=if let Some(desired)=requested{i32::from(desired)}else if given.is_none(){0}else{
-  let Some(kind)=(0..2).find(|&i|units[i]>=LIMITS[i]&&find(root,ORIGINALS[i],base)>=0)else{return;};kind as i32+1
+ let desired=if let Some(pending)=transfer.as_ref(){pending.kind as i32+1}else if let Some(desired)=requested{i32::from(desired)}else if given.is_none(){0}else{
+  let Some(kind)=(0..2).find(|&kind|units[kind]>=LIMITS[kind]&&find(root,ORIGINALS[kind],base)>=0)else{return;};
+  let items=instances(root,ORIGINALS[kind],base);if items.is_empty(){return;}
+  let previous_slots=(0..18).filter_map(|slot|{let index=read_i32(slots+12+slot*8);items.iter().find(|(item,_)|*item==index).map(|(_,identity)|(slot as i32,*identity))}).collect();
+  if let Ok(mut state)=STATE.lock(){state.removing=Some(Transfer{kind,items,slots:previous_slots,removed:None});}else{return;}
+  set(actor,OWNER+7+kind as i32,true,base);return;
  };
- let index=find(root,ORIGINALS[desired as usize],base);
- if index>=0&&requested.is_none(){
-  // Preserve the preowned tool. Every new copy beyond native capacity is an
-  // ordinary placed item, including repeated upgrades with a preowned target.
+ let items=instances(root,ORIGINALS[desired as usize],base);
+ let index=if requested.is_none()&&bag_full(slots,base){
   if !crate::spatial_ready(actor)||crate::CALLBACK_LOCK.swap(true,Ordering::AcqRel){return;}
   let created=crate::spawn_personal_lot_kind(actor,base,GROUND_LOT+desired*10,None,1);
   crate::CALLBACK_LOCK.store(false,Ordering::Release);
   if created==0{return;}
-  if desired==0{set(actor,OWNER+90,true,base);if let Ok(mut s)=STATE.lock(){s.given=Some(0);}return;}
- }
- if index<0{
-  if requested!=Some(desired as u8)||(request_frames>=30&&!has_effect(actor,OWNER+1+desired,base)){set(actor,OWNER+1+desired,true,base);if let Ok(mut s)=STATE.lock(){s.requested=Some(desired as u8);s.request_frames=0;}}
-  return;
- }
- if desired>0{
-  let old_stage=desired-1;let old=find(root,ORIGINALS[old_stage as usize],base);
-  if old>=0{let old_slots:Vec<_>=(0..18).filter(|&i|read_i32(slots+12+i*8)==old).collect();
-   if !old_slots.is_empty(){if requested==Some(desired as u8){for i in 0..18{if read_i32(slots+12+i*8)==index{equip(slots,i as i32,-1,base);}}}for i in old_slots{equip(slots,i as i32,index,base);}}
+  None
+ }else if requested.is_none(){
+  if let Ok(mut state)=STATE.lock(){state.requested=Some(desired as u8);state.request_items=items;}else{return;}
+  set(actor,OWNER+1+desired,true,base);return;
+ }else{
+  let Some(index)=received(&items,&request_items)else{return;};Some(index)
+ };
+ if let Some(pending)=transfer{
+  let old_slots:Vec<_>=pending.slots.iter().filter(|(_,identity)|Some(*identity)==pending.removed).map(|(slot,_)|*slot).collect();
+  if let Some(index)=index.filter(|_|!old_slots.is_empty()){
+   for slot in 0..18{if read_i32(slots+12+slot*8)==index{equip(slots,slot as i32,-1,base);}}
+   for slot in old_slots{equip(slots,slot,index,base);}
   }
-  if old>=0{set(actor,OWNER+7+old_stage,true,base);}
-  if let Ok(mut s)=STATE.lock(){
-   let kind=old_stage as usize;let mut counts=s.units.unwrap_or([0;2]);counts[kind]=0;s.units=Some(counts);s.cycles[kind]=s.cycles[kind].wrapping_add(1);
-   // Keep provenance until contact/expiry, including obsolete cycles. The
-   // native XP hook still needs it to suppress Scholar-only XP on other heroes.
-   // The advanced cycle rejects old flights without deleting native records.
-   s.removing=(old>=0).then_some((kind,old));
+  if let Ok(mut state)=STATE.lock(){
+   let mut counts=state.units.unwrap_or([0;2]);counts[pending.kind]=0;state.units=Some(counts);state.cycles[pending.kind]=state.cycles[pending.kind].wrapping_add(1);state.removing=None;
   }
-  for count in 1..=LIMITS[old_stage as usize]{set(actor,marker(old_stage as usize,count),false,base);}
-
+  for count in 1..=LIMITS[pending.kind]{set(actor,marker(pending.kind,count),false,base);}
  }
  set(actor,OWNER+1+desired,false,base);
  set(actor,OWNER+90+desired,true,base);
- if let Ok(mut s)=STATE.lock(){s.given=s.given.max(Some(desired as u8));s.requested=None;}
+ if let Ok(mut s)=STATE.lock(){s.given=s.given.max(Some(desired as u8));s.requested=None;s.request_items.clear();}
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn inventory_receipt_uses_identity_not_position_or_existing_copies(){
+  assert_eq!(received(&[(9,100),(10,101)],&[(1,100),(2,101)]),None);
+  assert_eq!(received(&[(1,102),(2,101)],&[(1,100),(2,101)]),Some(1));
+  assert_eq!(received(&[],&[(1,100)]),None);
+ }
+ #[test]fn rebinding_preserves_pending_removal_and_grant_until_explicit_reset(){
+  let mut state=State::default();state.bind(1,10);state.requested=Some(1);state.request_items=vec![(7,101)];
+  state.removing=Some(Transfer{kind:0,items:vec![(5,100)],slots:vec![(3,100)],removed:Some(100)});
+  state.bind(2,11);assert_eq!(state.requested,Some(1));assert_eq!(state.request_items,vec![(7,101)]);assert_eq!(state.removing.as_ref().unwrap().removed,Some(100));assert!(!state.ready);
+ }
  #[test]fn independent_repeatable_progress_and_saved_markers(){
   let mut counts=[0;2];for _ in 0..20{counts=progressed(counts,3080);}assert_eq!(counts,[20,0]);
   for _ in 0..4{counts=progressed(counts,3010);}assert_eq!(counts,[20,4]);assert_eq!(progressed(counts,3011),counts);

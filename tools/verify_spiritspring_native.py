@@ -38,5 +38,5 @@ try:
   cases.append(dict(primaryType=primary_type,fallbackType=fallback_type,configuredHeight=height,nativeResult=result,springAvailable=result>0))
 finally:k.VirtualFree(arena,0,0x8000)
 report=dict(version='0.10.10',exeSha256=hashlib.sha256(raw).hexdigest(),scriptEnvironmentId=366,regionContextRva='0x3C17D48',nativeGetterRva='0xBA7000',normalRegionType=46,sealableRegionType=60,isolatedOriginalMachineCodeCases=cases,configuredHeightUsedOnlyForLaunchDetection=True,liveSpiritspringFlightVerified=False)
-(root/'dist/spiritspring-native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+(root/'dist/reports/spiritspring-native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 print('PASS: original spring getter, context pointer binding, ordinary/sealable/absent/wrong-type paths; eight isolated native cases.')

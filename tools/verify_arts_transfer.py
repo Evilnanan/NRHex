@@ -50,5 +50,5 @@ report=dict(version='0.15.4',nativeGroundUidOffset='5C',groundDescriptorOffset='
  exactGroundUidBinding=True,identicalWeaponsNotMatchedByTypeOrOrder=True,
  nativeInventoryAndDropPayloadUnchanged=True,nestedReplacementDropCovered=True,
  multiplayerQueueCoveredByStaticCallFlow=True,gameplayVerified=False,multiplayerVerified=False)
-(root/'dist/arts-transfer-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+(root/'dist/reports/arts-transfer-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print('PASS: native UID survives local/network creation; both pickups recreate handles inside the seven-argument local inventory routine.')

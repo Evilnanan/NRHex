@@ -1,4 +1,5 @@
 """Validate then install the staged Archmage addition; preserve unrelated assets."""
+from distribution_paths import distribution_file
 from pathlib import Path
 import argparse,hashlib,json,shutil,subprocess,tomllib
 
@@ -16,7 +17,7 @@ assert hks['gateCases']==1360 and len(hks['functions'])==34
 updates={}
 def add(relative,source,before=None,after=None):
  assert source.is_file()
- if before:assert sha(dist/relative).upper()==before.upper(),f'Input changed: {relative}'
+ if before:assert sha(distribution_file(dist,relative)).upper()==before.upper(),f'Input changed: {relative}'
  if after:assert sha(source).upper()==after.upper(),f'Staged file changed: {relative}'
  updates[relative]=source
 add('mod/regulation.bin',work/'staged/regulation.bin',report['sourceSha256'],report['outputSha256'])
@@ -36,20 +37,20 @@ if args.check:
  raise SystemExit(0)
 process=subprocess.run(['powershell','-NoProfile','-Command','Get-Process nightreign -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id'],capture_output=True,text=True)
 assert not process.stdout.strip(),'Exit the current game before replacing its DLL'
-baseline={p.relative_to(dist).as_posix():sha(p) for folder in ['mod','testmods'] for p in (dist/folder).rglob('*') if p.is_file() and p.suffix!='.log'}
+baseline={p.relative_to(dist).as_posix():sha(p) for folder in ['mod','testmods'] for p in (distribution_file(dist,folder)).rglob('*') if p.is_file() and p.suffix!='.log'}
 baseline.update({p.name:sha(p) for p in dist.glob('*.me3')})
 backup=work/'before-install';backup.mkdir(parents=True,exist_ok=True)
 for relative in updates:
  target=backup/relative;target.parent.mkdir(parents=True,exist_ok=True)
- if not target.exists():shutil.copy2(dist/relative,target)
+ if not target.exists():shutil.copy2(distribution_file(dist,relative),target)
 try:
  for relative,source in updates.items():
-  target=dist/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,target);assert sha(target)==sha(source)
- assert all(sha(dist/relative)==digest for relative,digest in baseline.items() if relative not in updates)
+  target=distribution_file(dist,relative);target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,target);assert sha(target)==sha(source)
+ assert all(sha(distribution_file(dist,relative))==digest for relative,digest in baseline.items() if relative not in updates)
 except BaseException:
- for relative in updates:shutil.copy2(backup/relative,dist/relative)
+ for relative in updates:shutil.copy2(backup/relative,distribution_file(dist,relative))
  raise
-installed=dict(version=version,changedAssets={relative:sha(dist/relative) for relative in updates},otherAssetsAndSettingsPreserved=True,parameterValidation='archmage-parameter-validation.json',actionValidation='archmage-hks-validation.json',textValidation='archmage-text-validation.json',nativeValidation='archmage-native-validation.json',gameplayVerified=False,multiplayerVerified=False,gameStarted=False)
-for source,name in [(work/'staged/validation.json','archmage-parameter-validation.json'),(work/'hks-validation.json','archmage-hks-validation.json'),(work/'staged/texts/validation.json','archmage-text-validation.json'),(work/'native-validation.json','archmage-native-validation.json')]:shutil.copy2(source,dist/name)
-(dist/'archmage-validation.json').write_text(json.dumps(installed,indent=2),encoding='utf-8')
+installed=dict(version=version,changedAssets={relative:sha(distribution_file(dist,relative)) for relative in updates},otherAssetsAndSettingsPreserved=True,parameterValidation='archmage-parameter-validation.json',actionValidation='archmage-hks-validation.json',textValidation='archmage-text-validation.json',nativeValidation='archmage-native-validation.json',gameplayVerified=False,multiplayerVerified=False,gameStarted=False)
+for source,name in [(work/'staged/validation.json','archmage-parameter-validation.json'),(work/'hks-validation.json','archmage-hks-validation.json'),(work/'staged/texts/validation.json','archmage-text-validation.json'),(work/'native-validation.json','archmage-native-validation.json')]:shutil.copy2(source,distribution_file(dist,name))
+(dist/'reports'/'archmage-validation.json').write_text(json.dumps(installed,indent=2),encoding='utf-8')
 print(f'PASS: {version} Archmage installed; all {len(updates)} files verified; unrelated assets/settings preserved')

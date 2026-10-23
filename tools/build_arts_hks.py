@@ -84,5 +84,5 @@ for a,b in zip(r.functions,new.functions):
 path.write_bytes(patched)
 (root/'.work/hks').mkdir(exist_ok=True)
 (root/'.work/hks/arts-hks-base.hks').write_bytes(source)
-(root/'dist/arts-hks-validation.json').write_text(json.dumps(dict(version='0.15.2',functions=reports,inverseRestoresInput=True,originalBranchesUnchanged=True,registersPreserved=True,ownerNonownerAndBothHandsChecked=True,stanceOnlyDoesNotCountAsUse=True,continuousAttackStanceTypes=[10,11,25,239],normalSpellExcluded=True,gameplayVerified=False),indent=2))
+(root/'dist/reports/arts-hks-validation.json').write_text(json.dumps(dict(version='0.15.2',functions=reports,inverseRestoresInput=True,originalBranchesUnchanged=True,registersPreserved=True,ownerNonownerAndBothHandsChecked=True,stanceOnlyDoesNotCountAsUse=True,continuousAttackStanceTypes=[10,11,25,239],normalSpellExcluded=True,gameplayVerified=False),indent=2))
 print(f'PASS: {len(reports)} skill-node callbacks; both hands, stance preparation, combo exit, spell skill gates and inverse checked.')

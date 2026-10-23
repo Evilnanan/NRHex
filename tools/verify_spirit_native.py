@@ -43,6 +43,6 @@ try:
    impl[0x18+index*0x60]=state
    assert family(wrapper,index)==int(state in [10,11,20,21]),(index,state)
  report={'version':'0.17.37','exeSha256':digest,'nativeModelCases':model_cases,'env380Getter':'460AC0','familyStateCases':768,'familyPresentStates':[10,11,20,21],'nullFamilyModuleReturnsFalse':True,'gameplayVerified':False,'multiplayerVerified':False}
- (root/'dist/spirit-native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
+ (root/'dist/reports/spirit-native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
  print('PASS: original NPC model decoder and all 768 native family-state cases; env380 target verified')
 finally:k.VirtualFree(arena,0,0x8000)

@@ -60,7 +60,7 @@ report = dict(version=version, nativeGoods=3550, nativeBullet=10355000, nativeEf
               visualFieldsMatchNeutralTemplate=True, originalEffectsAndUnrelatedTablesUnchanged=True,
               changedAssets=changed, previousBalanceSyncCageAssetsAndUserConfigurationUnchanged=True,
               rustTestsPassed=test_count, gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/escape-vfx-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/escape-vfx-validation.json').write_text(json.dumps(report, indent=2), encoding='utf8')
 build = dict(version=version, buildPassed=True, incremental=True,
              scope='Independent neutral Bloodboil aura during Escape Plan; DLL and one added param row',
              signatureCount=49, rustTestsPassed=test_count, changedAssets=changed,
@@ -68,12 +68,12 @@ build = dict(version=version, buildPassed=True, incremental=True,
              installedDllSha256=dll_hash, dllInstalled=True, regulationSha256=after['mod/regulation.bin'],
              functionChecks=['escape-vfx-validation.json','cat-balance-validation.json','jiahao-balance-validation.json','effect-sync-validation.json','cage-patch-validation.json'],
              unrelatedAssetsAndUserConfigsUnchanged=True, gameplayVerified=False, multiplayerVerified=False)
-(ROOT / 'dist/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/build-validation.json').write_text(json.dumps(build, indent=2), encoding='utf8')
 runtime = dict(version=version, active=None, pid=None, allFourNativeDllsLoaded=False,
                build='build-validation.json', dllSha256=dll_hash, dllInstalled=True,
                gameplayVerified=False, multiplayerVerified=False,
                pendingChecks=['Escape Bloodboil aura starts with activation, ends after ten seconds or incapacitation',
                               'Previously pending balance and multiplayer checks'],
                notes='No game session was used for this additive visual patch.')
-(ROOT / 'dist/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
+(ROOT / 'dist/reports/runtime-validation.json').write_text(json.dumps(runtime, indent=2), encoding='utf8')
 print('PASS: original Bloodboil visual chain; neutral visual-only row; original Escape and unrelated assets preserved.')
