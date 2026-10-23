@@ -1,0 +1,369 @@
+{
+  "version": "0.17.236",
+  "owner": 95004200,
+  "nativeBurstSource": 7500202,
+  "privateBurst": 95004203,
+  "requiresPoison": false,
+  "onlyImmediateRollingAttackMotion": true,
+  "onlyActualSlideTargets": true,
+  "oneBurstPerFollowup": true,
+  "existingLaunchPreserved": true,
+  "assets": {
+    "changedAssets": {
+      "mod/regulation.bin": {
+        "inputSha256": "da692a69c0fc2b7cbc3a2ca3429a558d254b1b8e35644950555b253ec71b6dee",
+        "outputSha256": "e6620076d5c273eaaaf031faab7c03d96152e19796b0ec40c1153b90f29dd3d4"
+      },
+      "mod/action/script/c0000.hks": {
+        "inputSha256": "3c731b9f327d292f63cea07df2a86f401b7c7755dd1c3d7b1cad7335911c4667",
+        "outputSha256": "f85c455e624d4a1817685fb7ef0d1602b4c561a05f19d527507319d1ff88c88c"
+      },
+      "mod/chr/c0000.anibnd.dcx": {
+        "inputSha256": "b23dc60f4f5e65227c7071c5f7c8415bcd59b9b152a2afd14f096bbbe5a0999c",
+        "outputSha256": "44ff2d7074fbba4ee921993b4c51b534f39fcf0b8c3269bab091f7516f77eea9"
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "ed81b43c634588be30afa5a1ed4548ec8f35c8352ffa3cf8a986b1596c2e1621",
+        "outputSha256": "f632408b8914601b4b3185f0ed9b2ef354c4de264d638dd17d78c840413e7c9d"
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "81f109923b0a7601e570608ce945ab76996a066f46ba55d03b23816c18ce0b4e",
+        "outputSha256": "650e21b22afaf2a0ed4ee22efc346207886273f552e3f8f167b85aed9bc8863a"
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "e505160cdb527051e7009819709bbfa61135df57228589696c0a029d4e85ef89",
+        "outputSha256": "d9eaa3275efb472d4d8a0f4ed2731bc378492344bb160db555837339308f7fdb"
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "4e127b72bf47548738ec90fd321689922f9a9b1e6871a195130c418efbc3b7d7",
+        "outputSha256": "1373fb2fc1216e312832546db30892ad01ebefc54650e38734e82d6cd84b55d2"
+      }
+    },
+    "containers": {
+      "mod/chr/c0000.anibnd.dcx": {
+        "rawSha256": "8d1c96ecb7c89359883f3ec96b528fe6a544e22f273a7006df7308bebcd6d12f",
+        "containerSha256": "44ff2d7074fbba4ee921993b4c51b534f39fcf0b8c3269bab091f7516f77eea9",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "31f5fd32798282510cccbf659e0624dbf7130be16e7f4cdfa5857c2a8e1de7f0",
+        "containerSha256": "f632408b8914601b4b3185f0ed9b2ef354c4de264d638dd17d78c840413e7c9d",
+        "roundTripPassed": true
+      },
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "bf396b7e18fa389c7699afc79d1d07b6bbf25963630efd40a1bc12eb9bef17ad",
+        "containerSha256": "650e21b22afaf2a0ed4ee22efc346207886273f552e3f8f167b85aed9bc8863a",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+        "rawSha256": "7bdebc2bf31b58a52b8dd18a296a29fbc81894e2e47896d3f2586c9385c0d1d5",
+        "containerSha256": "d9eaa3275efb472d4d8a0f4ed2731bc378492344bb160db555837339308f7fdb",
+        "roundTripPassed": true
+      },
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+        "rawSha256": "4e85ca0ba7afa06e10fb81d48dd79079030b5c4a6822f0bc8c3d7468f72b8012",
+        "containerSha256": "1373fb2fc1216e312832546db30892ad01ebefc54650e38734e82d6cd84b55d2",
+        "roundTripPassed": true
+      }
+    },
+    "parameters": {
+      "inputSha256": "DA692A69C0FC2B7CBC3A2CA3429A558D254B1B8E35644950555B253EC71B6DEE",
+      "outputSha256": "E6620076D5C273EAAAF031FAAB7C03D96152E19796B0EC40C1153B90F29DD3D4",
+      "addedRows": [
+        95004201,
+        95004202,
+        95004203,
+        95004204
+      ],
+      "audit": {
+        "source": 7500202,
+        "burst": 95004203,
+        "requiresPoison": false,
+        "nativeDamageAndVisualPreserved": true,
+        "damageRate": 0.25,
+        "damagePoints": 250,
+        "vfx": 8500202
+      },
+      "actions": {
+        "starts": [
+          520000,
+          520003,
+          525000
+        ],
+        "effect": 95004204,
+        "onlyBeginPulsesAdded": true,
+        "originalEventsAndAnimationsPreserved": true,
+        "outputSha256": "8D1C96ECB7C89359883F3EC96B528FE6A544E22F273A7006DF7308BEBCD6D12F"
+      },
+      "otherRowsFieldsTablesAndAnimationsUnchanged": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "EB89682B1A990D8C9C1F1538A032C1C56C55548635B6BC0571F03DB717E95291",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "2CD1C3D4E8137758EF8D30BD113B451F6C8850409E76DC6C93B21540B64CBDDE",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "9C84F0B3F9F639026F228BD46251639AB668241EF994B3391C7F4B67B6B52106",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "C53B0E7C5EE8EBA69C7EB72C390EAE3CF495742DC3B2BD93AB4628BB3525E01F",
+          "outputSha256": "31F5FD32798282510CCCBF659E0624DBF7130BE16E7F4CDFA5857C2A8E1DE7F0",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004200,
+              "before": "你的滑铲可以踢飞小型敌人",
+              "after": "你的滑铲可以踢飞小型敌人。对被铲中的敌人衔接攻击会造成大伤害"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004200,
+              "before": "你的滑铲可以踢飞小型敌人",
+              "after": "你的滑铲可以踢飞小型敌人。对被铲中的敌人衔接攻击会造成大伤害"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004200,
+              "before": "你的滑铲可以踢飞小型敌人",
+              "after": "你的滑铲可以踢飞小型敌人。对被铲中的敌人衔接攻击会造成大伤害"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "253402E607F3351FEA7A191C7504403C6CF03458D3F6FABE64D0F9FF4CDEB48B",
+          "outputSha256": "BF396B7E18FA389C7699AFC79D1D07B6BBF25963630EFD40A1BC12EB9BEF17AD",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004200,
+              "before": "你的滑铲可以踢飞小型敌人",
+              "after": "你的滑铲可以踢飞小型敌人。对被铲中的敌人衔接攻击会造成大伤害"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "27D9D0BCC82C3F24AE6D0705602D85C58D1171B8BAB4257EE7C9B4D0CF1659E8",
+          "outputSha256": "7BDEBC2BF31B58A52B8DD18A296A29FBC81894E2E47896D3F2586C9385C0D1D5",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004200,
+              "before": "Your sliding kick can launch small enemies into the air.",
+              "after": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004200,
+              "before": "Your sliding kick can launch small enemies into the air.",
+              "after": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004200,
+              "before": "Your sliding kick can launch small enemies into the air.",
+              "after": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "94474ADDEB4B48B0D0BE310434417C92B5050B3F599475AE426C0469624228CA",
+          "outputSha256": "4E85CA0BA7AFA06E10FB81D48DD79079030B5C4A6822F0BC8C3D7468F72B8012",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004200,
+              "before": "Your sliding kick can launch small enemies into the air.",
+              "after": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "hks": {
+      "inputSha256": "3c731b9f327d292f63cea07df2a86f401b7c7755dd1c3d7b1cad7335911c4667",
+      "outputSha256": "f85c455e624d4a1817685fb7ef0d1602b4c561a05f19d527507319d1ff88c88c",
+      "functions": {
+        "1": {
+          "name": "ExecEvent",
+          "addedInstructions": 45,
+          "scratch": 3
+        },
+        "2": {
+          "name": "ExecEventSync",
+          "addedInstructions": 45,
+          "scratch": 4
+        },
+        "3": {
+          "name": "ExecEventNoReset",
+          "addedInstructions": 45,
+          "scratch": 3
+        },
+        "4": {
+          "name": "ExecEventSyncNoReset",
+          "addedInstructions": 45,
+          "scratch": 4
+        }
+      },
+      "exactInversePassed": true,
+      "originalInstructionsAndOtherFunctionsPreserved": true,
+      "hksTransitionCases": 84
+    },
+    "allBilingualDescriptionsMatch": true
+  },
+  "native": {
+    "hksTransitionCases": 84,
+    "poisonBurstSource": 7500202,
+    "poisonBurst": 95004203,
+    "requiresPoison": false,
+    "onlyImmediateRollingFollowup": true,
+    "onlyActualSlideTargets": true,
+    "oneBurstPerFollowup": true,
+    "nativeExecutionPassed": true,
+    "installedReadbackPassed": true,
+    "owner": 95004200,
+    "attack": 600000110,
+    "referenceAttack": 300000290,
+    "impact": 9,
+    "originalImpact": 1,
+    "ironeyeOnly": true,
+    "historyBit": 39,
+    "originalAttackRowsPreserved": true,
+    "nativeInstructions": [
+      "E709D4 AtkParam+72 read",
+      "E709D8 native branch",
+      "E709E8 outgoing hit+24 write"
+    ],
+    "compiledSharedConstructorWrapperExecuted": true,
+    "nativeRecipientReactionSignaturesChecked": true,
+    "sevenNativeArgumentsAndReturnPreserved": true,
+    "cases": [
+      "owned/unowned, local/remote, both attack table kinds",
+      "Marking, original poison relic follow-up, Upward Cut",
+      "actual native state152 collector and applicability for Marking/rolling/ordinary/body hits",
+      "compiled 13-argument recipient hook and HKS env query",
+      "same-target and wrong-target first hits; repeated/multi-hit contacts, air swings and unrelated transitions",
+      "lower/upper pair is one action; new slide miss and reused target handles",
+      "owner loss, down, death, revival and reset reject pending burst",
+      "Mighty coexistence, native attack immutability, cached copies retain input",
+      "all hero/affinity/party combinations in regular reward-filter tests"
+    ],
+    "stubs": [
+      "full constructor uses fixture prologue around original native impact copy instructions",
+      "actor/effect lookup, final burst submission; no complete animation/collision/network transport"
+    ],
+    "sources": {
+      "src/marking.rs": "e5d43a264ed2fc1cdcfc581cde4e612544ca2864ad9c0d192ebaa5e1ec7b83a2",
+      "src/marking_native_tests.rs": "5b242c58adddb6fe65aaa964b8868f41d2a4360dfcf4a71f283480a04b88151f",
+      "src/lib.rs": "39e3e34a6bfaadd02481c7c1b28a0048464bc45670382b0472e70807ac43c0ce",
+      "src/reward_choices.rs": "99f0e37db62f279da1ae6810ff054144e1546b69ec87e61ccdc629b7b96db2d4",
+      "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
+      "tools/HexBuild/Marking.cs": "7ea630d135b74dde560e9a030ed1016f1a96bb20710b0d26b163e2b84a746191",
+      "tools/HexBuild/HexCatalog.cs": "96e6c09a297b60b1732ddd7772db6c1db5a72ba6a064a829ed5589adeaf420e9",
+      "tools/HexBuild/RewardCatalog.cs": "a5d549c3020cf58f88c63711300112d3c5f3e25708b1f5b5e4b3b0c291df7a71",
+      "tools/verify_marking.py": "11c422b71be75a538f07cfad4f8aafc6461bb68c7d32ea2f9db91a8db5756450",
+      "src/marking_poison_native_tests.rs": "82cb41d2295032866d2f77cdbfa263805bb601015868f70eaa51a9a2b01b18f1",
+      "src/erosion.rs": "ceced6be4ec55a076a48186ca1cbeb523e0a685455ec1bffd69c3b539bd14c2c",
+      "src/ambulance.rs": "8101a2a0581d6dddfac93202afe6e8f6817b2dff855c2b03515c44d44bfe2551",
+      "src/reward_cycle_runtime.rs": "1f948a6c839d4bf1ce8f1f712bb949dc5c0b3ebd63ce51a7c9f991dbf29f90a2",
+      "tools/HexBuild/MarkingPoison.cs": "78ae7cbff3a089dfad33bd9b340fdb66eeb45ea698510918dece87c81f519b89",
+      "tools/build_marking_hks.py": "1be548c30565e4a0ed8b83b53f3949b9bb7f74e61584dd7be566f88b741e8ad2",
+      "tools/verify_marking_hks.py": "e454c613a89e4d005d26a70facdc412e79876853bc1512e434a213b9f7309a81"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "gameProcessAccessed": false
+  },
+  "build": {
+    "version": "0.17.236",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "0dde2136f12c0f87b2e5fb812db4dc646bfea6973fc23e229f8e8366c303e87a",
+    "installed": true,
+    "installedDllSha256": "0dde2136f12c0f87b2e5fb812db4dc646bfea6973fc23e229f8e8366c303e87a",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 440,
+  "regularIgnoredTests": 27,
+  "runtimeNativeSuitesPassed": [
+    "verify_sword_projectile.py",
+    "verify_glass_cannon_native.py",
+    "verify_death_dance.py",
+    "verify_erosion.py",
+    "verify_potential_fission.py",
+    "verify_reward_template.py",
+    "verify_ambulance.py",
+    "verify_echo_cast.py",
+    "verify_weapon_affinity.py",
+    "verify_snack.py",
+    "verify_marking.py",
+    "verify_wraith.py",
+    "verify_basics.py",
+    "verify_sniper.py",
+    "verify_momentum.py",
+    "verify_heartstealer.py",
+    "verify_cat_arena.py",
+    "verify_ultimate_awakening.py",
+    "verify_ultimate_unstoppable.py"
+  ],
+  "signatureCount": 196,
+  "changedDistributionFiles": {
+    "README.md": {
+      "inputSha256": "75ad27e9b86619640c55e7c048f0a158502d26391922d0bb810377f608b672c0",
+      "outputSha256": "4d8cc0199e1d097d2d6a1c43a21bd819481adb768d8bc3da3c7f80231d8def1d"
+    },
+    "mod/regulation.bin": {
+      "inputSha256": "da692a69c0fc2b7cbc3a2ca3429a558d254b1b8e35644950555b253ec71b6dee",
+      "outputSha256": "e6620076d5c273eaaaf031faab7c03d96152e19796b0ec40c1153b90f29dd3d4"
+    },
+    "mod/chr/c0000.anibnd.dcx": {
+      "inputSha256": "b23dc60f4f5e65227c7071c5f7c8415bcd59b9b152a2afd14f096bbbe5a0999c",
+      "outputSha256": "44ff2d7074fbba4ee921993b4c51b534f39fcf0b8c3269bab091f7516f77eea9"
+    },
+    "mod/natives/NRHex.dll": {
+      "inputSha256": "baf902f58dfab5a4f9548bd033a4acf3d8d3063a63d7d5c1177031fd62258ee7",
+      "outputSha256": "0dde2136f12c0f87b2e5fb812db4dc646bfea6973fc23e229f8e8366c303e87a"
+    },
+    "mod/action/script/c0000.hks": {
+      "inputSha256": "3c731b9f327d292f63cea07df2a86f401b7c7755dd1c3d7b1cad7335911c4667",
+      "outputSha256": "f85c455e624d4a1817685fb7ef0d1602b4c561a05f19d527507319d1ff88c88c"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "e505160cdb527051e7009819709bbfa61135df57228589696c0a029d4e85ef89",
+      "outputSha256": "d9eaa3275efb472d4d8a0f4ed2731bc378492344bb160db555837339308f7fdb"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "4e127b72bf47548738ec90fd321689922f9a9b1e6871a195130c418efbc3b7d7",
+      "outputSha256": "1373fb2fc1216e312832546db30892ad01ebefc54650e38734e82d6cd84b55d2"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "ed81b43c634588be30afa5a1ed4548ec8f35c8352ffa3cf8a986b1596c2e1621",
+      "outputSha256": "f632408b8914601b4b3185f0ed9b2ef354c4de264d638dd17d78c840413e7c9d"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "81f109923b0a7601e570608ce945ab76996a066f46ba55d03b23816c18ce0b4e",
+      "outputSha256": "650e21b22afaf2a0ed4ee22efc346207886273f552e3f8f167b85aed9bc8863a"
+    }
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

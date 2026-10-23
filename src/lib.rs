@@ -827,7 +827,7 @@ unsafe extern "system" fn on_sword_attack_rates(manager:usize,context:usize){
 // Retry a copy, retaining the original descriptor and every native condition.
 unsafe extern "system" fn sword_filter_detour(node:usize,descriptor:usize,owner:usize,weapon:i32,extra:i32)->u8{
  let original:NativeEffectFilter=std::mem::transmute(EFFECT_FILTER_ORIG.load(Ordering::Acquire));
- if ACTIVE.load(Ordering::Acquire)&&(erosion::body_contact(node,descriptor)||erosion::spell_contact(node,descriptor)||momentum::body_contact(node,descriptor)){return 0;}
+ if ACTIVE.load(Ordering::Acquire)&&(erosion::body_contact(node,descriptor)||erosion::spell_contact(node,descriptor)||marking::inapplicable(node,descriptor)||momentum::body_contact(node,descriptor)){return 0;}
  let result=original(node,descriptor,owner,weapon,extra);
  if result!=0||!ACTIVE.load(Ordering::Acquire)||node==0||descriptor==0{return result;}
  let param=read_ptr(node);if param==0{return result;}
@@ -1567,6 +1567,7 @@ unsafe extern "system" fn action_request_detour(input:usize,mode:i32,action:i32)
 unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize,a4:usize,a5:usize,a6:u8,a7:u8,a8:u8,a9:u8,a10:u8,a11:i32)->u8 {
  let original:ApplyEffect=std::mem::transmute(APPLY_ORIG.load(Ordering::Acquire));
  let base=BASE.load(Ordering::Acquire);
+ if ACTIVE.load(Ordering::Acquire)&&marking::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire){effect=basics::route_effect(player,effect,base);}
  if ACTIVE.load(Ordering::Acquire)&&slingshot_runtime::pulse(player,effect,base){return 1;}
  if ACTIVE.load(Ordering::Acquire)&&heartstealer::pulse(player,effect,base){return 1;}
@@ -2277,6 +2278,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  ominous_pact::update(player,base,dt);
  heartstealer::update(player,base,dt);
  wraith::update(player,base,dt);
+ marking::update(player,base);
  basics::update(player,base);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);

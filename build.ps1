@@ -232,6 +232,14 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Back to Basics Ultimate gates missing.' }
     python -X utf8 tools/build_wraith_hks.py --check
     if ($LASTEXITCODE -ne 0) { throw 'Wraith item action observers missing.' }
+    if (-not $DllOnly) {
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --marking-poison-actions
+        if ($LASTEXITCODE -ne 0) { throw 'Marking animation observer patch failed.' }
+        python -X utf8 tools/build_marking_hks.py --inplace
+        if ($LASTEXITCODE -ne 0) { throw 'Marking follow-up observer patch failed.' }
+    }
+    python -X utf8 tools/build_marking_hks.py --check
+    if ($LASTEXITCODE -ne 0) { throw 'Marking follow-up observer missing.' }
     # Both modes verify the runtime; only Full regenerates game resources.
     dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-poise-check
     if ($LASTEXITCODE -ne 0) { throw 'Sword Endure protection readback failed.' }

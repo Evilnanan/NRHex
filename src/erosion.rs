@@ -37,17 +37,19 @@ pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
  let spell=ACTIVE.load(Ordering::Acquire)&&descriptor!=0&&matches!(ptr::read(descriptor as*const u8),3|4|10);
  let _scope=CollectGuard::enter(spell);
  let item=ACTIVE.load(Ordering::Acquire)&&ITEM_CONTACT.with(Cell::get);
- let begin=if item&&out!=0{read_ptr(out+8)}else{0};
- let appended=if item&&out!=0{read_ptr(out+0x10).saturating_sub(begin)/4}else{0};
+ let begin=if ACTIVE.load(Ordering::Acquire)&&out!=0{read_ptr(out+8)}else{0};
+ let appended=if ACTIVE.load(Ordering::Acquire)&&out!=0{read_ptr(out+0x10).saturating_sub(begin)/4}else{0};
  original(manager,out,descriptor);
- if item&&out!=0{
+ if ACTIVE.load(Ordering::Acquire)&&out!=0{
   // Native collection may reallocate. Re-read begin/end, retain existing
   // entries and replace only newly appended Erosion carriers.
   let begin=read_ptr(out+8);let end=read_ptr(out+0x10);
   if begin!=0&&end>=begin&&(end-begin)%4==0{
    for i in appended..(end-begin)/4{
     let entry=(begin+i*4)as*mut i32;
-    if ptr::read_unaligned(entry)==CARRIER{ptr::write_unaligned(entry,ITEM_CARRIER);}
+    let effect=ptr::read_unaligned(entry);
+    if item&&effect==CARRIER{ptr::write_unaligned(entry,ITEM_CARRIER);}
+    if effect==crate::marking::CARRIER&&descriptor!=0&&read_i32(descriptor+0x34)==crate::marking::ATTACK&&read_i32(descriptor+0x38)==1{ptr::write_unaligned(entry,crate::marking::MARK_HIT);}
    }
   }
  }
@@ -122,6 +124,9 @@ pub unsafe fn body_contact(node:usize,descriptor:usize)->bool{
 type Apply=unsafe extern "system" fn(usize,i32,usize,u8,usize,usize,u8,u8,u8,u8,u8,u8,i32)->u8;
 pub unsafe extern "system" fn detour(target:usize,mut effect:i32,source:usize,a4:u8,a5:usize,a6:usize,a7:u8,a8:u8,a9:u8,a10:u8,a11:u8,a12:u8,a13:i32)->u8{
  let original:Apply=std::mem::transmute(ORIGINAL.load(Ordering::Acquire));
+ if matches!(effect,crate::marking::CARRIER|crate::marking::MARK_HIT)&&ACTIVE.load(Ordering::Acquire){
+  let Some(chosen)=crate::marking::route(target,effect,source,a6,BASE.load(Ordering::Acquire))else{return 0;};effect=chosen;
+ }
  if matches!(effect,CARRIER|ITEM_CARRIER)&&ACTIVE.load(Ordering::Acquire){
   let Some(chosen)=select(target,source,a6,BASE.load(Ordering::Acquire))else{return 0;};effect=chosen+if effect==ITEM_CARRIER{ITEM_FIRST-FIRST}else{0};
  }

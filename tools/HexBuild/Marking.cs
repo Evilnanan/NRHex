@@ -25,7 +25,8 @@ static class Marking {
   foreach(int id in new[]{Stamp,300000295,Attack,600000120})Check(CageAI.Same(original.Rows.Single(r=>r.ID==id),attacks.Rows.Single(r=>r.ID==id)),"Native attack changed");
   var effects=Table(current,"SpEffectParam");var expected=new PARAM.Row(Table(native,"SpEffectParam").Rows.Single(r=>r.ID==8000000)){ID=Owner};
   foreach(var(field,value)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("iconId",22295),("spEffectTextId_1",Owner),("displayIconForPermamentEffect",0)})Set(expected,field,value);
-  Check(CageAI.Same(expected,effects.Rows.Single(r=>r.ID==Owner)),"Owner is not the neutral persistent template");
+  MarkingPoison.OwnerEffect(expected);
+  Check(CageAI.Same(expected,effects.Rows.Single(r=>r.ID==Owner)),"Marking native hit carrier owner mismatch");
   Check(RewardCatalog.HistoryBit(Owner)==39&&RewardCatalog.HistoricalOwners[38]==95004100,"History slots must not be reused");
   var good=Table(current,"EquipParamGoods").Rows.Single(r=>r.ID==Owner);
   Check(Convert.ToInt32(good["goodsType"].Value)==11&&Convert.ToInt32(good["vagrantItemLotId"].Value)==Owner&&Convert.ToInt32(good["rarity"].Value)==3&&Convert.ToInt32(good["iconId"].Value)==20295,"Reward good mismatch");
@@ -42,7 +43,7 @@ static class Marking {
   var current=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));Validate(native,current,parse);Fixture(Path.Combine(root,"work/marking"),current,parse);
   string input=Path.Combine(root,"dist/mod/event/common.emevd.dcx");var raw=Environment.GetEnvironmentVariable("NRHEX_HEARTSTEALER_COMMON_RAW");
   if(!OperatingSystem.IsWindows()&&raw!=null){Check(Hash(input).Equals(Environment.GetEnvironmentVariable("NRHEX_HEARTSTEALER_COMMON_SHA256"),StringComparison.OrdinalIgnoreCase),"Raw common does not match installed package");input=raw;}
-  ValidateEvents(EMEVD.Read(input));Console.WriteLine("PASS: installed Marking owner, native Upward Cut impact, original attacks, reward wiring and guarded resets");
+  ValidateEvents(EMEVD.Read(input));MarkingPoison.Verify(root,native,parse);Console.WriteLine("PASS: installed Marking owner, native Upward Cut impact, original attacks, reward wiring and guarded resets");
  }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/marking/staged");Directory.CreateDirectory(dir);
@@ -53,6 +54,7 @@ static class Marking {
   PARAM.Row Add(string name,int from,int id){Check(!tables[name].Rows.Any(r=>r.ID==id),$"Marking ID collision: {name}/{id}");var r=new PARAM.Row(originals[name].Rows.First(r=>r.ID==from)){ID=id};tables[name].Rows.Add(r);added[name].Add(id);return r;}
   var h=hexes.Single(h=>h.Id==Owner);var s=Add("SpEffectParam",8000000,Owner);
   foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("iconId",h.SmallIcon),("spEffectTextId_1",Owner),("displayIconForPermamentEffect",0)})Set(s,f,v);
+  MarkingPoison.OwnerEffect(s);MarkingPoison.Mechanics(Add);
   var a=Add("AttachEffectParam",8000000,Owner);foreach(var(f,v)in new[]{("passiveSpEffectId_1",Owner),("attachTextId",Owner),("statusIconId",h.SmallIcon),("compatibilityId",-1),("overrideBaseEffectId",Owner),("overrideEffectId",-1),("isNumericEffect",0),("displayPercentageSymbol",0),("displayedModifierValue",0)})Set(a,f,v);
   var p=Add("PermanentBuffParam",8000000,Owner);foreach(var(f,v)in new[]{("spEffectId",Owner),("iconId",h.LargeIcon),("displayNumericValue",2),("displayPercentageSymbol",0),("numericValue",0)})Set(p,f,v);
   var g=Add("EquipParamGoods",8000001,Owner);Set(g,"vagrantItemLotId",Owner);Set(g,"iconId",h.LargeIcon-1000);Set(g,"rarity",3);

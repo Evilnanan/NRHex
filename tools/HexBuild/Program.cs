@@ -92,6 +92,8 @@ if(args.Contains("--wraith-stage")){Wraith.Stage(root,bnd,Parse,HexCatalog.Load(
 if(args.Contains("--wraith-native-stage")){Wraith.StageNative(root,bnd,Parse);return;}
 if(args.Contains("--wraith-native-check")){Wraith.Verify(root,Parse,true);return;}
 if(args.Contains("--wraith-check")){Wraith.Verify(root,Parse);return;}
+if(args.Contains("--marking-poison-stage")){MarkingPoison.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--marking-poison-actions")){MarkingPoison.Actions(root);return;}
 if(args.Contains("--marking-stage")){Marking.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--marking-check")){Marking.Verify(root,bnd,Parse);return;}
 if(args.Contains("--sword-poise-stage")){SwordPoise.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -799,6 +801,7 @@ foreach(var h in hexes){
  if(h.Id==ContractHeart.Contract)ContractHeart.Owners(s);
  if(h.Id==HeartMist.Owner)HeartMist.OwnerEffect(s,pars["SpEffectParam"].Rows.Single(r=>r.ID==8320400));
  if(h.Id==EssenceReaver.Owner)EssenceReaver.Owners(s);
+ if(h.Id==Marking.Owner)MarkingPoison.OwnerEffect(s);
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==Erosion.Owner)Erosion.Owners(s);
  if(h.Id==Sniper.Owner)Sniper.OwnerEffect(s);
@@ -839,6 +842,7 @@ DeathDance.Mechanics(Clone);
 Snack.Mechanics(Clone);
 Momentum.Mechanics(Clone,pars["SpEffectParam"]);
 UltimateAwakening.Mechanics(Clone);
+MarkingPoison.Mechanics(Clone);
 UltimateUnstoppable.Mechanics(Clone);
 UltimateChallenge.Mechanics(Clone);
 UltimateTiming.Mechanics(Clone);

@@ -120,6 +120,9 @@ pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
   if ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0&&crate::basics::sealed(read_ptr(context),BASE.load(Ordering::Acquire)){return 0;}
   return std::mem::transmute::<*mut u8,Env>(ENV_ORIGINAL.load(Ordering::Acquire))(context,if code==crate::basics::ULTIMATE_QUERY{1106}else{370},vm);
  }
+ if code==crate::marking::QUERY{
+  if ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{let base=BASE.load(Ordering::Acquire);let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);crate::marking::event(read_ptr(context),number(vm,2)as i32,base);}return 0;
+ }
  if matches!(code,crate::wraith::FRAME|crate::wraith::BUSY){if ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{crate::wraith::query(read_ptr(context),code,BASE.load(Ordering::Acquire));}return 0;}
  if code==crate::cat_wall::QUERY{
   if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}

@@ -197,7 +197,7 @@ Raises maximum HP by 50% and makes you more likely to be targeted by enemies for
 <!-- hex:95004200 -->
 ## Enhanced Marking
 
-Your sliding kick can launch small enemies into the air.
+Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide.
 
 <!-- hex:95004300 -->
 ## Wraithcaller
