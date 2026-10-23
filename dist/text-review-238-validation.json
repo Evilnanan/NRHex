@@ -1,0 +1,1509 @@
+{
+  "version": "0.17.238",
+  "mode": "text-only",
+  "englishReview": {
+    "abilitiesReviewed": 40,
+    "statusesReviewed": 12,
+    "namesPreserveEstablishedReferences": true,
+    "nativeTerms": {
+      "Dormant Power": {
+        "file": "CL_MenuText.fmg",
+        "id": 101020
+      },
+      "Necromancy": {
+        "file": "CL_MenuText.fmg",
+        "id": 415005
+      },
+      "Immortal March": {
+        "file": "CL_MenuText.fmg",
+        "id": 413005
+      }
+    },
+    "entries": [
+      {
+        "owner": 95000100,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Red Envelope",
+          "description": "Grants 88,888 runes and a latent power reward for each party member."
+        },
+        "after": {
+          "name": "Red Envelope",
+          "description": "Grants 88,888 runes and awards each party member a Dormant Power."
+        }
+      },
+      {
+        "owner": 95000200,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Celestial Body",
+          "description": "Reduces attack power by 25%. Raises all attributes by 10."
+        },
+        "after": {
+          "name": "Celestial Body",
+          "description": "Reduces attack power by 25%. Raises all attributes by 10."
+        }
+      },
+      {
+        "owner": 95000300,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Glass Cannon",
+          "description": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy resistances, defenses, and damage negation."
+        },
+        "after": {
+          "name": "Glass Cannon",
+          "description": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy defense, resistances, and damage negation, while retaining bonuses from negative resistances."
+        }
+      },
+      {
+        "owner": 95000400,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Ultimate Revolution",
+          "description": "Fully restores the Art gauge upon using an Ultimate Art. (60-second cooldown.)"
+        },
+        "after": {
+          "name": "Ultimate Revolution",
+          "description": "Fully restores the Art gauge upon activating an Ultimate Art. Cooldown: 60 seconds."
+        }
+      },
+      {
+        "owner": 95000500,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Heavy Drinking",
+          "description": "Doubles the number of Flask of Crimson Tears uses, but halves HP restoration. Using a flask boosts attack power by 5% for 15 seconds."
+        },
+        "after": {
+          "name": "Heavy Drinking",
+          "description": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds."
+        }
+      },
+      {
+        "owner": 95000600,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Regeneration",
+          "description": "Continuously consumes FP to restore HP while HP is not at maximum. Using a Flask of Crimson Tears at maximum HP restores 50% of maximum FP."
+        },
+        "after": {
+          "name": "Regeneration",
+          "description": "Continuously consumes FP to restore HP while HP is not at maximum. Using a Flask of Crimson Tears at maximum HP restores 50% of maximum FP."
+        }
+      },
+      {
+        "owner": 95000700,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Crystal Shell",
+          "description": "A crystal shell absorbs an incoming attack and shatters. The shell regenerates after 40 seconds."
+        },
+        "after": {
+          "name": "Crystal Shell",
+          "description": "Absorbs damage with a crystal shell that shatters and regenerates after 40 seconds."
+        }
+      },
+      {
+        "owner": 95000800,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Humans Are Cats",
+          "description": "Allows unlimited climbing. Boosts jump attack damage based on fall height. Silences footsteps. Conceals the body for 1 second upon taking damage."
+        },
+        "after": {
+          "name": "Humans Are Cats",
+          "description": "Allows unlimited climbing. Boosts jump attack damage based on fall height. Silences footsteps. Conceals the body for 1 second upon taking damage."
+        }
+      },
+      {
+        "owner": 95000900,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Draw Your Sword",
+          "description": "Your sorceries and incantations become melee attacks. Their original range is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%."
+        },
+        "after": {
+          "name": "Draw Your Sword",
+          "description": "Treats sorceries and incantations as melee attacks. Converts their original range into attack power, HP restoration on hit, damage negation, and poise. Boosts melee attack power by 15%."
+        }
+      },
+      {
+        "owner": 95001100,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Blunt Force",
+          "description": "Boosts the impact of successful attacks."
+        },
+        "after": {
+          "name": "Blunt Force",
+          "description": "Boosts the impact of melee attacks."
+        }
+      },
+      {
+        "owner": 95001200,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Escape Plan",
+          "description": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. (60-second cooldown.)"
+        },
+        "after": {
+          "name": "Escape Plan",
+          "description": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. Cooldown: 60 seconds."
+        }
+      },
+      {
+        "owner": 95001300,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Edgelord's Footwork",
+          "description": "Improves backstep evasion. Successful backstep attacks against enemies whose stance is not broken, and critical hits from the front, each fill 25% of the Art gauge. Dodge rolls and damage taken each deplete 30% of the Art gauge. Boosts backstep attack damage by up to 200%, based on the current Art gauge."
+        },
+        "after": {
+          "name": "Edgelord's Footwork",
+          "description": "Improves backstep evasion. Landing a backstep attack or frontal critical hit restores 25% of the Art gauge. Rolling or taking damage depletes 30% of the Art gauge. Boosts backstep attack damage based on the Art gauge's current charge."
+        }
+      },
+      {
+        "owner": 95001400,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Master of Arms",
+          "description": "Reduces skill FP consumption by 100%. Using a skill reforges the skill of that armament."
+        },
+        "after": {
+          "name": "Master of Arms",
+          "description": "Reduces FP consumption of weapon skills by 100%. Reforges the armament's skill after each use."
+        }
+      },
+      {
+        "owner": 95001500,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Poltergeist",
+          "description": "Marking one's own position generates roiling lava. Further marks of one's own position before eruption increase its damage."
+        },
+        "after": {
+          "name": "Poltergeist",
+          "description": "Marking the player's own location creates lava that erupts after a brief delay. Repeating this action before the eruption increases its damage."
+        }
+      },
+      {
+        "owner": 95001600,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Spawner",
+          "description": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times."
+        },
+        "after": {
+          "name": "Spawner",
+          "description": "Allows evergaols to be opened without a Stonesword Key and increases enemy variety. No Site of Grace appears after clearing an evergaol. Each evergaol can be opened up to five times."
+        }
+      },
+      {
+        "owner": 95001700,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Balloon",
+          "description": "Raises maximum HP by 50%. Reduces damage negation by 30%. Reduces resistance to piercing attacks by 100%. Triggers an explosion upon death or entering near-death, dealing damage equal to maximum HP to nearby enemies."
+        },
+        "after": {
+          "name": "Balloon",
+          "description": "Raises maximum HP by 50%. Reduces damage negation by 30%. Reduces resistance to piercing attacks by 100%. Triggers an explosion upon death or entering near-death, dealing damage equal to maximum HP to nearby enemies."
+        }
+      },
+      {
+        "owner": 95001800,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Enhanced [Necromancy]",
+          "description": "Stores the soul of a powerful enemy defeated by the party, replacing it only with a soul of higher maximum HP. Using [Immortal March] consumes the stored soul to summon a spirit that fights alongside the summoner. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage."
+        },
+        "after": {
+          "name": "Enhanced [Necromancy]",
+          "description": "Stores the soul of a recently defeated powerful enemy, prioritizing souls with higher maximum HP. Activating [Immortal March] summons its spirit to fight alongside the summoner for a short time."
+        }
+      },
+      {
+        "owner": 95002000,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Don't Change the Channel",
+          "description": "Restores 30 stamina upon fully charging a sorcery or incantation."
+        },
+        "after": {
+          "name": "Don't Change the Channel",
+          "description": "Restores 30 stamina upon fully charging a sorcery or incantation."
+        }
+      },
+      {
+        "owner": 95002100,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Archmage",
+          "description": "Reduces FP consumption of a catalyst’s secondary spell by 100%. After casting, replaces it with a random new spell."
+        },
+        "after": {
+          "name": "Archmage",
+          "description": "Reduces FP consumption of a catalyst's secondary spell by 100%. Casting the spell replaces it with a random new spell."
+        }
+      },
+      {
+        "owner": 95002200,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Demon's Gaze",
+          "description": "Occasionally creates golden magic circles nearby."
+        },
+        "after": {
+          "name": "Demon's Gaze",
+          "description": "Occasionally creates golden magic circles nearby."
+        }
+      },
+      {
+        "owner": 95002300,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Slingshot",
+          "description": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%."
+        },
+        "after": {
+          "name": "Slingshot",
+          "description": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack boosts jump attack power by 50%."
+        }
+      },
+      {
+        "owner": 95002400,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Clash",
+          "description": "Attacks grant a guarding effect while two-handing a weapon. After successfully guarding with this effect, guard counters consume no stamina and deal 100% more damage."
+        },
+        "after": {
+          "name": "Clash",
+          "description": "Allows attacks made while two-handing an armament to guard against enemy attacks. Guard counters after successfully guarding consume no stamina and deal 100% more damage."
+        }
+      },
+      {
+        "owner": 95002500,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Night’s Blessing",
+          "description": "Raises attack power by 20% in the Night’s Tide. When HP falls below 20% in the Night’s Tide, gradually restores HP for 15 seconds, then gradually depletes HP until leaving the Night’s Tide. Resets upon touching a site of grace."
+        },
+        "after": {
+          "name": "Night's Blessing",
+          "description": "Boosts attack power by 20% in the Night's Tide. When HP is below 20% in the Night's Tide, gradually restores HP for 15 seconds. A backlash then gradually depletes HP until leaving the Night's Tide. Touching a Site of Grace resets this effect."
+        }
+      },
+      {
+        "owner": 95002600,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Ominous Pact",
+          "description": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds."
+        },
+        "after": {
+          "name": "Ominous Pact",
+          "description": "Causes self-damage equal to 5% of maximum HP upon landing an attack. Cooldown: 10 seconds."
+        }
+      },
+      {
+        "owner": 95002700,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Heartstealer",
+          "description": "Landing a charged attack releases a mist of charm. 30-second cooldown."
+        },
+        "after": {
+          "name": "Heartstealer",
+          "description": "Releases a mist that charms enemies upon landing a charged attack. Cooldown: 30 seconds."
+        }
+      },
+      {
+        "owner": 95002900,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Essence Reaver",
+          "description": "Defeating enemies permanently raises maximum FP by 1%."
+        },
+        "after": {
+          "name": "Essence Reaver",
+          "description": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition."
+        }
+      },
+      {
+        "owner": 95003000,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Death’s Dance",
+          "description": "Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP."
+        },
+        "after": {
+          "name": "Death's Dance",
+          "description": "The Flask of Crimson Tears restores HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacks restore a portion of recently lost HP."
+        }
+      },
+      {
+        "owner": 95003100,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Erosion",
+          "description": "Reduces attack power by 20%. Attacks inflict buildup of the status ailment the target is weakest to."
+        },
+        "after": {
+          "name": "Erosion",
+          "description": "Reduces attack power by 20%. Attacks build up the status ailment to which the target is most vulnerable."
+        }
+      },
+      {
+        "owner": 95003200,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Potential Fission",
+          "description": "Latent powers you obtain next split into two of lower quality. Can trigger 3 times."
+        },
+        "after": {
+          "name": "Potential Fission",
+          "description": "Splits each of the next three Dormant Powers obtained into two of lower quality."
+        }
+      },
+      {
+        "owner": 95003400,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Ambulance",
+          "description": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina while continuously rescuing allies."
+        },
+        "after": {
+          "name": "Ambulance",
+          "description": "Sprinting, dashing, and running toward a near-death ally consume no stamina. Restores stamina while continuously rescuing allies."
+        }
+      },
+      {
+        "owner": 95003500,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Echo Casting",
+          "description": "Sorceries and incantations cost 100% more FP and 50% more stamina, and produce an additional projectile after casting."
+        },
+        "after": {
+          "name": "Echo Casting",
+          "description": "Increases sorcery and incantation FP consumption by 100% and stamina consumption by 50%. Creates an additional projectile after casting."
+        }
+      },
+      {
+        "owner": 95003600,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Set Meal",
+          "description": "Shop weapons cost more and come with a stat-boosting latent power when purchased."
+        },
+        "after": {
+          "name": "Set Meal",
+          "description": "Increases the price of armaments sold by merchants. Purchasing an armament also grants a Dormant Power with a passive effect."
+        }
+      },
+      {
+        "owner": 95003700,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Burst of Momentum",
+          "description": "For 10 seconds after landing an attack, boosts attack power by 30% for the first 5 seconds, then reduces attack power and damage negation by 50% for the next 5 seconds."
+        },
+        "after": {
+          "name": "Burst of Momentum",
+          "description": "For 10 seconds after landing an attack, boosts attack power by 30% for the first 5 seconds, then reduces attack power and damage negation by 50% for the next 5 seconds."
+        }
+      },
+      {
+        "owner": 95003800,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Ultimate Awakening",
+          "description": "Eliminates FP consumption for 15 seconds after activating an Ultimate Art."
+        },
+        "after": {
+          "name": "Ultimate Awakening",
+          "description": "Eliminates FP consumption for 15 seconds after activating an Ultimate Art."
+        }
+      },
+      {
+        "owner": 95003900,
+        "reviewed": true,
+        "changed": false,
+        "before": {
+          "name": "Ultimate Unstoppable",
+          "description": "Greatly increases poise and grants immunity to status buildup for 15 seconds after activating an Ultimate Art."
+        },
+        "after": {
+          "name": "Ultimate Unstoppable",
+          "description": "Greatly increases poise and grants immunity to status buildup for 15 seconds after activating an Ultimate Art."
+        }
+      },
+      {
+        "owner": 95004000,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Ultimate Challenge",
+          "description": "Raises maximum HP by 50% and makes you more likely to be targeted by enemies for 15 seconds after activating an Ultimate Art."
+        },
+        "after": {
+          "name": "Ultimate Challenge",
+          "description": "Raises maximum HP by 50% and increases the likelihood of being targeted by enemies for 15 seconds after activating an Ultimate Art."
+        }
+      },
+      {
+        "owner": 95004200,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Enhanced Marking",
+          "description": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide."
+        },
+        "after": {
+          "name": "Enhanced [Marking]",
+          "description": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide."
+        }
+      },
+      {
+        "owner": 95004300,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Wraithcaller",
+          "description": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell."
+        },
+        "after": {
+          "name": "Wraithcaller",
+          "description": "Eliminates FP consumption for wraith-calling items. Landing enough hits upgrades the item to one that releases more wraiths. Grants a Wraith Calling Bell."
+        }
+      },
+      {
+        "owner": 95004400,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Back to Basics",
+          "description": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage."
+        },
+        "after": {
+          "name": "Back to Basics",
+          "description": "Seals Ultimate Arts. Greatly accelerates Character Skill cooldown recovery and boosts its damage."
+        }
+      },
+      {
+        "owner": 95004500,
+        "reviewed": true,
+        "changed": true,
+        "before": {
+          "name": "Experienced Sniper",
+          "description": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff."
+        },
+        "after": {
+          "name": "Experienced Sniper",
+          "description": "Reduces attack power by 30%. Boosts damage as the distance to the target increases. Greatly reduces arrow damage falloff with distance."
+        }
+      }
+    ],
+    "descriptiveTerms": {
+      "锻体类潜在能力": "a Dormant Power with a passive effect",
+      "副法术": "a catalyst's secondary spell"
+    }
+  },
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "7FB7B1C3D1A09713C2584A8C736B16844BB4EBEF36BD4307BAF516F208BA1E82",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "1211D8E62A0EDA0B451586A481DA9A0BD3247638A3E3091888304494148F0706",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "31F5FD32798282510CCCBF659E0624DBF7130BE16E7F4CDFA5857C2A8E1DE7F0",
+        "outputSha256": "B47AEF85CC7B9F62293EBE9D6E233A21B8499ED272A9FEFB24D0901CF767992A",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000700,
+            "before": "受到攻击时，由结晶外壳代为承受并破碎。结晶外壳破碎后需要40秒来重新生成",
+            "after": "受到损伤时，由结晶外壳代为承受并破碎，40秒后重新生成"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001800,
+            "before": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。施放【不死行军】时，召唤其灵体，短时间内为你作战",
+            "after": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。发动【不死行军】时，召唤其灵体，短时间内为你作战"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000700,
+            "before": "受到攻击时，由结晶外壳代为承受并破碎。结晶外壳破碎后需要40秒来重新生成",
+            "after": "受到损伤时，由结晶外壳代为承受并破碎，40秒后重新生成"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001800,
+            "before": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。施放【不死行军】时，召唤其灵体，短时间内为你作战",
+            "after": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。发动【不死行军】时，召唤其灵体，短时间内为你作战"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000700,
+            "before": "受到攻击时，由结晶外壳代为承受并破碎。结晶外壳破碎后需要40秒来重新生成",
+            "after": "受到损伤时，由结晶外壳代为承受并破碎，40秒后重新生成"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001800,
+            "before": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。施放【不死行军】时，召唤其灵体，短时间内为你作战",
+            "after": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。发动【不死行军】时，召唤其灵体，短时间内为你作战"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "BF396B7E18FA389C7699AFC79D1D07B6BBF25963630EFD40A1BC12EB9BEF17AD",
+        "outputSha256": "4652E538B3E23F37DEB8887D88C70AB8E25CF6BCCB031ED4D192E73A6AA3D69C",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000701,
+            "before": "可以抵挡一次攻击",
+            "after": "可代为承受一次损伤"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000700,
+            "before": "受到攻击时，由结晶外壳代为承受并破碎。结晶外壳破碎后需要40秒来重新生成",
+            "after": "受到损伤时，由结晶外壳代为承受并破碎，40秒后重新生成"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001800,
+            "before": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。施放【不死行军】时，召唤其灵体，短时间内为你作战",
+            "after": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。发动【不死行军】时，召唤其灵体，短时间内为你作战"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "7BDEBC2BF31B58A52B8DD18A296A29FBC81894E2E47896D3F2586C9385C0D1D5",
+        "outputSha256": "C8651C6B193DC3D41BD7B46CC413CD056190908F5624BEA7300BF87BDBC4E875",
+        "changes": [
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95002500,
+            "before": "Night’s Blessing",
+            "after": "Night's Blessing"
+          },
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95003000,
+            "before": "Death’s Dance",
+            "after": "Death's Dance"
+          },
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95004200,
+            "before": "Enhanced Marking",
+            "after": "Enhanced [Marking]"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000100,
+            "before": "Grants 88,888 runes and a latent power reward for each party member.",
+            "after": "Grants 88,888 runes and awards each party member a Dormant Power."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000300,
+            "before": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy resistances, defenses, and damage negation.",
+            "after": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy defense, resistances, and damage negation, while retaining bonuses from negative resistances."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000400,
+            "before": "Fully restores the Art gauge upon using an Ultimate Art. (60-second cooldown.)",
+            "after": "Fully restores the Art gauge upon activating an Ultimate Art. Cooldown: 60 seconds."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000500,
+            "before": "Doubles the number of Flask of Crimson Tears uses, but halves HP restoration. Using a flask boosts attack power by 5% for 15 seconds.",
+            "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000700,
+            "before": "A crystal shell absorbs an incoming attack and shatters. The shell regenerates after 40 seconds.",
+            "after": "Absorbs damage with a crystal shell that shatters and regenerates after 40 seconds."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95000900,
+            "before": "Your sorceries and incantations become melee attacks. Their original range is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%.",
+            "after": "Treats sorceries and incantations as melee attacks. Converts their original range into attack power, HP restoration on hit, damage negation, and poise. Boosts melee attack power by 15%."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001100,
+            "before": "Boosts the impact of successful attacks.",
+            "after": "Boosts the impact of melee attacks."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001200,
+            "before": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. (60-second cooldown.)",
+            "after": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. Cooldown: 60 seconds."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001300,
+            "before": "Improves backstep evasion. Successful backstep attacks against enemies whose stance is not broken, and critical hits from the front, each fill 25% of the Art gauge. Dodge rolls and damage taken each deplete 30% of the Art gauge. Boosts backstep attack damage by up to 200%, based on the current Art gauge.",
+            "after": "Improves backstep evasion. Landing a backstep attack or frontal critical hit restores 25% of the Art gauge. Rolling or taking damage depletes 30% of the Art gauge. Boosts backstep attack damage based on the Art gauge's current charge."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001400,
+            "before": "Reduces skill FP consumption by 100%. Using a skill reforges the skill of that armament.",
+            "after": "Reduces FP consumption of weapon skills by 100%. Reforges the armament's skill after each use."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001500,
+            "before": "Marking one's own position generates roiling lava. Further marks of one's own position before eruption increase its damage.",
+            "after": "Marking the player's own location creates lava that erupts after a brief delay. Repeating this action before the eruption increases its damage."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001600,
+            "before": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times.",
+            "after": "Allows evergaols to be opened without a Stonesword Key and increases enemy variety. No Site of Grace appears after clearing an evergaol. Each evergaol can be opened up to five times."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001800,
+            "before": "Stores the soul of a powerful enemy defeated by the party, replacing it only with a soul of higher maximum HP. Using [Immortal March] consumes the stored soul to summon a spirit that fights alongside the summoner. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+            "after": "Stores the soul of a recently defeated powerful enemy, prioritizing souls with higher maximum HP. Activating [Immortal March] summons its spirit to fight alongside the summoner for a short time."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002100,
+            "before": "Reduces FP consumption of a catalyst’s secondary spell by 100%. After casting, replaces it with a random new spell.",
+            "after": "Reduces FP consumption of a catalyst's secondary spell by 100%. Casting the spell replaces it with a random new spell."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002300,
+            "before": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%.",
+            "after": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack boosts jump attack power by 50%."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002400,
+            "before": "Attacks grant a guarding effect while two-handing a weapon. After successfully guarding with this effect, guard counters consume no stamina and deal 100% more damage.",
+            "after": "Allows attacks made while two-handing an armament to guard against enemy attacks. Guard counters after successfully guarding consume no stamina and deal 100% more damage."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002500,
+            "before": "Raises attack power by 20% in the Night’s Tide. When HP falls below 20% in the Night’s Tide, gradually restores HP for 15 seconds, then gradually depletes HP until leaving the Night’s Tide. Resets upon touching a site of grace.",
+            "after": "Boosts attack power by 20% in the Night's Tide. When HP is below 20% in the Night's Tide, gradually restores HP for 15 seconds. A backlash then gradually depletes HP until leaving the Night's Tide. Touching a Site of Grace resets this effect."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds.",
+            "after": "Causes self-damage equal to 5% of maximum HP upon landing an attack. Cooldown: 10 seconds."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002700,
+            "before": "Landing a charged attack releases a mist of charm. 30-second cooldown.",
+            "after": "Releases a mist that charms enemies upon landing a charged attack. Cooldown: 30 seconds."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95002900,
+            "before": "Defeating enemies permanently raises maximum FP by 1%.",
+            "after": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003000,
+            "before": "Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.",
+            "after": "The Flask of Crimson Tears restores HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacks restore a portion of recently lost HP."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003100,
+            "before": "Reduces attack power by 20%. Attacks inflict buildup of the status ailment the target is weakest to.",
+            "after": "Reduces attack power by 20%. Attacks build up the status ailment to which the target is most vulnerable."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003200,
+            "before": "Latent powers you obtain next split into two of lower quality. Can trigger 3 times.",
+            "after": "Splits each of the next three Dormant Powers obtained into two of lower quality."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and 50% more stamina, and produce an additional projectile after casting.",
+            "after": "Increases sorcery and incantation FP consumption by 100% and stamina consumption by 50%. Creates an additional projectile after casting."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95003600,
+            "before": "Shop weapons cost more and come with a stat-boosting latent power when purchased.",
+            "after": "Increases the price of armaments sold by merchants. Purchasing an armament also grants a Dormant Power with a passive effect."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95004000,
+            "before": "Raises maximum HP by 50% and makes you more likely to be targeted by enemies for 15 seconds after activating an Ultimate Art.",
+            "after": "Raises maximum HP by 50% and increases the likelihood of being targeted by enemies for 15 seconds after activating an Ultimate Art."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95004200,
+            "before": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide.",
+            "after": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95004300,
+            "before": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell.",
+            "after": "Eliminates FP consumption for wraith-calling items. Landing enough hits upgrades the item to one that releases more wraiths. Grants a Wraith Calling Bell."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95004400,
+            "before": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage.",
+            "after": "Seals Ultimate Arts. Greatly accelerates Character Skill cooldown recovery and boosts its damage."
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95004500,
+            "before": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff.",
+            "after": "Reduces attack power by 30%. Boosts damage as the distance to the target increases. Greatly reduces arrow damage falloff with distance."
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95002500,
+            "before": "Night’s Blessing",
+            "after": "Night's Blessing"
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95003000,
+            "before": "Death’s Dance",
+            "after": "Death's Dance"
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95004200,
+            "before": "Enhanced Marking",
+            "after": "Enhanced [Marking]"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000100,
+            "before": "Grants 88,888 runes and a latent power reward for each party member.",
+            "after": "Grants 88,888 runes and awards each party member a Dormant Power."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000300,
+            "before": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy resistances, defenses, and damage negation.",
+            "after": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy defense, resistances, and damage negation, while retaining bonuses from negative resistances."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000400,
+            "before": "Fully restores the Art gauge upon using an Ultimate Art. (60-second cooldown.)",
+            "after": "Fully restores the Art gauge upon activating an Ultimate Art. Cooldown: 60 seconds."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000500,
+            "before": "Doubles the number of Flask of Crimson Tears uses, but halves HP restoration. Using a flask boosts attack power by 5% for 15 seconds.",
+            "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000700,
+            "before": "A crystal shell absorbs an incoming attack and shatters. The shell regenerates after 40 seconds.",
+            "after": "Absorbs damage with a crystal shell that shatters and regenerates after 40 seconds."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95000900,
+            "before": "Your sorceries and incantations become melee attacks. Their original range is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%.",
+            "after": "Treats sorceries and incantations as melee attacks. Converts their original range into attack power, HP restoration on hit, damage negation, and poise. Boosts melee attack power by 15%."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001100,
+            "before": "Boosts the impact of successful attacks.",
+            "after": "Boosts the impact of melee attacks."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001200,
+            "before": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. (60-second cooldown.)",
+            "after": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. Cooldown: 60 seconds."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001300,
+            "before": "Improves backstep evasion. Successful backstep attacks against enemies whose stance is not broken, and critical hits from the front, each fill 25% of the Art gauge. Dodge rolls and damage taken each deplete 30% of the Art gauge. Boosts backstep attack damage by up to 200%, based on the current Art gauge.",
+            "after": "Improves backstep evasion. Landing a backstep attack or frontal critical hit restores 25% of the Art gauge. Rolling or taking damage depletes 30% of the Art gauge. Boosts backstep attack damage based on the Art gauge's current charge."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001400,
+            "before": "Reduces skill FP consumption by 100%. Using a skill reforges the skill of that armament.",
+            "after": "Reduces FP consumption of weapon skills by 100%. Reforges the armament's skill after each use."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001500,
+            "before": "Marking one's own position generates roiling lava. Further marks of one's own position before eruption increase its damage.",
+            "after": "Marking the player's own location creates lava that erupts after a brief delay. Repeating this action before the eruption increases its damage."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001600,
+            "before": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times.",
+            "after": "Allows evergaols to be opened without a Stonesword Key and increases enemy variety. No Site of Grace appears after clearing an evergaol. Each evergaol can be opened up to five times."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001800,
+            "before": "Stores the soul of a powerful enemy defeated by the party, replacing it only with a soul of higher maximum HP. Using [Immortal March] consumes the stored soul to summon a spirit that fights alongside the summoner. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+            "after": "Stores the soul of a recently defeated powerful enemy, prioritizing souls with higher maximum HP. Activating [Immortal March] summons its spirit to fight alongside the summoner for a short time."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002100,
+            "before": "Reduces FP consumption of a catalyst’s secondary spell by 100%. After casting, replaces it with a random new spell.",
+            "after": "Reduces FP consumption of a catalyst's secondary spell by 100%. Casting the spell replaces it with a random new spell."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002300,
+            "before": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%.",
+            "after": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack boosts jump attack power by 50%."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002400,
+            "before": "Attacks grant a guarding effect while two-handing a weapon. After successfully guarding with this effect, guard counters consume no stamina and deal 100% more damage.",
+            "after": "Allows attacks made while two-handing an armament to guard against enemy attacks. Guard counters after successfully guarding consume no stamina and deal 100% more damage."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002500,
+            "before": "Raises attack power by 20% in the Night’s Tide. When HP falls below 20% in the Night’s Tide, gradually restores HP for 15 seconds, then gradually depletes HP until leaving the Night’s Tide. Resets upon touching a site of grace.",
+            "after": "Boosts attack power by 20% in the Night's Tide. When HP is below 20% in the Night's Tide, gradually restores HP for 15 seconds. A backlash then gradually depletes HP until leaving the Night's Tide. Touching a Site of Grace resets this effect."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds.",
+            "after": "Causes self-damage equal to 5% of maximum HP upon landing an attack. Cooldown: 10 seconds."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002700,
+            "before": "Landing a charged attack releases a mist of charm. 30-second cooldown.",
+            "after": "Releases a mist that charms enemies upon landing a charged attack. Cooldown: 30 seconds."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95002900,
+            "before": "Defeating enemies permanently raises maximum FP by 1%.",
+            "after": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003000,
+            "before": "Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.",
+            "after": "The Flask of Crimson Tears restores HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacks restore a portion of recently lost HP."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003100,
+            "before": "Reduces attack power by 20%. Attacks inflict buildup of the status ailment the target is weakest to.",
+            "after": "Reduces attack power by 20%. Attacks build up the status ailment to which the target is most vulnerable."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003200,
+            "before": "Latent powers you obtain next split into two of lower quality. Can trigger 3 times.",
+            "after": "Splits each of the next three Dormant Powers obtained into two of lower quality."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and 50% more stamina, and produce an additional projectile after casting.",
+            "after": "Increases sorcery and incantation FP consumption by 100% and stamina consumption by 50%. Creates an additional projectile after casting."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95003600,
+            "before": "Shop weapons cost more and come with a stat-boosting latent power when purchased.",
+            "after": "Increases the price of armaments sold by merchants. Purchasing an armament also grants a Dormant Power with a passive effect."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95004000,
+            "before": "Raises maximum HP by 50% and makes you more likely to be targeted by enemies for 15 seconds after activating an Ultimate Art.",
+            "after": "Raises maximum HP by 50% and increases the likelihood of being targeted by enemies for 15 seconds after activating an Ultimate Art."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95004200,
+            "before": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide.",
+            "after": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95004300,
+            "before": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell.",
+            "after": "Eliminates FP consumption for wraith-calling items. Landing enough hits upgrades the item to one that releases more wraiths. Grants a Wraith Calling Bell."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95004400,
+            "before": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage.",
+            "after": "Seals Ultimate Arts. Greatly accelerates Character Skill cooldown recovery and boosts its damage."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95004500,
+            "before": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff.",
+            "after": "Reduces attack power by 30%. Boosts damage as the distance to the target increases. Greatly reduces arrow damage falloff with distance."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000100,
+            "before": "Grants 88,888 runes and a latent power reward for each party member.",
+            "after": "Grants 88,888 runes and awards each party member a Dormant Power."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000300,
+            "before": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy resistances, defenses, and damage negation.",
+            "after": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy defense, resistances, and damage negation, while retaining bonuses from negative resistances."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000400,
+            "before": "Fully restores the Art gauge upon using an Ultimate Art. (60-second cooldown.)",
+            "after": "Fully restores the Art gauge upon activating an Ultimate Art. Cooldown: 60 seconds."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000500,
+            "before": "Doubles the number of Flask of Crimson Tears uses, but halves HP restoration. Using a flask boosts attack power by 5% for 15 seconds.",
+            "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000700,
+            "before": "A crystal shell absorbs an incoming attack and shatters. The shell regenerates after 40 seconds.",
+            "after": "Absorbs damage with a crystal shell that shatters and regenerates after 40 seconds."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95000900,
+            "before": "Your sorceries and incantations become melee attacks. Their original range is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%.",
+            "after": "Treats sorceries and incantations as melee attacks. Converts their original range into attack power, HP restoration on hit, damage negation, and poise. Boosts melee attack power by 15%."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001100,
+            "before": "Boosts the impact of successful attacks.",
+            "after": "Boosts the impact of melee attacks."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001200,
+            "before": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. (60-second cooldown.)",
+            "after": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. Cooldown: 60 seconds."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001300,
+            "before": "Improves backstep evasion. Successful backstep attacks against enemies whose stance is not broken, and critical hits from the front, each fill 25% of the Art gauge. Dodge rolls and damage taken each deplete 30% of the Art gauge. Boosts backstep attack damage by up to 200%, based on the current Art gauge.",
+            "after": "Improves backstep evasion. Landing a backstep attack or frontal critical hit restores 25% of the Art gauge. Rolling or taking damage depletes 30% of the Art gauge. Boosts backstep attack damage based on the Art gauge's current charge."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001400,
+            "before": "Reduces skill FP consumption by 100%. Using a skill reforges the skill of that armament.",
+            "after": "Reduces FP consumption of weapon skills by 100%. Reforges the armament's skill after each use."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001500,
+            "before": "Marking one's own position generates roiling lava. Further marks of one's own position before eruption increase its damage.",
+            "after": "Marking the player's own location creates lava that erupts after a brief delay. Repeating this action before the eruption increases its damage."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001600,
+            "before": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times.",
+            "after": "Allows evergaols to be opened without a Stonesword Key and increases enemy variety. No Site of Grace appears after clearing an evergaol. Each evergaol can be opened up to five times."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001800,
+            "before": "Stores the soul of a powerful enemy defeated by the party, replacing it only with a soul of higher maximum HP. Using [Immortal March] consumes the stored soul to summon a spirit that fights alongside the summoner. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+            "after": "Stores the soul of a recently defeated powerful enemy, prioritizing souls with higher maximum HP. Activating [Immortal March] summons its spirit to fight alongside the summoner for a short time."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002100,
+            "before": "Reduces FP consumption of a catalyst’s secondary spell by 100%. After casting, replaces it with a random new spell.",
+            "after": "Reduces FP consumption of a catalyst's secondary spell by 100%. Casting the spell replaces it with a random new spell."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002300,
+            "before": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%.",
+            "after": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack boosts jump attack power by 50%."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002400,
+            "before": "Attacks grant a guarding effect while two-handing a weapon. After successfully guarding with this effect, guard counters consume no stamina and deal 100% more damage.",
+            "after": "Allows attacks made while two-handing an armament to guard against enemy attacks. Guard counters after successfully guarding consume no stamina and deal 100% more damage."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002500,
+            "before": "Raises attack power by 20% in the Night’s Tide. When HP falls below 20% in the Night’s Tide, gradually restores HP for 15 seconds, then gradually depletes HP until leaving the Night’s Tide. Resets upon touching a site of grace.",
+            "after": "Boosts attack power by 20% in the Night's Tide. When HP is below 20% in the Night's Tide, gradually restores HP for 15 seconds. A backlash then gradually depletes HP until leaving the Night's Tide. Touching a Site of Grace resets this effect."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds.",
+            "after": "Causes self-damage equal to 5% of maximum HP upon landing an attack. Cooldown: 10 seconds."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002700,
+            "before": "Landing a charged attack releases a mist of charm. 30-second cooldown.",
+            "after": "Releases a mist that charms enemies upon landing a charged attack. Cooldown: 30 seconds."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95002900,
+            "before": "Defeating enemies permanently raises maximum FP by 1%.",
+            "after": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003000,
+            "before": "Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.",
+            "after": "The Flask of Crimson Tears restores HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacks restore a portion of recently lost HP."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003100,
+            "before": "Reduces attack power by 20%. Attacks inflict buildup of the status ailment the target is weakest to.",
+            "after": "Reduces attack power by 20%. Attacks build up the status ailment to which the target is most vulnerable."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003200,
+            "before": "Latent powers you obtain next split into two of lower quality. Can trigger 3 times.",
+            "after": "Splits each of the next three Dormant Powers obtained into two of lower quality."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and 50% more stamina, and produce an additional projectile after casting.",
+            "after": "Increases sorcery and incantation FP consumption by 100% and stamina consumption by 50%. Creates an additional projectile after casting."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95003600,
+            "before": "Shop weapons cost more and come with a stat-boosting latent power when purchased.",
+            "after": "Increases the price of armaments sold by merchants. Purchasing an armament also grants a Dormant Power with a passive effect."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95004000,
+            "before": "Raises maximum HP by 50% and makes you more likely to be targeted by enemies for 15 seconds after activating an Ultimate Art.",
+            "after": "Raises maximum HP by 50% and increases the likelihood of being targeted by enemies for 15 seconds after activating an Ultimate Art."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95004200,
+            "before": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide.",
+            "after": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95004300,
+            "before": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell.",
+            "after": "Eliminates FP consumption for wraith-calling items. Landing enough hits upgrades the item to one that releases more wraiths. Grants a Wraith Calling Bell."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95004400,
+            "before": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage.",
+            "after": "Seals Ultimate Arts. Greatly accelerates Character Skill cooldown recovery and boosts its damage."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95004500,
+            "before": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff.",
+            "after": "Reduces attack power by 30%. Boosts damage as the distance to the target increases. Greatly reduces arrow damage falloff with distance."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "4E85CA0BA7AFA06E10FB81D48DD79079030B5C4A6822F0BC8C3D7468F72B8012",
+        "outputSha256": "8D76A2799C581D19A3C476CE76BF7BE2182BEA5FF3E152AC0C42A6527389C8E4",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95002503,
+            "before": "Night’s Blessing",
+            "after": "Night's Blessing"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95002500,
+            "before": "Night’s Blessing",
+            "after": "Night's Blessing"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95003000,
+            "before": "Death’s Dance",
+            "after": "Death's Dance"
+          },
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95004200,
+            "before": "Enhanced Marking",
+            "after": "Enhanced [Marking]"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000701,
+            "before": "Negates damage from a single attack.",
+            "after": "Absorbs damage once."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000403,
+            "before": "Fully restores the Art gauge upon using an Ultimate Art.",
+            "after": "Fully restores the Art gauge upon activating an Ultimate Art."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002902,
+            "before": "Permanently raises maximum FP by 1% per stack. This effect accumulates multiplicatively.",
+            "after": "Raises maximum FP by 1% per stack for the rest of the expedition. Stacks apply multiplicatively."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002503,
+            "before": "Raises attack power by 20% in the Night’s Tide.",
+            "after": "Boosts attack power by 20% in the Night's Tide."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003801,
+            "before": "Eliminates FP consumption",
+            "after": "Eliminates FP consumption."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004001,
+            "before": "Raises maximum HP by 50% and makes you more likely to be targeted by enemies.",
+            "after": "Raises maximum HP by 50% and increases the likelihood of being targeted by enemies."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000100,
+            "before": "Grants 88,888 runes and a latent power reward for each party member.",
+            "after": "Grants 88,888 runes and awards each party member a Dormant Power."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000300,
+            "before": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy resistances, defenses, and damage negation.",
+            "after": "Increases damage taken tenfold. Boosts attack power by 20%. Damage dealt ignores enemy defense, resistances, and damage negation, while retaining bonuses from negative resistances."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000400,
+            "before": "Fully restores the Art gauge upon using an Ultimate Art. (60-second cooldown.)",
+            "after": "Fully restores the Art gauge upon activating an Ultimate Art. Cooldown: 60 seconds."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000700,
+            "before": "A crystal shell absorbs an incoming attack and shatters. The shell regenerates after 40 seconds.",
+            "after": "Absorbs damage with a crystal shell that shatters and regenerates after 40 seconds."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95000900,
+            "before": "Your sorceries and incantations become melee attacks. Their original range is converted into attack power, HP recovery rate, damage negation, and poise. Boosts melee attack power by 15%.",
+            "after": "Treats sorceries and incantations as melee attacks. Converts their original range into attack power, HP restoration on hit, damage negation, and poise. Boosts melee attack power by 15%."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001100,
+            "before": "Boosts the impact of successful attacks.",
+            "after": "Boosts the impact of melee attacks."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001200,
+            "before": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. (60-second cooldown.)",
+            "after": "Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. Cooldown: 60 seconds."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001300,
+            "before": "Improves backstep evasion. Successful backstep attacks against enemies whose stance is not broken, and critical hits from the front, each fill 25% of the Art gauge. Dodge rolls and damage taken each deplete 30% of the Art gauge. Boosts backstep attack damage by up to 200%, based on the current Art gauge.",
+            "after": "Improves backstep evasion. Landing a backstep attack or frontal critical hit restores 25% of the Art gauge. Rolling or taking damage depletes 30% of the Art gauge. Boosts backstep attack damage based on the Art gauge's current charge."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001400,
+            "before": "Reduces skill FP consumption by 100%. Using a skill reforges the skill of that armament.",
+            "after": "Reduces FP consumption of weapon skills by 100%. Reforges the armament's skill after each use."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001500,
+            "before": "Marking one's own position generates roiling lava. Further marks of one's own position before eruption increase its damage.",
+            "after": "Marking the player's own location creates lava that erupts after a brief delay. Repeating this action before the eruption increases its damage."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001600,
+            "before": "Allows evergaols to be opened without a Stonesword Key, releasing a wider variety of enemies. Defeating the prisoners does not create a Site of Grace, but allows the same evergaol to be opened again. Each evergaol can be opened up to five times.",
+            "after": "Allows evergaols to be opened without a Stonesword Key and increases enemy variety. No Site of Grace appears after clearing an evergaol. Each evergaol can be opened up to five times."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001800,
+            "before": "Stores the soul of a powerful enemy defeated by the party, replacing it only with a soul of higher maximum HP. Using [Immortal March] consumes the stored soul to summon a spirit that fights alongside the summoner. The spirit loses 1/60 of its maximum HP each second and deals 25% of its original damage.",
+            "after": "Stores the soul of a recently defeated powerful enemy, prioritizing souls with higher maximum HP. Activating [Immortal March] summons its spirit to fight alongside the summoner for a short time."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002100,
+            "before": "Reduces FP consumption of a catalyst’s secondary spell by 100%. After casting, replaces it with a random new spell.",
+            "after": "Reduces FP consumption of a catalyst's secondary spell by 100%. Casting the spell replaces it with a random new spell."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002300,
+            "before": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack increases jump attack power by 50%.",
+            "after": "Extends jumping distance after starting a sprint. Stacks up to three times. Each stack boosts jump attack power by 50%."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002400,
+            "before": "Attacks grant a guarding effect while two-handing a weapon. After successfully guarding with this effect, guard counters consume no stamina and deal 100% more damage.",
+            "after": "Allows attacks made while two-handing an armament to guard against enemy attacks. Guard counters after successfully guarding consume no stamina and deal 100% more damage."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002500,
+            "before": "Raises attack power by 20% in the Night’s Tide. When HP falls below 20% in the Night’s Tide, gradually restores HP for 15 seconds, then gradually depletes HP until leaving the Night’s Tide. Resets upon touching a site of grace.",
+            "after": "Boosts attack power by 20% in the Night's Tide. When HP is below 20% in the Night's Tide, gradually restores HP for 15 seconds. A backlash then gradually depletes HP until leaving the Night's Tide. Touching a Site of Grace resets this effect."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002600,
+            "before": "Landing attacks causes damage to self equal to 5% of maximum HP. Triggers at most once every 10 seconds.",
+            "after": "Causes self-damage equal to 5% of maximum HP upon landing an attack. Cooldown: 10 seconds."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002700,
+            "before": "Landing a charged attack releases a mist of charm. 30-second cooldown.",
+            "after": "Releases a mist that charms enemies upon landing a charged attack. Cooldown: 30 seconds."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95002900,
+            "before": "Defeating enemies permanently raises maximum FP by 1%.",
+            "after": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003000,
+            "before": "Flasks restore HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacking restores a portion of recently lost HP.",
+            "after": "The Flask of Crimson Tears restores HP gradually. Recoverable damage is taken gradually over 2 seconds. Attacks restore a portion of recently lost HP."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003100,
+            "before": "Reduces attack power by 20%. Attacks inflict buildup of the status ailment the target is weakest to.",
+            "after": "Reduces attack power by 20%. Attacks build up the status ailment to which the target is most vulnerable."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003200,
+            "before": "Latent powers you obtain next split into two of lower quality. Can trigger 3 times.",
+            "after": "Splits each of the next three Dormant Powers obtained into two of lower quality."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003500,
+            "before": "Sorceries and incantations cost 100% more FP and 50% more stamina, and produce an additional projectile after casting.",
+            "after": "Increases sorcery and incantation FP consumption by 100% and stamina consumption by 50%. Creates an additional projectile after casting."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95003600,
+            "before": "Shop weapons cost more and come with a stat-boosting latent power when purchased.",
+            "after": "Increases the price of armaments sold by merchants. Purchasing an armament also grants a Dormant Power with a passive effect."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004000,
+            "before": "Raises maximum HP by 50% and makes you more likely to be targeted by enemies for 15 seconds after activating an Ultimate Art.",
+            "after": "Raises maximum HP by 50% and increases the likelihood of being targeted by enemies for 15 seconds after activating an Ultimate Art."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004200,
+            "before": "Your sliding kick can launch small enemies into the air. Follow-up attacks deal heavy damage to enemies hit by the slide.",
+            "after": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004300,
+            "before": "Wraith-calling items consume no FP. After enough successful uses that hit enemies, upgrades to an item that releases more wraiths. Grants a Wraith Calling Bell.",
+            "after": "Eliminates FP consumption for wraith-calling items. Landing enough hits upgrades the item to one that releases more wraiths. Grants a Wraith Calling Bell."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004400,
+            "before": "Seals Ultimate Arts. Greatly improves Character Skill cooldown recovery and damage.",
+            "after": "Seals Ultimate Arts. Greatly accelerates Character Skill cooldown recovery and boosts its damage."
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004500,
+            "before": "Reduces attack power by 30%. Deal more damage the farther you are from your target. Greatly reduces arrow damage falloff.",
+            "after": "Reduces attack power by 30%. Boosts damage as the distance to the target increases. Greatly reduces arrow damage falloff with distance."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "containers": {
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "rawSha256": "b47aef85cc7b9f62293ebe9d6e233a21b8499ed272a9fefb24d0901cf767992a",
+      "containerSha256": "fa780fb20e6e613790c8f6f95a504148877fad9ed0af005dae50fe66fb41e11d",
+      "roundTripPassed": true
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "rawSha256": "4652e538b3e23f37deb8887d88c70ab8e25cf6bccb031ed4d192e73a6aa3d69c",
+      "containerSha256": "bfbdfddeb18a555466a2d7c65a15c57d10b4a94a74b291b10a8f5dea7545b354",
+      "roundTripPassed": true
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "rawSha256": "c8651c6b193dc3d41bd7b46cc413cd056190908f5624bea7300bf87bdbc4e875",
+      "containerSha256": "47bbcdb81267fbab3cbbf47b5c9aee5004b199b2590844a3cfe3945847944fc2",
+      "roundTripPassed": true
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "rawSha256": "8d76a2799c581d19a3c476ce76bf7be2182bea5ff3e152ac0c42a6527389c8e4",
+      "containerSha256": "6cc5f736fe224613e5bbcc2bed3bc9a3ea5a5d30db6cede1fd3f62cb1dd34193",
+      "roundTripPassed": true
+    }
+  },
+  "changedDistributionFiles": {
+    "README.md": {
+      "inputSha256": "0b51f61c6a995c0e05b301d074765da82f68c2b958f5a11686b2cc226a91987d",
+      "outputSha256": "e66561167f9166a6f3fe048927844eaee3e51f3f04c4e8d363e504fe178383fa"
+    },
+    "mod/msg/engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "d9eaa3275efb472d4d8a0f4ed2731bc378492344bb160db555837339308f7fdb",
+      "outputSha256": "47bbcdb81267fbab3cbbf47b5c9aee5004b199b2590844a3cfe3945847944fc2"
+    },
+    "mod/msg/engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "1373fb2fc1216e312832546db30892ad01ebefc54650e38734e82d6cd84b55d2",
+      "outputSha256": "6cc5f736fe224613e5bbcc2bed3bc9a3ea5a5d30db6cede1fd3f62cb1dd34193"
+    },
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "f632408b8914601b4b3185f0ed9b2ef354c4de264d638dd17d78c840413e7c9d",
+      "outputSha256": "fa780fb20e6e613790c8f6f95a504148877fad9ed0af005dae50fe66fb41e11d"
+    },
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "650e21b22afaf2a0ed4ee22efc346207886273f552e3f8f167b85aed9bc8863a",
+      "outputSha256": "bfbdfddeb18a555466a2d7c65a15c57d10b4a94a74b291b10a8f5dea7545b354"
+    }
+  },
+  "allOtherDistributionFilesPreserved": true,
+  "dllParametersAndActionsUnchanged": true,
+  "installedReadbackPassed": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}
