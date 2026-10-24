@@ -147,12 +147,44 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
  integer(row+0x12c,8110002);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);
  assert_eq!(vector[2],start+4);assert_eq!(values[0],8110002);integer(row+0x12c,CARRIER);
  ACTIVE.store(false,Ordering::Release);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);
+ // Sword exception executes through the actual 506200 -> 511010 chain.
+ // The collector must forward the source manager's owner, and only mapped
+ // local sorcery/incantation contacts may bypass Erosion's spell exclusion.
+ crate::SWORD_BONUSES.get_or_init(crate::sword::Bonuses::defaults);
+ let mapped=crate::sword_map::ATTACKS[0].0;
+ let mut world=vec![0usize;0x17500/8];let world=world.as_mut_ptr()as usize;
+ let previous_world=read_ptr(base+crate::WORLD_RVA);
+ pointer(base+crate::WORLD_RVA,world);pointer(world+0x174e8,source);pointer(manager+0x10,source);
+ let saved_base=BASE.swap(base,Ordering::AcqRel);
+ let lookup=std::slice::from_raw_parts((base+crate::HAS_EFFECT_RVA)as*const u8,10).to_vec();
+ let mut sword_owned=vec![0x81,0xfa];sword_owned.extend_from_slice(&crate::sword::OWNER.to_le_bytes());sword_owned.extend_from_slice(&[0x0f,0x94,0xc0,0xc3]);
+ ACTIVE.store(true,Ordering::Release);patch(base,crate::HAS_EFFECT_RVA,&sword_owned);
+ for (kind,offset,mask)in [(3u8,0x160,128u8),(4,0x161,1)]{
+  ptr::write(context as*mut u8,kind);integer(context+0x34,mapped);integer(context+0x38,1);
+  ptr::write((row+offset)as*mut u8,mask);vector[2]=start;
+  let descriptor=std::slice::from_raw_parts(context as*const u8,0x3c).to_vec();
+  for count in 1..=3{
+   collect(manager,vector.as_mut_ptr()as usize,context);
+   assert_eq!(vector[2],start+count*4);assert_eq!(values[count-1],CARRIER,"One native carrier per contact");
+  }
+  assert_eq!(std::slice::from_raw_parts(context as*const u8,0x3c),descriptor,"Shared spell descriptor unchanged");
+  integer(context+0x34,-1);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Unmapped spell excluded");integer(context+0x34,mapped);
+  integer(context+0x38,0);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Attack table must match Sword");integer(context+0x38,1);
+  pointer(manager+0x10,target);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Remote owner is not the local Sword owner");pointer(manager+0x10,source);
+  patch(base,crate::HAS_EFFECT_RVA,&[0x31,0xc0,0xc3]);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"No Sword: ordinary spell still excluded");
+  integer(row+0x12c,8110002);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4,"Other native added ailments remain unchanged");integer(row+0x12c,CARRIER);
+  patch(base,crate::HAS_EFFECT_RVA,&sword_owned);vector[2]=start;
+  ptr::write((row+offset)as*mut u8,0);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Remaining native applicability is still enforced");
+ }
+ ptr::write(context as*mut u8,10);ptr::write((row+0x259)as*mut u8,32);vector[2]=start;
+ collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Other spell types do not acquire Sword's exception");ptr::write((row+0x259)as*mut u8,0);
+ patch(base,crate::HAS_EFFECT_RVA,&lookup);BASE.store(saved_base,Ordering::Release);pointer(base+crate::WORLD_RVA,previous_world);pointer(manager+0x10,0);
  ACTIVE.store(active_before,Ordering::Release);
  ptr::write_bytes(context as*mut u8,0,0x48);float(context+0x38,1.);
  vector[2]=start;ptr::write_unaligned((row+0x156)as*mut u16,2103);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start);
  // Real native additional-ailment correction, including both correction fields.
  patch(base,0x43c899,&[0xc3]);ptr::write((row+0x259)as*mut u8,1);
- for (a,b,scale,want)in [(1.,1.,1.,1.),(0.5,0.5,1.,0.25),(0.,0.,1.,0.),(0.5,0.5,0.4,0.1)]{
+ for (a,b,scale,want)in [(1.,1.,1.,1.),(0.5,0.5,1.,0.25),(0.,0.,1.,0.),(0.,1.,1.,0.),(1.,0.,1.,0.),(0.5,0.5,0.4,0.1)]{
   float(hit+0x188,a);float(hit+0x18c,b);assert_eq!(erosion_native_motion(hit,row,scale,base+0x43c869),want);
  }
  ptr::write((row+0x259)as*mut u8,0);assert_eq!(erosion_native_motion(hit,row,0.4,base+0x43c869),0.4);

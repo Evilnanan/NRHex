@@ -38,7 +38,7 @@ pub fn weapon_exclusions(mut unavailable:HexSet,affinity:Option<i32>)->HexSet{
   (95001100,!physical&&!has_sword),
   (95002600,!physical&&!has_sword),
   (95002400,!physical),
-  (95003100,!physical),
+  (95003100,!physical&&!has_sword),
  ]{if excluded{unavailable.insert(index(id));}}
  unavailable
 }
@@ -81,7 +81,7 @@ pub fn is_hex_good(encoded:u32)->bool{
    let excluded=combat_exclusions(owned.clone(),hero,affinity);
    let caster=matches!(affinity,Some(57|61|1600|1700));let physical=affinity.is_some()&&!caster;
    let expected=[(95000900,(caster||flags&1!=0)&&flags&2==0),(95002000,caster||flags&1!=0),(95003500,caster||flags&1!=0),
-    (95001100,physical||flags&2!=0),(95002600,physical||flags&2!=0),(95002400,physical),(95003100,physical),
+    (95001100,physical||flags&2!=0),(95002600,physical||flags&2!=0),(95002400,physical),(95003100,physical||flags&2!=0),
     (95001800,hero==Some(6)),(95001300,!matches!(hero,Some(2|4|6))),(95000400,matches!(hero,Some(1|3|5|7|8)))];
    for (id,allowed)in expected{let ability=index(id);
     for seen in [HexSet::new(),all(HEX_COUNT)]{
@@ -204,17 +204,17 @@ pub fn is_hex_good(encoded:u32)->bool{
    }
   }
  }
- #[test]fn sword_ownership_unlocks_mighty_and_pact_but_never_owned_clash_or_terrain_filters(){
+ #[test]fn sword_ownership_unlocks_mighty_pact_erosion_but_never_owned_clash_or_terrain_filters(){
   for hero in [6,7]{
    let sword=index(95000900);let excluded=default_filters(terrain_exclusions(mask([sword,5]),true),Some(hero));
-   for owner in [95001100,95002600]{let i=index(owner);assert!(!excluded.contains(&i));assert!(preferred([i,0,1],&excluded).unwrap().contains(&i));}
-   for owner in [95000900,95002400,95003100,95001600]{assert!(excluded.contains(&index(owner)));}
+   for owner in [95001100,95002600,95003100]{let i=index(owner);assert!(!excluded.contains(&i));assert!(preferred([i,0,1],&excluded).unwrap().contains(&i));}
+   for owner in [95000900,95002400,95001600]{assert!(excluded.contains(&index(owner)));}
   }
  }
- #[test]fn erosion_role_exclusion_is_not_relaxed_by_sword_or_archmage(){
+ #[test]fn erosion_affinity_exclusion_is_relaxed_only_by_actual_sword_ownership(){
   let erosion=index(95003100);
   for hero in 1..=10{for owned in [HexSet::new(),mask([index(95000900)]),mask([index(95002100)]),mask([index(95000900),index(95002100)])]{
-   let allowed=!matches!(hero,6|7);let excluded=default_filters(owned,Some(hero));
+   let allowed=!matches!(hero,6|7)||owned.contains(&index(crate::sword::OWNER));let excluded=default_filters(owned,Some(hero));
    for seen in [HexSet::new(),all(HEX_COUNT)]{
     let round=crate::reward_cycle::Round::new(&excluded,&seen);
     assert_eq!(round.candidates.contains(&erosion),allowed);
@@ -222,6 +222,14 @@ pub fn is_hex_good(encoded:u32)->bool{
     assert_eq!(crate::reward_cycle::Single::new(&excluded,&seen,&mask([0,1])).candidates.contains(&erosion),allowed);
    }
   }}
+  // Sniper conflicts with Sword; that exclusion must never impersonate owning
+  // Sword and unlock Erosion. An owned Erosion remains unavailable as usual.
+  for owned in [mask([index(crate::sniper::OWNER)]),mask([index(crate::sword::OWNER),erosion])]{
+   let excluded=combat_exclusions(owned,Some(7),Some(57));
+   assert!(excluded.contains(&erosion));
+   assert!(!crate::reward_cycle::Round::new(&excluded,&HexSet::new()).preferred([erosion,0,1]).unwrap().contains(&erosion));
+   assert!(!crate::reward_cycle::Single::new(&excluded,&HexSet::new(),&mask([0,1])).candidates.contains(&erosion));
+  }
  }
  #[test]fn focused_preferences_preserve_order_and_replace_owned_or_duplicate_choices(){
   assert_eq!(preferred([9,3,6],&mask([3])),Some([9,6,0]));

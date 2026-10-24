@@ -54,10 +54,18 @@ pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
   }
  }
 }
-pub unsafe fn spell_contact(node:usize,descriptor:usize)->bool{
+pub unsafe fn spell_contact(node:usize,descriptor:usize,owner:usize)->bool{
  if node==0||descriptor==0||!COLLECT_SPELL.with(Cell::get)||!matches!(ptr::read(descriptor as*const u8),3|4|10){return false;}
  let param=read_ptr(node);if param==0{return false;}
- ptr::read_unaligned((param+0x156)as*const u16)==152&&read_i32(param+0x12c)==CARRIER
+ if ptr::read_unaligned((param+0x156)as*const u16)!=152||read_i32(param+0x12c)!=CARRIER{return false;}
+ // 506200 passes its manager's ChrIns owner to 511010. Match the same
+ // attack table used by Sword's hit conversion; do not rewrite the descriptor
+ // or skip any remaining native applicability / ailment-motion checks.
+ let base=BASE.load(Ordering::Acquire);
+ let sword_spell=matches!(ptr::read(descriptor as*const u8),3|4)
+  &&crate::SWORD_BONUSES.get().is_some_and(|bonuses|bonuses.for_attack(read_i32(descriptor+0x34),read_i32(descriptor+0x38)).is_some())
+  &&crate::is_local(owner,base)&&has_effect(owner,crate::sword::OWNER,base);
+ !sword_spell
 }
 pub const OWNER:i32=95003100;
 pub const CARRIER:i32=OWNER+1;
@@ -150,16 +158,16 @@ mod native_tests;
   ptr::write_unaligned((param+0x156)as*mut u16,152);ptr::write_unaligned((param+0x12c)as*mut i32,CARRIER);
   for kind in 0..=12{
    descriptor[0]=kind;let target=descriptor.as_ptr()as usize;
-   assert!(!spell_contact(node.as_ptr()as usize,target));
-   {let _outer=CollectGuard::enter(true);assert_eq!(spell_contact(node.as_ptr()as usize,target),matches!(kind,3|4|10));
-    {let _inner=CollectGuard::enter(false);assert!(!spell_contact(node.as_ptr()as usize,target));}
-    assert_eq!(spell_contact(node.as_ptr()as usize,target),matches!(kind,3|4|10));
+   assert!(!spell_contact(node.as_ptr()as usize,target,0));
+   {let _outer=CollectGuard::enter(true);assert_eq!(spell_contact(node.as_ptr()as usize,target,0),matches!(kind,3|4|10));
+    {let _inner=CollectGuard::enter(false);assert!(!spell_contact(node.as_ptr()as usize,target,0));}
+    assert_eq!(spell_contact(node.as_ptr()as usize,target,0),matches!(kind,3|4|10));
    }
-   assert!(!spell_contact(node.as_ptr()as usize,target));
+   assert!(!spell_contact(node.as_ptr()as usize,target,0));
   }
   descriptor[0]=3;let _scope=CollectGuard::enter(true);
-  ptr::write_unaligned((param+0x12c)as*mut i32,8110002);assert!(!spell_contact(node.as_ptr()as usize,descriptor.as_ptr()as usize));
-  assert!(!spell_contact(0,descriptor.as_ptr()as usize));assert!(!spell_contact(node.as_ptr()as usize,0));
+  ptr::write_unaligned((param+0x12c)as*mut i32,8110002);assert!(!spell_contact(node.as_ptr()as usize,descriptor.as_ptr()as usize,0));
+  assert!(!spell_contact(0,descriptor.as_ptr()as usize,0));assert!(!spell_contact(node.as_ptr()as usize,0,0));
  }}
  fn c(threshold:i32,remaining:i32)->Candidate{Candidate{threshold,remaining,..Default::default()}}
  #[test]fn immunity_and_active_ailments_are_excluded_but_death_is_a_normal_candidate(){

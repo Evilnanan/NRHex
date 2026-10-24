@@ -803,7 +803,7 @@ unsafe extern "system" fn on_sword_attack_rates(manager:usize,context:usize){
 // Retry a copy, retaining the original descriptor and every native condition.
 unsafe extern "system" fn sword_filter_detour(node:usize,descriptor:usize,owner:usize,weapon:i32,extra:i32)->u8{
  let original:NativeEffectFilter=std::mem::transmute(EFFECT_FILTER_ORIG.load(Ordering::Acquire));
- if ACTIVE.load(Ordering::Acquire)&&(erosion::body_contact(node,descriptor)||erosion::spell_contact(node,descriptor)||marking::inapplicable(node,descriptor)||momentum::body_contact(node,descriptor)){return 0;}
+ if ACTIVE.load(Ordering::Acquire)&&(erosion::body_contact(node,descriptor)||erosion::spell_contact(node,descriptor,owner)||marking::inapplicable(node,descriptor)||momentum::body_contact(node,descriptor)){return 0;}
  let result=original(node,descriptor,owner,weapon,extra);
  if result!=0||!ACTIVE.load(Ordering::Acquire)||node==0||descriptor==0{return result;}
  let param=read_ptr(node);if param==0{return result;}

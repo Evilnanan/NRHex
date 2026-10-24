@@ -1,0 +1,279 @@
+{
+  "version": "0.17.247",
+  "build": {
+    "version": "0.17.247",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "4ad9d24043307c61550918e5a92a70514415031a40f857407615311205080e22",
+    "installed": true,
+    "installedDllSha256": "4ad9d24043307c61550918e5a92a70514415031a40f857407615311205080e22",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "rustTestsPassed": 444,
+  "runtimeSignatureCount": 199,
+  "nativeErosion": {
+    "nativeExecutionPassed": true,
+    "compiledHookExecuted": true,
+    "compiledSharedApplicabilityHookExecuted": true,
+    "compiledCollectorHookExecuted": true,
+    "spellExclusionLimitedToErosionCollection": true,
+    "swordMappedLocalSpellException": true,
+    "swordSpellBuildup": 30,
+    "nativeZeroCorrectionPreserved": true,
+    "attackRateApplicabilityPreserved": true,
+    "nativeDescriptorBuilder": "0x50f230",
+    "nativeProjectileCollision": "0x33c120",
+    "nativeSourceGoodRead": "0x34e071",
+    "itemBuildup": 10,
+    "weaponBuildup": 30,
+    "bodyContactsExcluded": true,
+    "nativeImmunityChain": [
+      "0x509790",
+      "0x510fd0",
+      "0xea19c0"
+    ],
+    "nativeAddedAilmentSelector": "0x506200",
+    "nativeAttackApplicability": "0x511010",
+    "nativeMotionValueFragment": [
+      "0x43c869",
+      "0x43c899"
+    ],
+    "cases": [
+      "mapped local Sword sorcery/incantations collect one original carrier per contact without changing descriptors",
+      "unmapped attacks, other attack tables, remote owners and missing Sword remain excluded",
+      "Sword exception retains remaining native applicability checks and does not enable spell type10",
+      "Sword exception leaves other native added ailments unchanged",
+      "either native status correction being zero still yields zero buildup",
+      "item collisions use their native source-good ID; weapons keep the original carrier",
+      "appended Erosion carriers only; existing vector entries unchanged",
+      "item scope does not bypass spell exclusion or affect other native ailment owners",
+      "item payloads select the same weakest nonimmune status; no reselection of network payloads",
+      "roll/backstep/landing/jump/sprint body contacts excluded at native collection",
+      "same IDs in other attack tables unchanged",
+      "weapon/multihit collection unchanged",
+      "three spell descriptor types exclude Erosion only during collection",
+      "outside collection Erosion still passes native attack-rate applicability",
+      "other native added ailments on spells unchanged",
+      "inactive spell collection filter bypassed",
+      "native additional ailments on body contacts unchanged",
+      "inactive body filter unchanged",
+      "all seven native immunity flags",
+      "invalid immunity effects ignored",
+      "stateInfo152 accepted and2103 excluded",
+      "native spell applicability flags",
+      "two motion values multiplied",
+      "zero status correction remains zero",
+      "generic buildup multiplier retained",
+      "full threshold rather than remaining gauge",
+      "escalating threshold changes selection",
+      "progress tie and stable exact tie",
+      "immune ailment excluded",
+      "death participates normally",
+      "all immune does nothing",
+      "active ailment excluded",
+      "zero and NaN buildup rejected",
+      "dead recipient rejected",
+      "non-owner rejected",
+      "selected payload IDs not remapped again",
+      "inactive hook forwards unchanged",
+      "all13 arguments andAL result retained"
+    ],
+    "stubs": [
+      "projectile collision continuation dispatches to native collector; world handling is not executed",
+      "security cookie check",
+      "ownership and active-state lookup",
+      "native apply continuation records parameters; proc, damage and networking are not executed"
+    ],
+    "sources": {
+      "src/erosion.rs": "b205aed256785e395208fb2eee5fe6b09177f0c69fb60977c5d7705146d7fefd",
+      "src/erosion_native_tests.rs": "cac3128d9e01b294af7681b5e9716fd70ee978d56091e451a88e7c1b95104b98",
+      "src/lib.rs": "076a95b2211db937625ebd9c61af7086655c4b4e39762943469ec5a9cdb0a61f"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "nativeAffinity": {
+    "nativeExecutionPassed": true,
+    "nativeFunctions": [
+      "56ACF0 reward discovery context",
+      "5072D0 SpEffect state 2122 discovery override"
+    ],
+    "casterCategories": [
+      57,
+      61,
+      1600,
+      1700
+    ],
+    "normalCasterOwners": [
+      95000900,
+      95002000,
+      95003500
+    ],
+    "archmageException": 95002100,
+    "physicalOwners": [
+      95001100,
+      95002600,
+      95002400,
+      95003100
+    ],
+    "swordExceptionOwners": [
+      95001100,
+      95002600,
+      95003100
+    ],
+    "cases": [
+      "all ten HeroParam defaults",
+      "Duchess dagger default is not caster",
+      "all 33 relic discovery categories override caster and physical defaults",
+      "stat-growth state 2123 is ignored",
+      "multiple matching effects follow native first-match order",
+      "null parameter rows skipped",
+      "first override -1 preserves hero default",
+      "missing HeroParam permits a valid override; no usable result defers",
+      "live changes are queried without caching",
+      "invalid hero, absent actor/effect module, and absent base do not call native",
+      "native writes only reward context+10; actor and effect module unchanged"
+    ],
+    "regularTests": "seven ability filters across heroes, affinities, archmage/sword ownership, display cycles, focused/random pools and refresh; owned/conflicting abilities stay excluded",
+    "stubs": [
+      "E785B0 HeroParam lookup uses fixture rows",
+      "E782E0 scoped parameter-reference release uses fixture no-op"
+    ],
+    "sourceHashes": {
+      "src/weapon_affinity.rs": "c6c20338d7941318cc9222c2d47bfa92d0666a46fa5b3162126831b2c0f83032",
+      "src/weapon_affinity_native_tests.rs": "1a5e5d185bd3f1a254ac89ff1d6cc1d443b9bb60843ac148f8d51c3d39b8390a",
+      "src/reward_choices.rs": "097a51895c51d0deb53efaaaf0b94b165b5042513f38bebada36ad665961b2b9",
+      "src/lib.rs": "076a95b2211db937625ebd9c61af7086655c4b4e39762943469ec5a9cdb0a61f",
+      "tools/verify_weapon_affinity.py": "049b6eb0f2474ce7daf85aa9219668bc026f1d82e5e259275035c6fcb02d9038",
+      "data/reference/rewards/weapon-affinity.json": "b71c60d5038cd1d51d102f769b6c935b5244476b2f77651b37cc9b9398a9743c"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "drawRules": {
+    "actualSwordOwnershipUnlocksErosion": true,
+    "archmageAloneDoesNotUnlockErosion": true,
+    "sniperConflictDoesNotImpersonateSword": true,
+    "ownedErosionRemainsExcluded": true,
+    "liveAffinityQueriesPreserved": true,
+    "regularRegression": "all hero/affinity/Archmage/Sword combinations; random, preferred, refresh and exposure-cycle candidates"
+  },
+  "installedRegulationSha256": "6444bc77ce690e26419fb559a6854e0e3887a3ede9da16cde11ed611ab52d3c5",
+  "sampleSpellCorrections": [
+    {
+      "magic": 4021,
+      "name": "帚星",
+      "attacks": [
+        40210,
+        40211,
+        40212
+      ],
+      "correction": 1,
+      "pointCorrection": 1,
+      "buildupBeforeOtherNativeFactors": 30
+    },
+    {
+      "magic": 4050,
+      "name": "流星雨",
+      "attacks": [
+        40500,
+        40501,
+        40502,
+        40503,
+        40504,
+        40505,
+        40510,
+        40511,
+        40512,
+        40513,
+        40514,
+        40515
+      ],
+      "correction": 1,
+      "pointCorrection": 1,
+      "buildupBeforeOtherNativeFactors": 30
+    },
+    {
+      "magic": 4090,
+      "name": "结晶散射",
+      "attacks": [
+        40900,
+        40905
+      ],
+      "correction": 1,
+      "pointCorrection": 1,
+      "buildupBeforeOtherNativeFactors": 30
+    },
+    {
+      "magic": 4220,
+      "name": "毁灭流星",
+      "attacks": [
+        42200,
+        42201,
+        42202,
+        42203,
+        42204,
+        42205,
+        42206,
+        42207,
+        42210,
+        42211,
+        42212,
+        42213,
+        42214,
+        42215,
+        42216,
+        42217
+      ],
+      "correction": 1,
+      "pointCorrection": 1,
+      "buildupBeforeOtherNativeFactors": 30
+    },
+    {
+      "magic": 4500,
+      "name": "爆散结晶",
+      "attacks": [
+        45000,
+        45001,
+        45002,
+        45005,
+        45006,
+        45007
+      ],
+      "correction": 1,
+      "pointCorrection": 1,
+      "buildupBeforeOtherNativeFactors": 30
+    },
+    {
+      "magic": 6820,
+      "name": "兽爪",
+      "attacks": [
+        68200,
+        68205
+      ],
+      "correction": 1,
+      "pointCorrection": 1,
+      "buildupBeforeOtherNativeFactors": 30
+    }
+  ],
+  "changedAssets": [
+    "dist/mod/natives/NRHex.dll"
+  ],
+  "otherPackagedAssetsUnchanged": true,
+  "sourceHashes": {
+    "src/erosion.rs": "b205aed256785e395208fb2eee5fe6b09177f0c69fb60977c5d7705146d7fefd",
+    "src/erosion_native_tests.rs": "cac3128d9e01b294af7681b5e9716fd70ee978d56091e451a88e7c1b95104b98",
+    "src/lib.rs": "076a95b2211db937625ebd9c61af7086655c4b4e39762943469ec5a9cdb0a61f",
+    "src/reward_choices.rs": "097a51895c51d0deb53efaaaf0b94b165b5042513f38bebada36ad665961b2b9",
+    "tools/verify_erosion.py": "204d9b8a103d2fd9096bbe42464d03d12b016c866875fce7326b1b677975fc9e",
+    "tools/verify_weapon_affinity.py": "049b6eb0f2474ce7daf85aa9219668bc026f1d82e5e259275035c6fcb02d9038"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}
