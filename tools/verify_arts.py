@@ -51,7 +51,6 @@ assert texts['names']['zhocn']['303']=='小圆盾格挡'
 assert next(r for r in params['arts'] if r['ID']==303)['fields']['swordArtsType']==93
 source=(root/'src/lib.rs').read_text()
 assert '(handle>>28)&7!=0' in source and 'ARTS_RAW_ORIG' in source
-assert 'const TEST_REWARD: [usize;3] = [14,6,12];' in source and 'Some(TEST_REWARD)' in source
 assert 'ptr::write_unaligned((entry.as_mut_ptr()' in source
 assert 'ptr::write_unaligned((r[1]' not in source # Native instance never modified.
 report.update(independentDecompilePassed=True,nativeFpMultiplierField='artsConsumptionRate',nativeFpCostUsesEffectMultiplier=True,instanceOverrideOffset='1c',weaponHandleGenerationValidated=True,nativeInventoryAndDropBytesNeverModified=True,localSixWeaponSlotsOnly=True,protectedOriginalSkills=[1200,303],protectedWeaponTemplates=[x['ID'] for x in storm],uniqueSkillPool=pool['poolCount'],actualNameTextChecked=True,excludedPreviouslyRandomUnnamedSkills=[104,121,407,1180,1181],gameplayVerified=False,multiplayerVerified=False)

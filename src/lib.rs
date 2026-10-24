@@ -322,27 +322,6 @@ static ACTIVE: AtomicBool = AtomicBool::new(false);
 #[cfg(feature="test-hotkeys")]
 static KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
 #[cfg(feature="test-hotkeys")]
-static TEST_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
-#[cfg(feature="test-hotkeys")]
-static NEW_HEX_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
-#[cfg(feature="test-hotkeys")]
-static CHANT_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
-#[cfg(feature="test-hotkeys")]
-static GAZE_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
-#[cfg(feature="test-hotkeys")]
-static CONTRACT_KEY_WAS_DOWN: AtomicBool = AtomicBool::new(false);
-// Current development focus: Monster Cage, Crystal Shell, Versatile Arts.
-#[cfg(any(feature="test-hotkeys",test))]
-const TEST_REWARD: [usize;3] = [14,6,12];
-#[cfg(any(feature="test-hotkeys",test))]
-const NEW_HEX_REWARD: [usize;3] = [15,16,21];
-#[cfg(any(feature="test-hotkeys",test))]
-const CHANT_REWARD: [usize;3] = [17,8,18];
-#[cfg(any(feature="test-hotkeys",test))]
-const GAZE_REWARD: [usize;3] = [20,19,7];
-#[cfg(any(feature="test-hotkeys",test))]
-const CONTRACT_REWARD: [usize;3] = [23,24,21];
-#[cfg(feature="test-hotkeys")]
 static LAST_SPAWN: AtomicU64 = AtomicU64::new(0);
 static CALLBACK_LOCK: AtomicBool = AtomicBool::new(false);
 static CONFIG: OnceLock<Config> = OnceLock::new();
@@ -482,19 +461,16 @@ extern "system" { fn GetTickCount64()->u64; }
 extern "system" { fn BCryptGenRandom(handle:*mut c_void,buffer:*mut u8,len:u32,flags:u32)->i32; }
 
 #[derive(Debug)]
-struct Config { key:i32, test_key:i32, new_hex_key:i32, chant_key:i32, gaze_key:i32, contract_key:i32, ctrl:bool, cooldown:u64 }
+struct Config { key:i32, ctrl:bool, cooldown:u64 }
 impl Config {
  fn read(text:&str)->Result<Self,String> {
-  let mut c=Self{key:0x75,test_key:0x76,new_hex_key:0x77,chant_key:0x78,gaze_key:0x79,contract_key:0x7a,ctrl:true,cooldown:3000};
+  let mut c=Self{key:0x75,ctrl:true,cooldown:3000};
   for line in text.lines().map(str::trim).filter(|s|!s.is_empty()&&!s.starts_with([';','#','['])) {
    let (k,v)=line.split_once('=').ok_or("Expected key=value in NRHex.ini")?;
    match k.trim() {
     "VirtualKey"=>{let v=v.trim();c.key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid VirtualKey")?;},
-    "TestVirtualKey"=>{let v=v.trim();c.test_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid TestVirtualKey")?;},
-    "NewHexVirtualKey"=>{let v=v.trim();c.new_hex_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid NewHexVirtualKey")?;},
-    "ChantVirtualKey"|"AngelChantVirtualKey"=>{let v=v.trim();c.chant_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid ChantVirtualKey")?;},
-    "GazeVirtualKey"=>{let v=v.trim();c.gaze_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid GazeVirtualKey")?;},
-    "ContractVirtualKey"=>{let v=v.trim();c.contract_key=if let Some(s)=v.strip_prefix("0x"){i32::from_str_radix(s,16)}else{v.parse()}.map_err(|_|"Invalid ContractVirtualKey")?;},
+    // Retired focused keys are accepted only for old-INI compatibility.
+    "TestVirtualKey"|"NewHexVirtualKey"|"ChantVirtualKey"|"AngelChantVirtualKey"|"GazeVirtualKey"|"ContractVirtualKey"=>{},
     // Older INIs remain loadable, but cannot override the compiled range.
     "SwordNearDistance"=>{},
     "RequireControl"=>c.ctrl=v.trim().parse().map_err(|_|"RequireControl must be true/false")?,
@@ -502,8 +478,7 @@ impl Config {
     _=>return Err(format!("Unknown setting {k}"))
    }
   }
-  let keys=[c.key,c.test_key,c.new_hex_key,c.chant_key,c.gaze_key,c.contract_key];
-  if keys.iter().any(|k|!(1..=254).contains(k))||keys.iter().enumerate().any(|(i,k)|keys[i+1..].contains(k))||c.cooldown<1000 {return Err("Hotkeys must be distinct and 1..254; CooldownMs >=1000".into());}
+  if !(1..=254).contains(&c.key)||c.cooldown<1000 {return Err("VirtualKey must be 1..254; CooldownMs >=1000".into());}
   Ok(c)
  }
 }
@@ -757,7 +732,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
     .and_then(|_|hook::write_code(target,&prepared.patch));
   });
   result?;ACTIVE.store(true,Ordering::Release);
-  nlog_info!("Installed character-update hook at RVA {UPDATE_RVA:#x}. Random key={:#x}; cage/crystal/arts key={:#x}; waiting for the local player.",CONFIG.get().unwrap().key,CONFIG.get().unwrap().test_key);
+  nlog_info!("Installed character-update hook at RVA {UPDATE_RVA:#x}; waiting for the local player.");
   Ok(())
  })();
  if let Err(e)=init {nlog_error!("Disabled: {e}");return 1;}
@@ -2318,12 +2293,7 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
  let cfg=CONFIG.get().unwrap();
  let key=GetAsyncKeyState(cfg.key)<0;
  let pressed=pressed_edge(&KEY_WAS_DOWN,key);
- let test_pressed=pressed_edge(&TEST_KEY_WAS_DOWN,GetAsyncKeyState(cfg.test_key)<0);
- let new_hex_pressed=pressed_edge(&NEW_HEX_KEY_WAS_DOWN,GetAsyncKeyState(cfg.new_hex_key)<0);
- let chant_pressed=pressed_edge(&CHANT_KEY_WAS_DOWN,GetAsyncKeyState(cfg.chant_key)<0);
- let gaze_pressed=pressed_edge(&GAZE_KEY_WAS_DOWN,GetAsyncKeyState(cfg.gaze_key)<0);
- let contract_pressed=pressed_edge(&CONTRACT_KEY_WAS_DOWN,GetAsyncKeyState(cfg.contract_key)<0);
- if !pressed&&!test_pressed&&!new_hex_pressed&&!chant_pressed&&!gaze_pressed&&!contract_pressed{return;}
+ if !pressed{return;}
  if cfg.ctrl&&GetAsyncKeyState(0x11)>=0{return;}
  let mut pid=0;GetWindowThreadProcessId(GetForegroundWindow(),&mut pid);
  if pid!=win::GetCurrentProcessId(){return;}
@@ -2333,8 +2303,7 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
  let stats=read_ptr(modules);if stats==0||ptr::read_unaligned((stats+0x140) as *const i32)<=0{return;}
  if unclaimed_hex_ball(base){return;}
  if CALLBACK_LOCK.swap(true,Ordering::AcqRel){return;}
- let preferred=if contract_pressed {Some(CONTRACT_REWARD)}else if gaze_pressed {Some(GAZE_REWARD)}else if chant_pressed {Some(CHANT_REWARD)}else if new_hex_pressed {Some(NEW_HEX_REWARD)}else if test_pressed {Some(TEST_REWARD)}else{None};
- let Some((chosen,next_seen))=choose_reward(player,base,preferred) else{CALLBACK_LOCK.store(false,Ordering::Release);return;};
+ let Some((chosen,next_seen))=choose_reward(player,base,None) else{CALLBACK_LOCK.store(false,Ordering::Release);return;};
  LAST_SPAWN.store(now,Ordering::Relaxed);
  let ok=spawn_personal(player,base,chosen);
  if ok{reward_cycle_runtime::commit(player,base,next_seen);}
@@ -2425,17 +2394,18 @@ mod tests {
   }
   manager[1]=0;assert_eq!(player_data_hero(manager.as_ptr() as usize),None);
  }}
- #[test]fn focused_reward_keeps_cage_crystal_arts_and_existing_exclusions(){
+ #[test]fn preferred_reward_orders_keep_existing_exclusions(){
   use reward_choices::{mask,all};
-  assert_eq!(TEST_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[95001600,95000700,95001400]);
-  assert_eq!(reward_choices::preferred(TEST_REWARD,&HexSet::new()),Some(TEST_REWARD));
+  let choices=[14,6,12];
+  assert_eq!(choices.map(|i|hex_pool::OWNER_IDS[i]),[95001600,95000700,95001400]);
+  assert_eq!(reward_choices::preferred(choices,&HexSet::new()),Some(choices));
   for owned in [mask([14]),mask([6]),mask([12]),mask([14,6])]{
-   let order=reward_choices::preferred(TEST_REWARD,&owned).unwrap();assert!(reward_choices::eligible(order,&owned));
-   for i in TEST_REWARD{if !owned.contains(&i){assert!(order.contains(&i));}}
+   let order=reward_choices::preferred(choices,&owned).unwrap();assert!(reward_choices::eligible(order,&owned));
+   for i in choices{if !owned.contains(&i){assert!(order.contains(&i));}}
   }
   let unavailable=reward_choices::terrain_exclusions(HexSet::new(),true);
-  assert_eq!(reward_choices::preferred(TEST_REWARD,&unavailable),Some([6,12,0]));
-  assert_eq!(reward_choices::preferred(TEST_REWARD,&all(hex_pool::HEX_COUNT)),None);
+  assert_eq!(reward_choices::preferred(choices,&unavailable),Some([6,12,0]));
+  assert_eq!(reward_choices::preferred(choices,&all(hex_pool::HEX_COUNT)),None);
  }
  #[test]fn native_lava_wrappers_forward_arguments_and_scope_visual_scale(){unsafe{
   unsafe extern "system" fn mark(a:usize,b:usize,c:usize)->usize{assert_eq!((a,b,c),(1,2,3));0xabcd}
@@ -2520,39 +2490,17 @@ mod tests {
   assert_eq!(hex_pool::OWNER_IDS.len(),hex_pool::HEX_COUNT);
   assert_eq!(hex_pool::HISTORY_BITS.len(),hex_pool::HEX_COUNT);
  }
- #[test] fn key_config_rejects_invalid_input(){assert!(Config::read("VirtualKey=0").is_err());assert!(Config::read("TestVirtualKey=255").is_err());assert!(Config::read("VirtualKey=0x76").is_err());assert!(Config::read("CooldownMs=999").is_err());assert!(Config::read("Unknown=true").is_err());}
- #[test] fn random_and_focused_hotkeys_are_configurable(){
-  for c in [Config::read("").unwrap(),Config::read(include_str!("../dist/mod/natives/NRHex.ini")).unwrap()] {
-   assert_eq!((c.key,c.test_key,c.new_hex_key,c.chant_key,c.gaze_key,c.ctrl,c.cooldown),(0x75,0x76,0x77,0x78,0x79,true,3000));
+ #[test] fn key_config_rejects_invalid_input(){
+  for setting in ["VirtualKey=0","VirtualKey=255","VirtualKey=garbage","CooldownMs=999","RequireControl=invalid","Unknown=true"]{assert!(Config::read(setting).is_err(),"{setting}");}
+ }
+ #[test] fn random_reward_key_keeps_current_settings_and_ignores_retired_bindings(){
+  for c in [Config::read("").unwrap(),Config::read(include_str!("../dist/mod/natives/NRHex.ini")).unwrap()]{assert_eq!((c.key,c.ctrl,c.cooldown),(0x75,true,3000));}
+  let c=Config::read("VirtualKey=0x70\nRequireControl=false\nCooldownMs=4000").unwrap();assert_eq!((c.key,c.ctrl,c.cooldown),(0x70,false,4000));
+  for retired in ["TestVirtualKey","NewHexVirtualKey","ChantVirtualKey","AngelChantVirtualKey","GazeVirtualKey","ContractVirtualKey"]{
+   for value in ["0x75","0x76","255","ignored"]{let c=Config::read(&format!("{retired}={value}")).unwrap();assert_eq!((c.key,c.ctrl,c.cooldown),(0x75,true,3000));}
   }
-  let c=Config::read("VirtualKey=0x70\nTestVirtualKey=0x71\nNewHexVirtualKey=0x72\nAngelChantVirtualKey=0x73").unwrap();
-  assert_eq!((c.key,c.test_key,c.new_hex_key,c.chant_key),(0x70,0x71,0x72,0x73));
-  for value in ["0","255","0x75","0x76"]{assert!(Config::read(&format!("NewHexVirtualKey={value}")).is_err());}
-  for value in ["0","255","0x75","0x76","0x77"]{assert!(Config::read(&format!("AngelChantVirtualKey={value}")).is_err());}
-  for value in ["0","255","0x75","0x76","0x77","0x78"]{assert!(Config::read(&format!("GazeVirtualKey={value}")).is_err());}
-  assert_eq!(Config::read("GazeVirtualKey=0x7b").unwrap().gaze_key,0x7b);
-  assert_eq!(Config::read("").unwrap().contract_key,0x7a);
-  assert_eq!(CONTRACT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[95002600,95002700,95002400]);
-  for value in ["0","255","0x75","0x76","0x77","0x78","0x79"]{assert!(Config::read(&format!("ContractVirtualKey={value}")).is_err());}
-  assert_eq!(hex_pool::OWNER_IDS[GAZE_REWARD[0]],slingshot::OWNER);
-  assert_eq!(reward_choices::preferred(GAZE_REWARD,&HexSet::new()).unwrap()[0],GAZE_REWARD[0]);
-  assert_eq!(CHANT_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[chant::OWNER,sword::OWNER,archmage::OWNER]);
-  for hero in [6,7]{
-   assert_eq!(reward_choices::preferred(CHANT_REWARD,&reward_choices::default_filters(HexSet::new(),Some(hero))).unwrap(),CHANT_REWARD);
-   let next=reward_choices::preferred(CHANT_REWARD,&reward_choices::default_filters(reward_choices::mask([17]),Some(hero))).unwrap();assert_eq!(next[0],8);assert!(!next.contains(&17));
-   let next=reward_choices::preferred(CHANT_REWARD,&reward_choices::default_filters(reward_choices::mask([8]),Some(hero))).unwrap();assert_eq!(next[0],17);assert!(!next.contains(&8));
-  }
-  let excluded=reward_choices::preferred(CHANT_REWARD,&reward_choices::default_filters(HexSet::new(),Some(1))).unwrap();assert_eq!(excluded[0],18);assert!(!excluded.contains(&17));assert!(!excluded.contains(&8));
-  assert_eq!(NEW_HEX_REWARD.map(|i|hex_pool::OWNER_IDS[i]),[balloon::OWNER,spirit::OWNER,parry::OWNER]);
-  let both=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::default_filters(HexSet::new(),Some(6))).unwrap();
-  assert_eq!(&both[..2],&NEW_HEX_REWARD[..2]);assert!(!both.contains(&NEW_HEX_REWARD[2])); // Revenant cannot draw Clash.
-  let after_balloon=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::default_filters(reward_choices::mask([15]),Some(6))).unwrap();
-  assert_eq!(after_balloon[0],16);assert!(!after_balloon.contains(&15));
-  let other=reward_choices::preferred(NEW_HEX_REWARD,&reward_choices::default_filters(HexSet::new(),Some(1))).unwrap();
-  assert_eq!(other[0],15);assert!(!other.contains(&16));
-  for retired in ["Shell","Cat","Sword","Strength","Escape","Jiahao","Arts","Noisy","Cage"] {
-   assert!(Config::read(&format!("{retired}VirtualKey=0x70")).is_err());
-  }
+  // A formerly occupied focused key is now available for the sole random binding.
+  assert_eq!(Config::read("VirtualKey=0x76\nTestVirtualKey=0x76").unwrap().key,0x76);
  }
  #[test] fn hotkey_rearms_after_release_and_does_not_repeat_while_held(){
   let state=AtomicBool::new(false);

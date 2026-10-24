@@ -1,33 +1,32 @@
 {
-  "version": "0.17.22",
+  "version": "0.17.246",
   "activeHotkeys": {
-    "Ctrl+F6": "random reward",
-    "Ctrl+F7": [
-      "Monster Cage",
-      "Crystal Shell",
-      "Versatile Arts"
-    ]
+    "Ctrl+F6": "random reward"
   },
-  "preferredOwnerIds": [
-    95001600,
-    95000700,
-    95001400
-  ],
   "removedDedicatedKeySettings": [
-    "CageVirtualKey",
-    "CatVirtualKey",
-    "JiahaoVirtualKey",
-    "NoisyVirtualKey",
-    "ShellVirtualKey",
-    "SwordVirtualKey"
+    "ChantVirtualKey",
+    "GazeVirtualKey",
+    "NewHexVirtualKey",
+    "TestVirtualKey"
   ],
+  "chineseTextUpdatesAuthorized": true,
+  "retiredIniKeysIgnoredWithoutPolling": true,
   "existingCooldownFocusOwnershipTerrainAndPendingBallGuardsPreserved": true,
   "unrelatedAssetsAndUserBalanceUnchanged": true,
-  "rustTestsPassed": 155,
+  "rustTestsPassed": 444,
   "changedAssets": [
-    "natives/NRHex.dll",
-    "natives/NRHex.ini"
+    "mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "mod/natives/NRHex.dll",
+    "mod/natives/NRHex.ini"
   ],
+  "dllSha256": "66c317fb1f227451321b779a4e02f736ce4698b71fd14670947e2997fa0c6c97",
+  "sourceHashes": {
+    "src/lib.rs": "4cf1b7f52e675c17756baa4f9ee4410173880ea36c3dbd9fdcfa31c5d801ac12",
+    "tools/record_hotkey_cleanup.py": "44aafd0e3812d805a821bb2fe41f5380d51813069f678d40942274d529999a63",
+    "tools/package_no_hotkeys.py": "94a4860daa98da4d442750ad0ebcc9dece68f787a46b533a53782f5ba519c8c4",
+    "dist/mod/natives/NRHex.ini": "dd52f35f940c86634fad4672e0bbc78ed9cd7795a0f327d8aa950dd5b3501edf"
+  },
   "gameplayVerified": false,
   "multiplayerVerified": false
 }

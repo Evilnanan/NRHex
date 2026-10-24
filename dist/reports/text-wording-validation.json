@@ -1,0 +1,112 @@
+{
+  "version": "0.17.246",
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "76CF2C456539ADDDF89EB90E4A6C78956A6161C293CA14F79B1620D562DEB838",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "3308E8110753C30407BE7BE3363472E9D7286F3FCA191162E5C3BA3231078DED",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "B47AEF85CC7B9F62293EBE9D6E233A21B8499ED272A9FEFB24D0901CF767992A",
+        "outputSha256": "FA2B6C24AA2A26A51B4B02CADA27B7F2FC3AC7B30AEF4E9418965A1FFF971547",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95004400,
+            "before": "你的绝招已被封印。技艺的冷却速度和伤害大幅增强",
+            "after": "你的绝招已被封印。技艺的冷却速度和伤害获得大幅提升"
+          },
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95004500,
+            "before": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害距离衰减",
+            "after": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害衰减"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95004400,
+            "before": "你的绝招已被封印。技艺的冷却速度和伤害大幅增强",
+            "after": "你的绝招已被封印。技艺的冷却速度和伤害获得大幅提升"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95004500,
+            "before": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害距离衰减",
+            "after": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害衰减"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95004400,
+            "before": "你的绝招已被封印。技艺的冷却速度和伤害大幅增强",
+            "after": "你的绝招已被封印。技艺的冷却速度和伤害获得大幅提升"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95004500,
+            "before": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害距离衰减",
+            "after": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害衰减"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "4652E538B3E23F37DEB8887D88C70AB8E25CF6BCCB031ED4D192E73A6AA3D69C",
+        "outputSha256": "365CFE14D61FEDA881F321092410720FC8A899A4583351E91A3C27F352AB0F20",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004400,
+            "before": "你的绝招已被封印。技艺的冷却速度和伤害大幅增强",
+            "after": "你的绝招已被封印。技艺的冷却速度和伤害获得大幅提升"
+          },
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004500,
+            "before": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害距离衰减",
+            "after": "降低30%攻击力。你离目标越远伤害越高。大幅降低箭矢伤害衰减"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "5FF579042F7EA59CE5A56F471B36C2BF42E9CF1EC6F070E22B2E919C9E80E0C2",
+        "outputSha256": "5FF579042F7EA59CE5A56F471B36C2BF42E9CF1EC6F070E22B2E919C9E80E0C2",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "E7A54BF346B3D3B61307409030D6CF250143F10195DC68CB604B5F38145BFF69",
+        "outputSha256": "E7A54BF346B3D3B61307409030D6CF250143F10195DC68CB604B5F38145BFF69",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "containers": {
+    "item_dlc01.msgbnd.dcx": {
+      "inputSha256": "e8792cab87197f8238570b1cf3fc5ac9e16da3420e4b90303c412c9c391f12b5",
+      "outputSha256": "324840843e870adb0de5251a65e0eb7402ccf6440394153b057418c2c36bce49",
+      "roundTripPassed": true
+    },
+    "menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "833b9a32c8decd16b85245b449330ff914bbae17165bfb1a1f232484ca215536",
+      "outputSha256": "6c9eb3d882ccad18b99dd09955de059c1a0e32abb8f5aee734c2c6233f00e160",
+      "roundTripPassed": true
+    }
+  },
+  "onlyTwoChineseDescriptionsChanged": true,
+  "englishUnchanged": true,
+  "installedReadbackPassed": true,
+  "gameplayVerified": false
+}
