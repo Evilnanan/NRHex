@@ -6,7 +6,7 @@ pub const RESTAGE_PATTERN:&str="F3 0F 59 4F 3C 66 41 0F 6E C6 0F 5B C0 F3 0F 58 
 pub static RESTAGE_ORIGINAL:std::sync::atomic::AtomicPtr<u8>=std::sync::atomic::AtomicPtr::new(ptr::null_mut());
 pub const ULTIMATE_QUERY:i32=990045;
 pub const READY_QUERY:i32=990046;
-pub const CONFLICTS:[i32;4]=[95000400,95003800,95003900,95004000];
+pub const CONFLICTS:[i32;5]=[95000400,95003800,95003900,95004000,95001800];
 pub const COOLDOWNS:[i32;4]=[OWNER+1,OWNER+2,OWNER+3,OWNER+7];
 pub const FAMILY_IDLE:[i32;3]=[705061,705071,705081];
 pub const FAMILY_RELOAD:[i32;3]=[OWNER+4,OWNER+5,OWNER+6];
@@ -111,20 +111,20 @@ pub unsafe extern "system" fn restage_detour(){
   for hero in [9,10]{assert_eq!(cooldown_effect(Some(hero)),Some(OWNER+3));}
   for hero in [None,Some(0),Some(6),Some(7),Some(8)]{assert_eq!(cooldown_effect(hero),None);}
  }
- #[test]fn ultimate_conflicts_use_ownership_in_every_draw_route(){
+ #[test]fn ultimate_and_necromancy_conflicts_use_ownership_in_every_draw_route(){
   use crate::reward_choices::*;
   let index=|id|crate::hex_pool::OWNER_IDS.iter().position(|&v|v==id).unwrap();
-  let basics=index(OWNER);let ultimate=CONFLICTS.map(index);
-  for bits in 0..32{
-   let owned=mask(std::iter::once(basics).chain(ultimate).enumerate().filter_map(|(i,id)|(bits&(1<<i)!=0).then_some(id)));
+  let basics=index(OWNER);let conflicts=CONFLICTS.map(index);
+  for bits in 0..(1usize<<(CONFLICTS.len()+1)){
+   let owned=mask(std::iter::once(basics).chain(conflicts).enumerate().filter_map(|(i,id)|(bits&(1<<i)!=0).then_some(id)));
    let unavailable=ownership_exclusions(owned.clone());
    assert_eq!(unavailable.contains(&basics),bits!=0);
-   for id in ultimate{assert_eq!(unavailable.contains(&id),owned.contains(&id)||bits&1!=0);}
+   for id in conflicts{assert_eq!(unavailable.contains(&id),owned.contains(&id)||bits&1!=0);}
    for seen in [Default::default(),all(crate::hex_pool::HEX_COUNT)]{
     let round=crate::reward_cycle::Round::new(&unavailable,&seen);
-    let focused=round.preferred([basics,ultimate[0],ultimate[1]]).unwrap();
+    let focused=round.preferred([basics,conflicts[0],conflicts[1]]).unwrap();
     let refresh=crate::reward_cycle::Single::new(&unavailable,&seen,&mask([0,1]));
-    for id in std::iter::once(basics).chain(ultimate){assert_eq!(round.candidates.contains(&id),!unavailable.contains(&id));assert_eq!(refresh.candidates.contains(&id),!unavailable.contains(&id));if unavailable.contains(&id){assert!(!focused.contains(&id));}}
+    for id in std::iter::once(basics).chain(conflicts){assert_eq!(round.candidates.contains(&id),!unavailable.contains(&id));assert_eq!(refresh.candidates.contains(&id),!unavailable.contains(&id));if unavailable.contains(&id){assert!(!focused.contains(&id));}}
    }
   }
   assert_eq!(crate::hex_pool::HISTORY_BITS[basics],41);

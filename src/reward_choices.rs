@@ -11,9 +11,9 @@ pub fn ownership_exclusions(mut owned:HexSet)->HexSet{
  let sniper=index(crate::sniper::OWNER);let sword=index(crate::sword::OWNER);
  if owned.contains(&sniper)||owned.contains(&sword){owned.extend([sniper,sword]);}
  let basics=index(crate::basics::OWNER);
- let ultimate=crate::basics::CONFLICTS.map(index);
- if owned.contains(&basics){owned.extend(ultimate);}
- else if ultimate.iter().any(|i|owned.contains(i)){owned.insert(basics);}
+ let conflicts=crate::basics::CONFLICTS.map(index);
+ if owned.contains(&basics){owned.extend(conflicts);}
+ else if conflicts.iter().any(|i|owned.contains(i)){owned.insert(basics);}
  let pact=index(95002600);let shell=index(95000700);let jiahao=index(95001300);
  if owned.contains(&pact){owned.extend([shell,jiahao]);}
  else if owned.contains(&shell)||owned.contains(&jiahao){owned.insert(pact);}
@@ -94,6 +94,20 @@ pub fn is_hex_good(encoded:u32)->bool{
     }
    }
   }}}
+ }
+ #[test]fn basics_necromancy_conflict_uses_real_ownership_before_role_filters(){
+  let basics=index(crate::basics::OWNER);let necromancy=index(95001800);
+  for hero in std::iter::once(None).chain((0..=10).map(Some)){for flags in 0..4{
+   let owned=mask([(basics,flags&1!=0),(necromancy,flags&2!=0)].into_iter().filter_map(|(id,yes)|yes.then_some(id)));
+   let blocked=combat_exclusions(owned,hero,Some(1600));
+   for seen in [HexSet::new(),all(HEX_COUNT)]{
+    let round=crate::reward_cycle::Round::new(&blocked,&seen);let focused=round.preferred([basics,necromancy,0]).unwrap();let random=round.draw(|n|Some(n-1)).unwrap();let refresh=crate::reward_cycle::Single::new(&blocked,&seen,&mask([0,1]));
+    for (id,excluded)in [(basics,flags!=0),(necromancy,hero!=Some(6)||flags!=0)]{
+     assert_eq!(round.candidates.contains(&id),!excluded,"{hero:?}/{flags}/{id}");assert_eq!(refresh.candidates.contains(&id),!excluded);
+     if excluded{assert!(!focused.contains(&id));assert!(!random.contains(&id));}
+    }
+   }
+  }}
  }
  #[test]fn night_blessing_draws_and_refreshes_follow_live_difficulty_count(){
   let blessing=index(95002500);let owned=mask([5]);

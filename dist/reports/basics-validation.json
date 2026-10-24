@@ -1,6 +1,6 @@
 {
-  "version": "0.17.244",
-  "baseCommit": "7e3b46e5c2a4edce9b30d4af93bd4290e2c82837",
+  "version": "0.17.245",
+  "baseCommit": "37ccaefd8e9cb92157e99430f1e7aa1359162a65",
   "owner": 95004400,
   "name": "回归基本功",
   "allHeroesEligible": true,
@@ -9,7 +9,8 @@
     95000400,
     95003800,
     95003900,
-    95004000
+    95004000,
+    95001800
   ],
   "heroModifiers": {
     "1": {
@@ -124,11 +125,11 @@
       "full collision, inventory awards, game transport and animation state machine not executed"
     ],
     "sourceHashes": {
-      "src/basics.rs": "ba5260962eb2788430bcd15179021c927ce8802893d033c84ba4b14ebb751650",
+      "src/basics.rs": "fb7c53b0f2a9db154fa184fa20ce2270c35cabc5e664515f73c7d60cddfd4554",
       "src/basics_native_tests.rs": "fe88b77f0c07ffbfe2fa66086ebebf0d069ac218378b109fca9661ec25c8d759",
       "src/lib.rs": "b48586c55fe706529b2abd7819d0720c827e20e5f5be2f6b6e4a8b75886038ee",
       "src/ambulance.rs": "8101a2a0581d6dddfac93202afe6e8f6817b2dff855c2b03515c44d44bfe2551",
-      "src/reward_choices.rs": "99f0e37db62f279da1ae6810ff054144e1546b69ec87e61ccdc629b7b96db2d4",
+      "src/reward_choices.rs": "27d50e52fbda7589a5bfb20c621880734d36dc48626bf9dfe80c8f69f571893d",
       "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
       "tools/HexBuild/Basics.cs": "3c023a872e0f6b9545a3cecbbc406c15a87e1a5af5a1415369e13b3345c00eca",
       "tools/HexBuild/Program.cs": "808d32f5f619296733772b3334bfbbff87ae4f5c11882516dcf84c101c2b5c9c",
@@ -141,43 +142,35 @@
     "multiplayerVerified": false
   },
   "build": {
-    "version": "0.17.244",
+    "version": "0.17.245",
     "mode": "dll-only",
     "buildPassed": true,
     "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
-    "dllSha256": "c7ca86c24e322f40802b9791c1ad26c78d529368b333ec75a2950f30b7f398d6",
+    "dllSha256": "efcf8db7ef6e77f3f8df91cca2a651f1ba4afcef035b231443d5b4e2a7d37156",
     "installed": true,
-    "installedDllSha256": "c7ca86c24e322f40802b9791c1ad26c78d529368b333ec75a2950f30b7f398d6",
+    "installedDllSha256": "efcf8db7ef6e77f3f8df91cca2a651f1ba4afcef035b231443d5b4e2a7d37156",
     "resourcesRebuilt": false,
     "gameplayVerified": false,
     "multiplayerVerified": false,
     "loadingVerified": false
   },
-  "regularTestsPassed": 443,
+  "regularTestsPassed": 444,
   "regularIgnoredTests": 27,
   "runtimeSuitesPassed": 19,
   "exeSignaturesPassed": 199,
   "changedExistingGameResources": {
-    "dist/mod/event/common.emevd.dcx": {
-      "inputSha256": "fcdc5683f708de22543787f7613affe6cf34b5739aaf55677d1b97169418b095",
-      "outputSha256": "af54d80fa3055efc85bcb1f64e264f5cd9bbc08f6129f049d7438ec34043414d"
-    },
     "dist/mod/natives/NRHex.dll": {
-      "inputSha256": "29be47496c34351724c210a76bb5848301b7bbb76b39f1c0f04ad887abd36b40",
-      "outputSha256": "c7ca86c24e322f40802b9791c1ad26c78d529368b333ec75a2950f30b7f398d6"
-    },
-    "dist/mod/regulation.bin": {
-      "inputSha256": "e6620076d5c273eaaaf031faab7c03d96152e19796b0ec40c1153b90f29dd3d4",
-      "outputSha256": "6444bc77ce690e26419fb559a6854e0e3887a3ede9da16cde11ed611ab52d3c5"
+      "inputSha256": "c7ca86c24e322f40802b9791c1ad26c78d529368b333ec75a2950f30b7f398d6",
+      "outputSha256": "efcf8db7ef6e77f3f8df91cca2a651f1ba4afcef035b231443d5b4e2a7d37156"
     }
   },
   "allOtherTrackedGameResourcesPreserved": true,
   "sourceHashes": {
-    "src/basics.rs": "ba5260962eb2788430bcd15179021c927ce8802893d033c84ba4b14ebb751650",
+    "src/basics.rs": "fb7c53b0f2a9db154fa184fa20ce2270c35cabc5e664515f73c7d60cddfd4554",
     "src/basics_native_tests.rs": "fe88b77f0c07ffbfe2fa66086ebebf0d069ac218378b109fca9661ec25c8d759",
     "src/lib.rs": "b48586c55fe706529b2abd7819d0720c827e20e5f5be2f6b6e4a8b75886038ee",
     "src/ambulance.rs": "8101a2a0581d6dddfac93202afe6e8f6817b2dff855c2b03515c44d44bfe2551",
-    "src/reward_choices.rs": "99f0e37db62f279da1ae6810ff054144e1546b69ec87e61ccdc629b7b96db2d4",
+    "src/reward_choices.rs": "27d50e52fbda7589a5bfb20c621880734d36dc48626bf9dfe80c8f69f571893d",
     "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
     "tools/HexBuild/Basics.cs": "3c023a872e0f6b9545a3cecbbc406c15a87e1a5af5a1415369e13b3345c00eca",
     "tools/HexBuild/Program.cs": "808d32f5f619296733772b3334bfbbff87ae4f5c11882516dcf84c101c2b5c9c",
@@ -188,5 +181,9 @@
   },
   "loadingVerified": false,
   "gameplayVerified": false,
-  "multiplayerVerified": false
+  "multiplayerVerified": false,
+  "conflictsBidirectionalAndSharedByAllDrawRoutes": true,
+  "roleRestrictionsDoNotCountAsOwnership": true,
+  "necromancyDoesNotConflictWithUltimateSeries": true,
+  "parameterAndEventBalanceVersion": "0.17.244"
 }
