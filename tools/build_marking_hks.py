@@ -4,12 +4,14 @@ from pathlib import Path
 from hks_bytecode import Reader,decode
 ROOT=Path(__file__).resolve().parents[1];QUERY=990042
 EVENTS=['W_AttackRightBackstep','W_AttackBothBackstep','W_AttackDualBackStep','W_AttackArrowBothFireBackStep']
+ORIGIN_QUERY=990047
+ORIGIN_EVENTS=['W_HurtDaggerAttack','W_AirHurtDaggerAttack']
 def abx(op,a,bx):return op<<25|bx<<8|a
 def abc(op,a,b,c):return op<<25|b<<17|c<<8|a
-def patch(source):
+def patch_observer(source,query,events):
  r=Reader(source);r.function();edits=[];audit={}
  for fid in [1,2,3,4]:
-  f=r.functions[fid];cs=f['constants'];assert QUERY not in cs;extra=[];encoded=bytearray()
+  f=r.functions[fid];cs=f['constants'];assert query not in cs;extra=[];encoded=bytearray()
   def const(v):
    if v in cs:return cs.index(v)
    if v in extra:return len(cs)+extra.index(v)
@@ -19,8 +21,8 @@ def patch(source):
    else:extra.append(float(v));encoded.extend(b'\x03'+struct.pack('>f',v))
    return i
   def glob(a,v):return [abx(91,a,const(v)),abx(76,20,const(v)+1)]
-  a=f['slots'];prefix=glob(a,'env')+[abx(25,a+1,const(QUERY)),abx(25,a+2,const(0))]
-  for i,name in enumerate(EVENTS,1):
+  a=f['slots'];prefix=glob(a,'env')+[abx(25,a+1,const(query)),abx(25,a+2,const(0))]
+  for i,name in enumerate(events,1):
    for suffix,mode in [('',i),('_Upper',i+10)]:
     prefix+=[abx(25,a+3,const(name+suffix)),abc(4,0,0,a+3),abx(28,0,0x10000),abx(25,a+2,const(mode))]
   prefix+=[abc(2,a,3,1)]
@@ -43,9 +45,16 @@ def patch(source):
  for p,n,b in reversed(inverse):restored=restored[:p]+b+restored[p+n:]
  assert restored==source
  return target,audit
+def patch(source):
+ target=source;audit={}
+ for name,query,events in [('followup',QUERY,EVENTS),('origin',ORIGIN_QUERY,ORIGIN_EVENTS)]:
+  r=Reader(target);r.function();present=[query in r.functions[i]['constants']for i in [1,2,3,4]]
+  assert all(present)or not any(present),'Partially installed Marking observer'
+  if not all(present):target,audit[name]=patch_observer(target,query,events)
+ return target,audit
 def check(source):
  r=Reader(source);r.function()
- for i in [1,2,3,4]:assert QUERY in r.functions[i]['constants']and all(n in r.functions[i]['constants']for n in EVENTS)
+ for i in [1,2,3,4]:assert all(q in r.functions[i]['constants']for q in [QUERY,ORIGIN_QUERY])and all(n in r.functions[i]['constants']for n in EVENTS+ORIGIN_EVENTS)
  return r
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');p.add_argument('--inplace',action='store_true');a=p.parse_args();path=ROOT/'dist/mod/action/script/c0000.hks';source=path.read_bytes()
@@ -55,4 +64,4 @@ if __name__=='__main__':
  target,audit=patch(source);out=ROOT/'work/marking-poison/hks';out.mkdir(parents=True,exist_ok=True);(out/'before.hks').write_bytes(source);(out/'c0000.hks').write_bytes(target)
  (out/'validation.json').write_text(json.dumps(dict(inputSha256=hashlib.sha256(source).hexdigest(),outputSha256=hashlib.sha256(target).hexdigest(),functions=audit,exactInversePassed=True,originalInstructionsAndOtherFunctionsPreserved=True),indent=2)+'\n')
  if a.inplace:path.write_bytes(target)
- print('PASS: four Marking event observers staged; exact inverse and untouched native instructions verified')
+ print('PASS: Marking origin/follow-up observers staged; exact inverse and untouched native instructions verified')

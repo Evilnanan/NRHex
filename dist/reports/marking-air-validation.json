@@ -1,0 +1,286 @@
+{
+  "version": "0.17.248",
+  "build": {
+    "version": "0.17.248",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "68922c64a4438b81b6f007b7a88317746b3929e8235fcff86f7e58f0a3bebe31",
+    "installed": true,
+    "installedDllSha256": "68922c64a4438b81b6f007b7a88317746b3929e8235fcff86f7e58f0a3bebe31",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "rustTestsPassed": 446,
+  "runtimeSignatureCount": 199,
+  "nativeMarking": {
+    "hksTransitionCases": 104,
+    "poisonBurstSource": 7500202,
+    "poisonBurst": 95004203,
+    "requiresPoison": false,
+    "onlyImmediateBackstepFollowup": true,
+    "onlyActualSlideTargets": true,
+    "oneBurstPerFollowup": true,
+    "nativeExecutionPassed": true,
+    "installedReadbackPassed": true,
+    "owner": 95004200,
+    "attack": 600000110,
+    "referenceAttack": 300000290,
+    "impact": 9,
+    "airImpact": 3,
+    "originRecordedAtNativeStart": true,
+    "landingDoesNotChangeOrigin": true,
+    "originalImpact": 1,
+    "ironeyeOnly": true,
+    "historyBit": 39,
+    "originalAttackRowsPreserved": true,
+    "nativeInstructions": [
+      "E709D4 AtkParam+72 read",
+      "E709D8 native branch",
+      "E709E8 outgoing hit+24 write"
+    ],
+    "compiledSharedConstructorWrapperExecuted": true,
+    "nativeRecipientReactionSignaturesChecked": true,
+    "sevenNativeArgumentsAndReturnPreserved": true,
+    "cases": [
+      "ground9/air3 through the shared constructor, including Mighty coexistence",
+      "native ground/air HKS origin queries, landing, repeated starts and identity resets",
+      "owned/unowned, local/remote, both attack table kinds",
+      "Marking, original poison relic follow-up, Upward Cut",
+      "actual native state152 collector and applicability for Marking/backstep/ordinary/body hits",
+      "compiled 13-argument recipient hook and HKS env query",
+      "same-target and wrong-target first hits; repeated/multi-hit contacts, air swings and unrelated transitions",
+      "lower/upper pair is one action; new slide miss and reused target handles",
+      "owner loss, down, death, revival and reset reject pending burst",
+      "Mighty coexistence, native attack immutability, cached copies retain input",
+      "all hero/affinity/party combinations in regular reward-filter tests"
+    ],
+    "stubs": [
+      "full constructor uses fixture prologue around original native impact copy instructions",
+      "actor/effect lookup, final burst submission; no complete animation/collision/network transport"
+    ],
+    "sources": {
+      "src/marking.rs": "53a13bd98c5484f6877a3ffaf46ce2cf01aa9bb49298e516078e97e560f6b549",
+      "src/marking_native_tests.rs": "b0607240581d3ad1470e7fe70eae7caa42dcc0ff99f8688987c5ea6ec86d405a",
+      "src/lib.rs": "7929a26f10823a4e45c0300f3cb0c7643e70381bfd766893d4e6163c2858ad30",
+      "src/reward_choices.rs": "097a51895c51d0deb53efaaaf0b94b165b5042513f38bebada36ad665961b2b9",
+      "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
+      "tools/HexBuild/Marking.cs": "7ea630d135b74dde560e9a030ed1016f1a96bb20710b0d26b163e2b84a746191",
+      "tools/HexBuild/HexCatalog.cs": "96e6c09a297b60b1732ddd7772db6c1db5a72ba6a064a829ed5589adeaf420e9",
+      "tools/HexBuild/RewardCatalog.cs": "a5d549c3020cf58f88c63711300112d3c5f3e25708b1f5b5e4b3b0c291df7a71",
+      "tools/verify_marking.py": "65b9a31ea65c2f1a1bbf5e617529891f1c2a0f909085d6c9e2a4f137ba4d763c",
+      "src/marking_poison_native_tests.rs": "2b407b35abef4835f9982cd9936719eaed950eac1f74274c1deef3b66b89472b",
+      "src/erosion.rs": "b205aed256785e395208fb2eee5fe6b09177f0c69fb60977c5d7705146d7fefd",
+      "src/ambulance.rs": "dbf53a20298b810f24d36d7cbee7c30bfa54b3dab2e02b468b298060d8ff91df",
+      "src/reward_cycle_runtime.rs": "1f948a6c839d4bf1ce8f1f712bb949dc5c0b3ebd63ce51a7c9f991dbf29f90a2",
+      "tools/HexBuild/MarkingPoison.cs": "10ef17e8dc703d7be2af0517294d4b16fb10337b68078729da12f269fbbfe526",
+      "tools/build_marking_hks.py": "c1ab9e847d8319a47a0f663012691d2f2d2b03eecc17b5600b7aa38f6d115c99",
+      "tools/verify_marking_hks.py": "06f71632aeb49a32a3ec86d96c23b39c0059fe29d538f4432bcee43ba6c0bb49"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "gameProcessAccessed": false
+  },
+  "hksPatch": {
+    "inputSha256": "610ae197186870b122c6112e3cbf3023c89670a5223e4d1e7f2ea773981e240d",
+    "outputSha256": "861610709789c937eccd1fd24ba717d73e625aa7cb7343be9085837cdb9cfdcd",
+    "functions": {
+      "origin": {
+        "1": {
+          "name": "ExecEvent",
+          "addedInstructions": 21,
+          "scratch": 7
+        },
+        "2": {
+          "name": "ExecEventSync",
+          "addedInstructions": 21,
+          "scratch": 8
+        },
+        "3": {
+          "name": "ExecEventNoReset",
+          "addedInstructions": 21,
+          "scratch": 7
+        },
+        "4": {
+          "name": "ExecEventSyncNoReset",
+          "addedInstructions": 21,
+          "scratch": 8
+        }
+      }
+    },
+    "exactInversePassed": true,
+    "originalInstructionsAndOtherFunctionsPreserved": true
+  },
+  "texts": {
+    "version": "0.17.248",
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "FADD2FFB06A3C6C85B642BF700743534A5C149B145D480ADC1B2C1C2448E0507",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "FD05752B8609131DC26D95A2307A57AF640C9E462492EDABE3A322AA8BB56D18",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "FA2B6C24AA2A26A51B4B02CADA27B7F2FC3AC7B30AEF4E9418965A1FFF971547",
+          "outputSha256": "27A9A59C049428D3FBE04897EA4941C128EBEEA9080320104DD7D51EE2318004",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004200,
+              "before": "强化【标记】",
+              "after": "滑铲"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004200,
+              "before": "你的滑铲可以踢飞小型敌人。对被铲中的敌人衔接攻击会造成大伤害",
+              "after": "你的技艺可以踢飞小型敌人。对踢中的敌人衔接攻击会造成大伤害"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004200,
+              "before": "强化【标记】",
+              "after": "滑铲"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004200,
+              "before": "你的滑铲可以踢飞小型敌人。对被铲中的敌人衔接攻击会造成大伤害",
+              "after": "你的技艺可以踢飞小型敌人。对踢中的敌人衔接攻击会造成大伤害"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004200,
+              "before": "你的滑铲可以踢飞小型敌人。对被铲中的敌人衔接攻击会造成大伤害",
+              "after": "你的技艺可以踢飞小型敌人。对踢中的敌人衔接攻击会造成大伤害"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "365CFE14D61FEDA881F321092410720FC8A899A4583351E91A3C27F352AB0F20",
+          "outputSha256": "8B45F6DBBC1F1753A1E82A3A981454A2EA81C33F609ECAF2BF3DB4719A3CEAD1",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004200,
+              "before": "强化【标记】",
+              "after": "滑铲"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004200,
+              "before": "你的滑铲可以踢飞小型敌人。对被铲中的敌人衔接攻击会造成大伤害",
+              "after": "你的技艺可以踢飞小型敌人。对踢中的敌人衔接攻击会造成大伤害"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "5FF579042F7EA59CE5A56F471B36C2BF42E9CF1EC6F070E22B2E919C9E80E0C2",
+          "outputSha256": "A20D5F1AC49DECA228F1D1B63875C9B9D7B5F2FFF5E15C9E5FEE1408BEC171DD",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004200,
+              "before": "Enhanced [Marking]",
+              "after": "Slide"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004200,
+              "before": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide.",
+              "after": "Your Character Skill launches small enemies. Follow-up attacks against kicked enemies deal heavy damage."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004200,
+              "before": "Enhanced [Marking]",
+              "after": "Slide"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004200,
+              "before": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide.",
+              "after": "Your Character Skill launches small enemies. Follow-up attacks against kicked enemies deal heavy damage."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004200,
+              "before": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide.",
+              "after": "Your Character Skill launches small enemies. Follow-up attacks against kicked enemies deal heavy damage."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "E7A54BF346B3D3B61307409030D6CF250143F10195DC68CB604B5F38145BFF69",
+          "outputSha256": "27E94C437C90B0343E0F77CC6DF3547E740D365C676A2B862DA5E327E22B795D",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004200,
+              "before": "Enhanced [Marking]",
+              "after": "Slide"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004200,
+              "before": "Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide.",
+              "after": "Your Character Skill launches small enemies. Follow-up attacks against kicked enemies deal heavy damage."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "containers": {
+      "zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "324840843e870adb0de5251a65e0eb7402ccf6440394153b057418c2c36bce49",
+        "outputSha256": "75930c9c2900d3c52b19da7a37d99aff0e892fc9188219d52e285aaa822562f8",
+        "roundTripPassed": true
+      },
+      "zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "6c9eb3d882ccad18b99dd09955de059c1a0e32abb8f5aee734c2c6233f00e160",
+        "outputSha256": "9a9bc5a3365d2e93b87a911cef017280b818dba6d909ee756764d56dfe4fbef9",
+        "roundTripPassed": true
+      },
+      "engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "a65a4e372b15c93b2347ad2d4b2ae73afc2333dfc5236d81c6cd8326169ea9d9",
+        "outputSha256": "d2329099688430f83e3d1a55882f6673a94a13198f26f31f625645af347ac8cc",
+        "roundTripPassed": true
+      },
+      "engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "3f7963b2dbb8896bd3f971fa85939998905b13c31e56d54f213afbfa1f443d50",
+        "outputSha256": "8e4cc85d400b32c286958bb0a5f312c20a90111f16be687af73ebc4eec7e4575",
+        "roundTripPassed": true
+      }
+    },
+    "onlySelectedBilingualNameAndDescriptionChanged": true,
+    "installedReadbackPassed": true,
+    "gameplayVerified": false
+  },
+  "changedAssets": [
+    "dist/mod/action/script/c0000.hks",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "dist/mod/natives/NRHex.dll"
+  ],
+  "otherPackagedAssetsIncludingAnimationsParametersEventsAndConfigsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

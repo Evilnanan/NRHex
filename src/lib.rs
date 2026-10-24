@@ -975,7 +975,7 @@ unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  // Do not pre-boost a direct spell here and boost it a second time there.
  if spell_percentage(hit).is_some()&&has_effect(local,sword::OWNER,base){return;}
  if strength::applies(read_i32(context+8),read_i32(context+12))&&has_effect(local,strength::OWNER,base){strengthen_constructed_hit(hit);}
- marking::constructed(hit,context,||has_effect(local,marking::OWNER,base));
+ marking::constructed(hit,context,||has_effect(local,marking::OWNER,base),||marking::air_started(local));
 }
 
 unsafe fn spatial_ready(player:usize)->bool {

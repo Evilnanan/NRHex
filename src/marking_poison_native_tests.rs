@@ -50,6 +50,14 @@ fn native_marking_followup_targets_and_original_collector_are_scoped(){unsafe{
  for attack in [304,600000120]{collect(attack,false,&mut values,&mut vector);assert_eq!(vector[2],start+4);}
  let apply=|t,e|crate::erosion::detour(t,e,player,0x81,0x12345678,d,0x82,0x83,0x84,0x85,0x86,0x87,-99);
  let context=[player];let query=|mode:i32|{MODE.with(|v|v.set(mode as f32));assert_eq!(crate::ambulance::env(context.as_ptr()as usize,QUERY,1),0);};
+ // Execute the real HKS query dispatcher for both start variants. Generic
+ // transitions (including landing) and the TAE pulse do not change origin.
+ for mode in [2,12,1,11,2]{
+  MODE.with(|v|v.set(mode as f32));assert_eq!(crate::ambulance::env(context.as_ptr()as usize,ORIGIN_QUERY,1),0);
+  assert_eq!(air_started(player),matches!(mode,2|12));
+  query(0);pulse(player,BEGIN,base);assert_eq!(air_started(player),matches!(mode,2|12));
+  MODE.with(|v|v.set(0.));crate::ambulance::env(context.as_ptr()as usize,ORIGIN_QUERY,1);assert_eq!(air_started(player),matches!(mode,2|12));
+ }
  for mode in 1..=4{
   reset();assert!(pulse(player,BEGIN,base));assert_eq!(apply(target,MARK_HIT),0);query(mode);query(mode+10);
   CALLS.with(|v|v.borrow_mut().clear());assert_eq!(apply(target,CARRIER),0x91);assert_eq!(apply(target,CARRIER),0);CALLS.with(|v|assert_eq!(&*v.borrow(),&[(target,BURST,player)]));

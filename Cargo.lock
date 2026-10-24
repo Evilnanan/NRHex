@@ -79,7 +79,7 @@ checksum = "ce5d3ddc6d3fa000eb1536d85e147bfe31aacaba692ed6a876f95cb7c855be78"
 
 [[package]]
 name = "nrhex"
-version = "0.17.247"
+version = "0.17.248"
 dependencies = [
  "iced-x86",
  "sha2",

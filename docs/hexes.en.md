@@ -195,9 +195,9 @@ Greatly increases poise and grants immunity to status buildup for 15 seconds aft
 Raises maximum HP by 50% and increases the likelihood of being targeted by enemies for 15 seconds after activating an Ultimate Art.
 
 <!-- hex:95004200 -->
-## Enhanced [Marking]
+## Slide
 
-Allows sliding kicks to launch small enemies. Follow-up attacks deal heavy damage to enemies hit by the slide.
+Your Character Skill launches small enemies. Follow-up attacks against kicked enemies deal heavy damage.
 
 <!-- hex:95004300 -->
 ## Wraithcaller

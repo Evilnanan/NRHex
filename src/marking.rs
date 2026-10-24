@@ -3,11 +3,12 @@ use crate::{ptr,read_i32};
 pub const OWNER:i32=95004200;
 pub const ATTACK:i32=600000110;
 pub const IMPACT:u8=9;
-pub unsafe fn constructed(hit:usize,context:usize,owned:impl FnOnce()->bool){
+pub const AIR_IMPACT:u8=3;
+pub unsafe fn constructed(hit:usize,context:usize,owned:impl FnOnce()->bool,airborne:impl FnOnce()->bool){
  // Caller has already matched context[0] against the local ChrIns. Never
  // change a shared AtkParam, poison-relic follow-up, projectile or other skill.
  if hit!=0&&context!=0&&read_i32(context+8)==ATTACK&&read_i32(context+0xc)==1&&owned(){
-  ptr::write((hit+0x24)as*mut u8,IMPACT);
+  ptr::write((hit+0x24)as*mut u8,if airborne(){AIR_IMPACT}else{IMPACT});
  }
 }
 pub const CARRIER:i32=OWNER+1;
@@ -15,13 +16,15 @@ pub const MARK_HIT:i32=OWNER+2;
 pub const BURST:i32=OWNER+3;
 pub const BEGIN:i32=OWNER+4;
 pub const QUERY:i32=990042;
+pub const ORIGIN_QUERY:i32=990047;
 #[derive(Clone,Copy,Default,PartialEq,Eq,Debug)]
 struct Identity{actor:usize,handle:u64,stats:usize}
 #[derive(Clone,Copy,Default,PartialEq,Eq,Debug)]
 enum Phase{#[default]Idle,Slide,Followup{family:i32,layers:u8},Spent}
-#[derive(Default)]struct Combo{owner:Identity,phase:Phase,targets:Vec<Identity>}
+#[derive(Default)]struct Combo{owner:Identity,phase:Phase,targets:Vec<Identity>,airborne:bool}
 impl Combo{
  fn sync(&mut self,owner:Identity){if self.owner!=owner{*self=Self{owner,..Self::default()};}}
+ fn start(&mut self,airborne:bool){self.airborne=airborne;self.phase=Phase::Idle;self.targets.clear();}
  fn begin(&mut self){self.phase=Phase::Slide;self.targets.clear();}
  fn mark(&mut self,target:Identity){if self.phase==Phase::Slide&&!self.targets.contains(&target){self.targets.push(target);}}
  fn event(&mut self,mode:i32){
@@ -39,13 +42,21 @@ impl Combo{
   self.phase=Phase::Spent;let matched=self.targets.contains(&target);self.targets.clear();matched
  }
 }
-static COMBO:std::sync::Mutex<Combo>=std::sync::Mutex::new(Combo{owner:Identity{actor:0,handle:0,stats:0},phase:Phase::Idle,targets:Vec::new()});
+static COMBO:std::sync::Mutex<Combo>=std::sync::Mutex::new(Combo{owner:Identity{actor:0,handle:0,stats:0},phase:Phase::Idle,targets:Vec::new(),airborne:false});
 unsafe fn identity(actor:usize)->Identity{Identity{actor,handle:ptr::read_unaligned((actor+8)as*const u64),stats:crate::native_actor::stats(actor)}}
 unsafe fn owned(player:usize,base:usize)->Option<Identity>{
  if player==0||!crate::is_local(player,base)||!crate::has_effect(player,OWNER,base)||crate::has_effect(player,crate::reward_cycle_runtime::RESET,base){return None;}
  let id=identity(player);(id.stats!=0&&!crate::native_actor::incapacitated(player,id.stats)).then_some(id)
 }
 pub fn reset(){if let Ok(mut s)=COMBO.lock(){*s=Combo::default();}}
+pub unsafe fn start(player:usize,mode:i32,base:usize){
+ if !matches!(mode,1|2|11|12){return;}
+ if let Some(owner)=owned(player,base){if let Ok(mut s)=COMBO.lock(){s.sync(owner);s.start(matches!(mode,2|12));}}
+}
+pub unsafe fn air_started(player:usize)->bool{
+ if player==0{return false;}
+ let owner=identity(player);COMBO.lock().is_ok_and(|s|s.owner==owner&&s.airborne)
+}
 pub unsafe fn update(player:usize,base:usize){if let Some(owner)=owned(player,base){if let Ok(mut s)=COMBO.lock(){s.sync(owner);}}else{reset();}}
 pub unsafe fn pulse(player:usize,effect:i32,base:usize)->bool{
  if effect!=BEGIN{return false;}
@@ -72,16 +83,28 @@ pub unsafe fn route(target:usize,effect:i32,source:usize,context:usize,base:usiz
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn marking_queries_do_not_shadow_other_ability_queries(){
+  let queries=[QUERY,ORIGIN_QUERY,crate::wraith::FRAME,crate::wraith::BUSY,crate::basics::ULTIMATE_QUERY,crate::basics::READY_QUERY,crate::ambulance::QUERY,crate::cat_wall::QUERY];
+  assert_eq!(queries.into_iter().collect::<std::collections::BTreeSet<_>>().len(),queries.len());
+ }
  #[test]fn only_owned_pc_marking_changes_the_outgoing_reaction(){unsafe{
-  for owned in [false,true]{for attack in [ATTACK,600000120,300000290,0,-1]{for table in [0,1,2]{
+  for owned in [false,true]{for airborne in [false,true]{for attack in [ATTACK,600000120,300000290,0,-1]{for table in [0,1,2]{
    let mut context=[0u32;8];context[2]=attack as u32;context[3]=table;
    for original in [0,1,2,3,7,9,255]{
     let mut hit=[0xabu8;0x300];hit[0x24]=original;let before=hit;
-    constructed(hit.as_mut_ptr()as usize,context.as_ptr()as usize,||owned);
-    for i in 0..hit.len(){assert_eq!(hit[i],if i==0x24&&owned&&attack==ATTACK&&table==1{IMPACT}else{before[i]});}
+    constructed(hit.as_mut_ptr()as usize,context.as_ptr()as usize,||owned,||airborne);
+    for i in 0..hit.len(){assert_eq!(hit[i],if i==0x24&&owned&&attack==ATTACK&&table==1{if airborne{AIR_IMPACT}else{IMPACT}}else{before[i]});}
    }
-  }}}
+  }}}}
  }}
+ #[test]fn slide_origin_survives_landing_and_followup_but_not_new_starts_or_owner_changes(){
+  let mut s=Combo::default();s.sync(id(1));
+  for airborne in [true,false,true]{
+   s.start(airborne);s.begin();s.mark(id(2));s.event(0);assert_eq!(s.airborne,airborne);
+   s.begin();s.mark(id(2));s.event(1);assert_eq!(s.airborne,airborne);assert!(s.hit(id(2)));assert_eq!(s.airborne,airborne);
+  }
+  s.sync(id(3));assert!(!s.airborne);
+ }
  fn id(actor:usize)->Identity{Identity{actor,handle:actor as u64,stats:actor+100}}
  #[test]fn followup_is_one_attack_and_only_the_slid_target_can_burst(){
   for mode in 1..=4{
