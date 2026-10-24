@@ -7,17 +7,18 @@ pub static RESTAGE_ORIGINAL:std::sync::atomic::AtomicPtr<u8>=std::sync::atomic::
 pub const ULTIMATE_QUERY:i32=990045;
 pub const READY_QUERY:i32=990046;
 pub const CONFLICTS:[i32;4]=[95000400,95003800,95003900,95004000];
+pub const COOLDOWNS:[i32;4]=[OWNER+1,OWNER+2,OWNER+3,OWNER+7];
 pub const FAMILY_IDLE:[i32;3]=[705061,705071,705081];
 pub const FAMILY_RELOAD:[i32;3]=[OWNER+4,OWNER+5,OWNER+6];
-pub fn cooldown_effect(hero:Option<u8>)->Option<i32>{match hero{Some(1|2|3)=>Some(OWNER+1),Some(4|5)=>Some(OWNER+2),Some(9|10)=>Some(OWNER+3),_=>None}}
+pub fn cooldown_effect(hero:Option<u8>)->Option<i32>{match hero{Some(1)=>Some(OWNER+7),Some(2|9|10)=>Some(OWNER+3),Some(3)=>Some(OWNER+1),Some(4|5)=>Some(OWNER+2),_=>None}}
 pub fn multiplier(hero:Option<u8>,attack:i32,table:i32)->f32{
  if table!=1{return 1.;}
  match (hero,attack){
-  (Some(1),600000000|600000005|600000010|600000015|600000016|600000030|600000035)=>1.7,
-  (Some(2),600000050|600000055|600000080..=600000087|600000089..=600000091)=>2.,
-  (Some(3),600000110|600000120)=>1.7,
-  (Some(5),600000200|600000210|600000220|600000230|600000231|600000240|600000250)=>2.,
-  (Some(7),80000|80002|80100|80101|80200|80201|81000|81005|81100|81110|81300|81310|81500|81510|82000|82010|82011|82012|82100|82200|82201|82202|82210|82300|82310)=>1.5,
+  (Some(1),600000000|600000005|600000010|600000015|600000016|600000030|600000035)=>1.5,
+  (Some(2),600000050|600000055|600000080..=600000087|600000089..=600000091)=>1.5,
+  (Some(3),600000110|600000120)=>1.5,
+  (Some(5),600000200|600000210|600000220|600000230|600000231|600000240|600000250)=>3.,
+  (Some(7),80000|80002|80100|80101|80200|80201|81000|81005|81100|81110|81300|81310|81500|81510|82000|82010|82011|82012|82100|82200|82201|82202|82210|82300|82310)=>1.75,
   (Some(8),600000350)=>1.5,
   (Some(8),960200..=960591|600000355)=>1.15,
   _=>1.,
@@ -29,7 +30,7 @@ pub unsafe fn sealed(actor:usize,base:usize)->bool{
 pub unsafe fn update(actor:usize,base:usize){
  let stats=native_actor::stats(actor);if stats==0{return;}
  let wanted=if sealed(actor,base){cooldown_effect(local_hero(base))}else{None};
- for id in OWNER+1..=OWNER+3{crate::maintain_status_effect(actor,stats,id,wanted==Some(id),base);}
+ for id in COOLDOWNS{crate::maintain_status_effect(actor,stats,id,wanted==Some(id),base);}
  update_family(actor,base);
 }
 unsafe fn family_handles(owner:usize)->Option<[u64;3]>{
@@ -68,7 +69,7 @@ pub unsafe fn calculated(local:usize,target:usize,source:usize,hit:usize,base:us
  if hit==0||source==0||source==target||read_i32(hit+0x280)<=0||!sealed(local,base){return;}
  let hero=local_hero(base);
  let factor=if source==local{multiplier(hero,read_i32(hit+0x40),read_i32(hit+0x44))}
-  else if hero==Some(6)&&family_source(local,source,base){2.}else{1.};
+  else if hero==Some(6)&&family_source(local,source,base){3.}else{1.};
  if factor!=1.{ptr::write_unaligned((hit+0x280)as*mut i32,crate::sword::boosted(read_i32(hit+0x280),factor));}
 }
 // Restage replays recorded damage, with its own proportion and network payload.
@@ -99,13 +100,13 @@ pub unsafe extern "system" fn restage_detour(){
 #[cfg(test)]mod tests{
  use super::*;
  #[test]fn role_values_do_not_leak_to_other_attacks_or_roles(){
-  for (hero,attack,factor)in [(1,600000000,1.7),(2,600000050,2.),(3,600000110,1.7),(5,600000210,2.),(7,82310,1.5),(8,960200,1.15),(8,600000350,1.5),(8,600000355,1.15)]{
+  for (hero,attack,factor)in [(1,600000000,1.5),(2,600000050,1.5),(3,600000110,1.5),(5,600000210,3.),(7,82310,1.75),(8,960200,1.15),(8,600000350,1.5),(8,600000355,1.15)]{
    assert_eq!(multiplier(Some(hero),attack,1),factor);
    assert_eq!(multiplier(Some(hero),attack,0),1.);
    for other in 1..=10{if other!=hero{assert_eq!(multiplier(Some(other),attack,1),1.);}}
   }
   for hero in 0..=10{for attack in [0,12064105,300000290,600000400,81200,81201,82111]{assert_eq!(multiplier(Some(hero),attack,1),1.);}}
-  assert_eq!(cooldown_effect(Some(1)),Some(OWNER+1));assert_eq!(cooldown_effect(Some(2)),Some(OWNER+1));assert_eq!(cooldown_effect(Some(3)),Some(OWNER+1));
+  assert_eq!(cooldown_effect(Some(1)),Some(OWNER+7));assert_eq!(cooldown_effect(Some(2)),Some(OWNER+3));assert_eq!(cooldown_effect(Some(3)),Some(OWNER+1));
   for hero in [4,5]{assert_eq!(cooldown_effect(Some(hero)),Some(OWNER+2));}
   for hero in [9,10]{assert_eq!(cooldown_effect(Some(hero)),Some(OWNER+3));}
   for hero in [None,Some(0),Some(6),Some(7),Some(8)]{assert_eq!(cooldown_effect(hero),None);}

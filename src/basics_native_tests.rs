@@ -27,7 +27,7 @@ fn native_basics_cooldown_product_seal_and_damage(){unsafe{
  let mut jump=vec![0x48,0xb8];jump.extend_from_slice(&(has as*const()as usize).to_le_bytes());jump.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(jump.as_ptr(),(base+crate::HAS_EFFECT_RVA)as*mut u8,jump.len());
  let original:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+0x508480);
  let mut manager=[0usize;4];let mut first=[0usize;0x70/8];let mut second=[0usize;0x70/8];manager[1]=first.as_mut_ptr()as usize;first[0x38/8]=second.as_mut_ptr()as usize;
- for (id,expected)in [(OWNER+1,0.7),(OWNER+2,0.8),(OWNER+3,0.5)]{
+ for (id,expected)in [(OWNER+1,0.7),(OWNER+2,0.8),(OWNER+3,0.5),(OWNER+7,0.6)]{
   first[0]=row(&params,id).as_ptr()as usize;second[0]=row(&params,7000802).as_ptr()as usize;
   assert!((original(manager.as_ptr()as usize)-expected*0.9).abs()<1e-6);
   first[0x68/8]=1;assert!((original(manager.as_ptr()as usize)-0.9).abs()<1e-6);first[0x68/8]=0;
@@ -47,7 +47,7 @@ fn native_basics_cooldown_product_seal_and_damage(){unsafe{
  }}}
  for owned in [false,true]{for reset in [false,true]{OWNED.with(|s|s.set(owned));RESET.with(|s|s.set(reset));
   for (query,native)in [(ULTIMATE_QUERY,1106),(READY_QUERY,370)]{QUERY.with(|s|s.set(0));let result=crate::ambulance::env(context.as_ptr()as usize,query,17);assert_eq!(result,i32::from(!owned||reset));assert_eq!(QUERY.with(Cell::get),if owned&&!reset{0}else{native});}
-  for (hero,attack,expected)in [(1u8,600000000i32,170i32),(2,600000050,200),(3,600000110,170),(4,600000150,100),(5,600000210,200),(7,82310,150),(8,960200,115),(8,600000350,150),(9,600000400,100),(10,600000000,100)]{
+  for (hero,attack,expected)in [(1u8,600000000i32,150i32),(2,600000050,150),(3,600000110,150),(4,600000150,100),(5,600000210,300),(7,82310,175),(8,960200,115),(8,600000350,150),(9,600000400,100),(10,600000000,100)]{
    data[0xc7]=hero;let mut hit=[0u8;0x300];hit[0x40..0x44].copy_from_slice(&attack.to_le_bytes());hit[0x44..0x48].copy_from_slice(&1i32.to_le_bytes());hit[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());let before=hit;
    calculated(actor,actor+8,actor,hit.as_mut_ptr()as usize,base);let expected=if owned&&!reset{expected}else{100};assert_eq!(read_i32(hit.as_ptr()as usize+0x280),expected);
    for i in 0..hit.len(){if !(0x280..0x284).contains(&i){assert_eq!(hit[i],before[i]);}}
@@ -62,12 +62,12 @@ fn native_basics_cooldown_product_seal_and_damage(){unsafe{
  let mut entries=vec![0usize;60*2];let mut collection=[0usize;4];let table=[base+0x4ac780,base+0x4ac710,base+0x4ac770];
  collection[0]=table.as_ptr()as usize;collection[2]=60;collection[3]=entries.as_mut_ptr()as usize;world[(0x170b8+14*8)/8]=collection.as_mut_ptr()as usize;
  for slot in 0..3{family[(0x10+slot*0x60)/8]=handles[slot];npcs[slot][1]=0xffffffff10e0001e+slot;npcs[slot][0x190/8]=actors[slot];entries[(30+slot)*2]=actors[slot];assert_ne!(npcs[slot][1]as u64,handles[slot]);assert_eq!(native_actor::resolve(base,handles[slot]),actors[slot]);assert_eq!(family_slot(actor,actors[slot],base),Some(slot));}
- for source in actors.into_iter().chain([summon.as_ptr()as usize,0]){let mut hit=[0u8;0x300];hit[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());calculated(actor,actor+8,source,hit.as_mut_ptr()as usize,base);assert_eq!(read_i32(hit.as_ptr()as usize+0x280),if actors.contains(&source){200}else{100});}
+ for source in actors.into_iter().chain([summon.as_ptr()as usize,0]){let mut hit=[0u8;0x300];hit[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());calculated(actor,actor+8,source,hit.as_mut_ptr()as usize,base);assert_eq!(read_i32(hit.as_ptr()as usize+0x280),if actors.contains(&source){300}else{100});}
  for copied in [handles[0],npcs[0][1]as u64]{summon[1]=copied;assert!(!family_source(actor,summon.as_ptr()as usize,base));}
  entries[30*2]=0;assert!(!family_source(actor,actors[0],base));entries[30*2]=actors[0];
  let saved_handle=family[0x10/8];for invalid in [0,u64::MAX]{family[0x10/8]=invalid;assert!(!family_source(actor,actors[0],base));}family[0x10/8]=saved_handle;
- // Preserve every native regeneration field apart from the halved interval.
- for i in 0..3{let native=row(&params,FAMILY_IDLE[i]);let private=row(&params,FAMILY_RELOAD[i]);let interval=|b:&[u8]|f32::from_le_bytes(b[12..16].try_into().unwrap());assert_eq!(interval(private),interval(native)*0.5);}
+ // Preserve every native regeneration field apart from the one-third interval.
+ for i in 0..3{let native=row(&params,FAMILY_IDLE[i]);let private=row(&params,FAMILY_RELOAD[i]);let interval=|b:&[u8]|f32::from_le_bytes(b[12..16].try_into().unwrap());assert_eq!(interval(private),interval(native)/3.);}
  let saved_apply=crate::APPLY_ORIG.swap(applied as*mut u8,Ordering::AcqRel);
  for (address,target)in [(crate::APPLY_SELF_RVA,apply as*const()as usize)]{let mut j=vec![0x48,0xb8];j.extend_from_slice(&target.to_le_bytes());j.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(j.as_ptr(),(base+address)as*mut u8,j.len());}
  for hero in [1,6]{data[0xc7]=hero;for owned in [false,true]{for reset in [false,true]{OWNED.with(|s|s.set(owned));RESET.with(|s|s.set(reset));for i in 0..3{for j in 0..3{

@@ -85,6 +85,7 @@ PARAM Parse(string name,Memory<byte> bytes){
 if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sniper-stage")){Sniper.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sniper-check")){Sniper.Verify(root,bnd,Parse);return;}
+if(args.Contains("--basics-balance-stage")){Basics.StageBalance(root,bnd,Parse);return;}
 if(args.Contains("--basics-family-stage")){Basics.StageFamily(root,bnd,Parse);return;}
 if(args.Contains("--basics-stage")){Basics.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--basics-check")){Basics.Verify(root,bnd,Parse);return;}

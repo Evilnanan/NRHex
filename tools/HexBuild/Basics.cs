@@ -3,6 +3,9 @@ using System.Security.Cryptography;
 using System.Text.Json;
 static class Basics {
  public const int Owner=95004400;
+ public static readonly int[] CooldownIds={Owner+1,Owner+2,Owner+3,Owner+7};
+ public static readonly float[] CooldownRates={0.7f,0.8f,0.5f,0.6f};
+ public static readonly int[] ResetIds={Owner,Owner+1,Owner+2,Owner+3,Owner+7};
  public static readonly int[] FamilyIdle={705061,705071,705081};
  static string Name(BinderFile file)=>file.Name.Replace('\\','/').Split('/').Last();
  static void Check(bool value,string message){if(!value)throw new InvalidDataException(message);}
@@ -10,29 +13,28 @@ static class Basics {
  static string Hash(string path)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path)));
  static bool Removal(EMEVD.Instruction i,int effect)=>i.Bank==2004&&i.ID==21&&i.ArgData.Length==8&&BitConverter.ToInt32(i.ArgData)==20000&&BitConverter.ToInt32(i.ArgData,4)==effect;
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
-  float[] rates={0.7f,0.8f,0.5f};
-  for(int i=0;i<3;i++){var r=clone("SpEffectParam",8000000,Owner+1+i);foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("effectEndurance",2f),("saveCategory",-1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("characterSkillCooldownReduction",rates[i])})Set(r,f,v);}
+  for(int i=0;i<CooldownIds.Length;i++){var r=clone("SpEffectParam",8000000,CooldownIds[i]);foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("effectEndurance",2f),("saveCategory",-1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("characterSkillCooldownReduction",CooldownRates[i])})Set(r,f,v);}
   FamilyMechanics(clone);
  }
  public static void FamilyMechanics(Func<string,int,int,PARAM.Row> clone){
-  for(int i=0;i<3;i++){var r=clone("SpEffectParam",FamilyIdle[i],Owner+4+i);Set(r,"motionInterval",Convert.ToSingle(r["motionInterval"].Value)*0.5f);}
+  for(int i=0;i<3;i++){var r=clone("SpEffectParam",FamilyIdle[i],Owner+4+i);Set(r,"motionInterval",Convert.ToSingle(r["motionInterval"].Value)/3f);}
  }
  public static void Events(EMEVD events){
   foreach(int id in new[]{1111,9100941}){
    var e=events.Events.Single(e=>e.ID==id);Check(e.Parameters.Count==0&&!e.Instructions.Any(i=>Removal(i,Owner)),"Basics reset already present or parameterized");
    int index=id==1111?9:e.Instructions.FindLastIndex(i=>i.Bank==2004&&i.ID==21)+1;Check(index>0&&e.Instructions.Take(index).Any(i=>i.Bank==3),"Missing guarded player-ready anchor");
-   e.Instructions.InsertRange(index,Enumerable.Range(0,4).Select(n=>new EMEVD.Instruction(2004,21,new object[]{20000u,Owner+n})));
+   e.Instructions.InsertRange(index,ResetIds.Select(effect=>new EMEVD.Instruction(2004,21,new object[]{20000u,effect})));
   }
  }
- static void ValidateEvents(EMEVD events){foreach(int id in new[]{1111,9100941})foreach(int n in Enumerable.Range(0,4))Check(events.Events.Single(e=>e.ID==id).Instructions.Count(i=>Removal(i,Owner+n))==1,"Basics cleanup missing or duplicated");}
+ static void ValidateEvents(EMEVD events){foreach(int id in new[]{1111,9100941})foreach(int effect in ResetIds)Check(events.Events.Single(e=>e.ID==id).Instructions.Count(i=>Removal(i,effect))==1,"Basics cleanup missing or duplicated");}
  static object Validate(BND4 native,BND4 current,Func<string,Memory<byte>,PARAM> parse){
   PARAM Table(BND4 b,string name)=>parse(name,b.Files.Single(f=>Name(f)==name+".param").Bytes);
   var effects=Table(current,"SpEffectParam");var original=Table(native,"SpEffectParam");
-  for(int i=0;i<3;i++){var r=effects.Rows.Single(r=>r.ID==Owner+1+i);Check(Convert.ToSingle(r["characterSkillCooldownReduction"].Value)==new[]{0.7f,0.8f,0.5f}[i]&&Convert.ToSingle(r["effectEndurance"].Value)==2f&&Convert.ToInt32(r["saveCategory"].Value)==-1,"Native skill cooldown multiplier mismatch");}
+  for(int i=0;i<CooldownIds.Length;i++){var r=effects.Rows.Single(r=>r.ID==CooldownIds[i]);Check(Convert.ToSingle(r["characterSkillCooldownReduction"].Value)==CooldownRates[i]&&Convert.ToSingle(r["effectEndurance"].Value)==2f&&Convert.ToInt32(r["saveCategory"].Value)==-1,"Native skill cooldown multiplier mismatch");}
   foreach(int id in new[]{7000800,7000801,7000802,7290000,7290001,705060,705070,705080})Check(CageAI.Same(original.Rows.Single(r=>r.ID==id),effects.Rows.Single(r=>r.ID==id)),"Native relic changed");
   for(int i=0;i<3;i++){
    var nativeRow=original.Rows.Single(r=>r.ID==FamilyIdle[i]);Check(CageAI.Same(nativeRow,effects.Rows.Single(r=>r.ID==FamilyIdle[i])),"Native family regeneration changed");
-   var expected=new PARAM.Row(nativeRow){ID=Owner+4+i};Set(expected,"motionInterval",Convert.ToSingle(nativeRow["motionInterval"].Value)*0.5f);
+   var expected=new PARAM.Row(nativeRow){ID=Owner+4+i};Set(expected,"motionInterval",Convert.ToSingle(nativeRow["motionInterval"].Value)/3f);
    Check(CageAI.Same(expected,effects.Rows.Single(r=>r.ID==Owner+4+i)),"Private inactive effect differs beyond its healing interval");
    Check(Convert.ToSingle(nativeRow["changeHpRate"].Value)==-1f&&Convert.ToSingle(nativeRow["motionInterval"].Value)==new[]{0.6f,1.5f,2f}[i],"Native family healing baseline changed");
   }
@@ -40,10 +42,10 @@ static class Basics {
   Check(RewardCatalog.HistoryBit(Owner)==41&&RewardCatalog.HistoricalOwners[40]==95004300,"History slots must not be reused");
   var good=Table(current,"EquipParamGoods").Rows.Single(r=>r.ID==Owner);var attach=Table(current,"AttachEffectParam").Rows.Single(r=>r.ID==Owner);var permanent=Table(current,"PermanentBuffParam").Rows.Single(r=>r.ID==Owner);
   Check(Convert.ToInt32(good["vagrantItemLotId"].Value)==Owner&&Convert.ToInt32(good["iconId"].Value)==20297&&Convert.ToInt32(attach["passiveSpEffectId_1"].Value)==Owner&&Convert.ToInt32(permanent["iconId"].Value)==21297,"Ultimate-series reward wiring mismatch");
-  return new{owner=Owner,cooldownMultipliers=new[]{0.7f,0.8f,0.5f},familyDamageMultiplier=2f,familyReloadSpeed=2f,historyBit=41};
+  return new{owner=Owner,cooldownEffects=CooldownIds,cooldownMultipliers=CooldownRates,familyDamageMultiplier=3f,familyReloadSpeed=3f,historyBit=41};
  }
  static void Fixture(string directory,BND4 current,Func<string,Memory<byte>,PARAM> parse){
-  Directory.CreateDirectory(directory);var rows=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);rows.Rows=rows.Rows.Where(r=>r.ID>=Owner&&r.ID<=Owner+6||new[]{7000800,7000801,7000802,705060,705070,705080}.Concat(FamilyIdle).Contains(r.ID)).ToList();File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),rows.Write());
+  Directory.CreateDirectory(directory);var rows=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);rows.Rows=rows.Rows.Where(r=>r.ID>=Owner&&r.ID<=Owner+7||new[]{7000800,7000801,7000802,705060,705070,705080}.Concat(FamilyIdle).Contains(r.ID)).ToList();File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),rows.Write());
  }
  public static void StageFamily(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/basics-family/staged");Directory.CreateDirectory(dir);
@@ -85,9 +87,39 @@ static class Basics {
   var audit=Validate(native,final,parse);Fixture(dir,final,parse);RewardCatalog.Write(Path.Combine(dir,"hex_pool.rs"),hexes);
   string eventInput=Path.Combine(root,"dist/mod/event/common.emevd.dcx"),eventOutput=Path.Combine(dir,"common.emevd.dcx");var ev=EMEVD.Read(eventInput);var oldEv=EMEVD.Read(eventInput);Events(ev);ev.Write(eventOutput);var actualEv=EMEVD.Read(eventOutput);ValidateEvents(actualEv);
   Check(actualEv.Format==oldEv.Format&&actualEv.Compression==oldEv.Compression&&actualEv.Events.Count==oldEv.Events.Count&&actualEv.StringData.SequenceEqual(oldEv.StringData)&&actualEv.LinkedFileOffsets.SequenceEqual(oldEv.LinkedFileOffsets),"Event metadata changed");
-  foreach(var old in oldEv.Events){var actual=actualEv.Events.Single(e=>e.ID==old.ID);Check(Cages.Same(ev.Events.Single(e=>e.ID==old.ID),actual),"Event readback mismatch");if(old.ID is 1111 or 9100941)actual.Instructions.RemoveAll(i=>Enumerable.Range(0,4).Any(n=>Removal(i,Owner+n)));Check(Cages.Same(old,actual),"Unrelated event instructions/parameters changed");}
+  foreach(var old in oldEv.Events){var actual=actualEv.Events.Single(e=>e.ID==old.ID);Check(Cages.Same(ev.Events.Single(e=>e.ID==old.ID),actual),"Event readback mismatch");if(old.ID is 1111 or 9100941)actual.Instructions.RemoveAll(i=>ResetIds.Any(id=>Removal(i,id)));Check(Cages.Same(old,actual),"Unrelated event instructions/parameters changed");}
   HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner});
   File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),hexCount=hexes.Length,addedRows=added.ToDictionary(p=>p.Key,p=>p.Value.Order().ToArray()),rowCounts=tables.ToDictionary(p=>p.Key,p=>p.Value.Rows.Count),audit,existingRowsAndUnrelatedTablesUnchanged=true,onlyTwoGuardedCleanupEventsExtended=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: Back to Basics owner, native cooldown multipliers, append-only reward and guarded resets staged");
  }
+ public static void StageBalance(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
+  string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/basics-balance/staged");Directory.CreateDirectory(dir);
+  var b=SFUtil.DecryptNightreignRegulation(input);var before=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());var member=b.Files.Single(f=>Name(f)=="SpEffectParam.param");var old=parse("SpEffectParam",member.Bytes);var rows=parse("SpEffectParam",member.Bytes);
+  var templates=parse("SpEffectParam",native.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);var generated=new Dictionary<int,PARAM.Row>();
+  Mechanics((name,source,id)=>{Check(name=="SpEffectParam","Unexpected Basics table");var r=new PARAM.Row(templates.Rows.Single(r=>r.ID==source)){ID=id};generated.Add(id,r);return r;});
+  Check(!rows.Rows.Any(r=>r.ID==Owner+7),"Tracker cooldown effect collision");
+  foreach(var(id,expected)in generated){
+   if(id==Owner+7){rows.Rows.Add(expected);continue;}
+   var r=rows.Rows.Single(r=>r.ID==id);var comparison=new PARAM.Row(r);
+   if(id>=Owner+4&&id<=Owner+6)Set(comparison,"motionInterval",expected["motionInterval"].Value);
+   Check(CageAI.Same(comparison,expected),"Unexpected existing private Basics fields");
+   if(id>=Owner+4&&id<=Owner+6)Set(r,"motionInterval",expected["motionInterval"].Value);
+  }
+  rows.Rows=rows.Rows.OrderBy(r=>r.ID).ToList();member.Bytes=rows.Write();string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,b,b.Compression);var actual=SFUtil.DecryptNightreignRegulation(output);
+  Check(actual.Version==b.Version&&actual.Compression==b.Compression&&actual.Files.Count==b.Files.Count,"Regulation metadata changed");
+  foreach(var f in actual.Files){var intended=b.Files.Single(x=>x.ID==f.ID);Check(f.Name==intended.Name&&f.Flags==intended.Flags&&f.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Parameter serialization mismatch");if(f.ID!=member.ID)Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated parameter table changed");}
+  var after=parse("SpEffectParam",actual.Files.Single(f=>f.ID==member.ID).Bytes);Check(after.Rows.Count==old.Rows.Count+1,"Unexpected effect count");
+  foreach(var r in old.Rows){var expected=new PARAM.Row(r);if(r.ID>=Owner+4&&r.ID<=Owner+6)Set(expected,"motionInterval",generated[r.ID]["motionInterval"].Value);Check(CageAI.Same(expected,after.Rows.Single(x=>x.ID==r.ID)),"Unrelated existing effect changed");}
+  var audit=Validate(native,actual,parse);Fixture(dir,actual,parse);
+  string common=Path.Combine(root,"dist/mod/event/common.emevd.dcx"),raw=Environment.GetEnvironmentVariable("NRHEX_HEARTSTEALER_COMMON_RAW")??common;
+  if(raw!=common)Check(Hash(common).Equals(Environment.GetEnvironmentVariable("NRHEX_HEARTSTEALER_COMMON_SHA256"),StringComparison.OrdinalIgnoreCase),"Common fixture mismatch");
+  var events=EMEVD.Read(raw);var previous=EMEVD.Read(raw);
+  foreach(int id in new[]{1111,9100941}){var e=events.Events.Single(e=>e.ID==id);Check(e.Parameters.Count==0&&!e.Instructions.Any(i=>Removal(i,Owner+7)),"Unexpected Basics reset structure");foreach(int effect in new[]{Owner,Owner+1,Owner+2,Owner+3})Check(e.Instructions.Count(i=>Removal(i,effect))==1,"Missing previous guarded reset");int at=e.Instructions.FindIndex(i=>Removal(i,Owner+3))+1;Check(at>0,"Missing reset anchor");e.Instructions.Insert(at,new EMEVD.Instruction(2004,21,new object[]{20000u,Owner+7}));}
+  string eventOutput=Path.Combine(dir,"common.emevd");events.Write(eventOutput);var back=EMEVD.Read(eventOutput);ValidateEvents(back);
+  Check(back.Events.Count==previous.Events.Count&&back.Format==previous.Format&&back.Compression==previous.Compression&&back.StringData.SequenceEqual(previous.StringData)&&back.LinkedFileOffsets.SequenceEqual(previous.LinkedFileOffsets),"Event metadata changed");
+  foreach(var e in previous.Events){var now=back.Events.Single(x=>x.ID==e.ID);Check(Cages.Same(now,events.Events.Single(x=>x.ID==e.ID)),"Event roundtrip failed");if(e.ID is 1111 or 9100941)now.Instructions.RemoveAll(i=>Removal(i,Owner+7));Check(Cages.Same(e,now),"Unrelated event changed");}
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),addedEffect=Owner+7,changedIntervals=Enumerable.Range(4,3).Select(i=>new{id=Owner+i,interval=Convert.ToSingle(generated[Owner+i]["motionInterval"].Value)}),onlyThreeExistingFieldsChanged=true,onlyTwoGuardedResetInstructionsAdded=true,allOtherRowsTablesAndEventsPreserved=true,audit,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Basics balance staged; one Tracker effect, three family intervals and two guarded reset instructions only");
+ }
+
 }

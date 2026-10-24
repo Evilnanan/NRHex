@@ -1,6 +1,6 @@
 {
-  "version": "0.17.224",
-  "baseCommit": "5744fce69fd971e21f2f6df0c054e625addf54be",
+  "version": "0.17.244",
+  "baseCommit": "7e3b46e5c2a4edce9b30d4af93bd4290e2c82837",
   "owner": 95004400,
   "name": "回归基本功",
   "allHeroesEligible": true,
@@ -11,19 +11,18 @@
     95003900,
     95004000
   ],
-  "conflictsBidirectionalAndSharedByAllDrawRoutes": true,
   "heroModifiers": {
     "1": {
-      "cooldown": 0.7,
-      "damage": 1.7
+      "cooldown": 0.6,
+      "damage": 1.5
     },
     "2": {
-      "cooldown": 0.7,
-      "damage": 2
+      "cooldown": 0.5,
+      "damage": 1.5
     },
     "3": {
       "cooldown": 0.7,
-      "damage": 1.7
+      "damage": 1.5
     },
     "4": {
       "cooldown": 0.8,
@@ -31,14 +30,14 @@
     },
     "5": {
       "cooldown": 0.8,
-      "damage": 2
+      "damage": 3
     },
     "6": {
-      "familyDamage": 2,
-      "familyReloadSpeed": 2
+      "familyDamage": 3,
+      "familyReloadSpeed": 3
     },
     "7": {
-      "damage": 1.5
+      "damage": 1.75
     },
     "8": {
       "cursedSword": 1.15,
@@ -52,179 +51,142 @@
     }
   },
   "nativeRelicsPreserved": true,
-  "historyBit": 41,
-  "historyBytes": 6,
-  "activeCatalogSize": 40,
-  "drawEnabledSize": 39,
-  "singleNativeRewardTemplateRetained": true,
   "assets": {
-    "inputSha256": "B3276CE9F397F9D139132614D04E624666B6E8C7048578032165CDFB5931FE4A",
-    "outputSha256": "92754353E35E2A0CC3E26644123A450A5E9A94195E7D33ED03435F48A612CEDE",
-    "addedEffects": [
-      95004404,
-      95004405,
-      95004406
+    "inputSha256": "E6620076D5C273EAAAF031FAAB7C03D96152E19796B0EC40C1153B90F29DD3D4",
+    "outputSha256": "6444BC77CE690E26419FB559A6854E0E3887A3EDE9DA16CDE11ED611AB52D3C5",
+    "addedEffect": 95004407,
+    "changedIntervals": [
+      {
+        "id": 95004404,
+        "interval": 0.2
+      },
+      {
+        "id": 95004405,
+        "interval": 0.5
+      },
+      {
+        "id": 95004406,
+        "interval": 0.6666667
+      }
     ],
-    "onlyNewEffectsAdded": true,
-    "originalRowsAndUnrelatedTablesPreserved": true,
+    "onlyThreeExistingFieldsChanged": true,
+    "onlyTwoGuardedResetInstructionsAdded": true,
+    "allOtherRowsTablesAndEventsPreserved": true,
     "audit": {
       "owner": 95004400,
+      "cooldownEffects": [
+        95004401,
+        95004402,
+        95004403,
+        95004407
+      ],
       "cooldownMultipliers": [
         0.7,
         0.8,
-        0.5
+        0.5,
+        0.6
       ],
-      "familyDamageMultiplier": 2,
-      "familyReloadSpeed": 2,
+      "familyDamageMultiplier": 3,
+      "familyReloadSpeed": 3,
       "historyBit": 41
     },
     "gameplayVerified": false,
     "multiplayerVerified": false
   },
-  "hks": {
-    "inputSha256": "ecc038fba7a824fea2d13217ed5fc3059f781013d3a627e9c8fa750c074e0016",
-    "outputSha256": "3c731b9f327d292f63cea07df2a86f401b7c7755dd1c3d7b1cad7335911c4667",
-    "functions": {
-      "105": {
-        "name": "GetAttackRequest",
-        "changes": [
-          [
-            361,
-            1106,
-            990045
-          ],
-          [
-            446,
-            370,
-            990046
-          ],
-          [
-            497,
-            370,
-            990046
-          ]
-        ]
-      },
-      "107": {
-        "name": "ExecAirUlt",
-        "changes": [
-          [
-            57,
-            1106,
-            990045
-          ]
-        ]
-      }
-    },
-    "instructionCountsAndBranchesUnchanged": true,
-    "exactInversePassed": true
-  },
+  "commonCompressionRoundtripPassed": true,
+  "guardedResetsInspected": true,
   "native": {
     "owner": 95004400,
     "nativeExecutionPassed": true,
     "installedReadbackPassed": true,
     "nativeFunctions": [
       "508480 native cooldown product",
-      "449AC7 native Restage ratio, sum and truncation with compiled wrapper"
+      "449AC7 native Restage ratio, sum and truncation with compiled wrapper",
+      "519140 native family reference resolution through 4AC710/4AC770"
     ],
     "cases": [
-      "0.7/0.8/0.5 cooldown multipliers stack with native relic 0.9",
+      "0.7/0.8/0.5/0.6 cooldown multipliers stack with native relic 0.9",
       "local-only ground/air and two-button Ultimate gates; gauge unchanged",
       "native Restage history multiplier retains 0.5/0.6 base and truncation",
       "all ten hero damage scopes; ordinary attacks, healing, support and foreign actors unchanged",
-      "exact three family handles including generation; +100% means x2",
+      "three resolved family actors with different reference/internal identity formats; +200% means x3",
+      "empty slots, invalid references and foreign actors with copied identity bytes do not match",
       "only final HP damage changed; status, stamina and poise untouched",
-      "private native idle effects halve all three intervals; original and active rows preserved",
+      "private native idle effects reduce all three intervals to one third; original and active rows preserved",
       "acquisition upgrades existing idle effects once; 100 updates never restart healing ticks",
       "native active transition retained; owner loss and expedition reset restore idle effects"
     ],
     "stubs": [
       "native availability dispatcher result fixture",
-      "category-201 effect allocation/replacement and world handle lookup fixtures",
+      "category-201 effect allocation/replacement fixture",
       "ownership/effect lookups",
-      "actors and family slots are memory fixtures, not live actors",
+      "actor collections and family slots are memory fixtures, not live actors",
       "full collision, inventory awards, game transport and animation state machine not executed"
     ],
     "sourceHashes": {
-      "src/basics.rs": "b31257a622539e82f03ec777884574608457af080c72ee56e253184ac00301fe",
-      "src/basics_native_tests.rs": "9c433ee770bf155716aa8bd969a90526bdd2ecd660f7a622ccc0ffffdadc621f",
-      "src/lib.rs": "6412a62c43bbd65b2d5f697186349549c3a44b7740788f2ce6050660f3b1c886",
-      "src/ambulance.rs": "7418753e126f0b55fc5eb7137095497a7ec666f8f08a041f9176924e4b184db6",
-      "src/reward_choices.rs": "28bab7cb09fd50baafad143966fa86d32f997206396257296bf770d2fd1b9be6",
-      "src/hex_pool.rs": "1e9d4f18db3d4a7056d5ae4eb923f363edfc5df2dbda2b64d17b6f65869cee66",
-      "tools/HexBuild/Basics.cs": "6fdc7ec6ebace58506426f2bf031d7bb3644f2990d8fccd99d7f1d5d344283f2",
-      "tools/HexBuild/Program.cs": "0f5a97d7c0f690acf100ec68ea7fe457befbfeecfd6674d584c6df9b0614f95c",
+      "src/basics.rs": "ba5260962eb2788430bcd15179021c927ce8802893d033c84ba4b14ebb751650",
+      "src/basics_native_tests.rs": "fe88b77f0c07ffbfe2fa66086ebebf0d069ac218378b109fca9661ec25c8d759",
+      "src/lib.rs": "b48586c55fe706529b2abd7819d0720c827e20e5f5be2f6b6e4a8b75886038ee",
+      "src/ambulance.rs": "8101a2a0581d6dddfac93202afe6e8f6817b2dff855c2b03515c44d44bfe2551",
+      "src/reward_choices.rs": "99f0e37db62f279da1ae6810ff054144e1546b69ec87e61ccdc629b7b96db2d4",
+      "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
+      "tools/HexBuild/Basics.cs": "3c023a872e0f6b9545a3cecbbc406c15a87e1a5af5a1415369e13b3345c00eca",
+      "tools/HexBuild/Program.cs": "808d32f5f619296733772b3334bfbbff87ae4f5c11882516dcf84c101c2b5c9c",
       "tools/build_basics_hks.py": "db61f6afb2d8a2f009b906ae7409c7dcc701066d8b1f3c830a613ca4c8c4aa58",
-      "tools/verify_basics.py": "6d767588682f2ec7cf4cf93166451b8eba2d1a16035db2436d2aa272d1cc2b05",
-      "docs/hexes.md": "653f919f1d575592a11c8ece149c024006c82c9d33222af5abf916a593f323e9",
-      "docs/hexes.en.md": "2392166f14b96dc9a0f8b5d71aeb3d61f02660fc4a4692b31290b668432e5aa0"
+      "tools/verify_basics.py": "e38a0e5d20ce32520376d7d50bfc527e5aaa1c99eb024d636003651dcd7379b5",
+      "docs/hexes.md": "7fb7b1c3d1a09713c2584a8c736b16844bb4ebef36bd4307baf516f208ba1e82",
+      "docs/hexes.en.md": "3308e8110753c30407be7be3363472e9d7286f3fca191162e5c3ba3231078ded"
     },
     "gameplayVerified": false,
     "multiplayerVerified": false
   },
   "build": {
-    "version": "0.17.224",
+    "version": "0.17.244",
     "mode": "dll-only",
     "buildPassed": true,
     "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
-    "dllSha256": "577860fe672c344c9b554c22acdaf413b65b68962ec6526c22afc5ef6d8ee7c4",
+    "dllSha256": "c7ca86c24e322f40802b9791c1ad26c78d529368b333ec75a2950f30b7f398d6",
     "installed": true,
-    "installedDllSha256": "577860fe672c344c9b554c22acdaf413b65b68962ec6526c22afc5ef6d8ee7c4",
+    "installedDllSha256": "c7ca86c24e322f40802b9791c1ad26c78d529368b333ec75a2950f30b7f398d6",
     "resourcesRebuilt": false,
     "gameplayVerified": false,
     "multiplayerVerified": false,
     "loadingVerified": false
   },
-  "regularTestsPassed": 441,
+  "regularTestsPassed": 443,
   "regularIgnoredTests": 27,
-  "runtimeSuitesPassed": 18,
-  "exeSignaturesPassed": 206,
-  "onlyNativeIdleIntervalsChanged": true,
-  "onlyOwnThreeFamilySlotsRouted": true,
-  "existingIdleFamilyUpgradedOnAcquisition": true,
-  "noFrameRefreshOfRegenerationTimer": true,
-  "originalActiveFamilyEffectsPreserved": true,
-  "ownerLossAndResetRestoreNativeIdleEffects": true,
-  "loadingVerified": false,
-  "gameplayVerified": false,
-  "multiplayerVerified": false,
-  "changedExistingDistributionFiles": {
-    "README.md": {
-      "inputSha256": "ce0841fb0bd3030de04dc206c8aff9721bb0a545e67c96c50d9d0cca525736d6",
-      "outputSha256": "aac2aed341af234d49ead4382bd590768a9e127156aaa0173da2c898df65533c"
+  "runtimeSuitesPassed": 19,
+  "exeSignaturesPassed": 199,
+  "changedExistingGameResources": {
+    "dist/mod/event/common.emevd.dcx": {
+      "inputSha256": "fcdc5683f708de22543787f7613affe6cf34b5739aaf55677d1b97169418b095",
+      "outputSha256": "af54d80fa3055efc85bcb1f64e264f5cd9bbc08f6129f049d7438ec34043414d"
     },
-    "mod/regulation.bin": {
-      "inputSha256": "b3276ce9f397f9d139132614d04e624666b6e8c7048578032165cdfb5931fe4a",
-      "outputSha256": "92754353e35e2a0cc3e26644123a450a5e9a94195e7d33ed03435f48a612cede"
+    "dist/mod/natives/NRHex.dll": {
+      "inputSha256": "29be47496c34351724c210a76bb5848301b7bbb76b39f1c0f04ad887abd36b40",
+      "outputSha256": "c7ca86c24e322f40802b9791c1ad26c78d529368b333ec75a2950f30b7f398d6"
     },
-    "mod/natives/NRHex.dll": {
-      "inputSha256": "06e5d98bbae05bb4791e2c07ba8b6565253dea980eb06ee6d9ea2bc638af6338",
-      "outputSha256": "577860fe672c344c9b554c22acdaf413b65b68962ec6526c22afc5ef6d8ee7c4"
+    "dist/mod/regulation.bin": {
+      "inputSha256": "e6620076d5c273eaaaf031faab7c03d96152e19796b0ec40c1153b90f29dd3d4",
+      "outputSha256": "6444bc77ce690e26419fb559a6854e0e3887a3ede9da16cde11ed611ab52d3c5"
     }
   },
-  "allOtherExistingDistributionFilesPreserved": true,
+  "allOtherTrackedGameResourcesPreserved": true,
   "sourceHashes": {
-    "Cargo.toml": "689d5b00323714d976994df3a028f7061a4be7f5c93ad5260559deb9b0209eb3",
-    "Cargo.lock": "9e4bc1e08dbc9c72c685dde7a222712058b5f5ae6d1ea71582fd19d4be87f312",
-    "build.ps1": "481c481d540c0b328fbd709b3cf49f87a39108e1ac4ae59b3a18cccb82f7ac09",
-    "README.md": "11f471d43626c9a0efb39adb3cda3d6f959e66d50cbdf38960a5b88004a4119b",
-    "dist/README.md": "aac2aed341af234d49ead4382bd590768a9e127156aaa0173da2c898df65533c",
-    "CHANGELOG.md": "cde9d3aa191401c90a2a070fa091b4fc9b597670c96e4f0355bb95f664ac8289",
-    "docs/hexes.md": "653f919f1d575592a11c8ece149c024006c82c9d33222af5abf916a593f323e9",
-    "docs/hexes.en.md": "2392166f14b96dc9a0f8b5d71aeb3d61f02660fc4a4692b31290b668432e5aa0",
-    "docs/research/basics.md": "a417ef0e04d15de481fa51d65e5d3381943fbf5d15fa7323b94d5b257bd85d54",
-    "docs/implementation.md": "4673a73f46a03a54af8e34f1cfcb84ea91675b33b77032e8b617e808c9ddf3d8",
-    "src/basics.rs": "b31257a622539e82f03ec777884574608457af080c72ee56e253184ac00301fe",
-    "src/basics_native_tests.rs": "9c433ee770bf155716aa8bd969a90526bdd2ecd660f7a622ccc0ffffdadc621f",
-    "src/lib.rs": "6412a62c43bbd65b2d5f697186349549c3a44b7740788f2ce6050660f3b1c886",
-    "src/ambulance.rs": "7418753e126f0b55fc5eb7137095497a7ec666f8f08a041f9176924e4b184db6",
-    "src/reward_choices.rs": "28bab7cb09fd50baafad143966fa86d32f997206396257296bf770d2fd1b9be6",
-    "src/hex_pool.rs": "1e9d4f18db3d4a7056d5ae4eb923f363edfc5df2dbda2b64d17b6f65869cee66",
-    "tools/HexBuild/Basics.cs": "6fdc7ec6ebace58506426f2bf031d7bb3644f2990d8fccd99d7f1d5d344283f2",
-    "tools/HexBuild/Program.cs": "0f5a97d7c0f690acf100ec68ea7fe457befbfeecfd6674d584c6df9b0614f95c",
-    "tools/HexBuild/HexCatalog.cs": "bcc13bfb5c91409e86739473165fb5f7136659ac8cda87ee81100b77964c9933",
-    "tools/HexBuild/RewardCatalog.cs": "744bb051344e4198c0780a3305098f269a208452342989d6b0fdc1d48edae5ed",
+    "src/basics.rs": "ba5260962eb2788430bcd15179021c927ce8802893d033c84ba4b14ebb751650",
+    "src/basics_native_tests.rs": "fe88b77f0c07ffbfe2fa66086ebebf0d069ac218378b109fca9661ec25c8d759",
+    "src/lib.rs": "b48586c55fe706529b2abd7819d0720c827e20e5f5be2f6b6e4a8b75886038ee",
+    "src/ambulance.rs": "8101a2a0581d6dddfac93202afe6e8f6817b2dff855c2b03515c44d44bfe2551",
+    "src/reward_choices.rs": "99f0e37db62f279da1ae6810ff054144e1546b69ec87e61ccdc629b7b96db2d4",
+    "src/hex_pool.rs": "6474d8a28e7dda1a39dc0d1cbcc475eaa70feba8dc4cd7a829f7b7759fccdafb",
+    "tools/HexBuild/Basics.cs": "3c023a872e0f6b9545a3cecbbc406c15a87e1a5af5a1415369e13b3345c00eca",
+    "tools/HexBuild/Program.cs": "808d32f5f619296733772b3334bfbbff87ae4f5c11882516dcf84c101c2b5c9c",
     "tools/build_basics_hks.py": "db61f6afb2d8a2f009b906ae7409c7dcc701066d8b1f3c830a613ca4c8c4aa58",
-    "tools/verify_basics.py": "6d767588682f2ec7cf4cf93166451b8eba2d1a16035db2436d2aa272d1cc2b05"
-  }
+    "tools/verify_basics.py": "e38a0e5d20ce32520376d7d50bfc527e5aaa1c99eb024d636003651dcd7379b5",
+    "docs/hexes.md": "7fb7b1c3d1a09713c2584a8c736b16844bb4ebef36bd4307baf516f208ba1e82",
+    "docs/hexes.en.md": "3308e8110753c30407be7be3363472e9d7286f3fca191162e5c3ba3231078ded"
+  },
+  "loadingVerified": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
 }
