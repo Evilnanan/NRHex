@@ -1,0 +1,16 @@
+{
+  "dllSha256": "C2E87E09FE2113D9180C09126244BE2C5C52AC3DC162DBDB5B593BCB691EE8CD",
+  "nativeBasicsValidationPassed": true,
+  "damageBonus": 1.5,
+  "regularTestsPassed": 450,
+  "resourcesAndProfileUnchanged": true,
+  "version": "0.17.252",
+  "onlyDistDllInstalled": true,
+  "cooldownReduction": 0.2,
+  "hero": "Raider",
+  "damageMultiplier": 2.5,
+  "signatureCheckPassed": true,
+  "gameplayVerified": false,
+  "gameLaunched": false,
+  "groupDllUnchanged": true
+}

@@ -1,4 +1,4 @@
-# NRHex 0.17.251 自测版
+# NRHex 0.17.252 自测版
 
 目录：`mod/` 为游戏资源与 DLL，`testmods/` 为测试辅助 Mod，`reports/` 为构建／验证报告（游戏运行不需要）。启动使用 `启动测试版.ps1`；卡退出时使用 `强制结束游戏.cmd`，它调用同目录的 `Stop-Nightreign.ps1`。`NRHex.me3` 和现有配置位置不变。
 

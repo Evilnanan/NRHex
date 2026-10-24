@@ -17,7 +17,7 @@ pub fn multiplier(hero:Option<u8>,attack:i32,table:i32)->f32{
   (Some(1),600000000|600000005|600000010|600000015|600000016|600000030|600000035)=>1.5,
   (Some(2),600000050|600000055|600000080..=600000087|600000089..=600000091)=>1.5,
   (Some(3),600000110|600000120)=>1.5,
-  (Some(5),600000200|600000210|600000220|600000230|600000231|600000240|600000250)=>3.,
+  (Some(5),600000200|600000210|600000220|600000230|600000231|600000240|600000250)=>2.5,
   (Some(7),80000|80002|80100|80101|80200|80201|81000|81005|81100|81110|81300|81310|81500|81510|82000|82010|82011|82012|82100|82200|82201|82202|82210|82300|82310)=>1.75,
   (Some(8),600000350)=>1.5,
   (Some(8),960200..=960591|600000355)=>1.15,
@@ -100,7 +100,7 @@ pub unsafe extern "system" fn restage_detour(){
 #[cfg(test)]mod tests{
  use super::*;
  #[test]fn role_values_do_not_leak_to_other_attacks_or_roles(){
-  for (hero,attack,factor)in [(1,600000000,1.5),(2,600000050,1.5),(3,600000110,1.5),(5,600000210,3.),(7,82310,1.75),(8,960200,1.15),(8,600000350,1.5),(8,600000355,1.15)]{
+  for (hero,attack,factor)in [(1,600000000,1.5),(2,600000050,1.5),(3,600000110,1.5),(5,600000210,2.5),(7,82310,1.75),(8,960200,1.15),(8,600000350,1.5),(8,600000355,1.15)]{
    assert_eq!(multiplier(Some(hero),attack,1),factor);
    assert_eq!(multiplier(Some(hero),attack,0),1.);
    for other in 1..=10{if other!=hero{assert_eq!(multiplier(Some(other),attack,1),1.);}}
@@ -108,6 +108,7 @@ pub unsafe extern "system" fn restage_detour(){
   for hero in 0..=10{for attack in [0,12064105,300000290,600000400,81200,81201,82111]{assert_eq!(multiplier(Some(hero),attack,1),1.);}}
   assert_eq!(cooldown_effect(Some(1)),Some(OWNER+7));assert_eq!(cooldown_effect(Some(2)),Some(OWNER+3));assert_eq!(cooldown_effect(Some(3)),Some(OWNER+1));
   for hero in [4,5]{assert_eq!(cooldown_effect(Some(hero)),Some(OWNER+2));}
+  for attack in [600000200,600000210,600000220,600000230,600000231,600000240,600000250]{assert_eq!(multiplier(Some(5),attack,1),2.5);assert_eq!(multiplier(Some(5),attack,0),1.);assert_eq!(multiplier(Some(4),attack,1),1.);}
   for hero in [9,10]{assert_eq!(cooldown_effect(Some(hero)),Some(OWNER+3));}
   for hero in [None,Some(0),Some(6),Some(7),Some(8)]{assert_eq!(cooldown_effect(hero),None);}
  }
