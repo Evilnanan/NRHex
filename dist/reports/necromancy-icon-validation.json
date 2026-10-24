@@ -1,0 +1,43 @@
+{
+  "version": "0.17.250",
+  "hexId": 95001800,
+  "referenceHexId": 95000400,
+  "inputSha256": "7A7E23B0D7B4CF822A48BB6794A9F5B91AE8DE15A1864196A99A1B528DDD865B",
+  "outputSha256": "66CD09F244B81036084BFD282E37DC63B37EB9269A9FF09FF0CBC2EED957D1C3",
+  "icons": [
+    {
+      "table": "SpEffectParam",
+      "field": "iconId",
+      "before": 22267,
+      "after": 22297
+    },
+    {
+      "table": "AttachEffectParam",
+      "field": "statusIconId",
+      "before": 22267,
+      "after": 22297
+    },
+    {
+      "table": "PermanentBuffParam",
+      "field": "iconId",
+      "before": 21267,
+      "after": 21297
+    },
+    {
+      "table": "EquipParamGoods",
+      "field": "iconId",
+      "before": 20267,
+      "after": 20297
+    }
+  ],
+  "catalogMatchesReference": true,
+  "roundtripVerified": true,
+  "unrelatedRowsAndFieldsPreserved": true,
+  "unrelatedTablesPreserved": true,
+  "gameplayVerified": false,
+  "changedGameAssets": [
+    "dist/mod/regulation.bin"
+  ],
+  "installedHashMatches": true,
+  "otherGameAssetsUnchanged": true
+}
