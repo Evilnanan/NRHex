@@ -6,14 +6,6 @@ static class DevilsGaze {
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row row,string field,object value){row[field].Value=Convert.ChangeType(value,row[field].Value.GetType());}
  static string Hash(string p)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(p)));
- static int Damage(Dictionary<string,PARAM> tables,int depth,float fraction){
-  var correction=tables["ChaosMatchingCorrectParam"].Rows.Single(r=>r.ID==7760);
-  float baseRate=Convert.ToSingle(tables["SpEffectParam"].Rows.Single(r=>r.ID==7760)["darkAttackPowerRate"].Value);
-  Check(baseRate==3.36f,"Libra base attack correction changed");
-  float factor=1;
-  if(depth>0){int effect=Convert.ToInt32(correction[$"spEffect{depth-1:00}"].Value);Check(effect==877600+depth,"Libra depth reference changed");factor=Convert.ToSingle(tables["SpEffectParam"].Rows.Single(r=>r.ID==effect)["darkAttackPowerRate"].Value);}
-  return (int)Math.Round(300*(double)fraction*baseRate*factor,MidpointRounding.AwayFromZero);
- }
  static void HitPhases(PARAM.Row bullet,int part){
   // The original warning uses dummy NPC attack 1. For an environmental
   // all-team source it must not submit hits before the damaging child exists.
@@ -28,13 +20,11 @@ static class DevilsGaze {
   Check(Convert.ToSingle(native["life"].Value)==3.95f&&Convert.ToInt32(native["HitBulletID"].Value)==7560367,"Libra slow circle changed");
   var main=tables["AtkParam_Npc"].Rows.Single(r=>r.ID==7560221);
   Check(Convert.ToInt32(main["atkDark"].Value)==300&&Convert.ToInt32(main["spAttributeMixcraft"].Value)==13,"Libra holy attack changed");
-  // Nightlord's native base correction is separate from Deep of Night.
-  // An ownerless bullet does not inherit it, so bake only this fixed source
-  // correction into the private NPC attack rows before native mitigation.
+  // Retain the native raw attack. Base/depth/recipient multipliers are applied
+  // to the per-hit input copy at runtime, before native mitigation.
   for(int depth=0;depth<=5;depth++){
    int start=FirstBullet+depth*10,attackId=95002200+depth;
    var attack=add("AtkParam_Npc",7560221,attackId);
-   Set(attack,"atkDark",Damage(tables,depth,.25f));
    Set(attack,"friendlyTarget",1);Set(attack,"selfTarget",1);
    for(int part=0;part<3;part++){
     var bullet=add("Bullet",7560366+part,start+part);
@@ -76,25 +66,34 @@ static class DevilsGaze {
  public static void Tune(string root,Func<string,Memory<byte>,PARAM> parse){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,".work/devils-gaze-tuning");Directory.CreateDirectory(directory);
   var binder=SFUtil.DecryptNightreignRegulation(input);
-  string[] names={"AtkParam_Npc","SpEffectParam","ChaosMatchingCorrectParam"};
-  var tables=names.ToDictionary(n=>n,n=>parse(n,binder.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes));
-  var member=binder.Files.Single(f=>Path.GetFileName(f.Name)=="AtkParam_Npc.param");
+  string[] names={"AtkParam_Npc"};
+  var tables=names.ToDictionary(n=>n,n=>parse(n,binder.Files.Single(f=>f.Name.Replace('\\','/').Split('/').Last()==n+".param").Bytes));
+  var member=binder.Files.Single(f=>f.Name.Replace('\\','/').Split('/').Last()=="AtkParam_Npc.param");
   var baseline=parse("AtkParam_Npc",member.Bytes);var changed=new List<object>();
   for(int depth=0;depth<=5;depth++){
    int id=95002200+depth;var row=tables["AtkParam_Npc"].Rows.Single(r=>r.ID==id);
-   int old=Convert.ToInt32(row["atkDark"].Value),next=Damage(tables,depth,.25f);
-   Check(old==Damage(tables,depth,.5f)||old==next,"Unexpected installed damage");
+   int old=Convert.ToInt32(row["atkDark"].Value),next=300;
+   // Accept only the known prior package or an already normalized package.
+   Check(old==new[]{252,328,390,464,640,743}[depth]||old==next,"Unexpected installed damage");
    Set(row,"atkDark",next);Set(baseline.Rows.Single(r=>r.ID==id),"atkDark",next);
    changed.Add(new{id,old,next});
   }
   member.Bytes=tables["AtkParam_Npc"].Write();
   string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);
   var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Version==binder.Version&&final.Compression==binder.Compression&&final.Files.Count==binder.Files.Count,"Regulation container changed");
   foreach(var file in final.Files){var expected=binder.Files.Single(f=>f.ID==file.ID);Check(file.Name==expected.Name&&file.Flags==expected.Flags&&file.Bytes.Span.SequenceEqual(expected.Bytes.Span),"Member readback mismatch");}
   var actual=parse("AtkParam_Npc",final.Files.Single(f=>f.ID==member.ID).Bytes);
   Check(actual.Rows.Count==baseline.Rows.Count&&actual.Rows.Zip(baseline.Rows).All(v=>CageAI.Same(v.First,v.Second)),"Unrelated attack field changed");
-  File.WriteAllText(Path.Combine(directory,"parameter-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),fraction=.25,changes=changed,onlySixHolyAttackFieldsChanged=true,bulletVisualRadiusMadnessUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: six depth damage rows now 25%; all other attack fields, bullets and resources unchanged");
+  File.WriteAllText(Path.Combine(directory,"parameter-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),rawHolyAttack=300,changes=changed,onlySixHolyAttackFieldsChanged=true,bulletVisualRadiusMadnessUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: six Gaze rows retain raw 300 holy attack; all other attack fields, bullets and resources unchanged");
+ }
+ public static void VerifyRaw(string root,Func<string,Memory<byte>,PARAM> parse){
+  var binder=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));
+  var table=parse("AtkParam_Npc",binder.Files.Single(f=>f.Name.Replace('\\','/').Split('/').Last()=="AtkParam_Npc.param").Bytes);
+  Check(Convert.ToInt32(table.Rows.Single(r=>r.ID==7560221)["atkDark"].Value)==300,"Native Libra base attack changed");
+  for(int depth=0;depth<=5;depth++)Check(Convert.ToInt32(table.Rows.Single(r=>r.ID==Owner+depth)["atkDark"].Value)==300,"Gaze raw base attack mismatch; install matching regulation and DLL");
+  Console.WriteLine("PASS: installed Gaze attacks use raw 300 holy damage at all six stages");
  }
  public static void Stage(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string directory=Path.Combine(root,".work/devils-gaze/staged"),input=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(directory);

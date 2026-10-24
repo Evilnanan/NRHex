@@ -88,7 +88,7 @@
 
 用户已确认精简风暴管束者特效包的测试成功。两份构建的快捷键差异及目录布局经过构建和相关检查；未将这些检查视为新版本实机或联机验收。其他玩法与联机状态以对应研究记录和用户反馈为准。
 
-恶魔的注视：`src/devils_gaze.rs`负责周期和三角分布，`src/devils_gaze_runtime.rs`负责地面／障碍检测、环境来源和原生弹丸发射；`src/devils_gaze_hit.rs`在私有法阵接触角色时补回场景来源分支缺失的原生攻击免疫筛选，统一阻止免疫时的伤害、受击和发狂；`src/devils_gaze_audio.rs`负责原生Libra声音包的一次性引用；`tools/HexBuild/DevilsGaze.cs`负责原生慢版法阵、深度伤害、精简资源包及参数回读。
+恶魔的注视：`src/devils_gaze.rs`负责周期和三角分布，`src/devils_gaze_runtime.rs`负责地面／障碍检测、环境来源和原生弹丸发射；`src/devils_gaze_hit.rs`在私有法阵接触角色时补回场景来源分支缺失的原生攻击免疫筛选，统一阻止免疫时的伤害、受击和发狂；`src/devils_gaze_audio.rs`负责原生Libra声音包的一次性引用；`src/devils_gaze_scaling.rs`每次命中读取Libra当前基础／深夜修正，六档参数均保留原生300点基础，不提前烘焙或除回；`tools/HexBuild/DevilsGaze.cs`负责慢版法阵、原生基础攻击、精简资源包及参数回读。
 
 ## 风暴管束者音频
 

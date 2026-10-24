@@ -190,6 +190,7 @@ if(args.Contains("--devils-gaze-resources")){DevilsGaze.Resources(root,smith,gam
 if(args.Contains("--devils-gaze-remnant")){DevilsGazeRemnant.Stage(root,bnd,Parse);return;}
 if(args.Contains("--slingshot-tune")){Slingshot.Tune(root,Parse);return;}
 if(args.Contains("--devils-gaze-tune")){DevilsGaze.Tune(root,Parse);return;}
+if(args.Contains("--devils-gaze-raw-check")){DevilsGaze.VerifyRaw(root,Parse);return;}
 if(args.Contains("--devils-gaze-hitfix")){DevilsGaze.StageHitFix(root,Parse);return;}
 if(args.Contains("--devils-gaze-probe")){DevilsGaze.Probe(root,bnd,Parse);return;}
 if(args.Contains("--devils-gaze-resources-stage")){DevilsGaze.StageResources(root);return;}

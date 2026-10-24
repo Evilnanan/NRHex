@@ -1,7 +1,7 @@
 {
-  "version": "0.17.249",
-  "name": "恶魔的注视实时深夜倍率",
-  "rule": "live depth coefficient / baked depth coefficient, followed by existing party-recipient scaling",
+  "version": "0.17.250",
+  "name": "恶魔的注视实时基础与深夜修正",
+  "rule": "raw 300 holy attack * live Libra base correction * live depth correction * recipient fraction (party 1, other targets 0.25); no baked damage or division by former coefficients",
   "native": {
     "nativeExecutionPassed": true,
     "nativeFunctions": [
@@ -17,26 +17,28 @@
       "model resistance cancels effect vulnerability before clamping",
       "native attack rates, repeated-hit and positional multipliers preserved; guard/deflection/rebound/target-state bypass unchanged",
       "16 native object-defense flag/value cases with nested scopes and exact recipient matching",
-      "24 existing Gaze scale/guard cases plus 76 live-query cases evaluated twice",
-      "live query: six original stages with and without an effect-query hook, depths 6-10, rollback, zero override, custom effect ID, missing rows, native defenses and nested scopes",
+      "24 existing Gaze scale/guard cases plus 76 live-query cases evaluated twice plus six live-base cases",
+      "live query: six original stages with and without an effect-query hook, raw 300 input, live base correction in ordinary/deep modes, depths 6-10, rollback, zero override, custom effect ID, missing rows, native defenses and nested scopes",
       "input arrays remain unchanged and repeated evaluations do not compound"
     ],
     "nativeCalculatorCases": 36,
     "objectDefenseCases": 16,
     "sharedGazeCases": 24,
-    "liveGazeCases": 76,
-    "liveGazeEvaluations": 152,
+    "liveGazeCases": 82,
+    "liveGazeEvaluations": 158,
+    "rawGazeAttack": 300,
+    "depthBakeRemoved": true,
     "dependencyStubs": [
       "E9E680 resource manager: fixture tables"
     ],
     "actualDeeperNightLoaded": false,
     "scopeIdentityIsFixture": true,
     "sourceHashes": {
-      "src/glass_cannon.rs": "c92bb3a6f285b9427a60da239b2c5ada166e72ce9391c564abbc472ef0ac514f",
-      "src/glass_cannon_native_tests.rs": "3d2246a97e2fd5f10f11b8547c1f996841498bd1f50f9825a57ab624b4dab515",
+      "src/glass_cannon.rs": "ecadd3e58b45a61d54448ca0b917c687223871283c372557a2e1db5db6688d46",
+      "src/glass_cannon_native_tests.rs": "aca38980576d51ab34ed01810cb57b396f8230299968f286a52ced9cb312f78b",
       "src/devils_gaze_hit.rs": "0cb7ae51f67ce3a8081f06e2e214b5f3f1567c1f5523f0ac05c6ad8fe1317aa8",
-      "src/devils_gaze_scaling.rs": "dda61badf24316083e5cf19ca8b0f8d78c35230357b3041d4c7a3bd3d874e18f",
-      "tools/verify_glass_cannon_native.py": "4863eba454bde8c150b3abddb6bd176a471fa9e6a6a769aa7d1db8b250ba029f",
+      "src/devils_gaze_scaling.rs": "9092cace4b613753f2c3c843fd9caa71d0458fa436ce1e142de62fd1e05e79f0",
+      "tools/verify_glass_cannon_native.py": "1ad7349682988537c42cac83deaafeb0df117d3fd7655074ce6f385da9a1a8b6",
       "build.ps1": "22957b65a864187f1ec14e51e0bc00d9ac535a5f59c83ae9e61d686e471fca16"
     },
     "gameProcessAccessed": false,
@@ -44,44 +46,118 @@
     "multiplayerVerified": false
   },
   "build": {
-    "version": "0.17.249",
+    "version": "0.17.250",
     "mode": "dll-only",
     "buildPassed": true,
     "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
-    "dllSha256": "490e29c0fcf49b5c3e213ddf81f0f3e4b496965884ccef00597ba905732bb745",
+    "dllSha256": "8cc5b4d2e34b08a6ce8df682879b68af1b8af656a0940ac8118ef292d72e803c",
     "installed": true,
-    "installedDllSha256": "490e29c0fcf49b5c3e213ddf81f0f3e4b496965884ccef00597ba905732bb745",
+    "installedDllSha256": "8cc5b4d2e34b08a6ce8df682879b68af1b8af656a0940ac8118ef292d72e803c",
     "resourcesRebuilt": false,
     "gameplayVerified": false,
     "multiplayerVerified": false,
     "loadingVerified": false
   },
+  "parameters": {
+    "inputSha256": "6444BC77CE690E26419FB559A6854E0E3887A3EDE9DA16CDE11ED611AB52D3C5",
+    "outputSha256": "7A7E23B0D7B4CF822A48BB6794A9F5B91AE8DE15A1864196A99A1B528DDD865B",
+    "rawHolyAttack": 300,
+    "changes": [
+      {
+        "id": 95002200,
+        "old": 252,
+        "next": 300
+      },
+      {
+        "id": 95002201,
+        "old": 328,
+        "next": 300
+      },
+      {
+        "id": 95002202,
+        "old": 390,
+        "next": 300
+      },
+      {
+        "id": 95002203,
+        "old": 464,
+        "next": 300
+      },
+      {
+        "id": 95002204,
+        "old": 640,
+        "next": 300
+      },
+      {
+        "id": 95002205,
+        "old": 743,
+        "next": 300
+      }
+    ],
+    "onlySixHolyAttackFieldsChanged": true,
+    "bulletVisualRadiusMadnessUnchanged": true,
+    "gameplayVerified": false
+  },
+  "normalizedInputCheck": {
+    "inputSha256": "7A7E23B0D7B4CF822A48BB6794A9F5B91AE8DE15A1864196A99A1B528DDD865B",
+    "outputSha256": "FD0A88E586D91BB6ED321920A23FB8AB2F3CF9704EB07725FADA36B5B5FD5E46",
+    "rawHolyAttack": 300,
+    "changes": [
+      {
+        "id": 95002200,
+        "old": 300,
+        "next": 300
+      },
+      {
+        "id": 95002201,
+        "old": 300,
+        "next": 300
+      },
+      {
+        "id": 95002202,
+        "old": 300,
+        "next": 300
+      },
+      {
+        "id": 95002203,
+        "old": 300,
+        "next": 300
+      },
+      {
+        "id": 95002204,
+        "old": 300,
+        "next": 300
+      },
+      {
+        "id": 95002205,
+        "old": 300,
+        "next": 300
+      }
+    ],
+    "onlySixHolyAttackFieldsChanged": true,
+    "bulletVisualRadiusMadnessUnchanged": true,
+    "gameplayVerified": false
+  },
   "regularTestsPassed": 448,
   "regularIgnoredTests": 27,
   "runtimeNativeSuitesPassed": 19,
   "runtimeSignatureCount": 201,
-  "changedExistingDistributionFiles": {
-    "dist/README.md": {
-      "inputSha256": "eabbb784539044bac1f586b5ef6b3b25178eaf9243aab807e4820a5dd1c66e11",
-      "outputSha256": "095931691b1a24443799274cc22f448f6a0fe91929186c12ee0c232b76ca6b1b"
-    },
+  "changedGameAssets": {
     "dist/mod/natives/NRHex.dll": {
-      "inputSha256": "68922c64a4438b81b6f007b7a88317746b3929e8235fcff86f7e58f0a3bebe31",
-      "outputSha256": "490e29c0fcf49b5c3e213ddf81f0f3e4b496965884ccef00597ba905732bb745"
+      "inputSha256": "490e29c0fcf49b5c3e213ddf81f0f3e4b496965884ccef00597ba905732bb745",
+      "outputSha256": "8cc5b4d2e34b08a6ce8df682879b68af1b8af656a0940ac8118ef292d72e803c"
+    },
+    "dist/mod/regulation.bin": {
+      "inputSha256": "6444bc77ce690e26419fb559a6854e0e3887a3ede9da16cde11ed611ab52d3c5",
+      "outputSha256": "7a7e23b0d7b4cf822a48bb6794a9f5b91ae8de15a1864196a99a1b528ddd865b"
     }
   },
-  "allOtherExistingDistributionFilesPreserved": true,
-  "dllImportsUnchanged": [
-    "KERNEL32.dll",
-    "USER32.dll",
-    "USERENV.dll",
-    "WS2_32.dll",
-    "api-ms-win-core-synch-l1-2-0.dll",
-    "bcrypt.dll",
-    "bcryptprimitives.dll",
-    "msvcrt.dll",
-    "ntdll.dll"
-  ],
+  "otherPackagedGameAssetsUnchanged": true,
+  "parameterBuilderSources": {
+    "tools/HexBuild/DevilsGaze.cs": "b0ec2910f60d510c30e2067050e6ad8f1e028e2d69393ddd80760117115d7aab",
+    "tools/HexBuild/Program.cs": "3cc021c8f154072e4f3712f54119cc0f3aed24036551156e69b128f72e2c197f"
+  },
+  "earlierPerStageRoundingRemoved": true,
   "gameplayVerified": false,
   "multiplayerVerified": false
 }

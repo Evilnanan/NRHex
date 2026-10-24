@@ -52,9 +52,9 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
  effects:*const f32,armor:*const f32,guard:*const f32,conditional:*const f32,additional:*const f32,
  deflection:f32,repeated:f32,rebound:f32,attack_rate:f32,positional:f32,target_state:f32,balance:f32)->f32{
  // 439E80 passes a local five-element attack vector. For environment sources
- // its earlier steps are multiplicative; restore the quartered holy component
- // for player recipients and apply the live/baked depth ratio here, retaining
- // every native defensive coefficient.
+ // its earlier steps are multiplicative; apply live Libra base/depth and the
+ // recipient fraction to the raw holy component here, retaining every native
+ // defensive coefficient. No precomputed depth damage needs undoing.
  // Copy instead of modifying shared hit/bullet data: mixed targets and repeated
  // native evaluations must never compound or leak this recipient's multiplier.
  let holy=SCOPES.with(|s|s.borrow().last().map_or(1.,|v|v.2));
