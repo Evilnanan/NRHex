@@ -1,0 +1,130 @@
+{
+  "version": "0.17.250",
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "D09ED9815DED21F4785253668FB93E6ED4D6FC87F91A691E4E0C92ECECE3D289",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "9042D446CFF9F4F7EDCFD9D5A5B203EEF14BA358285345EC38961CAF66E1371E",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "27A9A59C049428D3FBE04897EA4941C128EBEEA9080320104DD7D51EE2318004",
+        "outputSha256": "17DD86937D1FF06F23F51E7B29B4A2785ED9D358F95D48CEAD350E783F4BAF04",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001800,
+            "before": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。发动【不死行军】时，召唤其灵体，短时间内为你作战",
+            "after": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001800,
+            "before": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。发动【不死行军】时，召唤其灵体，短时间内为你作战",
+            "after": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001800,
+            "before": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。发动【不死行军】时，召唤其灵体，短时间内为你作战",
+            "after": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "8B45F6DBBC1F1753A1E82A3A981454A2EA81C33F609ECAF2BF3DB4719A3CEAD1",
+        "outputSha256": "5B0B5E1E538111995187B3476E18C77D1893F99E33C0810A0BF615046E6EF5FB",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001800,
+            "before": "储存最近打倒的强大灵魂，优先保留血量上限更高的灵魂。发动【不死行军】时，召唤其灵体，短时间内为你作战",
+            "after": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "A20D5F1AC49DECA228F1D1B63875C9B9D7B5F2FFF5E15C9E5FEE1408BEC171DD",
+        "outputSha256": "9B2B9E6AD2B9BBDCD441BC4578BADD208105FCC1DFE912F4870FEC4E90ED522B",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95001800,
+            "before": "Stores a recently defeated strong enemy's soul, favoring higher max HP. [Immortal March] summons it to fight briefly.",
+            "after": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95001800,
+            "before": "Stores a recently defeated strong enemy's soul, favoring higher max HP. [Immortal March] summons it to fight briefly.",
+            "after": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95001800,
+            "before": "Stores a recently defeated strong enemy's soul, favoring higher max HP. [Immortal March] summons it to fight briefly.",
+            "after": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "27E94C437C90B0343E0F77CC6DF3547E740D365C676A2B862DA5E327E22B795D",
+        "outputSha256": "DC8F48173B463EF555CF5513546037B857E39AABBE4B0DE7E2DC682389C69025",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95001800,
+            "before": "Stores a recently defeated strong enemy's soul, favoring higher max HP. [Immortal March] summons it to fight briefly.",
+            "after": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "containers": {
+    "zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "75930c9c2900d3c52b19da7a37d99aff0e892fc9188219d52e285aaa822562f8",
+      "outputSha256": "92818d6e98b063499d3f71d0508a5229091af59364b706dd3c6410f7fc4fcc6b",
+      "roundTripPassed": true
+    },
+    "zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "9a9bc5a3365d2e93b87a911cef017280b818dba6d909ee756764d56dfe4fbef9",
+      "outputSha256": "c68ebd1d748673569043984960088e0bdacfb8201ff29cef637c995f3ffe86af",
+      "roundTripPassed": true
+    },
+    "engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "d2329099688430f83e3d1a55882f6673a94a13198f26f31f625645af347ac8cc",
+      "outputSha256": "0b5d7ba6b71c5caff3ffdaee13776f81bbcd2f02e3e26afb18cebec4d3abea07",
+      "roundTripPassed": true
+    },
+    "engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "8e4cc85d400b32c286958bb0a5f312c20a90111f16be687af73ebc4eec7e4575",
+      "outputSha256": "798f0e72214e616b9e16975e9f5f61a1a62809507324fdad4edea61b74241ede",
+      "roundTripPassed": true
+    }
+  },
+  "onlySelectedBilingualDescriptionChanged": true,
+  "installedReadbackPassed": true,
+  "gameplayVerified": false,
+  "changedGameAssets": [
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx"
+  ],
+  "dllParametersAnimationsScriptsEventsAndConfigsUnchanged": true
+}
