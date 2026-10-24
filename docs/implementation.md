@@ -329,3 +329,7 @@ tools/HexBuild/StormAudio.cs直接从当前sd.bhd／sd.bdt选择性提取cs_m19�
 ## 老练狙神
 
 `sniper.rs`与`HexBuild/Sniper.cs`提供原生攻击力惩罚、距离修正及本次命中的距离增伤。复用已有伤害回调与签名，不新增原生钩子；与亮剑共用抽取互斥入口，角色与武器池例外只读取真实拥有状态。具体计算、箭雨范围与验证限制见[研究记录](research/sniper.md)。
+
+## 金属化
+
+`src/metal.rs`处理本机原生铁壶香药的免消耗和一次赠送；`tools/HexBuild/Metal.cs`提供中性拥有标记、发放请求／保存收据、原生道具掉落表与局内清理。与咒魂使者共享参数查询挂钩、道具动作观察、背包容量／取得序号查询和普通地面物品格式，不新增HKS或动画修改。验证见`tools/verify_metal.py`；原生调用链、发放与背包边界见[金属化](research/metal.md)。

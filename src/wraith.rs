@@ -6,6 +6,7 @@ pub const OWNER:i32=95004300;
 pub const ORIGINALS:[i32;3]=[3080,3010,3011];
 pub const GROUND_LOT:i32=95543000;
 pub fn ground_tier(lot:i32)->Option<usize>{let offset=lot.checked_sub(GROUND_LOT)?;(matches!(offset,0|10|20)).then_some((offset/10)as usize)}
+pub fn ground_good(lot:i32)->Option<i32>{ground_tier(lot).map(|i|ORIGINALS[i]).or_else(||(lot==crate::metal::GROUND_LOT).then_some(crate::metal::GOOD))}
 pub const SERIAL_PATTERN:&str="40 53 48 83 EC 20 8B 41 1C 4C 8B C1 3B D0 73 10 8B C2 48 8D 14 80 48 8B 41 40 48 8D 1C 90 EB 0E 2B D0 49 8B 40 30 48 8D 0C 92 48 8D 1C 88 48 8B CB E8 7A E9 55 00 84 C0 74 09 8B 43 0C";
 pub const CAPACITY_PATTERN:&str="48 89 5C 24 10 57 48 83 EC 20 48 8B F9 48 8D 4C 24 30 E8 C9 F2 C8 00 48 8B 10 48 85 D2 74 07 44 0F B6 42 0E EB 03 45 33 C0";
 pub const FRAME:i32=990043;pub const BUSY:i32=990044;
@@ -48,7 +49,7 @@ impl State{
 }
 unsafe fn enabled(actor:usize,base:usize)->bool{actor!=0&&is_local(actor,base)&&has_effect(actor,OWNER,base)&&!has_effect(actor,crate::reward_cycle_runtime::RESET,base)}
 unsafe fn local(base:usize)->usize{let w=read_ptr(base+crate::WORLD_RVA);if w==0{0}else{read_ptr(w+0x174e8)}}
-unsafe fn set(actor:usize,id:i32,yes:bool,base:usize){let manager=read_ptr(actor+0x190);if manager==0{return;}if yes{let add:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);add(actor,id,0);}else{let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+crate::REMOVE_EFFECT_RVA);remove(manager,id);}}
+pub(crate) unsafe fn set(actor:usize,id:i32,yes:bool,base:usize){let manager=read_ptr(actor+0x190);if manager==0{return;}if yes{let add:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);add(actor,id,0);}else{let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+crate::REMOVE_EFFECT_RVA);remove(manager,id);}}
 unsafe fn saved(actor:usize)->Vec<i32>{
  let mut out=Vec::new();let manager=read_ptr(actor+0x190);if manager==0{return out;}let mut node=read_ptr(manager+8);
  for _ in 0..65536{if node==0{break;}let id=read_i32(node+8);if (OWNER+11..=OWNER+70).contains(&id)&&ptr::read_unaligned((node+0x68)as*const u32)&0x80080003==0{out.push(id);}node=read_ptr(node+0x38);}out
@@ -60,6 +61,7 @@ pub unsafe extern "system" fn param(out:usize,id:i32)->usize{
   let shadow=SHADOWS[i].get_or_init(||{let mut copy=Box::new(GoodRow(ptr::read_unaligned(row as*const[u8;0xe0])));copy.0[0x80..0x82].fill(0);copy});
   ptr::write_unaligned((out+8)as*mut usize,shadow.0.as_ptr()as usize);
  }}}
+ crate::metal::parameter(out,id);
  result
 }
 // Shared eligibility is called directly by selected-item input (3CFE48),
@@ -78,10 +80,10 @@ pub unsafe extern "system" fn used(context:usize,good:i32,data:usize,flag:u8,ent
 }
 pub unsafe fn place(manager:usize,descriptor:usize,original:unsafe extern "system" fn(usize,usize)->usize)->Option<usize>{
  let scope=crate::PERSONAL_REWARD.with(Cell::get);
- let kind=ground_tier(scope.lot)?;
+ let good=ground_good(scope.lot)?;
  if descriptor==0||scope.manager==0||manager!=scope.manager||read_i32(descriptor+0xb8)!=scope.lot{return None;}
  let owner=ptr::read_unaligned((descriptor+0xaa)as*const u16);
- if ((owner>>7)&3)as u8!=scope.slot||read_i32(descriptor+0x58)&15!=2||read_i32(descriptor+8)!=(ORIGINALS[kind]|0x40000000)||ptr::read((descriptor+0xa9)as*const u8)!=0||scope.attempted!=0{return Some(0);}
+ if ((owner>>7)&3)as u8!=scope.slot||read_i32(descriptor+0x58)&15!=2||read_i32(descriptor+8)!=(good|0x40000000)||ptr::read((descriptor+0xa9)as*const u8)!=0||scope.attempted!=0{return Some(0);}
  crate::PERSONAL_REWARD.with(|s|{let mut state=s.get();state.attempted=1;s.set(state);});
  let mut copy=ptr::read_unaligned(descriptor as*const[u64;24]);let p=copy.as_mut_ptr()as usize;
  let counter=(read_i32(manager+0x1c)as u32).wrapping_add(1);ptr::write_unaligned((manager+0x1c)as*mut u32,counter%0xffffff);
@@ -122,9 +124,9 @@ unsafe extern "system" fn credited(data:usize,category:u8,points:u16,caller:usiz
   if crate::local_hero(base)!=Some(9){return;}
  }}original(data,category,points)
 }
-unsafe fn inventory(actor:usize)->Option<(usize,usize)>{let gd=read_ptr(actor+0x5a0);(gd!=0).then_some((gd+0x1d8+0x1c8,gd+0x1d8+0x248))}
+pub(crate) unsafe fn inventory(actor:usize)->Option<(usize,usize)>{let gd=read_ptr(actor+0x5a0);(gd!=0).then_some((gd+0x1d8+0x1c8,gd+0x1d8+0x248))}
 unsafe fn find(root:usize,good:i32,base:usize)->i32{let find:unsafe extern "system" fn(usize,*const i32,i32)->i32=std::mem::transmute(base+0x1f5610);find(root,&(good|0x40000000),0)}
-unsafe fn instances(root:usize,good:i32,base:usize)->Vec<(i32,u32)>{
+pub(crate) unsafe fn instances(root:usize,good:i32,base:usize)->Vec<(i32,u32)>{
  let lookup:unsafe extern "system" fn(usize,*const i32,i32)->i32=std::mem::transmute(base+0x1f5610);
  let serial:unsafe extern "system" fn(usize,i32)->u32=std::mem::transmute(base+0x1f5700);
  let mut items=Vec::new();let mut start=0;
@@ -136,7 +138,7 @@ unsafe fn instances(root:usize,good:i32,base:usize)->Vec<(i32,u32)>{
  items
 }
 unsafe fn equip(slots:usize,slot:i32,index:i32,base:usize){let f:unsafe extern "system" fn(usize,i32,i32)=std::mem::transmute(base+0x1f7840);f(slots,slot+0x20,index);}
-unsafe fn bag_full(slots:usize,base:usize)->bool{
+pub(crate) unsafe fn bag_full(slots:usize,base:usize)->bool{
  let capacity:unsafe extern "system" fn(usize)->i32=std::mem::transmute(base+0x1f2370);
  let count=capacity(slots-0x248);
  !(1..=10).contains(&count)||(0..count as usize).all(|slot|read_i32(slots+12+slot*8)>=0)
@@ -144,6 +146,7 @@ unsafe fn bag_full(slots:usize,base:usize)->bool{
 // HKS observes every item common/activation frame, including the whole chained
 // animation. Three empty samples bridge ordering and same-frame blend callbacks.
 pub unsafe fn query(actor:usize,code:i32,base:usize){
+ crate::metal::observe(actor,code,base);
  if !enabled(actor,base){return;}
  if let Ok(mut s)=STATE.lock(){s.bind(actor,ptr::read_unaligned((actor+8)as*const u64));if code==BUSY{s.saw_item=true;s.ready=false;s.idle_frames=0;}else if code==FRAME{s.frame();}}
 }

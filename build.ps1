@@ -250,7 +250,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Sword Endure protection readback failed.' }
     cargo test --release --lib @cargoTarget @cargoFeatures
     if ($LASTEXITCODE -ne 0) { throw 'Runtime regression checks failed.' }
-    foreach ($runtimeCheck in @('verify_sword_projectile.py', 'verify_glass_cannon_native.py', 'verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_weapon_affinity.py', 'verify_snack.py', 'verify_marking.py', 'verify_wraith.py', 'verify_basics.py', 'verify_sniper.py', 'verify_momentum.py', 'verify_heartstealer.py', 'verify_cat_arena.py', 'verify_ultimate_awakening.py', 'verify_ultimate_unstoppable.py')) {
+    foreach ($runtimeCheck in @('verify_sword_projectile.py', 'verify_glass_cannon_native.py', 'verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_weapon_affinity.py', 'verify_snack.py', 'verify_marking.py', 'verify_wraith.py', 'verify_metal.py', 'verify_basics.py', 'verify_sniper.py', 'verify_momentum.py', 'verify_heartstealer.py', 'verify_cat_arena.py', 'verify_ultimate_awakening.py', 'verify_ultimate_unstoppable.py')) {
         python -X utf8 (Join-Path 'tools' $runtimeCheck)
         if ($LASTEXITCODE -ne 0) { throw "Runtime native verification failed: $runtimeCheck" }
     }

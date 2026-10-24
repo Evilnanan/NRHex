@@ -89,6 +89,8 @@ if(args.Contains("--basics-balance-stage")){Basics.StageBalance(root,bnd,Parse);
 if(args.Contains("--basics-family-stage")){Basics.StageFamily(root,bnd,Parse);return;}
 if(args.Contains("--basics-stage")){Basics.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--basics-check")){Basics.Verify(root,bnd,Parse);return;}
+if(args.Contains("--metal-stage")){Metal.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--metal-check")){Metal.Verify(root,bnd,Parse);return;}
 if(args.Contains("--wraith-stage")){Wraith.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--wraith-native-stage")){Wraith.StageNative(root,bnd,Parse);return;}
 if(args.Contains("--wraith-native-check")){Wraith.Verify(root,Parse,true);return;}
@@ -1003,6 +1005,7 @@ for(int i=0;i<8;i++){
  Set(bullet,"HitBulletID",i==7?-1:95001551+i);
 }
 Wraith.Mechanics(Clone,pars["ItemLotParam_map"]);
+Metal.Mechanics(Clone,pars["ItemLotParam_map"]);
 Basics.Mechanics(Clone);
 NewHexes.AddMechanics(pars,Clone,Path.Combine(root,"src"));
 DevilsGaze.Mechanics(pars,Clone);
@@ -1257,6 +1260,7 @@ ContractHeart.Events(ev);
 UltimateAwakening.Events(ev);
 Marking.Events(ev);
 Wraith.Events(ev);
+Metal.Events(ev);
 Basics.Events(ev);
 Sniper.Events(ev);
 UltimateUnstoppable.Events(ev);

@@ -1,0 +1,306 @@
+{
+  "version": "0.17.251",
+  "hexCount": 41,
+  "iconReference": 95000200,
+  "parameters": {
+    "version": "0.17.251",
+    "inputSha256": "66CD09F244B81036084BFD282E37DC63B37EB9269A9FF09FF0CBC2EED957D1C3",
+    "outputSha256": "E6889F5C4CF23C789E82A56E1B3985C6E14D1FA78DDAA89B763BA19C78EA7358",
+    "eventInputSha256": "B4F40625A04B3CC3E0F0843D9A1FA59D128B34C90907C35333FBE61EF51C2E6B",
+    "eventOutputSha256": "223D7D977A757F9DB0615747EEFE26F562EB2CC53FAA08B50E4E2B79EB1BD0C5",
+    "hexCount": 41,
+    "historyBit": 43,
+    "historyBytes": 6,
+    "addedRows": {
+      "SpEffectParam": [
+        95004600,
+        95004601,
+        95004602
+      ],
+      "AttachEffectParam": [
+        95004600
+      ],
+      "PermanentBuffParam": [
+        95004600
+      ],
+      "EquipParamGoods": [
+        95004600
+      ],
+      "ItemTableParam": [
+        95110143
+      ],
+      "ItemLotParam_map": [
+        95546000
+      ]
+    },
+    "existingRowsAndUnrelatedTablesUnchanged": true,
+    "originalIronjarUnchanged": true,
+    "onlyThreeExistingEventsExtended": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "eventsCompressionRoundtrip": true,
+  "installedCommonSha256": "fff7bab7e296c8b485084fd773c3695f7102b73114fab9068afaaa33ff27d3a8",
+  "texts": {
+    "version": "0.17.251",
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "FE73845FF7C4F3ACBB40E24CEE66744F77E0B81E83814A9AD27ADD4ACAD35FB7",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "C8A691A66494F91340A0DE09EAEBC24564DB2CC544A64BEE54E183901FA1E906",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "17DD86937D1FF06F23F51E7B29B4A2785ED9D358F95D48CEAD350E783F4BAF04",
+          "outputSha256": "BE65336355DB372419C4F69AE0A8A5252BFDAAFEFEC13E9A488EB8D7B0989706",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "金属化"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "你可以无限使用铁壶香药。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "金属化"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "你可以无限使用铁壶香药。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "你可以无限使用铁壶香药。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "5B0B5E1E538111995187B3476E18C77D1893F99E33C0810A0BF615046E6EF5FB",
+          "outputSha256": "258EDB28C9A43799D38FB435B0308008C2D3A76FB4ACEFF8257E86F753394333",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "金属化"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "你可以无限使用铁壶香药。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "9B2B9E6AD2B9BBDCD441BC4578BADD208105FCC1DFE912F4870FEC4E90ED522B",
+          "outputSha256": "E300419F26A56745DBFA7E0AA839069C56F4890C47F0B42558152283F5328881",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "Metallization"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "Metallization"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "DC8F48173B463EF555CF5513546037B857E39AABBE4B0DE7E2DC682389C69025",
+          "outputSha256": "91CA688DE36AD0D614D810C411354A1B97FBC414BFA14D26E8858135233E7DC2",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "Metallization"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": null,
+              "after": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "containers": {
+      "zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "92818d6e98b063499d3f71d0508a5229091af59364b706dd3c6410f7fc4fcc6b",
+        "outputSha256": "445dc7ac40ceb03dfe69dfb047a6e344622d1cec5c431633ecffaad4c8b7a648",
+        "roundTripPassed": true
+      },
+      "zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "c68ebd1d748673569043984960088e0bdacfb8201ff29cef637c995f3ffe86af",
+        "outputSha256": "e8a6057c899ea42e0eb9b316a46d837b94ddbb1985deb2ff4c8cb5c127e546ac",
+        "roundTripPassed": true
+      },
+      "engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "0b5d7ba6b71c5caff3ffdaee13776f81bbcd2f02e3e26afb18cebec4d3abea07",
+        "outputSha256": "ded0cbaa419f7677ebb70169e78bff6639ef0466d90b682fbd0b37badb856ac4",
+        "roundTripPassed": true
+      },
+      "engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "798f0e72214e616b9e16975e9f5f61a1a62809507324fdad4edea61b74241ede",
+        "outputSha256": "7e26f42ce7593a62667c38d4571e9d9948be4a6ef5b8a880ccbc2f328d08bea5",
+        "roundTripPassed": true
+      }
+    },
+    "onlySelectedBilingualRewardAdded": true,
+    "installedReadbackPassed": true,
+    "gameplayVerified": false
+  },
+  "native": {
+    "version": "0.17.251",
+    "owner": 95004600,
+    "nativeGood": 3520,
+    "nativeExecutionPassed": true,
+    "installedParameterAndEventReadbackPassed": true,
+    "originalIronjarAndEffectsUnchanged": true,
+    "sharedRowNeverWritten": true,
+    "nativeFunctions": [
+      "TAE65 dispatch table and original successful-use vtable slot point to669AE0",
+      "compiled669AE0 hook scopes sharedE8D840 query",
+      "original1F12B0 isConsume branch and deduction call",
+      "original1F5CA0 quantity reads from native inventory entries"
+    ],
+    "cases": [
+      "only local owner Ironjar consumption is exempt; other two perfumes deduct normally",
+      "owner absent, inactive, reset and remote actors retain consumption",
+      "ordinary out-of-scope row query returns original pointer; all original bytes preserved",
+      "nested TLS scope restores its parent",
+      "gift waits for three non-item samples; existing Wraith HKS observer shared",
+      "new serial or native stack growth acknowledges delivery; existing copies do not",
+      "no blind retry of consumed grant requests; pending delivery survives actor reconstruction",
+      "full item slots or native stack drop one ordinary Ironjar; failed spawn can retry",
+      "unclaimed gift or dropped gift never automatically repeats; saved receipt survives reconstruction"
+    ],
+    "stubs": [
+      "669AE0 non-inventory side effects are a recording callback; actual1F12B0 quantity predicate/branch executes",
+      "inventory lookup, count read and decrement target, native event AwardItemLot execution and network transport are fixtures",
+      "full ground descriptor/copy/linking covered by potential-fission native suite"
+    ],
+    "sources": {
+      "src/metal.rs": "0ffe036ae7351a4d1da26186069aca306f064387beb202f1bd0c270099ef6d4c",
+      "src/metal_native_tests.rs": "0dfc6b18bfc96ba91be51a9c911de156eb19333a6afc0351eab8034823b352db",
+      "src/wraith.rs": "82beafd68c7dc3fece1bed408fc66ff789405c9eccbbc41aa1b5afd641d56c0a",
+      "src/lib.rs": "88965f0946b2e755fd5793bc46969c9431473ec56b7139a7d978779d086ce3d3",
+      "src/hex_pool.rs": "7ddc2ea32c628f8d3e1b17a68521fab826df11de9b6ef23523c29822e709f464",
+      "src/reward_cycle_runtime.rs": "e164e4ee83e48835ceb32e89177a99012a7e363730a46b8cfc8b3b861d9c5b2e",
+      "src/potential_fission_native_tests.rs": "538d89700e5139efa798e3464be77643c27e3321c0fb47ee964573912b9bc917",
+      "tools/HexBuild/Metal.cs": "3758c2a851f2df85bb2e2c611e8ddba44e8a42db9a82f1efc10cda591d0b16e9",
+      "tools/HexBuild/HexCatalog.cs": "f30d36d2fa62e2f668e88fa0776c68fc5450d13275e011552d53621295b07aaf",
+      "tools/HexBuild/RewardCatalog.cs": "2da5bbe7606faae8b25ae643dd81fc2f959818bb64879f40bd8b94236df356bc",
+      "tools/HexBuild/Program.cs": "9eca92ef68f7b9f04f5fef4bee142f57f4e3d0630ad5467b244992b543342bc2",
+      "tools/verify_metal.py": "003269ec5fbd5a4cf3a59cb109be474617aff9142bb56f178c53574b658a6008"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.251",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "886cfd7bfdae42c8750374da79fb86bd73222018385e41ea2f57c590e984deba",
+    "installed": true,
+    "installedDllSha256": "886cfd7bfdae42c8750374da79fb86bd73222018385e41ea2f57c590e984deba",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 450,
+  "ignoredTests": 28,
+  "nativeRuntimeSuitesPassed": 20,
+  "runtimeSignaturesPassed": 203,
+  "changedGameAssets": [
+    "dist/mod/event/common.emevd.dcx",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "dist/mod/natives/NRHex.dll",
+    "dist/mod/regulation.bin"
+  ],
+  "installedAssetHashes": {
+    "dist/mod/event/common.emevd.dcx": "fff7bab7e296c8b485084fd773c3695f7102b73114fab9068afaaa33ff27d3a8",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "ded0cbaa419f7677ebb70169e78bff6639ef0466d90b682fbd0b37badb856ac4",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "7e26f42ce7593a62667c38d4571e9d9948be4a6ef5b8a880ccbc2f328d08bea5",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "445dc7ac40ceb03dfe69dfb047a6e344622d1cec5c431633ecffaad4c8b7a648",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "e8a6057c899ea42e0eb9b316a46d837b94ddbb1985deb2ff4c8cb5c127e546ac",
+    "dist/mod/natives/NRHex.dll": "886cfd7bfdae42c8750374da79fb86bd73222018385e41ea2f57c590e984deba",
+    "dist/mod/regulation.bin": "e6889f5c4cf23c789e82a56e1b3985c6e14d1fa78ddaa89b763ba19c78ea7358"
+  },
+  "otherGameAssetsUnchanged": true,
+  "sourceHashes": {
+    "src/metal.rs": "0ffe036ae7351a4d1da26186069aca306f064387beb202f1bd0c270099ef6d4c",
+    "src/metal_native_tests.rs": "0dfc6b18bfc96ba91be51a9c911de156eb19333a6afc0351eab8034823b352db",
+    "src/wraith.rs": "82beafd68c7dc3fece1bed408fc66ff789405c9eccbbc41aa1b5afd641d56c0a",
+    "src/lib.rs": "88965f0946b2e755fd5793bc46969c9431473ec56b7139a7d978779d086ce3d3",
+    "src/hex_pool.rs": "7ddc2ea32c628f8d3e1b17a68521fab826df11de9b6ef23523c29822e709f464",
+    "src/reward_choices.rs": "a3ed45825e3e61eec7d037b9d40c10a4d60fe26a79e2cfd58cdff53ac8309e24",
+    "src/reward_cycle_runtime.rs": "e164e4ee83e48835ceb32e89177a99012a7e363730a46b8cfc8b3b861d9c5b2e",
+    "src/potential_fission_native_tests.rs": "538d89700e5139efa798e3464be77643c27e3321c0fb47ee964573912b9bc917",
+    "tools/HexBuild/Metal.cs": "3758c2a851f2df85bb2e2c611e8ddba44e8a42db9a82f1efc10cda591d0b16e9",
+    "tools/HexBuild/HexCatalog.cs": "f30d36d2fa62e2f668e88fa0776c68fc5450d13275e011552d53621295b07aaf",
+    "tools/HexBuild/RewardCatalog.cs": "2da5bbe7606faae8b25ae643dd81fc2f959818bb64879f40bd8b94236df356bc",
+    "tools/HexBuild/Program.cs": "9eca92ef68f7b9f04f5fef4bee142f57f4e3d0630ad5467b244992b543342bc2",
+    "tools/verify_metal.py": "003269ec5fbd5a4cf3a59cb109be474617aff9142bb56f178c53574b658a6008",
+    "build.ps1": "717725425c7590f1cf134a86ddef1dea2a57c7f69a90db4c3574133f8bbddf6d",
+    "docs/hexes.md": "fe73845ff7c4f3acbb40e24cee66744f77e0b81e83814a9ad27add4acad35fb7",
+    "docs/hexes.en.md": "c8a691a66494f91340a0de09eaebc24564db2cc544a64bee54e183901fa1e906"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

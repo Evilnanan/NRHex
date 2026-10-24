@@ -174,6 +174,7 @@ pub fn is_hex_good(encoded:u32)->bool{
   assert!(!crate::hex_pool::HISTORY_BITS.contains(&30));
   assert_eq!(crate::hex_pool::HISTORY_BITS[index(95003400)],31);
   assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004500)],42);
+  assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004600)],43);
   assert_eq!(crate::reward_cycle::Round::new(&HexSet::new(),&HexSet::new()).candidates.len(),HEX_COUNT);
  }
  #[test]fn all_roles_preserve_their_filters_in_random_focused_and_refresh_paths(){

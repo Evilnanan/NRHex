@@ -40,9 +40,9 @@ fn descriptor(lot:i32,slot:u8,index:u8,source:u64)->[u64;24]{unsafe{
 unsafe extern "system" fn lottery(manager:usize,_:usize,lot:i32,kind:u8,_:u8,_:u8,_:u8,_:*const f32)->u8{
  let base=IMAGE.load(Ordering::Acquire);
  let dispatch:unsafe extern "system" fn(usize,usize)->usize=std::mem::transmute(base+REWARD_CREATE_RVA);
- if crate::wraith::ground_tier(lot).is_some(){assert_eq!(kind,1);}else{assert_eq!(kind,0);}
- let count=if crate::wraith::ground_tier(lot).is_some(){1}else if crate::snack::bonus_lot(lot){3}else{ROOTS.iter().find(|r|r.1==lot||r.2==lot).unwrap().3};
- for slot in 1..=3{for index in (0..count).rev(){let mut d=descriptor(lot,slot,index,999);if crate::wraith::ground_tier(lot).is_some(){ptr::write_unaligned((d.as_mut_ptr()as usize+8)as*mut u32,(0x40000000|crate::wraith::ORIGINALS[crate::wraith::ground_tier(lot).unwrap()])as u32);}
+ if crate::wraith::ground_good(lot).is_some(){assert_eq!(kind,1);}else{assert_eq!(kind,0);}
+ let count=if crate::wraith::ground_good(lot).is_some(){1}else if crate::snack::bonus_lot(lot){3}else{ROOTS.iter().find(|r|r.1==lot||r.2==lot).unwrap().3};
+ for slot in 1..=3{for index in (0..count).rev(){let mut d=descriptor(lot,slot,index,999);if crate::wraith::ground_good(lot).is_some(){ptr::write_unaligned((d.as_mut_ptr()as usize+8)as*mut u32,(0x40000000|crate::wraith::ground_good(lot).unwrap())as u32);}
  let before=d;dispatch(manager,d.as_mut_ptr()as usize);assert_eq!(d,before);}}1
 }
 unsafe fn emit(base:usize,manager:usize,lot:i32,slot:u8,source:u64,count:u8){
@@ -121,8 +121,10 @@ fn compiled_fission_routes_saved_charges_and_native_independent_groups(){unsafe{
   for kind in 0..3{for _ in 0..2{assert_eq!(crate::spawn_personal_lot_kind(player,base,crate::wraith::GROUND_LOT+kind*10,None,1),1);}}
   let bells=NODES.with(|nodes|nodes.borrow().iter().map(|node|node.as_ptr()as usize).filter(|&p|crate::wraith::ORIGINALS.iter().any(|&good|read_i32(p+0x28)==(0x40000000|good))&&read_i32(p+0x78)&15==1).collect::<Vec<_>>());
   assert_eq!(bells.len(),6);for good in crate::wraith::ORIGINALS{assert_eq!(bells.iter().filter(|&&p|read_i32(p+0x28)==(0x40000000|good)).count(),2);}for &p in &bells{assert_eq!(read_ptr(p+0x10),0);assert_eq!(read_ptr(p+0x18),0);assert_eq!(ptr::read_unaligned((p+0xca)as*const u16),0x40);assert_eq!(read_i32(p+0x78),1);assert_eq!(read_i32(p+0xd8),-1);assert_eq!(read_i32(p+0xcc),-1);assert_eq!(read_i32(p+0xdc),0);assert_eq!(read_i32(p+0x90),0);assert_eq!(read_ptr(p+0x80),usize::MAX);assert_eq!(read_ptr(p+0x88),usize::MAX);assert_eq!(ptr::read((p+0xc9)as*const u8),0xff);assert_eq!((read_i32(p+0x7c)as u32)&0x60000000,0x20000000);}
-  assert_eq!(read_i32(items+0x1c),slot*6);assert_ne!(read_i32(bells[0]+0x7c),read_i32(bells[1]+0x7c));
-  assert_eq!(NODES.with(|nodes|nodes.borrow().len()),9);assert_eq!(PERSONAL_REWARD.with(|scope|scope.get().manager),0);
+  assert_eq!(crate::spawn_personal_lot_kind(player,base,crate::metal::GROUND_LOT,None,1),1);
+  assert_eq!(NODES.with(|nodes|nodes.borrow().iter().filter(|node|read_i32(node.as_ptr()as usize+0x28)==(0x40000000|crate::metal::GOOD)&&read_i32(node.as_ptr()as usize+0x78)==1&&read_ptr(node.as_ptr()as usize+0x10)==0&&read_ptr(node.as_ptr()as usize+0x18)==0&&read_i32(node.as_ptr()as usize+0xd8)==-1).count()),1);
+  assert_eq!(read_i32(items+0x1c),slot*7);assert_ne!(read_i32(bells[0]+0x7c),read_i32(bells[1]+0x7c));
+  assert_eq!(NODES.with(|nodes|nodes.borrow().len()),10);assert_eq!(PERSONAL_REWARD.with(|scope|scope.get().manager),0);
  }
  *STATE.lock().unwrap()=old_state;BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);REWARD_CREATE_ORIG.store(old_dispatch,Ordering::Release);NODES.with(|n|n.borrow_mut().clear());VirtualFree(allocation,0,MEM_RELEASE);
 }}

@@ -213,3 +213,8 @@ Seals Ultimate Arts. Greatly accelerates Character Skill cooldown recovery and b
 ## Experienced Sniper
 
 Reduces attack power by 30%. Boosts damage as the distance to the target increases. Greatly reduces arrow damage falloff with distance.
+
+<!-- hex:95004600 -->
+## Metallization
+
+Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.
