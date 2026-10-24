@@ -1,0 +1,87 @@
+{
+  "version": "0.17.249",
+  "name": "恶魔的注视实时深夜倍率",
+  "rule": "live depth coefficient / baked depth coefficient, followed by existing party-recipient scaling",
+  "native": {
+    "nativeExecutionPassed": true,
+    "nativeFunctions": [
+      "6C5FC0 native damage combiner with compiled inline hook",
+      "506700 native object-defense query with compiled recipient hook",
+      "E71FC0 live correction lookup",
+      "EA17E0 live effect lookup, original and hooked replacement outputs"
+    ],
+    "rule": "combine model/equipment resistance and three native DamageCutRate groups per element, then retain only net coefficients above one",
+    "cases": [
+      "36 five-element cases: 30 owner/non-owner defensive-layer cases, two mixed repeated calculations, positive/neutral/negative intrinsic resistance and numerical immunity",
+      "physical, magic, fire, lightning and holy evaluated independently",
+      "model resistance cancels effect vulnerability before clamping",
+      "native attack rates, repeated-hit and positional multipliers preserved; guard/deflection/rebound/target-state bypass unchanged",
+      "16 native object-defense flag/value cases with nested scopes and exact recipient matching",
+      "24 existing Gaze scale/guard cases plus 76 live-query cases evaluated twice",
+      "live query: six original stages with and without an effect-query hook, depths 6-10, rollback, zero override, custom effect ID, missing rows, native defenses and nested scopes",
+      "input arrays remain unchanged and repeated evaluations do not compound"
+    ],
+    "nativeCalculatorCases": 36,
+    "objectDefenseCases": 16,
+    "sharedGazeCases": 24,
+    "liveGazeCases": 76,
+    "liveGazeEvaluations": 152,
+    "dependencyStubs": [
+      "E9E680 resource manager: fixture tables"
+    ],
+    "actualDeeperNightLoaded": false,
+    "scopeIdentityIsFixture": true,
+    "sourceHashes": {
+      "src/glass_cannon.rs": "c92bb3a6f285b9427a60da239b2c5ada166e72ce9391c564abbc472ef0ac514f",
+      "src/glass_cannon_native_tests.rs": "3d2246a97e2fd5f10f11b8547c1f996841498bd1f50f9825a57ab624b4dab515",
+      "src/devils_gaze_hit.rs": "0cb7ae51f67ce3a8081f06e2e214b5f3f1567c1f5523f0ac05c6ad8fe1317aa8",
+      "src/devils_gaze_scaling.rs": "dda61badf24316083e5cf19ca8b0f8d78c35230357b3041d4c7a3bd3d874e18f",
+      "tools/verify_glass_cannon_native.py": "4863eba454bde8c150b3abddb6bd176a471fa9e6a6a769aa7d1db8b250ba029f",
+      "build.ps1": "22957b65a864187f1ec14e51e0bc00d9ac535a5f59c83ae9e61d686e471fca16"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.249",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "490e29c0fcf49b5c3e213ddf81f0f3e4b496965884ccef00597ba905732bb745",
+    "installed": true,
+    "installedDllSha256": "490e29c0fcf49b5c3e213ddf81f0f3e4b496965884ccef00597ba905732bb745",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 448,
+  "regularIgnoredTests": 27,
+  "runtimeNativeSuitesPassed": 19,
+  "runtimeSignatureCount": 201,
+  "changedExistingDistributionFiles": {
+    "dist/README.md": {
+      "inputSha256": "eabbb784539044bac1f586b5ef6b3b25178eaf9243aab807e4820a5dd1c66e11",
+      "outputSha256": "095931691b1a24443799274cc22f448f6a0fe91929186c12ee0c232b76ca6b1b"
+    },
+    "dist/mod/natives/NRHex.dll": {
+      "inputSha256": "68922c64a4438b81b6f007b7a88317746b3929e8235fcff86f7e58f0a3bebe31",
+      "outputSha256": "490e29c0fcf49b5c3e213ddf81f0f3e4b496965884ccef00597ba905732bb745"
+    }
+  },
+  "allOtherExistingDistributionFilesPreserved": true,
+  "dllImportsUnchanged": [
+    "KERNEL32.dll",
+    "USER32.dll",
+    "USERENV.dll",
+    "WS2_32.dll",
+    "api-ms-win-core-synch-l1-2-0.dll",
+    "bcrypt.dll",
+    "bcryptprimitives.dll",
+    "msvcrt.dll",
+    "ntdll.dll"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

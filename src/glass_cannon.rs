@@ -20,7 +20,7 @@ pub unsafe extern "system" fn enter(module:usize,source:usize,hit:usize){
  let target=if active&&module!=0&&hit!=0{read_ptr(module+8)}else{0};
  let bypass=eligible(active,source,target,hit,
   |actor|has_effect(actor,OWNER,BASE.load(Ordering::Acquire)));
- let holy=crate::devils_gaze_hit::player_damage_multiplier(target,hit,BASE.load(Ordering::Acquire));
+ let holy=crate::devils_gaze_hit::damage_multiplier(target,hit,BASE.load(Ordering::Acquire));
  SCOPES.with(|s|s.borrow_mut().push((bypass,if bypass{read_ptr(target+0x190)}else{0},holy)));
 }
 fn eligible(active:bool,source:usize,target:usize,hit:usize,owns:impl FnOnce(usize)->bool)->bool{
@@ -53,7 +53,8 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
  deflection:f32,repeated:f32,rebound:f32,attack_rate:f32,positional:f32,target_state:f32,balance:f32)->f32{
  // 439E80 passes a local five-element attack vector. For environment sources
  // its earlier steps are multiplicative; restore the quartered holy component
- // for player recipients here, retaining every native defensive coefficient.
+ // for player recipients and apply the live/baked depth ratio here, retaining
+ // every native defensive coefficient.
  // Copy instead of modifying shared hit/bullet data: mixed targets and repeated
  // native evaluations must never compound or leak this recipient's multiplier.
  let holy=SCOPES.with(|s|s.borrow().last().map_or(1.,|v|v.2));

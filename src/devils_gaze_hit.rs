@@ -34,19 +34,24 @@ unsafe fn party_member(target: usize, world: usize, get: PartyLookup) -> bool {
     (1..=3).any(|slot| get(world, slot) == target)
 }
 unsafe fn recipient_multiplier(target: usize, hit: usize, is_member: impl FnOnce(usize) -> bool) -> f32 {
-    if target == 0 || hit == 0 || read_i32(hit+0x44) != 0
-        || !(devils_gaze::OWNER..=devils_gaze::OWNER+5).contains(&read_i32(hit+0x40)) {
-        return 1.;
-    }
+    if attack_depth(target, hit).is_none() { return 1.; }
     if is_member(target) { 4. } else { 1. }
 }
-pub unsafe fn player_damage_multiplier(target: usize, hit: usize, base: usize) -> f32 {
-    recipient_multiplier(target, hit, |actor| {
+unsafe fn attack_depth(target: usize, hit: usize) -> Option<usize> {
+    if target == 0 || hit == 0 || read_i32(hit+0x44) != 0 { return None; }
+    let id = read_i32(hit+0x40);
+    (devils_gaze::OWNER..=devils_gaze::OWNER+5).contains(&id)
+        .then(|| (id-devils_gaze::OWNER) as usize)
+}
+pub unsafe fn damage_multiplier(target: usize, hit: usize, base: usize) -> f32 {
+    let Some(depth) = attack_depth(target, hit) else { return 1.; };
+    let recipient = recipient_multiplier(target, hit, |actor| {
         if base == 0 { return false; }
         // 5197E0 queries WorldChrMan's player registry by PlayerGameData slot.
         // Its executable signature is already guarded by NEW_5197E0_PATTERN.
         party_member(actor, read_ptr(base + crate::WORLD_RVA), std::mem::transmute(base + 0x5197e0))
-    })
+    });
+    recipient * crate::devils_gaze_scaling::multiplier(depth, base)
 }
 
 unsafe fn blocked(active: bool, hit: usize, target: usize, bullet: usize, lookup: Lookup) -> bool {
@@ -149,10 +154,15 @@ mod tests {
                 let before=hit;
                 let expected=if [11,22,33].contains(&target)&&kind==0&&(95002200..=95002205).contains(&id){4.}else{1.};
                 assert_eq!(recipient_multiplier(target,hit.as_ptr() as usize,|p|party_member(p,w,party_lookup)),expected);
+                if target==0||kind!=0||!(95002200..=95002205).contains(&id){
+                    // A deliberately unusable base detects accidental queries
+                    // for unrelated attacks before the private-ID/table gate.
+                    assert_eq!(damage_multiplier(target,hit.as_ptr() as usize,1),1.);
+                }
                 assert_eq!(hit,before);
             }}
         }
-        assert_eq!(player_damage_multiplier(0,0,0),1.);
+        assert_eq!(damage_multiplier(0,0,0),1.);
     }}
     #[test] fn party_lookup_handles_local_remote_departure_and_missing_world() { unsafe {
         let mut world=vec![0usize;0x17500/8];world[0x174e8/8]=33;
