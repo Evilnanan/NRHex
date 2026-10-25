@@ -10,7 +10,7 @@
 
 名称约定：星界躯体、玻璃大炮、终极刷新、亮出你的剑、大力、逃跑计划、吵闹鬼沿用 [ARAM: Mayhem 的英文原名](https://arammayhem.com/augments/)；“别停止咏唱”沿用“别停止引导”的原名 [Don't Change the Channel](https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-12-notes/)。能力描述仍对应本 Mod 的机制。“人是猫”按指定致敬名称使用 `Humans Are Cats`。
 
-描述约定：参照黑夜君临原生词条，优先使用 `Boosts`、`Restores`、`Reduces`、`Grants` 等简洁陈述句，减少直接称呼玩家的 `you/your`。术语统一为 `attack power`（攻击力）、`damage negation`（减伤率）、`Ultimate Art`（绝招）、`Art gauge`（绝招量表）、`sorceries and incantations`（魔法、祷告）、`critical hits`（处决）、`stance`（架势）、`near-death`（濒死）；圣杯瓶用 `Flask of Crimson Tears`，石剑钥匙用 `Stonesword Key`，资源用 `HP`、`FP`、`stamina`，潜在能力用 `Dormant Power`，赐福用 `Site of Grace`。武器战技用 `skill`，不要混同角色技艺 `Character Skill`。吸血写为命中时回复 HP，避免使用其他游戏的 `lifesteal`；冲击力保留 `impact`，不要改成表示削韧的 stance damage。
+描述约定：参照黑夜君临原生词条，优先使用 `Boosts`、`Restores`、`Reduces`、`Grants` 等简洁陈述句，减少直接称呼玩家的 `you/your`。术语统一为 `attack power`（攻击力）、`damage negation`（减伤率）、`Ultimate Art`（绝招）、`Art gauge`（绝招量表）、`sorceries and incantations`（魔法、祷告）、`critical hits`（处决）、`stance`（架势）、`near-death`（濒死）；圣杯瓶用 `Flask of Crimson Tears`，石剑钥匙用 `Stonesword Key`，资源用 `HP`、`FP`、`stamina`，潜在能力用 `Dormant Power`，海克斯强化符文用 `Mayhem Augments`，赐福用 `Site of Grace`。武器战技用 `skill`，不要混同角色技艺 `Character Skill`。吸血写为命中时回复 HP，避免使用其他游戏的 `lifesteal`；冲击力保留 `impact`，不要改成表示削韧的 stance damage。
 
 以上用语已对照本地原版 `AttachEffectInfo.fmg`、`GoodsName.fmg` 和 `CL_MenuText.fmg`。只缩减过长的英文描述，尽量不超过140个字符；原文已在此范围内的保留，超长时优先精简措辞并保留数值、触发条件和核心机制，必要时才省略次要细节。140字符是编辑目标，不是已确认的引擎上限，最终显示仍需游戏内检查。不套用被致敬游戏的机制；时长使用 `seconds`，冷却可用 `Cooldown: 60 seconds.`；锻体奖励描述为 `a Dormant Power with a passive effect`。
 
@@ -222,4 +222,4 @@ Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.
 <!-- hex:95004700 -->
 ## Double the Joy
 
-Grants two random Hex Augment Runes.
+Grants two random Mayhem Augments.

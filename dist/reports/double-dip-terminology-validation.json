@@ -1,0 +1,95 @@
+{
+  "version": "0.17.253",
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "FE8FEB9B6A27B7C05BFF99E40862AE369B1484279E026A8ABDD02F32F78621A0",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "621D82773CB13F8545760DDE99F3F916037C0C1211449D9DEAE00520C9046E68",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "748F8F1292344CC7212BBA5D87CB527D4391B4CE202E95755AA9106023ED3083",
+        "outputSha256": "748F8F1292344CC7212BBA5D87CB527D4391B4CE202E95755AA9106023ED3083",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "751EF44370857E06F4FD5E46A763044EBBA76EA46F5B3F0AB90D69C56EC69DA2",
+        "outputSha256": "751EF44370857E06F4FD5E46A763044EBBA76EA46F5B3F0AB90D69C56EC69DA2",
+        "changes": [],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "7E59B84996CD2F4F7B525CA0C0049CD49BA33E06A38F3B9EDFEFAEA44E41A89E",
+        "outputSha256": "E967B7C13B57C9F685CD7A3C6CE8ED5353BF7D8654D53E4F8E348FC762CEDB5B",
+        "changes": [
+          {
+            "fmg": "AttachEffectInfo.fmg",
+            "id": 95004700,
+            "before": "Grants two random Hex Augment Runes.",
+            "after": "Grants two random Mayhem Augments."
+          },
+          {
+            "fmg": "PermanentBuffInfo.fmg",
+            "id": 95004700,
+            "before": "Grants two random Hex Augment Runes.",
+            "after": "Grants two random Mayhem Augments."
+          },
+          {
+            "fmg": "PermanentBuffCaption.fmg",
+            "id": 95004700,
+            "before": "Grants two random Hex Augment Runes.",
+            "after": "Grants two random Mayhem Augments."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "1760F624D523EC1B4B238500F9DCF871B53E10A7F30CF17178237CB757FD870A",
+        "outputSha256": "68BB01AAD2C97D95588E21209304E315BE9C9FF5E5598F0BDAA0F020FDAA555C",
+        "changes": [
+          {
+            "fmg": "SpEffectInfo.fmg",
+            "id": 95004700,
+            "before": "Grants two random Hex Augment Runes.",
+            "after": "Grants two random Mayhem Augments."
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "containers": {
+    "engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "c0d4be9df1619dfc97ce45490cdc2780d88f23390c9e85c205aa758b0cb7f57e",
+      "outputSha256": "bd3b6994975ffcdb716d255fcb01645896876edd34ebd192f93a7d92d1631f4a",
+      "roundTripPassed": true
+    },
+    "engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "40ca5a51c1fb8c0ed733f32186fcd5083caacf8748672e64d04dbe33c6a5e87f",
+      "outputSha256": "893352c1a91d65d78e2d1095cb46f73ac1765566123ee070150cdb242644a855",
+      "roundTripPassed": true
+    }
+  },
+  "onlyDoubleDipEnglishDescriptionChanged": true,
+  "installedReadbackPassed": true,
+  "gameplayVerified": false,
+  "englishDescription": "Grants two random Mayhem Augments.",
+  "terminologyRecordedInCanonicalSource": true,
+  "changedGameAssets": [
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx"
+  ],
+  "otherGameAssetsUnchanged": true,
+  "canonicalSourceSha256": "621d82773cb13f8545760dde99f3f916037c0c1211449d9deae00520c9046e68"
+}
