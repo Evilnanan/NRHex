@@ -220,6 +220,6 @@ Reduces attack power by 30%. Boosts damage as the distance to the target increas
 Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.
 
 <!-- hex:95004700 -->
-## Double the Joy
+## Good Things Come in Pairs
 
 Grants two random Mayhem Augments.

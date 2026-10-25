@@ -334,6 +334,6 @@ tools/HexBuild/StormAudio.cs直接从当前sd.bhd／sd.bdt选择性提取cs_m19�
 
 `src/metal.rs`处理本机原生铁壶香药的免消耗和一次赠送；`tools/HexBuild/Metal.cs`提供中性拥有标记、发放请求／保存收据、原生道具掉落表与局内清理。与咒魂使者共享参数查询挂钩、道具动作观察、背包容量／取得序号查询和普通地面物品格式，不新增HKS或动画修改。验证见`tools/verify_metal.py`；原生调用链、发放与背包边界见[金属化](research/metal.md)。
 
-## 双喜临门
+## 好事成双
 
-`src/double_dip.rs`提供独立随机池及持久选择／完成收据，与`reward_choices::exclusive_role`共用角色专属分类。`tools/HexBuild/DoubleDip.cs`通过同一参数化本地common事件为每个可能结果绑定隐藏选择标记、实际拥有效果和原生获得提示；不生成球或物品。普通抽取、互斥与展示轮换不变。检查入口为`tools/verify_double_dip.py`，参数及跨帧协议见[双喜临门](research/double-dip.md)。
+`src/double_dip.rs`提供独立随机池及持久选择／完成收据，与`reward_choices::exclusive_role`共用角色专属分类。`tools/HexBuild/DoubleDip.cs`通过同一参数化本地common事件为每个可能结果绑定隐藏选择标记、实际拥有效果和原生获得提示；不生成球或物品。普通抽取、互斥与展示轮换不变。检查入口为`tools/verify_double_dip.py`，参数及跨帧协议见[好事成双](research/double-dip.md)。

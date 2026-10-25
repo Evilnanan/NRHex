@@ -1,0 +1,125 @@
+{
+  "version": "0.17.253",
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "A603E2385663FF5EACD52E78CBA4708EFA2B1FE68F6637D003038EB4CED61E04",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "EAFAF1509228EE26BC94037912C7C2347FA6BC40FF34043FA46D22AAA4C9F0E6",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "748F8F1292344CC7212BBA5D87CB527D4391B4CE202E95755AA9106023ED3083",
+        "outputSha256": "46E8030682C863BF8931BB336158CAA6A127ACCD824325ABCEC473516AB3C5FA",
+        "changes": [
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95004700,
+            "before": "双喜临门",
+            "after": "好事成双"
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95004700,
+            "before": "双喜临门",
+            "after": "好事成双"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "751EF44370857E06F4FD5E46A763044EBBA76EA46F5B3F0AB90D69C56EC69DA2",
+        "outputSha256": "F65C22A4397C1DEC90BD5F9C3DEF82A996B6F96C86D43C7E2F1FF5D55D0CFFF9",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95004700,
+            "before": "双喜临门",
+            "after": "好事成双"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "E967B7C13B57C9F685CD7A3C6CE8ED5353BF7D8654D53E4F8E348FC762CEDB5B",
+        "outputSha256": "2894CB256F587BACB97781D21DBD1AB5E9D6FB1A6C31382A8484405028C0D56B",
+        "changes": [
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95004700,
+            "before": "Double the Joy",
+            "after": "Good Things Come in Pairs"
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95004700,
+            "before": "Double the Joy",
+            "after": "Good Things Come in Pairs"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "68BB01AAD2C97D95588E21209304E315BE9C9FF5E5598F0BDAA0F020FDAA555C",
+        "outputSha256": "38B986513147DBF603365721E628344539D9472E5BB75CDB4160204AB64FD2A8",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95004700,
+            "before": "Double the Joy",
+            "after": "Good Things Come in Pairs"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "containers": {
+    "zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "872193430f9b708b720344f99d5a905c3c4dfcc76c4a66d7b708e687ebc22f66",
+      "outputSha256": "3c49e4a0b66af9f70839a1661f34eb2acd58064967a1e93852f0837b8de067cf",
+      "roundTripPassed": true
+    },
+    "zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "d6a9928435360a2490a8f0717fd724a02e9324998601244d2e6c535f443256fa",
+      "outputSha256": "d8262ac0fb69e6dba33ecb38666b4067afd71f12687947ed03b00906eb49c99f",
+      "roundTripPassed": true
+    },
+    "engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "bd3b6994975ffcdb716d255fcb01645896876edd34ebd192f93a7d92d1631f4a",
+      "outputSha256": "a9ef8b96a91746028df82153d2870c3395114790aa23cd94f840ae4e8c92d918",
+      "roundTripPassed": true
+    },
+    "engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "893352c1a91d65d78e2d1095cb46f73ac1765566123ee070150cdb242644a855",
+      "outputSha256": "7fcd6083ce5ddfa31e0e9e4f86256c91da120f3afd320c727bb85699b3154d40",
+      "roundTripPassed": true
+    }
+  },
+  "onlyDoubleDipNamesChanged": true,
+  "installedReadbackPassed": true,
+  "gameplayVerified": false,
+  "chineseName": "好事成双",
+  "englishName": "Good Things Come in Pairs",
+  "descriptionsUnchanged": true,
+  "changedGameAssets": [
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx"
+  ],
+  "otherGameAssetsUnchanged": true,
+  "canonicalSourceHashes": {
+    "docs/hexes.md": "a603e2385663ff5eacd52e78cba4708efa2b1fe68f6637d003038eb4ced61e04",
+    "docs/hexes.en.md": "eafaf1509228ee26bc94037912c7c2347fa6bc40ff34043fa46d22aaa4c9f0e6"
+  }
+}
