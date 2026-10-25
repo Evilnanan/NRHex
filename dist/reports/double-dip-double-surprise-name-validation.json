@@ -1,0 +1,125 @@
+{
+  "version": "0.17.253",
+  "texts": {
+    "source": "docs/hexes.md",
+    "sourceSha256": "14344D4C4EA2C0591FA15280059D2A08CF7EE5B440E5F5030031CACAC8D5913A",
+    "englishSource": "docs/hexes.en.md",
+    "englishSourceSha256": "39C955449AD7A1D23C5ED0CA20277DB5BF9C1B6FB2651990DBFBA18A1596470A",
+    "statusSource": "data/text/status-effects.json",
+    "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+    "statusOnly": false,
+    "reports": [
+      {
+        "language": "zhocn",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "46E8030682C863BF8931BB336158CAA6A127ACCD824325ABCEC473516AB3C5FA",
+        "outputSha256": "B2563AA498F19C1142AA85CDC50E763C16E6EA9D73A325B94C548BE1A024CC53",
+        "changes": [
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95004700,
+            "before": "好事成双",
+            "after": "双重惊喜"
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95004700,
+            "before": "好事成双",
+            "after": "双重惊喜"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "zhocn",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "F65C22A4397C1DEC90BD5F9C3DEF82A996B6F96C86D43C7E2F1FF5D55D0CFFF9",
+        "outputSha256": "4B4DC2B46672548CA8070865C86DDD23658B0152582746338CAD57AB001A9048",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95004700,
+            "before": "好事成双",
+            "after": "双重惊喜"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "item_dlc01.msgbnd.dcx",
+        "inputSha256": "2894CB256F587BACB97781D21DBD1AB5E9D6FB1A6C31382A8484405028C0D56B",
+        "outputSha256": "CBE53D8250A6852C5FA7ACF63ED866D8BF0EAF5C79EDE0C2B159FD01A1F18CF8",
+        "changes": [
+          {
+            "fmg": "AttachEffectName.fmg",
+            "id": 95004700,
+            "before": "Good Things Come in Pairs",
+            "after": "Double Surprise"
+          },
+          {
+            "fmg": "PermanentBuffName.fmg",
+            "id": 95004700,
+            "before": "Good Things Come in Pairs",
+            "after": "Double Surprise"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      },
+      {
+        "language": "engus",
+        "file": "menu_dlc01.msgbnd.dcx",
+        "inputSha256": "38B986513147DBF603365721E628344539D9472E5BB75CDB4160204AB64FD2A8",
+        "outputSha256": "AA2FB18C17B1F2991106B6B1F9A47A4CDBA3044B7BF1D35F42187F30752F6CE5",
+        "changes": [
+          {
+            "fmg": "SpEffectName.fmg",
+            "id": 95004700,
+            "before": "Good Things Come in Pairs",
+            "after": "Double Surprise"
+          }
+        ],
+        "unrelatedEntriesAndMembersUnchanged": true
+      }
+    ]
+  },
+  "containers": {
+    "zhocn/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "3c49e4a0b66af9f70839a1661f34eb2acd58064967a1e93852f0837b8de067cf",
+      "outputSha256": "74e0b61865d6ac257d92c158a85020241450745b2eafdcc69db7141e773797a6",
+      "roundTripPassed": true
+    },
+    "zhocn/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "d8262ac0fb69e6dba33ecb38666b4067afd71f12687947ed03b00906eb49c99f",
+      "outputSha256": "1bee580eeb23e84f9c7f7aa271823a750368a2701c88df78f00f5ef384bd7ec2",
+      "roundTripPassed": true
+    },
+    "engus/item_dlc01.msgbnd.dcx": {
+      "inputSha256": "a9ef8b96a91746028df82153d2870c3395114790aa23cd94f840ae4e8c92d918",
+      "outputSha256": "dcb6a6f8fb49eaf9c05376f640771b74a8254bf3293f4edf15830643c1ad6714",
+      "roundTripPassed": true
+    },
+    "engus/menu_dlc01.msgbnd.dcx": {
+      "inputSha256": "7fcd6083ce5ddfa31e0e9e4f86256c91da120f3afd320c727bb85699b3154d40",
+      "outputSha256": "9e0c48b96bda5d54386fe1d3fdede58f25ec6fd89bf9ba833b3df19f62871cfe",
+      "roundTripPassed": true
+    }
+  },
+  "onlyDoubleDipNamesChanged": true,
+  "installedReadbackPassed": true,
+  "gameplayVerified": false,
+  "chineseName": "双重惊喜",
+  "englishName": "Double Surprise",
+  "descriptionsUnchanged": true,
+  "changedGameAssets": [
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx"
+  ],
+  "otherGameAssetsUnchanged": true,
+  "canonicalSourceHashes": {
+    "docs/hexes.md": "14344d4c4ea2c0591fa15280059d2a08cf7ee5b440e5f5030031cacac8d5913a",
+    "docs/hexes.en.md": "39c955449ad7a1d23c5ed0ca20277db5bf9c1b6fb2651990dbfba18a1596470a"
+  }
+}
