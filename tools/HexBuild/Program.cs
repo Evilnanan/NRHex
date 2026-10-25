@@ -36,6 +36,7 @@ if(args.Contains("--cage-music-probe")){CageMusic.Probe(root);return;}
 if(args.Contains("--cage-music-stage")){CageMusic.Stage(root);return;}
 if(args.Contains("--cage-music-shown-fix")){CageMusic.Stage(root,true);return;}
 if(args.Contains("--cage-body-fog")){CagePresentation.StageBodyFog(root);return;}
+if(args.Contains("--double-dip-popup-stage")){DoubleDip.StagePopup(root);return;}
 
 if(args.Contains("--cage-network-selector")){CageNetwork.Stage(root);return;}
 if(args.Contains("--cage-usage")){CageUsage.Stage(root);return;}
@@ -91,6 +92,7 @@ if(args.Contains("--basics-stage")){Basics.Stage(root,bnd,Parse,HexCatalog.Load(
 if(args.Contains("--basics-check")){Basics.Verify(root,bnd,Parse);return;}
 if(args.Contains("--double-dip-stage")){DoubleDip.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--double-dip-check")){DoubleDip.Verify(root,bnd,Parse);return;}
+if(args.Contains("--double-dip-check-staged")){DoubleDip.Verify(root,bnd,Parse,true);return;}
 if(args.Contains("--metal-stage")){Metal.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--metal-check")){Metal.Verify(root,bnd,Parse);return;}
 if(args.Contains("--wraith-stage")){Wraith.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}

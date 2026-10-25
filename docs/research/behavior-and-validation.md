@@ -21,7 +21,7 @@
 | 2004[8] | SetSpEffect | uint entity、int effect ID |
 | 2004[21] | ClearSpEffect | 原生清除效果；实体身份与网络上下文须核对 |
 | 2004[86] / [87] | AddEstusCharge / RefillEstus | 容量增加与补满不同，复用原生存储/限幅 |
-| 2003[124] | DisplayPermanentBuffPopup | PermanentBuffParam 的 ID；不是单独的 buff 激活机制 |
+| 2003[124] | DisplayPermanentBuffPopup | 名称不能当显示保证：本版本传record-only标志，不入提示队列；自定义能力需复用原生拾取的本地展示分支，见[双重惊喜](double-dip.md) |
 
 Bank/ID 之外的参数以四字节数字输出可能把 bool/byte、padding 和 float 错读成整数。直接用 `object[]` 构造时每个 boxed 类型影响打包；优先复用已确认原指令字节，新增指令按签名显式给类型并确认对齐。
 

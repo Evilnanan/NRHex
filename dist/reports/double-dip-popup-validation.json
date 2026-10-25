@@ -1,0 +1,155 @@
+{
+  "version": "0.17.254",
+  "owner": 95004700,
+  "directGrant": true,
+  "rewardNodesCreated": false,
+  "inventoryUsed": false,
+  "compiledRuntimeProtocolPassed": true,
+  "installedParameterReadbackPassed": true,
+  "eventReadback": "installed",
+  "checks": [
+    "all hero IDs and unknown values only filter foreign character-exclusive powers, ownership and self",
+    "current Ironeye can draw Slide; current Revenant can draw Enhanced Necromancy",
+    "owned conflicts, caster affinity, multi-role restrictions, difficulty count, terrain and exposure history do not filter this draw",
+    "two distinct unowned results; RNG failure never submits a partial new choice",
+    "persist both selections before READY; partial saved selection fills without rerolling its original target",
+    "parameterized local common worker binds selected marker and actual PermanentBuff owner for every possible target",
+    "native AddSpecialEffect and wait for actual ownership; preowned target cannot be reapplied",
+    "deferred native requests submitted once; actor reconstruction retains frozen selection",
+    "DLL queues local pickup-style popup only after real ownership, once per selected result; missing UI retries without a completion receipt",
+    "receipt only after both actual owner effects and popup submission; cleanup only after saved receipt is live; no re-grant on restoration",
+    "actual native deque confirms record-only path queues nothing, pickup flag keeps both results in order including wraparound",
+    "common worker itself rejects completed/reset states before DLL cleanup, including absent target with stale READY/selection",
+    "unknown hero, non-owner, down/dead/reset/foreign actor cannot initiate delivery",
+    "catalog append only; six history bytes; all existing parameter rows and unrelated tables/events preserved"
+  ],
+  "stubs": [
+    "native effect application/query/removal, popup ABI and event-worker scheduling are deferred fixtures in the Rust test",
+    "real popup enqueue code is separately executed with preallocated storage and an empty native record manager",
+    "native common event VM, popup rendering, gameplay and multiplayer are not executed"
+  ],
+  "sourceHashes": {
+    "src/double_dip.rs": "65e449d3b23b3ebdb72c9deb859d16f00b978490c23af6fa5bde5b626f7f009a",
+    "src/double_dip_native_tests.rs": "96ea48ea0506699b838e8f1a8bcbb769feba79983f53c10ea1b86681ece060a8",
+    "src/hex_pool.rs": "23f9d010ce788897a8f3676a852c22835576f5d2726f6d4f88dd3bb59fac19c8",
+    "src/lib.rs": "22524cd031ed00a5d0e3959489a26002a93675264c1901c188085d33c1447d92",
+    "src/reward_choices.rs": "6aad0f39d9755cf1c36a5bb8387c36d21e9811964c42570d5e601fa1139064b9",
+    "src/reward_cycle_runtime.rs": "3d81073a467f24b5ff13dba7cd04922a765653614cab8b596fcf7260b6088269",
+    "tools/HexBuild/DoubleDip.cs": "cb2982b53711511d3e2f5653e34809b271108cafe2fa930d7aea38041b43f56c",
+    "tools/HexBuild/HexCatalog.cs": "fbe988c62a303fabef28375153aee0308a4c50c55fdb2dcce33704e1e650eadc",
+    "tools/HexBuild/RewardCatalog.cs": "56acbd9b244b58d89a958f7b06e9bb62dc464a924496b0cc66a4c03ff08ebfc1",
+    "tools/HexBuild/Program.cs": "ee7e2684ff84fdb2338a626c7b2cbff6cdacc49f2798ddc2c6f0f066f18e170a",
+    "tools/verify_double_dip.py": "44b2b79d86689fa74c6d8431152af7d4e178344781a3d07ca4d8ba4008d776ac",
+    "tools/verify_double_dip_popup.py": "70f561c19ba3b6c455f1fcc77bfeef09d9ccbe6074e7a7a044d0b014d1f71771"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "nativePopup": {
+    "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "nativeFunction": "0x7c5080",
+    "nativePickupFlag": 0,
+    "legacyEventFlag": 1,
+    "realNativeDequeCases": [
+      {
+        "offset": 0,
+        "legacyQueued": 0,
+        "pickupQueued": [
+          95000300,
+          95004600
+        ]
+      },
+      {
+        "offset": 1,
+        "legacyQueued": 0,
+        "pickupQueued": [
+          95000300,
+          95004600
+        ]
+      },
+      {
+        "offset": 3,
+        "legacyQueued": 0,
+        "pickupQueued": [
+          95000300,
+          95004600
+        ]
+      },
+      {
+        "offset": 4,
+        "legacyQueued": 0,
+        "pickupQueued": [
+          95000300,
+          95004600
+        ]
+      },
+      {
+        "offset": 15,
+        "legacyQueued": 0,
+        "pickupQueued": [
+          95000300,
+          95004600
+        ]
+      },
+      {
+        "offset": 60,
+        "legacyQueued": 0,
+        "pickupQueued": [
+          95000300,
+          95004600
+        ]
+      },
+      {
+        "offset": 63,
+        "legacyQueued": 0,
+        "pickupQueued": [
+          95000300,
+          95004600
+        ]
+      }
+    ],
+    "gameProcessOpened": false,
+    "renderingVerified": false,
+    "multiplayerVerified": false
+  },
+  "eventPatch": {
+    "inputSha256": "F3D1CBEE6FC6FC142AE5628CF61BD081BAE60846892D5E99B72FFCAFB0D3E0A6",
+    "outputSha256": "564F2F0DA91B3463430C36FFC2A0AD6603728BDA3B844D7F83735EF3DA969EF5",
+    "changedEvent": 9101130,
+    "removedRecordOnlyOpcode": "2003[124]",
+    "nativePopupQueuedByDllAfterOwnership": true,
+    "allUnrelatedEventsUnchanged": true,
+    "gameplayVerified": false
+  },
+  "loading": {
+    "version": "0.17.254",
+    "pid": 21260,
+    "dllSha256": "303e889666574cb6b60badedee9d8b250cadb698ad4225a1aeb6460514c18722",
+    "active": 1,
+    "mainUpdateHook": "e94bf5a7ff",
+    "dllPath": "D:\\Projects\\NRMod\\NRHex\\dist\\mod\\natives\\NRHex.dll",
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "regularTestsPassed": 454,
+  "signaturesPassed": 204,
+  "installed": {
+    "dist/mod/natives/NRHex.dll": "303e889666574cb6b60badedee9d8b250cadb698ad4225a1aeb6460514c18722",
+    "dist/mod/event/common.emevd.dcx": "564f2f0da91b3463430c36ffc2a0ad6603728bda3b844d7f83735ef3da969ef5"
+  },
+  "groupBuildChanged": true,
+  "parametersAndTextsChanged": false,
+  "userVerification": {
+    "date": "2026-10-25",
+    "result": "User confirmed dist acquisition popup fix works",
+    "scope": "Double Surprise acquisition notifications",
+    "multiplayerVerified": false
+  },
+  "groupBuild": {
+    "version": "0.17.254",
+    "dllSha256": "d270fd24c3c3a580ab3e894c38c0c8a70ca4645f54b596c1bdf73ced6be12f31",
+    "fileCount": 26,
+    "testHotkeys": false,
+    "existingConfigurationsPreserved": true,
+    "distDllUnchanged": true
+  }
+}

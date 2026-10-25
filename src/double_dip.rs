@@ -6,6 +6,9 @@ pub const OWNER:i32=95004700;
 pub const RECEIPT:i32=OWNER+1;
 pub const READY:i32=OWNER+2;
 pub const FIRST_MARKER:i32=96210000;
+pub const POPUP_RVA:usize=0x7c5080;
+pub const POPUP_PATTERN:&str="48 89 5C 24 18 55 56 57 48 83 EC 20 48 8B 05 3D 28 44 03 41 0F B6 D8 8B FA 48 8B E9 48 8B B0 80 00 00 00";
+const MENU_RVA:usize=0x3c14a70;
 fn marker(index:usize)->i32{FIRST_MARKER+HISTORY_BITS[index]as i32}
 fn role_allowed(owner:i32,hero:Option<u8>)->bool{owner!=OWNER&&crate::reward_choices::exclusive_role(owner).is_none_or(|required|hero==Some(required))}
 fn candidates(owned:&HexSet,selected:&[usize],hero:Option<u8>)->Vec<usize>{
@@ -16,12 +19,23 @@ fn select(mut selected:Vec<usize>,owned:&HexSet,hero:Option<u8>,mut rng:impl FnM
  while selected.len()<2&&!pool.is_empty(){let n=rng(pool.len())?;if n>=pool.len(){return None;}selected.push(pool.remove(n));}
  Some(selected)
 }
-#[derive(Default)]struct State{selected:Option<Vec<usize>>,posted:std::collections::BTreeSet<i32>}
-static STATE:Mutex<State>=Mutex::new(State{selected:None,posted:std::collections::BTreeSet::new()});
+#[derive(Default)]struct State{selected:Option<Vec<usize>>,posted:std::collections::BTreeSet<i32>,announced:std::collections::BTreeSet<i32>}
+static STATE:Mutex<State>=Mutex::new(State{selected:None,posted:std::collections::BTreeSet::new(),announced:std::collections::BTreeSet::new()});
 pub fn reset(){if let Ok(mut state)=STATE.lock(){*state=State::default();}}
 // Reserve a request before invoking native code, which may re-enter update.
 fn post(id:i32)->bool{STATE.lock().map(|mut state|state.posted.insert(id)).unwrap_or(false)}
 unsafe fn add(actor:usize,id:i32,base:usize){if post(id){crate::wraith::set(actor,id,true,base);}}
+unsafe fn announce(id:i32,base:usize)->bool{
+ // Use the local pickup branch, not EMEVD 2003[124]'s record-only flag.
+ // The native deque owns ordering and presentation, including simultaneous gifts.
+ let menu=read_ptr(base+MENU_RVA);
+ if menu==0||read_ptr(base+crate::GAME_DATA_RVA)==0{return false;}
+ let Ok(mut state)=STATE.lock()else{return false;};
+ if !state.announced.insert(id){return true;}
+ drop(state);
+ let queue:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+POPUP_RVA);
+ queue(menu,id,0);true
+}
 pub unsafe fn update(actor:usize,base:usize){
  if actor==0||!is_local(actor,base)||!has_effect(actor,OWNER,base)||has_effect(actor,crate::reward_cycle_runtime::RESET,base){return;}
  let selected=STATE.lock().ok().and_then(|state|state.selected.clone());
@@ -46,9 +60,13 @@ pub unsafe fn update(actor:usize,base:usize){
   for &i in &selected{if !has_effect(actor,marker(i),base){add(actor,marker(i),base);}}return;
  }
  if !ready{add(actor,READY,base);return;}
- // Parameterized common workers wait for READY, apply the actual owner SpEffect
- // and display the native PermanentBuff popup. No inventory or reward nodes.
- if selected.iter().all(|&i|has_effect(actor,OWNER_IDS[i],base)){add(actor,RECEIPT,base);}
+ // Workers grant effects; announce only after each real owner is observable.
+ // Do not consume the completion receipt while the native UI is unavailable.
+ let mut complete=true;
+ for &i in &selected{
+  if !has_effect(actor,OWNER_IDS[i],base)||!announce(OWNER_IDS[i],base){complete=false;}
+ }
+ if complete{add(actor,RECEIPT,base);}
 }
 #[cfg(test)]mod tests{
  use super::*;use crate::reward_choices::{all,mask};

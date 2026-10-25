@@ -336,4 +336,4 @@ tools/HexBuild/StormAudio.cs直接从当前sd.bhd／sd.bdt选择性提取cs_m19�
 
 ## 双重惊喜
 
-`src/double_dip.rs`提供独立随机池及持久选择／完成收据，与`reward_choices::exclusive_role`共用角色专属分类。`tools/HexBuild/DoubleDip.cs`通过同一参数化本地common事件为每个可能结果绑定隐藏选择标记、实际拥有效果和原生获得提示；不生成球或物品。普通抽取、互斥与展示轮换不变。检查入口为`tools/verify_double_dip.py`，参数及跨帧协议见[双重惊喜](research/double-dip.md)。
+`src/double_dip.rs`提供独立随机池及持久选择／完成收据，与`reward_choices::exclusive_role`共用角色专属分类。`tools/HexBuild/DoubleDip.cs`通过同一参数化本地common事件为每个可能结果绑定隐藏选择标记和实际拥有效果；DLL确认到账后单次加入原生本地获取提示队列，不生成球或物品。普通抽取、互斥与展示轮换不变。检查入口为`tools/verify_double_dip.py`与`tools/verify_double_dip_popup.py`，参数及跨帧协议见[双重惊喜](research/double-dip.md)。

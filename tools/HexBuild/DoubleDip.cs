@@ -16,10 +16,12 @@ static class DoubleDip {
  static EMEVD.Instruction I(int b,int id,params object[] args)=>new(b,id,args);
  static EMEVD.Instruction Has(int group,int id,bool yes=true)=>I(4,5,(sbyte)group,20000u,id,(byte)(yes?1:0),(sbyte)0,1f);
  static bool Removal(EMEVD.Instruction i,int effect)=>i.Bank==2004&&i.ID==21&&i.ArgData.Length==8&&BitConverter.ToInt32(i.ArgData)==20000&&BitConverter.ToInt32(i.ArgData,4)==effect;
- static EMEVD.Event Worker(){
+ static EMEVD.Event Worker(bool legacyPopup=false){
   var e=new EMEVD.Event(GrantEvent,EMEVD.Event.RestBehaviorType.Restart);
   e.Instructions.AddRange([I(2000,2,(byte)0),Has(1,Owner),Has(1,Ready),Has(1,Receipt,false),Has(1,RewardCycle.Reset,false),Has(1,0),Has(1,0,false),I(0,0,(sbyte)0,(byte)1,(sbyte)1),I(2004,8,20000u,0),I(2003,124,0),Has(0,0),I(1000,4,(byte)1)]);
-  foreach(var(at,target,source)in new[]{(5,8,0),(6,8,4),(8,4,4),(9,0,4),(10,8,4)})e.Parameters.Add(new EMEVD.Parameter{InstructionIndex=at,TargetStartByte=target,SourceStartByte=source,ByteCount=4,UnkID=source/4+1});
+  if(!legacyPopup)e.Instructions.RemoveAt(9);
+  var bindings=legacyPopup?new[]{(5,8,0),(6,8,4),(8,4,4),(9,0,4),(10,8,4)}:new[]{(5,8,0),(6,8,4),(8,4,4),(9,8,4)};
+  foreach(var(at,target,source)in bindings)e.Parameters.Add(new EMEVD.Parameter{InstructionIndex=at,TargetStartByte=target,SourceStartByte=source,ByteCount=4,UnkID=source/4+1});
   return e;
  }
  public static void Events(EMEVD ev,Hex[] hexes){
@@ -34,9 +36,21 @@ static class DoubleDip {
   for(int slot=0;slot<targets.Length;slot++){
    var h=targets[slot];var init=inits.Single(i=>BitConverter.ToInt32(i.ArgData)==slot);Check(init.Layer==null&&init.ArgData.SequenceEqual(I(2000,0,slot,GrantEvent,Marker(h),h.Id).ArgData),"Invalid worker instance arguments");
    var args=init.ArgData.AsSpan(8).ToArray();var bound=Worker();foreach(var p in bound.Parameters)Array.Copy(args,p.SourceStartByte,bound.Instructions[(int)p.InstructionIndex].ArgData,p.TargetStartByte,p.ByteCount);
-   Check(BitConverter.ToInt32(bound.Instructions[5].ArgData,8)==Marker(h)&&BitConverter.ToInt32(bound.Instructions[6].ArgData,8)==h.Id&&bound.Instructions[6].ArgData[12]==0&&BitConverter.ToInt32(bound.Instructions[8].ArgData,4)==h.Id&&BitConverter.ToInt32(bound.Instructions[9].ArgData)==h.Id&&BitConverter.ToInt32(bound.Instructions[10].ArgData,8)==h.Id,"Bound grant/popup uses wrong marker or owner");
+   Check(BitConverter.ToInt32(bound.Instructions[5].ArgData,8)==Marker(h)&&BitConverter.ToInt32(bound.Instructions[6].ArgData,8)==h.Id&&bound.Instructions[6].ArgData[12]==0&&BitConverter.ToInt32(bound.Instructions[8].ArgData,4)==h.Id&&BitConverter.ToInt32(bound.Instructions[9].ArgData,8)==h.Id,"Bound grant uses wrong marker or owner");
   }
   foreach(int id in new[]{1111,9100941})foreach(int effect in Helpers(hexes).Prepend(Owner))Check(events.Events.Single(e=>e.ID==id).Instructions.Count(i=>Removal(i,effect))==1,"Missing guarded reset removal");
+ }
+ public static void StagePopup(string root){
+  var input=Common(root);var before=EMEVD.Read(input);var ev=EMEVD.Read(input);
+  var old=ev.Events.Single(e=>e.ID==GrantEvent);
+  Check(Cages.Same(old,Worker(true))||Cages.Same(old,Worker()),"Unknown direct-grant worker; refusing to replace");
+  ev.Events[ev.Events.IndexOf(old)]=Worker();
+  var dir=Path.Combine(root,"work/double-dip-popup/staged");Directory.CreateDirectory(dir);var output=Path.Combine(dir,"common.emevd.dcx");ev.Write(output);
+  var final=EMEVD.Read(output);ValidateEvents(final,HexCatalog.Load(root));
+  Check(final.Format==before.Format&&final.Compression==before.Compression&&final.Events.Count==before.Events.Count&&final.StringData.SequenceEqual(before.StringData)&&final.LinkedFileOffsets.SequenceEqual(before.LinkedFileOffsets),"Event metadata changed");
+  foreach(var e in before.Events)Check(Cages.Same(final.Events.Single(x=>x.ID==e.ID),e.ID==GrantEvent?Worker():e),"Unrelated event changed");
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),changedEvent=GrantEvent,removedRecordOnlyOpcode="2003[124]",nativePopupQueuedByDllAfterOwnership=true,allUnrelatedEventsUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: direct-grant worker staged without record-only popup opcode; four bindings and all unrelated events verified");
  }
  static void Validate(BND4 native,BND4 current,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   PARAM Table(BND4 b,string n)=>parse(n,b.Files.Single(f=>Name(f)==n+".param").Bytes);
@@ -48,7 +62,7 @@ static class DoubleDip {
   foreach(var target in Targets(hexes))Check(Convert.ToInt32(Table(current,"PermanentBuffParam").Rows.Single(r=>r.ID==target.Id)["spEffectId"].Value)==target.Id&&Convert.ToInt32(effects.Rows.Single(r=>r.ID==target.Id)["saveCategory"].Value)==10,"Direct gift target differs from actual native claim owner");
   Check(RewardCatalog.HistoryBit(Owner)==44&&RewardCatalog.HistoricalOwners[43]==95004600,"History registry must only append");
  }
- public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){var hexes=HexCatalog.Load(root);Validate(native,SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin")),parse,hexes);ValidateEvents(EMEVD.Read(Common(root)),hexes);Console.WriteLine("PASS: Double the Joy neutral reward, stable hidden selection and parameterized native direct-grant/popup workers read back");}
+ public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,bool staged=false){var hexes=HexCatalog.Load(root);Validate(native,SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin")),parse,hexes);ValidateEvents(EMEVD.Read(staged?Path.Combine(root,"work/double-dip-popup/staged/common.emevd.dcx"):Common(root)),hexes);Console.WriteLine("PASS: Double Surprise neutral reward, stable hidden selection and parameterized direct-grant workers read back; popup belongs to DLL");}
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string dir=Path.Combine(root,"work/double-dip/staged"),input=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(dir);var b=SFUtil.DecryptNightreignRegulation(input);var before=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
   string[] names={"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods","ItemTableParam"};var tables=names.ToDictionary(n=>n,n=>parse(n,b.Files.Single(f=>Name(f)==n+".param").Bytes));var origins=names.ToDictionary(n=>n,n=>parse(n,native.Files.Single(f=>Name(f)==n+".param").Bytes));var added=names.ToDictionary(n=>n,n=>new HashSet<int>());
