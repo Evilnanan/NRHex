@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "functions": {
+    "ExecChangeFlask": {
+      "originalHash": "0a000d2761d2dfc88666c79cf6e6b515cf7fce5742dc62b1ac822a5f4879f626",
+      "nrhexHash": "66924d89e0b5e587f15567d62da472abe77993a5eec52145ff42fd18f1258a29",
+      "mmvFunctionHash": "c61944c308157126bb67753816ea6c5e9261aa64925c3763292ee5c1306c773a",
+      "actions": [
+        {
+          "kind": "flask-helper",
+          "range": [
+            23,
+            32
+          ]
+        },
+        {
+          "kind": "replace",
+          "old": "env(GetSpEffectID, 8440200)",
+          "new": "NRHexMMV_Flask(env(GetSpEffectID, 8440200))",
+          "count": 3
+        }
+      ]
+    },
+    "GetAttackRequest": {
+      "originalHash": "4ad2489cee34d0a0d5f5208778f6a8440a92aca668729cc965b8a895704f4e49",
+      "nrhexHash": "34905ee34c976c503bd69c5aea9e43ea655d8345fe967b76e9996a9dcf3fdf57",
+      "mmvFunctionHash": "10700ac27928971c1302d4d14ebadf434c18d6a93bc6e0340903ba3587a83cf8",
+      "actions": [
+        {
+          "kind": "replace",
+          "old": "env(ActionRequest, ACTION_ARM_ULTRA)",
+          "new": "env(990045, ACTION_ARM_ULTRA)"
+        },
+        {
+          "kind": "replace",
+          "old": "env(IsUltimateArtReady)",
+          "new": "env(990046)",
+          "count": 2
+        }
+      ]
+    },
+    "ExecAirUlt": {
+      "originalHash": "34dcace13c0915f33ee235064141084f49dd6caf92e5c104e72c51a21fa0b724",
+      "nrhexHash": "692ce17f1f9027b787f88add8047f2a3f2a4e00283479839ac6f46e3b4788fee",
+      "mmvFunctionHash": "b7d01cf73e7f2fe731a84eef4798eb0b41d71dd7218ab69ea13cd089392686d8",
+      "actions": [
+        {
+          "kind": "replace",
+          "old": "env(ActionRequest, ACTION_ARM_ULTRA)",
+          "new": "env(990045, ACTION_ARM_ULTRA)"
+        }
+      ]
+    },
+    "ExecEvasion": {
+      "originalHash": "58d3d3f121d06675d32ca1e9b2fe112af8dd2d1f3da1be574590ce2f4b095ee9",
+      "nrhexHash": "cdcd32fb219979147acb0960d6424bce4d2dfae0c8b05dc1c5568ffcd034a5a4",
+      "mmvFunctionHash": "7d42cea413da0d3ac433b95b140749e4ec93622e3f91b9c9cd61c46f384ec4b3",
+      "actions": [
+        {
+          "kind": "after",
+          "anchor": "ExecEventAllBody(rollingEvent)",
+          "count": 2,
+          "occurrence": 0,
+          "range": [
+            320,
+            334
+          ]
+        },
+        {
+          "kind": "after",
+          "anchor": "SetVariable(\"EnableTAE_BackStep\", false)",
+          "range": [
+            1387,
+            1401
+          ]
+        },
+        {
+          "kind": "after",
+          "anchor": "SetAIActionState()",
+          "range": [
+            1485,
+            1503
+          ],
+          "inputs": {
+            "3": "request"
+          }
+        }
+      ]
+    },
+    "SprintStart_onActivate": {
+      "originalHash": "57363701806b3e8a4bb35169566e7f4b8a24f08bed01d7682940183b762ca29d",
+      "nrhexHash": "b15c0b2b0c12ca3399229b276bf2615bd4c439854b58475ee203121b610635d2",
+      "mmvFunctionHash": "dc2c543e26d02d22018590937a04f9e526797c9198d36619a9b6b2133dab333c",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            14
+          ]
+        },
+        {
+          "kind": "sprint-cost",
+          "range": [
+            24,
+            41
+          ]
+        }
+      ]
+    },
+    "MagicFireRight_Upper_onUpdate": {
+      "originalHash": "77f5b968c4770927b148ff70c05d1ad3a3e1fe2d12ce0d7a8b544f61db72a230",
+      "nrhexHash": "04c89a2dc8128881b1a7b95b666dbf815ed1e9cafc9d1159d4c86869055ae24c",
+      "mmvFunctionHash": "ca2624e51378bf056449ac53da99beea2ecca5744d4f8c21638032e722720aa7",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            114
+          ]
+        },
+        {
+          "kind": "before",
+          "anchor": "    if CheckIfHoldMagic() == TRUE and",
+          "range": [
+            287,
+            322
+          ]
+        }
+      ]
+    },
+    "MagicFireRight2_Upper_onUpdate": {
+      "originalHash": "d45ce8b1e6395f3d3aff906f86bfe5ec4e84cc70ab6e69699e1237b902bc9101",
+      "nrhexHash": "a7995cbb5de8af55b36d5e26c9fe5ad3c79da51248ed575858d4a356274411ec",
+      "mmvFunctionHash": "69dbd6c823aaa57b9477e549433cef56f033be224957c2f5e9d5c6f04d4e1c0c",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            114
+          ]
+        },
+        {
+          "kind": "before",
+          "anchor": "    if lower_state == LOWER_MOVE",
+          "range": [
+            273,
+            308
+          ]
+        }
+      ]
+    },
+    "MagicFireRight3_Upper_onUpdate": {
+      "originalHash": "dd84508c4c49bd6966fd1715c1ce9e6fd04e4558d7bc358fb8bb08d3f0f3a866",
+      "nrhexHash": "cd400424edde9c8278ca10a1abf3a70f78be2a94a481a86e513d7ba7307125d5",
+      "mmvFunctionHash": "022b2c2dfbc238a83fd1ab1f5a948b45263866e769ea653d202c592ed09bb6af",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            114
+          ]
+        },
+        {
+          "kind": "before",
+          "anchor": "    if lower_state == LOWER_MOVE",
+          "range": [
+            273,
+            308
+          ]
+        }
+      ]
+    },
+    "MagicFireLeft_Upper_onUpdate": {
+      "originalHash": "69ba9d1b667a79b71aace327704a89edba4f3ac9f2cb5abcf76dbd781091250a",
+      "nrhexHash": "7c110b2cfc1cf2453c829427d3d17119cb0e4355816d2edadc5d1f94d26d44cb",
+      "mmvFunctionHash": "8939b74ce3c9cec4e4d1a5ec0366d665278d313334a744d9b76dfe34971eaa3c",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            93
+          ]
+        },
+        {
+          "kind": "before",
+          "anchor": "    if CheckIfHoldMagic() == TRUE and",
+          "range": [
+            200,
+            235
+          ]
+        }
+      ]
+    },
+    "MagicFireLeft2_Upper_onUpdate": {
+      "originalHash": "327df0694c5a2bda0701ff26a9529862ef381300aaebfc86eace19e16f50d486",
+      "nrhexHash": "e06245df2761d4a0e24895a99fba1914886615f1c245f0ccd9d6f6ce039da3a1",
+      "mmvFunctionHash": "994d7b01cb5df6c8eed0ea933adc6ccaa7a87cdeb5870b5579bad7667bc1f742",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            93
+          ]
+        },
+        {
+          "kind": "before",
+          "anchor": "    if lower_state == LOWER_MOVE",
+          "range": [
+            240,
+            275
+          ]
+        }
+      ]
+    },
+    "MagicFireLeft3_Upper_onUpdate": {
+      "originalHash": "f55b590ff93312bd5ded45dbd8de6edd96fb8c158d49e568df0af03c8cd3f708",
+      "nrhexHash": "2947e2568c4eebb38500be1d2830dfdb8b0ca2ae381925807ba1afb0c7f1bf94",
+      "mmvFunctionHash": "7ba570fcf9d435f370103e1f5bfcc1bcff55acc1460375d35c49ef55de23e1bd",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            93
+          ]
+        },
+        {
+          "kind": "before",
+          "anchor": "    if lower_state == LOWER_MOVE",
+          "range": [
+            240,
+            275
+          ]
+        }
+      ]
+    },
+    "SpeedUpdate": {
+      "originalHash": "f9d0409a5c6856ab61434a4c4e15e069fb1f56981cc7b4bc45f06413b7e8cc0c",
+      "nrhexHash": "7baec0870e5118813dbc6e3e9a1e8b660fbf8df0c25d4c37c9d95ad2166c2292",
+      "mmvFunctionHash": "a1d0f5881d24e20220151e39bd266d4e3d339767a00d7085d2356a030eb4effe",
+      "actions": [
+        {
+          "kind": "after",
+          "anchor": "if ISENABLE_SPRINTSTOP == TRUE and env(ActionDuration, ACTION_ARM_L3) > 0 then\r\n            ISENABLE_SPRINTSTART = FALSE\r\n            ChangeMoveSpeedIndex(2)",
+          "range": [
+            426,
+            440
+          ]
+        }
+      ]
+    },
+    "JumpCommonFunction": {
+      "originalHash": "cb475b9f9c3d6e704f049387ad8e707b738c0959f19e20de5a9bac28a0813f9c",
+      "nrhexHash": "4ac03096ff558a2021ed065a3907ff758f3f76f224b1e9868630fee84980dcad",
+      "mmvFunctionHash": "601288747be3a4fb39996218209c5af6e07fe3c9a51a3b967376dd855700bec8",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            26
+          ]
+        },
+        {
+          "kind": "after",
+          "anchor": "if Act_Jump() == TRUE then\r\n        return TRUE\r\n    end",
+          "range": [
+            81,
+            108
+          ]
+        }
+      ]
+    }
+  }
+}

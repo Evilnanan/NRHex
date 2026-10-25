@@ -1,0 +1,3 @@
+# Lua 5.1 syntax and differential execution checks for generated HKS source.
+lupa==2.8
+pefile==2024.8.26

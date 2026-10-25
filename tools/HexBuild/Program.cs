@@ -93,6 +93,64 @@ if(args.Contains("--basics-check")){Basics.Verify(root,bnd,Parse);return;}
 if(args.Contains("--double-dip-stage")){DoubleDip.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--double-dip-check")){DoubleDip.Verify(root,bnd,Parse);return;}
 if(args.Contains("--double-dip-check-staged")){DoubleDip.Verify(root,bnd,Parse,true);return;}
+if(args.Contains("--sword-range-catalog")){MmvSpells.ExportRanges(root,Parse);return;}
+if(args.Contains("--mmv-sword-range-catalog")){
+ var at=Array.IndexOf(args,"--mmv-sword-range-catalog");
+ if(at+1>=args.Length)throw new ArgumentException("--mmv-sword-range-catalog requires an overlay directory");
+ MmvSpells.ExportRanges(root,Parse,args[at+1]);return;
+}
+if(args.Contains("--mmv-content-audit")){
+ var at=Array.IndexOf(args,"--mmv-content-audit");
+ if(at+1>=args.Length)throw new ArgumentException("--mmv-content-audit requires an MMV directory");
+ MmvCoverage.Export(root,args[at+1],source,bnd,Parse);return;
+}
+if(args.Contains("--mmv-spells")){
+ var at=Array.IndexOf(args,"--mmv-spells");
+ if(at+1>=args.Length)throw new ArgumentException("--mmv-spells requires an MMV directory");
+ MmvSpells.Export(root,args[at+1],bnd,Parse);return;
+}
+if(args.Contains("--mmv-audit")){
+ var at=Array.IndexOf(args,"--mmv-audit");
+ if(at+1>=args.Length)throw new ArgumentException("--mmv-audit requires an MMV directory");
+ var sfx=Array.IndexOf(args,"--original-sfx");
+ if(sfx>=0&&sfx+1>=args.Length)throw new ArgumentException("--original-sfx requires an original asset path");
+ MmvCompat.Audit(root,args[at+1],bnd,Parse,sfx>=0?args[sfx+1]:null);return;
+}
+if(args.Contains("--mmv-stage-safe")){
+ var at=Array.IndexOf(args,"--mmv-stage-safe");
+ if(at+1>=args.Length)throw new ArgumentException("--mmv-stage-safe requires an MMV directory");
+ MmvStage.Stage(root,args[at+1],bnd,Parse);return;
+}
+if(args.Contains("--mmv-stage-events")){
+ var at=Array.IndexOf(args,"--mmv-stage-events");
+ if(at+1>=args.Length)throw new ArgumentException("--mmv-stage-events requires an MMV directory");
+ MmvEvents.Stage(root,args[at+1]);return;
+}
+if(args.Contains("--mmv-map-audit")){
+ var at=Array.IndexOf(args,"--mmv-map-audit");
+ if(at+1>=args.Length)throw new ArgumentException("--mmv-map-audit requires an MMV directory");
+ MmvMaps.Audit(root,args[at+1]);return;
+}
+if(args.Contains("--mmv-stage-maps")){
+ var at=Array.IndexOf(args,"--mmv-stage-maps");
+ if(at+1>=args.Length)throw new ArgumentException("--mmv-stage-maps requires an MMV directory");
+ MmvMaps.Stage(root,args[at+1]);return;
+}
+if(args.Contains("--mmv-stage-binders")){
+ var at=Array.IndexOf(args,"--mmv-stage-binders");var sfx=Array.IndexOf(args,"--original-sfx");
+ if(at+1>=args.Length||sfx<0||sfx+1>=args.Length)throw new ArgumentException("MMV binder staging requires MMV and original SFX paths");
+ MmvBinders.Stage(root,args[at+1],args[sfx+1]);return;
+}
+if(args.Contains("--mmv-tae-audit")){
+ var at=Array.IndexOf(args,"--mmv-tae-audit");
+ if(at+1>=args.Length)throw new ArgumentException("MMV TAE audit requires MMV path");
+ MmvTae.Audit(root,args[at+1]);return;
+}
+if(args.Contains("--mmv-stage-tae")){
+ var at=Array.IndexOf(args,"--mmv-stage-tae");
+ if(at+1>=args.Length)throw new ArgumentException("MMV TAE staging requires MMV path");
+ MmvTae.Stage(root,args[at+1],Parse);return;
+}
 if(args.Contains("--metal-stage")){Metal.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--metal-check")){Metal.Verify(root,bnd,Parse);return;}
 if(args.Contains("--wraith-stage")){Wraith.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}

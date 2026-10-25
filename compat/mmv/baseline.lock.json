@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "scope": "mod/**, dll/** and root *.me3; excluding *.log, logs/** and dll/target/release/0987.txt",
+  "fileCount": 4459,
+  "totalBytes": 6916182559,
+  "sha256": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "criticalFiles": {
+    "Daybreak Launcher - 2.1.9 Beta2-Release.me3": {
+      "bytes": 769,
+      "sha256": "8b6c938326b2f0389376955ab06051e52cf643aa145c096bf1d734b10ffda476"
+    },
+    "dll/ChanceSetter.dll": {
+      "bytes": 3125972,
+      "sha256": "643748e7b28d7e723405a10741d4800f1824566fcc9a998eeeb7d766b925153a"
+    },
+    "dll/RestoredLegendaryStones.dll": {
+      "bytes": 2838235,
+      "sha256": "51bef3ddc321e6eeaa8da5c087b0cd9a1e71a8604f20a47e7113e18e9c67da59"
+    },
+    "dll/ServerRedirector/cl_server_redirector.dll": {
+      "bytes": 881664,
+      "sha256": "9413c4e6c4cc6d958e4b3dd4756548168749622ad2e0d5a4bd9ad3295ff2350c"
+    },
+    "dll/custom_drop_fxrs.dll": {
+      "bytes": 485376,
+      "sha256": "36e725c92a005c965c658e1013a6ef4134ae8dc81cfed15b021824485510f791"
+    },
+    "dll/target/release/nrallinone.dll": {
+      "bytes": 168960,
+      "sha256": "3436a9c4354893c8d5d42a56d39e128e40ebdbd63d8643169de166063eba39d7"
+    },
+    "dll/unlock_wwise_states_nr.dll": {
+      "bytes": 621056,
+      "sha256": "f9dad9cba8a02d7cb6192d8a79ad3f571aa6bfb20d3737df88c8e8502a21c084"
+    },
+    "mod/action/script/c0000.hks": {
+      "bytes": 1184534,
+      "sha256": "786f8a7bc89452d9531e2299b224c8945701c422437eca9aacbeb10a57a17f4d"
+    },
+    "mod/regulation.bin": {
+      "bytes": 3579136,
+      "sha256": "3305ac374b4da1db440e2b6644bc2c3c0ae96b98df9627f1a0e7a2b06d265c06"
+    }
+  },
+  "compatibilityVerified": false
+}

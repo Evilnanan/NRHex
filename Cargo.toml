@@ -17,6 +17,7 @@ default = ["test-hotkeys"]
 test-hotkeys = []
 cage-lifecycle-probe = []
 cage-demand = []
+mmv-compat = []
 
 [profile.release]
 panic = "abort"

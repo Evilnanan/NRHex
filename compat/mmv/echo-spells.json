@@ -1,0 +1,551 @@
+{
+  "schemaVersion": 1,
+  "spells": [
+    {
+      "magic": 5111,
+      "name": "古老月光",
+      "roots": [
+        11376000,
+        11376100
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "6df927da30451db934b26f006885dcf982a5d9020240a116d59bdc1176a78ee4"
+    },
+    {
+      "magic": 6610,
+      "name": "黄金树庇佑",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "f8e6197520dd3fc7451084c914e48a14f05e40dcf27e2f8acc6bb16ddb3b93cf",
+      "reason": "仅自身的防护效果，不重放自身增益。"
+    },
+    {
+      "magic": 6620,
+      "name": "卡利亚恩惠",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "df22caf15e4f3d0760db9d42dcf1ce1c7f8afcb90ffc0f58637db5235c3eb0b0",
+      "reason": "仅自身的回复效果，不重放自身增益。"
+    },
+    {
+      "magic": 6905,
+      "name": "雷电柱",
+      "roots": [
+        13710000
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "783743d9e3cbcc11ad4d708a3bdeb6be7761d62313f807bdfaa375ea193dd604"
+    },
+    {
+      "magic": 6906,
+      "name": "雷电箭",
+      "roots": [
+        13509000
+      ],
+      "worldRoots": [],
+      "stream": true,
+      "evidenceSha256": "e117e18c37d2487b1c0be2588f9b9a52d653bfcd230135f25e63c0ff4d32b95e"
+    },
+    {
+      "magic": 6907,
+      "name": "猎命镰刀",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "bf489c9cf89b8aabd657010f9011f60c90158e81bbf00cdedcd4924017d3fa66",
+      "reason": "动作直接攻击，没有可重放的 Magic 弹体入口。"
+    },
+    {
+      "magic": 6908,
+      "name": "黑蛇",
+      "roots": [
+        12407000
+      ],
+      "worldRoots": [],
+      "stream": true,
+      "evidenceSha256": "0675d5d84297f1e24a7ec0f02555c760901007a748f78043acedd9e6832006d0"
+    },
+    {
+      "magic": 7300,
+      "name": "发狂扩散",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "d1e19055c69d9edf8769fab4936a80a357d7d798458a1c6c1e461200fd67a083",
+      "reason": "直接根仅命中自身，不重复自身控制效果。"
+    },
+    {
+      "magic": 7540,
+      "name": "熔炉百相之针",
+      "roots": [
+        210665000,
+        210665001,
+        210665002,
+        210665003,
+        210665004,
+        210665005,
+        210665006
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "9df3083475afde94857c454d641a9b45ca68fea5d345b71b7c25ac9185e31288"
+    },
+    {
+      "magic": 7550,
+      "name": "熔炉百相之花",
+      "roots": [
+        210666000,
+        210666050
+      ],
+      "worldRoots": [
+        210666000,
+        210666050
+      ],
+      "stream": false,
+      "evidenceSha256": "9f998b1e9c0afbdd30a8ad416b493d500a1409706f8484a7ae0e2040b7cfc4ba"
+    },
+    {
+      "magic": 1604000,
+      "name": "大块灵魂沉淀物",
+      "roots": [
+        11604000,
+        11604001
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "572ae4b6fb9c48b389e63b17f1da38c69a454b0f93cfefdf4a92768b49b3f06a"
+    },
+    {
+      "magic": 2004310,
+      "name": "魔法三辉剑",
+      "roots": [
+        210431000,
+        210431001,
+        210431002,
+        210431050,
+        210431051,
+        210431052
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "18367baa0f82baad9364a8d10f701e5660315895b0661d280cf3de483ca254b2"
+    },
+    {
+      "magic": 2004320,
+      "name": "蕾菈娜的双月",
+      "roots": [
+        210432000,
+        210432003,
+        210432005
+      ],
+      "worldRoots": [
+        210432000,
+        210432003,
+        210432005
+      ],
+      "stream": false,
+      "evidenceSha256": "b8c794e207aab455d867b57bebe478e5e09ee2a3161de59b351a60c64fdbb796"
+    },
+    {
+      "magic": 2004500,
+      "name": "辉石指爪",
+      "roots": [
+        210450000,
+        210450050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "516e34e8c1dc6618a915077db0d8cd2efbbc02c18d934e04b1319df2b6750b68"
+    },
+    {
+      "magic": 2004510,
+      "name": "辉石繁指爪",
+      "roots": [
+        210451000,
+        210451050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "121390065ed9c3cb4ce293daa6e6b9099ea2a193654a13e99c26201a33b94e30"
+    },
+    {
+      "magic": 2004700,
+      "name": "岩块刀刃",
+      "roots": [
+        210470000,
+        210470050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "e446bfa250e3f7b7f4255411c217d334e33e232279ebe7d5eb1f61425746c9c4"
+    },
+    {
+      "magic": 2004710,
+      "name": "引力球",
+      "roots": [
+        210471000,
+        210471050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "69e0d4ee9a086b83564fc204edba2dcc7070327c31ef3f0446e3d9aed9e1f145"
+    },
+    {
+      "magic": 2004910,
+      "name": "拒绝的刺",
+      "roots": [
+        210491000,
+        210491001,
+        210491002
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "7caf8f91a6400b4af44da345f81e9c3b0b53f4626023f93ad9619ee2166148b3"
+    },
+    {
+      "magic": 2005000,
+      "name": "灵魂光环",
+      "roots": [
+        210500000,
+        210500001,
+        210500050,
+        210500051
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "a12a04929426319116e335e8ceeb2273ecfeda357dcbf92294ec75ce52df9560"
+    },
+    {
+      "magic": 2006200,
+      "name": "融泥漩",
+      "roots": [
+        210620000
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "13968addd1893fcb8798178b3e1694e1e321dd5ecef958b5bbda4d48da4c7325"
+    },
+    {
+      "magic": 2006210,
+      "name": "融泥块",
+      "roots": [
+        210621000,
+        210621050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "fea5a31af24af179137dfb0ad7db34b8d2e0a0938add3908f6d91ac91c0db164"
+    },
+    {
+      "magic": 2006300,
+      "name": "安帕赫的狂刃",
+      "roots": [
+        210630000,
+        210630010,
+        210630050,
+        210630060
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "5fbf36ac3bacde1e6f9f9bdc924737be25da15b175b4d17f4c524b0df01f334c"
+    },
+    {
+      "magic": 2006400,
+      "name": "远方之恢复",
+      "roots": [
+        210640000
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "ac357fd5040935692fad8e6c9b7aac74522753382b295ef2bc46be46e7755745",
+      "support": "projectile-heal",
+      "note": "保留投射物与原生落地治疗链，不复制施术者个人回复。"
+    },
+    {
+      "magic": 2006680,
+      "name": "幽影之地",
+      "roots": [
+        210668000
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "97b1a566aa0715c6cb0781e16b5f2f9798bcd4ba3e307bd720ac5494c5694177"
+    },
+    {
+      "magic": 2006700,
+      "name": "米凯拉的光",
+      "roots": [
+        210670000
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "ad2e500904464d8872950197f300172c2246032ade47584deee19495baaa0bec"
+    },
+    {
+      "magic": 2006710,
+      "name": "相迭光环",
+      "roots": [
+        210671000,
+        210671050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "43faa5833cef236a9d58b26fa38503edfdc1af96282aa14cc56650fed76262b2"
+    },
+    {
+      "magic": 2006800,
+      "name": "鲁格利亚的咆哮",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "107a7e923ee7f76a3f1482abf9a59dc816668f2341a19ac63de97ab2c01b0efd",
+      "reason": "Magic 只引用公共空辅助根；角色动作攻击不作为弹体重放。"
+    },
+    {
+      "magic": 2006900,
+      "name": "骑士雷电枪",
+      "roots": [
+        210690000,
+        210690001,
+        210690006,
+        210690050,
+        210690051,
+        210690056
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "257345ec7e04e1b9f25c34aa226b99310faefd09bf379eaf5c8f863bc2c5f69c"
+    },
+    {
+      "magic": 2007000,
+      "name": "贝勒的残虐",
+      "roots": [
+        210700000,
+        210700001
+      ],
+      "worldRoots": [
+        210700000
+      ],
+      "stream": false,
+      "evidenceSha256": "b7524888d3bf9f7c759b3219903eb416c3162b95e671181532050bf01806994d"
+    },
+    {
+      "magic": 2007010,
+      "name": "贝勒的焰雷",
+      "roots": [
+        210701000,
+        210701003
+      ],
+      "worldRoots": [
+        210701003
+      ],
+      "stream": false,
+      "evidenceSha256": "d74f401b113a39223996530263b0db2379fc6229d9a8640c28f4fdb2f20bfa15"
+    },
+    {
+      "magic": 2007020,
+      "name": "灵火吐息",
+      "roots": [
+        210702000,
+        210702001
+      ],
+      "worldRoots": [],
+      "stream": true,
+      "evidenceSha256": "1759771acc691f66e49e94f2a260d758730a83276a557ebd0b86eed0e13def79"
+    },
+    {
+      "magic": 2007200,
+      "name": "腐败蝶",
+      "roots": [
+        210720000,
+        210720001
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "c65a0c5ecff9b6e7053e461658e70fff79a0ad35b3ac9826d7b9f1df0821b256"
+    },
+    {
+      "magic": 2007210,
+      "name": "虫丝枪",
+      "roots": [
+        210721000,
+        210721001,
+        210721050,
+        210721051
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "842ce419ebd327f2bb84ebe15cf70150c8bd2052f98f009eb0ba683bceca0614"
+    },
+    {
+      "magic": 2007300,
+      "name": "米德拉的癫火",
+      "roots": [
+        210730000,
+        210730001,
+        210730002,
+        210730003,
+        210730004,
+        210730007
+      ],
+      "worldRoots": [],
+      "stream": true,
+      "evidenceSha256": "7be7fb19eb324e42eb3833f97e0803dc6ca87fa5a2f5ae4a034dcbebfee45edf"
+    },
+    {
+      "magic": 2007410,
+      "name": "虚幻小宇宙",
+      "roots": [
+        210741000,
+        210741050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "bad4b6be36a7fd89a1035a45132d92623fc2a15815698f8ea794a545c4c309c6"
+    },
+    {
+      "magic": 2007420,
+      "name": "守护指头",
+      "roots": [
+        210742000,
+        210742050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "77f9d827fdb84ee5712043d5fddecbf3fbb3ca571abf52cdd789fc220035a34e"
+    },
+    {
+      "magic": 2007700,
+      "name": "黄金弯弧",
+      "roots": [
+        210770000,
+        210770050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "ddf3db3d04cc91a641ca74be110fc96de312051d1ca40599bfc47aece6b64443"
+    },
+    {
+      "magic": 2007710,
+      "name": "黄金大弯弧",
+      "roots": [
+        210771000,
+        210771050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "6d5be63deef8eaacbf228f8c8bf6c512db798a5486df42bebdd751e37bbf51ed"
+    },
+    {
+      "magic": 2007720,
+      "name": "旋流",
+      "roots": [
+        210772000
+      ],
+      "worldRoots": [],
+      "stream": true,
+      "evidenceSha256": "5b7b03a0d7594615e4f871b164eabb685d774af071c22a8e0acf224d92d0f632"
+    },
+    {
+      "magic": 2007730,
+      "name": "神兽龙卷风",
+      "roots": [
+        210773000,
+        210773050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "2aa6b3bc70b0d93fd6cdd1e1d0b30227c9de78a0540c553efb5de44d9288dd4b"
+    },
+    {
+      "magic": 2007740,
+      "name": "神鸟羽毛",
+      "roots": [
+        210774000
+      ],
+      "worldRoots": [],
+      "stream": true,
+      "evidenceSha256": "b962f30f1a936638666b54b068223305299e0d4e03bbe69b80e297e9ae55ca96"
+    },
+    {
+      "magic": 2007800,
+      "name": "火焰蛇",
+      "roots": [
+        210780000,
+        210780050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "afaf0f5e84d50b337301cd154b5aed3008bcd2705d948276d93bee62f6b925b5"
+    },
+    {
+      "magic": 2007810,
+      "name": "火焰雨",
+      "roots": [
+        210781000,
+        210781050
+      ],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "65349b58e08bf67714886e631336817d896c38f072c701fe693230bd34a3c9c6"
+    },
+    {
+      "magic": 2007820,
+      "name": "梅瑟莫的火球",
+      "roots": [
+        210782000,
+        210782001,
+        210782050,
+        210782051
+      ],
+      "worldRoots": [
+        210782000,
+        210782001,
+        210782050,
+        210782051
+      ],
+      "stream": false,
+      "evidenceSha256": "241d6974760e82ff04b5f441a5a488bce991e409326c2b33d2eab03790102b99"
+    },
+    {
+      "magic": 3730100,
+      "name": "",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "6b500c39edadc40712fc7f699c91f8a401df4ad4a84b331877894324290fee88",
+      "reason": "无名称内部动作记录，没有 Magic 弹体入口。"
+    },
+    {
+      "magic": 3730200,
+      "name": "",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "c91d1c43a6f5eb66e63f380593241b2cb47f6914ea0f85e013be090d0eb1e2dc",
+      "reason": "无名称内部动作记录，没有 Magic 弹体入口。"
+    },
+    {
+      "magic": 3730300,
+      "name": "",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "e85d0ead6f688e21d61eaadef99a65aa423aef3302241bdd7b708b344a563229",
+      "reason": "无名称内部动作记录，没有 Magic 弹体入口。"
+    },
+    {
+      "magic": 3730400,
+      "name": "",
+      "roots": [],
+      "worldRoots": [],
+      "stream": false,
+      "evidenceSha256": "194e5648be1bd9946c54d197a77ca64f8272a7cd0f3d86241446a504b781d166",
+      "reason": "无名称内部动作记录，没有 Magic 弹体入口。"
+    }
+  ]
+}

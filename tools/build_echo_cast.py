@@ -86,6 +86,10 @@ assert len({row['bullet']for row in visuals['visuals']})==len(visuals['visuals']
 assert all(row['root']in dict(catalog)[row['magic']] and 95003590<=row['bullet']<=95003599 for row in visuals['visuals'])
 s+='pub const VISUALS:&[(i32,i32)]=&['+','.join(f"({row['root']},{row['bullet']})"for row in visuals['visuals'])+'];\n'
 path=r/'src/echo_cast_data.rs'
+s+='// Target adapters may add reviewed mixed-spell areas and hit-record isolation.\n'
+s+='pub const WORLD_ROOTS:&[(i32,i32)]=&[];\n'
+s+='pub const INDEPENDENT_HITS:&[i32]=&[6710,7520];\n'
+s+='pub const MMV_SPELLS:&[i32]=&[];\n'
 if args.check:assert path.read_text()==s,'Echo root catalog changed; regenerate with tools/build_echo_cast.py'
 else:path.write_text(s)
 assert not set(a['magic']for a in areas).intersection(mid for mid,_ in catalog)

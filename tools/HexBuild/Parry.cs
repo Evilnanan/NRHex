@@ -4,6 +4,7 @@ static class Parry {
  public const int Owner=95002400;
  public const int GuardJudge=95002400;
  public const float ChainSeconds=5f/30f;
+ public static readonly int[] GuardWindowMilliseconds=[90,134,178,222,266,310,356];
  public static void ProbePaired(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse){
   var name="EquipParamWeapon";
   var table=parse(name,original.Files.Single(file=>Path.GetFileName(file.Name)==name+".param").Bytes);
@@ -156,7 +157,7 @@ static class Parry {
  }
  public static void BuildActions(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse){
   const int first=14000,minTier=2,tiers=7,last=24000;
-  int[] totalMilliseconds={90,134,178,222,266,310,356};
+  int[] totalMilliseconds=GuardWindowMilliseconds;
   var work=Path.Combine(root,".work/parry/staged");Directory.CreateDirectory(work);
   PARAM Table(string n)=>parse(n,original.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes);
   Check(!Table("SpEffectParam").Rows.Any(r=>Convert.ToInt32(r["stateInfo"].Value)>=first&&Convert.ToInt32(r["stateInfo"].Value)<last),"Private state range collides with native state");

@@ -26,6 +26,8 @@ unsafe extern "system" fn initialize(ins:usize,_payload:usize,_target:usize,tran
 }
 unsafe extern "system" fn yes(_:usize,_dt:f32)->u8{1}
 unsafe extern "system" fn running(_:usize,_ins:usize,_dt:f32)->u8{0}
+unsafe extern "system" fn motion_fixture(_:usize,_row:usize,_dt:f32){}
+unsafe extern "system" fn arc_running(_:usize,ins:usize,dt:f32)->u8{motion(ins,ins+0x5c8,dt);0}
 unsafe extern "system" fn exit(_:usize,ins:usize){
  EXITS.fetch_add(1,Ordering::Relaxed);
  let release:unsafe extern "system" fn(usize)=std::mem::transmute(BASE.load(Ordering::Acquire)+0x34b9d0);release(ins);
@@ -62,11 +64,24 @@ fn matrix(p:Point)->Matrix{Matrix([1.,0.,0.,p[0],0.,1.,0.,p[1],0.,0.,1.,p[2]])}
   assert!(!stages::continues(pair.0,pair.1));
  }
 }
-#[test]fn native_transition_policy_is_exact_and_does_not_include_fragments(){
- for bullet in [10450000,10450001,10450002,10450050,10450051,10450052]{assert_eq!(transition_distance(bullet),Some(3.));}
- for bullet in [10670000,10670100,10693000]{assert_eq!(transition_distance(bullet),Some(6.));}
- for bullet in [10450003,10450004,10450053,10450054,10670001,10670002,10670101,10670102,10670105,10400000]{assert_eq!(transition_distance(bullet),None);}
+#[test]fn native_transition_policy_keeps_reviewed_endpoints_without_crystal_override(){
+ for bullet in [10450000,10450001,10450002,10450050,10450051,10450052]{assert_eq!(transition_distance(bullet),Some(6.));}
+ for bullet in [10670000,10670100,10693000,210671000,210671050,210772000]{assert_eq!(transition_distance(bullet),Some(6.));}
+ for bullet in [10450003,10450004,10450053,10450054,10670001,10670002,10670101,10670102,10670105,10400000]{assert_eq!(transition_distance(bullet),range_end(bullet).map(|_|6.));}
  assert!(native_return(10670000,10670001));assert!(native_return(10670100,10670101));assert!(!native_return(10670100,10670105));
+}
+#[test]fn smooth_arcs_are_frame_independent_and_allow_high_aim_beyond_six_metres(){
+ fn landing(dt:f32,pitch:f32)->f32{
+  let a=pitch.to_radians();let launch=[15.*a.cos(),15.*a.sin(),0.,0.];
+  let mut arc=arc_for(10610000,launch).unwrap();let mut p=[0.,1.5,0.,1.];
+  for _ in 0..1000{let v=arc_velocity(&mut arc,launch,dt).unwrap();for i in 0..3{p[i]+=v[i]*dt;}if p[1]<=0.{return p[0];}}
+  panic!("arc did not land")
+ }
+ for dt in [1./30.,1./60.,1./120.]{assert!((landing(dt,0.)-4.).abs()<0.51);assert!(landing(dt,45.)>6.);}
+ let mut arc=arc_for(10610000,[15.,0.,0.,0.]).unwrap();let prior=arc;
+ assert!(arc_velocity(&mut arc,[15.,0.,0.,0.],0.).is_none());assert_eq!(arc.elapsed,prior.elapsed);
+ assert!(arc_velocity(&mut arc,[15.,0.,0.,0.],f32::NAN).is_none());
+ assert!(arc_for(10601000,[15.,0.,0.,0.]).is_none());
 }
 #[test]fn ground_placement_counts_horizontal_reach_without_cancelling_vertical_probes(){
  let flight=Flight{origin:Some([10.,20.,30.,1.]),horizontal:true};
@@ -103,9 +118,10 @@ fn native_sword_projectile_fixed_launch_retirement_and_independent_children(){un
  let mut group=vec![0u64;0x5a0/8];let gp=group.as_mut_ptr()as usize;int(gp,0);
  let mut payload=[0u64;0x230/8];let pp=payload.as_mut_ptr()as usize;int(pp,-1);int(pp+4,10402100);put(pp+0x10,11);int(pp+0x24,4021);
  let origin=[10.,20.,30.,1.];let pose=matrix(origin);let posep=pose.0.as_ptr()as usize;
+ let vtp=vt.as_mut_ptr()as usize;
  let mut reset_fixture=|speed:Point|{
   ptr::write_bytes(ip as*mut u8,0,0x630);put(ip+8,0x12340000);put(ip+0x88,stages.as_ptr()as usize);int(ip+0x90,1);int(ip+0x94,2);int(ip+0x54,0);
-  put(ip+0x5c0,vt.as_ptr()as usize);put(ip+0x5c8,rowp);put(ip+0x598,rowp);
+  put(ip+0x5c0,vtp);put(ip+0x5c8,rowp);put(ip+0x598,rowp);
   ptr::write_unaligned((ip+0x30)as*mut Point,speed);float(ip+0x2d4,100.);ptr::write((ip+0x580)as*mut u8,0x21);int(ip+0x60,77);int(ip+0x64,88);
   group[1]=0x12340000;int(gp+0x320,1);
  };
@@ -128,6 +144,49 @@ fn native_sword_projectile_fixed_launch_retirement_and_independent_children(){un
   cleanup(manager.as_mut_ptr()as usize,ip);assert!(instance(ip).is_none());assert_ne!(read_ptr(ip+8),old_handle);assert_eq!(ptr::read((ip+0x580)as*const u8)&1,0);assert_eq!(read_i32(gp+0x320),0);
  }
  assert_eq!(EXITS.load(Ordering::Relaxed),3);assert_eq!(*COLLISIONS.lock().unwrap(),[77,88,77,88,77,88]);
+ // Smooth arcs use native movement/collision with no six-metre retirement.
+ MOTION_ORIGINAL.store(motion_fixture as*mut u8,Ordering::Release);
+ put(vtp+16,arc_running as*const()as usize);
+ for (bullet,magic,impact) in [(10610000,6100,10610001),(10610050,6100,10610051),
+  (10408000,4080,10408001),(10480000,4800,10480001),(10482000,4820,10482001),(10631000,6310,10631001),(10631005,6310,10631001)]{
+  int(pp+4,bullet);int(pp+0x24,magic);reset_fixture([15.,5.,0.,0.]);bind_root();
+  assert!(instance(ip).unwrap().arc.is_some());
+  float(ip+0x2d4,1.5);let count=CHILDREN.load(Ordering::Relaxed);
+  let start=point(ip);assert_eq!(update(ip,0.1),1);let first=point(ip);
+  assert!((first[0]-start[0]-1.5).abs()<0.001);
+  let first_v=ptr::read_unaligned((ip+0x30)as*const Point);
+  assert_eq!(update(ip,0.1),1);let second_v=ptr::read_unaligned((ip+0x30)as*const Point);
+  assert!(second_v[1]<first_v[1]);assert!((second_v[0]-15.).abs()<0.001);
+  for _ in 0..3{assert_eq!(update(ip,0.1),1);}
+  let end=point(ip);assert!(end[0]-origin[0]>6.);assert_eq!(read_i32(ip+0x90),1);
+  assert!(ptr::read_unaligned((ip+0x2d4)as*const f32)<1.01);
+  assert_eq!(CHILDREN.load(Ordering::Relaxed),count);
+  int(ip+0x600,impact);
+  let impact_mode:unsafe extern "system" fn(usize,i32)=std::mem::transmute(base+MODE_RVA);
+  impact_mode(ip,3);assert_eq!(CHILDREN.load(Ordering::Relaxed),count+1);
+  assert_eq!(*EMISSION.lock().unwrap(),Some((impact,end)));
+  cleanup(manager.as_mut_ptr()as usize,ip);assert!(instance(ip).is_none());
+ }
+ put(vtp+16,running as*const()as usize);
+ for bullet in [10601000,10601050]{
+  int(pp+4,bullet);int(pp+0x24,6010);reset_fixture([15.,0.,0.,0.]);bind_root();
+  assert!(!quick_drop(bullet));let count=CHILDREN.load(Ordering::Relaxed);
+  assert_eq!(update(ip,0.41),0);assert_eq!(CHILDREN.load(Ordering::Relaxed),count);
+  cleanup(manager.as_mut_ptr()as usize,ip);
+ }
+ // Every generated native endpoint emits its selected child once and leaves
+ // effect lifetime/collision to the original branch; root ownership still gates it.
+ for &(bullet,child_id) in crate::sword_map::RANGE_ENDS{
+  int(pp+4,10402100);int(pp+0x24,4021);reset_fixture([20.,0.,0.,0.]);bind_root();
+  int(pp+4,bullet);{let _init=initialize_scope(gp,posep).unwrap();initialize_native(ip,pp,0,posep,7,9);}
+  int(ip+0x600,123);let count=CHILDREN.load(Ordering::Relaxed);
+  assert_eq!(update(ip,0.31),1);assert_eq!(CHILDREN.load(Ordering::Relaxed),count+1);
+  assert_eq!(*EMISSION.lock().unwrap(),Some((child_id,[16.,20.,30.,1.])));
+  assert_eq!(*INHERITED.lock().unwrap(),None);
+  assert_eq!(update(ip,0.01),0);assert_eq!(CHILDREN.load(Ordering::Relaxed),count+1);
+  cleanup(manager.as_mut_ptr()as usize,ip);
+ }
+ CHILDREN.store(0,Ordering::Relaxed); // Existing independent-child cases count from zero.
  for (bullet,magic,speed)in [(10406000,4060,30.),(10406001,4060,30.),(10603000,6030,5.),(10603050,6030,8.),
   (10700000,7000,12.),(10700002,7000,6.),(10700100,7001,22.),(10700101,7001,22.),
   (10702000,7020,12.),(10702002,7020,6.),(10702100,7021,22.),(10702101,7021,22.),
@@ -146,7 +205,61 @@ fn native_sword_projectile_fixed_launch_retirement_and_independent_children(){un
   assert_eq!(update(ip,0.2),1);assert_eq!(instance(ip).unwrap().flight.origin,Some(origin));
   assert_eq!(update(ip,0.001),0);
  }
- int(pp+4,10402100);int(pp+0x24,4021);row[0x9c]=0;
+ // MMV breath/stream roots use the same motion path even with dummy-poly sync.
+ for (bullet,speed) in [(210702000,22.),(210702001,22.),(210702002,22.),(210730000,9.),(210730007,9.),(210774000,46.)]{
+  row[0x9c]=0;row[0x9a]=0;int(pp+4,10402100);int(pp+0x24,4021);
+  reset_fixture([speed,0.,0.,0.]);bind_root();
+  int(pp+4,bullet);row[0x9c]=if bullet==210702002{0}else{0x20};row[0x9a]=if bullet==210702002{4}else{0};
+  {let _init=initialize_scope(gp,posep).unwrap();initialize_native(ip,pp,0,posep,7,9);}
+  assert_eq!(instance(ip).unwrap().flight.origin,Some(origin));
+  assert_eq!(update(ip,6./speed),1);assert_eq!(update(ip,0.001),0);
+  cleanup(manager.as_mut_ptr()as usize,ip);
+ }
+ int(pp+4,10402100);int(pp+0x24,4021);row[0x9c]=0;row[0x9a]=0;
+ // Target-position summons cap the per-call native descriptor, not global params.
+ for bullet in [210781000,210781050]{
+  int(pp+4,bullet);float(pp+0x184,25.);
+  {let _child=ChildGuard(CHILD.with(|slot|slot.replace(Some(Some(Flight::default())))));
+   let _factory=factory_scope(pp);assert_eq!(ptr::read_unaligned((pp+0x184)as*const f32),6.);
+   {let _nested=factory_scope(pp);assert_eq!(ptr::read_unaligned((pp+0x184)as*const f32),6.);}
+   assert_eq!(ptr::read_unaligned((pp+0x184)as*const f32),6.);
+  }
+  assert_eq!(ptr::read_unaligned((pp+0x184)as*const f32),25.);
+  {let _child=ChildGuard(CHILD.with(|slot|slot.replace(Some(None))));let _factory=factory_scope(pp);
+   assert_eq!(ptr::read_unaligned((pp+0x184)as*const f32),25.);}
+  assert!(native_return(bullet,bullet+1));
+ }
+ int(pp+4,10402100);int(pp+0x24,4021);
+ // Reviewed MMV ground continuations retain the original horizontal budget.
+ for &(parent,next) in crate::sword_map::FLIGHT_CONTINUATIONS.iter().filter(|(a,_)|(12407000..12408400).contains(a)){
+  reset_fixture([10.,0.,0.,0.]);bind_root();int(pp+4,parent);
+  {let _init=initialize_scope(gp,posep).unwrap();initialize_native(ip,pp,0,posep,7,9);}
+  assert!(instance(ip).unwrap().flight.horizontal);assert_eq!(update(ip,0.5),1);
+  let pos=point(ip);let orient=[0.;4];assert_eq!(child(ip,pos.as_ptr()as usize,orient.as_ptr()as usize,next,0),1);
+  assert_eq!(INHERITED.lock().unwrap().unwrap().origin,Some(origin));
+  let outside=[16.01,20.,30.,1.];assert_eq!(child(ip,outside.as_ptr()as usize,orient.as_ptr()as usize,next,0),0);
+  int(pp+4,10402100);
+ }
+ // Finger motion -> stationary delay -> motion keeps the first origin.
+ for root_id in [210450000,210450050,210451000,210451050]{
+  if !continues(root_id,root_id+1){continue;}
+  int(pp+4,root_id);int(pp+0x24,-1);reset_fixture([10.,0.,0.,0.]);bind_root();
+  assert_eq!(update(ip,0.4),1);let pos=point(ip);let pose=matrix(pos);let orient=[0.;4];
+  for offset in [1,2]{
+   let next=root_id+offset;assert_eq!(child(ip,pos.as_ptr()as usize,orient.as_ptr()as usize,next,0),1);
+   let inherited=INHERITED.lock().unwrap().unwrap();assert_eq!(inherited.origin,Some(origin));
+   int(pp+4,next);
+   {let _child=ChildGuard(CHILD.with(|slot|slot.replace(Some(Some(inherited)))));let _factory=factory_scope(pp);factory_done(gp);}
+   reset_fixture(if offset==1{[0.;4]}else{[10.,0.,0.,0.]});
+   {let _init=initialize_scope(gp,pose.0.as_ptr()as usize).unwrap();initialize_native(ip,pp,0,pose.0.as_ptr()as usize,7,9);}
+   assert_eq!(instance(ip).unwrap().flight.origin,Some(origin));
+   if offset==1{assert_eq!(update(ip,0.2),1);assert_eq!(point(ip),pos);}
+  }
+  assert_eq!(update(ip,0.2),1);assert_eq!(point(ip),[16.,20.,30.,1.]);assert_eq!(update(ip,0.001),0);
+  cleanup(manager.as_mut_ptr()as usize,ip);
+ }
+ int(pp+4,10402100);int(pp+0x24,4021);
+ CHILDREN.store(0,Ordering::Relaxed);
  // A looping trajectory may travel arbitrarily far inside the launch sphere.
  reset_fixture([1.,0.,0.,0.]);bind_root();
  for p in [[14.,20.,30.,1.],[10.,24.,30.,1.],[6.,20.,30.,1.],[10.,16.,30.,1.],origin]{ptr::write_unaligned((ip+0x10)as*mut Point,p);assert_eq!(after_move(ip),0);}
@@ -218,26 +331,31 @@ fn native_sword_projectile_fixed_launch_retirement_and_independent_children(){un
   int(pp+4,10402100);
  }
  for (bullet,child_id,speed,limit,magic)in [
-  (10450000,10450003,25.,3.,4500),(10450001,10450003,25.,3.,4500),(10450002,10450003,25.,3.,4500),
-  (10450050,10450053,33.,3.,4500),(10450051,10450053,33.,3.,4500),(10450052,10450053,33.,3.,4500),
-  (10670000,10670001,30.,6.,6700),(10670100,10670101,10.,6.,6701),(10693000,10693001,200.,6.,6930)]{
+  (10436000,10436001,10.,6.,4360),(10436100,10436101,10.,6.,4361),
+  (10450000,10450003,25.,6.,4500),(10450001,10450003,25.,6.,4500),(10450002,10450003,25.,6.,4500),
+  (10450050,10450053,33.,6.,4500),(10450051,10450053,33.,6.,4500),(10450052,10450053,33.,6.,4500),
+  (10670000,10670001,30.,6.,6700),(10670100,10670101,10.,6.,6701),(10693000,10693001,200.,6.,6930),
+  (210671000,210671001,30.,6.,2006710),(210671050,210671051,30.,6.,2006710),
+  (210772000,210772001,200.,6.,2007720),(210670000,210670001,999.,6.,2006700),
+  (10491000,10491003,15.,6.,4910),(210491000,210491005,15.,6.,2004910),(210491001,210491005,15.,6.,2004910),(210491002,210491005,15.,6.,2004910),
+  (210741000,210741001,200.,6.,2007410),(210741050,210741051,200.,6.,2007410)]{
   int(pp+4,10402100);int(pp+0x24,4021);reset_fixture([speed,0.,0.,0.]);bind_root();
   int(pp+4,bullet);int(pp+0x24,magic);float(ip+0x2d4,0.05);
   {let _init=initialize_scope(gp,posep).unwrap();initialize_native(ip,pp,0,posep,7,9);}
-  if crystal_carrier(bullet){assert!(ptr::read_unaligned((ip+0x2d4)as*const f32)>limit/speed);}
-  else{float(ip+0x2d4,1.35);}
+  assert_eq!(ptr::read_unaligned((ip+0x2d4)as*const f32),0.05); // Binding never extends native lifetime.
+  float(ip+0x2d4,1.35);
   int(ip+0x600,child_id);
   let mut visual=[0u64,2];
-  if bullet==10670100{put(ip+0x68,visual.as_mut_ptr()as usize);ptr::write((ip+0x581)as*mut u8,1);}
+  if matches!(bullet,10670100|210671000|210671050){put(ip+0x68,visual.as_mut_ptr()as usize);ptr::write((ip+0x581)as*mut u8,1);}
   let children_before=CHILDREN.load(Ordering::Relaxed);
   assert_eq!(update(ip,(limit-0.5)/speed),1);assert_eq!(CHILDREN.load(Ordering::Relaxed),children_before);
-  assert_eq!(update(ip,1./speed),u8::from(matches!(bullet,10670000|10670100)));assert_eq!(read_i32(ip+0x90),3);
+  assert_eq!(update(ip,1./speed),u8::from(deferred_transition(bullet)));assert_eq!(read_i32(ip+0x90),3);
   assert_eq!(CHILDREN.load(Ordering::Relaxed),children_before+1);
   assert_eq!(*EMISSION.lock().unwrap(),Some((child_id,[origin[0]+limit,origin[1],origin[2],1.])));
-  assert_eq!(*INHERITED.lock().unwrap(),if native_return(bullet,child_id){None}else{Some(Flight::default())});
+  assert_eq!(*INHERITED.lock().unwrap(),if native_return(bullet,child_id)||range_end(bullet)==Some(child_id){None}else{Some(Flight::default())});
   assert_eq!(ptr::read((ip+0x583)as*const u8),0);
-  if matches!(bullet,10670000|10670100){assert_eq!(update(ip,0.01),0);}
-  if bullet==10670100{assert_eq!(read_ptr(ip+0x68),0);assert_eq!(visual[1],1);}
+  if deferred_transition(bullet){assert_eq!(update(ip,0.01),0);}
+  if matches!(bullet,10670100|210671000|210671050){assert_eq!(read_ptr(ip+0x68),0);assert_eq!(visual[1],1);}
   cleanup(manager.as_mut_ptr()as usize,ip);assert!(instance(ip).is_none());
   assert_eq!(CHILDREN.load(Ordering::Relaxed),children_before+1);
   assert_eq!(VISUAL_ERASES.load(Ordering::Relaxed),0);

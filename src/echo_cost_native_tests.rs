@@ -70,10 +70,15 @@ fn native_echo_spell_stamina_cost_and_abi(){unsafe{
  let row=magic.as_mut_ptr()as usize;
  for(scale,flat)in [(100,0),(80,3),(150,0),(0,0)]{
   SCALE.store(scale,Ordering::Relaxed);FLAT.store(flat,Ordering::Relaxed);
-  for(mode,native)in [(0,normal),(1,charged)]{run(row,mode,(native*scale/100+flat)*3/2);}
+  for(mode,native)in [(0,normal),(1,charged)]{run(row,mode,((native*scale/100+flat)as f64*1.5).round()as i32);}
  }
  SCALE.store(100,Ordering::Relaxed);FLAT.store(0,Ordering::Relaxed);
- for kind in [0,1,2,3,255]{ptr::write((row+0x26)as*mut u8,kind);run(row,0,if kind<=1{52}else{35});}ptr::write((row+0x26)as*mut u8,0);
+ for kind in [0,1,2,3,255]{ptr::write((row+0x26)as*mut u8,kind);run(row,0,if kind<=1{53}else{35});}ptr::write((row+0x26)as*mut u8,0);
+ // Small channel costs must round at the final native modifier result too.
+ for (raw,expected) in [(1i16,2),(2,3),(3,5),(4,6)]{
+  ptr::write_unaligned((row+0x12)as*mut i16,raw);run(row,0,expected);
+ }
+ ptr::write_unaligned((row+0x12)as*mut i16,normal as i16);
  OWNED.store(false,Ordering::Relaxed);run(row,0,35);OWNED.store(true,Ordering::Relaxed);
  world[0x174e8/8]=0;run(row,1,46);world[0x174e8/8]=actor;
  ACTIVE.store(false,Ordering::Release);run(row,0,35);ACTIVE.store(true,Ordering::Release);
@@ -85,8 +90,8 @@ fn native_echo_spell_stamina_cost_and_abi(){unsafe{
  let mut stats=[0u32;0x200/4];let stats=stats.as_mut_ptr()as usize;int(stats+0x15c,200);int(stats+0x160,200);
  put(base+0x3c0f338,1);ptr::write((base+0x3c0f2f7)as*mut u8,0);
  let consume:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);
- run(row,0,52);let cost=crate::read_i32(ctx+0xc0);
- for remaining in [148,96,44,-8,-50]{consume(stats,cost,0);assert_eq!(crate::read_i32(stats+0x15c),remaining);assert_eq!(crate::read_i32(ctx+0xc0),-52);}
+ run(row,0,53);let cost=crate::read_i32(ctx+0xc0);
+ for remaining in [147,94,41,-12,-50]{consume(stats,cost,0);assert_eq!(crate::read_i32(stats+0x15c),remaining);assert_eq!(crate::read_i32(ctx+0xc0),-53);}
  for flag in [1u8,0x20]{int(stats+0x15c,200);ptr::write((stats+0x189)as*mut u8,flag);consume(stats,cost,0);assert_eq!(crate::read_i32(stats+0x15c),200);}
  // Ordinary behavior costs use a different constructor: its code is unpatched.
  let section=headers.sections.iter().find(|s|0x384340>=s.virtual_address&&0x384480<s.virtual_address+s.raw_size).unwrap();let start=(0x384340-section.virtual_address+section.raw_offset)as usize;

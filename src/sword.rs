@@ -1,9 +1,5 @@
 use std::collections::BTreeMap;
 use crate::sword_map;
-#[cfg(test)]
-#[path = "sword_csv.rs"]
-mod sword_csv;
-include!(concat!(env!("OUT_DIR"), "/sword_bonuses.rs"));
 pub const OWNER:i32=95000900;
 pub const CAST_OWNER:i32=95000912; // HKS f32 IDs must be divisible by eight.
 pub const CAST_PULSE:i32=95000904;
@@ -21,11 +17,7 @@ pub const CASTER_HEIGHT:f32=1.; // Mighty + Sword ordinary projectile synergy on
 
 pub struct Bonuses {percentages:BTreeMap<i32,f32>}
 impl Bonuses {
- pub fn defaults()->Self{Self{percentages:COMPILED_BONUSES.iter().copied().collect()}}
- #[cfg(test)]
- pub fn read(text:&str)->Result<Self,String>{
-  sword_csv::read(text,sword_map::DEFAULT_BONUSES.iter().map(|&(id,_)|id)).map(|percentages|Self{percentages})
- }
+ pub fn defaults()->Self{Self{percentages:sword_map::DEFAULT_BONUSES.iter().copied().collect()}}
  pub fn for_magic(&self,id:i32)->Option<f32>{self.percentages.get(&id).copied()}
  pub fn for_attack(&self,attack:i32,kind:i32)->Option<f32>{
   if kind!=1{return None;} // Verified live: player Glintstone Pebble is kind 1.
@@ -171,17 +163,13 @@ pub fn pulse_magic(recovery:bool,continuous:bool,previous:i32,current:i32)->Opti
    if charged{for missing in [100,110,130]{let mut incomplete=mask;incomplete[missing/32]&=!(1<<(missing%32));assert!(!extra_melee_application(3,&incomplete,[100,0,0]));}}
   }
  }
- fn table(override_id:i32,value:&str)->String{"MagicID,增伤百分比\n".to_string()+&sword_map::DEFAULT_BONUSES.iter().map(|(id,v)|format!("{id},{}\n",if *id==override_id{value.to_string()}else{v.to_string()})).collect::<String>()}
- #[test]fn table_bonus_keeps_damage_and_scales_lifesteal(){for (value,factor) in [("0",1.),("10",1.1),("30",1.3),("50",1.5),("100",2.)]{let b=Bonuses::read(&table(4021,value)).unwrap();assert_eq!(b.factor(40210,1),Some(factor));assert_eq!(b.factor(40210,0),None);assert_eq!(b.factor(-1,1),None);let p=b.for_magic(4021).unwrap();assert_eq!(b.for_attack(40210,1),Some(p));assert_eq!(heal_amount(100,p,false),(p as f64*2.).floor() as u32);}}
+ #[test]fn automatic_percentage_keeps_damage_and_scales_lifesteal(){for (value,factor) in [(0.,1.),(10.,1.1),(30.,1.3),(50.,1.5),(100.,2.),(12.5,1.125)]{let mut b=Bonuses::defaults();b.percentages.insert(4021,value);assert_eq!(b.factor(40210,1),Some(factor));assert_eq!(b.factor(40210,0),None);assert_eq!(b.factor(-1,1),None);assert_eq!(b.for_attack(40210,1),Some(value));assert_eq!(heal_amount(100,value,false),(value as f64*2.).floor() as u32);}}
  #[test]fn recorded_recluse_staff_hits_use_pc_kind_one(){let r=Bonuses::defaults();for attack in [40000,40070]{assert!(r.factor(attack,1).unwrap()>=1.);assert_eq!(r.factor(attack,0),None);}}
  #[test]fn casting_expires_and_cannot_transfer_to_dead_or_other_owner(){assert!(casting(1,true,true,1,100,199));assert!(!casting(1,true,true,1,100,200));assert!(!casting(1,true,true,2,100,150));assert!(!casting(1,false,true,1,100,150));assert!(!casting(1,true,false,1,100,150));}
- #[test]fn bonus_table_rejects_invalid_values_and_missing_or_duplicate_identity(){for v in ["-1","NaN","inf","100.01","oops"]{assert!(Bonuses::read(&table(4021,v)).is_err());}assert!(Bonuses::read("MagicID,增伤百分比\n4021,50").is_err());assert!(Bonuses::read(&(table(4021,"50")+"4021,50\n")).is_err());assert!(Bonuses::read(&(table(4021,"50")+"999999,50\n")).is_err());}
- #[test]fn blank_bonus_means_zero_and_fractional_bonus_is_supported(){assert_eq!(Bonuses::read(&table(4021,"")).unwrap().factor(40210,1),Some(1.));assert_eq!(Bonuses::read(&table(4021,"12.5")).unwrap().factor(40210,1),Some(1.125));}
- #[test]fn compiled_table_preserves_user_values_for_every_spell_and_mapped_attack(){let expected=Bonuses::read(include_str!("../data/balance/sword.csv")).unwrap();let b=Bonuses::defaults();assert_eq!(b.percentages,expected.percentages);for (attack,ids) in sword_map::ATTACKS{let p=ids.iter().map(|id|expected.percentages[id]).fold(f32::INFINITY,f32::min);assert_eq!(b.factor(*attack,1),Some(1.+p/100.));}assert_eq!(b.percentages.len(),160);}
+ #[test]fn compiled_automatic_values_cover_every_mapped_attack(){let b=Bonuses::defaults();assert!(b.percentages.values().all(|p|p.is_finite()&&*p>=0.));for (attack,ids) in sword_map::ATTACKS{let p=ids.iter().map(|id|b.percentages[id]).fold(f32::INFINITY,f32::min);assert_eq!(b.factor(*attack,1),Some(1.+p/100.));}for id in [4430,4440,4450,6420,6600]{assert_eq!(b.for_magic(id),Some(0.));}assert!(b.percentages.len()>=160);}
  #[test]fn healing_uses_full_hit_damage_without_requiring_target_hp_loss(){assert_eq!(heal_amount(300,30.,false),180);assert_eq!(heal_amount(65,20.,false),26);assert_eq!(heal_amount(0,30.,false),0);assert_eq!(heal_amount(-1,30.,false),0);assert_eq!(heal_amount(i32::MAX,100.,false),65535);assert_eq!(heal_amount(300,0.,false),0);assert_eq!(heal_amount(300,12.5,false),75);assert_eq!(heal_amount(100,100.,false),200);}
  #[test]fn glancing_and_immune_hits_never_heal_despite_displayed_damage(){for damage in [1,5,300,i32::MAX]{assert_eq!(heal_amount(damage,100.,true),0);}}
  #[test]fn added_melee_category_keeps_all_original_tags_without_adding_skill_and_is_idempotent(){for original in 0..256{let mut mask=[0u32;8];mask[original/32]|=1<<(original%32);let saved=mask;add_melee_category(&mut mask);for category in [original,130]{assert_ne!(mask[category/32]&(1<<(category%32)),0);}for bit in 0..256{let expected=saved[bit/32]&(1<<(bit%32))!=0||bit==130||(original==110&&bit==100);assert_eq!(mask[bit/32]&(1<<(bit%32))!=0,expected);}let once=mask;add_melee_category(&mut mask);assert_eq!(mask,once);}}
- #[test]fn shared_percentage_headers_are_unambiguous(){for name in ["加成","吸血百分比","效果百分比","增伤百分比"]{assert!(Bonuses::read(&table(4021,"30").replace("增伤百分比",name)).is_ok());}assert!(Bonuses::read("MagicID,吸血百分比,增伤百分比\n4021,20,30").is_err());assert!(Bonuses::read("MagicID,加成,吸血百分比\n4021,20,30").is_err());}
  #[test]fn incoming_reduction_is_linear_and_preserves_non_damage(){assert_eq!(reduced(65,30.),45);assert_eq!(reduced(100,0.),100);assert_eq!(reduced(100,100.),0);assert_eq!(reduced(-5,50.),-5);assert_eq!(reduced(0,50.),0);assert_eq!(reduced(100,12.5),87);}
  #[test]fn torso_range_handles_elevated_contacts_without_expanding_horizontal_range(){
   let feet=[10.,20.,30.,1.];

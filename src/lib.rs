@@ -6,7 +6,7 @@ mod ambulance;
 compile_error!("Use the demand implementation or lifecycle probe, not both");
 mod echo_cast;
 mod echo_cost;
-mod echo_cast_data;
+mod echo_cast_data { include!(concat!(env!("OUT_DIR"), "/echo_cast_data.rs")); }
 pub mod hook;
 pub mod log;
 pub mod pattern;
@@ -58,7 +58,9 @@ mod ominous_pact;
 mod reward_terrain;
 mod native_party;
 mod weapon_affinity;
-mod parry_data;
+mod parry_data { include!(concat!(env!("OUT_DIR"), "/parry_data.rs")); }
+#[cfg(feature="mmv-compat")]
+mod mmv_compat;
 mod hero_audio;
 mod storm_audio;
 mod spirit;
@@ -103,7 +105,7 @@ mod wall_input;
 mod cat_wall;
 mod flasks;
 mod sword;
-mod sword_map;
+mod sword_map { include!(concat!(env!("OUT_DIR"), "/sword_map.rs")); }
 mod sword_projectile;
 mod cage_mutation;
 mod cage_trace;
@@ -363,7 +365,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);204] {
+fn signatures()->[(&'static str,u32);205] {
  [(double_dip::POPUP_PATTERN,double_dip::POPUP_RVA as u32),
   (basics::RESTAGE_PATTERN,basics::RESTAGE_RVA as u32),
   (devils_gaze_scaling::CORRECTION_QUERY_PATTERN,devils_gaze_scaling::CORRECTION_QUERY_RVA as u32),
@@ -374,6 +376,7 @@ fn signatures()->[(&'static str,u32);204] {
   (sword_projectile::STEP_PATTERN,sword_projectile::STEP_RVA as u32),
   (sword_projectile::MODE_PATTERN,sword_projectile::MODE_RVA as u32),
   (sword_projectile::PARAM_PATTERN,sword_projectile::PARAM_RVA as u32),
+  (sword_projectile::MOTION_PATTERN,sword_projectile::MOTION_RVA as u32),
   (echo_cast::FACTORY_PATTERN,echo_cast::FACTORY_RVA as u32),(echo_cast::TARGET_COPY_PATTERN,echo_cast::TARGET_COPY_RVA as u32),(echo_cast::RELEASE_PATTERN,echo_cast::RELEASE_RVA as u32),(echo_cast::TARGET_VALID_PATTERN,echo_cast::TARGET_VALID_RVA as u32),(ambulance::ENV_PATTERN,ambulance::ENV_RVA as u32),(ambulance::NUMBER_PATTERN,ambulance::NUMBER_RVA as u32),(ambulance::COST_PATTERN,ambulance::COST_RVA as u32),(ambulance::HIT_PATTERN,ambulance::HIT_RVA as u32),(ambulance::MODE_PATTERN,ambulance::MODE_RVA as u32),(ambulance::COMMON_PATTERN,ambulance::COMMON_RVA as u32),(ambulance::FORMULA_PATTERN,ambulance::FORMULA_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (snack::PRICE_PATTERN,snack::PRICE_RVA as u32),(snack::SPEND_PATTERN,snack::SPEND_RVA as u32),(snack::BUY_A_PATTERN,snack::BUY_A_RVA as u32),(snack::BUY_B_PATTERN,snack::BUY_B_RVA as u32),(snack::ITEM_A_PATTERN,snack::ITEM_A_RVA as u32),(snack::ITEM_B_PATTERN,snack::ITEM_B_RVA as u32),(snack::RARITY_PATTERN,snack::RARITY_RVA as u32),
   (metal::CONSUME_PATTERN,metal::CONSUME_RVA as u32),(metal::QUANTITY_PATTERN,0x1f5ca0),
@@ -514,7 +517,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let config=Config::read(&text)?;nlog_info!("settings: {config:?}");CONFIG.set(config).map_err(|_|"Already initialized")?;
   nlog_info!("Test reward hotkeys compiled in: {}",cfg!(feature="test-hotkeys"));
   SWORD_BONUSES.set(sword::Bonuses::defaults()).map_err(|_|"Sword bonuses already initialized")?;
-  nlog_info!("Sword shared effect percentages initialized from the compiled user balance table");
+  nlog_info!("Sword shared effect percentages initialized from automatic original-flight estimates");
   let base=pe::main_module_base()?;
   let bytes=std::fs::read(module_path(base as *mut c_void)?).map_err(|e|e.to_string())?;
   let hash=format!("{:x}",Sha256::digest(bytes));
@@ -522,7 +525,13 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let image=pe::ModuleImage::from_base(base)?;let regions=image.exec_regions();
   for (pattern,wanted) in signatures() {
    let hits=pattern::scan_regions(&regions,&pattern::Pattern::parse(pattern)?);
-   if hits.len()!=1||hits[0].1.rva!=wanted {return Err(format!("Signature mismatch at RVA {wanted:#x}; hits {:?}; no hooks installed",hits.iter().map(|v|v.1.rva).collect::<Vec<_>>()));}
+   if hits.len()!=1||hits[0].1.rva!=wanted {
+    #[cfg(feature="mmv-compat")]
+    if hits.is_empty()&&mmv_compat::accepts(base as usize,wanted)? {
+     nlog_info!("MMV compatibility: verified Legendary Stones item-copy chain at {wanted:#x}; existing detour preserved");continue;
+    }
+    return Err(format!("Signature mismatch at RVA {wanted:#x}; hits {:?}; no hooks installed",hits.iter().map(|v|v.1.rva).collect::<Vec<_>>()));
+   }
   }
   let update_head=[0x48,0x8b,0xc4,0x48,0x89,0x58,0x10,0x48,0x89,0x78,0x18,0x55,0x48,0x8d,0x68,0xa1];
   if std::slice::from_raw_parts(base.add(UPDATE_RVA),update_head.len())!=update_head {return Err("Character update prologue mismatch".into());}
@@ -614,6 +623,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (sword_projectile::CHILD_RVA,sword_projectile::child as*const u8,&sword_projectile::CHILD_ORIGINAL),
    (sword_projectile::RESET_RVA,sword_projectile::reset as*const u8,&sword_projectile::RESET_ORIGINAL),
    (sword_projectile::STEP_RVA,sword_projectile::step as*const u8,&sword_projectile::STEP_ORIGINAL),
+   (sword_projectile::MOTION_RVA,sword_projectile::motion as*const u8,&sword_projectile::MOTION_ORIGINAL),
    (snack::SPEND_RVA,snack::spent as *const u8,&snack::SPEND_ORIGINAL),
    (snack::PRICE_RVA,snack::price as *const u8,&snack::PRICE_ORIGINAL),
    (metal::CONSUME_RVA,metal::consumed as *const u8,&metal::CONSUME_ORIGINAL),

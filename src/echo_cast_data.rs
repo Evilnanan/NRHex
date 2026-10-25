@@ -132,3 +132,7 @@ pub const WORLD_AREAS:&[i32]=&[4120,7060,7090,7240,7330];
 pub const EXCLUDED:&[i32]=&[4110,4200,4520,4700,4701];
 pub const RELEASES:&[(i32,i32,i32)]=&[(4300,10430000,10430001),(4301,10430100,10430101),(4302,10430200,10430201)];
 pub const VISUALS:&[(i32,i32)]=&[(10671000,95003590),(10671050,95003591),(10724000,95003592)];
+// Target adapters may add reviewed mixed-spell areas and hit-record isolation.
+pub const WORLD_ROOTS:&[(i32,i32)]=&[];
+pub const INDEPENDENT_HITS:&[i32]=&[6710,7520];
+pub const MMV_SPELLS:&[i32]=&[];

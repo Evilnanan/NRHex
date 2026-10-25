@@ -9,3 +9,8 @@
 *.pyc
 
 /work/
+/dist-mmv/
+/dist-mmv-community/
+
+/dist/mmv/
+/releases/

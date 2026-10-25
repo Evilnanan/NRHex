@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "NRHex-MMV",
+  "sharedResources": "dist/mod",
+  "output": "dist/mmv",
+  "communityOutput": null,
+  "originalSfxSha256": "0dfd146f6cf246f8a9c2763730fab2941ba2943e9644a460c7854cb4aa436269",
+  "runtimeFeatures": [
+    "cage-demand",
+    "mmv-compat"
+  ],
+  "runtimeDefaultFeatures": false,
+  "status": "buildable-awaiting-game-test",
+  "loadingModel": {
+    "base": "existing MMV package, read-only external dependency",
+    "overlay": "independent NRHex-MMV package with merged overlapping resources",
+    "mmvDirectoryWrites": false,
+    "preserveMmvGameplay": true
+  },
+  "requiredAdapters": [],
+  "requiredGameTests": [
+    "startup and native DLL coexistence",
+    "roundtable and level rewards",
+    "night battles and cages",
+    "actions and spells",
+    "multiplayer"
+  ]
+}

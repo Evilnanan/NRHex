@@ -1,12 +1,16 @@
 # 开发与构建
 
-仓库只保留三个构建入口。新增能力、参数、事件、动作和特效统一使用完整构建；仅改 Rust 代码时使用 DLL 模式。原先按海克斯划分的九个专项 PowerShell 入口及其九个不再被引用的安装／差异记录脚本已删除，有效验证已接入统一流程。底层仍被使用的生成器和研究工具保留；旧入口可从 Git 历史恢复，历史用法见 [CHANGELOG.md](../CHANGELOG.md)。
+独立版使用三个构建入口，MMV 适配另设独立目标。新增能力、参数、事件、动作和特效统一使用完整构建；仅改 Rust 代码时使用 DLL 模式。原先按海克斯划分的九个专项 PowerShell 入口及其九个不再被引用的安装／差异记录脚本已删除，有效验证已接入统一流程。底层仍被使用的生成器和研究工具保留；旧入口可从 Git 历史恢复，历史用法见 [CHANGELOG.md](../CHANGELOG.md)。
 
 | 入口 | 用途 |
 | --- | --- |
 | `build.ps1` | 默认完整构建；`-DllOnly` 仅验证、编译和更新 DLL |
 | `build-texts.ps1` | 构建或检查中英文文案 |
 | `build-no-hotkeys.ps1` | 编译无测试热键的 DLL，搭配当前 dist 资源打包群友版 |
+| `build-release.ps1` | 以 Mayhem Augments 名称输出仅含本 Mod 的独立发行目录和 ZIP |
+| `build-mmv.ps1` | 以只读 MMV 原包为基线，默认输出含热键的 `dist/mmv`；无热键群友版须用 `-CommunityDestination` 指定仓库外目录；游戏验证状态另行记录 |
+
+MMV 与独立版共用源码及文案，不维护长期分叉。当前适配状态、使用方式和后续合并规则见 [MMV 构建目标](../compat/mmv/README.md)。`-AuditOnly` 只完成检查，不代表可运行版已经构建成功。
 
 ## 完整构建
 
@@ -54,6 +58,12 @@
 
 未指定 `-Destination` 时沿用脚本中的本机默认目录。独立 DLL 产物放在 `.work/no-hotkeys-target`，不会覆盖 dist 自测 DLL；打包记录只留在项目 `.work/no-hotkeys-package`。
 
+## 纯净发行版
+
+使用 `./build-release.ps1`，复用当前 `dist/mod` 的独立版资源并检查最新中英文文案，重新编译无热键 DLL。默认输出 `releases/Mayhem Augments-<版本>/` 和同名 ZIP；可用 `-OutputDirectory` 指定其他输出父目录，已有同名发行包时停止以避免覆盖。脚本显式选择独立版条件表，不继承 MMV 构建环境。
+
+发行包只有 `mod/` 和 `Mayhem Augments.me3`；内部 DLL/INI 名称仍为 NRHex。ME3 配置仅加载本 Mod，不写入 `start_online`、`disable_arxan` 或开头注释，不复制个人配置、辅助 Mod、MMV、README 或构建报告。打包后验证 ME3 配置和 ZIP 全部文件哈希；报告保存在 `.work/release/`。这一步不重新生成游戏资源，资源改动须先运行对应独立版构建。
+
 ## 工具和环境
 
 构建使用 PowerShell、Python、.NET 10、Rust Windows 工具链、Smithbox/SoulsFormats、ME3，以及需要动作反编译时的 DSLuaDecompiler。Python 依赖见 `tools/requirements.txt`。原始 EXE 与 regulation 必须匹配项目验证的版本。
@@ -85,6 +95,6 @@
 
 `assets/original/manifest.json` 和 `data/reference/manifest.json` 约束保留的输入与研究夹具。升级游戏时应重新导出、研究和更新清单，不能绕过失配检查。`.work`、`work` 与 `target` 用于生成数据和缓存，不作为原始游戏数据来源。
 
-用户维护的 CSV、INI 和其他 Mod 配置应保留。`data/balance/sword.csv` 在 DLL 编译时静态嵌入，修改后需要重新编译 DLL；其中的加成值不能为改变回收倍率而统一翻倍。亮剑近身范围当前固定为5米，不由 INI 控制。
+用户维护的 CSV、INI 和其他 Mod 配置应保留。亮剑已停止读取 `data/balance/sword.csv` 和 `sword-mmv.csv` 的手填加成；两份文件仅保留历史数据。构建读取目标参数并运行 `tools/build_sword_auto.py`，以原飞行距离估算的米数直接作为百分比（保留一位小数），无可比较飞行距离为 0%，回收倍率沿用现有值。独立版生成 `src/sword_map.rs`，MMV 从合并后的参数生成专用映射，经 `NRHEX_SWORD_DATA` 交给共享运行时。直接运行 Cargo 使用已生成快照；更新参数后应先走构建入口重新导出，不能手改生成值。弹体常规上限为 6 米，详见 `docs/research/sword-auto.md`。
 
 构建后重启游戏加载 DLL、动作或文本。运行状态只读检查使用 `tools/check_loaded.py`，不继承旧版本的加载或实测结论。

@@ -143,11 +143,11 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  // not depend on the original enemy lock or even the existence of targets.
  TARGET_COUNT.store(2,Ordering::Relaxed);fire();assert!(QUEUE.lock().unwrap().pending.is_empty());
  TARGET_ALIVE.store(false,Ordering::Relaxed);put(dp+0xc0,target_ref.as_mut_ptr()as usize);
- for(i,(magic,root,replay))in crate::echo_cast_data::AREAS.iter().copied().chain(crate::echo_cast_data::ROOTS.iter().filter(|(magic,_)|crate::echo_cast_data::WORLD_AREAS.contains(magic)).flat_map(|&(magic,roots)|roots.iter().map(move|&root|(magic,root,root)))).enumerate(){
+ for(i,(magic,root,replay))in crate::echo_cast_data::AREAS.iter().copied().chain(crate::echo_cast_data::ROOTS.iter().filter(|(magic,_)|crate::echo_cast_data::WORLD_AREAS.contains(magic)).flat_map(|&(magic,roots)|roots.iter().map(move|&root|(magic,root,root)))).chain(crate::echo_cast_data::WORLD_ROOTS.iter().map(|&(magic,root)|(magic,root,root))).enumerate(){
   TARGET_COUNT.store(if i%2==0{0}else{2},Ordering::Relaxed);
   int(dp+0x18,magic);int(dp+0x14,root);int(dp+0x80,7f32.to_bits()as i32);
   let before=SHOTS.lock().unwrap().len();fire();assert_eq!(QUEUE.lock().unwrap().pending.len(),1);
-  assert_eq!(target_ref[0x78/4],2);assert_eq!(first[6],0xc0000006);
+  assert_eq!(target_ref[0x78/4],2);assert_eq!(first[6],if crate::echo_cast_data::INDEPENDENT_HITS.contains(&magic){0xc0000005}else{0xc0000006});
   int(dp+0x80,99f32.to_bits()as i32);update(p,base,0.49);assert_eq!(SHOTS.lock().unwrap().len(),before+1);update(p,base,0.01);
   let visual=crate::echo_cast_data::VISUALS.iter().find(|row|row.0==root);
   let shots=SHOTS.lock().unwrap();assert_eq!(shots.len(),before+2+usize::from(visual.is_some()));
@@ -257,7 +257,7 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
   let replay=read_ptr(queue.pending[0].descriptor.0.as_ptr()as usize+0xa0);
   assert_ne!(replay,first_record);assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),1);assert_eq!(read_ptr(dp+0xa0),first_record);
   assert!(queue.pending.iter().all(|ticket|read_ptr(ticket.descriptor.0.as_ptr()as usize+0xa0)==replay));drop(queue);
-  if matches!(magic,6710|7520){assert!(QUEUE.lock().unwrap().pending.iter().all(|ticket|read_ptr(ticket.descriptor.0.as_ptr()as usize+0x98)==0));assert_eq!(first[6],0xc0000005);assert_eq!(read_ptr(dp+0x98),first.as_ptr()as usize);}
+  if crate::echo_cast_data::INDEPENDENT_HITS.contains(&magic){assert!(QUEUE.lock().unwrap().pending.iter().all(|ticket|read_ptr(ticket.descriptor.0.as_ptr()as usize+0x98)==0));assert_eq!(first[6],0xc0000005);assert_eq!(read_ptr(dp+0x98),first.as_ptr()as usize);}
   let mut replay_hits=[0u64;6];put(replay+8,replay_hits.as_mut_ptr()as usize);put(replay+0x10,replay_hits.as_ptr()as usize);put(replay+0x18,replay_hits.as_ptr()as usize+48);
   register(replay,victim_pointer,&category,202);assert_eq!(allowed(replay,victim_pointer,&category,202),1);
   assert_eq!(allowed(first_record,victim_pointer,&category,202),0);
@@ -284,7 +284,7 @@ fn echo_compiled_hooks_replay_native_dispatch_and_release_references(){unsafe{
  assert_eq!(SHOTS.lock().unwrap().len(),before+20);assert!(QUEUE.lock().unwrap().pending.is_empty());assert_eq!(VOLLEY_COUNT.load(Ordering::Relaxed),0);assert_eq!(second[10],0x80000006);
  STREAM.store(true,Ordering::Relaxed);
  let mut stream_shared=[0u32;16];stream_shared[6]=1;STREAM_SHARED.store(stream_shared.as_mut_ptr()as usize,Ordering::Relaxed);
- for magic in [4060,6030,7050,7520]{
+ for &magic in crate::echo_cast_data::STREAMS{
   int(dp+0x18,magic);int(dp+0x14,crate::echo_cast_data::ROOTS.iter().find(|row|row.0==magic).unwrap().1[0]);
   TARGET_DESC.store(np,Ordering::Relaxed);let before=SHOTS.lock().unwrap().len();fire();
   assert!(QUEUE.lock().unwrap().pending.is_empty());update(p,base,0.5);assert_eq!(SHOTS.lock().unwrap().len(),before+1);

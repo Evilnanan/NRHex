@@ -26,8 +26,6 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Original skill data export failed.' }
         & python -X utf8 tools/build_arts_data.py
         if ($LASTEXITCODE -ne 0) { throw 'Skill pool build failed.' }
-        & python -X utf8 tools/build_sword_ranges.py
-        if ($LASTEXITCODE -ne 0) { throw 'Sword range table build failed.' }
         dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot
         if ($LASTEXITCODE -ne 0) { throw 'Parameter/event/text build failed.' }
         python -X utf8 tools/verify_cage_groups.py
@@ -248,6 +246,10 @@ try {
     # Both modes verify the runtime; only Full regenerates game resources.
     dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-poise-check
     if ($LASTEXITCODE -ne 0) { throw 'Sword Endure protection readback failed.' }
+    dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-range-catalog
+    if ($LASTEXITCODE -ne 0) { throw 'Sword automatic parameter export failed.' }
+    python -X utf8 tools/build_sword_auto.py
+    if ($LASTEXITCODE -ne 0) { throw 'Sword automatic balance generation failed.' }
     cargo test --release --lib @cargoTarget @cargoFeatures
     if ($LASTEXITCODE -ne 0) { throw 'Runtime regression checks failed.' }
     foreach ($runtimeCheck in @('verify_sword_projectile.py', 'verify_glass_cannon_native.py', 'verify_death_dance.py', 'verify_erosion.py', 'verify_potential_fission.py', 'verify_reward_template.py', 'verify_ambulance.py', 'verify_echo_cast.py', 'verify_weapon_affinity.py', 'verify_snack.py', 'verify_marking.py', 'verify_wraith.py', 'verify_metal.py', 'verify_double_dip.py', 'verify_basics.py', 'verify_sniper.py', 'verify_momentum.py', 'verify_heartstealer.py', 'verify_cat_arena.py', 'verify_ultimate_awakening.py', 'verify_ultimate_unstoppable.py')) {

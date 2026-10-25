@@ -68,6 +68,7 @@ fn root_magic(magic:i32,bullet:i32)->Option<i32>{
   .or_else(||crate::echo_cast_data::AREAS.iter().find(|(_,root,_)|*root==bullet).map(|(magic,_,_)|*magic))
 }
 fn area_replay(magic:i32,bullet:i32)->Option<i32>{
+ if crate::echo_cast_data::WORLD_ROOTS.binary_search(&(magic,bullet)).is_ok(){return Some(bullet);}
  if crate::echo_cast_data::WORLD_AREAS.binary_search(&magic).is_ok(){
   return crate::echo_cast_data::ROOTS.binary_search_by_key(&magic,|row|row.0).ok().and_then(|index|crate::echo_cast_data::ROOTS[index].1.binary_search(&bullet).ok()).map(|_|bullet);
  }
@@ -126,7 +127,7 @@ unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
  if replay.is_none()&&(targets==0||end.wrapping_sub(targets)!=0x50){return None;}
  let volley=replay_volley(scope,magic,base).ok()?;
  let mut d=Box::new(Descriptor(ptr::read_unaligned(scope.descriptor as*const[u8;0x110])));
- if matches!(magic,6710|7520){d.0[0x98..0xa0].fill(0);}
+ if crate::echo_cast_data::INDEPENDENT_HITS.binary_search(&magic).is_ok(){d.0[0x98..0xa0].fill(0);}
  if let Some(volley)=volley.as_ref(){ptr::write_unaligned(d.0.as_mut_ptr().add(0xa0)as*mut usize,volley.replay);}
  d.0[0x90..0x98].fill(0);
  // The copied target is replaced with the target already resolved by native
@@ -296,11 +297,11 @@ unsafe fn emit_visual(ticket:&Ticket,manager:usize,emit:Emit){
   for magic in [6420,6760,6971]{assert!(!eligible(magic,10000000+magic*100));}
  }
  #[test]fn expanded_world_areas_keep_native_roots_without_echoing_personal_effects(){
-  assert_eq!(crate::echo_cast_data::EXPANDED.len(),26);
+  assert_eq!(crate::echo_cast_data::EXPANDED.len(),26+crate::echo_cast_data::MMV_SPELLS.len());
   assert_eq!(crate::echo_cast_data::EXCLUDED,&[4110,4200,4520,4700,4701]);
   for &magic in crate::echo_cast_data::EXPANDED{
    let roots=crate::echo_cast_data::ROOTS.iter().find(|row|row.0==magic).unwrap().1;
-   for &root in roots{assert!(eligible(magic,root));assert_eq!(area_replay(magic,root),crate::echo_cast_data::WORLD_AREAS.contains(&magic).then_some(root));}
+   for &root in roots{assert!(eligible(magic,root));assert_eq!(area_replay(magic,root),(crate::echo_cast_data::WORLD_AREAS.contains(&magic)||crate::echo_cast_data::WORLD_ROOTS.contains(&(magic,root))).then_some(root));}
   }
   for magic in [4130,4300,4301,4302,4430,4440,4450,4460,4470,6420,7080,7500,7510,7900]{assert!(!crate::echo_cast_data::ROOTS.iter().any(|row|row.0==magic));}
  }
