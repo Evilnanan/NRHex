@@ -195,7 +195,7 @@ Greatly increases poise and grants immunity to status buildup for 15 seconds aft
 Raises maximum HP by 50% and increases the likelihood of being targeted by enemies for 15 seconds after activating an Ultimate Art.
 
 <!-- hex:95004200 -->
-## Slide
+## Slide Kick
 
 Your Character Skill launches small enemies. Follow-up attacks against kicked enemies deal heavy damage.
 
@@ -218,3 +218,8 @@ Reduces attack power by 30%. Boosts damage as the distance to the target increas
 ## Metallization
 
 Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.
+
+<!-- hex:95004700 -->
+## Double the Joy
+
+Grants two random Hex Augment Runes.

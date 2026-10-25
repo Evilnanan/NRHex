@@ -42,10 +42,11 @@ pub fn weapon_exclusions(mut unavailable:HexSet,affinity:Option<i32>)->HexSet{
  ]{if excluded{unavailable.insert(index(id));}}
  unavailable
 }
+// Single-character powers share this classification with exceptional draws.
+pub fn exclusive_role(owner:i32)->Option<u8>{match owner{95001800=>Some(6),crate::marking::OWNER=>Some(3),_=>None}}
 pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
+ for (i,&id)in OWNER_IDS.iter().enumerate(){if exclusive_role(id).is_some_and(|required|hero!=Some(required)){unavailable.insert(i);}}
  for (id,excluded)in [
-  (95001800,hero!=Some(6)),
-  (crate::marking::OWNER,hero!=Some(3)),
   (95001300,matches!(hero,Some(2|4|6))),
   (95000400,!matches!(hero,Some(1|3|5|7|8))),
  ]{if excluded{unavailable.insert(index(id));}}
@@ -175,6 +176,7 @@ pub fn is_hex_good(encoded:u32)->bool{
   assert_eq!(crate::hex_pool::HISTORY_BITS[index(95003400)],31);
   assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004500)],42);
   assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004600)],43);
+  assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004700)],44);
   assert_eq!(crate::reward_cycle::Round::new(&HexSet::new(),&HexSet::new()).candidates.len(),HEX_COUNT);
  }
  #[test]fn all_roles_preserve_their_filters_in_random_focused_and_refresh_paths(){

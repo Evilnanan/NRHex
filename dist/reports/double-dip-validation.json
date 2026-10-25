@@ -1,0 +1,436 @@
+{
+  "version": "0.17.253",
+  "hexCount": 42,
+  "parameters": {
+    "version": "0.17.253",
+    "inputSha256": "E6889F5C4CF23C789E82A56E1B3985C6E14D1FA78DDAA89B763BA19C78EA7358",
+    "outputSha256": "FFF37AEC610D1F04104562E4EDB03DD0F38E154CFA2457A3353D1A091BC2E820",
+    "eventInputSha256": "223D7D977A757F9DB0615747EEFE26F562EB2CC53FAA08B50E4E2B79EB1BD0C5",
+    "eventOutputSha256": "32FE3AB3E5FA93B6E984ABC76D357A86BB3526E2D75DCB9A4E4EB7B623EF25C6",
+    "hexCount": 42,
+    "historyBit": 44,
+    "historyBytes": 6,
+    "addedRows": {
+      "SpEffectParam": [
+        95004700,
+        95004701,
+        95004702,
+        96210000,
+        96210001,
+        96210002,
+        96210003,
+        96210004,
+        96210005,
+        96210006,
+        96210007,
+        96210008,
+        96210009,
+        96210010,
+        96210011,
+        96210012,
+        96210013,
+        96210014,
+        96210015,
+        96210016,
+        96210018,
+        96210019,
+        96210020,
+        96210021,
+        96210022,
+        96210023,
+        96210024,
+        96210025,
+        96210026,
+        96210027,
+        96210028,
+        96210029,
+        96210031,
+        96210032,
+        96210033,
+        96210034,
+        96210035,
+        96210036,
+        96210037,
+        96210039,
+        96210040,
+        96210041,
+        96210042,
+        96210043
+      ],
+      "AttachEffectParam": [
+        95004700
+      ],
+      "PermanentBuffParam": [
+        95004700
+      ],
+      "EquipParamGoods": [
+        95004700
+      ],
+      "ItemTableParam": [
+        95110144
+      ]
+    },
+    "workerInstances": 41,
+    "parameterizedWorkerBindingsChecked": true,
+    "directOwnerEffectsMatchNativePermanentBuffClaims": true,
+    "noRewardNodesOrInventoryGrants": true,
+    "allExistingRowsAndUnrelatedTablesUnchanged": true,
+    "onlyThreeExistingEventsExtended": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "eventWorkerInstructionCount": 12,
+  "eventWorkerTerminalAndResetGuards": true,
+  "eventCompressionRoundtrip": true,
+  "installedCommonSha256": "f3d1cbee6fc6fc142ae5628cf61bd081bae60846892d5e99b72ffcafb0d3e0a6",
+  "texts": {
+    "version": "0.17.253",
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "FE8FEB9B6A27B7C05BFF99E40862AE369B1484279E026A8ABDD02F32F78621A0",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "3F8D32848C028093BB5126D48C0697D97B1D4B18F751FBDC4C1B9F56CECCCBDE",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "BE65336355DB372419C4F69AE0A8A5252BFDAAFEFEC13E9A488EB8D7B0989706",
+          "outputSha256": "748F8F1292344CC7212BBA5D87CB527D4391B4CE202E95755AA9106023ED3083",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "双喜临门"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "随机获得两个海克斯强化符文"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "双喜临门"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "随机获得两个海克斯强化符文"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "随机获得两个海克斯强化符文"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "258EDB28C9A43799D38FB435B0308008C2D3A76FB4ACEFF8257E86F753394333",
+          "outputSha256": "751EF44370857E06F4FD5E46A763044EBBA76EA46F5B3F0AB90D69C56EC69DA2",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "双喜临门"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "随机获得两个海克斯强化符文"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "9D13E5D8D979A197B6993F9CAD5C32674FF42D762D4FBDAE116A5598A450A11C",
+          "outputSha256": "9A42ED2AB1BB2CC0DF258F7A6B22FB0A2B37D5654355D9EF70A96739BB227185",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "Double the Joy"
+            },
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "Grants two random Hex Augment Runes."
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "Double the Joy"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "Grants two random Hex Augment Runes."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "Grants two random Hex Augment Runes."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "F0F151496EE60614DF415452D4D387D5F27DD8B2277E97836A3F17FEBE8DAA40",
+          "outputSha256": "1C708676BD73C998A5A9CFF918343D9177383FB17B75B5535E431A863AC7C203",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "Double the Joy"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004700,
+              "before": null,
+              "after": "Grants two random Hex Augment Runes."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "containers": {
+      "zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "445dc7ac40ceb03dfe69dfb047a6e344622d1cec5c431633ecffaad4c8b7a648",
+        "outputSha256": "872193430f9b708b720344f99d5a905c3c4dfcc76c4a66d7b708e687ebc22f66",
+        "roundTripPassed": true
+      },
+      "zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "e8a6057c899ea42e0eb9b316a46d837b94ddbb1985deb2ff4c8cb5c127e546ac",
+        "outputSha256": "d6a9928435360a2490a8f0717fd724a02e9324998601244d2e6c535f443256fa",
+        "roundTripPassed": true
+      },
+      "engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "a9a7029ff3c235b5331a868de8d282fa05acbff549201dcfb5ba8bb39de6bf07",
+        "outputSha256": "5f837536f626a268d456c3e1b3ba8d1c62de1690d753155c8849549f3c4eb4d9",
+        "roundTripPassed": true
+      },
+      "engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "fec0f68c8693d1f3c49993ef2322471f37a8029874cb14005b02f7a0135d6950",
+        "outputSha256": "d5751dc6e1b2e1a3c150f14eb994d6bd3232e6f19b760464e41a72b50ea2b810",
+        "roundTripPassed": true
+      }
+    },
+    "onlySelectedBilingualRewardAdded": true,
+    "installedReadbackPassed": true,
+    "gameplayVerified": false
+  },
+  "slideEnglishName": {
+    "version": "0.17.253",
+    "texts": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "FE8FEB9B6A27B7C05BFF99E40862AE369B1484279E026A8ABDD02F32F78621A0",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "63B6CCE35F1DB4F3420384EF471582E29D6F3701A674D238FEE0954E8BFBCC87",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "EFBF1692230725C916277291260EC0C6FC99DCCA5057DD036EC1074B3239A367",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "748F8F1292344CC7212BBA5D87CB527D4391B4CE202E95755AA9106023ED3083",
+          "outputSha256": "748F8F1292344CC7212BBA5D87CB527D4391B4CE202E95755AA9106023ED3083",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "751EF44370857E06F4FD5E46A763044EBBA76EA46F5B3F0AB90D69C56EC69DA2",
+          "outputSha256": "751EF44370857E06F4FD5E46A763044EBBA76EA46F5B3F0AB90D69C56EC69DA2",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "9A42ED2AB1BB2CC0DF258F7A6B22FB0A2B37D5654355D9EF70A96739BB227185",
+          "outputSha256": "7E59B84996CD2F4F7B525CA0C0049CD49BA33E06A38F3B9EDFEFAEA44E41A89E",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004200,
+              "before": "Slide",
+              "after": "Slide Kick"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004200,
+              "before": "Slide",
+              "after": "Slide Kick"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "1C708676BD73C998A5A9CFF918343D9177383FB17B75B5535E431A863AC7C203",
+          "outputSha256": "1760F624D523EC1B4B238500F9DCF871B53E10A7F30CF17178237CB757FD870A",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004200,
+              "before": "Slide",
+              "after": "Slide Kick"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "containers": {
+      "zhocn/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "872193430f9b708b720344f99d5a905c3c4dfcc76c4a66d7b708e687ebc22f66",
+        "outputSha256": "872193430f9b708b720344f99d5a905c3c4dfcc76c4a66d7b708e687ebc22f66",
+        "roundTripPassed": true
+      },
+      "zhocn/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "d6a9928435360a2490a8f0717fd724a02e9324998601244d2e6c535f443256fa",
+        "outputSha256": "d6a9928435360a2490a8f0717fd724a02e9324998601244d2e6c535f443256fa",
+        "roundTripPassed": true
+      },
+      "engus/item_dlc01.msgbnd.dcx": {
+        "inputSha256": "5f837536f626a268d456c3e1b3ba8d1c62de1690d753155c8849549f3c4eb4d9",
+        "outputSha256": "c0d4be9df1619dfc97ce45490cdc2780d88f23390c9e85c205aa758b0cb7f57e",
+        "roundTripPassed": true
+      },
+      "engus/menu_dlc01.msgbnd.dcx": {
+        "inputSha256": "d5751dc6e1b2e1a3c150f14eb994d6bd3232e6f19b760464e41a72b50ea2b810",
+        "outputSha256": "40ca5a51c1fb8c0ed733f32186fcd5083caacf8748672e64d04dbe33c6a5e87f",
+        "roundTripPassed": true
+      }
+    },
+    "onlySlideEnglishNameChanged": true,
+    "installedReadbackPassed": true,
+    "gameplayVerified": false
+  },
+  "slideEnglishDescriptionUnchanged": true,
+  "runtime": {
+    "version": "0.17.253",
+    "owner": 95004700,
+    "directGrant": true,
+    "rewardNodesCreated": false,
+    "inventoryUsed": false,
+    "compiledRuntimeProtocolPassed": true,
+    "installedParameterAndEventReadbackPassed": true,
+    "checks": [
+      "all hero IDs and unknown values only filter foreign character-exclusive powers, ownership and self",
+      "current Ironeye can draw Slide; current Revenant can draw Enhanced Necromancy",
+      "owned conflicts, caster affinity, multi-role restrictions, difficulty count, terrain and exposure history do not filter this draw",
+      "two distinct unowned results; RNG failure never submits a partial new choice",
+      "persist both selections before READY; partial saved selection fills without rerolling its original target",
+      "parameterized local common worker binds selected marker, actual PermanentBuff owner and popup for every possible target",
+      "native AddSpecialEffect followed by DisplayPermanentBuffPopup and wait for actual ownership; preowned target cannot be reapplied",
+      "deferred native requests submitted once; actor reconstruction retains frozen selection",
+      "receipt only after both actual owner effects; cleanup only after saved receipt is live; no re-grant on restoration",
+      "common worker itself rejects completed/reset states before DLL cleanup, including absent target with stale READY/selection",
+      "unknown hero, non-owner, down/dead/reset/foreign actor cannot initiate delivery",
+      "catalog append only; six history bytes; all existing parameter rows and unrelated tables/events preserved"
+    ],
+    "stubs": [
+      "native effect application/query/removal and event-worker scheduling are deferred fixtures",
+      "native common event VM, popup presentation, gameplay and multiplayer are not executed"
+    ],
+    "sourceHashes": {
+      "src/double_dip.rs": "6e00fe6762869095a86948e80306b6790c9b373900cc88afbc0169df9abff76e",
+      "src/double_dip_native_tests.rs": "156f3e2090b1ef36a77004501287e0700360e2fedcdbbd82f6a2c06335d24edc",
+      "src/hex_pool.rs": "5b24eef744a857abd2f50891211f7cf1b36478580eeac522ec6a6242fdcab0a9",
+      "src/lib.rs": "563daacde53bbc98fb3be0e2e37961f4381e8ccaf6211b19290b647240c5f2d2",
+      "src/reward_choices.rs": "e533779474c789ffd11cdb38390d71137d017325fea6874951eec9aa8b2ba984",
+      "src/reward_cycle_runtime.rs": "fbfb899360a363caf094da61bb490f3184b416fbcd96b4a9cf570d91d0d3a49e",
+      "tools/HexBuild/DoubleDip.cs": "1c69550256215173ab2fd4e6c26f2bed2e7cd17f0500c8b8511c75e83187a6ff",
+      "tools/HexBuild/HexCatalog.cs": "de1ccff42722bca3c9221a1bbe19c7c6090abecb75426a092c1fb79b70416c70",
+      "tools/HexBuild/RewardCatalog.cs": "f068a7852c18dc0a95b74904979037177e83114ddab1bb6bc2954dacc199c82c",
+      "tools/HexBuild/Program.cs": "af1225703f94adc99833009807984bc4fb596efbf8dfb63259edd27f00efe3f4",
+      "tools/verify_double_dip.py": "3f3c70317b2fbe0bb5d163104fc39d21c18bb753408e7bf7ef4565514cab622a"
+    },
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "build": {
+    "version": "0.17.253",
+    "mode": "dll-only",
+    "buildPassed": true,
+    "dllPath": "/workspace/NRHex/target/x86_64-pc-windows-gnu/release/NRHex.dll",
+    "dllSha256": "81cb2ff797bf499a6b5946bfab0ca716953eef1dc1e595720a3f19e6e552bfd3",
+    "installed": true,
+    "installedDllSha256": "81cb2ff797bf499a6b5946bfab0ca716953eef1dc1e595720a3f19e6e552bfd3",
+    "resourcesRebuilt": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "loadingVerified": false
+  },
+  "regularTestsPassed": 454,
+  "ignoredTests": 29,
+  "runtimeSuitesPassed": 21,
+  "runtimeSignaturesPassed": 203,
+  "eventGuardTargetedRecheckPassed": true,
+  "eventGuardParameterContentsUnchanged": true,
+  "productionDllUnaffectedByEventOnlyGuard": true,
+  "changedGameAssets": [
+    "dist/mod/event/common.emevd.dcx",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx",
+    "dist/mod/natives/NRHex.dll",
+    "dist/mod/regulation.bin"
+  ],
+  "installedAssetHashes": {
+    "dist/mod/event/common.emevd.dcx": "f3d1cbee6fc6fc142ae5628cf61bd081bae60846892d5e99b72ffcafb0d3e0a6",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "c0d4be9df1619dfc97ce45490cdc2780d88f23390c9e85c205aa758b0cb7f57e",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "40ca5a51c1fb8c0ed733f32186fcd5083caacf8748672e64d04dbe33c6a5e87f",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "872193430f9b708b720344f99d5a905c3c4dfcc76c4a66d7b708e687ebc22f66",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "d6a9928435360a2490a8f0717fd724a02e9324998601244d2e6c535f443256fa",
+    "dist/mod/natives/NRHex.dll": "81cb2ff797bf499a6b5946bfab0ca716953eef1dc1e595720a3f19e6e552bfd3",
+    "dist/mod/regulation.bin": "fff37aec610d1f04104562e4edb03dd0f38e154cfa2457a3353d1a091bc2e820"
+  },
+  "otherGameAssetsUnchanged": true,
+  "sourceHashes": {
+    "src/double_dip.rs": "6e00fe6762869095a86948e80306b6790c9b373900cc88afbc0169df9abff76e",
+    "src/double_dip_native_tests.rs": "156f3e2090b1ef36a77004501287e0700360e2fedcdbbd82f6a2c06335d24edc",
+    "src/lib.rs": "563daacde53bbc98fb3be0e2e37961f4381e8ccaf6211b19290b647240c5f2d2",
+    "src/hex_pool.rs": "5b24eef744a857abd2f50891211f7cf1b36478580eeac522ec6a6242fdcab0a9",
+    "src/reward_choices.rs": "e533779474c789ffd11cdb38390d71137d017325fea6874951eec9aa8b2ba984",
+    "src/reward_cycle_runtime.rs": "fbfb899360a363caf094da61bb490f3184b416fbcd96b4a9cf570d91d0d3a49e",
+    "tools/HexBuild/DoubleDip.cs": "1c69550256215173ab2fd4e6c26f2bed2e7cd17f0500c8b8511c75e83187a6ff",
+    "tools/HexBuild/HexCatalog.cs": "de1ccff42722bca3c9221a1bbe19c7c6090abecb75426a092c1fb79b70416c70",
+    "tools/HexBuild/RewardCatalog.cs": "f068a7852c18dc0a95b74904979037177e83114ddab1bb6bc2954dacc199c82c",
+    "tools/HexBuild/Program.cs": "af1225703f94adc99833009807984bc4fb596efbf8dfb63259edd27f00efe3f4",
+    "tools/verify_double_dip.py": "3f3c70317b2fbe0bb5d163104fc39d21c18bb753408e7bf7ef4565514cab622a",
+    "build.ps1": "16804e37ad141fb369ef191301c76379c77f543e24b4de7b0d65b654cb39fd41",
+    "docs/hexes.md": "fe8feb9b6a27b7c05bff99e40862ae369b1484279e026a8abdd02f32f78621a0",
+    "docs/hexes.en.md": "63b6cce35f1db4f3420384ef471582e29d6f3701a674d238fee0954e8bfbcc87"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

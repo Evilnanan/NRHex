@@ -35,6 +35,7 @@ mod basics;
 mod sniper;
 mod wraith;
 mod metal;
+mod double_dip;
 mod strength_sword;
 mod sword_hit_rules;
 mod escape;
@@ -2266,6 +2267,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  heartstealer::update(player,base,dt);
  wraith::update(player,base,dt);
  metal::update(player,base);
+ double_dip::update(player,base);
  marking::update(player,base);
  basics::update(player,base);
  night_blessing::update(player,base,dt);
