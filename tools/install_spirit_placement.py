@@ -12,7 +12,7 @@ p=json.loads((stage/'parameter-validation.json').read_text(encoding='utf8'))
 assert sha(stage/'regulation.bin')==p['outputSha256']
 assert sha(dist/'mod/regulation.bin') in [p['inputSha256'],p['outputSha256']]
 assert subprocess.run(['powershell','-NoProfile','-Command','if(Get-Process nightreign -ErrorAction SilentlyContinue){exit 1}else{exit 0}']).returncode==0,'Close game before installing'
-files=[(root/'target/release/NRHex.dll',dist/'mod/natives/NRHex.dll'),(stage/'regulation.bin',dist/'mod/regulation.bin'),(stage/'README.md',dist/'README.md')]
+files=[(root/'target/release/NRHex.dll',dist/'natives/NRHex.dll'),(stage/'regulation.bin',dist/'mod/regulation.bin'),(stage/'README.md',dist/'README.md')]
 for source,target in files:
  saved=work/'install-before'/target.relative_to(dist);saved.parent.mkdir(parents=True,exist_ok=True)
  if not saved.exists():shutil.copy2(target,saved)

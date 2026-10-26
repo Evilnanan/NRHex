@@ -30,6 +30,7 @@ behaviors=sorted({x['ID'] for x in p['behaviors']})
 assert dict(canonical)[1047]==1301 and dict(canonical)[1173]==707
 assert {300707900,301301901}.issubset(behaviors)
 text='// Generated from hash-guarded original regulation. Bows have a separate pool.\n'
+text+='pub const MMV_SKILLS:&[i32]=&[];\npub const MMV_JUDGES:&[i32]=&[];\npub const MMV_BEHAVIORS:&[(i32,i32,i32)]=&[];\n'
 text+=f'pub const POOL: [i32; {len(ordinary_skills)}] = '+str(ordinary_skills).replace(' ', '')+';\n'
 text+=f'pub const BOW_POOL: [i32; {len(bow_skills)}] = '+str(bow_skills).replace(' ', '')+';\n'
 text+=f'pub const BOW_WEAPONS: [i32; {len(bow_weapons)}] = '+str(bow_weapons).replace(' ', '')+';\n'

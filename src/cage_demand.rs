@@ -16,8 +16,20 @@ thread_local!{static CONTEXT:Cell<usize>=const{Cell::new(0)};}
 struct Record{context:usize,map:u32,index:i32,npc:i32,requested:bool,reported:bool}
 fn records()->&'static Mutex<HashMap<usize,Record>>{RECORDS.get_or_init(Default::default)}
 fn cage_map(map:u32)->bool{map>>24==46&&matches!((map>>16)&255,50|60|70|80)}
-fn cage_npc(npc:i32)->bool{(95300000..95300084).contains(&npc)}
-fn belongs(map:u32,handle:u64)->bool{(handle>>32)as u32==map&&(handle as u32&0xff000000)==0x11000000}
+fn cage_npc(npc:i32)->bool{crate::cage_catalog::npc(npc)}
+fn belongs(map:u32,handle:u64)->bool{(handle>>32)as u32==map&&((handle>>28)&15)==1}
+
+unsafe fn part_index(base:usize,handle:u64)->i32{
+ // The native handle contains an 8-bit map serial above the 20-bit index.
+ // Reading the low 24 bits leaks serial bits into the MSB lookup after reloads.
+ let decode:unsafe extern "system" fn(*const u64)->i32=std::mem::transmute(base+0x63ff10);
+ decode(&handle)
+}
+unsafe fn map_handle(base:usize,map:u32,index:i32)->u64{
+ if index<0||read_ptr(base+WORLD_RVA)==0{return u64::MAX;}
+ let encode:unsafe extern "system" fn(*mut u64,*const u32,i32)->*mut u64=std::mem::transmute(base+0x63fd90);
+ let mut handle=u64::MAX;encode(&mut handle,&map,index);handle
+}
 
 struct ContextScope(usize);
 impl ContextScope{fn enter(context:usize)->Self{Self(CONTEXT.with(|value|value.replace(context)))}}
@@ -68,7 +80,7 @@ unsafe extern "system" fn gate(world:usize,handle:u64)->u8{
  let data=read_ptr(context+0x58);
  if data==0{return result;}
  let base=BASE.load(Ordering::Acquire);
- let mut part=Part::enemy(base,data,read_ptr(context+0x68),(handle as u32&0xffffff)as i32);
+ let mut part=Part::enemy(base,data,read_ptr(context+0x68),part_index(base,handle));
  if part.present()&&cage_npc(part.npc()){0}else{result}
 }
 
@@ -112,7 +124,7 @@ unsafe fn reward_records(manager:usize,map:u32)->Vec<usize>{
   if read_i32(node+0x20)as u32!=map{continue;}
   let reward=read_ptr(node+0x28);if reward==0||read_i32(reward+0x18)as u32!=map{continue;}
   let group=read_i32(reward+0x20)as u32;
-  if (5937..5950).contains(&(group%10000)){found.push(reward);}
+  if crate::cage_catalog::reward_group(group%10000){found.push(reward);}
  }
  found
 }
@@ -144,9 +156,8 @@ unsafe fn restore_riding(record:Record,base:usize){
   if rider_index<0||mount_index<0||rider_index==mount_index||record.index!=rider_index&&record.index!=mount_index{continue;}
   let rider_npc=rider_part.npc();let mount_npc=mount_part.npc();
   if !cage_npc(rider_npc)||!cage_npc(mount_npc){continue;}
-  let handle=|part_index:i32|((record.map as u64)<<32)|0x11000000|part_index as u64;
-  let rider=resolve_map_actor(base,handle(rider_index));
-  let mount=resolve_map_actor(base,handle(mount_index));
+  let rider=resolve_map_actor(base,map_handle(base,record.map,rider_index));
+  let mount=resolve_map_actor(base,map_handle(base,record.map,mount_index));
   if rider==0||mount==0||crate::native_actor::npc_id(rider,base)!=Some(rider_npc)||crate::native_actor::npc_id(mount,base)!=Some(mount_npc){continue;}
   if read_ptr(rider+0x20)==0||read_ptr(mount+0x20)==0||read_ptr(rider+0x60)==0||read_ptr(mount+0x60)==0{continue;}
   let rider_modules=read_ptr(rider+0x1b8);let mount_modules=read_ptr(mount+0x1b8);
@@ -174,7 +185,7 @@ unsafe fn create_selected(generator:usize,record:Record,base:usize)->bool{
  let data=read_ptr(record.context+0x58);
  if data==0||ptr::read((record.context+0xe0)as*const u8)==0{return false;}
  let world=read_ptr(base+WORLD_RVA);if world==0{return false;}
- let handle=((record.map as u64)<<32)|0x11000000|record.index as u64;
+ let handle=map_handle(base,record.map,record.index);
  let existing=resolve_map_actor(base,handle);
  if existing!=0{return crate::native_actor::npc_id(existing,base)==Some(record.npc)&&bind(generator,existing);}
  let collection=world+0x9ba0;
@@ -252,6 +263,8 @@ unsafe extern "system" fn select(generator:usize,frame:usize){
 
 pub unsafe fn prepare(base:usize)->Result<Vec<(usize,hook::PreparedHook)>,String>{
  let calls:&[(usize,&[u8])]=&[
+  (0x63ff10,&[0x48,0x8b,0x11,0x48,0x8b,0xca,0x48,0xc1,0xe9,0x1c]),
+  (0x63fd90,&[0x48,0x89,0x5c,0x24,0x10,0x48,0x89,0x74,0x24,0x20]),
   (0x4ddc90,&[0x8b,0x81,0x10,0x02,0x00,0x00,0x89,0x02,0x48,0x8b,0xc2,0xc3]),
   (0x518f30,&[0x48,0x89,0x5c,0x24,0x18,0x56,0x48,0x83,0xec,0x20]),
   (0xe35620,&[0x48,0x89,0x4c,0x24,0x08,0x53,0x48,0x83,0xec,0x30]),
@@ -352,7 +365,12 @@ pub unsafe fn prepare(base:usize)->Result<Vec<(usize,hook::PreparedHook)>,String
   for npc in [48000010,95300084,95299999]{assert!(!cage_npc(npc));}
   assert!(belongs(0x2e321a03,0x2e321a0311000010));
   assert!(!belongs(0x2e321a03,0x2e321a0411000010));
-  assert!(!belongs(0x2e321a03,0x2e321a0310000010));
+  // Map serial is not the entity class; all serials share native class 1.
+  for serial in 0..=255u64{
+   assert!(belongs(0x2e321a03,0x2e321a0310000010|(serial<<20)));
+  }
+  assert!(!belongs(0x2e321a03,0x2e321a0321200010));
+  assert!(!belongs(0x2e321a03,u64::MAX));
  }
  #[test]fn nested_creation_context_restores_parent(){
   assert_eq!(CONTEXT.with(Cell::get),0);

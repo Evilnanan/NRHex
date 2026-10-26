@@ -2,8 +2,8 @@
 from pathlib import Path
 import csv,collections,json,math
 root=Path(__file__).resolve().parents[1]
-source=root/'dist/mod/natives/亮出你的剑射程 - 副本.csv'
-original=root/'dist/mod/natives/亮出你的剑射程.csv'
+source=root/'dist/natives/亮出你的剑射程 - 副本.csv'
+original=root/'dist/natives/亮出你的剑射程.csv'
 def read(p):
  with p.open(encoding='utf-8-sig',newline='') as f:
   reader=csv.DictReader(f);return reader.fieldnames,list(reader)

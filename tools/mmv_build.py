@@ -16,7 +16,7 @@ import tomllib
 
 from mmv_hks import audit as audit_hks
 from mmv_hks_stage import stage as stage_hks
-from mmv_package import build as package
+from mmv_package import build as package, source_profiles
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / 'compat/mmv/target.json'
@@ -52,7 +52,7 @@ def inventory(mmv: Path) -> dict:
         folder = mmv / name
         if not folder.is_dir() or folder.is_symlink() or folder.is_junction():
             raise ValueError(f'Missing or linked MMV input directory: {folder}')
-    profiles = sorted(mmv.glob('*.me3'))
+    profiles = source_profiles(mmv)
     if not profiles:
         raise ValueError('MMV profile is missing')
     paths = [*files_under(mmv / 'mod'), *files_under(mmv / 'dll'), *profiles]
@@ -211,6 +211,26 @@ def main(argv=None) -> int:
             report[name + 'Adapter'] = result
             entries = [result] if name == 'tae' else result['files']
             report['partialPreview']['files'].update({('map/mapstudio/' if name == 'maps' else '') + f['file']: f['sha256'] for f in entries})
+        print('Adding reviewed MMV field bosses to the demand-created cage pool...', flush=True)
+        with (REPORTS / 'cages.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--mmv-stage-cages', str(mmv)], cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+        cages = json.loads((REPORTS / 'staged/cages-validation.json').read_text(encoding='utf8'))
+        report['cageAdapter'] = cages
+        report['partialPreview']['files'].update(cages['files'])
+        print('Rebasing spirit summons on MMV NPCs and resolving boss HUD bindings...', flush=True)
+        with (REPORTS / 'spirit-catalog.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--spirit-target-export', str(REPORTS / 'staged'), str(mmv)], cwd=ROOT,
+                           stdout=log, stderr=subprocess.STDOUT, check=True)
+            subprocess.run([sys.executable, str(ROOT / 'tools/build_mmv_spirit.py'), '--overlay', str(REPORTS / 'staged')],
+                           cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--spirit-target-apply', str(REPORTS / 'staged'), str(REPORTS / 'staged/spirit-plan.json')],
+                           cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+        report['spiritAdapter'] = json.loads((REPORTS / 'staged/spirit-validation.json').read_text(encoding='utf8'))
+        report['partialPreview']['files']['regulation.bin'] = digest(REPORTS / 'staged/mod/regulation.bin')
+
         if set(report['partialPreview']['files']) != set(before):
             raise ValueError('Adapters do not cover exactly the current shared resource set; review added/removed files')
         report['partialPreview'].update(stage='merged-resources', releaseReady=False)
@@ -232,9 +252,27 @@ def main(argv=None) -> int:
             subprocess.run([sys.executable, str(ROOT / 'tools/build_mmv_echo.py'), '--overlay', str(REPORTS / 'staged')],
                            cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
         report['echoAdapter'] = json.loads((REPORTS / 'staged/echo-validation.json').read_text(encoding='utf8'))
+        with (REPORTS / 'archmage-catalog.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--archmage-target-export', str(REPORTS / 'staged')], cwd=ROOT,
+                           stdout=log, stderr=subprocess.STDOUT, check=True)
+            subprocess.run([sys.executable, str(ROOT / 'tools/build_mmv_archmage.py'), '--overlay', str(REPORTS / 'staged')],
+                           cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+        report['archmageAdapter'] = json.loads((REPORTS / 'staged/archmage-validation.json').read_text(encoding='utf8'))
+        with (REPORTS / 'arts-catalog.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--arts-target-export', str(REPORTS / 'staged')], cwd=ROOT,
+                           stdout=log, stderr=subprocess.STDOUT, check=True)
+            subprocess.run([sys.executable, str(ROOT / 'tools/build_mmv_arts.py'), '--overlay', str(REPORTS / 'staged')],
+                           cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+        report['artsAdapter'] = json.loads((REPORTS / 'staged/arts-validation.json').read_text(encoding='utf8'))
         runtime_paths = [*ROOT.joinpath('src').rglob('*.rs'), ROOT / 'build.rs', ROOT / 'Cargo.toml', ROOT / 'Cargo.lock',
                          ROOT / 'tools/build_sword_auto.py', ROOT / 'tools/sword_range_estimate.py', REPORTS / 'staged/sword_map.rs',
-                         ROOT / 'tools/build_mmv_echo.py', ROOT / 'compat/mmv/echo-spells.json', REPORTS / 'staged/echo_cast_data.rs']
+                         ROOT / 'tools/build_mmv_echo.py', ROOT / 'compat/mmv/echo-spells.json', REPORTS / 'staged/echo_cast_data.rs',
+                         ROOT / 'tools/build_mmv_archmage.py', REPORTS / 'staged/archmage_data.rs',
+                         ROOT / 'tools/build_mmv_arts.py', ROOT / 'compat/mmv/arts.json', REPORTS / 'staged/arts_data.rs',
+                         ROOT / 'tools/build_mmv_spirit.py', ROOT / 'compat/mmv/spirit-npc-ids.json', REPORTS / 'staged/spirit_target_data.rs',
+                         ROOT / 'compat/mmv/cage-encounters.json', REPORTS / 'staged/cage_data.rs']
         runtime_inputs = {str(p.relative_to(ROOT)): digest(p) for p in runtime_paths}
         print('Compiling shared runtime with MMV-generated attack data...', flush=True)
         variants = ['dist', 'community'] if args.variant == 'both' else [args.variant]
@@ -245,7 +283,11 @@ def main(argv=None) -> int:
                                 '--target-dir', str(REPORTS / 'targets' / variant)], cwd=ROOT,
                                env={**os.environ, 'NRHEX_PARRY_DATA': str(REPORTS / 'staged/parry_data.rs'),
                                     'NRHEX_SWORD_DATA': str(REPORTS / 'staged/sword_map.rs'),
-                                    'NRHEX_ECHO_DATA': str(REPORTS / 'staged/echo_cast_data.rs')},
+                                    'NRHEX_ECHO_DATA': str(REPORTS / 'staged/echo_cast_data.rs'),
+                                    'NRHEX_ARCHMAGE_DATA': str(REPORTS / 'staged/archmage_data.rs'),
+                                    'NRHEX_ARTS_DATA': str(REPORTS / 'staged/arts_data.rs'),
+                                    'NRHEX_SPIRIT_DATA': str(REPORTS / 'staged/spirit_target_data.rs'),
+                                    'NRHEX_CAGE_DATA': str(REPORTS / 'staged/cage_data.rs')},
                                stdout=log, stderr=subprocess.STDOUT, check=True)
         if runtime_inputs != {str(p.relative_to(ROOT)): digest(p) for p in runtime_paths} or before != shared_inputs():
             raise ValueError('NRHex inputs changed during compilation; rerun before packaging')

@@ -67,6 +67,7 @@ mod spirit;
 mod spirit_kills;
 mod spirit_placement;
 mod spirit_npcs;
+mod spirit_target_data { include!(concat!(env!("OUT_DIR"), "/spirit_target_data.rs")); }
 mod spirit_bosses;
 mod spirit_cage_models;
 mod native_actor;
@@ -76,9 +77,9 @@ mod balloon_team;
 mod spirit_runtime;
 use native_actor::npc_id;
 use actor_lifecycle::{on_effect,death_detour};
-mod arts_data;
+mod arts_data { include!(concat!(env!("OUT_DIR"), "/arts_data.rs")); }
 mod archmage;
-mod archmage_data;
+mod archmage_data { include!(concat!(env!("OUT_DIR"), "/archmage_data.rs")); }
 mod archmage_runtime;
 mod archmage_cost;
 mod slingshot;
@@ -108,6 +109,7 @@ mod sword;
 mod sword_map { include!(concat!(env!("OUT_DIR"), "/sword_map.rs")); }
 mod sword_projectile;
 mod cage_mutation;
+mod cage_catalog;
 mod cage_trace;
 use reward_choices::HexSet;
 
@@ -1281,7 +1283,7 @@ unsafe fn arts_behavior_call(original:ArtsBehaviorFn,player:usize,judge:i32,sour
  // Preserve the native five-argument call and its side effects, including miss
  // and common-fallback results. Change only the resulting PC behavior row ID.
  let native=original(player,judge,source,flags,extra);
- if !ACTIVE.load(Ordering::Acquire)||!(3000..4000).contains(&judge){return native;}
+ if !ACTIVE.load(Ordering::Acquire)||!arts::behavior_judge(judge){return native;}
  let base=BASE.load(Ordering::Acquire);
  if player==0||!has_effect(player,arts::OWNER,base){return native;}
  let Some(w)=arts_source_weapon(player,source,base) else{return native;};
@@ -2220,7 +2222,7 @@ unsafe fn promote_cage_mutation(actor:usize,base:usize,notified:bool){
  let vtable=read_ptr(actor);if vtable==0||read_ptr(vtable+0x1a0)!=base+0x4d1ea0{return;}
  let reference=read_ptr(actor+0x5b8);if reference==0{return;}
  let npc=read_i32(reference+8);
- if !(cage_mutation::FIRST_NPC..cage_mutation::FIRST_NPC+cage_mutation::NPC_COUNT).contains(&npc){return;}
+ if !cage_catalog::npc(npc){return;}
  if !notified{cage_trace::observe(actor,npc,base);}
  let location=(actor+0x1fb) as *mut u8;
  let flags=ptr::read(location);
@@ -2514,7 +2516,7 @@ mod tests {
   for setting in ["VirtualKey=0","VirtualKey=255","VirtualKey=garbage","CooldownMs=999","RequireControl=invalid","Unknown=true"]{assert!(Config::read(setting).is_err(),"{setting}");}
  }
  #[test] fn random_reward_key_keeps_current_settings_and_ignores_retired_bindings(){
-  for c in [Config::read("").unwrap(),Config::read(include_str!("../dist/mod/natives/NRHex.ini")).unwrap()]{assert_eq!((c.key,c.ctrl,c.cooldown),(0x75,true,3000));}
+  for c in [Config::read("").unwrap(),Config::read(include_str!("../dist/natives/NRHex.ini")).unwrap()]{assert_eq!((c.key,c.ctrl,c.cooldown),(0x75,true,3000));}
   let c=Config::read("VirtualKey=0x70\nRequireControl=false\nCooldownMs=4000").unwrap();assert_eq!((c.key,c.ctrl,c.cooldown),(0x70,false,4000));
   for retired in ["TestVirtualKey","NewHexVirtualKey","ChantVirtualKey","AngelChantVirtualKey","GazeVirtualKey","ContractVirtualKey"]{
    for value in ["0x75","0x76","255","ignored"]{let c=Config::read(&format!("{retired}={value}")).unwrap();assert_eq!((c.key,c.ctrl,c.cooldown),(0x75,true,3000));}

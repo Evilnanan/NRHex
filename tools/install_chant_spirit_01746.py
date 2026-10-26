@@ -14,7 +14,7 @@ assert sha(work/'regulation.bin')==p['outputSha256']
 assert sha(dist/'mod/regulation.bin') in [p['inputSha256'],p['outputSha256']]
 t=json.loads((work/'texts/validation.json').read_text())
 assert sha(root/'docs/hexes.md')==t['sourceSha256']
-files=[(work/'NRHex.dll',dist/'mod/natives/NRHex.dll'),(work/'regulation.bin',dist/'mod/regulation.bin'),(work/'README.md',dist/'README.md')]
+files=[(work/'NRHex.dll',dist/'natives/NRHex.dll'),(work/'regulation.bin',dist/'mod/regulation.bin'),(work/'README.md',dist/'README.md')]
 for row in t['reports']:
  a=work/'texts'/row['language']/row['file'];b=dist/'mod/msg'/row['language']/row['file']
  assert sha(a)==row['outputSha256'] and sha(b) in [row['inputSha256'],row['outputSha256']]

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "c6220-twist-bones",
+  "description": "Fire Demon behavior references bones outside its 124-bone skeleton.",
+  "sourceFiles": {
+    "chr/c6220.behbnd.dcx": "02b8f1edde0c2462cbee7e4c47e6174930b468e07e2b596c04970619c6894365",
+    "chr/c6220.anibnd.dcx": "f3f6e31c19aaef37662106b6459986c0216d3da9f1120dc2d22b7a440d1d39d6"
+  },
+  "behaviorMemberId": 7000500,
+  "behaviorSha256": "a24fbdb1cb9a4a018d2ee55e9b724267f4a677265ccf9d1e1d05182015a24380",
+  "skeletonMemberId": 1000000,
+  "skeletonSha256": "127e9e6a856dea6d1867942d8f85d77338a7d87011f84714dd54f964c94bd660",
+  "boneCount": 124,
+  "patches": [
+    {
+      "offset": 2804,
+      "before": "7c00",
+      "after": "5a00",
+      "field": "startBoneIndex",
+      "node": "Fall_Twist_Neck"
+    },
+    {
+      "offset": 2806,
+      "before": "7c00",
+      "after": "5a00",
+      "field": "endBoneIndex",
+      "node": "Fall_Twist_Neck"
+    },
+    {
+      "offset": 2996,
+      "before": "8200",
+      "after": "5b00",
+      "field": "startBoneIndex",
+      "node": "Fall_Twist_Head"
+    },
+    {
+      "offset": 2998,
+      "before": "8200",
+      "after": "5b00",
+      "field": "endBoneIndex",
+      "node": "Fall_Twist_Head"
+    }
+  ]
+}

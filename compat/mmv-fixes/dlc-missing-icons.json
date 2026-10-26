@@ -1,0 +1,29 @@
+{
+  "id": "dlc-missing-icons",
+  "sourceFiles": {
+    "menu/21_common_dlc01_h.sblytbnd.dcx": "13130d1c404e3115b50ca955b7e2b50bded47edd3c8e48829dc521136707eb12",
+    "menu/21_common_dlc01_h.tpf.dcx": "18b2e3a1ea70254bedb56b76bac07f573668e81e2534e4017df900e3a4bc71c7"
+  },
+  "originalFiles": {
+    "menu/21_common_dlc01_h.sblytbnd.dcx": "e46224c37f7e2c526ffb6accc2db3f212b5dd4c62cc7764e0350fccbe8288848",
+    "menu/21_common_dlc01_h.tpf.dcx": "71c6d5f2c54dda5b2117ed41693ab642e9a92c0b9087b70c784dc2c91cd9d53f"
+  },
+  "missing": {
+    "SB_ItemIcon_DLC01_0": [
+      "MENU_ItemIcon_21297.png"
+    ],
+    "SB_StatusIcon_DLC01_0": [
+      "MENU_StatusIcon_20520.png",
+      "MENU_StatusIcon_20521.png",
+      "MENU_StatusIcon_20522.png",
+      "MENU_StatusIcon_20523.png",
+      "MENU_StatusIcon_20524.png",
+      "MENU_StatusIcon_20525.png",
+      "MENU_StatusIcon_20526.png",
+      "MENU_StatusIcon_20527.png",
+      "MENU_StatusIcon_20528.png",
+      "MENU_StatusIcon_20529.png",
+      "MENU_StatusIcon_22297.png"
+    ]
+  }
+}

@@ -66,7 +66,7 @@ static class CageEncounters {
   // silently keeping a cached bar associated with unloaded actors.
   foreach(var (m,i) in g.members.Where(m=>m.combat).Select((m,i)=>(m,i))){int child=i+6;e.Instructions.AddRange([Flag(child,Dead(p,m),false),Flag(child,Shown(p,m),false),I(0,0,(sbyte)-12,(byte)1,(sbyte)child)]);}
  }
- static EMEVD.Event Hud(uint p,Group g){
+ public static EMEVD.Event Hud(uint p,Group g){
   if(g.bars.Length==1)return SharedHud(p,g);
   var e=new EMEVD.Event(p+9800+(uint)g.choice,EMEVD.Event.RestBehaviorType.Restart);e.Instructions.Add(I(2000,2,(byte)0));
   Conditions(e,p,g);e.Instructions.Add(Wait(1));
@@ -99,11 +99,11 @@ static class CageEncounters {
   e.Instructions[skip]=I(1000,7,(byte)(e.Instructions.Count-skip-1),(byte)1,(sbyte)5);
   e.Instructions.AddRange([I(2004,5,actor,(byte)1),Local(shown,true),Flag(-2,choice,false),I(4,7,(sbyte)-2,actor,(byte)0,(sbyte)0,1f),Wait(-2),Local(shown,false),I(1001,1,1),Restart()]);if(stableSnapshot){Cages.StabilizeBirth(e);Cages.LocalGeneration(e,actor,p+3800+(uint)m.index,m.combat?Dead(p,m):null);CageUsage.Intro(e);CageCoop.Birth(e,actor);if(centralFog)CagePresentation.CentralFog(e,p,g,m);}return e;
  }
- static EMEVD.Event Death(uint p,Group g,Member m){
+ public static EMEVD.Event Death(uint p,Group g,Member m){
   var e=new EMEVD.Event(p+9100+(uint)m.index,EMEVD.Event.RestBehaviorType.Restart);
   e.Instructions.AddRange([I(2000,2,(byte)0),Cages.HostOnly(),Flag(1,p+7500+(uint)g.choice,true),Flag(1,p+7404,true),Wait(1),Hp(0,Actor(p,m),5,0),Shared(Dead(p,m),true),Flag(0,p+7500+(uint)g.choice,false),I(1001,1,1),Restart()]);return e;
  }
- static EMEVD.Event Battle(uint p,Group g,Dictionary<string,PARAM> tables){
+ public static EMEVD.Event Battle(uint p,Group g,Dictionary<string,PARAM> tables,PARAM.Row? firstNpc=null){
   uint choice=p+7500+(uint)g.choice,cooling=p+7550+(uint)g.choice,red=p+7650+(uint)g.choice,decided=p+7700+(uint)g.choice;
   var e=new EMEVD.Event(p+9710+(uint)g.choice,EMEVD.Event.RestBehaviorType.Restart);e.Instructions.Add(I(2000,2,(byte)0));
   // Per-peer startup loading is owned by Birth; battle begins with host authority.
@@ -116,7 +116,7 @@ static class CageEncounters {
   // Rearm only AFTER every newly generated actor is alive, so old corpses
   // cannot produce a second reward during the cleanup/next-spawn gap.
   e.Instructions.Add(Shared(RewardFlag(p,g),false));foreach(var m in g.members.Where(m=>m.combat))e.Instructions.Add(Shared(Dead(p,m),false));Cages.Difficulty(e,Target(p,g),g.members[0].entity);
-  var first=g.members.First(m=>m.combat);Cages.Mutate(e,Actor(p,first),tables["NpcParam"].Rows.Single(r=>r.ID==95300000+first.index),tables,Cages.MutationMaps(tables),red,decided);
+  var first=g.members.First(m=>m.combat);Cages.Mutate(e,Actor(p,first),firstNpc??tables["NpcParam"].Rows.Single(r=>r.ID==95300000+first.index),tables,Cages.MutationMaps(tables),red,decided);
   e.Instructions.Add(I(1003,1,(byte)(g.members.Length-1),(byte)0,(byte)0,red));
   foreach(var m in g.members.Where(m=>m!=first))e.Instructions.Add(I(2004,8,Actor(p,m),Cages.Mutation));
   foreach(var m in g.members)e.Instructions.AddRange([I(2004,1,Actor(p,m),(byte)0),I(2004,34,Actor(p,m),(byte)1,(sbyte)0)]);

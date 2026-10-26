@@ -7,6 +7,19 @@ static class Archmage {
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row row,string field,object value){row[field].Value=Convert.ChangeType(value,row[field].Value.GetType());}
  static string Hash(string p)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(p)));
+ public static void ExportTarget(string root,string overlay,Func<string,Memory<byte>,PARAM> parse){
+  var path=Path.Combine(Path.GetFullPath(overlay),"mod/regulation.bin");var hash=Hash(path);
+  var binder=SFUtil.DecryptNightreignRegulation(path);
+  var tables=new Dictionary<string,object>();
+  foreach(var name in new[]{"Magic","MagicTableParam"}){
+   var fields=name=="Magic"?new[]{"ezStateBehaviorType","isEnchant","isShieldEnchant"}:new[]{"magicId","chanceWeight"};
+   tables[name]=parse(name,binder.Files.Single(f=>f.Name.Replace('\\','/').Split('/').Last()==name+".param").Bytes).Rows.Select(r=>new{r.ID,fields=fields.ToDictionary(k=>k,k=>r[k].Value)}).ToArray();
+  }
+  Check(Hash(path)==hash,"Archmage input changed during export");
+  var output=Path.Combine(root,"work/compat/mmv/archmage-parameters.json");Directory.CreateDirectory(Path.GetDirectoryName(output)!);
+  File.WriteAllText(output,JsonSerializer.Serialize(new{regulationPath=path,regulationSha256=hash,tables}));
+  Console.WriteLine("Exported target Archmage parameters: "+output);
+ }
  public static void Markers(Func<int,int,PARAM.Row> clone){
   foreach(int id in Tokens){
    var row=clone(8000000,id);Set(row,"maxHpRate",1f);Set(row,"saveCategory",-1);Set(row,"spCategory",20);

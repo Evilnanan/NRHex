@@ -7,7 +7,7 @@ digest=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 command="$g=Get-Process nightreign -ErrorAction Stop; @{pid=$g.Id;modules=@($g.Modules | Where-Object {$_.ModuleName -in @('nightreign.exe','NRHex.dll','derandomizer.dll','StormControl_no_gui.dll','DeepUnlocker.dll')} | ForEach-Object {@{name=$_.ModuleName;base=$_.BaseAddress.ToInt64();path=$_.FileName}})} | ConvertTo-Json -Depth 4"
 info=json.loads(subprocess.run(['powershell','-NoProfile','-Command',command],capture_output=True,text=True,check=True).stdout)
 modules={m['name']:m for m in info['modules']};assert len(modules)==5
-dll=root/'dist/mod/natives/NRHex.dll';assert digest(dll)==json.loads((root/'dist/reports/build-validation.json').read_text())['installedDllSha256']
+dll=root/'dist/natives/NRHex.dll';assert digest(dll)==json.loads((root/'dist/reports/build-validation.json').read_text())['installedDllSha256']
 pe=pefile.PE(str(dll));exports={s.name:s.address for s in pe.DIRECTORY_ENTRY_EXPORT.symbols}
 k=c.WinDLL('kernel32');k.OpenProcess.argtypes=[c.c_uint,c.c_int,c.c_uint];k.OpenProcess.restype=c.c_void_p
 k.ReadProcessMemory.argtypes=[c.c_void_p,c.c_void_p,c.c_void_p,c.c_size_t,c.POINTER(c.c_size_t)];k.CloseHandle.argtypes=[c.c_void_p]

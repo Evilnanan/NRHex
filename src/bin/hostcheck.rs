@@ -5,7 +5,7 @@ fn main(){
  let root=PathBuf::from(env!("CARGO_MANIFEST_DIR"));
  let dir=root.join("research/hostcheck");fs::create_dir_all(&dir).unwrap();
  fs::copy(root.join("target/release/NRHex.dll"),dir.join("NRHex.dll")).unwrap();
- fs::copy(root.join("dist/mod/natives/NRHex.ini"),dir.join("NRHex.ini")).unwrap();
+ fs::copy(root.join("dist/natives/NRHex.ini"),dir.join("NRHex.ini")).unwrap();
  fs::write(dir.join("NRHex.log"),"").unwrap();
  let dll=unsafe{win::LoadLibraryW(win::wide(&dir.join("NRHex.dll").to_string_lossy()).as_ptr())};
  assert!(!dll.is_null(),"DLL failed to load");

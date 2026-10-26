@@ -3,12 +3,18 @@ $ErrorActionPreference = 'Stop'
 $taskOldParry = $env:NRHEX_PARRY_DATA
 $taskOldSword = $env:NRHEX_SWORD_DATA
 $taskOldEcho = $env:NRHEX_ECHO_DATA
+$taskOldArchmage = $env:NRHEX_ARCHMAGE_DATA
+$taskOldSpirit = $env:NRHEX_SPIRIT_DATA
+$taskOldArts = $env:NRHEX_ARTS_DATA
 Push-Location $PSScriptRoot
 try {
+    $env:NRHEX_SPIRIT_DATA = Join-Path $PSScriptRoot 'src/spirit_target_data.rs'
     # Do not inherit MMV tables from another build.
     $env:NRHEX_PARRY_DATA = Join-Path $PSScriptRoot 'src/parry_data.rs'
     $env:NRHEX_SWORD_DATA = Join-Path $PSScriptRoot 'src/sword_map.rs'
     $env:NRHEX_ECHO_DATA = Join-Path $PSScriptRoot 'src/echo_cast_data.rs'
+    $env:NRHEX_ARCHMAGE_DATA = Join-Path $PSScriptRoot 'src/archmage_data.rs'
+    $env:NRHEX_ARTS_DATA = Join-Path $PSScriptRoot 'src/arts_data.rs'
     & ./build-texts.ps1 -Check
     if ($LASTEXITCODE -ne 0) { throw 'Release texts are out of date.' }
     cargo build --release --lib --no-default-features --features cage-demand --target-dir "$PSScriptRoot/.work/no-hotkeys-target"
@@ -16,8 +22,11 @@ try {
     python -X utf8 tools/package_release.py --output-directory $OutputDirectory
     if ($LASTEXITCODE -ne 0) { throw 'Release packaging failed.' }
 } finally {
+    $env:NRHEX_SPIRIT_DATA = $taskOldSpirit
     $env:NRHEX_PARRY_DATA = $taskOldParry
     $env:NRHEX_SWORD_DATA = $taskOldSword
     $env:NRHEX_ECHO_DATA = $taskOldEcho
+    $env:NRHEX_ARCHMAGE_DATA = $taskOldArchmage
+    $env:NRHEX_ARTS_DATA = $taskOldArts
     Pop-Location
 }

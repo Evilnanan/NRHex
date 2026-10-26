@@ -26,7 +26,7 @@ for entry in texts['reports']:
  assert entry['unrelatedEntriesAndMembersUnchanged']
  rel=Path(entry['language'])/entry['file']
  add((Path('mod/msg')/rel).as_posix(),stage/'texts'/rel,entry['inputSha256'],entry['outputSha256'])
-add('mod/natives/NRHex.dll',root/'target/release/NRHex.dll')
+add('natives/NRHex.dll',root/'target/release/NRHex.dll')
 process=subprocess.run(['powershell','-NoProfile','-Command','Get-Process nightreign -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id'],capture_output=True,text=True)
 assert not process.stdout.strip(),'Close the running game before installation'
 baseline={p.relative_to(dist).as_posix():sha(p) for p in (dist/'mod').rglob('*') if p.is_file() and p.suffix!='.log'}

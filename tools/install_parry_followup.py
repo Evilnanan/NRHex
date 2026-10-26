@@ -8,7 +8,7 @@ def read(p):return json.loads(p.read_text(encoding='utf8'))
 params=read(stage/'parameters.json');actions=read(stage/'actions.json');native=read(root/'.work/parry/native-validation.json')
 assert params['originalRowsUnchanged'] and actions['originalEventsPreserved'] and native['finalGuardNotificationVerified']
 assert sum(map(len,actions['targets'].values()))==57
-updates={'mod/regulation.bin':stage/'regulation.bin','mod/chr/c0000.anibnd.dcx':stage/'c0000.anibnd.dcx','mod/natives/NRHex.dll':root/'target/release/NRHex.dll'}
+updates={'mod/regulation.bin':stage/'regulation.bin','mod/chr/c0000.anibnd.dcx':stage/'c0000.anibnd.dcx','natives/NRHex.dll':root/'target/release/NRHex.dll'}
 for rel,report in [('mod/regulation.bin',params),('mod/chr/c0000.anibnd.dcx',actions)]:
  assert sha(distribution_file(dist,rel))==report['inputSha256'] and sha(updates[rel])==report['outputSha256']
 proc=subprocess.run(['powershell','-NoProfile','-Command','Get-Process nightreign -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id'],capture_output=True,text=True)

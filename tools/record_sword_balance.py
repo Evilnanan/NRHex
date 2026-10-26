@@ -83,11 +83,11 @@ for report in texts:
 before = json.loads(baseline.read_text())
 after = assets()
 changed = sorted(p for p in before.keys() | after.keys() if before.get(p) != after.get(p))
-assert set(changed) == {'mod/natives/NRHex.dll', 'mod/msg/zhocn/item_dlc01.msgbnd.dcx', 'mod/msg/engus/item_dlc01.msgbnd.dcx'}, changed
+assert set(changed) == {'natives/NRHex.dll', 'mod/msg/zhocn/item_dlc01.msgbnd.dcx', 'mod/msg/engus/item_dlc01.msgbnd.dcx'}, changed
 assert after['source:data/balance/sword.csv'] == before['source:data/balance/sword.csv']
 assert after['mod/regulation.bin'] == before['mod/regulation.bin']
 dll_hash = digest(ROOT / 'target/release/NRHex.dll')
-assert dll_hash == after['mod/natives/NRHex.dll']
+assert dll_hash == after['natives/NRHex.dll']
 version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
 test_count = int(sys.argv[sys.argv.index('--rust-tests') + 1])
 checks = ['sword-balance-validation.json', 'drinking-hud-validation.json', 'escape-vfx-validation.json',

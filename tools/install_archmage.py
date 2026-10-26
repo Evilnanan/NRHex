@@ -30,8 +30,8 @@ for entry in texts['reports']:
   relative=Path(entry['language'])/entry['file']
   add((Path('mod/msg')/relative).as_posix(),work/'staged/texts'/relative,entry['inputSha256'],entry['outputSha256'])
 assert (root/'src/hex_pool.rs').read_bytes()==(work/'staged/hex_pool.rs').read_bytes()
-add('mod/natives/NRHex.dll',root/'target/release/NRHex.dll')
-assert sha(root/'target/release/NRHex.dll')!=sha(dist/'mod/natives/NRHex.dll')
+add('natives/NRHex.dll',root/'target/release/NRHex.dll')
+assert sha(root/'target/release/NRHex.dll')!=sha(dist/'natives/NRHex.dll')
 if args.check:
  print(f'PASS: {version} staged inputs, scope and all {len(updates)} installation files verified')
  raise SystemExit(0)

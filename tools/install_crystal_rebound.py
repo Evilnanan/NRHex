@@ -13,7 +13,7 @@ assert digest(root/'docs/hexes.md')==texts['sourceSha256'].lower()
 assert digest(root/'data/balance/sword.csv')==digest(work/'before/data/balance/sword.csv')
 for name,expected in baseline.items():
  if name not in ['README.md','runtime-validation.json']:assert digest(distribution_file(dist,name))==expected,('package changed',name)
-assets={'mod/natives/NRHex.dll':root/'target/release/NRHex.dll'}
+assets={'natives/NRHex.dll':root/'target/release/NRHex.dll'}
 for report in texts['reports']:
  name='mod/msg/zhocn/'+report['file'];source=work/'texts'/report['file']
  assert report['inputSha256'].lower()==baseline[name] and digest(source)==report['outputSha256'].lower()

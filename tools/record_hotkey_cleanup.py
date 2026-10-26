@@ -35,7 +35,7 @@ args = parser.parse_args()
 work = ROOT / '.work/hotkeys'
 work.mkdir(parents=True, exist_ok=True)
 baseline = work / 'package-baseline.json'
-ini_path = ROOT / 'dist/mod/natives/NRHex.ini'
+ini_path = ROOT / 'dist/natives/NRHex.ini'
 csv_path = ROOT / 'data/balance/sword.csv'
 if args.before:
     baseline.write_text(json.dumps(dict(assets=assets(), csvSha256=digest(csv_path),
@@ -47,7 +47,7 @@ before = json.loads(baseline.read_text())
 after = assets()
 changed = sorted(p for p in before['assets'].keys() | after.keys()
                  if before['assets'].get(p) != after.get(p))
-allowed = {'mod/natives/NRHex.dll', 'mod/natives/NRHex.ini'}
+allowed = {'natives/NRHex.dll', 'natives/NRHex.ini'}
 if args.allow_text_updates:
     allowed.update(f'mod/msg/zhocn/{kind}_dlc01.msgbnd.dcx' for kind in ['item', 'menu'])
 assert set(changed) <= allowed, changed
@@ -72,8 +72,8 @@ for guard in ['if !pressed{return;}', 'cfg.cooldown', 'cfg.ctrl', 'GetForeground
     assert guard in update, guard
 assert '#[cfg(feature="test-hotkeys")]\nunsafe fn update_test_hotkeys' in source
 version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
-dll = args.dll or ROOT / 'dist/mod/natives/NRHex.dll'
-assert digest(dll) == after['mod/natives/NRHex.dll']
+dll = args.dll or ROOT / 'dist/natives/NRHex.dll'
+assert digest(dll) == after['natives/NRHex.dll']
 assert args.rust_tests is not None and args.rust_tests > 0
 report = dict(version=version, activeHotkeys={'Ctrl+F6': 'random reward'},
               removedDedicatedKeySettings=sorted(old.keys() - current.keys()),
@@ -84,7 +84,7 @@ report = dict(version=version, activeHotkeys={'Ctrl+F6': 'random reward'},
               changedAssets=changed, dllSha256=digest(dll),
               sourceHashes={p: digest(ROOT / p) for p in [
                   'src/lib.rs', 'tools/record_hotkey_cleanup.py', 'tools/package_no_hotkeys.py',
-                  'dist/mod/natives/NRHex.ini']},
+                  'dist/natives/NRHex.ini']},
               gameplayVerified=False, multiplayerVerified=False)
 (ROOT / 'dist/reports/hotkey-cleanup-validation.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf8')
 print('PASS: only Ctrl+F6 remains; original spawn guards/settings retained; package changes limited to DLL/INI and explicitly allowed text updates.')

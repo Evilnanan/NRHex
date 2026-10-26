@@ -95,7 +95,13 @@ pub fn emitter_dummy(skill:i32,base:i32,behavior:i32,dummy:i32)->Option<i32>{
  if base/10000==family||behavior/1000!=300000+family{return None;}
  if dummy==10000+point||dummy==20000+point{Some(58)}else{None}
 }
+pub fn behavior_judge(judge:i32)->bool{
+ (3000..4000).contains(&judge)||crate::arts_data::MMV_JUDGES.binary_search(&judge).is_ok()
+}
 pub fn behavior(judge:i32,skill:i32)->Option<i32>{
+ if crate::arts_data::MMV_SKILLS.binary_search(&skill).is_ok(){
+  return crate::arts_data::MMV_BEHAVIORS.binary_search_by_key(&(skill,judge),|x|(x.0,x.1)).ok().map(|i|crate::arts_data::MMV_BEHAVIORS[i].2);
+ }
  if !(3000..4000).contains(&judge){return None;}
  let target=crate::arts_data::SKILL_VARIATIONS.binary_search_by_key(&skill,|x|x.0).ok().map(|i|crate::arts_data::SKILL_VARIATIONS[i].1)?;
  let id=300000000+target*1000+judge%1000;
@@ -105,6 +111,28 @@ pub fn behavior(judge:i32,skill:i32)->Option<i32>{
  use super::*;
  fn w(handle:u32,original:i32)->Weapon{Weapon{handle,original,base:2000000}}
  fn state()->Arts{let mut a=Arts::default();a.synchronize(1,true,true);a}
+ #[test]fn target_weapon_catalogue_and_reviewed_behavior_maps_preserve_boundaries(){
+  assert!(crate::arts_data::DEFAULTS.windows(2).all(|w|w[0].0<w[1].0));
+  for &(base,id) in &crate::arts_data::DEFAULTS{assert_eq!(original(base,-1),Some(id));assert_eq!(original(base,12345),Some(12345));}
+  for &base in &crate::arts_data::BOW_WEAPONS{assert_eq!(pool(base),&crate::arts_data::BOW_POOL);}
+  assert!(crate::arts_data::MMV_BEHAVIORS.windows(2).all(|w|(w[0].0,w[0].1)<(w[1].0,w[1].1)));
+  for &(skill,judge,row) in crate::arts_data::MMV_BEHAVIORS{
+   assert!(behavior_judge(judge));assert_eq!(behavior(judge,skill),Some(row));
+   assert!(crate::arts_data::BEHAVIORS.binary_search(&row).is_ok());
+   assert_eq!(behavior(judge,999999),None);
+  }
+  for &skill in crate::arts_data::MMV_SKILLS{
+   assert!(pool(2000000).contains(&skill));assert!(!pool(41000000).contains(&skill));
+   assert_eq!(behavior(0,skill),None);assert_eq!(behavior(999999,skill),None);
+   let weapon=w(123,100);let mut a=state();a.notify(Some(weapon),true);a.tick();a.tick();assert_eq!(a.tick(),Some(weapon));
+   a.reforge(weapon,skill);assert!(a.network_pending());assert_eq!(a.selected(weapon),Some(skill));
+   let mut data=[0x67;0x48];data[..4].copy_from_slice(&weapon.base.to_le_bytes());let mut expected=data;
+   expected[4..8].copy_from_slice(&skill.to_le_bytes());snapshot(&mut data,weapon.base,skill);assert_eq!(data,expected);
+   a.dropped(99,weapon);assert!(a.picked_up(99,Weapon{handle:456,..weapon}));
+   a.synchronize(1,true,false);assert_eq!(a.selected(weapon),Some(skill));a.synchronize(2,true,true);assert_eq!(a.selected(weapon),None);
+  }
+  for judge in [-1,0,999,10000,999999]{assert!(!behavior_judge(judge));}
+ }
  #[test]fn elemental_projectile_arts_require_the_weapons_matching_attack_component(){
   for (weapon,fire,magic) in [(2000000,false,false),(3140000,true,false),(12200000,true,false),(13020000,false,true),(2150000,false,true),(-1,false,false)]{
    assert_eq!(roll_allowed(weapon,1014),fire);
@@ -147,7 +175,7 @@ pub fn behavior(judge:i32,skill:i32)->Option<i32>{
  #[test]fn bows_and_other_weapons_have_disjoint_usable_pools(){
   assert_eq!(pool(41000000),&[400,401,402,404,405,406,1169]);
   assert_eq!(pool(42000000),pool(41000000));
-  let ordinary=pool(2000000);assert_eq!(ordinary.len(),175);
+  let ordinary=pool(2000000);assert_eq!(ordinary.len(),175+crate::arts_data::MMV_SKILLS.len());
   for id in [0,1,2,10,117,1007,9999,400,401,402,404,405,406,1169]{assert!(!ordinary.contains(&id));}
   for id in pool(41000000){assert!(!ordinary.contains(id));}
   assert!(ordinary.contains(&1001)&&ordinary.contains(&1002));

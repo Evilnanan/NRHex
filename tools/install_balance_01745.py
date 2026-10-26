@@ -17,7 +17,7 @@ assert sha(dist/'mod/regulation.bin') in [p['inputSha256'],p['outputSha256']]
 assert p['allLegacyRewardsExcludeRetired'] and len(p['hexes'])==18
 text_report=json.loads((stage/'texts/validation.json').read_text(encoding='utf8'))
 assert sha(root/'docs/hexes.md')==text_report['sourceSha256']
-files=[(root/'target/release/NRHex.dll',dist/'mod/natives/NRHex.dll'),(stage/'regulation.bin',dist/'mod/regulation.bin'),(stage/'README.md',dist/'README.md')]
+files=[(root/'target/release/NRHex.dll',dist/'natives/NRHex.dll'),(stage/'regulation.bin',dist/'mod/regulation.bin'),(stage/'README.md',dist/'README.md')]
 for row in text_report['reports']:
     source=stage/'texts'/row['language']/row['file'];target=dist/'mod/msg'/row['language']/row['file']
     assert sha(source)==row['outputSha256']

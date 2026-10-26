@@ -9,7 +9,7 @@ if '--counter-update' in sys.argv:
  texts=read(root/'.work/texts/validation.json');support=read(stage/'counter-parameter-validation.json')
  assert not subprocess.run(['powershell','-NoProfile','-Command','Get-Process nightreign -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id'],capture_output=True,text=True).stdout.strip(),'Close the game before replacing assets'
  for name,key in [('source','sourceSha256'),('englishSource','englishSourceSha256'),('statusSource','statusSourceSha256')]:assert sha(root/texts[name]).upper()==texts[key].upper()
- updates={'mod/natives/NRHex.dll':root/'target/release/NRHex.dll'}
+ updates={'natives/NRHex.dll':root/'target/release/NRHex.dll'}
  assert support['originalRowsUnchanged'] and support['nativeFiltersUnchanged'] and support['attackCategory']==103 and support['multiplier']==2
  assert sha(dist/'mod/regulation.bin').upper()==support['inputSha256'] and sha(stage/'counter-regulation.bin').upper()==support['outputSha256']
  updates['mod/regulation.bin']=stage/'counter-regulation.bin'
@@ -43,7 +43,7 @@ if '--guard-update' in sys.argv:
  assert (root/'src/parry_data.rs').read_bytes()==(stage/'parry_data.rs').read_bytes()
  assert not subprocess.run(['powershell','-NoProfile','-Command','Get-Process nightreign -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id'],capture_output=True,text=True).stdout.strip(),'Close the game before replacing assets'
  for name,key in [('source','sourceSha256'),('englishSource','englishSourceSha256'),('statusSource','statusSourceSha256')]:assert sha(root/texts[name]).upper()==texts[key].upper()
- updates={'mod/chr/c0000.anibnd.dcx':stage/'c0000.anibnd.dcx','mod/natives/NRHex.dll':root/'target/release/NRHex.dll'}
+ updates={'mod/chr/c0000.anibnd.dcx':stage/'c0000.anibnd.dcx','natives/NRHex.dll':root/'target/release/NRHex.dll'}
  assert support['originalRowsUnchanged'] and support['nativeCommonResource']
  assert sha(dist/'mod/regulation.bin').upper()==support['inputSha256'] and sha(stage/'guard-regulation.bin').upper()==support['outputSha256']
  updates['mod/regulation.bin']=stage/'guard-regulation.bin'
@@ -87,7 +87,7 @@ add('mod/chr/c0000.anibnd.dcx',stage/'c0000.anibnd.dcx',actions['inputSha256'],a
 for e in texts['reports']:
  assert e['unrelatedEntriesAndMembersUnchanged'];rel=Path(e['language'])/e['file']
  add((Path('mod/msg')/rel).as_posix(),stage/'texts'/rel,e['inputSha256'],e['outputSha256'])
-add('mod/natives/NRHex.dll',root/'target/release/NRHex.dll')
+add('natives/NRHex.dll',root/'target/release/NRHex.dll')
 process=subprocess.run(['powershell','-NoProfile','-Command','Get-Process nightreign -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id'],capture_output=True,text=True)
 assert not process.stdout.strip(),'Close the game before replacing assets'
 baseline={p.relative_to(dist).as_posix():sha(p) for p in (dist/'mod').rglob('*') if p.is_file() and p.suffix!='.log'}

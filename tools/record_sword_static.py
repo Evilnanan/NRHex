@@ -41,8 +41,8 @@ captured = json.loads(baseline.read_text())
 before = captured['assets']
 after = assets()
 changed = sorted(p for p in before.keys() | after.keys() if before.get(p) != after.get(p))
-assert set(changed) <= {'mod/natives/NRHex.dll', 'mod/natives/sword.csv'}, changed
-assert 'mod/natives/sword.csv' not in after
+assert set(changed) <= {'natives/NRHex.dll', 'natives/sword.csv'}, changed
+assert 'natives/sword.csv' not in after
 assert digest(csv_path) == captured['csvSha256'], 'User CSV changed during the update'
 with csv_path.open(encoding='utf-8-sig', newline='') as stream:
     reader = csv.DictReader(stream)
@@ -84,7 +84,7 @@ for name, value, success in [('fresh_fractional_value', '17.25', True),
 
 assert 'dir.join("sword.csv")' not in (ROOT / 'src/lib.rs').read_text(encoding='utf8')
 dll_hash = digest(ROOT / 'target/release/NRHex.dll')
-assert dll_hash == after['mod/natives/NRHex.dll']
+assert dll_hash == after['natives/NRHex.dll']
 version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
 tests = int(sys.argv[sys.argv.index('--rust-tests') + 1])
 report = dict(version=version, spellCount=len(expected), csvPath='data/balance/sword.csv', csvSha256=digest(csv_path),

@@ -20,10 +20,10 @@ assert [int(x) for x in re.findall(r'"cmp r10d, (\d+)"',source)]==ids+[95005001,
 baseline=json.loads((ROOT/'.work/status-routing-01732/baseline.json').read_text())
 unchanged=[]
 for rel,expected in baseline.items():
- if rel.startswith('dist/mod/') or rel.startswith('dist/testmods/') and Path(rel).suffix in ['.dll','.ini','.csv'] or rel in ['dist/NRHex.me3','dist/mod/natives/NRHex.ini','data/balance/sword.csv']:
+ if rel.startswith(('dist/mod/','dist/natives/')) or rel.startswith('dist/testmods/') and Path(rel).suffix in ['.dll','.ini','.csv'] or rel in ['dist/NRHex.me3','data/balance/sword.csv']:
   assert digest(ROOT/rel)==expected,f'Unrelated gameplay asset changed: {rel}'
   unchanged.append(rel)
-assert digest(ROOT/'target/release/NRHex.dll')==digest(ROOT/'dist/mod/natives/NRHex.dll')
+assert digest(ROOT/'target/release/NRHex.dll')==digest(ROOT/'dist/natives/NRHex.dll')
 version=tomllib.loads((ROOT/'Cargo.toml').read_text())['package']['version']
 report=dict(version=version,originalExeSha256=hashlib.sha256(raw).hexdigest(),
  selectorRva='0xa89a93',stolenBytes=7,originalInstructionFixtureSha256=digest(fixture),
@@ -35,7 +35,7 @@ report=dict(version=version,originalExeSha256=hashlib.sha256(raw).hexdigest(),
  hiddenEscapeActiveAndCooldownRemainHidden=True,
  rustTestsPassed=167,realDetourAndRelocatedNativeInstructionCases=392,
  runtimeSignaturesVerified=63,gameplayAssetsUnchanged=unchanged,
- dllSha256=digest(ROOT/'dist/mod/natives/NRHex.dll'),gameUiVerified=False,multiplayerVerified=False,
+ dllSha256=digest(ROOT/'dist/natives/NRHex.dll'),gameUiVerified=False,multiplayerVerified=False,
  notes='Private native selector + real detour tests and build/static checks. Actual own/peer status pages pending user validation.')
 (ROOT/'dist/reports/status-routing-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
 print(f'PASS: current UI selector, state range, installed DLL and {len(unchanged)} unchanged gameplay assets.')

@@ -6,7 +6,7 @@ if (Test-Path -LiteralPath $taskManifest) {
         throw '请先退出当前游戏，再启动新版。不会自动关闭游戏。'
     }
     $taskUpdate = Get-Content -LiteralPath $taskManifest -Raw -Encoding UTF8 | ConvertFrom-Json
-    $taskInstalled = Join-Path $PSScriptRoot 'mod/natives/NRHex.dll'
+    $taskInstalled = Join-Path $PSScriptRoot 'natives/NRHex.dll'
     $taskCurrentHash = (Get-FileHash -LiteralPath $taskInstalled -Algorithm SHA256).Hash
     if ($taskCurrentHash -notin @($taskUpdate.previousDllSha256, $taskUpdate.dllSha256)) {
         throw '当前 DLL 与待更新版本的基线不符，请重新构建后更新。'

@@ -211,6 +211,22 @@ if(args.Contains("--sword-regain-probe")){SwordRegain.Export(root,bnd,Parse);ret
 if(args.Contains("--sword-charged-probe")){SwordCharged.Probe(root,bnd,Parse);return;}
 if(args.Contains("--sword-charge-damage-probe")){SwordCharged.DamageProbe(root,bnd,Parse);return;}
 if(args.Contains("--archmage-data")){Archmage.WriteData(root,bnd,Parse);return;}
+if(args.Contains("--archmage-target-export")){Archmage.ExportTarget(root,args[Array.IndexOf(args,"--archmage-target-export")+1],Parse);return;}
+if(args.Contains("--mmv-map-icons-export")){
+ var mmv=args[Array.IndexOf(args,"--mmv-map-icons-export")+1];
+ var target=SFUtil.DecryptNightreignRegulation(Path.Combine(mmv,"mod/regulation.bin"));
+ var tables=new[]{"WorldMapPointParam","WorldMapPointIconParam","SmallBaseAndSpotDefine","SmallBaseAndSpotAttachPoint","SmallBaseMapVariationParam"}.ToDictionary(n=>n,n=>new[]{("original",bnd),("mmv",target)}.ToDictionary(x=>x.Item1,x=>Parse(n,x.Item2.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes).Rows.Select(r=>new{r.ID,r.Name,fields=r.Cells.ToDictionary(c=>c.Def.InternalName,c=>c.Value)})));
+ var text=new List<object>();
+ foreach(var category in new[]{"item","menu"})foreach(var f in BND4.Read(Path.Combine(mmv,"mod/msg/zhocn",category+"_dlc01.msgbnd.dcx")).Files){
+ if(!f.Name.EndsWith(".fmg"))continue;
+ foreach(var e in FMG.Read(f.Bytes).Entries.Where(e=>e.Text!=null&&(e.Text.Contains("池沼")||e.Text.Contains("锻造村"))))text.Add(new{f.Name,e.ID,e.Text});}
+ File.WriteAllText(Path.Combine(root,"work/compat/mmv-fixes/map-parameters.json"),JsonSerializer.Serialize(new{tables,text}));Console.WriteLine("Exported map icon parameters/text read-only");return;
+}
+if(args.Contains("--spirit-target-export")){var i=Array.IndexOf(args,"--spirit-target-export");MmvSpirit.Export(root,args[i+1],args[i+2],Parse);return;}
+if(args.Contains("--mmv-stage-cages")){MmvCages.Stage(root,args[Array.IndexOf(args,"--mmv-stage-cages")+1],Parse);return;}
+if(args.Contains("--mmv-cages-audit")){MmvCages.Audit(root,args[Array.IndexOf(args,"--mmv-cages-audit")+1]);return;}
+if(args.Contains("--spirit-target-apply")){var i=Array.IndexOf(args,"--spirit-target-apply");MmvSpirit.Apply(args[i+1],args[i+2],Parse);return;}
+if(args.Contains("--arts-target-export")){MmvArts.Export(root,args[Array.IndexOf(args,"--arts-target-export")+1],Parse);return;}
 if(args.Contains("--essence-reaver-probe")){EssenceReaver.Probe(root,bnd,Parse);return;}
 if(args.Contains("--essence-reaver-single")){EssenceReaver.StageSingle(root,Parse);return;}
 if(args.Contains("--essence-reaver-check")){EssenceReaver.ExportChecks(root,Parse);return;}

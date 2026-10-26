@@ -48,7 +48,7 @@ for entry in texts['reports']:
     assert entry['unrelatedEntriesAndMembersUnchanged']
     rel = Path(entry['language']) / entry['file']
     add((Path('mod/msg') / rel).as_posix(), stage / 'texts' / rel, entry['inputSha256'], entry['outputSha256'])
-add('mod/natives/NRHex.dll', root / 'target/release/NRHex.dll')
+add('natives/NRHex.dll', root / 'target/release/NRHex.dll')
 baseline = {p.relative_to(dist).as_posix(): sha(p) for p in dist.rglob('*') if p.is_file() and p.suffix != '.log'}
 version = tomllib.loads((root / 'Cargo.toml').read_text())['package']['version']
 backup = work / f'before-install-{version}'

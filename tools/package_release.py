@@ -51,8 +51,8 @@ def main():
         payload[p.relative_to(ROOT / 'dist').as_posix()] = data
         inputs[p] = sha(data)
     assert 'mod/regulation.bin' in payload and 'mod/event/common.emevd.dcx' in payload
-    payload['mod/natives/NRHex.dll'] = dll
-    payload['mod/natives/NRHex.ini'] = b'; Mayhem Augments release. Test hotkeys are disabled at compile time.\n[Settings]\n'
+    payload['natives/NRHex.dll'] = dll
+    payload['natives/NRHex.ini'] = b'; Mayhem Augments release. Test hotkeys are disabled at compile time.\n[Settings]\n'
     profile = f'{NAME}.me3'
     payload[profile] = b'''profileVersion = "v1"
 
@@ -60,7 +60,7 @@ def main():
 game = "nightreign"
 
 [[natives]]
-path = "mod/natives/NRHex.dll"
+path = "natives/NRHex.dll"
 
 [[packages]]
 id = "nrhex"

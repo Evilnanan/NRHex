@@ -42,7 +42,7 @@ coop = read(work/'coop-fixes-validation.json')
 assert coop['singleAuthorityAndLifecycleCases'] == 296 and coop['groupEventCases'] == 960
 assert not coop['multiplayerVerified'] and not coop['gameplayVerified']
 native = root/'target/release/NRHex.dll'
-assert native.is_file() and digest(native) != baseline['mod/natives/NRHex.dll']
+assert native.is_file() and digest(native) != baseline['natives/NRHex.dll']
 reports = {'coop-fixes-validation.json':coop,'coop-parameter-validation.json':parameters,
            'arts-stance-validation.json':arts,
            'cage-groups-validation.json':read(root/'.work/cage-groups/validation.json'),
@@ -60,19 +60,19 @@ for name in [*reports,'arts-hks-validation.json','build-validation.json','runtim
         destination = work/'before/reports'/name;destination.parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(p,destination)
 for k,p in changed.items():shutil.copy2(p,distribution_file(dist,k))
-shutil.copy2(native,dist/'mod/natives/NRHex.dll')
+shutil.copy2(native,dist/'natives/NRHex.dll')
 for name,report in reports.items():write(distribution_file(dist,name),report)
 old_arts = read(dist/'reports'/'arts-hks-validation.json')
 old_arts.update(version='0.17.27',stanceReentryFix='arts-stance-validation.json',
                 gameplayVerified=False,multiplayerVerified=False)
 write(dist/'reports'/'arts-hks-validation.json',old_arts)
-allow = expected | {'mod/natives/NRHex.dll','README.md',*reports,'arts-hks-validation.json'}
+allow = expected | {'natives/NRHex.dll','README.md',*reports,'arts-hks-validation.json'}
 for k,h in baseline.items():
     if k not in allow:assert digest(distribution_file(dist,k)) == h, ('unrelated delivered file changed',k)
 for k,p in changed.items():assert digest(distribution_file(dist,k)) == digest(p)
-assert digest(dist/'mod/natives/NRHex.dll') == digest(native)
+assert digest(dist/'natives/NRHex.dll') == digest(native)
 scope = dict(version='0.17.27',assets={k:dict(before=baseline[k],after=digest(distribution_file(dist,k)))
-             for k in sorted(expected|{'mod/natives/NRHex.dll'})},originalMapsUnchanged=True,
+             for k in sorted(expected|{'natives/NRHex.dll'})},originalMapsUnchanged=True,
              unrelatedPackageFilesUnchanged=True,handEditedSwordCsvUnchanged=True,
              originalParameterRowsAndOtherTablesUnchanged=True,gameplayVerified=False,multiplayerVerified=False)
 write(work/'installed-assets.json',scope);write(dist/'reports'/'scope-validation.json',scope)

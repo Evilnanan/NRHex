@@ -8,6 +8,25 @@
 
 独立版入口为 `dist/启动测试版.ps1`，MMV 入口为 `dist/启动MMV测试版.ps1`。两者分别加载自己的资源与 DLL；MMV 配置位于 `dist/mmv/NRHex-MMV.me3`。不同时启动两版。
 
+### 可复制的 MMV 群友版
+
+`-Variant community -CommunityDestination 'D:/Users/OwO/Documents/me3-profiles/MayhemAugments-MMV-community'` 输出增量安装目录。将其**内容**复制到匹配版本的 MMV 根目录后，通过 `Mayhem Augments.me3` 启动 MMV＋MA，不从构建输出目录直接启动。无需复制或改写 MMV 原来的 `mod/`、`dll/`、`logs/` 和启动配置。
+
+```text
+Mayhem Augments.me3
+MayhemAugments/
+  mod/                   合并后的 MA 适配资源
+  natives/NRHex.dll     无测试热键的群友版
+  natives/NRHex.ini
+MMV-Fixes/               测试入口已显式启用时，携带独立修复包
+  mod/
+  natives/MMVFixes.dll
+```
+
+入口全部使用相对路径，资源顺序为 MMV → MA → 独立 MMV-Fixes；保留 MMV 原生 DLL 配置和存档名。MMV 入口保留原配置的 `start_online` 和 `disable_arxan`（当前均为 `true`），不写开头注释；独立发行版仍采用自己的入口约定。NRHex 的运行日志写在自身 DLL 同目录，不占用 MMV 的顶层日志目录。构建报告、修复包的本机来源清单、历史日志、测试工具不进入群友包。
+
+独立修复包从当前测试入口的显式启用项取得，只携带经 manifest 哈希核对的运行文件；不合入 MA 资源。以后不需要这些修复时，从 `Mayhem Augments.me3` 删除 ID 为 `mmv-fixes` 的一个 package 和一个 native，再删除 `MMV-Fixes/` 即可。删除整个增量包的两个目录和新入口即可恢复使用 MMV 原入口。MMV 升级后须重新核对和构建适配资源，不能把旧合并包直接当作通用补丁。
+
 ## 入口与输入
 
 ```powershell
@@ -46,13 +65,21 @@ MMV 路径也可以通过 `NRHEX_MMV` 指定。脚本使用当前 `dist/mod` 作
 
 ### 新增内容覆盖
 
-资源合并之外，已逐项审视 42 个海克斯对 MMV 新增敌人、武器、战技和法术的识别，见[完整覆盖报告](../../docs/research/mmv-hex-coverage.md)。初次审计的四个主要缺口中，回响施放已加入 39 个新法祷／96 个入口；大法师、百般武艺和强化死灵术的静态名单仍待适配。亮剑和交锋已有 MMV 专用数据。新增动作通知、奖励入口及联机效果仍需分批验证，不能把合并成功视为所有新内容已适配。
+资源合并之外，已逐项审视 42 个海克斯对 MMV 新增敌人、武器、战技和法术的识别，见[完整覆盖报告](../../docs/research/mmv-hex-coverage.md)。初次审计的四个主要缺口中，回响施放已加入 39 个新法祷／96 个入口；大法师已接入新增法术分类与 41 种随机候选，百般武艺已补齐全部新增武器记录、37种战技及7个动作通知，强化死灵术已接入 MMV 参数副本与实际模型／BOSS 血条目录，见[适配记录](../../docs/research/mmv-spirit.md)。亮剑和交锋已有 MMV 专用数据。新增动作通知、奖励入口及联机效果仍需分批验证，不能把合并成功视为所有新内容已适配。
 
 ### 回响新增法祷
 
 `compat/mmv/echo-spells.json` 记录每个新增 Magic 的取舍和审查指纹；`tools/build_mmv_echo.py` 读取合并参数，生成 `staged/echo_cast_data.rs`，通过 `NRHEX_ECHO_DATA` 注入同一套回响运行时。普通／蓄力根、六种持续施法配置、混合型法术的原地范围段分别处理；所有新增条目隔离原施法的命中记录，持续回响内部继续共享自己的命中列表。独立版使用原目录，五个用户指定例外保持。
 
 新增支持、暂未支持的动作法术、验证边界见[MMV 回响适配](../../docs/research/mmv-echo.md)。输入 Magic／弹体链变化或出现未审核的新法术时生成器停止；不能只更新审查哈希绕过复核。纯个人效果、公共空辅助根和无名称内部动作不纳入。构建成功不等于完整视觉、碰撞或联机验收。
+
+### 大法师新增法祷
+
+`HexBuild --archmage-target-export <overlay>` 从目标合并包导出 Magic 类型／附魔标志和 MagicTableParam 权重；`tools/build_mmv_archmage.py` 生成 `staged/archmage_data.rs`，通过 `NRHEX_ARCHMAGE_DATA` 接入共享运行时。独立版仍使用原生表。当前 MMV 随机池为 78 种魔法、114 种祷告；具体边界和验证见[MMV 大法师适配](../../docs/research/mmv-archmage.md)。
+
+### 百般武艺新增武器／战技
+
+`HexBuild --arts-target-export <overlay>` 读取目标武器、战技、攻击行为及TAE；`tools/build_mmv_arts.py` 根据 `compat/mmv/arts.json` 的逐项审查生成目标表，通过 `NRHEX_ARTS_DATA` 注入共享运行时。302条新武器默认战技、4把新弓及属性面板已覆盖；37种公共攻击链战技可随机。新增动作通知在MMV副本合并，原包不变。未纳入的67条记录及原因见[MMV百般武艺适配](../../docs/research/mmv-arts.md)。
 
 ### 亮剑自动估算
 
@@ -73,3 +100,9 @@ dotnet build tools/HexBuild
 ```
 
 后续可玩版本需要验证启动、圆桌、升级领奖、昼夜与 BOSS 生成、刷怪笼、动作海克斯、施法，以及双方使用相同适配包的联机。构建或审计成功不代替这些实测。
+
+## 刷怪笼目标数据
+
+`cage-encounters.json` 保存经过核对的 59 组 MMV 野外／监牢遭遇，追加到共享 50 组；守夜专用版本不加入，已有相同 BOSS 的数值／禁飞变体不重复加入。四张监牢增加 95 个角色定义，但运行时只在选中后创建。`NRHEX_CAGE_DATA` 同步驱动按需创建筛选、深夜变异与奖励组重新绑定；独立版默认表为空，不扩大独立版池子。
+
+顺序为参数、地图／事件合并 → MMV 刷怪笼追加 → 灵魂 NPC 导出／生成 → DLL。这样新刷怪笼敌人的真实模型和 BOSS 身份也进入强化死灵术，不依赖私有 NPC 编号猜模型。详见 `docs/research/mmv-cages.md`。构建及离线检查通过；尚未完成新增遭遇的游戏／联机验收。

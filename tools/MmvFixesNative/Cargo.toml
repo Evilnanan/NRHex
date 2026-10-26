@@ -1,0 +1,17 @@
+[package]
+name = "mmv-fixes"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "MMVFixes"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+iced-x86 = { version = "1.21", default-features = false, features = ["std", "decoder", "encoder", "block_encoder", "fast_fmt"] }
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1

@@ -1,0 +1,1764 @@
+{
+  "schema": 1,
+  "scope": "Reviewed active MMV field/gaol encounters, including overworld unique bosses; night-only and unused template encounters excluded",
+  "encounters": [
+    {
+      "index": 0,
+      "map": "m45_51_00_00",
+      "target": 45510820,
+      "name": "Frenzied Grave Warden Duelist (Field Boss) (Tier 1)",
+      "healthBarName": 903400301,
+      "bgm": 921100,
+      "members": [
+        {
+          "index": 0,
+          "sourceName": "c4690_9002",
+          "entity": 45510820,
+          "npc": 34000941,
+          "think": 34001015,
+          "model": "c3400",
+          "combat": true
+        }
+      ],
+      "mapSha256": "d8d2dc69582477d3d75bfb6bb4f6f7a9fe7afb2161e7a5f13436194ae8732cf7",
+      "eventSha256": "e7cf5b9b4164b495148a7465bc4b2f5887701bd873cbe70db112b651ad5e208d"
+    },
+    {
+      "index": 1,
+      "map": "m45_51_00_00",
+      "target": 45510830,
+      "name": "Outrider Knight (Field Boss) (Tier 1)",
+      "healthBarName": 904978000,
+      "bgm": 921100,
+      "members": [
+        {
+          "index": 1,
+          "sourceName": "c4690_9003",
+          "entity": 45510830,
+          "npc": 13100010,
+          "think": 13100000,
+          "model": "c1310",
+          "combat": true
+        }
+      ],
+      "mapSha256": "d8d2dc69582477d3d75bfb6bb4f6f7a9fe7afb2161e7a5f13436194ae8732cf7",
+      "eventSha256": "e7cf5b9b4164b495148a7465bc4b2f5887701bd873cbe70db112b651ad5e208d"
+    },
+    {
+      "index": 2,
+      "map": "m46_51_00_00",
+      "target": 46515810,
+      "name": "Miranda Blossom (Magic)  (Field Boss) (Tier 1) / Glintstone Sorcerer (Field Boss) (Tier 1)",
+      "healthBarName": 904480311,
+      "bgm": 920910,
+      "members": [
+        {
+          "index": 2,
+          "sourceName": "c4480_9002",
+          "entity": 46510810,
+          "npc": 44800230,
+          "think": 44820005,
+          "model": "c4480",
+          "combat": true
+        },
+        {
+          "index": 3,
+          "sourceName": "c4481_9023",
+          "entity": 46510811,
+          "npc": 37020080,
+          "think": 37020005,
+          "model": "c3702",
+          "combat": true
+        },
+        {
+          "index": 4,
+          "sourceName": "c4481_9024",
+          "entity": 46510812,
+          "npc": 37020080,
+          "think": 37020005,
+          "model": "c3702",
+          "combat": true
+        },
+        {
+          "index": 5,
+          "sourceName": "c4481_9025",
+          "entity": 46510813,
+          "npc": 37020080,
+          "think": 37020005,
+          "model": "c3702",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e61519ac3b59bd2bceac4b7176db85efe7f5e15addd5320eeb7902de919a2e5a",
+      "eventSha256": "eb5d65b1c259e7be2cb17807e51ea90d10a0fcd917e7c0bf93beac0635dee014"
+    },
+    {
+      "index": 3,
+      "map": "m46_51_00_00",
+      "target": 46515830,
+      "name": "Rotten Miranda Blossom (Field Boss) (Tier 1)",
+      "healthBarName": 904480311,
+      "bgm": 920910,
+      "members": [
+        {
+          "index": 6,
+          "sourceName": "c4480_9001",
+          "entity": 46510830,
+          "npc": 44820050,
+          "think": 44820005,
+          "model": "c4482",
+          "combat": true
+        },
+        {
+          "index": 7,
+          "sourceName": "c4481_9013",
+          "entity": 46510831,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        },
+        {
+          "index": 8,
+          "sourceName": "c4481_9012",
+          "entity": 46510832,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        },
+        {
+          "index": 9,
+          "sourceName": "c4481_9016",
+          "entity": 46510833,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        },
+        {
+          "index": 10,
+          "sourceName": "c4481_9019",
+          "entity": 46510834,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        },
+        {
+          "index": 11,
+          "sourceName": "c4481_9010",
+          "entity": 46510835,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        },
+        {
+          "index": 12,
+          "sourceName": "c4481_9011",
+          "entity": 46510836,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        },
+        {
+          "index": 13,
+          "sourceName": "c4481_9014",
+          "entity": 46510837,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        },
+        {
+          "index": 14,
+          "sourceName": "c4481_9015",
+          "entity": 46510838,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        },
+        {
+          "index": 15,
+          "sourceName": "c4481_9018",
+          "entity": 46510839,
+          "npc": 44830050,
+          "think": 44830005,
+          "model": "c4483",
+          "combat": false
+        }
+      ],
+      "mapSha256": "e61519ac3b59bd2bceac4b7176db85efe7f5e15addd5320eeb7902de919a2e5a",
+      "eventSha256": "eb5d65b1c259e7be2cb17807e51ea90d10a0fcd917e7c0bf93beac0635dee014"
+    },
+    {
+      "index": 4,
+      "map": "m46_51_00_00",
+      "target": 46515840,
+      "name": "Miranda Blossom (Frenzy) (Field Boss) (Tier 1) / Frenzied Nomad (Field Boss)",
+      "healthBarName": 904480311,
+      "bgm": 920910,
+      "members": [
+        {
+          "index": 16,
+          "sourceName": "c4480_9003",
+          "entity": 46510840,
+          "npc": 44800150,
+          "think": 44820005,
+          "model": "c4480",
+          "combat": true
+        },
+        {
+          "index": 17,
+          "sourceName": "c4481_9020",
+          "entity": 46510841,
+          "npc": 32010036,
+          "think": 32010005,
+          "model": "c3201",
+          "combat": true
+        },
+        {
+          "index": 18,
+          "sourceName": "c4481_9021",
+          "entity": 46510842,
+          "npc": 32010036,
+          "think": 32010005,
+          "model": "c3201",
+          "combat": true
+        },
+        {
+          "index": 19,
+          "sourceName": "c4481_9022",
+          "entity": 46510843,
+          "npc": 32010036,
+          "think": 32010005,
+          "model": "c3201",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e61519ac3b59bd2bceac4b7176db85efe7f5e15addd5320eeb7902de919a2e5a",
+      "eventSha256": "eb5d65b1c259e7be2cb17807e51ea90d10a0fcd917e7c0bf93beac0635dee014"
+    },
+    {
+      "index": 5,
+      "map": "m46_52_00_00",
+      "target": 46520810,
+      "name": "Putrid Tree Spirit (Field Boss) (Tier 4)",
+      "healthBarName": 904640100,
+      "bgm": 920610,
+      "members": [
+        {
+          "index": 20,
+          "sourceName": "c4670_9002",
+          "entity": 46520810,
+          "npc": 46400960,
+          "think": 46400005,
+          "model": "c4640",
+          "combat": true
+        }
+      ],
+      "mapSha256": "672c492decece58d13d3decb7b639f3f67d1c83434751496d879a77e16ef25ac",
+      "eventSha256": "6d19bec5ff44620189df04cf927675a34d00678074e6b723e362c0b13abf7c84"
+    },
+    {
+      "index": 6,
+      "map": "m46_52_00_00",
+      "target": 46520820,
+      "name": "Putrid Erdtree Avatar (Field Boss) (Tier 4)",
+      "healthBarName": 904811000,
+      "bgm": 920610,
+      "members": [
+        {
+          "index": 21,
+          "sourceName": "c4810_9001",
+          "entity": 46520820,
+          "npc": 48110020,
+          "think": 48110005,
+          "model": "c4811",
+          "combat": true
+        }
+      ],
+      "mapSha256": "672c492decece58d13d3decb7b639f3f67d1c83434751496d879a77e16ef25ac",
+      "eventSha256": "6d19bec5ff44620189df04cf927675a34d00678074e6b723e362c0b13abf7c84"
+    },
+    {
+      "index": 7,
+      "map": "m46_53_00_00",
+      "target": 46530830,
+      "name": "Crucible Knight Devonia (Field Boss) (Tier 3)",
+      "healthBarName": 902500300,
+      "bgm": 920210,
+      "members": [
+        {
+          "index": 22,
+          "sourceName": "c3251_9004",
+          "entity": 46530830,
+          "npc": 58000050,
+          "think": 58000000,
+          "model": "c5800",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e596ff8c985d50c2be6c277cbd11807681007f4f75471bb883afd79788129489",
+      "eventSha256": "2c1f8e5bec7066ff8a94aaccfc573dbb08d8de3505ba1135e74747e853cc67b8"
+    },
+    {
+      "index": 8,
+      "map": "m46_54_00_00",
+      "target": 46540810,
+      "name": "Borealis (Field Boss) (Tier 4)",
+      "healthBarName": 904503600,
+      "bgm": 920310,
+      "members": [
+        {
+          "index": 23,
+          "sourceName": "c4500_9000",
+          "entity": 46540810,
+          "npc": 45030040,
+          "think": 45030005,
+          "model": "c4503",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e27a7526f5733d060a5d4451b49f07f175315359313441858c1252b54c3b9181",
+      "eventSha256": "2ce39734358da3cfdd7453a9dbe49b160265ddb375044525bbe83582075ce709"
+    },
+    {
+      "index": 9,
+      "map": "m46_54_00_00",
+      "target": 46540820,
+      "name": "Decaying Ekzykes (Field Boss) (Tier 4)",
+      "healthBarName": 904501600,
+      "bgm": 920310,
+      "members": [
+        {
+          "index": 24,
+          "sourceName": "c4500_9001",
+          "entity": 46540820,
+          "npc": 45010020,
+          "think": 45010005,
+          "model": "c4501",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e27a7526f5733d060a5d4451b49f07f175315359313441858c1252b54c3b9181",
+      "eventSha256": "2ce39734358da3cfdd7453a9dbe49b160265ddb375044525bbe83582075ce709"
+    },
+    {
+      "index": 10,
+      "map": "m46_54_00_00",
+      "target": 46540830,
+      "name": "Fire Demon (Field Boss) (Tier 3)",
+      "healthBarName": 904975000,
+      "bgm": 833000,
+      "members": [
+        {
+          "index": 25,
+          "sourceName": "c5011_9001",
+          "entity": 46540830,
+          "npc": 62201020,
+          "think": 62201010,
+          "model": "c6220",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e27a7526f5733d060a5d4451b49f07f175315359313441858c1252b54c3b9181",
+      "eventSha256": "2ce39734358da3cfdd7453a9dbe49b160265ddb375044525bbe83582075ce709"
+    },
+    {
+      "index": 11,
+      "map": "m46_55_00_00",
+      "target": 46550810,
+      "name": "Erdtree Burial Watchdog (Staff) (Field Boss) (Tier 1)",
+      "healthBarName": 904260307,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 26,
+          "sourceName": "c4770_9004",
+          "entity": 46550810,
+          "npc": 42601640,
+          "think": 42600005,
+          "model": "c4260",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e47d522ce4474dc0b0afc9ffb7f64fad90ce86c692b394de9fca694c4f76edc6",
+      "eventSha256": "3a431874ec8b90ee9d7ba91ee8a928a0fac37168f8dc75fa3cb811800506ccf9"
+    },
+    {
+      "index": 12,
+      "map": "m46_55_00_00",
+      "target": 46550820,
+      "name": "Erdtree Burial Watchdog (Fire) (Field Boss) (Tier 1)",
+      "healthBarName": 904260307,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 27,
+          "sourceName": "c4770_9002",
+          "entity": 46550820,
+          "npc": 42600150,
+          "think": 42600005,
+          "model": "c4260",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e47d522ce4474dc0b0afc9ffb7f64fad90ce86c692b394de9fca694c4f76edc6",
+      "eventSha256": "3a431874ec8b90ee9d7ba91ee8a928a0fac37168f8dc75fa3cb811800506ccf9"
+    },
+    {
+      "index": 13,
+      "map": "m46_55_00_00",
+      "target": 46550830,
+      "name": "Erdtree Burial Watchdog (Lightning) (Field Boss) (Tier 1)",
+      "healthBarName": 904260307,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 28,
+          "sourceName": "c4770_9003",
+          "entity": 46550830,
+          "npc": 42600160,
+          "think": 42600005,
+          "model": "c4260",
+          "combat": true
+        }
+      ],
+      "mapSha256": "e47d522ce4474dc0b0afc9ffb7f64fad90ce86c692b394de9fca694c4f76edc6",
+      "eventSha256": "3a431874ec8b90ee9d7ba91ee8a928a0fac37168f8dc75fa3cb811800506ccf9"
+    },
+    {
+      "index": 14,
+      "map": "m46_56_00_00",
+      "target": 46560820,
+      "name": "Outland Commander (Field Boss) (Tier 3)",
+      "healthBarName": 903050500,
+      "bgm": 950000,
+      "members": [
+        {
+          "index": 29,
+          "sourceName": "c7100_9000",
+          "entity": 46560820,
+          "npc": 30500020,
+          "think": 30500005,
+          "model": "c3050",
+          "combat": true
+        }
+      ],
+      "mapSha256": "d4b4da59a31f42e89ee077a9042a5cc1967c53a14d7089cc4ff1b50a1d6ae4e7",
+      "eventSha256": "85244c3da0bed7f49a0806f8823759647e15d132682936a0564a2de618ba593d"
+    },
+    {
+      "index": 15,
+      "map": "m46_57_00_00",
+      "target": 46570810,
+      "name": "Carian Troll Knight (Field Boss) (Tier 1)",
+      "healthBarName": 904601000,
+      "bgm": 931000,
+      "members": [
+        {
+          "index": 30,
+          "sourceName": "c4810_9003",
+          "entity": 46570810,
+          "npc": 46010080,
+          "think": 46010005,
+          "model": "c4601",
+          "combat": true
+        }
+      ],
+      "mapSha256": "41dceafd473fd17fe55f80d55f4d31f5013802110c201fb609df39fe21a5a98e",
+      "eventSha256": "b95aa39b90fc2ecbe0bd3dd3c50400e5c5a3b4d9f86e08f706dcc1bada9af45e"
+    },
+    {
+      "index": 16,
+      "map": "m46_58_00_00",
+      "target": 46580810,
+      "name": "Ghostflame Dragon (Field Boss) (Tier 3)",
+      "healthBarName": 905860000,
+      "bgm": 920310,
+      "members": [
+        {
+          "index": 31,
+          "sourceName": "c4640_9004",
+          "entity": 46580810,
+          "npc": 58600100,
+          "think": 58600005,
+          "model": "c5860",
+          "combat": true
+        }
+      ],
+      "mapSha256": "61d661cc2d2d5db51639b7da824548dd9b537fbe13b45baeb98d5eaaedffa91b",
+      "eventSha256": "d8834d1aa4252de798ec56e0f8caf27987dabe875156152d5e4201b4c2bc6f7b"
+    },
+    {
+      "index": 17,
+      "map": "m46_58_00_00",
+      "target": 46580830,
+      "name": "Glintstone Dragon Smarag (Field Boss) (Tier 3)",
+      "healthBarName": 904502600,
+      "bgm": 920910,
+      "members": [
+        {
+          "index": 32,
+          "sourceName": "c5011_9003",
+          "entity": 46580830,
+          "npc": 45020930,
+          "think": 45020005,
+          "model": "c4502",
+          "combat": true
+        }
+      ],
+      "mapSha256": "61d661cc2d2d5db51639b7da824548dd9b537fbe13b45baeb98d5eaaedffa91b",
+      "eventSha256": "d8834d1aa4252de798ec56e0f8caf27987dabe875156152d5e4201b4c2bc6f7b"
+    },
+    {
+      "index": 18,
+      "map": "m46_59_00_00",
+      "target": 46595810,
+      "name": "Abductor Virgin (Field Boss) (Sickle) (Tier 1) / Abductor Virgin (Field Boss) (Saws) (Tier 1)",
+      "healthBarName": 904470003,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 33,
+          "sourceName": "c3100_9002",
+          "entity": 46590810,
+          "npc": 44700030,
+          "think": 44700005,
+          "model": "c4470",
+          "combat": true
+        },
+        {
+          "index": 34,
+          "sourceName": "c3100_9004",
+          "entity": 46590811,
+          "npc": 44701030,
+          "think": 44701005,
+          "model": "c4470",
+          "combat": true
+        }
+      ],
+      "mapSha256": "b1745b134044cd9dd91581a5aaa11d5cf71d76cb98e594697f298c5884381fd8",
+      "eventSha256": "798b767e486b268d4ffd19c6cb670e06b358704347d6dad6d2132f4d1c58883e"
+    },
+    {
+      "index": 19,
+      "map": "m46_59_00_00",
+      "target": 46590820,
+      "name": "Large Wormface (Field Boss) (Tier 1)",
+      "healthBarName": 904580600,
+      "bgm": 921200,
+      "members": [
+        {
+          "index": 35,
+          "sourceName": "c3100_9005",
+          "entity": 46590820,
+          "npc": 45803040,
+          "think": 45800005,
+          "model": "c4580",
+          "combat": true
+        }
+      ],
+      "mapSha256": "b1745b134044cd9dd91581a5aaa11d5cf71d76cb98e594697f298c5884381fd8",
+      "eventSha256": "798b767e486b268d4ffd19c6cb670e06b358704347d6dad6d2132f4d1c58883e"
+    },
+    {
+      "index": 20,
+      "map": "m46_62_00_00",
+      "target": 46625800,
+      "name": "Godrick Knight (Spear) (Field Boss) (Tier 1) TDB / Godrick Knight (Sword) (Field Boss) (Tier 1) TDB",
+      "healthBarName": 904311001,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 36,
+          "sourceName": "c3150_9000",
+          "entity": 46620800,
+          "npc": 43511050,
+          "think": 43511005,
+          "model": "c4351",
+          "combat": true
+        },
+        {
+          "index": 37,
+          "sourceName": "c3150_9007",
+          "entity": 46620801,
+          "npc": 43510050,
+          "think": 43510005,
+          "model": "c4351",
+          "combat": true
+        },
+        {
+          "sourceName": "c3160_9000",
+          "entity": 46620902,
+          "npc": 43610020,
+          "think": 43610000,
+          "model": "c4361",
+          "combat": false,
+          "index": 38
+        }
+      ],
+      "mapSha256": "14aecd4f506c89ec4351982b99bbf01e89039a2e11b940bf82204c8515fac2e3",
+      "eventSha256": "a11bb091159f8471d48a6992527c1962bead990e62d9d7403eb26984b1865dbe"
+    },
+    {
+      "index": 21,
+      "map": "m46_62_00_00",
+      "target": 46625810,
+      "name": "Cuckoo Knight (Spear) (Field Boss) (Tier 1) TDB / Cuckoo Knight (Sword) (Field Boss) (Tier 1) TDB",
+      "healthBarName": 904311002,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 39,
+          "sourceName": "c3150_9002",
+          "entity": 46620810,
+          "npc": 43521040,
+          "think": 43521005,
+          "model": "c4352",
+          "combat": true
+        },
+        {
+          "index": 40,
+          "sourceName": "c3150_9008",
+          "entity": 46620811,
+          "npc": 43520040,
+          "think": 43520005,
+          "model": "c4352",
+          "combat": true
+        },
+        {
+          "sourceName": "c3160_9002",
+          "entity": 46620912,
+          "npc": 43620030,
+          "think": 43620000,
+          "model": "c4362",
+          "combat": false,
+          "index": 41
+        }
+      ],
+      "mapSha256": "14aecd4f506c89ec4351982b99bbf01e89039a2e11b940bf82204c8515fac2e3",
+      "eventSha256": "a11bb091159f8471d48a6992527c1962bead990e62d9d7403eb26984b1865dbe"
+    },
+    {
+      "index": 22,
+      "map": "m46_62_00_00",
+      "target": 46625820,
+      "name": "Leyndell Knight (Spear) (Field Boss) (Tier 1) TDB / Leyndell Knight (NB Prelude) (Dragonslayer Armor)",
+      "healthBarName": 904311003,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 42,
+          "sourceName": "c3150_9003",
+          "entity": 46620820,
+          "npc": 43531040,
+          "think": 43531005,
+          "model": "c4353",
+          "combat": true
+        },
+        {
+          "index": 43,
+          "sourceName": "c3150_9009",
+          "entity": 46620821,
+          "npc": 43530040,
+          "think": 43530005,
+          "model": "c4353",
+          "combat": true
+        },
+        {
+          "sourceName": "c3160_9003",
+          "entity": 46620922,
+          "npc": 43630020,
+          "think": 43630000,
+          "model": "c4363",
+          "combat": false,
+          "index": 44
+        }
+      ],
+      "mapSha256": "14aecd4f506c89ec4351982b99bbf01e89039a2e11b940bf82204c8515fac2e3",
+      "eventSha256": "a11bb091159f8471d48a6992527c1962bead990e62d9d7403eb26984b1865dbe"
+    },
+    {
+      "index": 23,
+      "map": "m46_62_00_00",
+      "target": 46625830,
+      "name": "Redmane Knight (Spear) (Field Boss) (Tier 1) TDB / Redmane Knight (Sword) (Field Boss) (Tier 1) TDB",
+      "healthBarName": 904311004,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 45,
+          "sourceName": "c3150_9004",
+          "entity": 46620830,
+          "npc": 43541020,
+          "think": 43541005,
+          "model": "c4354",
+          "combat": true
+        },
+        {
+          "index": 46,
+          "sourceName": "c3150_9010",
+          "entity": 46620831,
+          "npc": 43540020,
+          "think": 43540005,
+          "model": "c4354",
+          "combat": true
+        },
+        {
+          "sourceName": "c3160_9004",
+          "entity": 46620932,
+          "npc": 43640050,
+          "think": 43640000,
+          "model": "c4364",
+          "combat": false,
+          "index": 47
+        }
+      ],
+      "mapSha256": "14aecd4f506c89ec4351982b99bbf01e89039a2e11b940bf82204c8515fac2e3",
+      "eventSha256": "a11bb091159f8471d48a6992527c1962bead990e62d9d7403eb26984b1865dbe"
+    },
+    {
+      "index": 24,
+      "map": "m46_62_00_00",
+      "target": 46625840,
+      "name": "Mausoleum Knight (Spear) (Field Boss) (Tier 1) TDB / Mausoleum Knight (Sword) (Field Boss) (Tier 1) TDB",
+      "healthBarName": 904311006,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 48,
+          "sourceName": "c3150_9005",
+          "entity": 46620840,
+          "npc": 43551050,
+          "think": 43551005,
+          "model": "c4355",
+          "combat": true
+        },
+        {
+          "index": 49,
+          "sourceName": "c3150_9011",
+          "entity": 46620841,
+          "npc": 43550050,
+          "think": 43550005,
+          "model": "c4355",
+          "combat": true
+        },
+        {
+          "sourceName": "c3160_9005",
+          "entity": 46620942,
+          "npc": 43650060,
+          "think": 43650000,
+          "model": "c4365",
+          "combat": false,
+          "index": 50
+        }
+      ],
+      "mapSha256": "14aecd4f506c89ec4351982b99bbf01e89039a2e11b940bf82204c8515fac2e3",
+      "eventSha256": "a11bb091159f8471d48a6992527c1962bead990e62d9d7403eb26984b1865dbe"
+    },
+    {
+      "index": 25,
+      "map": "m46_62_00_00",
+      "target": 46625850,
+      "name": "Haligtree Knight (Spear) (Field Boss) (Tier 1) TDB / Haligtree Knight (Sword) (Field Boss) (Tier 1) TDB",
+      "healthBarName": 904311005,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 51,
+          "sourceName": "c3150_9006",
+          "entity": 46620850,
+          "npc": 43561040,
+          "think": 43561005,
+          "model": "c4356",
+          "combat": true
+        },
+        {
+          "index": 52,
+          "sourceName": "c3150_9012",
+          "entity": 46620851,
+          "npc": 43560040,
+          "think": 43560005,
+          "model": "c4356",
+          "combat": true
+        },
+        {
+          "sourceName": "c3160_9006",
+          "entity": 46620952,
+          "npc": 43630020,
+          "think": 43630000,
+          "model": "c4363",
+          "combat": false,
+          "index": 53
+        }
+      ],
+      "mapSha256": "14aecd4f506c89ec4351982b99bbf01e89039a2e11b940bf82204c8515fac2e3",
+      "eventSha256": "a11bb091159f8471d48a6992527c1962bead990e62d9d7403eb26984b1865dbe"
+    },
+    {
+      "index": 26,
+      "map": "m46_62_00_00",
+      "target": 46625860,
+      "name": "Depraved Perfumer (Field Boss) (Tier 1) / Page (Field Boss) (Tier 1)",
+      "healthBarName": 903700302,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 54,
+          "sourceName": "c3252_9000",
+          "entity": 46620860,
+          "npc": 37000045,
+          "think": 37000005,
+          "model": "c3700",
+          "combat": true
+        },
+        {
+          "index": 55,
+          "sourceName": "c3252_9005",
+          "entity": 46620861,
+          "npc": 37031080,
+          "think": 37030005,
+          "model": "c3703",
+          "combat": true
+        }
+      ],
+      "mapSha256": "14aecd4f506c89ec4351982b99bbf01e89039a2e11b940bf82204c8515fac2e3",
+      "eventSha256": "a11bb091159f8471d48a6992527c1962bead990e62d9d7403eb26984b1865dbe"
+    },
+    {
+      "index": 27,
+      "map": "m46_62_00_00",
+      "target": 46625870,
+      "name": "Sanguine Noble (Field Boss) (Tier 1) / Large Bloodbane Albinauric (Field Boss) (Tier 1)",
+      "healthBarName": 903550542,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 56,
+          "sourceName": "c3252_9001",
+          "entity": 46620870,
+          "npc": 35500065,
+          "think": 35500005,
+          "model": "c3550",
+          "combat": true
+        },
+        {
+          "index": 57,
+          "sourceName": "c3252_9006",
+          "entity": 46620871,
+          "npc": 34715268,
+          "think": 34705005,
+          "model": "c3471",
+          "combat": true
+        },
+        {
+          "index": 58,
+          "sourceName": "c3252_9008",
+          "entity": 46620872,
+          "npc": 34715268,
+          "think": 34705005,
+          "model": "c3471",
+          "combat": true
+        },
+        {
+          "index": 59,
+          "sourceName": "c3252_9009",
+          "entity": 46620873,
+          "npc": 34715268,
+          "think": 34705005,
+          "model": "c3471",
+          "combat": true
+        }
+      ],
+      "mapSha256": "14aecd4f506c89ec4351982b99bbf01e89039a2e11b940bf82204c8515fac2e3",
+      "eventSha256": "a11bb091159f8471d48a6992527c1962bead990e62d9d7403eb26984b1865dbe"
+    },
+    {
+      "index": 28,
+      "map": "m46_63_00_00",
+      "target": 46630810,
+      "name": "Polar Runebear (Field Boss) (Tier 3)",
+      "healthBarName": 904630320,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 60,
+          "sourceName": "c3460_9002",
+          "entity": 46630810,
+          "npc": 46300220,
+          "think": 46300005,
+          "model": "c4630",
+          "combat": true
+        }
+      ],
+      "mapSha256": "306f377c3a8ffb3f6543ec749bffc5d4d9342daaab9ec0f2d37d2764d48f0ed7",
+      "eventSha256": "6de6e4eeb3e1933b7076efd955782064180c4a47437bbdcc6ef08ba0ee3e3526"
+    },
+    {
+      "index": 29,
+      "map": "m46_64_00_00",
+      "target": 46640810,
+      "name": "Divine Beast Warrior Lightning Field Boss (Tier 3)",
+      "healthBarName": 905250600,
+      "bgm": 941010,
+      "members": [
+        {
+          "index": 61,
+          "sourceName": "c5250_9000",
+          "entity": 46640810,
+          "npc": 52503035,
+          "think": 52501055,
+          "model": "c5250",
+          "combat": true
+        }
+      ],
+      "mapSha256": "fb33bf101bbb5f662b921b1b2f9d999fa0c728c9b8220446adfb30a80bae0b99",
+      "eventSha256": "ea0118361cdc1122c48232f908564eed64e253a7cf7cd432ca1020e7f91c6e58"
+    },
+    {
+      "index": 30,
+      "map": "m46_64_00_00",
+      "target": 46640820,
+      "name": "Divine Beast Warrior Wind Field Boss (Tier 3)",
+      "healthBarName": 905250600,
+      "bgm": 941010,
+      "members": [
+        {
+          "index": 62,
+          "sourceName": "c5250_9001",
+          "entity": 46640820,
+          "npc": 52503055,
+          "think": 52501045,
+          "model": "c5250",
+          "combat": true
+        }
+      ],
+      "mapSha256": "fb33bf101bbb5f662b921b1b2f9d999fa0c728c9b8220446adfb30a80bae0b99",
+      "eventSha256": "ea0118361cdc1122c48232f908564eed64e253a7cf7cd432ca1020e7f91c6e58"
+    },
+    {
+      "index": 31,
+      "map": "m46_64_00_00",
+      "target": 46640830,
+      "name": "Divine Beast Warrior Ice Field Boss (Tier 4)",
+      "healthBarName": 905250600,
+      "bgm": 941010,
+      "members": [
+        {
+          "index": 63,
+          "sourceName": "c5250_9002",
+          "entity": 46640830,
+          "npc": 52503045,
+          "think": 52501035,
+          "model": "c5250",
+          "combat": true
+        }
+      ],
+      "mapSha256": "fb33bf101bbb5f662b921b1b2f9d999fa0c728c9b8220446adfb30a80bae0b99",
+      "eventSha256": "ea0118361cdc1122c48232f908564eed64e253a7cf7cd432ca1020e7f91c6e58"
+    },
+    {
+      "index": 32,
+      "map": "m46_65_00_00",
+      "target": 46650810,
+      "name": "Cleanrot Knight (Field Boss) (Tier 1)",
+      "healthBarName": 903800600,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 64,
+          "sourceName": "c2100_9003",
+          "entity": 46650810,
+          "npc": 38000020,
+          "think": 38000005,
+          "model": "c3800",
+          "combat": true
+        }
+      ],
+      "mapSha256": "0b725c643983965e7fd7b34554f21cc7b6eeded4b9c64c15957762c2bc41c172",
+      "eventSha256": "54190dfbc63b172086b0346013b702f905e7e796c1f5b634cc02852c8612fdb6"
+    },
+    {
+      "index": 33,
+      "map": "m46_65_00_00",
+      "target": 46650820,
+      "name": "Skeletal Gladiator (Field Boss) (Tier 1)",
+      "healthBarName": 904580620,
+      "bgm": 931000,
+      "members": [
+        {
+          "index": 65,
+          "sourceName": "c2100_9004",
+          "entity": 46650820,
+          "npc": 43401950,
+          "think": 43400005,
+          "model": "c4340",
+          "combat": true
+        }
+      ],
+      "mapSha256": "0b725c643983965e7fd7b34554f21cc7b6eeded4b9c64c15957762c2bc41c172",
+      "eventSha256": "54190dfbc63b172086b0346013b702f905e7e796c1f5b634cc02852c8612fdb6"
+    },
+    {
+      "index": 34,
+      "map": "m46_66_00_00",
+      "target": 46660810,
+      "name": "Great Red Bear (Field Boss) (Tier 4)",
+      "healthBarName": 905820600,
+      "bgm": 931000,
+      "members": [
+        {
+          "index": 66,
+          "sourceName": "c4980_9003",
+          "entity": 46660810,
+          "npc": 58200100,
+          "think": 58200005,
+          "model": "c5820",
+          "combat": true
+        }
+      ],
+      "mapSha256": "11b64c9948ba66edf702f07344142c23d448d7f27a3feadf29cb3b9145cadc41",
+      "eventSha256": "39044ffeb8f53024303843474572b053173871fe04191eba749a64a6093aefb4"
+    },
+    {
+      "index": 35,
+      "map": "m46_66_00_00",
+      "target": 46660820,
+      "name": "Divine Beast Dancing Lion (Field Boss) (Tier 4)",
+      "healthBarName": 905210600,
+      "bgm": 521000,
+      "members": [
+        {
+          "index": 67,
+          "sourceName": "c4980_9002",
+          "entity": 46660820,
+          "npc": 52100090,
+          "think": 52100005,
+          "model": "c5210",
+          "combat": true
+        }
+      ],
+      "mapSha256": "11b64c9948ba66edf702f07344142c23d448d7f27a3feadf29cb3b9145cadc41",
+      "eventSha256": "39044ffeb8f53024303843474572b053173871fe04191eba749a64a6093aefb4"
+    },
+    {
+      "index": 36,
+      "map": "m46_67_00_00",
+      "target": 46670810,
+      "name": "Slashy (Field Boss) (Tier 3)",
+      "healthBarName": 904130730,
+      "bgm": 931000,
+      "members": [
+        {
+          "index": 68,
+          "sourceName": "c4910_9003",
+          "entity": 46670810,
+          "npc": 12600020,
+          "think": 12600005,
+          "model": "c1260",
+          "combat": true
+        }
+      ],
+      "mapSha256": "7e006517d40cc099ba27231d0a30fb6d3e87bb8b65c5654f866a0e5e07069701",
+      "eventSha256": "8532f4ec7e09f8507fe4c132d54371bf2fbe3027a461891962aa90e6eb7350a3"
+    },
+    {
+      "index": 37,
+      "map": "m46_67_00_00",
+      "target": 46670820,
+      "name": "Bashy (Field Boss) (Tier 3)",
+      "healthBarName": 904130720,
+      "bgm": 931000,
+      "members": [
+        {
+          "index": 69,
+          "sourceName": "c2100_9002",
+          "entity": 46670820,
+          "npc": 12601020,
+          "think": 12600015,
+          "model": "c1260",
+          "combat": true
+        }
+      ],
+      "mapSha256": "7e006517d40cc099ba27231d0a30fb6d3e87bb8b65c5654f866a0e5e07069701",
+      "eventSha256": "8532f4ec7e09f8507fe4c132d54371bf2fbe3027a461891962aa90e6eb7350a3"
+    },
+    {
+      "index": 38,
+      "map": "m46_67_00_00",
+      "target": 46670830,
+      "name": "Crashy (Field Boss) (Tier 3)",
+      "healthBarName": 904130740,
+      "bgm": 931000,
+      "members": [
+        {
+          "index": 70,
+          "sourceName": "c2100_9003",
+          "entity": 46670830,
+          "npc": 12602020,
+          "think": 12600015,
+          "model": "c1260",
+          "combat": true
+        }
+      ],
+      "mapSha256": "7e006517d40cc099ba27231d0a30fb6d3e87bb8b65c5654f866a0e5e07069701",
+      "eventSha256": "8532f4ec7e09f8507fe4c132d54371bf2fbe3027a461891962aa90e6eb7350a3"
+    },
+    {
+      "index": 39,
+      "map": "m46_69_00_00",
+      "target": 46690810,
+      "name": "Misbegotten Crusader (Field Boss) (Tier 2)",
+      "healthBarName": 903460600,
+      "bgm": 920910,
+      "members": [
+        {
+          "index": 71,
+          "sourceName": "c3460_9001",
+          "entity": 46690810,
+          "npc": 34601960,
+          "think": 34600025,
+          "model": "c3460",
+          "combat": true
+        }
+      ],
+      "mapSha256": "138c03f4bd65f6fea8920dc69808747e63af35fe4e57c6e447f9ba761c60267b",
+      "eventSha256": "60284caac9ba41efc18276df2ee0b6ca7dbbcd39b34ca63a6a9e5ed73f1f47e3"
+    },
+    {
+      "index": 40,
+      "map": "m46_69_00_00",
+      "target": 46690820,
+      "name": "Putrid Grave Warden Duelist (Field Boss) (Tier 2)",
+      "healthBarName": 903400302,
+      "bgm": 921100,
+      "members": [
+        {
+          "index": 72,
+          "sourceName": "c4690_9003",
+          "entity": 46690820,
+          "npc": 34000955,
+          "think": 34000005,
+          "model": "c3400",
+          "combat": true
+        }
+      ],
+      "mapSha256": "138c03f4bd65f6fea8920dc69808747e63af35fe4e57c6e447f9ba761c60267b",
+      "eventSha256": "60284caac9ba41efc18276df2ee0b6ca7dbbcd39b34ca63a6a9e5ed73f1f47e3"
+    },
+    {
+      "index": 41,
+      "map": "m46_69_00_00",
+      "target": 46690830,
+      "name": "Divine Bird Warrior (Field Boss) (Tier 2)",
+      "healthBarName": 905250610,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 73,
+          "sourceName": "c4690_9004",
+          "entity": 46690830,
+          "npc": 52500200,
+          "think": 52500005,
+          "model": "c5250",
+          "combat": true
+        }
+      ],
+      "mapSha256": "138c03f4bd65f6fea8920dc69808747e63af35fe4e57c6e447f9ba761c60267b",
+      "eventSha256": "60284caac9ba41efc18276df2ee0b6ca7dbbcd39b34ca63a6a9e5ed73f1f47e3"
+    },
+    {
+      "index": 42,
+      "map": "m46_69_00_00",
+      "target": 46690840,
+      "name": "Corvian Knight (Rapier) (Field Boss) (Tier 2)",
+      "healthBarName": 904976000,
+      "bgm": 942000,
+      "members": [
+        {
+          "index": 74,
+          "sourceName": "c4690_9005",
+          "entity": 46690840,
+          "npc": 62100015,
+          "think": 62100000,
+          "model": "c6210",
+          "combat": true
+        }
+      ],
+      "mapSha256": "138c03f4bd65f6fea8920dc69808747e63af35fe4e57c6e447f9ba761c60267b",
+      "eventSha256": "60284caac9ba41efc18276df2ee0b6ca7dbbcd39b34ca63a6a9e5ed73f1f47e3"
+    },
+    {
+      "index": 43,
+      "map": "m46_69_00_00",
+      "target": 46690840,
+      "name": "Corvian Knight (Claws) (Field Boss) (Tier 2)",
+      "healthBarName": 904976000,
+      "bgm": 942000,
+      "members": [
+        {
+          "index": 75,
+          "sourceName": "c4690_9006",
+          "entity": 46690840,
+          "npc": 62100020,
+          "think": 62100010,
+          "model": "c6210",
+          "combat": true
+        }
+      ],
+      "mapSha256": "138c03f4bd65f6fea8920dc69808747e63af35fe4e57c6e447f9ba761c60267b",
+      "eventSha256": "60284caac9ba41efc18276df2ee0b6ca7dbbcd39b34ca63a6a9e5ed73f1f47e3"
+    },
+    {
+      "index": 44,
+      "map": "m46_71_00_00",
+      "target": 46710800,
+      "name": "Black Knight Garrew (Field Boss) (Tier 2)",
+      "healthBarName": 903800710,
+      "bgm": 942000,
+      "members": [
+        {
+          "index": 76,
+          "sourceName": "c4690_9000",
+          "entity": 46710800,
+          "npc": 58400610,
+          "think": 58400005,
+          "model": "c5840",
+          "combat": true
+        }
+      ],
+      "mapSha256": "18d15e3a0b04464909bc836cdec43862afbfbabc8405ac8158f6077ca05c2c39",
+      "eventSha256": "82fe39192c2091843d33328ec3feff1fcca48116582c08718c6523f59bdeb15d"
+    },
+    {
+      "index": 45,
+      "map": "m46_71_00_00",
+      "target": 46710810,
+      "name": "Black Knight Edredd (Field Boss) (Tier 2)",
+      "healthBarName": 903800710,
+      "bgm": 942000,
+      "members": [
+        {
+          "index": 77,
+          "sourceName": "c4690_9001",
+          "entity": 46710810,
+          "npc": 58400700,
+          "think": 58401000,
+          "model": "c5840",
+          "combat": true
+        }
+      ],
+      "mapSha256": "18d15e3a0b04464909bc836cdec43862afbfbabc8405ac8158f6077ca05c2c39",
+      "eventSha256": "82fe39192c2091843d33328ec3feff1fcca48116582c08718c6523f59bdeb15d"
+    },
+    {
+      "index": 46,
+      "map": "m46_71_00_00",
+      "target": 46710820,
+      "name": "Fire Knight (Field Boss) (Tier 2)",
+      "healthBarName": 903800700,
+      "bgm": 942000,
+      "members": [
+        {
+          "index": 78,
+          "sourceName": "c3252_9002",
+          "entity": 46710820,
+          "npc": 51600120,
+          "think": 51600005,
+          "model": "c5160",
+          "combat": true
+        }
+      ],
+      "mapSha256": "18d15e3a0b04464909bc836cdec43862afbfbabc8405ac8158f6077ca05c2c39",
+      "eventSha256": "82fe39192c2091843d33328ec3feff1fcca48116582c08718c6523f59bdeb15d"
+    },
+    {
+      "index": 47,
+      "map": "m46_72_00_00",
+      "target": 46720800,
+      "name": "Onze (Field Boss) (Tier 2)",
+      "healthBarName": 905810000,
+      "bgm": 931000,
+      "members": [
+        {
+          "index": 79,
+          "sourceName": "c4130_9001",
+          "entity": 46720800,
+          "npc": 58100990,
+          "think": 58100005,
+          "model": "c5810",
+          "combat": true
+        }
+      ],
+      "mapSha256": "3ab3a782013ae0b38bab6ea246cee272ed913008be029c1419c4c87beac71290",
+      "eventSha256": "18d759703eef3d78a0486ab6b0c72300b37c51eed7a34d09d3a88945eeb79dfd"
+    },
+    {
+      "index": 48,
+      "map": "m46_72_00_00",
+      "target": 46720810,
+      "name": "Curseblade Labirith (Field Boss) (Tier 2)",
+      "healthBarName": 905040000,
+      "bgm": 941010,
+      "members": [
+        {
+          "index": 80,
+          "sourceName": "c4910_9000",
+          "entity": 46720810,
+          "npc": 50400180,
+          "think": 50400005,
+          "model": "c5040",
+          "combat": true
+        }
+      ],
+      "mapSha256": "3ab3a782013ae0b38bab6ea246cee272ed913008be029c1419c4c87beac71290",
+      "eventSha256": "18d759703eef3d78a0486ab6b0c72300b37c51eed7a34d09d3a88945eeb79dfd"
+    },
+    {
+      "index": 49,
+      "map": "m46_72_00_00",
+      "target": 46720820,
+      "name": "Death Knight (Field Boss) (Twin Axes) (Tier 2)",
+      "healthBarName": 905070000,
+      "bgm": 942000,
+      "members": [
+        {
+          "index": 81,
+          "sourceName": "c4910_9001",
+          "entity": 46720820,
+          "npc": 50700090,
+          "think": 50700005,
+          "model": "c5070",
+          "combat": true
+        }
+      ],
+      "mapSha256": "3ab3a782013ae0b38bab6ea246cee272ed913008be029c1419c4c87beac71290",
+      "eventSha256": "18d759703eef3d78a0486ab6b0c72300b37c51eed7a34d09d3a88945eeb79dfd"
+    },
+    {
+      "index": 50,
+      "map": "m46_72_00_00",
+      "target": 46720830,
+      "name": "Death Knight (Field Boss) (Longhaft) (Tier 2)",
+      "healthBarName": 905070000,
+      "bgm": 942000,
+      "members": [
+        {
+          "index": 82,
+          "sourceName": "c4910_9002",
+          "entity": 46720830,
+          "npc": 50701100,
+          "think": 50701005,
+          "model": "c5070",
+          "combat": true
+        }
+      ],
+      "mapSha256": "3ab3a782013ae0b38bab6ea246cee272ed913008be029c1419c4c87beac71290",
+      "eventSha256": "18d759703eef3d78a0486ab6b0c72300b37c51eed7a34d09d3a88945eeb79dfd"
+    },
+    {
+      "index": 51,
+      "map": "m46_75_00_00",
+      "target": 46750830,
+      "name": "Dragonkin Soldier (Ice Lightning) (Field Boss) (Tier 4)",
+      "healthBarName": 904650600,
+      "bgm": 920300,
+      "members": [
+        {
+          "index": 83,
+          "sourceName": "c5011_9001",
+          "entity": 46750830,
+          "npc": 46500070,
+          "think": 46500005,
+          "model": "c4650",
+          "combat": true
+        }
+      ],
+      "mapSha256": "9050760f192fe4d16a7d8c8d6a04fbcc2a2b1a8fe15fc801d636320c720e65ee",
+      "eventSha256": "a0fc6bfd7c25e05d532cf5048d9e7aa492ea47fc9c05f7fe02820f0285552a3f"
+    },
+    {
+      "index": 52,
+      "map": "m46_77_00_00",
+      "target": 46775800,
+      "name": "Chief Bloodfiend (Field Boss) (Tier 2)",
+      "healthBarName": 905081001,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 84,
+          "sourceName": "c4130_9002",
+          "entity": 46770800,
+          "npc": 50810980,
+          "think": 50810005,
+          "model": "c5081",
+          "combat": true
+        },
+        {
+          "index": 85,
+          "sourceName": "c4130_9004",
+          "entity": 46770801,
+          "npc": 50802002,
+          "think": 50802005,
+          "model": "c5080",
+          "combat": false
+        },
+        {
+          "index": 86,
+          "sourceName": "c4130_9005",
+          "entity": 46770802,
+          "npc": 50801002,
+          "think": 50801005,
+          "model": "c5080",
+          "combat": false
+        }
+      ],
+      "mapSha256": "5c51f58c1379422b7044a09c303bcf2a6d990e68d14daf15182faadf0f26d407",
+      "eventSha256": "0efc4414d507941da4a7862bb56d9b4a4ea0d59b4cbdc6e2e2a272f0db51b980"
+    },
+    {
+      "index": 53,
+      "map": "m46_77_00_00",
+      "target": 46775810,
+      "name": "Inquisitor Jori (Staff) (Field Boss) (Tier 2) / Fat Inquisitor (Field Boss) (Tier 2)",
+      "healthBarName": 905320001,
+      "bgm": 940210,
+      "members": [
+        {
+          "index": 87,
+          "sourceName": "c3252_9004",
+          "entity": 46770810,
+          "npc": 53120180,
+          "think": 53120000,
+          "model": "c5312",
+          "combat": true
+        },
+        {
+          "index": 88,
+          "sourceName": "c3252_9003",
+          "entity": 46770811,
+          "npc": 53207090,
+          "think": 53200000,
+          "model": "c5320",
+          "combat": true
+        }
+      ],
+      "mapSha256": "5c51f58c1379422b7044a09c303bcf2a6d990e68d14daf15182faadf0f26d407",
+      "eventSha256": "0efc4414d507941da4a7862bb56d9b4a4ea0d59b4cbdc6e2e2a272f0db51b980"
+    },
+    {
+      "index": 54,
+      "map": "m46_77_00_00",
+      "target": 46770820,
+      "name": "Runebear (Field Boss) (Tier 2)",
+      "healthBarName": 904630310,
+      "bgm": 940000,
+      "members": [
+        {
+          "index": 89,
+          "sourceName": "c3181_9005",
+          "entity": 46770820,
+          "npc": 46300050,
+          "think": 46300005,
+          "model": "c4630",
+          "combat": true
+        }
+      ],
+      "mapSha256": "5c51f58c1379422b7044a09c303bcf2a6d990e68d14daf15182faadf0f26d407",
+      "eventSha256": "0efc4414d507941da4a7862bb56d9b4a4ea0d59b4cbdc6e2e2a272f0db51b980"
+    },
+    {
+      "index": 55,
+      "map": "m46_77_00_00",
+      "target": 46770830,
+      "name": "Red Wolf of Radagon (Blade) (Field Boss) (Tier 2)",
+      "healthBarName": 903181400,
+      "bgm": 921410,
+      "members": [
+        {
+          "index": 90,
+          "sourceName": "c3181_9001",
+          "entity": 46770830,
+          "npc": 31811030,
+          "think": 31810000,
+          "model": "c3181",
+          "combat": true
+        }
+      ],
+      "mapSha256": "5c51f58c1379422b7044a09c303bcf2a6d990e68d14daf15182faadf0f26d407",
+      "eventSha256": "0efc4414d507941da4a7862bb56d9b4a4ea0d59b4cbdc6e2e2a272f0db51b980"
+    },
+    {
+      "index": 56,
+      "map": "m60_43_38_10",
+      "target": 1038100890,
+      "name": "Seath",
+      "healthBarName": 904270602,
+      "bgm": 853000,
+      "members": [
+        {
+          "index": 91,
+          "sourceName": "c4602_9003",
+          "entity": 1038100890,
+          "npc": 85300000,
+          "think": 85300000,
+          "model": "c8530",
+          "combat": true
+        },
+        {
+          "index": 92,
+          "sourceName": "c4602_9004",
+          "entity": 1038100900,
+          "npc": 85300010,
+          "think": 85300000,
+          "model": "c8531",
+          "combat": false
+        }
+      ],
+      "auxiliaryEvent": 1038102220,
+      "mapSha256": "8b3b005d0b95cecc40d4d10a6fceae89ff1eb7b148b01978a5bf5d3b71bcae59",
+      "eventSha256": "e5939b864f6f7a832886e302a54a1ab14f684b5fa089e4a5b29f619f5e99a50b"
+    },
+    {
+      "index": 57,
+      "map": "m60_43_39_20",
+      "target": 1039200890,
+      "name": "Demon of Hatred (Crater)",
+      "healthBarName": 907020000,
+      "bgm": 702000,
+      "members": [
+        {
+          "index": 93,
+          "sourceName": "c3910_9003",
+          "entity": 1039200890,
+          "npc": 70200010,
+          "think": 70200000,
+          "model": "c7020",
+          "combat": true
+        }
+      ],
+      "auxiliaryEvent": null,
+      "mapSha256": "d5ab70a9ca7ecaf4f2e9409d1f8caff0d6adac6cd4df039c5cc1024ecb896442",
+      "eventSha256": "fb4a228665eedcc2294aecece8858b606f6b31f0b10670fe4c1225bfe097a083"
+    },
+    {
+      "index": 58,
+      "map": "m60_45_36_30",
+      "target": 1056300820,
+      "name": "Najka (Rotted Woods)",
+      "healthBarName": 904969020,
+      "bgm": 860003,
+      "members": [
+        {
+          "index": 94,
+          "sourceName": "c4311_9015",
+          "entity": 1056300820,
+          "npc": 95180010,
+          "think": 95170000,
+          "model": "c9518",
+          "combat": true
+        }
+      ],
+      "auxiliaryEvent": null,
+      "mapSha256": "db959699b98bb0c7bcfba1738ccce9d8f160ae02b8ea7de2386385033a32c1bb",
+      "eventSha256": "1618bbbd7f09f11461292473cff9f18705823a71c6a4537918057fa6359c6c8c"
+    }
+  ],
+  "excluded": [
+    {
+      "map": "m45_51_00_00",
+      "target": 45510800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m45_51_00_00",
+      "target": 45510810,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_51_00_00",
+      "target": 46510800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_51_00_00",
+      "target": 46515820,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_51_00_00",
+      "target": 46510850,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_52_00_00",
+      "target": 46520800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_52_00_00",
+      "target": 46520830,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_53_00_00",
+      "target": 46530800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_53_00_00",
+      "target": 46530810,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_53_00_00",
+      "target": 46530820,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_54_00_00",
+      "target": 46540800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_55_00_00",
+      "target": 46550800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_56_00_00",
+      "target": 46560800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_56_00_00",
+      "target": 46560810,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_57_00_00",
+      "target": 46570800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_58_00_00",
+      "target": 46580800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_58_00_00",
+      "target": 46580820,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_59_00_00",
+      "target": 46590800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_63_00_00",
+      "target": 46630800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_63_00_00",
+      "target": 46635820,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_64_00_00",
+      "target": 46640800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_65_00_00",
+      "target": 46650800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_66_00_00",
+      "target": 46660800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_67_00_00",
+      "target": 46670800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_68_00_00",
+      "target": 46680800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_68_00_00",
+      "target": 46680810,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_68_00_00",
+      "target": 46680820,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_69_00_00",
+      "target": 46690800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_71_00_00",
+      "target": 46710830,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_74_00_00",
+      "target": 46745800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_74_00_00",
+      "target": 46740810,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_74_00_00",
+      "target": 46740820,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_75_00_00",
+      "target": 46750800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_75_00_00",
+      "target": 46750810,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_75_00_00",
+      "target": 46750820,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_76_00_00",
+      "target": 46760800,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_76_00_00",
+      "target": 46760810,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    },
+    {
+      "map": "m46_76_00_00",
+      "target": 46760830,
+      "reason": "Existing cage encounter or alternate stats/no-flight version"
+    }
+  ]
+}

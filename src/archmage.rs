@@ -85,6 +85,27 @@ pub fn snapshot(data:&mut [u8;0x48],c:Catalyst,spells:[i32;2]){
  use super::*;
  fn catalyst(handle:u32)->Catalyst{Catalyst{handle,base:33000000,original:[4000,4001]}}
  fn state()->Archmage{let mut s=Archmage::default();s.synchronize(1,true,true);s}
+ #[test]fn target_catalogue_rerolls_and_exports_every_classified_secondary(){
+  let spells=crate::archmage_data::SPELLS;let random=crate::archmage_data::RANDOM_SPELLS;
+  assert!(spells.windows(2).all(|w|w[0].0<w[1].0));
+  assert!(random.windows(2).all(|w|w[0]<w[1]));
+  for &(original,k) in spells{
+   let c=Catalyst{original:[original,original],..catalyst(1)};
+   let choices=pool(original);assert!(!choices.is_empty());
+   assert!(choices.iter().all(|&id|kind(id)==Some(k)));
+   let mut s=state();s.notify(Some((c,1)));s.tick();s.tick();assert_eq!(s.tick(),[(c,1)]);
+   for &choice in &choices{
+    assert!(s.reroll(c,1,choice));assert_eq!(s.selected(c),Some([original,choice]));assert!(s.network_pending());
+    let mut data=[0x67;0x48];data[..4].copy_from_slice(&c.base.to_le_bytes());let mut expected=data;
+    expected[0x18..0x1c].copy_from_slice(&choice.to_le_bytes());snapshot(&mut data,c,[original,choice]);assert_eq!(data,expected);
+    s.network_sent();assert!(!s.network_pending());
+   }
+   s.dropped(123,c);let picked=Catalyst{handle:2,..c};assert!(s.picked_up(123,picked));
+   assert_eq!(s.selected(picked),s.selected(c));assert!(s.network_pending());
+   s.synchronize(1,true,false);assert!(s.selected(picked).is_some());
+   s.synchronize(2,true,true);assert_eq!(s.selected(picked),None);
+  }
+ }
  #[test]fn continuous_and_charged_casts_only_roll_used_slots_after_whole_chain(){
   let mut s=state();let c=catalyst(1);
   for _ in 0..100{s.notify(None);assert!(s.tick().is_empty());}

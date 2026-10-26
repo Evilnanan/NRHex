@@ -95,9 +95,9 @@ after = assets()
 assert before['mod/regulation.bin'].upper() == patch['inputRegulationSha256']
 assert after['mod/regulation.bin'].upper() == patch['outputRegulationSha256']
 changed = sorted(p for p in before.keys() | after.keys() if before.get(p) != after.get(p))
-assert set(changed) <= {'mod/regulation.bin', 'mod/natives/NRHex.dll'}, changed
+assert set(changed) <= {'mod/regulation.bin', 'natives/NRHex.dll'}, changed
 dll_hash = digest(ROOT / 'target/release/NRHex.dll')
-assert dll_hash == after['mod/natives/NRHex.dll']
+assert dll_hash == after['natives/NRHex.dll']
 version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
 test_count = int(sys.argv[sys.argv.index('--rust-tests') + 1])
 report = dict(version=version, hudIcon=20006, nativeReference=1681,

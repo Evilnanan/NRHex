@@ -272,8 +272,10 @@ try {
         Copy-Item -LiteralPath '.work/devils-gaze-iframes/native-validation.json' -Destination 'dist/reports/devils-gaze-immunity-validation.json' -Force
     }
     if (-not $NoInstall) {
-        New-Item -ItemType Directory -Path (Join-Path $PSScriptRoot 'dist/mod/natives') -Force | Out-Null
-        Copy-Item -LiteralPath $compiledDll -Destination (Join-Path $PSScriptRoot 'dist/mod/natives/NRHex.dll') -Force
+        python tools/native_layout.py (Join-Path $PSScriptRoot 'dist')
+        if ($LASTEXITCODE -ne 0) { throw 'Native directory migration failed.' }
+        New-Item -ItemType Directory -Path (Join-Path $PSScriptRoot 'dist/natives') -Force | Out-Null
+        Copy-Item -LiteralPath $compiledDll -Destination (Join-Path $PSScriptRoot 'dist/natives/NRHex.dll') -Force
     }
     if (-not $DllOnly) {
         & $me3 profile show --file (Join-Path $PSScriptRoot 'dist/NRHex.me3')

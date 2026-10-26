@@ -15,20 +15,22 @@ static class CageCoop {
   if(Convert.ToInt32(npc["multiPlayCorrectionParamId"].Value)!=(original<0?original:original+CorrectionBase))return false;
   return npc.Cells.Where(c=>c!=null&&c.Def.InternalName is not "disableRespawn" and not "multiPlayCorrectionParamId").All(c=>JsonSerializer.Serialize(c.Value)==JsonSerializer.Serialize(source[c.Def.InternalName].Value));
  }
- public static void Parameters(Dictionary<string,PARAM> tables,Func<string,int,int,PARAM.Row> clone){
-  var npcs=tables["NpcParam"].Rows.Where(r=>r.ID>=95300000&&r.ID<95300084).ToArray();Check(npcs.Length==84,"Expected 84 cage actors");
+ public static void Parameters(Dictionary<string,PARAM> tables,Func<string,int,int,PARAM.Row> clone,PARAM.Row[]? targetNpcs=null){
+  var npcs=targetNpcs??tables["NpcParam"].Rows.Where(r=>r.ID>=95300000&&r.ID<95300084).ToArray();Check(targetNpcs!=null||npcs.Length==84,"Expected 84 cage actors");
   var originalIds=npcs.Select(r=>Convert.ToInt32(r["multiPlayCorrectionParamId"].Value)).Where(id=>id>=0).Distinct().Order().ToArray();
   foreach(int source in originalIds){
    Check(source<10000,"Unexpected multiplayer correction source");var c=clone("MultiPlayCorrectionParam",source,CorrectionBase+source);
    foreach(string f in new[]{"client1SpEffectId","client2SpEffectId","client3SpEffectId"}){
-    int id=Convert.ToInt32(c[f].Value);if(id<0)continue;Check(id<10000,"Unexpected native correction effect");
+    int id=Convert.ToInt32(c[f].Value);if(id<0)continue;
+    if(targetNpcs!=null&&id>=EffectBase&&id<EffectBase+10000)id-=EffectBase;
+    Check(id<10000,"Unexpected native correction effect");
     int target=EffectBase+id;
     if(!tables["SpEffectParam"].Rows.Any(r=>r.ID==target)){var fx=clone("SpEffectParam",id,target);Check(Convert.ToInt32(fx["stateInfo"].Value)==282,"Correction must keep the native exclusive state");Set(fx,"isDisableNetSync",1);}
     Set(c,f,target);
    }
   }
   foreach(var npc in npcs){int id=Convert.ToInt32(npc["multiPlayCorrectionParamId"].Value);if(id>=0)Set(npc,"multiPlayCorrectionParamId",CorrectionBase+id);}
-  var marker=clone("SpEffectParam",Cages.Mutation,Ready);Set(marker,"isDisableNetSync",1);Set(marker,"spCategory",20);
+  if(targetNpcs==null){var marker=clone("SpEffectParam",Cages.Mutation,Ready);Set(marker,"isDisableNetSync",1);Set(marker,"spCategory",20);}
  }
  static void RemoveActivation(EMEVD.Event e,uint actor,int expected){
   Check(e.Parameters.Count==0,"Parameterized cage event");int count=0;

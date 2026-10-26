@@ -11,6 +11,22 @@ from mmv_hks_fragments import Fragment, functions
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / 'compat/mmv/hks-interior.json'
+ARTS_PLAN = ROOT / 'compat/mmv/arts.json'
+
+
+def arts_prefix(mode):
+    if mode not in ('used', 'busy'):
+        raise ValueError(f'Unknown Arts notification mode: {mode}')
+    body = '    if env(1116, 6999800) == TRUE then\n'
+    if mode == 'busy':
+        body += '        act(2002, 6999801)\n'
+    else:
+        body += ('        if c_SwordArtsHand == HAND_LEFT then\n'
+                 '            act(2002, 6999802)\n'
+                 '        else\n'
+                 '            act(2002, 6999803)\n'
+                 '        end\n')
+    return body + '    end\n'
 
 
 def hash_function(f):
@@ -97,6 +113,16 @@ def compose(source, before, after, plan):
                     add(0, 0, block, name + ':helper')
                 else:
                     raise ValueError(f'Unknown HKS adapter action: {kind}')
+        adapted.append(name)
+    # MMV-only nodes have no native bytecode counterpart to translate. Guard
+    # their complete source bodies, then add only the shared ownership pulse.
+    for name, spec in json.loads(ARTS_PLAN.read_text(encoding='utf8'))['callbacks'].items():
+        if name not in named or named[name]['count'] != 1 or name in adapted:
+            raise ValueError(f'MMV Arts callback missing/ambiguous/already adapted: {name}')
+        f = named[name]
+        if f['args'] or hashlib.sha256(source[f['start']:f['end']].encode()).hexdigest()!=spec['sourceSha256']:
+            raise ValueError(f'MMV Arts callback changed: {name}')
+        add(f['body'],f['body'],arts_prefix(spec['mode']),name+':mmv-arts')
         adapted.append(name)
     ordered = sorted(edits, key=lambda e: (e['start'], e['end']))
     for left, right in zip(ordered, ordered[1:]):

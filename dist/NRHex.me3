@@ -10,7 +10,7 @@ id = "nrhex-test"
 source = "mod"
 
 [[natives]]
-path = "mod/natives/NRHex.dll"
+path = "natives/NRHex.dll"
 
 [[natives]]
 path = "testmods/derandomizer/derandomizer.dll"

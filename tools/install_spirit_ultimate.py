@@ -14,7 +14,7 @@ assert sha(stage/'regulation.bin')==parameter['outputSha256']
 assert sha(dist/'mod/regulation.bin') in [parameter['inputSha256'],parameter['outputSha256']]
 assert sha(stage/'c0000.hks')==hks['outputSha256'].upper()
 assert sha(dist/'mod/action/script/c0000.hks') in [hks['inputSha256'].upper(),hks['outputSha256'].upper()]
-files=[(root/'target/release/NRHex.dll',dist/'mod/natives/NRHex.dll'),(stage/'regulation.bin',dist/'mod/regulation.bin'),(stage/'c0000.hks',dist/'mod/action/script/c0000.hks')]
+files=[(root/'target/release/NRHex.dll',dist/'natives/NRHex.dll'),(stage/'regulation.bin',dist/'mod/regulation.bin'),(stage/'c0000.hks',dist/'mod/action/script/c0000.hks')]
 for r in texts['reports']:
  source=stage/'texts'/r['language']/r['file'];target=dist/'mod/msg'/r['language']/r['file']
  assert sha(source)==r['outputSha256'] and sha(target) in [r['inputSha256'],r['outputSha256']]

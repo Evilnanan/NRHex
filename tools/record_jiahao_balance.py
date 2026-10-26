@@ -58,7 +58,7 @@ assert len(backstep_rows) == 173
 before = json.loads(baseline.read_text())
 after = assets()
 changed = sorted(p for p in before.keys() | after.keys() if before.get(p) != after.get(p))
-allowed = {'mod/natives/NRHex.dll', 'mod/msg/zhocn/item_dlc01.msgbnd.dcx', 'mod/msg/engus/item_dlc01.msgbnd.dcx'}
+allowed = {'natives/NRHex.dll', 'mod/msg/zhocn/item_dlc01.msgbnd.dcx', 'mod/msg/engus/item_dlc01.msgbnd.dcx'}
 assert set(changed) <= allowed, changed
 assert before['mod/regulation.bin'] == after['mod/regulation.bin']
 text = json.loads((work / 'text-validation.json').read_text())
@@ -78,7 +78,7 @@ assert 'Other dodges cost 25% Art gauge.' in en
 assert 'Frontal critical hits restore 25%.' in en
 assert en.endswith('Backstep attacks gain bonus damage equal to twice your current Art gauge percentage.')
 dll_hash = digest(ROOT / 'target/release/NRHex.dll')
-assert dll_hash == after['mod/natives/NRHex.dll']
+assert dll_hash == after['natives/NRHex.dll']
 version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
 test_count = int(sys.argv[sys.argv.index('--rust-tests') + 1])
 checks = dict(version=version, exeSha256=exe_hash, nativeAnchorsPassed=True,

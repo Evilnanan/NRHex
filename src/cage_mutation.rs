@@ -5,7 +5,7 @@ pub const NPC_COUNT:i32=84;
 // Only the cage's own persistent marker may promote one of its NPC copies.
 // Other native bits, including the actor's network state, must survive.
 pub fn promoted_flags(npc:i32,marked:bool,flags:u8)->u8 {
- if marked&&(FIRST_NPC..FIRST_NPC+NPC_COUNT).contains(&npc){flags|1}else{flags}
+ if marked&&crate::cage_catalog::npc(npc){flags|1}else{flags}
 }
 
 #[cfg(test)]

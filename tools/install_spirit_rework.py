@@ -14,7 +14,7 @@ assert sha(stage/'regulation.bin')==parameters['outputSha256']
 assert sha(dist/'mod/regulation.bin') in [parameters['inputSha256'],parameters['outputSha256']]
 assert '198 passed; 0 failed' in (stage.parent/'tests.log').read_text(encoding='utf8')
 assert 'PASS: current EXE hash' in (stage.parent/'scancheck.log').read_text(encoding='utf8')
-files=[(root/'target/release/NRHex.dll',dist/'mod/natives/NRHex.dll'),(stage/'regulation.bin',dist/'mod/regulation.bin')]
+files=[(root/'target/release/NRHex.dll',dist/'natives/NRHex.dll'),(stage/'regulation.bin',dist/'mod/regulation.bin')]
 for r in texts['reports']:
     source=stage/'texts'/r['language']/r['file'];target=dist/'mod/msg'/r['language']/r['file']
     assert sha(source)==r['outputSha256'] and sha(target) in [r['inputSha256'],r['outputSha256']]

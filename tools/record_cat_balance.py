@@ -28,9 +28,9 @@ if '--before' in sys.argv:
 before = json.loads(baseline.read_text())
 after = assets()
 changed = sorted(p for p in before.keys() | after.keys() if before.get(p) != after.get(p))
-assert set(changed) <= {'mod/natives/NRHex.dll'}, changed
+assert set(changed) <= {'natives/NRHex.dll'}, changed
 dll_hash = digest(ROOT / 'target/release/NRHex.dll')
-assert dll_hash == after['mod/natives/NRHex.dll']
+assert dll_hash == after['natives/NRHex.dll']
 version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
 native = json.loads((ROOT / 'dist/reports/cat-jump-native-validation.json').read_text())
 assert native['version'] == version and len(native['isolatedNativeHeightCases']) == 6

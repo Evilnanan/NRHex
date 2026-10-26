@@ -112,17 +112,23 @@ impl Spirits {
     }
 }
 pub fn private_npc(source: i32) -> Option<i32> {
+    if let Ok(i) = crate::spirit_target_data::EXTRA_NPCS.binary_search_by_key(&source, |&(npc, _)| npc) {
+        return Some(crate::spirit_target_data::EXTRA_NPCS[i].1);
+    }
     crate::spirit_npcs::NPCS
         .binary_search_by_key(&source, |&(id, _)| id)
         .ok()
         .map(|i| crate::spirit_npcs::NPCS[i].1)
 }
 pub fn is_private_npc(id: i32) -> bool {
-    (FIRST_NPC..FIRST_NPC + crate::spirit_npcs::NPCS.len() as i32).contains(&id)
+    (FIRST_NPC..FIRST_NPC + (crate::spirit_npcs::NPCS.len() + crate::spirit_target_data::EXTRA_NPCS.len()) as i32).contains(&id)
 }
 // Native NPC model decoding uses the numeric NPC prefix. Private rows need
 // their source model restored; map-placed cage rows have an explicit model.
 pub fn private_model(id: i32) -> Option<i32> {
+    if let Ok(i) = crate::spirit_target_data::MODELS.binary_search_by_key(&id, |&(npc, _)| npc) {
+        return Some(crate::spirit_target_data::MODELS[i].1);
+    }
     let index = id.checked_sub(FIRST_NPC)?;
     if index < 0 {
         return None;
@@ -139,7 +145,8 @@ pub fn private_model(id: i32) -> Option<i32> {
     Some(model)
 }
 pub fn boss_npc(id: i32) -> bool {
-    crate::spirit_bosses::BOSS_NPCS.binary_search(&id).is_ok()
+    crate::spirit_target_data::BOSSES.binary_search(&id).is_ok()
+        || crate::spirit_bosses::BOSS_NPCS.binary_search(&id).is_ok()
         || crate::spirit_bosses::THREAT_NPCS.binary_search(&id).is_ok()
         || crate::spirit_bosses::CAGE_BOSS_NPCS
             .binary_search(&id)
@@ -183,6 +190,32 @@ impl Packet {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn target_sources_models_and_packet_descriptors_roundtrip() {
+        assert!(crate::spirit_target_data::EXTRA_NPCS.windows(2).all(|w| w[0].0 < w[1].0));
+        assert!(crate::spirit_target_data::MODELS.windows(2).all(|w| w[0].0 < w[1].0));
+        assert!(crate::spirit_target_data::BOSSES.windows(2).all(|w| w[0] < w[1]));
+        for &(source, private) in crate::spirit_target_data::EXTRA_NPCS {
+            assert_eq!(private_npc(source), Some(private));
+            assert!(is_private_npc(private));
+            assert!(!is_private_npc(source));
+            assert!(private_model(private).is_some());
+            let descriptor = Soul { npc: private, think: 12345, chara_init: -1 };
+            let packet = Packet::new(descriptor, 42, 1, [1., 2., 3.], 0.);
+            assert_eq!((packet.npc, packet.think, packet.chara_init), (private, 12345, -1));
+            let mut state = Spirits::default();
+            state.synchronize(1, true);
+            assert!(state.defeated(Soul { npc: source, ..descriptor }, 7, 1000));
+            state.ultimate();
+            assert_eq!(state.take(true).unwrap().npc, source);
+            state.created(42);
+            assert_eq!(state.take(true), None);
+        }
+        for &npc in crate::spirit_target_data::BOSSES {
+            assert!(boss_npc(npc));
+            assert!(private_npc(npc).is_some());
+        }
+    }
     #[test]
     fn capture_prefers_max_hp_and_consumption_resets_priority() {
         let mut s = Spirits::default();
@@ -250,7 +283,7 @@ mod tests {
             0,
             46400010,
             FIRST_NPC - 1,
-            FIRST_NPC + crate::spirit_npcs::NPCS.len() as i32,
+            FIRST_NPC + (crate::spirit_npcs::NPCS.len() + crate::spirit_target_data::EXTRA_NPCS.len()) as i32,
         ] {
             assert_eq!(private_model(id), None);
         }

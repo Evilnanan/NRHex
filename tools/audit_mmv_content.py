@@ -60,13 +60,15 @@ def main():
         return {r['ID']: r['Text'] for f, entries in raw['text'].items() if f.startswith(prefix) for r in entries}
     weapon_names, art_names = texts('WeaponName'), texts('ArtsName')
     weapons, arts = rows('EquipParamWeapon'), rows('SwordArtsParam')
-    defaults = pairs('src/arts_data.rs', 'DEFAULTS')
-    bows = numbers('src/arts_data.rs', 'BOW_WEAPONS')
-    fire = numbers('src/arts_data.rs', 'FIRE_WEAPONS')
-    magic_weapons = numbers('src/arts_data.rs', 'MAGIC_WEAPONS')
-    pool = numbers('src/arts_data.rs', 'POOL') | numbers('src/arts_data.rs', 'BOW_POOL')
-    known = pairs('src/archmage_data.rs', 'SPELLS')
-    random = numbers('src/archmage_data.rs', 'RANDOM_SPELLS')
+    arts_path = 'work/compat/mmv/staged/arts_data.rs' if (ROOT / 'work/compat/mmv/staged/arts_data.rs').is_file() else 'src/arts_data.rs'
+    defaults = pairs(arts_path, 'DEFAULTS')
+    bows = numbers(arts_path, 'BOW_WEAPONS')
+    fire = numbers(arts_path, 'FIRE_WEAPONS')
+    magic_weapons = numbers(arts_path, 'MAGIC_WEAPONS')
+    pool = numbers(arts_path, 'POOL') | numbers(arts_path, 'BOW_POOL')
+    mage_path = 'work/compat/mmv/staged/archmage_data.rs' if (ROOT / 'work/compat/mmv/staged/archmage_data.rs').is_file() else 'src/archmage_data.rs'
+    known = pairs(mage_path, 'SPELLS')
+    random = numbers(mage_path, 'RANDOM_SPELLS')
     echo_path = 'work/compat/mmv/staged/echo_cast_data.rs' if (ROOT / 'work/compat/mmv/staged/echo_cast_data.rs').is_file() else 'src/echo_cast_data.rs'
     echo = {int(mid): set(map(int,re.findall(r'\d+', bullets))) for mid,bullets in
             re.findall(r'\((\d+),&\[([^]]*)\]\)',section(echo_path,'ROOTS'))}
@@ -98,7 +100,8 @@ def main():
     art_report=[dict(id=i,name=art_names.get(arts[i]['fields']['textId'],arts[i]['Name']),
         type=arts[i]['fields']['swordArtsType'],sampleWeapon=arts[i]['fields']['sparringGroundsWeaponId'],
         randomRegistered=i in pool) for i in added('SwordArtsParam')]
-    private=pairs('src/spirit_npcs.rs','NPCS');boss=set()
+    spirit_path = 'work/compat/mmv/staged/spirit_target_data.rs' if (ROOT/'work/compat/mmv/staged/spirit_target_data.rs').exists() else 'src/spirit_target_data.rs'
+    private=pairs('src/spirit_npcs.rs','NPCS');private.update(pairs(spirit_path,'EXTRA_NPCS'));boss=numbers(spirit_path,'BOSSES')
     for n in ['BOSS_NPCS','THREAT_NPCS','CAGE_BOSS_NPCS']:boss|=numbers('src/spirit_bosses.rs',n)
     npcs=rows('NpcParam')
     enemy_report=[dict(id=i,name=npcs[i]['Name'],hp=npcs[i]['fields']['hp'],team=npcs[i]['fields']['teamType'],
@@ -129,11 +132,11 @@ def main():
                    newWeaponsMissingParryTable=len(parry_missing),newArtsMissingRandomPool=sum(not a['randomRegistered'] for a in art_report),
                    newMagicWithOldEchoRoot=sum(bool(s['oldEchoRootOverlap']) for s in spell_report))
     report=dict(scope='Static parameter rows and runtime catalogues; not gameplay or availability certification',
-        hashes=raw['hashes'],echoCatalogue=echo_path,summary=summary,spells=spell_report,weapons=weapon_report,arts=art_report,enemies=enemy_report,changedWeaponDefaults=changed,
+        hashes=raw['hashes'],echoCatalogue=echo_path,archmageCatalogue=mage_path,artsCatalogue=arts_path,spiritCatalogue=spirit_path,summary=summary,spells=spell_report,weapons=weapon_report,arts=art_report,enemies=enemy_report,changedWeaponDefaults=changed,
         missingParryWeapons=parry_missing,newHksFunctions=callbacks,
         changedExistingMagicRoots=[mid for mid in sorted(magic.keys()&oldmagic.keys()) if magic_roots(magic[mid])!=magic_roots(oldmagic[mid])],
         catalogueHashes={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
-          [ROOT/'src/archmage_data.rs',ROOT/'src/arts_data.rs',ROOT/echo_path,ROOT/'src/echo_cast_data.rs',ROOT/'src/spirit_npcs.rs',ROOT/'src/spirit_bosses.rs',
+          [ROOT/mage_path,ROOT/'src/archmage_data.rs',ROOT/arts_path,ROOT/'src/arts_data.rs',ROOT/echo_path,ROOT/'src/echo_cast_data.rs',ROOT/'src/spirit_npcs.rs',ROOT/'src/spirit_bosses.rs',ROOT/spirit_path,
            ROOT/'work/compat/mmv/staged/parry_data.rs',ROOT/'work/compat/mmv/staged/sword_map.rs',ROOT/'dist/mmv/mod/action/script/c0000.hks',
            OUT/'parameters.json',ROOT/'work/compat/mmv/sword-parameters.json',ROOT/'work/sword-range-export/parameters.json']})
     (OUT/'coverage.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')

@@ -8,12 +8,34 @@ import sys
 import tempfile
 from pathlib import Path
 from distribution_paths import distribution_file
+from native_layout import migrate
+
+
+def verify_native_migration():
+    with tempfile.TemporaryDirectory(prefix='nrhex-native-layout-') as temporary:
+        base = Path(temporary)
+        old = base / 'mod/natives'
+        old.mkdir(parents=True)
+        for name, data in {'NRHex.dll': b'dll', 'NRHex.ini': b'user=true', 'NRHex.log': b'log'}.items():
+            (old / name).write_bytes(data)
+        (base / 'natives').mkdir()
+        try:
+            migrate(base)
+        except ValueError:
+            assert (old / 'NRHex.ini').read_bytes() == b'user=true'
+        else:
+            raise AssertionError('Conflicting native directories must not be merged silently')
+        (base / 'natives').rmdir()
+        assert len(migrate(base)) == 3
+        assert not old.exists()
+        assert (base / 'natives/NRHex.ini').read_bytes() == b'user=true'
+        assert migrate(base) == {}
 
 
 def verify_record_writer(root):
     with tempfile.TemporaryDirectory(prefix='nrhex-report-layout-') as temporary:
         fixture = Path(temporary)
-        for folder in ['tools', 'src', 'dist/reports', 'dist/mod/natives']:
+        for folder in ['tools', 'src', 'dist/reports', 'dist/natives']:
             (fixture / folder).mkdir(parents=True, exist_ok=True)
         shutil.copy2(root / 'tools/record_build.py', fixture / 'tools/record_build.py')
         (fixture / 'Cargo.toml').write_text('[package]\nversion = "0.0.0"\n', encoding='utf-8')
@@ -21,7 +43,7 @@ def verify_record_writer(root):
         reports = fixture / 'dist/reports'
         (reports / 'validation.json').write_text('{"hexes":[]}', encoding='utf-8')
         (reports / 'fixture-validation.json').write_text('{}', encoding='utf-8')
-        dll = fixture / 'dist/mod/natives/NRHex.dll'
+        dll = fixture / 'dist/natives/NRHex.dll'
         dll.write_bytes(b'layout-fixture')
         command = [sys.executable, str(fixture / 'tools/record_build.py'), '--dll', str(dll)]
         subprocess.run(command, check=True, capture_output=True, text=True)
@@ -48,7 +70,7 @@ def verify(root):
         assert distribution_file(dist, name) == reports / name
         assert distribution_file(dist, Path(name)) == reports / name
         assert distribution_file(dist, 'reports/' + name) == reports / name
-    for name in ['mod/natives/NRHex.dll', 'mod/regulation.bin', 'testmods/example/config.json', 'NRHex.me3', 'README.md']:
+    for name in ['natives/NRHex.dll', 'mod/regulation.bin', 'testmods/example/config.json', 'NRHex.me3', 'README.md']:
         assert distribution_file(dist, name) == dist / name
     absolute = root / 'work' / 'validation.json'
     assert distribution_file(dist, absolute) == absolute
@@ -69,6 +91,7 @@ def verify(root):
                 value = node.right.value
                 assert not (value.endswith('.json') and '/' not in value), f'Unrouted report: {path}:{node.lineno}'
     verify_record_writer(root)
+    verify_native_migration()
     print(f'PASS: {len(list(reports.glob("*.json")))} reports, legacy-name routing, runtime paths, full/DLL-only report writers and {len(sources)} tool sources')
 
 

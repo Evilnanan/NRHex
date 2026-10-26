@@ -14,7 +14,7 @@ binary = pefile.PE(data=raw, fast_load=True)
 binary.parse_data_directories(directories=[5])
 source = (ROOT / 'src/cage_demand.rs').read_text(encoding='utf-8')
 signatures = re.findall(r'\(0x([0-9a-f]+),[^\n]*?&\[([0-9a-fx,]+)\]\)', source)
-assert len(signatures) == 35
+assert len(signatures) == 37
 for address, values in signatures:
     expected = bytes(int(value, 16) for value in values.split(','))
     assert binary.get_data(int(address, 16), len(expected)) == expected, address
@@ -44,6 +44,26 @@ try:
                 value.value = (value.value + base - binary.OPTIONAL_HEADER.ImageBase) & 0xffffffffffffffff
             else:
                 assert entry.type == 0
+
+    # Execute the original constructor/decoder with the live-verified handle
+    # layout. Only WorldChrMan's map-serial query is replaced with a fixture.
+    native.c_uint.from_address(base + 0x39a8888).value = 0xff
+    native.c_uint.from_address(base + 0x39a888c).value = 20
+    native.c_uint.from_address(base + 0x39a8890).value = 0xfffff
+    native.c_uint64.from_address(base + 0x3c0f0a8).value = 1
+    encode = native.WINFUNCTYPE(native.c_void_p, native.c_void_p, native.c_void_p, native.c_int)(base + 0x63fd90)
+    decode = native.WINFUNCTYPE(native.c_int, native.c_void_p)(base + 0x63ff10)
+    for serial in [0, 1, 15, 16, 18, 31, 32, 255]:
+        patch(0x519380, b'\xb8' + struct.pack('<I', serial) + b'\xc3')
+        for map_id in [0x2e321a01, 0x2e461a03]:
+            map_value = native.c_uint(map_id)
+            for index in [0, 5, 38, 185, 0xfffff]:
+                identifier = native.c_uint64()
+                assert encode(native.addressof(identifier), native.addressof(map_value), index) == native.addressof(identifier)
+                assert identifier.value == (map_id << 32) | 0x10000000 | (serial << 20) | index
+                assert decode(native.addressof(identifier)) == index
+                cases.append({'serial': serial, 'index': index, 'nativeHandle': hex(identifier.value),
+                              'legacyIndexWouldLeak': (identifier.value & 0xffffff) != index})
 
     patch(0xe3d7b0, bytes.fromhex('31 c0 c3'))
     patch(0x75bb30, bytes.fromhex('89 11 48 8b c1 c3'))

@@ -26,7 +26,7 @@ if '--before' in sys.argv:
 before = json.loads(baseline.read_text())
 after = assets()
 changed = sorted(p for p in before.keys() | after.keys() if before.get(p) != after.get(p))
-assert set(changed) <= {'mod/regulation.bin', 'mod/natives/NRHex.dll'}, changed
+assert set(changed) <= {'mod/regulation.bin', 'natives/NRHex.dll'}, changed
 patch = json.loads((work / 'parameter-patch.json').read_text())
 assert patch['outputRegulationSha256'].lower() == after['mod/regulation.bin']
 assert patch['effectId'] == 95000601
@@ -37,7 +37,7 @@ version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['package']['version']
 runtime_source = (ROOT / 'src/runtime.rs').read_text(encoding='utf8')
 assert 's.fp>=4' in runtime_source and 'REGEN_INTERVAL: f32 = 0.25' in runtime_source
 dll_hash = digest(ROOT / 'target/release/NRHex.dll')
-assert dll_hash == after['mod/natives/NRHex.dll']
+assert dll_hash == after['natives/NRHex.dll']
 test_count = int(sys.argv[sys.argv.index('--rust-tests') + 1])
 report = dict(version=version, **patch, intervalSeconds=0.25, changedAssets=changed,
               runtimeMinimumFp=4, rustTestsPassed=test_count,
