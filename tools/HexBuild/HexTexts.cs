@@ -34,7 +34,7 @@ static class HexTexts {
    return language=="zhocn"?((r.ZhName??owner.Zh)+r.ZhSuffix,r.ZhInfo):((r.EnName??owner.En)+r.EnSuffix,r.EnInfo);
   });
  }
- public static void Stage(string root,Hex[] hexes,string? destination=null,bool statusOnly=false,bool allRewards=false,int[]? onlyIds=null,int[]? retiredIds=null){
+ public static void Stage(string root,Hex[] hexes,string? destination=null,bool statusOnly=false,bool allRewards=false,int[]? onlyIds=null,int[]? retiredIds=null,string? inputMod=null){
   var output=destination??Path.Combine(root,".work/crystal-rebound-01730/texts");Directory.CreateDirectory(output);
   var reports=new List<object>();
   foreach(var language in destination==null&&!statusOnly?new[]{"zhocn"}:new[]{"zhocn","engus"}){
@@ -53,7 +53,7 @@ static class HexTexts {
     replacements["SpEffectName.fmg"]=statuses.ToDictionary(v=>v.Key,v=>v.Value.Name);
     replacements["SpEffectInfo.fmg"]=statuses.ToDictionary(v=>v.Key,v=>v.Value.Info);
    }
-   string file=kind+"_dlc01.msgbnd.dcx",input=Path.Combine(root,"dist/mod/msg",language,file),target=Path.Combine(output,language,file);Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+   string file=kind+"_dlc01.msgbnd.dcx",input=Path.Combine(inputMod??Path.Combine(root,"dist/mod"),"msg",language,file),target=Path.Combine(output,language,file);Directory.CreateDirectory(Path.GetDirectoryName(target)!);
    // Retain the historical Chinese-only staging location for older tools.
    if(destination==null)target=Path.Combine(output,file);
    var before=BND4.Read(input);var patched=BND4.Read(input);var changes=new List<object>();

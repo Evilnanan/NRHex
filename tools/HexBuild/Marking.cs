@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 static class Marking {
  public const int Owner=95004200,Attack=600000110,Stamp=300000290,Impact=9;
+ public const float CooldownRate=1.5f;
  static string Name(BinderFile file)=>file.Name.Replace('\\','/').Split('/').Last();
  static void Check(bool value,string message){if(!value)throw new InvalidDataException(message);}
  static void Set(PARAM.Row row,string field,object value)=>row[field].Value=Convert.ChangeType(value,row[field].Value.GetType());

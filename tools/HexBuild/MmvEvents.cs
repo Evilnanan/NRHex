@@ -112,6 +112,12 @@ static class MmvEvents {
             var originalPath = Path.Combine(root, "assets/original/event", file);
             Require(File.Exists(originalPath), $"Original event input missing: {file}");
             var baseline = EMEVD.Read(originalPath); var nrhex = EMEVD.Read(path);
+            // Rebase the base encounter lifecycle first; escalation is a final
+            // pass after MMV has allocated its additional actors and flags.
+            if (name == "common_func" && nrhex.Events.Single(e=>e.ID==Cages.OpenEvent).Parameters.Any(p=>p.SourceStartByte>=32))
+                nrhex.Events[nrhex.Events.FindIndex(e=>e.ID==Cages.OpenEvent)] = CageUsage.Open(baseline.Events.Single(e=>e.ID==90045000));
+            if (new[]{"m46_50_00_00","m46_60_00_00","m46_70_00_00","m46_80_00_00"}.Contains(name))
+                CageEscalation.StripMap(nrhex,(uint)(4600+int.Parse(name.Substring(4,2)))*10000);
             var mmvPath = Path.Combine(mmvRoot, "mod/event", file);
             var input = File.Exists(mmvPath) ? mmvPath : originalPath;
             var prior = EMEVD.Read(input); var result = EMEVD.Read(input);

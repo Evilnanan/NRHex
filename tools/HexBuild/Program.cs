@@ -159,6 +159,9 @@ if(args.Contains("--wraith-native-check")){Wraith.Verify(root,Parse,true);return
 if(args.Contains("--wraith-check")){Wraith.Verify(root,Parse);return;}
 if(args.Contains("--marking-poison-stage")){MarkingPoison.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--marking-poison-actions")){MarkingPoison.Actions(root);return;}
+if(args.Contains("--escape-balance-stage")){int at=Array.IndexOf(args,"--escape-balance-stage");HexBalance.Stage(root,Path.GetFullPath(args[at+1]),Path.GetFullPath(args[at+2]),Parse,escapeOnly:true);return;}
+if(args.Contains("--hex-balance-stage")){int at=Array.IndexOf(args,"--hex-balance-stage");HexBalance.Stage(root,Path.GetFullPath(args[at+1]),Path.GetFullPath(args[at+2]),Parse);return;}
+if(args.Contains("--cage-escalation-stage")){int at=Array.IndexOf(args,"--cage-escalation-stage");CageEscalation.Stage(root,Path.GetFullPath(args[at+1]),Path.GetFullPath(args[at+2]),Parse);return;}
 if(args.Contains("--marking-stage")){Marking.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--marking-check")){Marking.Verify(root,bnd,Parse);return;}
 if(args.Contains("--sword-poise-stage")){SwordPoise.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -879,7 +882,7 @@ foreach(var h in hexes){
  var s=Clone("SpEffectParam",8000000,h.Id);
  Set(s,"maxHpRate",1f);Set(s,"spCategory",20);Set(s,"iconId",h.SmallIcon);Set(s,"spEffectTextId_1",h.Id);Set(s,"displayIconForPermamentEffect",0);
  if(h.Id==95000200){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,.75f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"addLifeForceStatus","addWillpowerStatus","addEndureStatus","addStrengthStatus","addDexterityStatus","addMagicStatus","addFaithStatus","addLuckStatus"})Set(s,f,10);}
- if(h.Id==95000300){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,1.2f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,f,10f);}
+ if(h.Id==95000300){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,GlassCannon.AttackRate);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,f,10f);}
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
  if(h.Id==ContractHeart.Contract)ContractHeart.Owners(s);
  if(h.Id==HeartMist.Owner)HeartMist.OwnerEffect(s,pars["SpEffectParam"].Rows.Single(r=>r.ID==8320400));
@@ -979,8 +982,10 @@ Set(escapeVisual,"iconId",-1);Set(escapeVisual,"spEffectTextId_1",-1);Set(escape
 EscapeVfx.Apply(pars["SpEffectParam"],pars["SpEffectVfxParam"],pars["Bullet"]);
 added["SpEffectVfxParam"].Add(EscapeVfx.Visual);
 foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(escape,f,.4f);
+foreach(var f in Erosion.AttackRates)Set(escape,f,.7f);
+foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(escape,f,1);
 var escapeCooldown=Clone("SpEffectParam",8000000,95001202);
-Set(escapeCooldown,"maxHpRate",1f);Set(escapeCooldown,"effectEndurance",60f);Set(escapeCooldown,"iconId",-1);Set(escapeCooldown,"displayIconForPermamentEffect",0);Set(escapeCooldown,"spEffectTextId_1",95001202);
+Set(escapeCooldown,"maxHpRate",1f);Set(escapeCooldown,"effectEndurance",70f);Set(escapeCooldown,"iconId",-1);Set(escapeCooldown,"displayIconForPermamentEffect",0);Set(escapeCooldown,"spEffectTextId_1",95001202);
 var sixthSense=pars["SpEffectParam"].Rows.Single(r=>r.ID==700600);
 Require(Convert.ToInt32(sixthSense["displayIconForPermamentEffect"].Value)==1,"Native Sixth Sense HUD flag changed");
 var escapeReady=Clone("SpEffectParam",8000000,95001203);
@@ -1159,7 +1164,7 @@ foreach(var f in drinkingPowerRates)Require(Convert.ToSingle(Effect(95000200)[f]
 foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Require(Convert.ToInt32(Effect(95000200)[f].Value)==1,"Astral Body spell applicability mismatch");
 foreach(var f in new[]{"addLifeForceStatus","addWillpowerStatus","addEndureStatus","addStrengthStatus","addDexterityStatus","addMagicStatus","addFaithStatus","addLuckStatus"})Require(Convert.ToInt32(Effect(95000200)[f].Value)==10,"Astral Body must grant all eight attributes +10");
 foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Require(Convert.ToSingle(Effect(95000300)[f].Value)==10f,"Glass Cannon must take 1000% of normal damage, not +1000%");
-foreach(var f in drinkingRates)Require(Convert.ToSingle(Effect(95000300)[f].Value)==1.2f,"Glass Cannon damage multiplier must be 1.2");
+foreach(var f in drinkingRates)Require(Convert.ToSingle(Effect(95000300)[f].Value)==GlassCannon.AttackRate,"Glass Cannon damage multiplier must be 1.25");
 foreach(var f in drinkingPowerRates)Require(Convert.ToSingle(Effect(95000300)[f].Value)==1f,"Glass Cannon must not also change pre-defense attack power");
 foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Require(Convert.ToInt32(Effect(95000300)[f].Value)==1,"Glass Cannon spell applicability mismatch");
 Require(Convert.ToSingle(Effect(95000401)["ultimateArtGauge"].Value)==100f&&Convert.ToSingle(Effect(95000401)["effectEndurance"].Value)==0f,"Ultimate pulse is not an instant +100 refill");
@@ -1201,9 +1206,10 @@ Directory.CreateDirectory(Path.Combine(root,".work/noisy"));
 File.WriteAllText(Path.Combine(root,".work/noisy/serialized.json"),JsonSerializer.Serialize(new{effects=new[]{95001501}.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),bullets=serialized["Bullet"].Rows.Where(r=>r.ID>=95001550&&r.ID<=95001557).Select(r=>new{id=r.ID,fields=r.Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),attacks=serialized["AtkParam_Pc"].Rows.Where(r=>r.ID>=95001560&&r.ID<=95001566).Select(r=>new{id=r.ID,fields=r.Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)})}));
 var escapeIds=new[]{95001200,95001201,95001202,95001203,95001204};
 foreach(int id in escapeIds)Require(Convert.ToSingle(Effect(id)["maxHpRate"].Value)==1f,"Escape adds an unintended max-HP bonus");
-Require(Convert.ToSingle(Effect(95001201)["effectEndurance"].Value)==10f&&Convert.ToSingle(Effect(95001202)["effectEndurance"].Value)==60f,"Escape duration/cooldown mismatch");
+Require(Convert.ToSingle(Effect(95001201)["effectEndurance"].Value)==10f&&Convert.ToSingle(Effect(95001202)["effectEndurance"].Value)==70f,"Escape duration/cooldown mismatch");
 Require(Convert.ToInt32(Effect(95001204)["vfxId"].Value)==EscapeVfx.Visual&&Convert.ToSingle(Effect(95001204)["effectEndurance"].Value)==0.2f&&Convert.ToInt32(Effect(95001204)["saveCategory"].Value)==-1&&Convert.ToInt32(Effect(95001204)["iconId"].Value)==-1&&Convert.ToInt32(Effect(95001204)["stateInfo"].Value)==0,"Escape Restage cue must be neutral, hidden and transient");
 foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Require(Convert.ToSingle(Effect(95001201)[f].Value)==.4f,"Escape must reduce all damage types by 60%");
+foreach(var f in Erosion.AttackRates)Require(Convert.ToSingle(Effect(95001201)[f].Value)==.7f,"Escape attack penalty must be 30%");
 Require(Convert.ToInt32(Effect(95001203)["iconId"].Value)==20222&&Convert.ToInt32(Effect(95001203)["displayIconForPermamentEffect"].Value)==1&&Convert.ToInt32(Effect(95001203)["saveCategory"].Value)==-1,"Escape ready HUD icon mismatch");
 File.WriteAllText(Path.Combine(root,".work/effects/escape-serialized.json"),JsonSerializer.Serialize(escapeIds.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));
 File.WriteAllText(Path.Combine(root,".work/actions/jiahao-serialized.json"),JsonSerializer.Serialize(new[]{95001300,6999700,6999701,6999705}.Select(id=>new{id,fields=Effect(id).Cells.Where(c=>c!=null).ToDictionary(c=>c.Def.InternalName,c=>c.Value)}),new JsonSerializerOptions{WriteIndented=true}));

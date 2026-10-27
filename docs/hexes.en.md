@@ -27,7 +27,7 @@ Reduces attack power by 25%. Raises all attributes by 10.
 <!-- hex:95000300 -->
 ## Glass Cannon
 
-Takes 10x damage. Attack power +20%. Ignores enemy defense, resistances and damage negation.
+Takes 10x damage. Attack power +25%. Ignores enemy defense, resistances and damage negation.
 
 <!-- hex:95000400 -->
 ## Ultimate Revolution
@@ -67,7 +67,7 @@ Boosts the impact of melee attacks.
 <!-- hex:95001200 -->
 ## Escape Plan
 
-Increases action speed and boosts damage negation by 60% for 10 seconds when HP is low. Cooldown: 60 seconds.
+At low HP, act faster, take 60% less damage and deal 30% less damage for 10s. Cooldown: 70s.
 
 <!-- hex:95001300 -->
 ## Edgelord's Footwork
@@ -87,7 +87,7 @@ Marking the player's own location creates lava that erupts after a delay. Repeat
 <!-- hex:95001600 -->
 ## Spawner
 
-Opens evergaols without keys, with varied enemies and up to 5 openings each. No Site of Grace appears after clearing.
+Open evergaols repeatedly without keys to face varied enemies. No Site of Grace appears after clearing.
 
 <!-- hex:95001700 -->
 ## Balloon
@@ -152,7 +152,7 @@ Healing flasks restore HP gradually. Recoverable damage is taken over 2 seconds.
 <!-- hex:95003100 -->
 ## Erosion
 
-Reduces attack power by 20%. Attacks build up the status ailment to which the target is most vulnerable.
+Reduces attack power by 30%. Attacks build up the status ailment to which the target is most vulnerable.
 
 <!-- hex:95003200 -->
 ## Potential Fission
@@ -182,7 +182,7 @@ After a hit: attack power +30% for 5 seconds, then attack power and damage negat
 <!-- hex:95003800 -->
 ## Ultimate Awakening
 
-Eliminates FP consumption for 15 seconds after activating an Ultimate Art.
+Eliminates FP consumption for 10 seconds after activating an Ultimate Art.
 
 <!-- hex:95003900 -->
 ## Ultimate Unstoppable
@@ -197,7 +197,7 @@ Raises maximum HP by 50% and increases the likelihood of being targeted by enemi
 <!-- hex:95004200 -->
 ## Slide Kick
 
-Your Character Skill launches small enemies. Follow-up attacks against kicked enemies deal heavy damage.
+Character Skill cooldown +50%. Launches small enemies; follow-up attacks against kicked enemies deal heavy damage.
 
 <!-- hex:95004300 -->
 ## Wraithcaller
@@ -212,7 +212,7 @@ Seals Ultimate Arts. Greatly accelerates Character Skill cooldown recovery and b
 <!-- hex:95004500 -->
 ## Experienced Sniper
 
-Reduces attack power by 30%. Boosts damage as the distance to the target increases. Greatly reduces arrow damage falloff with distance.
+Attack power -30%. Damage increases with distance to the target. Greatly extends range.
 
 <!-- hex:95004600 -->
 ## Metallization

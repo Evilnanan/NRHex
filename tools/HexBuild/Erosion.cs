@@ -3,8 +3,8 @@ using System.Text.Json;
 static class Erosion {
  public const int Owner=95003100;
  public const int Carrier=Owner+1,First=Owner+10,ItemCarrier=Owner+2,ItemFirst=Owner+20;
- const float AttackRate=.8f;
- static readonly string[] AttackRates={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"};
+ public const float AttackRate=.7f;
+ public static readonly string[] AttackRates={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"};
  static readonly int[] Sources={8110002,8110402,8110102,6800,8110502,8110202,6750};
  static readonly string[] Powers={"poizonAttackPower","diseaseAttackPower","bloodAttackPower","curseAttackPower","freezeAttackPower","sleepAttackPower","madnessAttackPower"};
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
@@ -84,7 +84,7 @@ static class Erosion {
   foreach(var (table,updates) in fields){
    var file=binder.Files.Single(file=>Name(file)==table+".param");var parameters=parse(table,file.Bytes);var row=parameters.Rows.Single(row=>row.ID==Owner);
    foreach(var (field,value) in updates){
-    if(AttackRates.Contains(field))Check(Convert.ToSingle(row[field].Value) is .85f or AttackRate,$"Unexpected Erosion attack rate: {field}");
+    if(AttackRates.Contains(field))Check(Convert.ToSingle(row[field].Value) is .85f or .8f or AttackRate,$"Unexpected Erosion attack rate: {field}");
     else{
      int current=Convert.ToInt32(row[field].Value),previous=table=="PermanentBuffParam"?21206:table=="EquipParamGoods"?20206:22206;
      Check(current==previous||current==previous+1||current==Convert.ToInt32(value),$"Unexpected Erosion icon: {table}/{field}/{current}");
@@ -113,8 +113,8 @@ static class Erosion {
    }
   }
   HexTexts.Stage(root,hexes,Path.Combine(directory,"texts"),allRewards:true,onlyIds:new[]{Owner});
-  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),owner=Owner,attackRate=AttackRate,damageReductionPercent=20,largeIcon=hex.LargeIcon,smallIcon=hex.SmallIcon,goodsIcon=hex.LargeIcon-1000,changes,unrelatedRowsAndFieldsPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: Erosion 20% attack reduction and icons read back; all unrelated parameter fields preserved");
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),owner=Owner,attackRate=AttackRate,damageReductionPercent=30,largeIcon=hex.LargeIcon,smallIcon=hex.SmallIcon,goodsIcon=hex.LargeIcon-1000,changes,unrelatedRowsAndFieldsPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Erosion 30% attack reduction and icons read back; all unrelated parameter fields preserved");
  }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string dir=Path.Combine(root,"work/erosion/staged"),input=Path.Combine(root,"dist/mod/regulation.bin");Directory.CreateDirectory(dir);

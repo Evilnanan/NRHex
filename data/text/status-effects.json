@@ -14,14 +14,14 @@
   {
     "textId": 95001203,
     "ownerId": 95001200,
-    "zhInfo": "血量偏低时，触发加速和60%减伤",
-    "enInfo": "Increases action speed and boosts damage negation by 60% when HP is low."
+    "zhInfo": "血量偏低时，触发加速和60%减伤，攻击力降低30%",
+    "enInfo": "At low HP, act faster, take 60% less damage and deal 30% less damage."
   },
   {
     "textId": 95001201,
     "ownerId": 95001200,
-    "zhInfo": "行动加快，减伤率提升60%",
-    "enInfo": "Increases action speed and boosts damage negation by 60%."
+    "zhInfo": "行动加快，减伤率提升60%，攻击力降低30%",
+    "enInfo": "Act faster, take 60% less damage and deal 30% less damage."
   },
   {
     "textId": 95001202,

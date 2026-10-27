@@ -62,6 +62,7 @@ mod parry_data { include!(concat!(env!("OUT_DIR"), "/parry_data.rs")); }
 #[cfg(feature="mmv-compat")]
 mod mmv_compat;
 mod hero_audio;
+mod cage_hud;
 mod storm_audio;
 mod spirit;
 mod spirit_kills;
@@ -367,7 +368,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);205] {
+fn signatures()->[(&'static str,u32);206] {
  [(double_dip::POPUP_PATTERN,double_dip::POPUP_RVA as u32),
   (basics::RESTAGE_PATTERN,basics::RESTAGE_RVA as u32),
   (devils_gaze_scaling::CORRECTION_QUERY_PATTERN,devils_gaze_scaling::CORRECTION_QUERY_RVA as u32),
@@ -403,6 +404,7 @@ fn signatures()->[(&'static str,u32);205] {
   ("8B 91 04 07 00 00 83 EA 01 74 30 83 EA 01 74 25 83 EA 01 74 1A 83 EA 01 74 0F 83 FA 01 75 04",0x66b8c0),
   ("8D 42 06 83 F8 15 77 0C 48 8B 89 70 06 00 00 E9 CC 4A D1 FF B8 FF FF FF FF C3",0x66cde0),
   (hero_audio::PATTERN,hero_audio::RVA as u32),
+  (cage_hud::PATTERN,cage_hud::RVA as u32),
   (storm_audio::REQUEST_PATTERN,storm_audio::REQUEST_RVA as u32),
   (erosion::COLLECT_PATTERN,erosion::COLLECT_RVA as u32),
   (erosion::CONTACT_PATTERN,erosion::CONTACT_RVA as u32),
@@ -685,6 +687,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (LAVA_CLEANUP_RVA,lava_cleanup_detour as *const u8,&LAVA_CLEANUP_ORIG),
    (glass_cannon::OBJECT_RVA,glass_cannon::object_detour as *const u8,&glass_cannon::OBJECT_ORIGINAL),
    (hero_audio::RVA,hero_audio::detour as *const u8,&hero_audio::ORIGINAL),
+   (cage_hud::RVA,cage_hud::detour as *const u8,&cage_hud::ORIGINAL),
    (archmage_runtime::RVA,archmage_runtime::wrapper as *const u8,&archmage_runtime::ORIGINAL),
    (archmage_cost::SELECT_RVA,archmage_cost::select as *const u8,&archmage_cost::SELECT_ORIGINAL),
    (archmage_cost::COST_RVA,archmage_cost::wrapper as *const u8,&archmage_cost::COST_ORIGINAL),

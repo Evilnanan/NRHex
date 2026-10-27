@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Security.Cryptography;
 
 static class GlassCannon {
- public const float AttackRate=1.2f;
+ public const float AttackRate=1.25f;
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
  public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
@@ -16,7 +16,7 @@ static class GlassCannon {
   var row=rows.Rows.Single(r=>r.ID==95000300);
   string[] fields=["physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"];
   foreach(string f in fields){
-   float old=Convert.ToSingle(row[f].Value);Check(old==1.4f||old==AttackRate,"Unexpected Glass Cannon attack multiplier");
+   float old=Convert.ToSingle(row[f].Value);Check(old==1.4f||old==1.2f||old==AttackRate,"Unexpected Glass Cannon attack multiplier");
    row[f].Value=AttackRate;
   }
   foreach(string f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Check(Convert.ToSingle(row[f].Value)==10f,"Unexpected incoming damage multiplier");
@@ -39,6 +39,6 @@ static class GlassCannon {
   }
   HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:[95000300]);
   File.WriteAllText(Path.Combine(dir,"parameters.json"),JsonSerializer.Serialize(new{version="0.17.69",inputSha256=Hash(input),outputSha256=Hash(target),effectId=95000300,fields,attackRate=AttackRate,incomingDamageRate=10f,unrelatedRowsAndFieldsPreserved=true,hexes=hexes.Where(h=>h.Id==95000300),gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: Glass Cannon attack multiplier 1.4 -> 1.2, incoming x10 retained; unrelated fields preserved; Chinese and English texts verified");
+  Console.WriteLine("PASS: Glass Cannon attack multiplier 1.25, incoming x10 retained; unrelated fields preserved; Chinese and English texts verified");
  }
 }

@@ -63,8 +63,8 @@ fn native_ultimate_awakening_success_refresh_and_fp_aggregation(){unsafe{
  let cast=|id,actor|crate::effect_detour(actor,id,actor,0,0,0,0,0,0,0,0);
  float(node+0x4c,0.);assert_eq!(cast(12345,player),1);cast(crate::runtime::ULTIMATE_ACTION,player);assert_eq!(APPLICATIONS.with(Cell::get),0);
  ACCEPT.with(|s|s.set(0));assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),0);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(1));
- assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),1);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(value(node+0x4c),15.);assert_eq!(crate::read_i32(stats+0x150),42);
- for remaining in [14.5,9.5,1.,0.001]{float(node+0x4c,remaining);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),15.);}
+ assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),1);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(value(node+0x4c),10.);assert_eq!(crate::read_i32(stats+0x150),42);
+ for remaining in [9.5,5.,1.,0.001]{float(node+0x4c,remaining);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),10.);}
  // Installed native cost rows, including Echo Casting's x2, aggregate through
  // the original functions. Expiry is represented by native inactive-node flags.
  for(rva,with_echo)in [(0x5061b0,1.),(0x507310,2.),(0x5081e0,1.),(0x507410,2.)]{
@@ -79,7 +79,7 @@ fn native_ultimate_awakening_success_refresh_and_fp_aggregation(){unsafe{
  OWNED.with(|s|s.set(true));RESET.with(|s|s.set(false));int(stats+0x140,100);ptr::write((player+0x710)as*mut u8,0);
  let count=APPLICATIONS.with(Cell::get);cast(crate::runtime::ULTIMATE_TRIGGER,player+8);assert_eq!(APPLICATIONS.with(Cell::get),count);
  crate::ACTIVE.store(false,Ordering::Release);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);crate::ACTIVE.store(true,Ordering::Release);
- FAIL.with(|s|s.set(true));float(node+0x4c,2.);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),2.);FAIL.with(|s|s.set(false));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),15.);
+ FAIL.with(|s|s.set(true));float(node+0x4c,2.);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),2.);FAIL.with(|s|s.set(false));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),10.);
  // Missing stats/manager fail safely, without inventing a buff or FP refill.
  put(modules,0);let count=APPLICATIONS.with(Cell::get);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);put(modules,stats);
  put(player+0x190,0);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);

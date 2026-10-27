@@ -1,6 +1,6 @@
 """Read-only binding checks and isolated original getter/HP-condition execution."""
 from pathlib import Path
-import ctypes as c,hashlib,json,struct
+import ctypes as c,hashlib,json,struct,sys
 import pefile
 root=Path(__file__).resolve().parents[1]
 raw=Path(r'D:/Program Files (x86)/Steam/steamapps/common/ELDEN RING NIGHTREIGN/Game/nightreign.exe').read_bytes()
@@ -35,10 +35,13 @@ finally:k.VirtualFree(memory,0,0x8000)
 rows={r['ID']:r['fields'] for r in json.loads((root/'.work/effects/native-low-hp.json').read_text())}
 assert all(rows[id]['conditionHp']==40 for id in [340800,7012300,8660100,8660000])
 assert rows[700600]['displayIconForPermamentEffect']==1
-serialized={r['id']:r['fields'] for r in json.loads((root/'.work/effects/escape-serialized.json').read_text())}
-assert serialized[95001201]['effectEndurance']==10 and serialized[95001202]['effectEndurance']==60
+serialized_path=Path(sys.argv[1]) if len(sys.argv)>1 else root/'.work/effects/escape-serialized.json'
+serialized={r['id']:r['fields'] for r in json.loads(serialized_path.read_text())}
+assert serialized[95001201]['effectEndurance']==10 and serialized[95001202]['effectEndurance']==70
 assert serialized[95001203]['iconId']==20222 and serialized[95001203]['displayIconForPermamentEffect']==1
 assert serialized[95001201]['conditionHp']==-1 and serialized[95001201]['stateInfo']==0
+assert all(serialized[95001201][field]==.7 for field in ['physicsAttackRate','magicAttackRate','fireAttackRate','thunderAttackRate','darkAttackRate'])
+assert all(serialized[95001201][field]==1 for field in ['magParamChange','miracleParamChange','shamanParamChange'])
 assert all(serialized[95001201][field]==.4 for field in ['slashDamageCutRate','blowDamageCutRate','thrustDamageCutRate','neutralDamageCutRate','magicDamageCutRate','fireDamageCutRate','thunderDamageCutRate','darkDamageCutRate'])
 source=(root/'src/lib.rs').read_text();getter=source[source.index('unsafe extern "system" fn speed_detour'):source.index('unsafe fn update_escape')]
 assert 'read_ptr(controller+8)!=player' in getter and 'read_ptr(modules+0x28).checked_add(0x1800)' in getter

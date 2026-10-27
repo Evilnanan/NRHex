@@ -8,7 +8,7 @@ static class MarkingPoison {
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
- public static void OwnerEffect(PARAM.Row row){Set(row,"stateInfo",152);Set(row,"atkOccurrenceSpEffectId",Carrier);}
+ public static void OwnerEffect(PARAM.Row row){Set(row,"stateInfo",152);Set(row,"atkOccurrenceSpEffectId",Carrier);Set(row,"characterSkillCooldownReduction",Marking.CooldownRate);}
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
   foreach(int id in new[]{Carrier,MarkHit,Begin}){
    var row=clone("SpEffectParam",8000000,id);

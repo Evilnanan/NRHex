@@ -243,6 +243,10 @@ try {
     }
     python -X utf8 tools/build_marking_hks.py --check
     if ($LASTEXITCODE -ne 0) { throw 'Marking follow-up observer missing.' }
+    if (-not $DllOnly) {
+        python -X utf8 tools/build_cage_escalation.py
+        if ($LASTEXITCODE -ne 0) { throw 'Cage escalation event and native HUD checks failed.' }
+    }
     # Both modes verify the runtime; only Full regenerates game resources.
     dotnet run --project tools/HexBuild -- $PSScriptRoot --sword-poise-check
     if ($LASTEXITCODE -ne 0) { throw 'Sword Endure protection readback failed.' }

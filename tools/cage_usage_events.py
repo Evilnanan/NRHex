@@ -36,14 +36,17 @@ def bind(event, parameters):
 
 def opening(event, parameters, owner=True, keys=0, count=0, busy=False,
             request=False, normal_open=False, night=False, player=1):
-    opened,stone,variation,log,used,busy_flag,request_flag,counter = struct.unpack('<8I',parameters)
+    opened,stone,variation,log,used,busy_flag,request_flag,counter = struct.unpack('<8I',parameters[:32])
     code = bind(event,parameters)
     labels = {int(n[5:]):i for i,(n,_) in enumerate(code) if n.startswith('Label')}
     flags = {busy_flag:busy,request_flag:request,opened:normal_open,7509:night}
-    groups = {}; pc=0; removed=0; messages=[]; increments=0
+    wide = len(parameters)>32
+    if wide:
+        for bit in range(32): flags[counter+bit]=bool(count & (1<<bit))
+    writes=[]; groups = {}; pc=0; removed=0; messages=[]; increments=0
     def group(g,v):groups[g]=(groups.get(g,False) or v) if g<0 else (groups.get(g,True) and v)
-    def finish():return dict(request=bool(flags.get(request_flag)),opened=bool(flags.get(opened)),removed=removed,count=count,messages=messages,increments=increments)
-    for _ in range(120):
+    def finish():return dict(request=bool(flags.get(request_flag)),opened=bool(flags.get(opened)),removed=removed,count=count,messages=messages,increments=increments,writes=writes)
+    for _ in range(1000):
         n,a=code[pc];pc+=1
         if n=='IfIsMapVariation':group(a[0],a[1]==1 and a[2]==variation)
         elif n=='IfActionButtonInArea':group(a[0],True)
@@ -64,19 +67,22 @@ def opening(event, parameters, owner=True, keys=0, count=0, busy=False,
             if groups.get(a[2],False)==bool(a[1]):pc=labels[a[0]]+1
         elif n=='SkipIfCharacterHasSpEffect':
             if owner==bool(a[3]):pc+=a[0]
+        elif n=='SkipIfEventFlag':
+            if bool(flags.get(a[3],False))==bool(a[1]):pc+=a[0]
+        elif n=='SkipUnconditionally':pc+=a[0]
         elif n=='GotoUnconditionally':pc=labels[a[0]]+1
         elif n=='IfPlayerHasdoesntHaveItem':group(a[0],keys>0)
         elif n=='SkipIfConditionGroupStateUncompiled':
             if groups.get(a[2],False)==bool(a[1]):pc+=a[0]
         elif n=='SkipIfIsPlayerNo':
             if (player==a[1])==bool(a[2]):pc+=a[0]
-        elif n=='SetNetworkconnectedEventFlag':flags[a[1]]=bool(a[2])
+        elif n=='SetNetworkconnectedEventFlag':flags[a[1]]=bool(a[2]);writes.append((a[1],bool(a[2])))
         elif n=='IncrementEventValue':
-            assert a==[counter,3,5];count=min(count+1,5);increments+=1
+            assert a==([counter,32,0xffffffff] if wide else [counter,3,5]);count=min(count+1,a[2]);increments+=1
         elif n=='RemoveItemFromPlayer':removed+=a[2]
         elif n=='RecordUserDispLog':messages.append(a)
         elif n=='EndUnconditionally':return finish()
-        elif n in ['SetNetworkSyncState','IfElapsedSeconds','WaitFixedTimeSeconds','SetWorldMapPointFlag','ForceAnimationPlayback','WaitFixedTimeFrames'] or n.startswith('Label'):pass
+        elif n in ['MmvOriginalMapGuard','SetNetworkSyncState','IfElapsedSeconds','WaitFixedTimeSeconds','SetWorldMapPointFlag','ForceAnimationPlayback','WaitFixedTimeFrames'] or n.startswith('Label'):pass
         else:raise AssertionError((n,a))
     raise AssertionError('Opener failed to yield')
 

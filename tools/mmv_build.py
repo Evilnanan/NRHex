@@ -218,6 +218,11 @@ def main(argv=None) -> int:
         cages = json.loads((REPORTS / 'staged/cages-validation.json').read_text(encoding='utf8'))
         report['cageAdapter'] = cages
         report['partialPreview']['files'].update(cages['files'])
+        print('Applying personal gaol escalation and native boss buff stacks...', flush=True)
+        from build_cage_escalation import install as install_cage_escalation
+        escalation = install_cage_escalation(REPORTS / 'staged/mod', REPORTS / 'cage-escalation')
+        report['partialPreview']['files'].update({name: digest(REPORTS / 'staged/mod' / name) for name in escalation})
+        report['cageEscalation'] = json.loads((REPORTS / 'cage-escalation/validation.json').read_text(encoding='utf8'))
         print('Rebasing spirit summons on MMV NPCs and resolving boss HUD bindings...', flush=True)
         with (REPORTS / 'spirit-catalog.log').open('w', encoding='utf8') as log:
             subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
