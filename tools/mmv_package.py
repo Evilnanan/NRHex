@@ -85,6 +85,18 @@ def profile(source: Path, overlay: Path, preserve_fixes=True) -> tuple[str, dict
     current_profile = overlay / 'NRHex-MMV.me3'
     if preserve_fixes and current_profile.exists():
         current = tomllib.loads(current_profile.read_text(encoding='utf-8-sig'))
+        # Keep the user's explicitly enabled local test helper on rebuild.
+        # community_profile passes preserve_fixes=False and never inherits it.
+        storm = [n for n in current.get('natives', []) if n.get('id') == 'storm-control']
+        if len(storm) > 1:
+            raise ValueError('Duplicate StormControl test helper')
+        for native in storm:
+            entry = copy.deepcopy(native)
+            path = Path(entry['path'])
+            entry['path'] = str(path if path.is_absolute() else (overlay / path).resolve())
+            if not Path(entry['path']).is_file():
+                raise ValueError('StormControl test DLL is missing: ' + entry['path'])
+            merged['natives'].append(entry)
         fixes = [p for p in current.get('packages', []) if p.get('id') == 'mmv-fixes']
         if len(fixes) > 1:
             raise ValueError('Duplicate independent MMV fix package')

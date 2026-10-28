@@ -38,7 +38,7 @@ assert r.returncode==0 and '1 passed; 0 failed;'in r.stdout,r.stdout+r.stderr
 report=dict(version=tomllib.loads((ROOT/'Cargo.toml').read_text())['package']['version'],owner=95004800,
  nativeInputMultiplicationAndCombinerPassed=True,compiledCommitAndAdditiveBonusPassed=True,
  originalDamageAndSmashCallbacksUnchanged=True,observerBytecodeExecuted=True,
- checks=['independent pre/post totals; max after summation; two-max-HP cap; frozen multi-target bonus',
+ checks=['independent pre/post totals; max after summation; 3.5-max-HP cap; frozen multi-target bonus',
  'zero object defense and zero final damage; preserve additive attacker damage without dividing by defense',
  'accepted hit commits once at pre-HP-clamp load; 1 HP retains damage; preview/cache/nullified hits excluded',
  'standalone and Back to Basics additive output; full-body cancellation; native no-reset hurt overlay preserved',

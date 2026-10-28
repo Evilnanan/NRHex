@@ -19,12 +19,12 @@ pub static SCALE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 #[derive(Default)]struct Cast{owner:Identity,serial:u64,phase:u8,cap:f64,before:f64,after:f64,frozen:Option<f32>}
 impl Cast{
  fn clear(&mut self){let serial=self.serial.wrapping_add(1);*self=Self{serial,..Self::default()};}
- fn begin(&mut self,owner:Identity,hp:i32){self.clear();self.owner=owner;self.phase=1;self.cap=2.*hp.max(0)as f64;}
+ fn begin(&mut self,owner:Identity,hp:i32){self.clear();self.owner=owner;self.phase=1;self.cap=3.5*hp.max(0)as f64;}
  fn add(&mut self,before:f32,after:i32){
   if self.phase==0||self.frozen.is_some(){return;}
   if before.is_finite()&&before>=0.&&after>=0{self.before=(self.before+before as f64).min(self.cap);self.after=(self.after+after as f64).min(self.cap);}
  }
- fn freeze(&mut self)->f32{if self.phase!=2{return 0.;}*self.frozen.get_or_insert((self.before.max(self.after).min(self.cap)/2000.)as f32)}
+ fn freeze(&mut self)->f32{if self.phase!=2{return 0.;}*self.frozen.get_or_insert((self.before.max(self.after).min(self.cap)/2500.)as f32)}
 }
 static STATE:Mutex<Cast>=Mutex::new(Cast{owner:Identity{actor:0,stats:0,handle:0},serial:0,phase:0,cap:0.,before:0.,after:0.,frozen:None});
 unsafe fn identity(actor:usize,base:usize)->Option<Identity>{
@@ -167,18 +167,18 @@ pub unsafe extern "system" fn scale_detour(){
   let mut c=Cast::default();c.begin(Identity::default(),1500);
   c.add(600.,150);c.add(100.,250); // max(sum)=700, not sum(max)=850.
   assert_eq!((c.before,c.after),(700.,400.));assert_eq!(c.freeze(),0.);
-  c.phase=2;let bonus=c.freeze();assert!((bonus-700./2000.).abs()<1e-6);
+  c.phase=2;let bonus=c.freeze();assert!((bonus-700./2500.).abs()<1e-6);
   c.add(5000.,5000);assert_eq!(c.freeze(),bonus);
   let old=c.serial;c.clear();assert_ne!(old,c.serial);assert_eq!(c.freeze(),0.);
-  c.begin(Identity::default(),1500);c.phase=2;c.add(1500.,3750);
-  assert_eq!((c.before,c.after),(1500.,3000.));assert_eq!(c.freeze(),1.5);
-  assert_eq!(crate::basics::multiplier(Some(5),600000210,1)+c.freeze(),4.);
+  c.begin(Identity::default(),1500);c.phase=2;c.add(1500.,6000);
+  assert_eq!((c.before,c.after),(1500.,5250.));assert_eq!(c.freeze(),2.1);
+  assert_eq!(crate::basics::multiplier(Some(5),600000210,1)+c.freeze(),4.6);
  }
  #[test]fn zero_post_mitigation_still_counts_pre_damage_and_invalid_values_do_not(){
   let mut c=Cast::default();c.begin(Identity::default(),1000);c.phase=2;
   c.add(150.,0);c.add(f32::NAN,999);c.add(f32::INFINITY,999);c.add(-1.,999);c.add(2.,-1);
-  assert_eq!((c.before,c.after),(150.,0.));assert_eq!(c.freeze(),0.075);
-  c.begin(Identity::default(),1);c.phase=2;c.add(f32::MAX,i32::MAX);assert_eq!(c.freeze(),2./2000.);
+  assert_eq!((c.before,c.after),(150.,0.));assert_eq!(c.freeze(),0.06);
+  c.begin(Identity::default(),1);c.phase=2;c.add(f32::MAX,i32::MAX);assert_eq!(c.freeze(),3.5/2500.);
  }
  #[test]fn only_empowered_damage_components_match(){
   for id in [600000210,600000231]{assert!(empowered(id,1));assert!(!empowered(id,0));}

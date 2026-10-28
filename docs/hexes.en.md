@@ -225,6 +225,6 @@ Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.
 Grants two random Mayhem Augments.
 
 <!-- hex:95004800 -->
-## Deliberate Punch
+## Haymaker
 
 The more damage you take during an empowered Character Skill, the more damage your counterattack deals.
