@@ -66,10 +66,13 @@ unsafe fn update_family(owner:usize,base:usize){
  }
 }
 pub unsafe fn calculated(local:usize,target:usize,source:usize,hit:usize,base:usize){
- if hit==0||source==0||source==target||read_i32(hit+0x280)<=0||!sealed(local,base){return;}
+ if hit==0||source==0||source==target||read_i32(hit+0x280)<=0{return;}
  let hero=local_hero(base);
- let factor=if source==local{multiplier(hero,read_i32(hit+0x40),read_i32(hit+0x44))}
-  else if hero==Some(6)&&family_source(local,source,base){3.}else{1.};
+ let basic=sealed(local,base);
+ let mut factor=if source==local&&basic{multiplier(hero,read_i32(hit+0x40),read_i32(hit+0x44))}
+  else if basic&&hero==Some(6)&&family_source(local,source,base){3.}else{1.};
+ if source==local{factor+=crate::deliberate_punch::bonus(local,hit,base);}
+
  if factor!=1.{ptr::write_unaligned((hit+0x280)as*mut i32,crate::sword::boosted(read_i32(hit+0x280),factor));}
 }
 // Restage replays recorded damage, with its own proportion and network payload.

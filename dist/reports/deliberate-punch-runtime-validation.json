@@ -1,0 +1,27 @@
+{
+  "version": "0.17.255",
+  "owner": 95004800,
+  "nativeInputMultiplicationAndCombinerPassed": true,
+  "compiledCommitAndAdditiveBonusPassed": true,
+  "originalDamageAndSmashCallbacksUnchanged": true,
+  "observerBytecodeExecuted": true,
+  "checks": [
+    "independent pre/post totals; max after summation; two-max-HP cap; frozen multi-target bonus",
+    "zero object defense and zero final damage; preserve additive attacker damage without dividing by defense",
+    "accepted hit commits once at pre-HP-clamp load; 1 HP retains damage; preview/cache/nullified hits excluded",
+    "standalone and Back to Basics additive output; full-body cancellation; native no-reset hurt overlay preserved",
+    "ordinary and Double Surprise candidates share actual Raider exclusivity"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "sourceHashes": {
+    "src/deliberate_punch.rs": "40890c494dc2ba50c60745f3b2c8fdda5385c83c3cf081cd51b360670070225c",
+    "src/deliberate_punch_native_tests.rs": "f2baf96aa3e82dd78abea8fb2bc3d0b780f230aa396dc3e06de88748a633c07d",
+    "src/glass_cannon.rs": "887be61cb9db4dc9b4bc5c02596c1850fc686151ac8d3d01e9243371c027c192",
+    "src/basics.rs": "11bdd1be96bc290c3e2fc7674ff569705216f1d416964d123e5d26ee0498a743",
+    "src/lib.rs": "c5bb51312c15f6c670b016c3bc8e792ed82a6d202d54594b2d596f4ba4e4fa26",
+    "src/hex_pool.rs": "457ead48a19018dce4da27534cefb29417be33a848af2c432d21b78357779b7f",
+    "tools/build_deliberate_punch_hks.py": "93f12a82f83841ed51971ca9ec53d9796bbdfbbae35259d33cc47bf0cf1152c7",
+    "tools/verify_deliberate_punch.py": "db4e83c3d7d8f4e9c18f43fe6e53995fcb4e6fc0a91ce5f74d39404c393c713b"
+  }
+}

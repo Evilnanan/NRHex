@@ -116,6 +116,9 @@ unsafe fn toward_down(owner:Identity,base:usize,angle:f32,speed:f32)->bool{
 }
 type Env=unsafe extern "system" fn(usize,i32,usize)->i32;
 pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
+ if code==crate::deliberate_punch::QUERY{
+  if ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{let base=BASE.load(Ordering::Acquire);let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);crate::deliberate_punch::event(read_ptr(context),number(vm,2)as i32,base);}return 0;
+ }
  if matches!(code,crate::basics::ULTIMATE_QUERY|crate::basics::READY_QUERY){
   if ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0&&crate::basics::sealed(read_ptr(context),BASE.load(Ordering::Acquire)){return 0;}
   return std::mem::transmute::<*mut u8,Env>(ENV_ORIGINAL.load(Ordering::Acquire))(context,if code==crate::basics::ULTIMATE_QUERY{1106}else{370},vm);

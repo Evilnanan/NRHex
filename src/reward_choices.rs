@@ -43,7 +43,7 @@ pub fn weapon_exclusions(mut unavailable:HexSet,affinity:Option<i32>)->HexSet{
  unavailable
 }
 // Single-character powers share this classification with exceptional draws.
-pub fn exclusive_role(owner:i32)->Option<u8>{match owner{95001800=>Some(6),crate::marking::OWNER=>Some(3),_=>None}}
+pub fn exclusive_role(owner:i32)->Option<u8>{match owner{95001800=>Some(6),crate::marking::OWNER=>Some(3),crate::deliberate_punch::OWNER=>Some(5),_=>None}}
 pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  for (i,&id)in OWNER_IDS.iter().enumerate(){if exclusive_role(id).is_some_and(|required|hero!=Some(required)){unavailable.insert(i);}}
  for (id,excluded)in [

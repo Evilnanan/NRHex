@@ -32,6 +32,7 @@ mod reward_recovery;
 mod strength;
 mod marking;
 mod basics;
+mod deliberate_punch;
 mod sniper;
 mod wraith;
 mod metal;
@@ -368,8 +369,12 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);206] {
- [(double_dip::POPUP_PATTERN,double_dip::POPUP_RVA as u32),
+fn signatures()->[(&'static str,u32);210] {
+ [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
+  (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
+  (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
+  (deliberate_punch::SCALE_PATTERN,deliberate_punch::SCALE_RVA as u32),
+  (double_dip::POPUP_PATTERN,double_dip::POPUP_RVA as u32),
   (basics::RESTAGE_PATTERN,basics::RESTAGE_RVA as u32),
   (devils_gaze_scaling::CORRECTION_QUERY_PATTERN,devils_gaze_scaling::CORRECTION_QUERY_RVA as u32),
   (devils_gaze_scaling::EFFECT_QUERY_PATTERN,devils_gaze_scaling::EFFECT_QUERY_RVA as u32),
@@ -622,6 +627,10 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   potential_fission::GROUP_SKIP.store(base.add(0x57a8e1)as*mut u8,Ordering::Release);
   sword_projectile::STOP.store(base.add(sword_projectile::STOP_RVA)as*mut u8,Ordering::Release);
   let arts_transfer_targets=[
+   (deliberate_punch::DISPATCH_RVA,deliberate_punch::dispatch as*const u8,&deliberate_punch::DISPATCH_ORIGINAL),
+   (deliberate_punch::COMMIT_RVA,deliberate_punch::commit_detour as*const u8,&deliberate_punch::COMMIT_ORIGINAL),
+   (deliberate_punch::OBJECT_RVA,deliberate_punch::object_detour as*const u8,&deliberate_punch::OBJECT_ORIGINAL),
+   (deliberate_punch::SCALE_RVA,deliberate_punch::scale_detour as*const u8,&deliberate_punch::SCALE_ORIGINAL),
    (basics::RESTAGE_RVA,basics::restage_detour as*const u8,&basics::RESTAGE_ORIGINAL),
    (sword_projectile::BIND_RVA,sword_projectile::bind as*const u8,&sword_projectile::BIND_ORIGINAL),
    (sword_projectile::CHILD_RVA,sword_projectile::child as*const u8,&sword_projectile::CHILD_ORIGINAL),
@@ -994,6 +1003,7 @@ unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  // Deliberately exclude projectile sources, even when their resolved owner
  // is local. Projectile synergy is evaluated separately at actual contact.
  if local==0||read_ptr(context)!=local{return;}
+ deliberate_punch::constructed(local,hit,base);
  // Sword spells are evaluated at contact, across the complete impact dispatch.
  // Do not pre-boost a direct spell here and boost it a second time there.
  if spell_percentage(hit).is_some()&&has_effect(local,sword::OWNER,base){return;}
@@ -1017,6 +1027,7 @@ unsafe fn position(player:usize,base:usize)->[f32;4] {
 unsafe extern "system" fn on_sword_before_calculation(module:usize,source:usize,hit:usize){
  parry::enter(module,hit);
  glass_cannon::enter(module,source,hit);
+ deliberate_punch::enter(module,hit);
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);
  if !is_local(source,base)||!has_effect(source,sword::OWNER,base)||spell_percentage(hit).is_none(){return;}
@@ -1025,6 +1036,7 @@ unsafe extern "system" fn on_sword_before_calculation(module:usize,source:usize,
  ptr::write_unaligned((hit+0x124) as *mut [u32;8],categories);
 }
 unsafe extern "system" fn on_rear_calculated(module:usize,source:usize,hit:usize) {
+ deliberate_punch::leave();
  glass_cannon::leave();
  parry::finish_guard(module,hit);
  parry_turn::calculated(module,source,hit);
@@ -2286,6 +2298,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  double_dip::update(player,base);
  marking::update(player,base);
  basics::update(player,base);
+ deliberate_punch::update(player,base);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  update_chant(player,base);

@@ -1,0 +1,84 @@
+{
+  "version": "0.17.255",
+  "target": "x86_64-pc-windows-gnu",
+  "runtimeTests": {
+    "passed": 463,
+    "failed": 0,
+    "ignoredByDefault": 30,
+    "explicitNativeTests": [
+      "native_punch_shadow_commit_and_additive_bonus",
+      "native_glass_cannon_retains_net_negative_resistance"
+    ]
+  },
+  "signaturesVerified": 210,
+  "standaloneDllLoadAndUnsupportedHostGuardPassed": true,
+  "standaloneMe3ProfileParsed": true,
+  "standaloneFullPowerShellPipelineRun": false,
+  "standaloneResourceMethod": "Guarded incremental generator, parameter/event/text readback, original-bytecode observer patch; unrelated current assets retained",
+  "sourceHashes": {
+    "src/deliberate_punch.rs": "40890c494dc2ba50c60745f3b2c8fdda5385c83c3cf081cd51b360670070225c",
+    "src/deliberate_punch_native_tests.rs": "f2baf96aa3e82dd78abea8fb2bc3d0b780f230aa396dc3e06de88748a633c07d",
+    "src/glass_cannon.rs": "887be61cb9db4dc9b4bc5c02596c1850fc686151ac8d3d01e9243371c027c192",
+    "src/basics.rs": "11bdd1be96bc290c3e2fc7674ff569705216f1d416964d123e5d26ee0498a743",
+    "src/lib.rs": "c5bb51312c15f6c670b016c3bc8e792ed82a6d202d54594b2d596f4ba4e4fa26",
+    "src/hex_pool.rs": "457ead48a19018dce4da27534cefb29417be33a848af2c432d21b78357779b7f",
+    "tools/build_deliberate_punch_hks.py": "93f12a82f83841ed51971ca9ec53d9796bbdfbbae35259d33cc47bf0cf1152c7",
+    "tools/verify_deliberate_punch.py": "db4e83c3d7d8f4e9c18f43fe6e53995fcb4e6fc0a91ce5f74d39404c393c713b"
+  },
+  "standaloneFiles": {
+    "dist/natives/NRHex.dll": "2662d63247be88824fdf827255034828c5227c13eeb11e52c4c7b8f1fda9ec93",
+    "dist/mod/regulation.bin": "6621252b1b5df8612518899cfa1c1740a2fafc29c82c9515eed41d58765c40c9",
+    "dist/mod/event/common.emevd.dcx": "874d4a6cdec9c2d6d6d5677d20a7fc329827f85a7cdb5b16bbb35ec4f8ea8b02",
+    "dist/mod/action/script/c0000.hks": "48760c7475106e1ef34aadf8f801992b7a969da9790d8a66ebdb2701bb3a1940",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "a90e50e7844ede089006c76c2a8dc94078fdd6ae0fc30936a37ff7e1dcd88358",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "70fca9a01aa878a2843e9d1e0e3ff0f5c9ddb98663fff7fbf9185198c6cfe0e7",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "d431e086aa64d5190dce83eed95e744d46c984c76b2590d44a55953928afea3c",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "d6419f6f1a18720619a9c039749c0509f5a2a09ef5fb726107ebc47e69def020"
+  },
+  "mmv": {
+    "status": "built-awaiting-game-test",
+    "variant": "dist",
+    "sharedResources": 23,
+    "inputFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+    "originalInputsUnchanged": true,
+    "profileValidated": true,
+    "hksAdapter": {
+      "functions": 157,
+      "inverseRestoresMmvSource": true,
+      "lua51SyntaxVerified": true,
+      "differentialTestsPassed": true
+    },
+    "files": {
+      "mod/regulation.bin": "670653e3fd72ad55c8b0990247e9089e03c2f54e56d432efeeb2db64d538f527",
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": "2f4e48f9a4000605dbc79ea0a7e9de95aa2d4a23bdfc358d3583c9a81b161dfc",
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": "eb731cd52fd9b63fcf2ffd4acde3595b3ca13fb1578d5ca8efee73f75df46cb2",
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "6cfcde95f7e77fc84efc5457947c2088d82a221d44a70a9a2ca8c4716c78d3e0",
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "fb3a0c44696f160f333bed7a9c61a3c2988354fe439d15644f1c13d6c8f988be",
+      "mod/action/script/c0000.hks": "926723e5b991ed96d5f90d51fde064efd5525bf690bc135142f482e530cd381f",
+      "mod/event/common.emevd.dcx": "b42dbb96e8b9b21a795ad2f6e3164494720392e4d470677d21a4ff473f238ffa",
+      "mod/event/common_func.emevd.dcx": "f8442bca05e53cf27c04758a1beb07e1fd470c564d2c00ac06570334e7a0de9e",
+      "mod/event/m41_00_00_00.emevd.dcx": "f4b09100990aae0e5520de0796d06e049faa6bf8c5f54e7f3553e89777877de3",
+      "mod/event/m41_01_00_00.emevd.dcx": "47cece5fefa89ae81effff481e3fcd42cea672b5211b5abe8ef271d6636be1a1",
+      "mod/event/m41_30_00_00.emevd.dcx": "0bd80b07daf8ab88d244e2ae4edfa4f86ae450b9456996c9d81d45f848fce478",
+      "mod/event/m46_50_00_00.emevd.dcx": "5d928333ac7c2bfc02bfa596c7ac22709a442d4e1c4290d8a3ce53fda9cbfe52",
+      "mod/event/m46_60_00_00.emevd.dcx": "db9d551887c046bc8379115cf87d7bd7258cc54f84f166af2a545340a9ae0272",
+      "mod/event/m46_70_00_00.emevd.dcx": "0cd0a6095c4fd944b0552fe9ccab5913159bb7809a4209cc424e8a459416912f",
+      "mod/event/m46_80_00_00.emevd.dcx": "30eb7487d44c7ed9c3fe6274c394919fa603cdd65306b8c649da7ae52a8d0618",
+      "mod/event/m51_00_00_00.emevd.dcx": "ed06844bedc1b812fce48b8f7fddfe5cb204bdd7ba000fe50028feb1a9463764",
+      "mod/map/mapstudio/m46_50_00_00.msb.dcx": "fd91721785ee1bcd8479a61d34ee590e7b13247bb75c927b2757b10fc983aea8",
+      "mod/map/mapstudio/m46_60_00_00.msb.dcx": "c81436c7ae69d78bdad3d1054b8bdbab2934ceb5f125c7373ec0066936b62118",
+      "mod/map/mapstudio/m46_70_00_00.msb.dcx": "f08a09c20e941a0f089f30b4e3e3342afcc93ab049a1fceeafc50f8771e6262f",
+      "mod/map/mapstudio/m46_80_00_00.msb.dcx": "0cce73df158f60358bf2d26707db3df4c4ace09061a20f0758b12e56747ba2cc",
+      "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "b308942cfa3c80521d854698b4a1a73be6e5f1a8b99ba0dc60512fb99ec2f90a",
+      "mod/script/talk/m00_00_00_00.talkesdbnd.dcx": "13b39623986fecdf6309316a5ecf6f0ed6089d25134a91b28bc3caadd1f8e826",
+      "mod/chr/c0000.anibnd.dcx": "79eb963ce33c104fbcaf2b89e5a4434b0c42e36489c2772f428b7360b10d3dc0",
+      "natives/NRHex.dll": "b4a0d42901aae943cb32c79b0d487fe3999e657f624a60f280d023115ee8a3e9",
+      "natives/NRHex.ini": "b3f7dff047761973c779c5411667cbe7ec91cb7eebafb8ccc3eb6d90e695e169",
+      "NRHex-MMV.me3": "5c8adabb710bff9894635e7c8927ad319c1d56c34217603d99a16c3c72482094"
+    },
+    "cloudPathMapping": "Wine Z: export paths translated to the same local files; original input hashes still verified"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "nativeMmvCoexistenceVerified": false
+}

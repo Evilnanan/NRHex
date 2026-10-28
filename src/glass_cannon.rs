@@ -62,6 +62,13 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
  let attack=if holy!=1.&&!attack.is_null(){
   scaled=ptr::read_unaligned(attack as *const [f32;5]);scaled[4]*=holy;scaled.as_ptr()
  }else{attack};
+ // A private neutral-defense evaluation records the first HP candidate only.
+ // It never changes the real output or any shared attack/effect row.
+ if let Some(raw)=crate::deliberate_punch::raw_attack(attack,holy){
+  let one=[1.;5];let n=one.as_ptr();let mut scratch=[0.;5];
+  let before=original(scratch.as_mut_ptr(),raw.as_ptr(),rates,n,n,n,n,n,1.,repeated,1.,attack_rate,positional,1.,balance);
+  crate::deliberate_punch::candidate(before);
+ }
  if !bypass{return original(out,attack,rates,effects,armor,guard,conditional,additional,
   deflection,repeated,rebound,attack_rate,positional,target_state,balance);}
  // 503800 separates DamageCutRate into ordinary, category 110 and category

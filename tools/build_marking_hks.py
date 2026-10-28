@@ -8,9 +8,9 @@ ORIGIN_QUERY=990047
 ORIGIN_EVENTS=['W_HurtDaggerAttack','W_AirHurtDaggerAttack']
 def abx(op,a,bx):return op<<25|bx<<8|a
 def abc(op,a,b,c):return op<<25|b<<17|c<<8|a
-def patch_observer(source,query,events):
+def patch_observer(source,query,events,fids=(1,2,3,4)):
  r=Reader(source);r.function();edits=[];audit={}
- for fid in [1,2,3,4]:
+ for fid in fids:
   f=r.functions[fid];cs=f['constants'];assert query not in cs;extra=[];encoded=bytearray()
   def const(v):
    if v in cs:return cs.index(v)

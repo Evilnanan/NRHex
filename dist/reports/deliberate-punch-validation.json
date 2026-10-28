@@ -1,0 +1,31 @@
+{
+  "inputSha256": "5AAC71855A6894F2DBCF28C961BFF620C00EB5ABD6493B028B0358953F2D20BE",
+  "outputSha256": "6621252B1B5DF8612518899CFA1C1740A2FAFC29C82C9515EED41D58765C40C9",
+  "eventInputSha256": "564F2F0DA91B3463430C36FFC2A0AD6603728BDA3B844D7F83735EF3DA969EF5",
+  "eventOutputSha256": "874D4A6CDEC9C2D6D6D5677D20A7FC329827F85A7CDB5B16BBB35EC4F8EA8B02",
+  "hexCount": 43,
+  "historyBit": 45,
+  "historyBytes": 6,
+  "addedRows": {
+    "SpEffectParam": [
+      95004800,
+      96210045
+    ],
+    "AttachEffectParam": [
+      95004800
+    ],
+    "PermanentBuffParam": [
+      95004800
+    ],
+    "EquipParamGoods": [
+      95004800
+    ],
+    "ItemTableParam": [
+      95110145
+    ]
+  },
+  "allExistingRowsAndUnrelatedTablesUnchanged": true,
+  "onlyThreeExistingEventsExtended": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}
