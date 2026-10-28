@@ -1,23 +1,22 @@
 {
-  "version": "0.17.255",
+  "version": "0.17.256",
   "target": "x86_64-pc-windows-gnu",
   "runtimeTests": {
     "passed": 463,
     "failed": 0,
     "ignoredByDefault": 30,
     "explicitNativeTests": [
-      "native_punch_shadow_commit_and_additive_bonus",
-      "native_glass_cannon_retains_net_negative_resistance"
+      "native_punch_shadow_commit_and_additive_bonus"
     ]
   },
   "signaturesVerified": 210,
   "standaloneDllLoadAndUnsupportedHostGuardPassed": true,
   "standaloneMe3ProfileParsed": true,
   "standaloneFullPowerShellPipelineRun": false,
-  "standaloneResourceMethod": "Guarded incremental generator, parameter/event/text readback, original-bytecode observer patch; unrelated current assets retained",
+  "standaloneResourceMethod": "DLL-only balance update; resource hashes unchanged from 0.17.255",
   "sourceHashes": {
-    "src/deliberate_punch.rs": "40890c494dc2ba50c60745f3b2c8fdda5385c83c3cf081cd51b360670070225c",
-    "src/deliberate_punch_native_tests.rs": "f2baf96aa3e82dd78abea8fb2bc3d0b780f230aa396dc3e06de88748a633c07d",
+    "src/deliberate_punch.rs": "8020cc223c19673823f61d8a410fa7963a0940a42beadb7b338883626354cedc",
+    "src/deliberate_punch_native_tests.rs": "ea7bbc639f0b8316131e52d89b7be1b7d7c8267b331732501c2685cea42c7518",
     "src/glass_cannon.rs": "887be61cb9db4dc9b4bc5c02596c1850fc686151ac8d3d01e9243371c027c192",
     "src/basics.rs": "11bdd1be96bc290c3e2fc7674ff569705216f1d416964d123e5d26ee0498a743",
     "src/lib.rs": "c5bb51312c15f6c670b016c3bc8e792ed82a6d202d54594b2d596f4ba4e4fa26",
@@ -26,7 +25,7 @@
     "tools/verify_deliberate_punch.py": "db4e83c3d7d8f4e9c18f43fe6e53995fcb4e6fc0a91ce5f74d39404c393c713b"
   },
   "standaloneFiles": {
-    "dist/natives/NRHex.dll": "2662d63247be88824fdf827255034828c5227c13eeb11e52c4c7b8f1fda9ec93",
+    "dist/natives/NRHex.dll": "4df6ab7645a00618741d42ed0cec87a0dd3fa0b7e8547882a8f0585d2e8f0752",
     "dist/mod/regulation.bin": "6621252b1b5df8612518899cfa1c1740a2fafc29c82c9515eed41d58765c40c9",
     "dist/mod/event/common.emevd.dcx": "874d4a6cdec9c2d6d6d5677d20a7fc329827f85a7cdb5b16bbb35ec4f8ea8b02",
     "dist/mod/action/script/c0000.hks": "48760c7475106e1ef34aadf8f801992b7a969da9790d8a66ebdb2701bb3a1940",
@@ -72,7 +71,7 @@
       "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "b308942cfa3c80521d854698b4a1a73be6e5f1a8b99ba0dc60512fb99ec2f90a",
       "mod/script/talk/m00_00_00_00.talkesdbnd.dcx": "13b39623986fecdf6309316a5ecf6f0ed6089d25134a91b28bc3caadd1f8e826",
       "mod/chr/c0000.anibnd.dcx": "79eb963ce33c104fbcaf2b89e5a4434b0c42e36489c2772f428b7360b10d3dc0",
-      "natives/NRHex.dll": "b4a0d42901aae943cb32c79b0d487fe3999e657f624a60f280d023115ee8a3e9",
+      "natives/NRHex.dll": "a5261de023dbebd78434dcd11d3c28a490bcbf1c1be0895b16093c40780da7a8",
       "natives/NRHex.ini": "b3f7dff047761973c779c5411667cbe7ec91cb7eebafb8ccc3eb6d90e695e169",
       "NRHex-MMV.me3": "5c8adabb710bff9894635e7c8927ad319c1d56c34217603d99a16c3c72482094"
     },
@@ -80,5 +79,7 @@
   },
   "gameplayVerified": false,
   "multiplayerVerified": false,
-  "nativeMmvCoexistenceVerified": false
+  "nativeMmvCoexistenceVerified": false,
+  "damagePerPercent": 20,
+  "resourceValidationBaseline": "0.17.255; existing resources and generated MMV tables verified unchanged during DLL-only update"
 }

@@ -1,5 +1,5 @@
 {
-  "version": "0.17.255",
+  "version": "0.17.256",
   "owner": 95004800,
   "nativeInputMultiplicationAndCombinerPassed": true,
   "compiledCommitAndAdditiveBonusPassed": true,
@@ -15,8 +15,8 @@
   "gameplayVerified": false,
   "multiplayerVerified": false,
   "sourceHashes": {
-    "src/deliberate_punch.rs": "40890c494dc2ba50c60745f3b2c8fdda5385c83c3cf081cd51b360670070225c",
-    "src/deliberate_punch_native_tests.rs": "f2baf96aa3e82dd78abea8fb2bc3d0b780f230aa396dc3e06de88748a633c07d",
+    "src/deliberate_punch.rs": "8020cc223c19673823f61d8a410fa7963a0940a42beadb7b338883626354cedc",
+    "src/deliberate_punch_native_tests.rs": "ea7bbc639f0b8316131e52d89b7be1b7d7c8267b331732501c2685cea42c7518",
     "src/glass_cannon.rs": "887be61cb9db4dc9b4bc5c02596c1850fc686151ac8d3d01e9243371c027c192",
     "src/basics.rs": "11bdd1be96bc290c3e2fc7674ff569705216f1d416964d123e5d26ee0498a743",
     "src/lib.rs": "c5bb51312c15f6c670b016c3bc8e792ed82a6d202d54594b2d596f4ba4e4fa26",

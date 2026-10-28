@@ -46,7 +46,7 @@ fn native_punch_shadow_commit_and_additive_bonus(){unsafe{
  ptr::write((hit+0x2c3)as*mut u8,2);commit_fixture(module,hit);assert_eq!(STATE.lock().unwrap().before,0.);ptr::write((hit+0x2c3)as*mut u8,0);
  ptr::write_unaligned((hit+0x280)as*mut i32,75);commit_fixture(module,hit);IMPACTS.with(|s|{s.borrow_mut().pop();});event(actor,3,base);
  ptr::write_unaligned((hit+0x40)as*mut i32,600000210);ptr::write_unaligned((hit+0x44)as*mut i32,1);constructed(actor,hit,base);
- for basic in [false,true]{BASIC.with(|s|s.set(basic));ptr::write_unaligned((hit+0x280)as*mut i32,100);crate::basics::calculated(actor,actor+8,actor,hit,base);assert_eq!(read_i32(hit+0x280),if basic{270}else{120});}
+ for basic in [false,true]{BASIC.with(|s|s.set(basic));ptr::write_unaligned((hit+0x280)as*mut i32,100);crate::basics::calculated(actor,actor+8,actor,hit,base);assert_eq!(read_i32(hit+0x280),if basic{265}else{115});}
  event(actor,0,base);assert_eq!(bonus(actor,hit,base),0.);
  STATE.lock().unwrap().clear();BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);crate::glass_cannon::ORIGINAL.store(old_calc,Ordering::Release);for(p,old)in saved{p.store(old,Ordering::Release);}VirtualFree(memory,0,MEM_RELEASE);
 }}

@@ -24,7 +24,7 @@ impl Cast{
   if self.phase==0||self.frozen.is_some(){return;}
   if before.is_finite()&&before>=0.&&after>=0{self.before=(self.before+before as f64).min(self.cap);self.after=(self.after+after as f64).min(self.cap);}
  }
- fn freeze(&mut self)->f32{if self.phase!=2{return 0.;}*self.frozen.get_or_insert((self.before.max(self.after).min(self.cap)/1500.)as f32)}
+ fn freeze(&mut self)->f32{if self.phase!=2{return 0.;}*self.frozen.get_or_insert((self.before.max(self.after).min(self.cap)/2000.)as f32)}
 }
 static STATE:Mutex<Cast>=Mutex::new(Cast{owner:Identity{actor:0,stats:0,handle:0},serial:0,phase:0,cap:0.,before:0.,after:0.,frozen:None});
 unsafe fn identity(actor:usize,base:usize)->Option<Identity>{
@@ -167,18 +167,18 @@ pub unsafe extern "system" fn scale_detour(){
   let mut c=Cast::default();c.begin(Identity::default(),1500);
   c.add(600.,150);c.add(100.,250); // max(sum)=700, not sum(max)=850.
   assert_eq!((c.before,c.after),(700.,400.));assert_eq!(c.freeze(),0.);
-  c.phase=2;let bonus=c.freeze();assert!((bonus-700./1500.).abs()<1e-6);
+  c.phase=2;let bonus=c.freeze();assert!((bonus-700./2000.).abs()<1e-6);
   c.add(5000.,5000);assert_eq!(c.freeze(),bonus);
   let old=c.serial;c.clear();assert_ne!(old,c.serial);assert_eq!(c.freeze(),0.);
   c.begin(Identity::default(),1500);c.phase=2;c.add(1500.,3750);
-  assert_eq!((c.before,c.after),(1500.,3000.));assert_eq!(c.freeze(),2.);
-  assert_eq!(crate::basics::multiplier(Some(5),600000210,1)+2.,4.5);
+  assert_eq!((c.before,c.after),(1500.,3000.));assert_eq!(c.freeze(),1.5);
+  assert_eq!(crate::basics::multiplier(Some(5),600000210,1)+c.freeze(),4.);
  }
  #[test]fn zero_post_mitigation_still_counts_pre_damage_and_invalid_values_do_not(){
   let mut c=Cast::default();c.begin(Identity::default(),1000);c.phase=2;
   c.add(150.,0);c.add(f32::NAN,999);c.add(f32::INFINITY,999);c.add(-1.,999);c.add(2.,-1);
-  assert_eq!((c.before,c.after),(150.,0.));assert_eq!(c.freeze(),0.1);
-  c.begin(Identity::default(),1);c.phase=2;c.add(f32::MAX,i32::MAX);assert_eq!(c.freeze(),2./1500.);
+  assert_eq!((c.before,c.after),(150.,0.));assert_eq!(c.freeze(),0.075);
+  c.begin(Identity::default(),1);c.phase=2;c.add(f32::MAX,i32::MAX);assert_eq!(c.freeze(),2./2000.);
  }
  #[test]fn only_empowered_damage_components_match(){
   for id in [600000210,600000231]{assert!(empowered(id,1));assert!(!empowered(id,0));}
