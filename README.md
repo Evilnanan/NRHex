@@ -4,8 +4,6 @@ Mod 正式名称为 **Mayhem Augments**；`NRHex` 仅作为源码、DLL、INI �
 
 《艾尔登法环 黑夜君临》海克斯 Mod，当前代码版 **0.17.256**。复用原生金色潜在能力，在 2／7／10／13 级独立发放三选一奖励；未领取奖励排队，复活后移动到本人脚下。同次远征中，展示过的海克斯暂不重复，候选轮完后重新循环。海克斯三选一的每栏可使用原生“放置”按键刷新一次。
 
-新增无赖专属“蓄意轰拳”，支持“双重惊喜”按角色获取；双路受伤累计和基本功加算规则见 [研究记录](docs/research/deliberate-punch.md)。
-
 自测包位于 `dist`，保留 Ctrl+F6；群友版通过 `build-no-hotkeys.ps1` 构建，编译时移除测试快捷键。两版的 DLL／INI 均位于 `natives`。
 
 纯净发行版使用 `./build-release.ps1`，输出 `releases/Mayhem Augments-<版本>/` 和同名 ZIP。解压后通过 ME3 加载 `Mayhem Augments.me3`；仅包含本 Mod，不带 MMV、辅助 Mod 或测试快捷键。需要自行安装 ME3；发行配置不指定在线或 Arxan 选项。
