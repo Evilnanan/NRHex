@@ -2,7 +2,7 @@
 
 亮剑基础百分比＝目标参数估算的原飞行距离（米），保留一位小数；无可比较飞行距离为 0%。伤害加成、咏唱减伤仍共用此值，回收倍率仍为基础百分比的两倍，并继续使用原生回收槽与原生高阶倍率。没有另行引入新的上限或修改回收公式。
 
-`tools/build_sword_auto.py` 从目标 regulation 导出的 Magic / Bullet / AtkParam_Pc 和中文名称生成数据。独立版 160 个法术；MMV 当前 204 个法术。构建无需手填 CSV，也不读取用户排序后的研究表。历史 CSV 和已排序表保留。以下是生成的只读核对表：
+`tools/build_sword_auto.py` 从目标 regulation 导出的 Magic / Bullet / AtkParam_Pc 和中文名称生成数据。独立版 160 个法术；MMV 当前 204 个法术。构建无需手填 CSV，也不读取用户排序后的研究表。已排序的研究表保留。以下是生成的只读核对表：
 
 - [独立版自动加成](sword-auto-native.csv)
 - [MMV 自动加成](sword-auto-mmv.csv)

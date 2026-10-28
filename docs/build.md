@@ -95,6 +95,6 @@ MMV 与独立版共用源码及文案，不维护长期分叉。当前适配状�
 
 `assets/original/manifest.json` 和 `data/reference/manifest.json` 约束保留的输入与研究夹具。升级游戏时应重新导出、研究和更新清单，不能绕过失配检查。`.work`、`work` 与 `target` 用于生成数据和缓存，不作为原始游戏数据来源。
 
-用户维护的 CSV、INI 和其他 Mod 配置应保留。亮剑已停止读取 `data/balance/sword.csv` 和 `sword-mmv.csv` 的手填加成；两份文件仅保留历史数据。构建读取目标参数并运行 `tools/build_sword_auto.py`，以原飞行距离估算的米数直接作为百分比（保留一位小数），无可比较飞行距离为 0%，回收倍率沿用现有值。独立版生成 `src/sword_map.rs`，MMV 从合并后的参数生成专用映射，经 `NRHEX_SWORD_DATA` 交给共享运行时。直接运行 Cargo 使用已生成快照；更新参数后应先走构建入口重新导出，不能手改生成值。弹体常规上限为 6 米，详见 `docs/research/sword-auto.md`。
+用户维护的 CSV、INI 和其他 Mod 配置应保留。亮剑加成由目标参数自动生成，无需手填加成表。构建读取目标参数并运行 `tools/build_sword_auto.py`，以原飞行距离估算的米数直接作为百分比（保留一位小数），无可比较飞行距离为 0%，回收倍率沿用现有值。独立版生成 `src/sword_map.rs`，MMV 从合并后的参数生成专用映射，经 `NRHEX_SWORD_DATA` 交给共享运行时。直接运行 Cargo 使用已生成快照；更新参数后应先走构建入口重新导出，不能手改生成值。弹体常规上限为 6 米，详见 `docs/research/sword-auto.md`。
 
 构建后重启游戏加载 DLL、动作或文本。运行状态只读检查使用 `tools/check_loaded.py`，不继承旧版本的加载或实测结论。

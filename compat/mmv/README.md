@@ -83,7 +83,7 @@ MMV 路径也可以通过 `NRHEX_MMV` 指定。脚本使用当前 `dist/mod` 作
 
 ### 亮剑自动估算
 
-两份手填 CSV 仅保留历史数据，不再控制 DLL。构建从合并后的 MMV regulation 和中文名称导出 Magic、Bullet、AtkParam_Pc，自动生成 `work/compat/mmv/staged/sword_map.rs`，通过 `NRHEX_SWORD_DATA` 编入共享运行时。当前收录 160 个原有、44 个新增法术；加成＝估算原飞行距离（米）对应的百分比，没有可比较飞行距离时为 0%。`docs/research/sword-auto-mmv.csv` 是只供查看的生成结果。
+构建从合并后的 MMV regulation 和中文名称导出 Magic、Bullet、AtkParam_Pc，自动生成 `work/compat/mmv/staged/sword_map.rs`，通过 `NRHEX_SWORD_DATA` 编入共享运行时。当前收录 160 个原有、44 个新增法术；加成＝估算原飞行距离（米）对应的百分比，没有可比较飞行距离时为 0%。`docs/research/sword-auto-mmv.csv` 是只供查看的生成结果。
 
 新增法术的自动图遍历不是完整实机验收。融泥块按投掷载体首次落地估算；融泥漩按喷流最远外扩估算，不累计回流路程，也不把高速竖直探地弹的寿命当成400米射程。其他已核对的阶段规则和快速下坠见 `docs/research/sword-auto.md`。原 MMV 文件仍为只读。
 
