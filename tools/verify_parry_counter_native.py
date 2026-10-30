@@ -62,6 +62,7 @@ try:
    assert observed==[('calculate',c.addressof(player),amount,-2,0x81,7),('set',c.addressof(stats),150-(amount*2+3),0)],observed
    cases.append(dict(behaviorPresent=present,baseCost=amount,finalDebit=amount*2+3))
 finally:k.VirtualFree(m,0,0x8000)
-report=dict(nativeCases=len(cases),cases=cases,parameters=params,hookAfterNativeCalculator=True,staminaSetterStubbed=True,gameplayVerified=False)
+assert 'COUNTER_COST' not in (ROOT/'src/lib.rs').read_text()
+report=dict(nativeCases=len(cases),cases=cases,parameters=params,counterCostHookRemoved=True,staminaSetterStubbed=True,gameplayVerified=False)
 (ROOT/'.work/parry-counter/native-validation.json').write_text(json.dumps(report,indent=2),encoding='utf8')
 print(f'PASS: {len(cases)} original debit-path cases; current behavior row, five calculator arguments, signed debit and stats recipient verified')

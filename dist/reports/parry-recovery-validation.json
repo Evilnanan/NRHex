@@ -1,0 +1,668 @@
+{
+  "version": "0.17.259",
+  "target": "x86_64-pc-windows-gnu",
+  "counterDamageMultiplier": 2,
+  "hpRecoveryMaxPercent": 35,
+  "staminaRecoveryMaxPercent": 65,
+  "counterStaminaCost": "original native debit restored",
+  "native": {
+    "nativeSelectorCases": 64,
+    "cases": [
+      {
+        "active": false,
+        "kind": 1,
+        "tag": 0,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 1,
+        "tag": 0,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 1,
+        "tag": 100,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 1,
+        "tag": 100,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 1,
+        "tag": 103,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 1,
+        "tag": 103,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 1,
+        "tag": 130,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 1,
+        "tag": 130,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 3,
+        "tag": 0,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 3,
+        "tag": 0,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 3,
+        "tag": 100,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 3,
+        "tag": 100,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 3,
+        "tag": 103,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 3,
+        "tag": 103,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 3,
+        "tag": 130,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 3,
+        "tag": 130,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 4,
+        "tag": 0,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 4,
+        "tag": 0,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 4,
+        "tag": 100,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 4,
+        "tag": 100,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 4,
+        "tag": 103,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 4,
+        "tag": 103,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 4,
+        "tag": 130,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 4,
+        "tag": 130,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 10,
+        "tag": 0,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 10,
+        "tag": 0,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 10,
+        "tag": 100,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 10,
+        "tag": 100,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 10,
+        "tag": 103,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 10,
+        "tag": 103,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 10,
+        "tag": 130,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": false,
+        "kind": 10,
+        "tag": 130,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 1,
+        "tag": 0,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 1,
+        "tag": 0,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 1,
+        "tag": 100,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 1,
+        "tag": 100,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 1,
+        "tag": 103,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 1,
+        "tag": 103,
+        "damage": 100,
+        "recoveryEvents": 1
+      },
+      {
+        "active": true,
+        "kind": 1,
+        "tag": 130,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 1,
+        "tag": 130,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 3,
+        "tag": 0,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 3,
+        "tag": 0,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 3,
+        "tag": 100,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 3,
+        "tag": 100,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 3,
+        "tag": 103,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 3,
+        "tag": 103,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 3,
+        "tag": 130,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 3,
+        "tag": 130,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 4,
+        "tag": 0,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 4,
+        "tag": 0,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 4,
+        "tag": 100,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 4,
+        "tag": 100,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 4,
+        "tag": 103,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 4,
+        "tag": 103,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 4,
+        "tag": 130,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 4,
+        "tag": 130,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 10,
+        "tag": 0,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 10,
+        "tag": 0,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 10,
+        "tag": 100,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 10,
+        "tag": 100,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 10,
+        "tag": 103,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 10,
+        "tag": 103,
+        "damage": 100,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 10,
+        "tag": 130,
+        "damage": 0,
+        "recoveryEvents": 0
+      },
+      {
+        "active": true,
+        "kind": 10,
+        "tag": 130,
+        "damage": 100,
+        "recoveryEvents": 0
+      }
+    ],
+    "nativeRecoveryCases": [
+      {
+        "maxHp": 1000,
+        "flags": 0,
+        "hpGains": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "staminaRate": 0.0
+      },
+      {
+        "maxHp": 1000,
+        "flags": 2,
+        "hpGains": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "staminaRate": 0.0
+      },
+      {
+        "maxHp": 1000,
+        "flags": 4,
+        "hpGains": [
+          350,
+          0,
+          350,
+          0,
+          0
+        ],
+        "staminaRate": -65.0
+      },
+      {
+        "maxHp": 1200,
+        "flags": 0,
+        "hpGains": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "staminaRate": 0.0
+      },
+      {
+        "maxHp": 1200,
+        "flags": 2,
+        "hpGains": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "staminaRate": 0.0
+      },
+      {
+        "maxHp": 1200,
+        "flags": 4,
+        "hpGains": [
+          420,
+          0,
+          420,
+          0,
+          0
+        ],
+        "staminaRate": -65.0
+      },
+      {
+        "maxHp": 2000,
+        "flags": 0,
+        "hpGains": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "staminaRate": 0.0
+      },
+      {
+        "maxHp": 2000,
+        "flags": 2,
+        "hpGains": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "staminaRate": 0.0
+      },
+      {
+        "maxHp": 2000,
+        "flags": 4,
+        "hpGains": [
+          700,
+          0,
+          700,
+          0,
+          0
+        ],
+        "staminaRate": -65.0
+      }
+    ],
+    "damageMultiplierPreserved": true,
+    "nativeAttackerDelivery": true,
+    "prayerfulStrikeVfx": 8630,
+    "prayerfulStrikeSfx": 525033,
+    "counterCostHookRemoved": true,
+    "stubs": [
+      "security-cookie helper",
+      "HP setter post-write authority predicate",
+      "attack-rate parameter reference lookup",
+      "selected-effect row lookup and final effect submission; native caller recipient verified"
+    ],
+    "fixtureSha256": "078d51f9874509aabc21a24344180d445f85029eb01897b55977c5afe54b0884",
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "parameters": {
+    "inputSha256": "7B4E36B0244474DEDCB5B6E1149637A4C1BA9E524D3955D80D152C4F4395050E",
+    "outputSha256": "5B055CCFB4F6B8540B6DEE2E1CF5D7B937A87FAB69954F2A20E4A3D6474EB6E8",
+    "counter": 95002404,
+    "pulse": 95002406,
+    "hpPercent": 35,
+    "staminaPercent": 65,
+    "visual": 8630,
+    "sfx": 525033,
+    "onlyCounterTriggerAndRecoveryPulseChanged": true,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "tests": {
+    "passed": 462,
+    "failed": 0,
+    "ignoredByDefault": 30,
+    "removedObsoleteCounterCostTest": true,
+    "nativeDebitCases": 10
+  },
+  "standaloneResourceMethod": "Guarded counter/pulse patch and bilingual text stage with readback; full standalone PowerShell pipeline not run",
+  "standaloneSignaturesVerified": 209,
+  "standaloneDllLoadAndUnsupportedHostGuardPassed": true,
+  "bilingualTextReadbackPassed": true,
+  "mmv": {
+    "status": "built-awaiting-game-test",
+    "inputFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+    "originalInputsUnchanged": true,
+    "fullPipelinePassed": true,
+    "prayerfulStrikeVisualMatchesNative": true,
+    "files": {
+      "mod/regulation.bin": "375c341cbeca0ddaa66d6dd0e1b2a8db573536f1d1942b46e2a1fbc895079378",
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": "225306ed60dc85d541189f5913cc2052dc979a48c46914f70b5da10e55072502",
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": "ed8606870ddf1e27e8b4a88e0c8cd339c89039616a67313c1bba219945769cbd",
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "5752a69b03fd3ff2ceea709b7a983c637a2172a2bc290a51d5b05c0c70475992",
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "931fe72594aa50f59eae22a5f8b836434f13b14c9d4f2130cc560a7c6570db91",
+      "mod/action/script/c0000.hks": "926723e5b991ed96d5f90d51fde064efd5525bf690bc135142f482e530cd381f",
+      "mod/event/common.emevd.dcx": "b42dbb96e8b9b21a795ad2f6e3164494720392e4d470677d21a4ff473f238ffa",
+      "mod/event/common_func.emevd.dcx": "f8442bca05e53cf27c04758a1beb07e1fd470c564d2c00ac06570334e7a0de9e",
+      "mod/event/m41_00_00_00.emevd.dcx": "f4b09100990aae0e5520de0796d06e049faa6bf8c5f54e7f3553e89777877de3",
+      "mod/event/m41_01_00_00.emevd.dcx": "47cece5fefa89ae81effff481e3fcd42cea672b5211b5abe8ef271d6636be1a1",
+      "mod/event/m41_30_00_00.emevd.dcx": "0bd80b07daf8ab88d244e2ae4edfa4f86ae450b9456996c9d81d45f848fce478",
+      "mod/event/m46_50_00_00.emevd.dcx": "5d928333ac7c2bfc02bfa596c7ac22709a442d4e1c4290d8a3ce53fda9cbfe52",
+      "mod/event/m46_60_00_00.emevd.dcx": "db9d551887c046bc8379115cf87d7bd7258cc54f84f166af2a545340a9ae0272",
+      "mod/event/m46_70_00_00.emevd.dcx": "0cd0a6095c4fd944b0552fe9ccab5913159bb7809a4209cc424e8a459416912f",
+      "mod/event/m46_80_00_00.emevd.dcx": "30eb7487d44c7ed9c3fe6274c394919fa603cdd65306b8c649da7ae52a8d0618",
+      "mod/event/m51_00_00_00.emevd.dcx": "ed06844bedc1b812fce48b8f7fddfe5cb204bdd7ba000fe50028feb1a9463764",
+      "mod/map/mapstudio/m46_50_00_00.msb.dcx": "fd91721785ee1bcd8479a61d34ee590e7b13247bb75c927b2757b10fc983aea8",
+      "mod/map/mapstudio/m46_60_00_00.msb.dcx": "c81436c7ae69d78bdad3d1054b8bdbab2934ceb5f125c7373ec0066936b62118",
+      "mod/map/mapstudio/m46_70_00_00.msb.dcx": "f08a09c20e941a0f089f30b4e3e3342afcc93ab049a1fceeafc50f8771e6262f",
+      "mod/map/mapstudio/m46_80_00_00.msb.dcx": "0cce73df158f60358bf2d26707db3df4c4ace09061a20f0758b12e56747ba2cc",
+      "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "b308942cfa3c80521d854698b4a1a73be6e5f1a8b99ba0dc60512fb99ec2f90a",
+      "mod/script/talk/m00_00_00_00.talkesdbnd.dcx": "13b39623986fecdf6309316a5ecf6f0ed6089d25134a91b28bc3caadd1f8e826",
+      "mod/chr/c0000.anibnd.dcx": "79eb963ce33c104fbcaf2b89e5a4434b0c42e36489c2772f428b7360b10d3dc0",
+      "natives/NRHex.dll": "373a6c8e098990c37857bd48e6ae8a58ad46fba929cbb368b84a58d7d0a7c724",
+      "natives/NRHex.ini": "b291c5c27e8c0b69c5b824823878667916b674c7092c2686e497f2c4e98f17b2",
+      "NRHex-MMV.me3": "5c8adabb710bff9894635e7c8927ad319c1d56c34217603d99a16c3c72482094"
+    }
+  },
+  "sourceHashes": {
+    "src/parry.rs": "0b5ccc75dec7c1386b6217f6c7c78e722793c03b1c4c2f5863292abb45910c78",
+    "src/lib.rs": "b2f42d011c54dfe99a67bb4f719c5167ce55f6adbd52cbbab0bddaaa29e5f072",
+    "tools/HexBuild/Parry.cs": "4e1dc4ac65562c38e5ae6d1d0687fdd71a2658593c31c30170f600909bcb8607",
+    "tools/HexBuild/ParryRecovery.cs": "9ca7e7afb129491919c653684888f5bb2590c851466159dab110a069a25a83d5",
+    "tools/HexBuild/Program.cs": "4b8d8a18c4a1ca300fd42a61dbd328c05fa1715d7225195a915418c7938b0fd8",
+    "tools/verify_parry_recovery_native.py": "aae56672352bb46b8fb7dd8e972d6bd2d71e2cad5d7e2e6bb0cd952354f82371",
+    "tools/verify_parry_counter_native.py": "b3ebd4f8a1ddd27e195a33101eaa9ad2e39c631d3c2c71bcc44444785135dc31",
+    "build.ps1": "793ad695b068b7e9b8431a9886831e6497aca372537454714f2d2d54fa629d0e",
+    "docs/hexes.md": "f5236903b179e52bcc1e1404d2e9124bfa0a0ddff9899482aada42be7f02a7c6",
+    "docs/hexes.en.md": "905abe936122ed13bdbef3cb13b9c1d20c1f17efd80ae7bd02e034c6ee3267c0",
+    "Cargo.toml": "3cc842308cbf8403f2e4a72479cb80f3bcd35c1c19ac348032ba2da5accec50d",
+    "Cargo.lock": "5387b83fd03f975af72ad61245aff375f04424508afc6250a8620d92a3cffcc3"
+  },
+  "standaloneFiles": {
+    "dist/natives/NRHex.dll": "e13d893efd5464952d7baec17a0f2e71f519a22f73f239a3cd346ea32d3f0f7e",
+    "dist/mod/regulation.bin": "5b055ccfb4f6b8540b6dee2e1cf5d7b937a87fab69954f2a20e4a3d6474eb6e8",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "625ec7eaaa61ceba97b6c734368ccbbb5df07901b3f32c54245c1d7aea160166",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "08df84cecb5cc3b19e5ff98376fef7e2be33d3659125fd228a99656ec7a92db6",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "deb1aca72c1f749ab62ddaddc652c530fbc6f21e00c505fc4f03c7b30706e45a",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "64e3e6ed496c56e28ddb3ac09cb5b895f684a929624988976cddba817b4aacad"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

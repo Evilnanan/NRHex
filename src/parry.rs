@@ -88,46 +88,6 @@ pub const REPEL_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41
 pub static COST_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static COST_RESUME:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static REPEL_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-// Weapon-behavior execution, immediately after the native stamina calculator.
-// RSI is the attack module; [RSP+58] is its resolved BehaviorParam row.
-pub const COUNTER_COST_RVA:usize=0x434768;
-pub const COUNTER_COST_PATTERN:&str="48 8B CE 8B D8 E8 AE 79 FF FF F7 DB 45 33 C0 8B D3 48 8B 88 B8 01 00 00 48 8B 09 E8 48 1A FF FF";
-pub static COUNTER_COST_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-const COUNTER_CATEGORIES:[usize;5]=[0x4e,0x4f,0x1c8,0x1c9,0x1ca];
-#[repr(C)]struct CounterAttackRef{id:i32,cache:u32,kind:i32,padding:u32,row:usize}
-type CounterLookup=unsafe extern "system" fn(*mut CounterAttackRef,i32,i32);
-unsafe fn counter_cost_with(module:usize,behavior:usize,cost:i32,lookup:CounterLookup)->i32{
- let Some(base)=active_base() else{return cost;};
- if cost<=0||module==0||behavior==0||ptr::read((behavior+9) as *const u8)!=0{return cost;}
- let player=read_ptr(module+8);
- if owned_action(player).is_none()||!has_effect(player,COUNTER,base){return cost;}
- let id=crate::read_i32(behavior+0xc);if id<0{return cost;}
- let mut attack=CounterAttackRef{id:-1,cache:0,kind:1,padding:0,row:0};
- lookup(&mut attack,1,id); // native table kind 1 = PC, 0 = NPC
- if attack.row!=0&&COUNTER_CATEGORIES.iter().any(|offset|ptr::read((attack.row+offset) as *const u8)==103){0}else{cost}
-}
-unsafe extern "system" fn counter_cost(module:usize,behavior:usize,cost:i32)->i32{
- let Some(base)=active_base() else{return cost;};
- counter_cost_with(module,behavior,cost,std::mem::transmute(base+crate::devils_gaze_hit::LOOKUP_RVA))
-}
-// Preserve the full surrounding native frame. Only the final positive debit
-// changes; no refill, shared parameter mutation, actor flag or cached pointer.
-#[unsafe(naked)]pub unsafe extern "system" fn counter_cost_detour(){
- core::arch::naked_asm!(
-  "pushfq","sub rsp,0xc8",
-  "mov [rsp+0x20],rax","mov [rsp+0x28],rcx","mov [rsp+0x30],rdx",
-  "mov [rsp+0x38],r8","mov [rsp+0x40],r9","mov [rsp+0x48],r10","mov [rsp+0x50],r11",
-  "movdqu [rsp+0x60],xmm0","movdqu [rsp+0x70],xmm1","movdqu [rsp+0x80],xmm2",
-  "movdqu [rsp+0x90],xmm3","movdqu [rsp+0xa0],xmm4","movdqu [rsp+0xb0],xmm5",
-  "mov r8d,eax","mov rcx,rsi","mov rdx,[rsp+0x128]","call {callback}","mov [rsp+0x20],eax",
-  "movdqu xmm0,[rsp+0x60]","movdqu xmm1,[rsp+0x70]","movdqu xmm2,[rsp+0x80]",
-  "movdqu xmm3,[rsp+0x90]","movdqu xmm4,[rsp+0xa0]","movdqu xmm5,[rsp+0xb0]",
-  "mov rax,[rsp+0x20]","mov rcx,[rsp+0x28]","mov rdx,[rsp+0x30]",
-  "mov r8,[rsp+0x38]","mov r9,[rsp+0x40]","mov r10,[rsp+0x48]","mov r11,[rsp+0x50]",
-  "add rsp,0xc8","popfq","jmp qword ptr [rip+{original}]",
-  callback=sym counter_cost,original=sym COUNTER_COST_ORIGINAL
- );
-}
 pub fn native_guard_judge(judge:i32)->i32{if judge==GUARD_JUDGE{460}else{judge}}
 thread_local!{static GUARD_SCOPES:RefCell<Vec<Option<(usize,u8,i32)>>>=const{RefCell::new(Vec::new())};}
 #[cfg(test)]thread_local!{static TEST_CONTEXT:std::cell::Cell<Option<(bool,usize)>>=const{std::cell::Cell::new(None)};}
@@ -332,60 +292,6 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
 #[cfg(test)]mod tests{
  use super::*;
  static NOTIFY_TEST:std::sync::Mutex<()>=std::sync::Mutex::new(());
- thread_local!{static COUNTER_ROW:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
- unsafe extern "system" fn counter_lookup(out:*mut CounterAttackRef,kind:i32,id:i32){
-  assert_eq!(kind,1);assert_eq!((*out).id,-1);assert_eq!((*out).cache,0);
-  (*out).row=if id==99{0}else{COUNTER_ROW.with(|r|r.get())};
- }
- unsafe extern "system" fn counter_owns(manager:usize,id:i32)->u8{
-  u8::from((manager==1||manager==2)&&id==OWNER||manager==2&&id==COUNTER)
- }
- // Enter with the real call-site alignment, no extra return address atop its
- // stack locals. The continuation checks preserved flags/registers/SIMD.
- #[unsafe(naked)]unsafe extern "system" fn run_counter(_module:usize,_behavior:usize,_cost:i32)->i32{
-  core::arch::naked_asm!("push rsi","push rbx","sub rsp,0x88","mov rsi,rcx",
-   "mov [rsp+0x58],rdx","mov eax,r8d","mov edx,0x12345678","movd xmm0,edx","stc",
-   "jmp {detour}",detour=sym counter_cost_detour);
- }
- #[unsafe(naked)]unsafe extern "system" fn counter_continuation(){
-  core::arch::naked_asm!("jnc 2f","cmp edx,0x12345678","jne 2f","movd r10d,xmm0","cmp r10d,edx","jne 2f",
-   "mov rcx,rsi","mov ebx,eax","jmp 3f","2:","mov eax,0xdeadbeef",
-   "3:","add rsp,0x88","pop rbx","pop rsi","ret");
- }
- #[test]fn counter_stamina_is_scoped_to_native_counter_category_and_earned_guard(){unsafe{
-  let base=crate::win::VirtualAlloc(ptr::null_mut(),0xe70000,0x3000,0x40) as usize;assert_ne!(base,0);
-  for(rva,address)in[(crate::HAS_EFFECT_RVA,counter_owns as *const () as usize),(crate::devils_gaze_hit::LOOKUP_RVA,counter_lookup as *const () as usize)]{
-   let mut jump=vec![0x48,0xb8];jump.extend_from_slice(&address.to_le_bytes());jump.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(jump.as_ptr(),(base+rva) as *mut u8,jump.len());
-  }
-  TEST_CONTEXT.with(|s|s.set(Some((true,base))));
-  let previous=COUNTER_COST_ORIGINAL.swap(counter_continuation as *const () as *mut u8,Ordering::AcqRel);
-  let mut actor=vec![0u8;0x718];let mut vt=vec![0usize;0x120/8];let mut stats=vec![0u8;0x168];let mut action=[0u8;0x260];
-  let modules=[stats.as_mut_ptr() as usize,action.as_mut_ptr() as usize];let player=actor.as_mut_ptr() as usize;
-  vt[0x118/8]=base+0x4d2f00;ptr::write_unaligned(player as *mut usize,vt.as_ptr() as usize);
-  ptr::write_unaligned((player+0x1b8) as *mut usize,modules.as_ptr() as usize);
-  stats[0x140..0x144].copy_from_slice(&100i32.to_le_bytes());stats[0x15c..0x160].copy_from_slice(&37i32.to_le_bytes());
-  let module=[0usize,player];let m=module.as_ptr() as usize;
-  let mut behavior=[0u8;0x20];behavior[0xc..0x10].copy_from_slice(&123i32.to_le_bytes());let b=behavior.as_ptr() as usize;
-  let mut row=[0u8;0x1d0];COUNTER_ROW.with(|r|r.set(row.as_mut_ptr() as usize));
-  for manager in [0usize,1,2]{ptr::write_unaligned((player+0x190) as *mut usize,manager);
-   for category in [0u8,101,102,103,129]{for offset in COUNTER_CATEGORIES{
-    row.fill(0);row[offset]=category;
-    for cost in [-20,0,1,35,200]{assert_eq!(run_counter(m,b,cost),if manager==2&&category==103&&cost>0{0}else{cost});}
-   }}
-  }
-  row.fill(0);row[0x4e]=103;
-  for kind in [1u8,2,255]{behavior[9]=kind;assert_eq!(run_counter(m,b,35),35);}behavior[9]=0;
-  for id in [-1i32,99]{behavior[0xc..0x10].copy_from_slice(&id.to_le_bytes());assert_eq!(run_counter(m,b,35),35);}
-  behavior[0xc..0x10].copy_from_slice(&123i32.to_le_bytes());
-  actor[0x710]=1;assert_eq!(run_counter(m,b,35),35);actor[0x710]=0;
-  stats[0x140..0x144].copy_from_slice(&0i32.to_le_bytes());assert_eq!(run_counter(m,b,35),35);
-  stats[0x140..0x144].copy_from_slice(&100i32.to_le_bytes());
-  assert_eq!(run_counter(0,b,35),35);assert_eq!(run_counter(m,0,35),35);
-  TEST_CONTEXT.with(|s|s.set(Some((false,base))));assert_eq!(run_counter(m,b,35),35);
-  assert_eq!(crate::read_i32(stats.as_ptr() as usize+0x15c),37); // no refill or mutation
-  COUNTER_COST_ORIGINAL.store(previous,Ordering::Release);COUNTER_ROW.with(|r|r.set(0));TEST_CONTEXT.with(|s|s.set(None));
-  assert_ne!(crate::win::VirtualFree(base as *mut _,0,0x8000),0);
- }}
  unsafe extern "system" fn fixture_airborne(physics:usize)->u8{u8::from(ptr::read((physics+0x92) as *const u8)==0)}
  const fn fixture_weapon_rows()->[[u8;0x1a8];2]{let mut rows=[[0;0x1a8];2];rows[0][0x1a6]=3;rows[1][0x1a6]=3;rows}
  thread_local!{static WEAPON_ROWS:RefCell<[[u8;0x1a8];2]>=const{RefCell::new(fixture_weapon_rows())};}

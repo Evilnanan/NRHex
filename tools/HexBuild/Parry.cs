@@ -60,6 +60,7 @@ static class Parry {
    Check(Math.Abs(Convert.ToSingle(row[f].Value)-1.2f)<.00001f,"Native guard-counter multiplier changed");Set(row,f,2f);
   }
   Set(row,"spCategory",20);
+  ParryRecovery.ConfigureCounter(row);ParryRecovery.Support(clone);
  }
  public static void ProbeCounterCost(string root,BND4 original,Func<string,Memory<byte>,PARAM> parse){
   PARAM Table(string n)=>parse(n,original.Files.Single(f=>Path.GetFileName(f.Name)==n+".param").Bytes);
@@ -91,11 +92,12 @@ static class Parry {
   var result=SFUtil.DecryptNightreignRegulation(output);
   foreach(var f in result.Files){Check(f.Bytes.Span.SequenceEqual(binder.Files.Single(x=>x.ID==f.ID).Bytes.Span),"Counter readback differs");if(f.ID!=file.ID)Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated table changed");}
   var actual=parse("SpEffectParam",result.Files.Single(f=>f.ID==file.ID).Bytes);
-  Check(actual.Rows.Count==baseline.Rows.Count+1,"Unexpected row count");
+  Check(actual.Rows.Count==baseline.Rows.Count+2,"Unexpected row count");
   foreach(var row in baseline.Rows)Check(CageAI.Same(row,actual.Rows.Single(r=>r.ID==row.ID)),"Preexisting row changed");
   var added=actual.Rows.Single(r=>r.ID==Owner+4);var native=baseline.Rows.Single(r=>r.ID==322000);
-  string[] changed={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate","spCategory"};
+  string[] changed={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate","spCategory","stateInfo","atkOccurrenceSpEffectId"};
   foreach(var cell in added.Cells.Where(c=>!changed.Contains(c.Def.InternalName)))Check(Equals(cell.Value,native[cell.Def.InternalName].Value),"Native guard-counter filter/lifecycle changed");
+  ParryRecovery.Validate(binder,result,parse);
   File.WriteAllText(Path.Combine(dir,"counter-parameter-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),added=Owner+4,nativeTemplate=322000,attackCategory=103,multiplier=2f,originalRowsUnchanged=true,nativeFiltersUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: native category-103 counter multiplier x2 staged/read back; all existing parameters preserved");
  }

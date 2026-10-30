@@ -193,6 +193,14 @@ try {
         Copy-Item -LiteralPath '.work/parry/staged/parry_data.rs' -Destination 'src/parry_data.rs' -Force
         dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-paired-probe
         if ($LASTEXITCODE -ne 0) { throw 'Parry paired weapon parameter verification failed.' }
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-recovery-check
+        if ($LASTEXITCODE -ne 0) { throw 'Parry recovery parameter verification failed.' }
+        python -X utf8 tools/verify_parry_recovery_native.py
+        if ($LASTEXITCODE -ne 0) { throw 'Parry native on-hit recovery verification failed.' }
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-counter-probe
+        if ($LASTEXITCODE -ne 0) { throw 'Parry counter classification verification failed.' }
+        python -X utf8 tools/verify_parry_counter_native.py
+        if ($LASTEXITCODE -ne 0) { throw 'Parry native stamina debit verification failed.' }
         python -X utf8 tools/verify_parry_native.py
         if ($LASTEXITCODE -ne 0) { throw 'Parry native guard and paired weapon verification failed.' }
         dotnet run --project tools/HexBuild -- $PSScriptRoot --parry-followup-actions

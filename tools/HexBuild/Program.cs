@@ -252,6 +252,8 @@ if(args.Contains("--heart-ready-fog-resources")){HeartReadyFog.StageResources(ro
 if(args.Contains("--cage-hp-probe")){CageHealth.Probe(root,Parse);return;}
 if(args.Contains("--cage-hp-sync")){CageCoop.Stage(root,Parse);return;}
 if(args.Contains("--cage-hp-check")){CageCoop.Export(root,Parse);return;}
+if(args.Contains("--parry-recovery-stage")){ParryRecovery.Stage(root,bnd,Parse);return;}
+if(args.Contains("--parry-recovery-check")){ParryRecovery.Verify(root,bnd,Parse);return;}
 if(args.Contains("--parry-counter-probe")){Parry.ProbeCounterCost(root,bnd,Parse);return;}
 if(args.Contains("--archmage-secondary")){Archmage.StageSecondary(root,Parse);return;}
 if(args.Contains("--archmage-probe")){Archmage.Probe(root,bnd,Parse);return;}

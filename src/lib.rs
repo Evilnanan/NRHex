@@ -369,7 +369,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);210] {
+fn signatures()->[(&'static str,u32);209] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -448,7 +448,6 @@ fn signatures()->[(&'static str,u32);210] {
   (weapon_affinity::QUERY_PATTERN,weapon_affinity::QUERY_RVA as u32),(weapon_affinity::OVERRIDE_PATTERN,weapon_affinity::OVERRIDE_RVA as u32),
   (parry::AIRBORNE_PATTERN,parry::AIRBORNE_RVA as u32),
   (parry::DUMMY_COUNT_PATTERN,parry::DUMMY_COUNT_RVA as u32),
-  (parry::COUNTER_COST_PATTERN,parry::COUNTER_COST_RVA as u32),
   (REWARD_HIDE_PATTERN,REWARD_HIDE_RVA as u32),(REWARD_SHOW_PATTERN,REWARD_SHOW_RVA as u32),
   (ARTS_ID_PATTERN,ARTS_ID_RVA as u32),(ARTS_PARAM_PATTERN,ARTS_PARAM_RVA as u32),(ARTS_REF_PATTERN,ARTS_REF_RVA as u32),
   (ARTS_RAW_PATTERN,ARTS_RAW_RVA as u32),
@@ -675,7 +674,6 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (reward_reroll::PRESS_RVA,reward_reroll::press as *const u8,&reward_reroll::PRESS_ORIGINAL),
    (parry::NOTIFY_RVA,parry::notify_detour as *const u8,&parry::NOTIFY_ORIGINAL),
    (parry::COST_RVA,parry::cost_detour as *const u8,&parry::COST_ORIGINAL),
-   (parry::COUNTER_COST_RVA,parry::counter_cost_detour as *const u8,&parry::COUNTER_COST_ORIGINAL),
    (parry::REPEL_RVA,parry::repel as *const u8,&parry::REPEL_ORIGINAL),
    (parry::RVA,parry::detour as *const u8,&parry::ORIGINAL),
    (erosion::COLLECT_RVA,erosion::collect as *const u8,&erosion::COLLECT_ORIGINAL),
@@ -711,7 +709,6 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    if rva==death_dance::RVA&&p.stolen!=6{return Err("Death dance must relocate exactly MOV ECX,[RBX+140]".into());}
    if rva==parry::RVA&&p.stolen!=7{return Err("Parry state query must relocate its two 7-byte MOV instructions".into());}
    if rva==parry::COST_RVA&&p.stolen!=9{return Err("Parry cost gate must relocate the nine-byte MOVSS".into());}
-   if rva==parry::COUNTER_COST_RVA&&p.stolen!=5{return Err("Parry counter cost must relocate MOV RCX,RSI / MOV EBX,EAX".into());}
    original.store(p.trampoline,Ordering::Release);arts_transfer_prepared.push((rva,p));
   }
   if arts_param_prepared.stolen!=5{return Err("Arts param entry must relocate its five-byte native jump".into());}

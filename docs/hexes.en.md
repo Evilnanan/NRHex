@@ -122,7 +122,7 @@ Extends jumping distance after starting a sprint. Stacks up to three times. Each
 <!-- hex:95002400 -->
 ## Clash
 
-Two-handed attacks can guard enemy blows. On a successful guard, guard counters cost no stamina and deal 100% more damage.
+Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit.
 
 <!-- hex:95002500 -->
 ## Night's Blessing
