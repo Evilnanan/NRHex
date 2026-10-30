@@ -203,6 +203,8 @@ if(args.Contains("--ambulance-stage")){Ambulance.Stage(root,bnd,Parse,HexCatalog
 if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ability-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--erosion-sources-stage")){var i=Array.IndexOf(args,"--erosion-sources-stage");ErosionSources.Stage(root,args[i+1],args[i+2],Parse);return;}
+if(args.Contains("--erosion-sources-catalog")){var i=Array.IndexOf(args,"--erosion-sources-catalog");ErosionSources.Catalog(root,args[i+1],args[i+2],Parse);return;}
 if(args.Contains("--erosion-items-stage")){Erosion.StageItems(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--erosion-items-check")){Erosion.VerifyItems(root,bnd,Parse);return;}
 if(args.Contains("--erosion-stage")){Erosion.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}

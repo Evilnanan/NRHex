@@ -104,16 +104,18 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
   vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);
   assert_eq!(vector[2],if blocked{start}else{start+4},"attack {attack} table {table}");
  }
- // A native on-hit ailment owner using the same body contact remains intact.
+ // Native flags still control eligibility; only unsupported type10 is filtered.
  integer(context+0x34,10000);integer(context+0x38,1);
  let applies:unsafe extern "system" fn(usize,usize,usize,i32,i32)->u8=std::mem::transmute(base+crate::EFFECT_FILTER_RVA);
  for (kind,offset,mask)in [(3u8,0x160,128u8),(4,0x161,1),(10,0x259,32)]{
   ptr::write(context as*mut u8,kind);ptr::write((row+offset)as*mut u8,mask);
-  vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start);
+  vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);
+  assert_eq!(vector[2],if kind==10{start}else{start+4});
+  if kind!=10{assert_eq!(values[0],SPELL_CARRIER);}
   assert_eq!(applies(node,context,0,-1,-1),1);
-  integer(row+0x12c,8110002);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);assert_eq!(values[0],8110002);
+  integer(row+0x12c,8110002);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);assert_eq!(values[0],8110002);
   integer(row+0x12c,CARRIER);ACTIVE.store(false,Ordering::Release);vector[2]=start;
-  collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);
+  collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);assert_eq!(values[0],CARRIER);
   ACTIVE.store(true,Ordering::Release);ptr::write((row+offset)as*mut u8,0);
  }
 
@@ -137,7 +139,8 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
  integer(bullet+0x2c0,3080);
  for(kind,offset,mask)in [(3u8,0x160,128u8),(4,0x161,1),(10,0x259,32)]{
   ptr::write(context as*mut u8,kind);ptr::write((row+offset)as*mut u8,mask);vector[2]=start;
-  collide(context,vector.as_mut_ptr()as usize,bullet);assert_eq!(vector[2],start,"Spell exclusion precedes item tier");ptr::write((row+offset)as*mut u8,0);
+  collide(context,vector.as_mut_ptr()as usize,bullet);assert_eq!(vector[2],if kind==10{start}else{start+4});
+  if kind!=10{assert_eq!(values[0],ITEM_CARRIER,"Explicit source goods take priority");}ptr::write((row+offset)as*mut u8,0);
  }
  ptr::write(context as*mut u8,0);integer(row+0x12c,8110002);vector[2]=start;
  collide(context,vector.as_mut_ptr()as usize,bullet);assert_eq!(values[0],8110002,"Other native ailment additions stay intact");integer(row+0x12c,CARRIER);
@@ -147,38 +150,28 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
  integer(row+0x12c,8110002);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);
  assert_eq!(vector[2],start+4);assert_eq!(values[0],8110002);integer(row+0x12c,CARRIER);
  ACTIVE.store(false,Ordering::Release);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4);
- // Sword exception executes through the actual 506200 -> 511010 chain.
- // The collector must forward the source manager's owner, and only mapped
- // local sorcery/incantation contacts may bypass Erosion's spell exclusion.
- crate::SWORD_BONUSES.get_or_init(crate::sword::Bonuses::defaults);
- let mapped=crate::sword_map::ATTACKS[0].0;
- let mut world=vec![0usize;0x17500/8];let world=world.as_mut_ptr()as usize;
- let previous_world=read_ptr(base+crate::WORLD_RVA);
- pointer(base+crate::WORLD_RVA,world);pointer(world+0x174e8,source);pointer(manager+0x10,source);
- let saved_base=BASE.swap(base,Ordering::AcqRel);
- let lookup=std::slice::from_raw_parts((base+crate::HAS_EFFECT_RVA)as*const u8,10).to_vec();
- let mut sword_owned=vec![0x81,0xfa];sword_owned.extend_from_slice(&crate::sword::OWNER.to_le_bytes());sword_owned.extend_from_slice(&[0x0f,0x94,0xc0,0xc3]);
- ACTIVE.store(true,Ordering::Release);patch(base,crate::HAS_EFFECT_RVA,&sword_owned);
+ // Plain sorcery/prayer works for any owner and attack, without Sword.
+ ACTIVE.store(true,Ordering::Release);
  for (kind,offset,mask)in [(3u8,0x160,128u8),(4,0x161,1)]{
-  ptr::write(context as*mut u8,kind);integer(context+0x34,mapped);integer(context+0x38,1);
-  ptr::write((row+offset)as*mut u8,mask);vector[2]=start;
-  let descriptor=std::slice::from_raw_parts(context as*const u8,0x3c).to_vec();
-  for count in 1..=3{
-   collect(manager,vector.as_mut_ptr()as usize,context);
-   assert_eq!(vector[2],start+count*4);assert_eq!(values[count-1],CARRIER,"One native carrier per contact");
-  }
-  assert_eq!(std::slice::from_raw_parts(context as*const u8,0x3c),descriptor,"Shared spell descriptor unchanged");
-  integer(context+0x34,-1);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Unmapped spell excluded");integer(context+0x34,mapped);
-  integer(context+0x38,0);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Attack table must match Sword");integer(context+0x38,1);
-  pointer(manager+0x10,target);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Remote owner is not the local Sword owner");pointer(manager+0x10,source);
-  patch(base,crate::HAS_EFFECT_RVA,&[0x31,0xc0,0xc3]);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"No Sword: ordinary spell still excluded");
-  integer(row+0x12c,8110002);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+4,"Other native added ailments remain unchanged");integer(row+0x12c,CARRIER);
-  patch(base,crate::HAS_EFFECT_RVA,&sword_owned);vector[2]=start;
-  ptr::write((row+offset)as*mut u8,0);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Remaining native applicability is still enforced");
+  ptr::write(context as*mut u8,kind);ptr::write((row+offset)as*mut u8,mask);
+  for owner in [0,source,target]{for attack in [-1,40000,12301101]{
+   pointer(manager+0x10,owner);integer(context+0x34,attack);vector[2]=start;
+   let descriptor=std::slice::from_raw_parts(context as*const u8,0x3c).to_vec();
+   for count in 1..=3{collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start+count*4);assert_eq!(values[count-1],SPELL_CARRIER);}
+   assert_eq!(std::slice::from_raw_parts(context as*const u8,0x3c),descriptor);
+  }}
+  ptr::write((row+offset)as*mut u8,0);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Native eligibility remains enforced");
  }
- ptr::write(context as*mut u8,10);ptr::write((row+0x259)as*mut u8,32);vector[2]=start;
- collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Other spell types do not acquire Sword's exception");ptr::write((row+0x259)as*mut u8,0);
- patch(base,crate::HAS_EFFECT_RVA,&lookup);BASE.store(saved_base,Ordering::Release);pointer(base+crate::WORLD_RVA,previous_world);pointer(manager+0x10,0);
+ pointer(manager+0x10,0);ptr::write(context as*mut u8,0);integer(bullet+0x2c0,-1);
+ for id in [12421005,12421006,12301020,12301120,98802001]{
+  assert!(source_data::PASSIVE_BULLETS.binary_search(&id).is_ok());integer(bullet+0xa4,id);vector[2]=start;
+  collide(context,vector.as_mut_ptr()as usize,bullet);assert_eq!(values[0],PASSIVE_CARRIER);
+  assert!(!PASSIVE_CONTACT.with(Cell::get));
+  vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(values[0],CARRIER,"Projectile scope cannot leak to weapon hit");
+ }
+ // Execute original payload ID copy instructions to validate BulletIns+A4.
+ patch(base,0x33e799,&[0xc3]);let copy:unsafe extern "system" fn(usize,usize)=std::mem::transmute(base+0x33e789);
+ let payload=[-1i32,12421005,-1];copy(bullet+0xa0,payload.as_ptr()as usize);assert_eq!(read_i32(bullet+0xa4),12421005);
  ACTIVE.store(active_before,Ordering::Release);
  ptr::write_bytes(context as*mut u8,0,0x48);float(context+0x38,1.);
  vector[2]=start;ptr::write_unaligned((row+0x156)as*mut u16,2103);collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start);
@@ -199,7 +192,9 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
  let expected=|id|{assert_eq!(call(CARRIER),0x91);assert_eq!(CALLS.lock().unwrap().pop(),Some((target,id,source,0x12345678,context)));};
  for selected in 0..7{
   for i in 0..7{integer(resist+0x2c+i*4,if i==selected{84}else{400});integer(resist+0x10+i*4,400);}
-  assert_eq!(call(ITEM_CARRIER),0x91);assert_eq!(CALLS.lock().unwrap().pop().unwrap().1,ITEM_FIRST+selected as i32);
+  for (carrier,first) in [(ITEM_CARRIER,ITEM_FIRST),(SPELL_CARRIER,SPELL_FIRST),(PASSIVE_CARRIER,PASSIVE_FIRST)]{
+   assert_eq!(call(carrier),0x91);assert_eq!(CALLS.lock().unwrap().pop().unwrap().1,first+selected as i32);
+  }
   expected(FIRST+selected as i32);
  }
  for i in 0..7{integer(resist+0x2c+i*4,400);integer(resist+0x10+i*4,400);}

@@ -369,7 +369,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);210] {
+fn signatures()->[(&'static str,u32);212] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -414,6 +414,7 @@ fn signatures()->[(&'static str,u32);210] {
   (storm_audio::REQUEST_PATTERN,storm_audio::REQUEST_RVA as u32),
   (erosion::COLLECT_PATTERN,erosion::COLLECT_RVA as u32),
   (erosion::CONTACT_PATTERN,erosion::CONTACT_RVA as u32),
+  (erosion::SOURCE_COPY_PATTERN,erosion::SOURCE_COPY_RVA as u32),(erosion::SOURCE_ID_PATTERN,erosion::SOURCE_ID_RVA as u32),
   (archmage_cost::SELECT_PATTERN,archmage_cost::SELECT_RVA as u32),(archmage_cost::COST_PATTERN,archmage_cost::COST_RVA as u32),(archmage_runtime::PATTERN,archmage_runtime::RVA as u32),(glass_cannon::OBJECT_PATTERN,glass_cannon::OBJECT_RVA as u32),(glass_cannon::PATTERN,glass_cannon::RVA as u32),(DAMAGE_PATTERN,DAMAGE_RVA as u32),(FORWARD_PATTERN,FORWARD_RVA as u32),(POSITION_PATTERN,POSITION_RVA as u32),
   (ACTION_REQUEST_PATTERN,ACTION_REQUEST_RVA as u32),
   (FLASK_COUNT_PATTERN,FLASK_COUNT_RVA as u32),

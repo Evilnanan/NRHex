@@ -3,6 +3,21 @@
 use crate::{has_effect,has_state,native_actor,read_i32,read_ptr,ptr,ACTIVE,BASE};
 use std::sync::atomic::{AtomicPtr,Ordering};
 use std::cell::Cell;
+mod source_data { include!(concat!(env!("OUT_DIR"),"/erosion_sources.rs")); }
+// 354B48 copies the native launch payload to BulletIns+A0; 33E78D copies
+// payload+4 (Bullet row ID) to destination+4, hence BulletIns+A4.
+pub const SOURCE_COPY_RVA:usize=0x354b48;
+pub const SOURCE_COPY_PATTERN:&str="48 81 C1 A0 00 00 00 E8 1C 9C FE FF";
+pub const SOURCE_ID_RVA:usize=0x33e770;
+pub const SOURCE_ID_PATTERN:&str="48 89 5C 24 18 57 48 83 EC 20 48 8B FA 48 8B D9 48 3B CA 0F 84 4D 03 00 00 8B 02 89 01 8B 42 04 89 41 04 8B 42 08 89 41 08";
+fn carrier(kind:u8,item:bool,passive:bool)->i32 {
+ if item { ITEM_CARRIER } else if matches!(kind,3|4) { SPELL_CARRIER }
+ else if passive { PASSIVE_CARRIER } else { CARRIER }
+}
+fn payload_first(effect:i32)->Option<i32>{match effect{
+ CARRIER=>Some(FIRST),ITEM_CARRIER=>Some(ITEM_FIRST),SPELL_CARRIER=>Some(SPELL_FIRST),PASSIVE_CARRIER=>Some(PASSIVE_FIRST),_=>None
+}}
+
 pub const COLLECT_RVA:usize=0x506200;
 pub const COLLECT_PATTERN:&str="48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 57 48 83 EC 30 48 8B 59 08";
 pub static COLLECT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
@@ -11,8 +26,12 @@ pub const CONTACT_PATTERN:&str="48 89 5C 24 20 55 56 57 41 54 41 55 41 56 41 57 
 pub static CONTACT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 thread_local!{
  static COLLECT_SPELL:Cell<bool>=const{Cell::new(false)};
+ static PASSIVE_CONTACT:Cell<bool>=const{Cell::new(false)};
  static ITEM_CONTACT:Cell<bool>=const{Cell::new(false)};
 }
+struct PassiveGuard(bool);
+impl PassiveGuard{fn enter(value:bool)->Self{Self(PASSIVE_CONTACT.with(|s|s.replace(value)))}}
+impl Drop for PassiveGuard{fn drop(&mut self){PASSIVE_CONTACT.with(|s|s.set(self.0));}}
 struct ItemGuard(bool);
 impl ItemGuard{fn enter(item:bool)->Self{Self(ITEM_CONTACT.with(|value|value.replace(item)))}}
 impl Drop for ItemGuard{fn drop(&mut self){ITEM_CONTACT.with(|value|value.set(self.0));}}
@@ -22,6 +41,9 @@ impl Drop for ItemGuard{fn drop(&mut self){ITEM_CONTACT.with(|value|value.set(se
 pub unsafe extern "system" fn contact(hit:usize,target:usize,bullet:usize)->u8{
  let original:unsafe extern "system" fn(usize,usize,usize)->u8=std::mem::transmute(CONTACT_ORIGINAL.load(Ordering::Acquire));
  let item=ACTIVE.load(Ordering::Acquire)&&bullet!=0&&read_i32(bullet+0x2c0)>=0;
+ let passive=ACTIVE.load(Ordering::Acquire)&&bullet!=0
+  &&source_data::PASSIVE_BULLETS.binary_search(&read_i32(bullet+0xa4)).is_ok();
+ let _passive=PassiveGuard::enter(passive);
  let _scope=ItemGuard::enter(item);
  original(hit,target,bullet)
 }
@@ -37,6 +59,7 @@ pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
  let spell=ACTIVE.load(Ordering::Acquire)&&descriptor!=0&&matches!(ptr::read(descriptor as*const u8),3|4|10);
  let _scope=CollectGuard::enter(spell);
  let item=ACTIVE.load(Ordering::Acquire)&&ITEM_CONTACT.with(Cell::get);
+ let replacement=carrier(if descriptor==0{0}else{ptr::read(descriptor as*const u8)},item,PASSIVE_CONTACT.with(Cell::get));
  let begin=if ACTIVE.load(Ordering::Acquire)&&out!=0{read_ptr(out+8)}else{0};
  let appended=if ACTIVE.load(Ordering::Acquire)&&out!=0{read_ptr(out+0x10).saturating_sub(begin)/4}else{0};
  original(manager,out,descriptor);
@@ -48,30 +71,27 @@ pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
    for i in appended..(end-begin)/4{
     let entry=(begin+i*4)as*mut i32;
     let effect=ptr::read_unaligned(entry);
-    if item&&effect==CARRIER{ptr::write_unaligned(entry,ITEM_CARRIER);}
+    if effect==CARRIER{ptr::write_unaligned(entry,replacement);}
     if effect==crate::marking::CARRIER&&descriptor!=0&&read_i32(descriptor+0x34)==crate::marking::ATTACK&&read_i32(descriptor+0x38)==1{ptr::write_unaligned(entry,crate::marking::MARK_HIT);}
    }
   }
  }
 }
-pub unsafe fn spell_contact(node:usize,descriptor:usize,owner:usize)->bool{
- if node==0||descriptor==0||!COLLECT_SPELL.with(Cell::get)||!matches!(ptr::read(descriptor as*const u8),3|4|10){return false;}
- let param=read_ptr(node);if param==0{return false;}
- if ptr::read_unaligned((param+0x156)as*const u16)!=152||read_i32(param+0x12c)!=CARRIER{return false;}
- // 506200 passes its manager's ChrIns owner to 511010. Match the same
- // attack table used by Sword's hit conversion; do not rewrite the descriptor
- // or skip any remaining native applicability / ailment-motion checks.
- let base=BASE.load(Ordering::Acquire);
- let sword_spell=matches!(ptr::read(descriptor as*const u8),3|4)
-  &&crate::SWORD_BONUSES.get().is_some_and(|bonuses|bonuses.for_attack(read_i32(descriptor+0x34),read_i32(descriptor+0x38)).is_some())
-  &&crate::is_local(owner,base)&&has_effect(owner,crate::sword::OWNER,base);
- !sword_spell
+// Sorcery/prayer now uses its own tier without Sword ownership. Preserve the
+// separate unsupported shaman type10 filter, limited to Erosion collection.
+pub unsafe fn spell_contact(node:usize,descriptor:usize,_owner:usize)->bool{
+ if node==0||descriptor==0||!COLLECT_SPELL.with(Cell::get)||ptr::read(descriptor as*const u8)!=10{return false;}
+ let param=read_ptr(node);param!=0&&ptr::read_unaligned((param+0x156)as*const u16)==152&&read_i32(param+0x12c)==CARRIER
 }
 pub const OWNER:i32=95003100;
 pub const CARRIER:i32=OWNER+1;
 pub const FIRST:i32=OWNER+10;
 pub const ITEM_CARRIER:i32=OWNER+2;
 pub const ITEM_FIRST:i32=OWNER+20;
+pub const SPELL_CARRIER:i32=OWNER+3;
+pub const PASSIVE_CARRIER:i32=OWNER+4;
+pub const SPELL_FIRST:i32=OWNER+30;
+pub const PASSIVE_FIRST:i32=OWNER+40;
 pub const RVA:usize=0x3c80a0;
 pub const PATTERN:&str="48 89 5C 24 10 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 60 FF FF FF 48 81 EC A0 01 00 00 45 0F B6 E1 4D 8B E8 44 8B FA 48 8B F9 33 DB";
 pub const IMMUNE_RVA:usize=0x509790;
@@ -135,8 +155,8 @@ pub unsafe extern "system" fn detour(target:usize,mut effect:i32,source:usize,a4
  if matches!(effect,crate::marking::CARRIER|crate::marking::MARK_HIT)&&ACTIVE.load(Ordering::Acquire){
   let Some(chosen)=crate::marking::route(target,effect,source,a6,BASE.load(Ordering::Acquire))else{return 0;};effect=chosen;
  }
- if matches!(effect,CARRIER|ITEM_CARRIER)&&ACTIVE.load(Ordering::Acquire){
-  let Some(chosen)=select(target,source,a6,BASE.load(Ordering::Acquire))else{return 0;};effect=chosen+if effect==ITEM_CARRIER{ITEM_FIRST-FIRST}else{0};
+ if payload_first(effect).is_some()&&ACTIVE.load(Ordering::Acquire){
+  let Some(chosen)=select(target,source,a6,BASE.load(Ordering::Acquire))else{return 0;};effect=chosen+payload_first(effect).unwrap()-FIRST;
  }
  original(target,effect,source,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
 }
@@ -145,6 +165,16 @@ pub unsafe extern "system" fn detour(target:usize,mut effect:i32,source:usize,a4
 mod native_tests;
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn four_source_tiers_preserve_explicit_provenance(){
+  assert_eq!(carrier(1,false,false),CARRIER);
+  for kind in [3,4]{assert_eq!(carrier(kind,false,false),SPELL_CARRIER);assert_eq!(carrier(kind,false,true),SPELL_CARRIER);}
+  for kind in [0,1,2,3,4]{assert_eq!(carrier(kind,true,true),ITEM_CARRIER);}
+  assert_eq!(carrier(0,false,true),PASSIVE_CARRIER);
+  let _outer=PassiveGuard::enter(true);assert!(PASSIVE_CONTACT.with(Cell::get));
+  {let _inner=PassiveGuard::enter(false);assert!(!PASSIVE_CONTACT.with(Cell::get));}
+  assert!(PASSIVE_CONTACT.with(Cell::get));
+  for first in [FIRST,ITEM_FIRST,SPELL_FIRST,PASSIVE_FIRST]{for i in 0..7{assert_eq!(payload_first(first+i),None);}}
+ }
  #[test]fn nested_non_item_contacts_do_not_inherit_an_outer_item_scope(){
   assert!(!ITEM_CONTACT.with(Cell::get));
   {let _outer=ItemGuard::enter(true);assert!(ITEM_CONTACT.with(Cell::get));
@@ -159,9 +189,9 @@ mod native_tests;
   for kind in 0..=12{
    descriptor[0]=kind;let target=descriptor.as_ptr()as usize;
    assert!(!spell_contact(node.as_ptr()as usize,target,0));
-   {let _outer=CollectGuard::enter(true);assert_eq!(spell_contact(node.as_ptr()as usize,target,0),matches!(kind,3|4|10));
+   {let _outer=CollectGuard::enter(true);assert_eq!(spell_contact(node.as_ptr()as usize,target,0),kind==10);
     {let _inner=CollectGuard::enter(false);assert!(!spell_contact(node.as_ptr()as usize,target,0));}
-    assert_eq!(spell_contact(node.as_ptr()as usize,target,0),matches!(kind,3|4|10));
+    assert_eq!(spell_contact(node.as_ptr()as usize,target,0),kind==10);
    }
    assert!(!spell_contact(node.as_ptr()as usize,target,0));
   }

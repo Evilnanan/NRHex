@@ -271,13 +271,18 @@ def main(argv=None) -> int:
             subprocess.run([sys.executable, str(ROOT / 'tools/build_mmv_arts.py'), '--overlay', str(REPORTS / 'staged')],
                            cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
         report['artsAdapter'] = json.loads((REPORTS / 'staged/arts-validation.json').read_text(encoding='utf8'))
+        with (REPORTS / 'erosion-catalog.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--erosion-sources-catalog', str(REPORTS / 'staged/mod/regulation.bin'), str(REPORTS / 'staged')],
+                           cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
         runtime_paths = [*ROOT.joinpath('src').rglob('*.rs'), ROOT / 'build.rs', ROOT / 'Cargo.toml', ROOT / 'Cargo.lock',
                          ROOT / 'tools/build_sword_auto.py', ROOT / 'tools/sword_range_estimate.py', REPORTS / 'staged/sword_map.rs',
                          ROOT / 'tools/build_mmv_echo.py', ROOT / 'compat/mmv/echo-spells.json', REPORTS / 'staged/echo_cast_data.rs',
                          ROOT / 'tools/build_mmv_archmage.py', REPORTS / 'staged/archmage_data.rs',
                          ROOT / 'tools/build_mmv_arts.py', ROOT / 'compat/mmv/arts.json', REPORTS / 'staged/arts_data.rs',
                          ROOT / 'tools/build_mmv_spirit.py', ROOT / 'compat/mmv/spirit-npc-ids.json', REPORTS / 'staged/spirit_target_data.rs',
-                         ROOT / 'compat/mmv/cage-encounters.json', REPORTS / 'staged/cage_data.rs']
+                         ROOT / 'compat/mmv/cage-encounters.json', REPORTS / 'staged/cage_data.rs',
+                         ROOT / 'tools/erosion-sources.json', REPORTS / 'staged/erosion_sources.rs']
         runtime_inputs = {str(p.relative_to(ROOT)): digest(p) for p in runtime_paths}
         print('Compiling shared runtime with MMV-generated attack data...', flush=True)
         variants = ['dist', 'community'] if args.variant == 'both' else [args.variant]
@@ -286,7 +291,7 @@ def main(argv=None) -> int:
             with (REPORTS / f'cargo-{variant}.log').open('w', encoding='utf8') as log:
                 subprocess.run(['cargo', 'build', '--release', '--lib', '--no-default-features', '--features', features,
                                 '--target-dir', str(REPORTS / 'targets' / variant)], cwd=ROOT,
-                               env={**os.environ, 'NRHEX_PARRY_DATA': str(REPORTS / 'staged/parry_data.rs'),
+                               env={**os.environ, 'NRHEX_EROSION_DATA': str(REPORTS / 'staged/erosion_sources.rs'), 'NRHEX_PARRY_DATA': str(REPORTS / 'staged/parry_data.rs'),
                                     'NRHEX_SWORD_DATA': str(REPORTS / 'staged/sword_map.rs'),
                                     'NRHEX_ECHO_DATA': str(REPORTS / 'staged/echo_cast_data.rs'),
                                     'NRHEX_ARCHMAGE_DATA': str(REPORTS / 'staged/archmage_data.rs'),

@@ -17,11 +17,11 @@ static class Erosion {
   foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(r,f,1);
  }
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
-  foreach(int id in new[]{Carrier,ItemCarrier}){
+  foreach(int id in new[]{Carrier,ItemCarrier,Owner+3,Owner+4}){
   var carrier=clone("SpEffectParam",8000000,id);
   foreach(var (f,v) in new (string,object)[]{("maxHpRate",1f),("effectEndurance",0f),("saveCategory",-1),("spCategory",-1),("isUseStatusAilmentAtkPowerCorrect",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(carrier,f,v);
   }
-  foreach(var(first,power)in new[]{(First,30),(ItemFirst,10)})for(int i=0;i<7;i++){
+  foreach(var(first,power)in new[]{(First,30),(ItemFirst,10),(Owner+30,10),(Owner+40,5)})for(int i=0;i<7;i++){
    var r=clone("SpEffectParam",Sources[i],first+i);
    foreach(var f in Powers)Set(r,f,0);Set(r,Powers[i],power);Set(r,"isUseStatusAilmentAtkPowerCorrect",1);
   }

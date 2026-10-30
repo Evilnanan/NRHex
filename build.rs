@@ -1,6 +1,11 @@
 use std::{env, fs, path::PathBuf};
 
 fn main() {
+    println!("cargo:rerun-if-env-changed=NRHEX_EROSION_DATA");
+    let erosion = env::var_os("NRHEX_EROSION_DATA").map(PathBuf::from)
+        .unwrap_or_else(|| PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap()).join("src/erosion_sources.rs"));
+    println!("cargo:rerun-if-changed={}", erosion.display());
+    fs::copy(&erosion, PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("erosion_sources.rs")).expect("Cannot stage Erosion source catalog");
     let root = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
     println!("cargo:rerun-if-env-changed=NRHEX_CAGE_DATA");
     let cage = env::var_os("NRHEX_CAGE_DATA").map(PathBuf::from)
