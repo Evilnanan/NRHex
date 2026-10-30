@@ -187,7 +187,7 @@ Fully restores FP upon activating an Ultimate Art and eliminates FP consumption 
 <!-- hex:95003900 -->
 ## Ultimate Unstoppable
 
-Greatly increases poise and grants immunity to status buildup for 15 seconds after activating an Ultimate Art.
+Clears status buildup upon activating an Ultimate Art, then greatly increases poise and grants immunity to status buildup for 15 seconds.
 
 <!-- hex:95004000 -->
 ## Ultimate Challenge

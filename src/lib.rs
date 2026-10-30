@@ -369,7 +369,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);209] {
+fn signatures()->[(&'static str,u32);210] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -396,6 +396,7 @@ fn signatures()->[(&'static str,u32);209] {
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
   (NEAR_DEATH_STATE_PATTERN,0x66d700),
+  (ultimate_unstoppable::CLEAR_PATTERN,ultimate_unstoppable::CLEAR_RVA as u32),
   (balloon_runtime::STATE_PATTERN,balloon_runtime::STATE_RVA as u32),
   (balloon_team::TEAM_PATTERN,balloon_team::TEAM_RVA as u32),
   (balloon_team::HIT_PATTERN,balloon_team::HIT_RVA as u32),

@@ -28,7 +28,7 @@ unsafe fn candidate(base:usize,manager:usize,id:i32)->i32{
  let f:unsafe extern "system" fn(usize,i32,usize,usize,u8,f32,u8,u8,i32)->i32=std::mem::transmute(base+0x50d060);f(manager,id,0,0,0,1.,0,0,-1)
 }
 unsafe extern "system" fn apply(player:usize,id:i32,flag:u8)->u8{
- assert_eq!(flag,0);assert!(id==BUFF||id==crate::ultimate_awakening::BUFF);
+ assert_eq!(flag,0);if id==crate::ultimate_awakening::REFILL{return 1;}assert!(id==BUFF||id==crate::ultimate_awakening::BUFF);
  if FAIL.with(Cell::get){return 0;}assert_eq!(crate::effect_detour(player,id,player,0,0,0,0,0,0,0,0),1);
  let base=IMAGE.with(Cell::get);let manager=read_ptr(player+0x190);let node=if id==BUFF{APPLICATIONS.with(|s|s.set(s.get()+1));NODE.with(Cell::get)}else{FP_NODE.with(Cell::get)};
  if has(manager,id)==0{
@@ -99,6 +99,16 @@ fn native_ultimate_unstoppable_buildup_immunity(){unsafe{
   }
   put(node,buff.as_ptr()as usize);int(node+0x68,0);put(manager+8,node);
  }
+ // Native reset is independent of the negative-buildup/bolus path. Preserve
+ // every byte outside the seven meters, including proc counts/active flags.
+ let clear:unsafe extern "system" fn(usize)=std::mem::transmute(base+CLEAR_RVA);
+ for threshold in [-1,0,1,100,9999,i32::MAX]{for remaining in [0,1,50,9999]{
+  for index in 0..7{int(resist+0x10+index*4,remaining);int(resist+0x2c+index*4,threshold);int(resist+0x64+index*4,7);}
+  int(resist+0xb8,0x7f);
+  let mut expected=std::slice::from_raw_parts(resist as*const u8,0x100).to_vec();
+  for index in 0..7{expected[0x10+index*4..0x14+index*4].copy_from_slice(&threshold.max(0).to_le_bytes());}
+  clear(resist);assert_eq!(std::slice::from_raw_parts(resist as*const u8,0x100),expected);
+ }}
  assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
 }}
 #[test]
@@ -120,13 +130,18 @@ fn native_ultimate_unstoppable_endure_reaction_and_private_replacement(){unsafe{
  let mut world=vec![0usize;0x17500/8];let world=world.as_mut_ptr()as usize;put(base+crate::WORLD_RVA,world);
  let mut a=[0usize;0x720/8];let player=a.as_mut_ptr()as usize;put(world+0x174e8,player);
  let mut modules=[0usize;0x180/8];let modules=modules.as_mut_ptr()as usize;put(player+0x1b8,modules);let mut stats=[0usize;0x180/8];let stats=stats.as_mut_ptr()as usize;put(modules,stats);int(stats+0x140,100);
+ let mut resist=[0usize;0x100/8];let resist=resist.as_mut_ptr()as usize;
+ put(resist,base+0x2c113c8);put(resist+8,player);put(modules+0x20,resist);
+ let seed=||{for i in 0..7{int(resist+0x10+i*4,1);int(resist+0x2c+i*4,100+i as i32);int(resist+0x64+i*4,7);}int(resist+0xb8,0x7f);};
+ let check=|cleared|{for i in 0..7{assert_eq!(crate::read_i32(resist+0x10+i*4),if cleared{100+i as i32}else{1});assert_eq!(crate::read_i32(resist+0x2c+i*4),100+i as i32);assert_eq!(crate::read_i32(resist+0x64+i*4),7);}assert_eq!(crate::read_i32(resist+0xb8),0x7f);};
+ seed();
  let mut manager=[0usize;8];let manager=manager.as_mut_ptr()as usize;put(player+0x190,manager);
  let mut n=[0usize;0x88/8];let node=n.as_mut_ptr()as usize;NODE.with(|s|s.set(node));let mut fpn=[0usize;0x88/8];let fp_node=fpn.as_mut_ptr()as usize;FP_NODE.with(|s|s.set(fp_node));
  let mut en=[0usize;0x88/8];let end_node=en.as_mut_ptr()as usize;put(end_node,endure.as_ptr()as usize);int(end_node+8,1650);float(end_node+0x4c,1.25);
  let mut sn=[0usize;0x88/8];let sword_node=sn.as_mut_ptr()as usize;put(sword_node,sword.as_ptr()as usize);int(sword_node+8,crate::sword::POISE);float(sword_node+0x4c,-1.);
  let cast=|id,actor|crate::effect_detour(actor,id,actor,0,0,0,0,0,0,0,0);
- cast(12345,player);cast(crate::runtime::ULTIMATE_ACTION,player);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(0));assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),0);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(1));
- cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(value(node+0x4c),15.);assert_eq!(candidate(base,manager,BUFF),1);
+ cast(12345,player);cast(crate::runtime::ULTIMATE_ACTION,player);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(0));assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),0);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(1));check(false);
+ cast(crate::runtime::ULTIMATE_TRIGGER,player);check(true);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(value(node+0x4c),15.);assert_eq!(candidate(base,manager,BUFF),1);
  let reaction:unsafe extern "system" fn(usize,u8,u8)->u8=std::mem::transmute(base+0x507c40);
  let mut original_manager=[0usize;8];let reference=original_manager.as_mut_ptr()as usize;put(reference+8,end_node);
  for level in 0..=12{for flag in [0,1]{assert_eq!(reaction(manager,level,flag),reaction(reference,level,flag));}}
@@ -138,19 +153,25 @@ fn native_ultimate_unstoppable_endure_reaction_and_private_replacement(){unsafe{
  // Add independent vanilla Endure and Sword. Repeated ultimates replace only
  // our one node; their row IDs, durations and eligibility are preserved.
  put(node+0x38,end_node);put(end_node+0x40,node);put(end_node+0x38,sword_node);put(sword_node+0x40,end_node);
- for remaining in [14.,3.,0.001]{float(node+0x4c,remaining);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),15.);assert_eq!(value(end_node+0x4c),1.25);assert_eq!(value(sword_node+0x4c),-1.);
+ for remaining in [14.,3.,0.001]{seed();float(node+0x4c,remaining);cast(crate::runtime::ULTIMATE_TRIGGER,player);check(true);assert_eq!(value(node+0x4c),15.);assert_eq!(value(end_node+0x4c),1.25);assert_eq!(value(sword_node+0x4c),-1.);
   let mut p=read_ptr(manager+8);let mut count=0;let mut ours=0;while p!=0{count+=1;ours+=usize::from(crate::read_i32(p+8)==BUFF);p=read_ptr(p+0x38);assert!(count<5);}assert_eq!((count,ours),(3,1));
  }
  // An expired node is invisible to has_effect but still blocks native add.
  int(node+0x68,2);assert_eq!(has(manager,BUFF),0);assert_eq!(candidate(base,manager,BUFF),1);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(has(manager,BUFF),1);assert_eq!(value(node+0x4c),15.);
  // Coexistence with Ultimate Awakening keeps native FP protection independent.
- AWAKENED.with(|s|s.set(true));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(fp_node+0x4c),15.);assert_eq!(value(node+0x4c),15.);let fp_rate:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+0x507310);assert_eq!(fp_rate(manager),0.);AWAKENED.with(|s|s.set(false));
+ AWAKENED.with(|s|s.set(true));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(fp_node+0x4c),7.);assert_eq!(value(node+0x4c),15.);let fp_rate:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+0x507310);assert_eq!(fp_rate(manager),0.);AWAKENED.with(|s|s.set(false));
  for(owned,reset,hp,down)in [(false,false,100,0),(true,true,100,0),(true,false,0,0),(true,false,100,1),(true,false,100,2)]{
-  OWNED.with(|s|s.set(owned));RESET.with(|s|s.set(reset));int(stats+0x140,hp);ptr::write((player+0x710)as*mut u8,down);let count=APPLICATIONS.with(Cell::get);float(node+0x4c,7.);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);assert_eq!(value(node+0x4c),7.);
+  seed();OWNED.with(|s|s.set(owned));RESET.with(|s|s.set(reset));int(stats+0x140,hp);ptr::write((player+0x710)as*mut u8,down);let count=APPLICATIONS.with(Cell::get);float(node+0x4c,7.);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);assert_eq!(value(node+0x4c),7.);check(false);
  }
  OWNED.with(|s|s.set(true));RESET.with(|s|s.set(false));int(stats+0x140,100);ptr::write((player+0x710)as*mut u8,0);let count=APPLICATIONS.with(Cell::get);
- cast(crate::runtime::ULTIMATE_TRIGGER,player+8);crate::ACTIVE.store(false,Ordering::Release);cast(crate::runtime::ULTIMATE_TRIGGER,player);crate::ACTIVE.store(true,Ordering::Release);assert_eq!(APPLICATIONS.with(Cell::get),count);
+ seed();cast(crate::runtime::ULTIMATE_TRIGGER,player+8);crate::ACTIVE.store(false,Ordering::Release);cast(crate::runtime::ULTIMATE_TRIGGER,player);crate::ACTIVE.store(true,Ordering::Release);assert_eq!(APPLICATIONS.with(Cell::get),count);check(false);
  FAIL.with(|s|s.set(true));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(has(manager,BUFF),0);FAIL.with(|s|s.set(false));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),15.);
+ for invalid in [0usize,1,2]{
+  seed();put(modules+0x20,if invalid==0{0}else{resist});
+  put(resist,if invalid==1{0}else{base+0x2c113c8});put(resist+8,if invalid==2{0}else{player});
+  cast(crate::runtime::ULTIMATE_TRIGGER,player);check(false);
+ }
+ put(modules+0x20,resist);put(resist,base+0x2c113c8);put(resist+8,player);
  // Native expiry removes the finite effect; list storage/removal is exercised
  // above, while elapsed game-time updates themselves are outside this fixture.
  let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+crate::REMOVE_EFFECT_RVA);assert_eq!(remove(manager,BUFF),1);assert_eq!(has(manager,1650),1);assert_eq!(has(manager,crate::sword::POISE),1);
