@@ -1,0 +1,191 @@
+{
+  "chineseName": "惊喜盲盒",
+  "englishName": "Mystery Box",
+  "onlyNamesChanged": true,
+  "descriptionsAndMechanicsUnchanged": true,
+  "standaloneAndMmvInstalledReadbackPassed": true,
+  "allOtherGameAssetsAndConfigurationUnchanged": true,
+  "variants": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "26E5D2B60259AC3B26C4DBC1C86AB9A2DE51193C3B6CC1634EF577C11295241C",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "5A1F77631378CE17F168AE2CAA4CFD15364C76AFBA31CE70F22BEA0C1DCCD1B1",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "3FB767674CABF0B303659C736560802C7B348483540FC4E561079B81CD565DC5",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "323740884A8E54BDB5528BFE600250B5C50286FC924DF7C175E8544AFDB30181",
+          "outputSha256": "A49C04A8C7AA96118049FA0FADB46577E8117645B8B22F03EC38BD3E6447271E",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004700,
+              "before": "双重惊喜",
+              "after": "惊喜盲盒"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004700,
+              "before": "双重惊喜",
+              "after": "惊喜盲盒"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "3C8C35ADFE40CC7537FD5BB99E312361C6E666675B721CCF7F4B744D2116BAD1",
+          "outputSha256": "2ECC7F1216DF6172EFE1C10759B8CFFBD578EFB7F698C5A9280285B646036206",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004700,
+              "before": "双重惊喜",
+              "after": "惊喜盲盒"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "A36D2004C76310EACE8DFDA0F8840F29254FC8CF6CCADF81C6DF2AD8C27EF8B2",
+          "outputSha256": "5E95759EA4E619F1D2F9BB43B57260A4907619CEE34A035D424633B97485CB48",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004700,
+              "before": "Double Surprise",
+              "after": "Mystery Box"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004700,
+              "before": "Double Surprise",
+              "after": "Mystery Box"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "F8928DDB9216CE632FC143B42D44286D5D7B54D15194BCDF2EF722385D23190F",
+          "outputSha256": "FD8FB6386EE6B98FA882F0C53689E0D38AC352C930D1FF451384CCDA351F06DE",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004700,
+              "before": "Double Surprise",
+              "after": "Mystery Box"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "26E5D2B60259AC3B26C4DBC1C86AB9A2DE51193C3B6CC1634EF577C11295241C",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "5A1F77631378CE17F168AE2CAA4CFD15364C76AFBA31CE70F22BEA0C1DCCD1B1",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "3FB767674CABF0B303659C736560802C7B348483540FC4E561079B81CD565DC5",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "D7AAC152C44B81B83733CAD15CFB14C4894DA1877AA1E2CE7BC4BFF4D68BEDCD",
+          "outputSha256": "78F5BC1E37D66F0DA8B9F7644BA14644293D15E91FBB0FCF0E0F2133AD7F1A2C",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004700,
+              "before": "双重惊喜",
+              "after": "惊喜盲盒"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004700,
+              "before": "双重惊喜",
+              "after": "惊喜盲盒"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "6B820EDBD14EB72E4498E06F9805A4A039AA4750DF1A8FA1B60778FADD267733",
+          "outputSha256": "796FD524535DD3061CB2DBA4182C5F50257345A5FB85B59CFBAEA3FB34F44849",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004700,
+              "before": "双重惊喜",
+              "after": "惊喜盲盒"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "46282875D6AA016C702C15500C662C991BAA5FC1E951354766B19CC51D8AA139",
+          "outputSha256": "F396D95E98DE546BC4E7EC6CB8BE22863F8927158945E14211E0C8103AA1E66D",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004700,
+              "before": "Double Surprise",
+              "after": "Mystery Box"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004700,
+              "before": "Double Surprise",
+              "after": "Mystery Box"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "21C7EEE18D609A4972F22AAE65D0D75F1E474FDEF82342C1F23241A5966D9D25",
+          "outputSha256": "BA53389AB4E9752F81FBCD63181A9F32E4E3108524F0F42F2E21F44B6D6C9AAB",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004700,
+              "before": "Double Surprise",
+              "after": "Mystery Box"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "installedFiles": {
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "f396d95e98de546bc4e7ec6cb8be22863f8927158945e14211e0c8103aa1e66d",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "ba53389ab4e9752f81fbcd63181a9f32e4e3108524f0f42f2e21f44b6d6c9aab",
+    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "78f5bc1e37d66f0da8b9f7644ba14644293d15e91fbb0fcf0e0f2133ad7f1a2c",
+    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "796fd524535dd3061cb2dba4182c5f50257345a5fb85b59cfbaea3fb34f44849",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "5e95759ea4e619f1d2f9bb43b57260a4907619cee34a035d424633b97485cb48",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "fd8fb6386ee6b98fa882f0c53689e0d38ac352c930d1ff451384ccda351f06de",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "a49c04a8c7aa96118049fa0fadb46577e8117645b8b22f03ec38bd3e6447271e",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "2ecc7f1216df6172efe1c10759b8cffbd578efb7f698c5a9280285b646036206"
+  },
+  "sourceHashes": {
+    "docs/hexes.md": "26e5d2b60259ac3b26c4dbc1c86ab9a2de51193c3b6cc1634ef577c11295241c",
+    "docs/hexes.en.md": "5a1f77631378ce17f168ae2caa4cfd15364c76afba31ce70f22bea0c1dccd1b1"
+  },
+  "gameplayVerified": false
+}

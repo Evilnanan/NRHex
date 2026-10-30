@@ -220,7 +220,7 @@ Attack power -30%. Damage increases with distance to the target. Greatly extends
 Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.
 
 <!-- hex:95004700 -->
-## Double Surprise
+## Mystery Box
 
 Grants two random Mayhem Augments.
 

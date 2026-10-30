@@ -42,7 +42,7 @@ report=dict(version=tomllib.loads((ROOT/'Cargo.toml').read_text())['package']['v
  'zero object defense and zero final damage; preserve additive attacker damage without dividing by defense',
  'accepted hit commits once at pre-HP-clamp load; 1 HP retains damage; preview/cache/nullified hits excluded',
  'standalone and Back to Basics additive output; full-body cancellation; native no-reset hurt overlay preserved',
- 'ordinary and Double Surprise candidates share actual Raider exclusivity'],
+ 'ordinary and Mystery Box candidates share actual Raider exclusivity'],
  gameplayVerified=False,multiplayerVerified=False,
  sourceHashes={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest()for p in ['src/deliberate_punch.rs','src/deliberate_punch_native_tests.rs','src/glass_cannon.rs','src/basics.rs','src/lib.rs','src/hex_pool.rs','tools/build_deliberate_punch_hks.py','tools/verify_deliberate_punch.py']})
 (out/'runtime-validation.json').write_text(json.dumps(report,indent=2)+'\n')
