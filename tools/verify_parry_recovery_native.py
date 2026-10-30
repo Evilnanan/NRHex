@@ -107,10 +107,30 @@ try:
    gain=sum(integer(out,i*4) for i in [0,1,3])
    set_hp(stats,current+gain,0,1.,1.,1)
    assert integer(stats,0x140)==min(maximum,current+maximum*35//100)
+ # The shared Rust effect hook consumes an actor-owned opportunity before
+ # forwarding delivery (unit-tested with reentrant and delayed submissions).
+ # Verify its native has/remove contract: list unlink is synchronous, so the
+ # next target cannot observe a deferred/still-visible opportunity. Allocation
+ # and destruction of these stack-backed fixture nodes are intentionally absent.
+ ready=row(95002407);ready_node=c.create_string_buffer(0x88);tail=c.create_string_buffer(0x88)
+ put(node,0,'<Q',c.addressof(counter));put(node,8,'<i',95002404);put(node,0x68,'<I',0)
+ put(ready_node,0,'<Q',c.addressof(ready));put(ready_node,8,'<i',95002407)
+ put(tail,0,'<Q',c.addressof(pulse));put(tail,8,'<i',95002406)
+ put(node,0x38,'<Q',c.addressof(ready_node));put(ready_node,0x40,'<Q',c.addressof(node))
+ put(ready_node,0x38,'<Q',c.addressof(tail));put(tail,0x40,'<Q',c.addressof(ready_node))
+ patch(0x50b63e,b'\x31\xc0\xe9'+struct.pack('<i',0x50b806-0x50b63e-7))
+ has=c.WINFUNCTYPE(c.c_ubyte,c.c_void_p,c.c_int)(m+0x508df0)
+ remove=c.WINFUNCTYPE(c.c_ubyte,c.c_void_p,c.c_int)(m+0x504e80)
+ assert has(manager,95002407)==1
+ assert remove(manager,95002407)==1 and has(manager,95002407)==0
+ assert has(manager,95002404)==1 and has(manager,95002406)==1
+ assert struct.unpack_from('<Q',node,0x38)[0]==c.addressof(tail)
+ assert struct.unpack_from('<Q',tail,0x40)[0]==c.addressof(node)
+ assert remove(manager,95002407)==0
  # The removed hook cannot waive a missed counter's ordinary attack cost.
  assert 'COUNTER_COST' not in (ROOT/'src/lib.rs').read_text()
  assert 'counter_cost_detour' not in (ROOT/'src/parry.rs').read_text()
 finally:assert k.VirtualFree(m,0,0x8000)
-report=dict(nativeSelectorCases=len(cases),cases=cases,nativeRecoveryCases=recovery,damageMultiplierPreserved=True,nativeAttackerDelivery=True,prayerfulStrikeVfx=8630,prayerfulStrikeSfx=525033,counterCostHookRemoved=True,stubs=['security-cookie helper','HP setter post-write authority predicate','attack-rate parameter reference lookup','selected-effect row lookup and final effect submission; native caller recipient verified'],fixtureSha256=hashlib.sha256(fixture).hexdigest(),gameplayVerified=False,multiplayerVerified=False)
+report=dict(nativeSelectorCases=len(cases),cases=cases,nativeRecoveryCases=recovery,damageMultiplierPreserved=True,nativeAttackerDelivery=True,nativeOpportunityRemovalSynchronous=True,prayerfulStrikeVfx=8630,prayerfulStrikeSfx=525033,counterCostHookRemoved=True,stubs=['security-cookie helper','HP setter post-write authority predicate','attack-rate parameter reference lookup','selected-effect row lookup and final effect submission; native caller recipient verified','opportunity removal post-unlink destruction/category bookkeeping for stack-backed nodes'],fixtureSha256=hashlib.sha256(fixture).hexdigest(),gameplayVerified=False,multiplayerVerified=False)
 (work/'native-validation.json').write_text(json.dumps(report,indent=2)+'\n')
 print(f'PASS: {len(cases)} native Clash on-hit/category cases; x2 damage, attacker-only delivery, 35% HP and 65% stamina recovery')

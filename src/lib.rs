@@ -1605,7 +1605,9 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
   let accepted=effect!=jiahao::CRITICAL||jiahao_front_critical(player,base);
   if accepted&&stats!=0{if let Some(state)=JIAHAO.get(){if let Ok(mut state)=state.lock(){state.synchronize(player,stats,true,read_i32(stats+0x140)>0);state.marker(effect,GetTickCount64());}}}
  }
- let result=original(player,effect,source,a4,a5,a6,a7,a8,a9,a10,a11);
+ let result=if ACTIVE.load(Ordering::Acquire)&&effect==parry::RECOVERY {
+  parry::recover_once(player,base,||original(player,effect,source,a4,a5,a6,a7,a8,a9,a10,a11))
+ }else{original(player,effect,source,a4,a5,a6,a7,a8,a9,a10,a11)};
  // The event supplies a synchronized persistent marker. Native mutation
  // sources and native death rewards both read this same actor bit.
  if ACTIVE.load(Ordering::Acquire)&&effect==cage_mutation::MARKER {

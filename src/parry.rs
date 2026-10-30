@@ -12,6 +12,8 @@ pub const SPARK_RIGHT:i32=95002402;
 pub const SPARK_LEFT:i32=95002403;
 pub const COUNTER:i32=95002404;
 pub const REACTION:i32=95002405;
+pub const RECOVERY:i32=95002406;
+pub const RECOVERY_READY:i32=95002407;
 // Native HKS env(207) -> PlayerIns vtable +278 -> 66B060.
 // Read the current equipment style, not attack-hand or input/animation guesses.
 pub const HAND_STYLE_RVA:usize=0x66b060;
@@ -173,11 +175,36 @@ unsafe fn on_guard_notification(module:usize,hit:usize,kind:i32)->(usize,bool){
  let present=has_effect(player,COUNTER,base);
  if enabled&&!present{apply(player,COUNTER,0);}
  else if !enabled&&present{remove(manager,COUNTER);}
+ // One opportunity per accepted attack guard. Repeated guards while ready
+ // do not accumulate charges; an ordinary guard revokes both kinds of bonus.
+ if enabled&&has_effect(player,COUNTER,base){
+  if !has_effect(player,RECOVERY_READY,base){apply(player,RECOVERY_READY,0);}
+ }else if has_effect(player,RECOVERY_READY,base){remove(manager,RECOVERY_READY);}
  if !enabled{return (0,false);}
  // Re-applying an existing SpEffect does not reliably restart its init FFX.
  // Native reaction TAE events now own the one-shot spark and sound.
  if has_effect(player,CHAIN,base){remove(manager,CHAIN);}apply(player,CHAIN,0);
  (read_ptr(read_ptr(player+0x1b8)+8),continuing)
+}
+// Called only for our native category-103 on-hit pulse, through the existing
+// shared effect hook. Remove the actor-owned opportunity synchronously BEFORE
+// submitting healing, so same-frame targets, delayed hits and reentry share it.
+// Keep COUNTER intact: every damage segment must still receive its x2 bonus.
+pub unsafe fn recover_once(player:usize,base:usize,submit:impl FnOnce()->u8)->u8{
+ if owned_action(player).is_none()||has_effect(player,crate::reward_cycle_runtime::RESET,base)||
+  !has_effect(player,COUNTER,base)||!has_effect(player,RECOVERY_READY,base){return 0;}
+ let manager=read_ptr(player+0x190);
+ let remove:unsafe extern "system" fn(usize,i32)->u8=std::mem::transmute(base+crate::REMOVE_EFFECT_RVA);
+ if remove(manager,RECOVERY_READY)==0||has_effect(player,RECOVERY_READY,base){return 0;}
+ let result=submit();
+ // A rejected native submission did not heal. Preserve the opportunity for
+ // a later valid hit, without removing/restarting an already pending pulse.
+ if result==0&&owned_action(player).is_some()&&has_effect(player,COUNTER,base)&&
+  !has_effect(player,crate::reward_cycle_runtime::RESET,base)&&!has_effect(player,RECOVERY_READY,base){
+  let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);
+  apply(player,RECOVERY_READY,0);
+ }
+ result
 }
 unsafe fn feedback_query(manager:usize,state:u16)->Option<u8>{
  if !(FEEDBACK_RIGHT..=FEEDBACK_WEAPON_LEFT).contains(&state){return None;}
@@ -351,6 +378,14 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   let manager=&mut effects as *mut Effects as usize;
   assert_eq!(feedback_query(manager,FEEDBACK_SOUND),Some(0));
   on_guard_notification(m,h,3);assert!(effects.ids.contains(&COUNTER));assert!(!effects.ids.contains(&SPARK_RIGHT));
+  assert!(effects.ids.contains(&RECOVERY_READY));
+  assert_eq!(recover_once(a,base,||1),1);assert!(!effects.ids.contains(&RECOVERY_READY));
+  assert!(effects.ids.contains(&COUNTER));
+  for _ in 0..8{assert_eq!(recover_once(a,base,||panic!("later target or segment healed")),0);}
+  on_guard_notification(m,h,3);assert!(effects.ids.contains(&RECOVERY_READY));
+  for _ in 0..8{on_guard_notification(m,h,3);}
+  assert_eq!(effects.ids.iter().filter(|&&id|id==RECOVERY_READY).count(),1);
+
   assert_eq!(feedback_query(manager,FEEDBACK_RIGHT),Some(1));assert_eq!(feedback_query(manager,FEEDBACK_LEFT),Some(0));
   assert_eq!(feedback_query(manager,FEEDBACK_SOUND),Some(1));
   unsafe extern "system" fn left_source(_:usize)->i32{-2}
@@ -376,7 +411,7 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   assert_eq!(free_guard(m,h),0);assert_eq!(crate::read_i32(h+0x284),37);
   enter(m,h);assert_eq!(crate::read_i32(action.as_ptr() as usize+0x24c),460);leave();
   hit[0x2c1]=8;on_guard_notification(m,h,3);assert!(effects.ids.contains(&COUNTER));
-  hit[0x2c1]=0;on_guard_notification(m,h,3);assert!(!effects.ids.contains(&COUNTER));
+  hit[0x2c1]=0;on_guard_notification(m,h,3);assert!(!effects.ids.contains(&COUNTER));assert!(!effects.ids.contains(&RECOVERY_READY));
   // The ordinary block can play exactly the same recoil animation, but its
   // provenance has been cleared, so its full-duration marker grants nothing.
   effects.ids.push(REACTION);assert!(!attack_guard(a));assert_eq!(free_guard(m,h),0);
@@ -643,3 +678,5 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   ORIGINAL.store(old,Ordering::Release);
  }}
 }
+
+#[cfg(test)]#[path="parry_recovery_tests.rs"]mod recovery_tests;

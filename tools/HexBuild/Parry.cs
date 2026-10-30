@@ -92,7 +92,7 @@ static class Parry {
   var result=SFUtil.DecryptNightreignRegulation(output);
   foreach(var f in result.Files){Check(f.Bytes.Span.SequenceEqual(binder.Files.Single(x=>x.ID==f.ID).Bytes.Span),"Counter readback differs");if(f.ID!=file.ID)Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated table changed");}
   var actual=parse("SpEffectParam",result.Files.Single(f=>f.ID==file.ID).Bytes);
-  Check(actual.Rows.Count==baseline.Rows.Count+2,"Unexpected row count");
+  Check(actual.Rows.Count==baseline.Rows.Count+3,"Unexpected row count");
   foreach(var row in baseline.Rows)Check(CageAI.Same(row,actual.Rows.Single(r=>r.ID==row.ID)),"Preexisting row changed");
   var added=actual.Rows.Single(r=>r.ID==Owner+4);var native=baseline.Rows.Single(r=>r.ID==322000);
   string[] changed={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate","spCategory","stateInfo","atkOccurrenceSpEffectId"};
