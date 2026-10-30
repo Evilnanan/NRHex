@@ -1,0 +1,145 @@
+{
+  "englishName": "Slide Tackle",
+  "owner": 95004200,
+  "onlyEnglishNamesChanged": true,
+  "chineseDescriptionsMechanicsAndConfigsUnchanged": true,
+  "standaloneAndMmvReadbackPassed": true,
+  "variants": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "16CDF9B1BA62872C682EBEEAD3B7D1CD5AC9A1E526A2749A77F3114512988EE2",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "CD67B17DB903D967A2FADCC5886C25A8FE2F9526D0B33747B48F8B14668B6EDB",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "3FB767674CABF0B303659C736560802C7B348483540FC4E561079B81CD565DC5",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "8F24532244DF992E69BD65D6E986B7707A4703CBBDB98CE4E7B4E0AC88CFD174",
+          "outputSha256": "8F24532244DF992E69BD65D6E986B7707A4703CBBDB98CE4E7B4E0AC88CFD174",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "D9449AC0D47E4A18CA7CF98A94442BF91F1224B9924A7B05FFE31E70738E6B21",
+          "outputSha256": "D9449AC0D47E4A18CA7CF98A94442BF91F1224B9924A7B05FFE31E70738E6B21",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "9882C879508D069F28D99C6590BD1B9D7A89FEB09629F569FD1C454D399C7EDF",
+          "outputSha256": "0215909D5F07B30E79474AD58A343767870FAFAB91DB644D2111D669EFC6801A",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004200,
+              "before": "Slide Kick",
+              "after": "Slide Tackle"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004200,
+              "before": "Slide Kick",
+              "after": "Slide Tackle"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "58178ED84920543BD096A839ECF5D827064ABB26477056C3B04995609F3E7A9F",
+          "outputSha256": "14FB28DA4832A3F776FFEF9E83AB8E129E282092EE2E8AEE55D59EEAAD1B5855",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004200,
+              "before": "Slide Kick",
+              "after": "Slide Tackle"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "16CDF9B1BA62872C682EBEEAD3B7D1CD5AC9A1E526A2749A77F3114512988EE2",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "CD67B17DB903D967A2FADCC5886C25A8FE2F9526D0B33747B48F8B14668B6EDB",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "3FB767674CABF0B303659C736560802C7B348483540FC4E561079B81CD565DC5",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "1AAE7BEF7CDE788A938F2044B74FB55C4E79B34A54F7CA70086D5D90A71FF709",
+          "outputSha256": "1AAE7BEF7CDE788A938F2044B74FB55C4E79B34A54F7CA70086D5D90A71FF709",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "37B74E7DDA69AE3229E97C92F157EDB8A415B4F872FB057307551DED7F00F214",
+          "outputSha256": "37B74E7DDA69AE3229E97C92F157EDB8A415B4F872FB057307551DED7F00F214",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "18ACD0E7B8ADBB619D4D5444F1D4C56BFEFD68161C436DCCF9F0B595636FEE6C",
+          "outputSha256": "B8FA4B0B333C5A4CFA0818AB9DE63043569CE7C89EAA11142937DD7024A1AB68",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95004200,
+              "before": "Slide Kick",
+              "after": "Slide Tackle"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95004200,
+              "before": "Slide Kick",
+              "after": "Slide Tackle"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "8765A737F1A03E020915C5A3065D804800F1E8AC3E042592D43ABCDD9775E0B2",
+          "outputSha256": "56E56B992610CA46CBD207170C52E3E661928DCDEBE19217BACD71662629EA4A",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95004200,
+              "before": "Slide Kick",
+              "after": "Slide Tackle"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "installedFiles": {
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "0215909d5f07b30e79474ad58a343767870fafab91db644d2111d669efc6801a",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "14fb28da4832a3f776ffef9e83ab8e129e282092ee2e8aee55d59eeaad1b5855",
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "b8fa4b0b333c5a4cfa0818ab9de63043569ce7c89eaa11142937dd7024a1ab68",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "56e56b992610ca46cbd207170c52e3e661928dcdebe19217bacd71662629ea4a"
+  },
+  "canonicalSourceHashes": {
+    "docs/hexes.md": "16cdf9b1ba62872c682ebeead3b7d1cd5ac9a1e526a2749a77f3114512988ee2",
+    "docs/hexes.en.md": "cd67b17db903d967a2fadcc5886c25a8fe2f9526d0b33747b48f8b14668b6edb"
+  }
+}

@@ -195,7 +195,7 @@ Clears status buildup upon activating an Ultimate Art, then greatly increases po
 Raises maximum HP by 50% and increases the likelihood of being targeted by enemies for 15 seconds after activating an Ultimate Art.
 
 <!-- hex:95004200 -->
-## Slide Kick
+## Slide Tackle
 
 Character Skill cooldown +50%. Launches small enemies; follow-up attacks against kicked enemies deal heavy damage.
 
