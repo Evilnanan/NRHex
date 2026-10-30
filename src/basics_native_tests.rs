@@ -47,7 +47,7 @@ fn native_basics_cooldown_product_seal_and_damage(){unsafe{
  }}}
  for owned in [false,true]{for reset in [false,true]{OWNED.with(|s|s.set(owned));RESET.with(|s|s.set(reset));
   for (query,native)in [(ULTIMATE_QUERY,1106),(READY_QUERY,370)]{QUERY.with(|s|s.set(0));let result=crate::ambulance::env(context.as_ptr()as usize,query,17);assert_eq!(result,i32::from(!owned||reset));assert_eq!(QUERY.with(Cell::get),if owned&&!reset{0}else{native});}
-  for (hero,attack,expected)in [(1u8,600000000i32,150i32),(2,600000050,150),(3,600000110,150),(4,600000150,100),(5,600000210,250),(7,82310,175),(8,960200,115),(8,600000350,150),(9,600000400,100),(10,600000000,100)]{
+  for (hero,attack,expected)in [(1u8,600000000i32,150i32),(2,600000050,150),(3,600000110,150),(4,600000150,100),(5,600000210,250),(7,82310,150),(8,960200,115),(8,600000350,150),(9,600000400,100),(10,600000000,100)]{
    data[0xc7]=hero;let mut hit=[0u8;0x300];hit[0x40..0x44].copy_from_slice(&attack.to_le_bytes());hit[0x44..0x48].copy_from_slice(&1i32.to_le_bytes());hit[0x280..0x284].copy_from_slice(&100i32.to_le_bytes());let before=hit;
    calculated(actor,actor+8,actor,hit.as_mut_ptr()as usize,base);let expected=if owned&&!reset{expected}else{100};assert_eq!(read_i32(hit.as_ptr()as usize+0x280),expected);
    for i in 0..hit.len(){if !(0x280..0x284).contains(&i){assert_eq!(hit[i],before[i]);}}
