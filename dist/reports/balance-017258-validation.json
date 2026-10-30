@@ -1,0 +1,164 @@
+{
+  "version": "0.17.258",
+  "target": "x86_64-pc-windows-gnu",
+  "haymaker": {
+    "damagePerPercent": 22,
+    "maxHpCap": 3.5,
+    "independentPrePostTotals": true,
+    "backToBasicsAdditive": true
+  },
+  "awakening": {
+    "installedParameterReadbackPassed": true,
+    "nativeExecutionPassed": true,
+    "seconds": 7,
+    "refill": 95003802,
+    "restoreMaxFpPercent": 100,
+    "trigger": 95000404,
+    "owner": 95003800,
+    "buff": 95003801,
+    "nativeSource": 511060,
+    "nativeVfx": 5860,
+    "nativeSfx": 330111,
+    "nativeFunctions": [
+      "507460 installed refill percentage calculation",
+      "4261C0 and 427E50 FP addition and maximum clamp",
+      "510B20 same-ID refresh eligibility",
+      "511450 category20 ID isolation",
+      "511700 original duration refresh",
+      "5061B0 arts FP multiplier",
+      "507310 magic FP multiplier",
+      "5081E0 shaman FP multiplier",
+      "507410 miracle FP multiplier"
+    ],
+    "cases": [
+      "accepted ultimate notification via compiled shared effect hook",
+      "rejected/other notifications do not activate",
+      "one instant FP refill submission per accepted ultimate; no refill on rejected/invalid triggers",
+      "installed refill restores empty/partial/full FP to changing maximum; inactive/consumed node adds zero",
+      "nested self-application does not loop",
+      "refresh remaining duration to 7, never add time",
+      "installed zero multipliers override Echo Casting x2",
+      "inactive native node restores normal FP rates",
+      "native tear coexists and its remaining duration stays unchanged",
+      "ownerless, reset, down, dead, reviving, remote and inactive calls rejected",
+      "missing stats and failed effect submission",
+      "all-hero/affinity/party random/focused/reroll eligibility"
+    ],
+    "stubs": [
+      "native effect submission and accepted application result",
+      "effect-row lookup called by native lifetime reset",
+      "actor/effect storage and expiry flags; full update loop not simulated"
+    ],
+    "sources": {
+      "src/ultimate_awakening.rs": "2ed6d004f19f85907d472da46b7c0a23b8b86b0db4592d9a64f48a66f5dc6333",
+      "src/ultimate_awakening_native_tests.rs": "1fa550c926fc6d7abc0a6b4705a7beecf19c3124cbfbacadead70c1d1925492b",
+      "src/lib.rs": "c5bb51312c15f6c670b016c3bc8e792ed82a6d202d54594b2d596f4ba4e4fa26",
+      "src/hex_pool.rs": "457ead48a19018dce4da27534cefb29417be33a848af2c432d21b78357779b7f",
+      "tools/HexBuild/UltimateAwakening.cs": "9ad5a0db0717fff93e994877093ee54b6c3834b47b3fe8d8989dbdfaa6637e75",
+      "tools/HexBuild/RewardCatalog.cs": "179599121271fe004fd4b7a505d64c5bfbe24dd4889fd08418ecee0068ee3a08",
+      "tools/verify_ultimate_awakening.py": "cb82780baeaaa0b335d11e515254e06e902416ec41f2754abd475c56fdf65f57"
+    },
+    "gameProcessAccessed": false,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "parameterUpdate": {
+    "inputSha256": "FDF837432C425A11554541CC4E6DBA15523871ED29E1DBD7CEF9CF156B08780D",
+    "outputSha256": "7B4E36B0244474DEDCB5B6E1149637A4C1BA9E524D3955D80D152C4F4395050E",
+    "effectId": 95003801,
+    "field": "effectEndurance",
+    "before": 10,
+    "after": 7,
+    "audit": {
+      "owner": 95003800,
+      "buff": 95003801,
+      "source": 511060,
+      "seconds": 7,
+      "refill": 95003802,
+      "restoreMaxFpPercent": 100,
+      "historyBit": 35,
+      "fpRates": {
+        "artsConsumptionRate": 0,
+        "magicConsumptionRate": 0,
+        "shamanConsumptionRate": 0,
+        "miracleConsumptionRate": 0,
+        "goodsConsumptionRate": 0
+      },
+      "nativeVfx": 5860,
+      "nativeSfx": 330111
+    },
+    "addedRefill": 95003802,
+    "restoreMaxFpPercent": 100,
+    "unrelatedRowsFieldsAndTablesUnchanged": true,
+    "gameplayVerified": false
+  },
+  "tests": {
+    "passed": 463,
+    "failed": 0,
+    "ignoredByDefault": 30,
+    "explicitNativeTests": [
+      "native_punch_shadow_commit_and_additive_bonus",
+      "native_ultimate_awakening_success_refresh_and_fp_aggregation"
+    ]
+  },
+  "standaloneResourceMethod": "Guarded duration/refill parameter patch and bilingual text stage with readback; full standalone PowerShell pipeline not run",
+  "standaloneSignaturesAndDllLoadPassed": true,
+  "bilingualTextReadbackPassed": true,
+  "mmv": {
+    "status": "built-awaiting-game-test",
+    "inputFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+    "originalInputsUnchanged": true,
+    "fullPipelinePassed": true,
+    "files": {
+      "mod/regulation.bin": "162c540113db263e8a6aff57ae4605b35f230f6e4a9fe2f3b9826345ff79717b",
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": "d2382ae4fe8ff9289a2853d3a1ac562cb2cf9434be663ad2fd6e9a6d2a9e9423",
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": "553add9d8f144eab9525e3755d1c0454f7d223346a8c73c975fc82a73cf87413",
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "08d28c9ea7163292d648b6d6d1910cc6d794b980f41665f69171d086d8b9ec3f",
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "72f235b872bf9aaa4b92f7137d85e286d85181fd9a6b22f215a7f785d280c784",
+      "mod/action/script/c0000.hks": "926723e5b991ed96d5f90d51fde064efd5525bf690bc135142f482e530cd381f",
+      "mod/event/common.emevd.dcx": "b42dbb96e8b9b21a795ad2f6e3164494720392e4d470677d21a4ff473f238ffa",
+      "mod/event/common_func.emevd.dcx": "f8442bca05e53cf27c04758a1beb07e1fd470c564d2c00ac06570334e7a0de9e",
+      "mod/event/m41_00_00_00.emevd.dcx": "f4b09100990aae0e5520de0796d06e049faa6bf8c5f54e7f3553e89777877de3",
+      "mod/event/m41_01_00_00.emevd.dcx": "47cece5fefa89ae81effff481e3fcd42cea672b5211b5abe8ef271d6636be1a1",
+      "mod/event/m41_30_00_00.emevd.dcx": "0bd80b07daf8ab88d244e2ae4edfa4f86ae450b9456996c9d81d45f848fce478",
+      "mod/event/m46_50_00_00.emevd.dcx": "5d928333ac7c2bfc02bfa596c7ac22709a442d4e1c4290d8a3ce53fda9cbfe52",
+      "mod/event/m46_60_00_00.emevd.dcx": "db9d551887c046bc8379115cf87d7bd7258cc54f84f166af2a545340a9ae0272",
+      "mod/event/m46_70_00_00.emevd.dcx": "0cd0a6095c4fd944b0552fe9ccab5913159bb7809a4209cc424e8a459416912f",
+      "mod/event/m46_80_00_00.emevd.dcx": "30eb7487d44c7ed9c3fe6274c394919fa603cdd65306b8c649da7ae52a8d0618",
+      "mod/event/m51_00_00_00.emevd.dcx": "ed06844bedc1b812fce48b8f7fddfe5cb204bdd7ba000fe50028feb1a9463764",
+      "mod/map/mapstudio/m46_50_00_00.msb.dcx": "fd91721785ee1bcd8479a61d34ee590e7b13247bb75c927b2757b10fc983aea8",
+      "mod/map/mapstudio/m46_60_00_00.msb.dcx": "c81436c7ae69d78bdad3d1054b8bdbab2934ceb5f125c7373ec0066936b62118",
+      "mod/map/mapstudio/m46_70_00_00.msb.dcx": "f08a09c20e941a0f089f30b4e3e3342afcc93ab049a1fceeafc50f8771e6262f",
+      "mod/map/mapstudio/m46_80_00_00.msb.dcx": "0cce73df158f60358bf2d26707db3df4c4ace09061a20f0758b12e56747ba2cc",
+      "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "b308942cfa3c80521d854698b4a1a73be6e5f1a8b99ba0dc60512fb99ec2f90a",
+      "mod/script/talk/m00_00_00_00.talkesdbnd.dcx": "13b39623986fecdf6309316a5ecf6f0ed6089d25134a91b28bc3caadd1f8e826",
+      "mod/chr/c0000.anibnd.dcx": "79eb963ce33c104fbcaf2b89e5a4434b0c42e36489c2772f428b7360b10d3dc0",
+      "natives/NRHex.dll": "4b6927240938dd480017d8de3de20b4f11a52458458e8e14430ed4ae409631ab",
+      "natives/NRHex.ini": "88d3dbfb029a81d9f9483cd67241217b0ace746ba9775232352324a162ffd61b",
+      "NRHex-MMV.me3": "5c8adabb710bff9894635e7c8927ad319c1d56c34217603d99a16c3c72482094"
+    }
+  },
+  "sourceHashes": {
+    "src/deliberate_punch.rs": "79871ae28e9512a438da67db16d90c7a7cb187d5fa2896177fd00d0a11027e48",
+    "src/deliberate_punch_native_tests.rs": "4d691aa122e98edbffd09da3f38c2a9c69126e86de217c55a5d87cdc2eb9903b",
+    "src/ultimate_awakening.rs": "2ed6d004f19f85907d472da46b7c0a23b8b86b0db4592d9a64f48a66f5dc6333",
+    "src/ultimate_awakening_native_tests.rs": "1fa550c926fc6d7abc0a6b4705a7beecf19c3124cbfbacadead70c1d1925492b",
+    "tools/HexBuild/UltimateAwakening.cs": "9ad5a0db0717fff93e994877093ee54b6c3834b47b3fe8d8989dbdfaa6637e75",
+    "tools/HexBuild/HexBalance.cs": "397e36de15a074ea244a7411244e91934d470c1f1ce5fb3b29f39ac5d38cc380",
+    "tools/verify_ultimate_awakening.py": "cb82780baeaaa0b335d11e515254e06e902416ec41f2754abd475c56fdf65f57",
+    "docs/hexes.md": "45c3d96075a7167d512c15fde95153b62436169faf327131000a6785bb6cb808",
+    "docs/hexes.en.md": "bedbb9b7eb3ce027b1ece412325b541fc1f3ba23432bcfccbb01e600d7847b6a",
+    "Cargo.toml": "8b7c60dfb50ffd18c934911a392e59178c622fefded468e747f592608171560f",
+    "Cargo.lock": "cf11e01b54e59931231b76a90f8968993a62ec09418b4fd69f35d115dc7eab72"
+  },
+  "standaloneFiles": {
+    "dist/natives/NRHex.dll": "b91966a7f0740d049f4732b6b5cb1cd01460bfd2c09e2fc847cf2bad825343bf",
+    "dist/mod/regulation.bin": "7b4e36b0244474dedcb5b6e1149637a4c1ba9e524d3955d80d152c4f4395050e",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "e78fac07142783c2e32268fee7736e604eba60f8dd8193b6ebd2a0fb2b22149a",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "404f5aa343af8a054c324d9068da0f3a8ad1dd11327e12112eff116bc9db8f76",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "0f03fdcb342bd34b7f37aea72de22cc482ec3d59139cabefd5223686500f8171",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "714a4650d7c621d8cd3fe0aa8d43af09943675872a0141c3dbcd3b1f0c33ffce"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

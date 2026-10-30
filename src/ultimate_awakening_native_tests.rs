@@ -8,6 +8,7 @@ thread_local!{
  static OWNED:Cell<bool>=const{Cell::new(true)};static RESET:Cell<bool>=const{Cell::new(false)};
  static ACCEPT:Cell<u8>=const{Cell::new(1)};static FAIL:Cell<bool>=const{Cell::new(false)};
  static IMAGE:Cell<usize>=const{Cell::new(0)};static NODE:Cell<usize>=const{Cell::new(0)};
+ static REFILLS:Cell<usize>=const{Cell::new(0)};
  static APPLICATIONS:Cell<usize>=const{Cell::new(0)};static FORWARDS:Cell<usize>=const{Cell::new(0)};
 }
 unsafe fn put(p:usize,v:usize){ptr::write_unaligned(p as*mut usize,v);}
@@ -19,7 +20,14 @@ unsafe fn jump(base:usize,rva:usize,f:usize){let mut b=vec![0x48,0xb8];b.extend_
 unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from((id==OWNER&&OWNED.with(Cell::get))||(id==crate::reward_cycle_runtime::RESET&&RESET.with(Cell::get)))}
 unsafe extern "system" fn original(_:usize,id:i32,_:usize,_:usize,_:usize,_:u8,_:u8,_:u8,_:u8,_:u8,_:i32)->u8{FORWARDS.with(|s|s.set(s.get()+1));if id==crate::runtime::ULTIMATE_TRIGGER{ACCEPT.with(Cell::get)}else{1}}
 unsafe extern "system" fn apply(player:usize,id:i32,flag:u8)->u8{
- assert_eq!((id,flag),(BUFF,0));APPLICATIONS.with(|s|s.set(s.get()+1));if FAIL.with(Cell::get){return 0;}
+ assert_eq!(flag,0);
+ if id==REFILL{
+  REFILLS.with(|s|s.set(s.get()+1));
+  // Observe the native pulse submission only; do not pretend a stub proves FP recovery.
+  assert_eq!(crate::effect_detour(player,id,player,0,0,0,0,0,0,0,0),1);
+  return 1;
+ }
+ assert_eq!(id,BUFF);APPLICATIONS.with(|s|s.set(s.get()+1));if FAIL.with(Cell::get){return 0;}
  // Exercise nested dispatch: applying our own buff must not activate again.
  assert_eq!(crate::effect_detour(player,id,player,0,0,0,0,0,0,0,0),1);
  let base=IMAGE.with(Cell::get);let node=NODE.with(Cell::get);
@@ -63,8 +71,9 @@ fn native_ultimate_awakening_success_refresh_and_fp_aggregation(){unsafe{
  let cast=|id,actor|crate::effect_detour(actor,id,actor,0,0,0,0,0,0,0,0);
  float(node+0x4c,0.);assert_eq!(cast(12345,player),1);cast(crate::runtime::ULTIMATE_ACTION,player);assert_eq!(APPLICATIONS.with(Cell::get),0);
  ACCEPT.with(|s|s.set(0));assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),0);assert_eq!(APPLICATIONS.with(Cell::get),0);ACCEPT.with(|s|s.set(1));
- assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),1);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(value(node+0x4c),10.);assert_eq!(crate::read_i32(stats+0x150),42);
- for remaining in [9.5,5.,1.,0.001]{float(node+0x4c,remaining);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),10.);}
+ assert_eq!(REFILLS.with(Cell::get),0);
+ assert_eq!(cast(crate::runtime::ULTIMATE_TRIGGER,player),1);assert_eq!(APPLICATIONS.with(Cell::get),1);assert_eq!(REFILLS.with(Cell::get),1);assert_eq!(value(node+0x4c),7.);assert_eq!(crate::read_i32(stats+0x150),42);
+ for remaining in [6.5,5.,1.,0.001]{float(node+0x4c,remaining);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),7.);assert_eq!(REFILLS.with(Cell::get),APPLICATIONS.with(Cell::get));}
  // Installed native cost rows, including Echo Casting's x2, aggregate through
  // the original functions. Expiry is represented by native inactive-node flags.
  for(rva,with_echo)in [(0x5061b0,1.),(0x507310,2.),(0x5081e0,1.),(0x507410,2.)]{
@@ -79,9 +88,25 @@ fn native_ultimate_awakening_success_refresh_and_fp_aggregation(){unsafe{
  OWNED.with(|s|s.set(true));RESET.with(|s|s.set(false));int(stats+0x140,100);ptr::write((player+0x710)as*mut u8,0);
  let count=APPLICATIONS.with(Cell::get);cast(crate::runtime::ULTIMATE_TRIGGER,player+8);assert_eq!(APPLICATIONS.with(Cell::get),count);
  crate::ACTIVE.store(false,Ordering::Release);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);crate::ACTIVE.store(true,Ordering::Release);
- FAIL.with(|s|s.set(true));float(node+0x4c,2.);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),2.);FAIL.with(|s|s.set(false));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),10.);
+ FAIL.with(|s|s.set(true));float(node+0x4c,2.);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),2.);FAIL.with(|s|s.set(false));cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(value(node+0x4c),7.);
+ assert_eq!(REFILLS.with(Cell::get),APPLICATIONS.with(Cell::get));
+ // Execute the installed refill's original percentage calculation and FP clamp.
+ // The native effect list / tick-ready bit is a fixture, not a live update loop.
+ let refill=row(&params,REFILL);let mut rn=[0usize;0x88/8];let refill_node=rn.as_mut_ptr()as usize;
+ put(refill_node,refill.as_ptr()as usize);int(refill_node+8,REFILL);put(manager+8,refill_node);
+ let collect:unsafe extern "system" fn(usize,i32,*mut i32)=std::mem::transmute(base+0x507460);
+ let add:unsafe extern "system" fn(usize,i32)=std::mem::transmute(base+0x4261c0);
+ for max in [1,120,201,9999]{for current in [0,max/2,max]{
+  int(stats+0x150,current);int(stats+0x154,max);int(refill_node+0x68,4);
+  let mut gains=[0;2];collect(manager,max,gains.as_mut_ptr());assert_eq!(gains,[max,0]);
+  for gain in gains{add(stats,gain);}assert_eq!(crate::read_i32(stats+0x150),max);
+  assert_eq!(crate::read_i32(stats+0x140),100); // FP-only, no HP recovery.
+  for flags in [0,2]{int(refill_node+0x68,flags);collect(manager,max,gains.as_mut_ptr());assert_eq!(gains,[0,0]);}
+ }}
+ put(manager+8,node);
  // Missing stats/manager fail safely, without inventing a buff or FP refill.
  put(modules,0);let count=APPLICATIONS.with(Cell::get);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);put(modules,stats);
  put(player+0x190,0);cast(crate::runtime::ULTIMATE_TRIGGER,player);assert_eq!(APPLICATIONS.with(Cell::get),count);
+ assert_eq!(REFILLS.with(Cell::get),APPLICATIONS.with(Cell::get));
  crate::BASE.store(saved_base,Ordering::Release);crate::ACTIVE.store(saved_active,Ordering::Release);crate::APPLY_ORIG.store(saved_original,Ordering::Release);assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
 }}

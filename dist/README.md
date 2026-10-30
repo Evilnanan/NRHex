@@ -1,4 +1,4 @@
-# Mayhem Augments 0.17.257 自测版
+# Mayhem Augments 0.17.258 自测版
 
 目录：`mod/` 为游戏资源，`natives/` 为 DLL、INI 和运行日志，`testmods/` 为测试辅助 Mod，`reports/` 为构建／验证报告（游戏运行不需要）。独立版启动使用 `启动测试版.ps1`；MMV 适配测试包位于 `mmv/`，使用根目录的 `启动MMV测试版.ps1` 启动（仍需外部 MMV 原包）；卡退出时使用 `强制结束游戏.cmd`，它调用同目录的 `Stop-Nightreign.ps1`。`NRHex.me3` 和现有配置位置不变。
 

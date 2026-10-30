@@ -33,7 +33,7 @@ static class HexBalance {
    foreach(var(field,value)in fields){
     float previous=Convert.ToSingle(row[field].Value);
     float prior=escapeOnly?(id==95000300?1.2f:id==95001202?60f:Erosion.AttackRates.Contains(field)?1f:0f):id==Marking.Owner?1f:id==Erosion.Owner?.8f:15f;
-    Check(previous==value||previous==prior,$"Unexpected balance input {id}/{field}: {previous}");
+    Check(previous==value||previous==prior||(!escapeOnly&&id==UltimateAwakening.Buff&&previous==10f),$"Unexpected balance input {id}/{field}: {previous}");
     Set(row,field,value);changes.Add(new{id,field,before=previous,after=value});
    }
   }
@@ -57,6 +57,6 @@ static class HexBalance {
   HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(output,"texts"),allRewards:true,onlyIds:escapeOnly?new[]{95001200,95000300}:new[]{Marking.Owner,Erosion.Owner,Sniper.Owner,UltimateAwakening.Owner},inputMod:inputMod);
   if(escapeOnly)File.WriteAllText(Path.Combine(output,"effects.json"),JsonSerializer.Serialize(after.Rows.Where(r=>r.ID>=95001200&&r.ID<=95001204).Select(r=>new{id=r.ID,fields=r.Cells.ToDictionary(c=>c.Def.InternalName,c=>c.Value)})));
   File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{input,inputSha256=Hash(input),outputSha256=Hash(target),changes,onlySevenFieldsChanged=!escapeOnly,escapeOnly,otherRowsAndTablesPreserved=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine(escapeOnly?"PASS: Escape attack x0.7 / 70s cooldown and Glass Cannon attack x1.25; fourteen fields only; unrelated data preserved":"PASS: Slide Kick cooldown x1.5, Erosion attack x0.7, Awakening 10s; seven fields only, bilingual text verified");
+  Console.WriteLine(escapeOnly?"PASS: Escape attack x0.7 / 70s cooldown and Glass Cannon attack x1.25; fourteen fields only; unrelated data preserved":"PASS: Slide Kick cooldown x1.5, Erosion attack x0.7, Awakening 7s; seven fields only, bilingual text verified");
  }
 }

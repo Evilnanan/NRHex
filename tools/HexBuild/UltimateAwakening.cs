@@ -2,16 +2,20 @@ using SoulsFormats;
 using System.Security.Cryptography;
 using System.Text.Json;
 static class UltimateAwakening {
- public const int Owner=95003800,Buff=Owner+1,Source=511060;
- public const float Duration=10f;
+ public const int Owner=95003800,Buff=Owner+1,Refill=Owner+2,Source=511060,RefillSource=3269;
+ public const float Duration=7f;
  static readonly string[] CostFields={"artsConsumptionRate","magicConsumptionRate","shamanConsumptionRate","miracleConsumptionRate","goodsConsumptionRate"};
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
+ static void ConfigureRefill(PARAM.Row r){
+  Set(r,"soul",0);Set(r,"changeHpPoint",0);Set(r,"changeMpPoint",0);Set(r,"changeMpRate",-100);
+ }
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
   var r=clone("SpEffectParam",Source,Buff);
   Set(r,"effectEndurance",Duration);Set(r,"spCategory",20);Set(r,"spEffectTextId_1",Buff);
+  ConfigureRefill(clone("SpEffectParam",RefillSource,Refill));
  }
  static bool Removal(EMEVD.Instruction i,int effect)=>i.Bank==2004&&i.ID==21&&i.ArgData.Length==8&&BitConverter.ToInt32(i.ArgData)==20000&&BitConverter.ToInt32(i.ArgData,4)==effect;
  public static void Events(EMEVD ev){
@@ -30,6 +34,9 @@ static class UltimateAwakening {
   Check(CageAI.Same(source,actual.Rows.Single(r=>r.ID==Source)),"Original Cerulean Hidden Tear changed");
   var expected=new PARAM.Row(source){ID=Buff};Set(expected,"effectEndurance",Duration);Set(expected,"spCategory",20);Set(expected,"spEffectTextId_1",Buff);
   Check(CageAI.Same(expected,buff),"Awakening differs from the reviewed native tear clone");
+  var refill=actual.Rows.Single(r=>r.ID==Refill);var expectedRefill=new PARAM.Row(origin.Rows.Single(r=>r.ID==RefillSource)){ID=Refill};ConfigureRefill(expectedRefill);
+  Check(CageAI.Same(expectedRefill,refill),"Awakening refill differs from reviewed native instant pulse");
+  Check(Convert.ToSingle(refill["effectEndurance"].Value)==0f&&Convert.ToSingle(refill["changeHpRate"].Value)==0f&&Convert.ToInt32(refill["saveCategory"].Value)==-1,"Refill must be transient, immediate and FP-only");
   foreach(var f in CostFields)Check(Convert.ToSingle(buff[f].Value)==0f,"FP cost must be zero: "+f);
   Check(Convert.ToInt32(buff["saveCategory"].Value)==-1&&Convert.ToInt32(buff["vfxId"].Value)==5860&&Convert.ToInt32(buff["iconId"].Value)==20407,"Native transient/visual metadata mismatch");
   var owner=actual.Rows.Single(r=>r.ID==Owner);Check(Convert.ToInt32(owner["iconId"].Value)==22297&&Convert.ToInt32(owner["saveCategory"].Value)==10&&Convert.ToSingle(owner["effectEndurance"].Value)==-1f&&CostFields.All(f=>Convert.ToSingle(owner[f].Value)==1f),"Neutral permanent owner mismatch");
@@ -39,11 +46,11 @@ static class UltimateAwakening {
   var attach=Table(current,"AttachEffectParam").Rows.Single(r=>r.ID==Owner);var perm=Table(current,"PermanentBuffParam").Rows.Single(r=>r.ID==Owner);
   Check(Convert.ToInt32(attach["statusIconId"].Value)==22297&&Convert.ToInt32(attach["passiveSpEffectId_1"].Value)==Owner&&Convert.ToInt32(perm["spEffectId"].Value)==Owner&&Convert.ToInt32(perm["iconId"].Value)==21297,"Ability effect/icon wiring mismatch");
   var visual=Table(current,"SpEffectVfxParam").Rows.Single(r=>r.ID==5860);Check(CageAI.Same(visual,Table(native,"SpEffectVfxParam").Rows.Single(r=>r.ID==5860))&&Convert.ToInt32(visual["midstSfxId"].Value)==330111,"Native tear visual changed");
-  return new{owner=Owner,buff=Buff,source=Source,seconds=Duration,historyBit=35,fpRates=CostFields.ToDictionary(f=>f,f=>buff[f].Value),nativeVfx=5860,nativeSfx=330111};
+  return new{owner=Owner,buff=Buff,source=Source,seconds=Duration,refill=Refill,restoreMaxFpPercent=100,historyBit=35,fpRates=CostFields.ToDictionary(f=>f,f=>buff[f].Value),nativeVfx=5860,nativeSfx=330111};
  }
  static void ValidateEvents(EMEVD ev){foreach(int id in new[]{1111,9100941})foreach(int effect in new[]{Owner,Buff})Check(ev.Events.Single(e=>e.ID==id).Instructions.Count(i=>Removal(i,effect))==1,"Missing/duplicate Awakening reset");}
  static void Fixture(string directory,BND4 current,Func<string,Memory<byte>,PARAM> parse){
-  var sp=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);sp.Rows=sp.Rows.Where(r=>new[]{Owner,Buff,Source,EchoCast.Owner}.Contains(r.ID)).ToList();Directory.CreateDirectory(directory);File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),sp.Write());
+  var sp=parse("SpEffectParam",current.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes);sp.Rows=sp.Rows.Where(r=>new[]{Owner,Buff,Refill,Source,EchoCast.Owner}.Contains(r.ID)).ToList();Directory.CreateDirectory(directory);File.WriteAllBytes(Path.Combine(directory,"installed-effects.param"),sp.Write());
  }
  public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   var current=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));Validate(native,current,parse);Fixture(Path.Combine(root,"work/ultimate-awakening"),current,parse);
@@ -57,19 +64,25 @@ static class UltimateAwakening {
   var binder=SFUtil.DecryptNightreignRegulation(input);var original=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
   var file=binder.Files.Single(f=>Name(f)=="SpEffectParam.param");var before=parse("SpEffectParam",file.Bytes);var rows=parse("SpEffectParam",file.Bytes);
   var row=rows.Rows.Single(r=>r.ID==Buff);float old=Convert.ToSingle(row["effectEndurance"].Value);
-  Check(old==10f||old==15f,"Unexpected Awakening duration");Set(row,"effectEndurance",Duration);file.Bytes=rows.Write();
+  Check(old==Duration||old==10f||old==15f,"Unexpected Awakening duration");Set(row,"effectEndurance",Duration);
+  var source=parse("SpEffectParam",native.Files.Single(f=>Name(f)=="SpEffectParam.param").Bytes).Rows.Single(r=>r.ID==RefillSource);
+  var refill=new PARAM.Row(source){ID=Refill};ConfigureRefill(refill);
+  var existing=rows.Rows.SingleOrDefault(r=>r.ID==Refill);
+  Check(existing==null||CageAI.Same(existing,refill),"Unexpected refill ID collision");
+  if(existing==null)rows.Rows.Add(refill);
+  rows.Rows=rows.Rows.OrderBy(r=>r.ID).ToList();file.Bytes=rows.Write();
   string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);var final=SFUtil.DecryptNightreignRegulation(output);
   Check(final.Version==binder.Version&&final.Compression==binder.Compression&&final.Files.Count==binder.Files.Count,"Regulation metadata changed");
   foreach(var member in final.Files){
    var expected=binder.Files.Single(f=>f.ID==member.ID);Check(member.Name==expected.Name&&member.Flags==expected.Flags&&member.Bytes.Span.SequenceEqual(expected.Bytes.Span),"Regulation readback mismatch");
    if(member.ID!=file.ID)Check(member.Bytes.Span.SequenceEqual(original[member.ID]),"Unrelated table changed");
   }
-  var after=parse("SpEffectParam",final.Files.Single(f=>f.ID==file.ID).Bytes);Check(after.Rows.Count==before.Rows.Count,"Effect row count changed");
+  var after=parse("SpEffectParam",final.Files.Single(f=>f.ID==file.ID).Bytes);Check(after.Rows.Count==before.Rows.Count+(existing==null?1:0),"Effect row count changed");
   foreach(var previous in before.Rows){var expected=new PARAM.Row(previous);if(previous.ID==Buff)Set(expected,"effectEndurance",Duration);Check(CageAI.Same(expected,after.Rows.Single(r=>r.ID==previous.ID)),"Unrelated effect field changed");}
   var audit=Validate(native,final,parse);Fixture(dir,final,parse);
   HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner});
-  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),effectId=Buff,field="effectEndurance",before=old,after=Duration,audit,unrelatedRowsFieldsAndTablesUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: Awakening duration staged; only private effectEndurance changed, native tear preserved");
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),effectId=Buff,field="effectEndurance",before=old,after=Duration,audit,addedRefill=Refill,restoreMaxFpPercent=100,unrelatedRowsFieldsAndTablesUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Awakening duration staged; private duration and instant FP refill verified, native tear preserved");
  }
  public static void Stage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),dir=Path.Combine(root,"work/ultimate-awakening/staged");Directory.CreateDirectory(dir);
