@@ -3,6 +3,7 @@ using System.Text.Json;
 static class Erosion {
  public const int Owner=95003100;
  public const int Carrier=Owner+1,First=Owner+10,ItemCarrier=Owner+2,ItemFirst=Owner+20;
+ public const int SpellPower=15;
  public const float AttackRate=.7f;
  public static readonly string[] AttackRates={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"};
  static readonly int[] Sources={8110002,8110402,8110102,6800,8110502,8110202,6750};
@@ -21,7 +22,7 @@ static class Erosion {
   var carrier=clone("SpEffectParam",8000000,id);
   foreach(var (f,v) in new (string,object)[]{("maxHpRate",1f),("effectEndurance",0f),("saveCategory",-1),("spCategory",-1),("isUseStatusAilmentAtkPowerCorrect",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(carrier,f,v);
   }
-  foreach(var(first,power)in new[]{(First,30),(ItemFirst,10),(Owner+30,10),(Owner+40,5)})for(int i=0;i<7;i++){
+  foreach(var(first,power)in new[]{(First,30),(ItemFirst,10),(Owner+30,SpellPower),(Owner+40,5)})for(int i=0;i<7;i++){
    var r=clone("SpEffectParam",Sources[i],first+i);
    foreach(var f in Powers)Set(r,f,0);Set(r,Powers[i],power);Set(r,"isUseStatusAilmentAtkPowerCorrect",1);
   }

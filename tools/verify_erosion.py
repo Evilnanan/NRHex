@@ -3,7 +3,7 @@ import hashlib,json,os,subprocess
 from pathlib import Path
 from local_paths import ROOT,GAME
 
-subprocess.run(['dotnet','run','--project',str(ROOT/'tools/HexBuild'),'--',str(ROOT),'--erosion-items-check'],check=True)
+subprocess.run(['dotnet','run','--project',str(ROOT/'tools/HexBuild'),'--',str(ROOT),'--erosion-tiers-check'],check=True)
 env=os.environ.copy()
 env.setdefault('NRHEX_NATIVE_EXE',str(GAME/'nightreign.exe'))
 command=['cargo','test','--release','--features','cage-demand']
@@ -16,11 +16,11 @@ work=ROOT/'work/erosion';work.mkdir(parents=True,exist_ok=True)
 assert result.returncode==0 and '1 passed; 0 failed;' in output,output
 sources=['src/erosion.rs','src/erosion_native_tests.rs','src/lib.rs']
 report=dict(nativeExecutionPassed=True,compiledHookExecuted=True,compiledSharedApplicabilityHookExecuted=True,compiledCollectorHookExecuted=True,
- weaponBuildup=30,spellBuildup=10,itemBuildup=10,passiveBuildup=5,nativeZeroCorrectionPreserved=True,
+ weaponBuildup=30,spellBuildup=15,itemBuildup=10,passiveBuildup=5,nativeZeroCorrectionPreserved=True,
  spellRequiresSword=True,bodyContactsExcluded=True,nativeBulletIdCopyExecuted=True,
  nativeImmunityChain=['0x509790','0x510fd0','0xea19c0'],nativeAddedAilmentSelector='0x506200',nativeAttackApplicability='0x511010',
  nativeMotionValueFragment=['0x43c869','0x43c899'],
- cases=['all four carriers map to each of seven weakest ailments','only mapped local Sword spells collect the 10-point carrier; missing Sword/remote/unmapped/table mismatch excluded',
+ cases=['all four carriers map to each of seven weakest ailments','only mapped local Sword spells collect the 15-point carrier; missing Sword/remote/unmapped/table mismatch excluded',
  'native applicability remains enforced and type10 remains excluded','other native ailment additions unchanged',
  'source goods take precedence; preexisting carrier vector entries unchanged','passive projectile IDs select 5-point carrier without leaking to weapon contacts',
  'unmodified native launch-payload copy verifies BulletIns+A4','two native motion values multiply; either zero stays zero',

@@ -165,7 +165,7 @@ fn compiled_erosion_and_native_ailment_paths_execute_together(){unsafe{
   let descriptor=std::slice::from_raw_parts(context as*const u8,0x3c).to_vec();
   for count in 1..=3{
    collect(manager,vector.as_mut_ptr()as usize,context);
-   assert_eq!(vector[2],start+count*4);assert_eq!(values[count-1],SPELL_CARRIER,"One 10-point spell carrier per contact");
+   assert_eq!(vector[2],start+count*4);assert_eq!(values[count-1],SPELL_CARRIER,"One 15-point spell carrier per contact");
   }
   assert_eq!(std::slice::from_raw_parts(context as*const u8,0x3c),descriptor,"Shared spell descriptor unchanged");
   integer(context+0x34,-1);vector[2]=start;collect(manager,vector.as_mut_ptr()as usize,context);assert_eq!(vector[2],start,"Unmapped spell excluded");integer(context+0x34,mapped);

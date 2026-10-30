@@ -77,7 +77,7 @@ pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
   }
  }
 }
-// Restore Sword-dependent spell eligibility; accepted spells retain their 10-point tier.
+// Restore Sword-dependent spell eligibility; accepted spells retain their 15-point tier.
 pub unsafe fn spell_contact(node:usize,descriptor:usize,owner:usize)->bool{
  if node==0||descriptor==0||!COLLECT_SPELL.with(Cell::get)||!matches!(ptr::read(descriptor as*const u8),3|4|10){return false;}
  let param=read_ptr(node);if param==0{return false;}
