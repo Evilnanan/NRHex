@@ -1,0 +1,209 @@
+{
+  "version": "0.17.266",
+  "owner": 95002400,
+  "change": "Remove first-hit emphasis from Chinese and English descriptions",
+  "mechanicsUnchanged": true,
+  "otherAssetsAndConfigsUnchanged": true,
+  "installedFiles": {
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "3692fd8c2d57c122cf492a583d724e1910aac502de762f20936cb3f6ffea5c6a",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "3cdb9f3dce76c123a3e4f9894c1035255773513e2f076fec11bf3d3640eba862",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "12dac60b8d33eff24edb5f2cde83ea2ca4d1ddf0c7ac961950390663ead90788",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "0a16a29d0f3b54a8fe9a9243318f896f9464baef42b339f362bca7f9b3e36824",
+    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "b3c99522d7a90647593a37f748c834f99eb032d115d7c56ff58122bb69d4f488",
+    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "a2e1228c4bb211cd2a1607695ea198ce8c3dfb0908736357871db54a7fdf3298",
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "7ae129c5bad7a90137acb2fdd4570e4400db4a40735e224cea6dcb3df7fa363b",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "ab8e8b6bc2ad137a3bbc84922427bc93caaddfc853d631f4a713e81789fc8023"
+  },
+  "readback": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "9D2901D93B15ABAA7F2AC9B40639398DD831FEA7CDE204790E4DC9063A35730F",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "53F1959BD76E7B35265998571E25CBFBEEB62F1871AC9B4872B90E9401008BDE",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "3FB767674CABF0B303659C736560802C7B348483540FC4E561079B81CD565DC5",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "B9D1A4F7B039EC1F3910D97DE9A493DCF54F0C67BD44946FB7E3D7CE193C00DB",
+          "outputSha256": "3692FD8C2D57C122CF492A583D724E1910AAC502DE762F20936CB3F6FFEA5C6A",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95002400,
+              "before": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在首次命中时回复血量和精力",
+              "after": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在命中时回复血量和精力"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95002400,
+              "before": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在首次命中时回复血量和精力",
+              "after": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在命中时回复血量和精力"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95002400,
+              "before": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在首次命中时回复血量和精力",
+              "after": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在命中时回复血量和精力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "6E8B18E9357FCD77038858B5A1A552E104D81FCC95433502E400A4ECB99FECE3",
+          "outputSha256": "3CDB9F3DCE76C123A3E4F9894C1035255773513E2F076FEC11BF3D3640EBA862",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95002400,
+              "before": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在首次命中时回复血量和精力",
+              "after": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在命中时回复血量和精力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "24883344CDD76698F7D636C050073470D2ACE457EBF25A1D9632FBFE2C0E90D3",
+          "outputSha256": "12DAC60B8D33EFF24EDB5F2CDE83EA2CA4D1DDF0C7AC961950390663EAD90788",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95002400,
+              "before": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina once on the first hit.",
+              "after": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95002400,
+              "before": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina once on the first hit.",
+              "after": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95002400,
+              "before": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina once on the first hit.",
+              "after": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "785396B093A2EA3AFDC229C3ED285371BFB66B4BFBBF201C75C815D59BCBE8AE",
+          "outputSha256": "0A16A29D0F3B54A8FE9A9243318F896F9464BAEF42B339F362BCA7F9B3E36824",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95002400,
+              "before": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina once on the first hit.",
+              "after": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "9D2901D93B15ABAA7F2AC9B40639398DD831FEA7CDE204790E4DC9063A35730F",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "53F1959BD76E7B35265998571E25CBFBEEB62F1871AC9B4872B90E9401008BDE",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "3FB767674CABF0B303659C736560802C7B348483540FC4E561079B81CD565DC5",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "FB7B7C50F162ECF88B2350B6F628E66F68559003EE59AF54ABA0B4D016F9669C",
+          "outputSha256": "B3C99522D7A90647593A37F748C834F99EB032D115D7C56FF58122BB69D4F488",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95002400,
+              "before": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在首次命中时回复血量和精力",
+              "after": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在命中时回复血量和精力"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95002400,
+              "before": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在首次命中时回复血量和精力",
+              "after": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在命中时回复血量和精力"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95002400,
+              "before": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在首次命中时回复血量和精力",
+              "after": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在命中时回复血量和精力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "CF002DFADC0BB0BE45DFB7F777399EAE4046013DB163262B79B16326A2AFE076",
+          "outputSha256": "A2E1228C4BB211CD2A1607695EA198CE8C3DFB0908736357871DB54A7FDF3298",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95002400,
+              "before": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在首次命中时回复血量和精力",
+              "after": "双手共持的攻击可以招架敌人的攻击。成功招架时的防御反击伤害翻倍，并且在命中时回复血量和精力"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "219E30372B1CF7D3CE08746F81DAA2EEB7C0C8D4978DC25D0B2BB58D912F7151",
+          "outputSha256": "7AE129C5BAD7A90137ACB2FDD4570E4400DB4A40735E224CEA6DCB3DF7FA363B",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95002400,
+              "before": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina once on the first hit.",
+              "after": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95002400,
+              "before": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina once on the first hit.",
+              "after": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95002400,
+              "before": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina once on the first hit.",
+              "after": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "EC20942E68CAC479FC3A493D4A80BE3EE533C3862B49456EAD1583D2AA63B040",
+          "outputSha256": "AB8E8B6BC2AD137A3BBC84922427BC93CAADDFC853D631F4A713E81789FC8023",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95002400,
+              "before": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina once on the first hit.",
+              "after": "Two-handed attacks can guard enemy blows. After a successful guard, guard counters deal double damage and restore HP and stamina on hit."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  }
+}
