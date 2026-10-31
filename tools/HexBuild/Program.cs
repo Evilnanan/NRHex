@@ -84,6 +84,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  p.ApplyParamdef(d);return p;
 }
 if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--bartender-stage")){Bartender.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--deliberate-punch-stage")){DeliberatePunch.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sniper-stage")){Sniper.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sniper-check")){Sniper.Verify(root,bnd,Parse);return;}
@@ -898,6 +899,7 @@ foreach(var h in hexes){
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==Erosion.Owner)Erosion.Owners(s);
  if(h.Id==Sniper.Owner)Sniper.OwnerEffect(s);
+ if(h.Id==Bartender.Owner)Bartender.OwnerEffect(s,pars["SpEffectParam"].Rows.Single(r=>r.ID==7035700));
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
  if(h.Id==EchoCast.Owner)EchoCast.OwnerEffect(s);
@@ -941,6 +943,7 @@ UltimateChallenge.Mechanics(Clone);
 UltimateTiming.Mechanics(Clone);
 Ambulance.RecoveryEffect(Clone,pars["SpEffectParam"]);
 Erosion.Mechanics(Clone);
+Bartender.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
 foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
@@ -1355,6 +1358,7 @@ Wraith.Events(ev);
 Metal.Events(ev);
 DoubleDip.Events(ev,hexes);
 DeliberatePunch.Events(ev);
+Bartender.Events(ev);
 Basics.Events(ev);
 Sniper.Events(ev);
 UltimateUnstoppable.Events(ev);

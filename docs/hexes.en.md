@@ -228,3 +228,8 @@ Grants two random Mayhem Augments.
 ## Haymaker
 
 The more damage you take during an empowered Character Skill, the more damage your counterattack deals.
+
+<!-- hex:95004900 -->
+## Bartender
+
+Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.

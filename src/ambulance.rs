@@ -116,6 +116,12 @@ unsafe fn toward_down(owner:Identity,base:usize,angle:f32,speed:f32)->bool{
 }
 type Env=unsafe extern "system" fn(usize,i32,usize)->i32;
 pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
+ // The owner ID is not exactly representable as an HKS f32 constant.
+ if code==990049{
+  if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}
+  let actor=read_ptr(context);let base=BASE.load(Ordering::Acquire);
+  return i32::from(actor!=0&&is_local(actor,base)&&has_effect(actor,95004900,base));
+ }
  if code==crate::deliberate_punch::QUERY{
   if ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{let base=BASE.load(Ordering::Acquire);let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);crate::deliberate_punch::event(read_ptr(context),number(vm,2)as i32,base);}return 0;
  }

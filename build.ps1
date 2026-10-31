@@ -253,6 +253,12 @@ try {
         python -X utf8 tools/build_deliberate_punch_hks.py --inplace
         if ($LASTEXITCODE -ne 0) { throw 'Deliberate Punch action observer failed.' }
     }
+    if (-not $DllOnly) {
+        python -X utf8 tools/build_bartender_hks.py --inplace
+        if ($LASTEXITCODE -ne 0) { throw 'Bartender native switch adapter failed.' }
+    }
+    python -X utf8 tools/build_bartender_hks.py --check
+    if ($LASTEXITCODE -ne 0) { throw 'Bartender native switch adapter missing.' }
     python -X utf8 tools/build_deliberate_punch_hks.py --check
     if ($LASTEXITCODE -ne 0) { throw 'Deliberate Punch action observer verification failed.' }
     python -X utf8 tools/build_marking_hks.py --check

@@ -1,0 +1,184 @@
+{
+  "version": "0.17.266",
+  "owner": 95004900,
+  "exclusiveHero": 7,
+  "historyBit": 46,
+  "rotationMarkers": [
+    6999981,
+    6999982,
+    6999983,
+    6999984
+  ],
+  "order": [
+    "Magic",
+    "Fire",
+    "Lightning",
+    "Holy"
+  ],
+  "nativeEffects": [
+    7035700,
+    7035701,
+    7035702,
+    7035703,
+    7035704,
+    7035705,
+    7035706,
+    7035707,
+    7035708,
+    7035709,
+    7035710,
+    7035711,
+    7035712,
+    7035713,
+    7035714,
+    7035715,
+    7035716,
+    7035717,
+    7035718,
+    7035719,
+    7035720,
+    7035721
+  ],
+  "nativeAttackPower": 20,
+  "nativeDurationSeconds": 10,
+  "validation": {
+    "bartenderBytecodeAndMmvLuaTestsPassed": 4,
+    "roleFilterTestsPassed": 12,
+    "mysteryBoxTestsPassed": 4,
+    "mmvHksFunctionsAdapted": 158,
+    "mmvPrefixDifferentialCases": 27360,
+    "mmvInteriorDifferentialCases": 5888,
+    "exactHksInversePassed": true,
+    "previousMmvHksExactlyReproduced": true,
+    "allExistingParameterRowsUnchanged": true,
+    "installedRewardAndTextReadbackPassed": true,
+    "standaloneAndMmvDllLoadPassed": true
+  },
+  "standaloneHksSha256": "f7d18748981aabd5214de96f072c82e62bfb6f4c4bbeb0a1d5aa1af905035d0a",
+  "install": {
+    "installedFiles": {
+      "dist/mod/regulation.bin": "52be705b1a12b352d1540e69820192b94f3802ad2cc772cbe2f26cdca783fb40",
+      "dist/mod/event/common.emevd.dcx": "d28ddcf92c0f2ebb64e4dfe2f0402b7d35ce88884db51f33fe9b23a24d07ec40",
+      "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "47b76f4f000e1886d90be3d11a731f083e8192a73c437bbf5613d4730898eaa4",
+      "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "1fd95b333b41ffb4b59165b53dd492f08809cf00436444e95c9cce24e9fb1dbc",
+      "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "08ca6a5aa45ed32c83e1cac4fc230e49eb468591be59548546d626b35fd3b033",
+      "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "22b2c587790b15ec6877bd0e180ef1329b48a95ec5dde97eb36480240d00a897",
+      "dist/mmv/mod/regulation.bin": "8864f0ae3874012c16324182e5fbc9c1d5dd85f871d1b681d444a03c9d1c0c57",
+      "dist/mmv/mod/event/common.emevd.dcx": "46ee2674e8d7beadfa4a49d4b8fc243fdfcc33684e85eca877f9be13e0194cbb",
+      "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "6fee5979f1b84889c6596277d6cbbf7bbe75668ae2fc9e5e34f464ec28cceda7",
+      "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "b4f352bf8ce61b3745d24ef83ae1ee3f958537ca056634e486c13b3dc8e17a72",
+      "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "e7e3cd1f908bb5e234e9f4af9539c8c9a39532cebcb7669d80ef9be0a00de1a1",
+      "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "d4f494a0ae0bb1dbfc32a21225edc351cb1815022bd88011b8d6e48c9a95f1ee",
+      "dist/mmv/mod/action/script/c0000.hks": "0269a89c668bb75aa3f9bb1a1bd398d13793b48334d4dba8e6faee55dddef363",
+      "dist/natives/NRHex.dll": "9e3d45222ce2fc6ab65a909caf5d3afb2fd4f8180870de982002aad68d90ae53",
+      "dist/mmv/natives/NRHex.dll": "68fbfb07b0a366f5e925cd6ff787683c8f533c7c2c808f81cf762fdb014da83d"
+    },
+    "otherAssetsAndConfigsUnchanged": true
+  },
+  "stages": {
+    "staged": {
+      "inputSha256": "ADE4968B80E228FDFA63DA21DB62373C2AD9A157283FA132133AE2371B65B5D5",
+      "outputSha256": "52BE705B1A12B352D1540E69820192B94F3802AD2CC772CBE2F26CDCA783FB40",
+      "eventInputSha256": "874D4A6CDEC9C2D6D6D5677D20A7FC329827F85A7CDB5B16BBB35EC4F8EA8B02",
+      "eventOutputSha256": "D28DDCF92C0F2EBB64E4DFE2F0402B7D35CE88884DB51F33FE9B23A24D07EC40",
+      "hexCount": 44,
+      "historyBit": 46,
+      "historyBytes": 6,
+      "addedRows": {
+        "SpEffectParam": [
+          6999981,
+          6999982,
+          6999983,
+          6999984,
+          95004900,
+          96210046
+        ],
+        "AttachEffectParam": [
+          95004900
+        ],
+        "PermanentBuffParam": [
+          95004900
+        ],
+        "EquipParamGoods": [
+          95004900
+        ],
+        "ItemTableParam": [
+          95110146
+        ]
+      },
+      "allExistingRowsAndUnrelatedTablesUnchanged": true,
+      "onlyThreeExistingEventsExtended": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "mmv": {
+      "inputSha256": "699EC7F69D0C4B75C200F84B0CE0B55033D04D197470CAC4ABD49820BD05011B",
+      "outputSha256": "8864F0AE3874012C16324182E5FBC9C1D5DD85F871D1B681D444A03C9D1C0C57",
+      "eventInputSha256": "B42DBB96E8B9B21A795AD2F6E3164494720392E4D470677D21A4FF473F238FFA",
+      "eventOutputSha256": "46EE2674E8D7BEADFA4A49D4B8FC243FDFCC33684E85ECA877F9BE13E0194CBB",
+      "hexCount": 44,
+      "historyBit": 46,
+      "historyBytes": 6,
+      "addedRows": {
+        "SpEffectParam": [
+          6999981,
+          6999982,
+          6999983,
+          6999984,
+          95004900,
+          96210046
+        ],
+        "AttachEffectParam": [
+          95004900
+        ],
+        "PermanentBuffParam": [
+          95004900
+        ],
+        "EquipParamGoods": [
+          95004900
+        ],
+        "ItemTableParam": [
+          95110146
+        ]
+      },
+      "allExistingRowsAndUnrelatedTablesUnchanged": true,
+      "onlyThreeExistingEventsExtended": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    }
+  },
+  "mmv": {
+    "fingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+    "existingAttackCatalogsPreserved": {
+      "parry_data.rs": "fafc624c1f902549072d8aca66a2e83a301d101a17a2dac96d734f843e669307",
+      "sword_map.rs": "31a68b2bc78b810237c78f934dd1ea90f58f35e8a65a47d0c2ea4276889e16f7",
+      "echo_cast_data.rs": "180f34c5ca27757ef11d2f755ce53ac32cdb766b411bb3a9418bad788c40fa17",
+      "archmage_data.rs": "2db323bf9c622d3d50bf676cd2a82656965ef19440ea27ec692b7e415f82516b",
+      "arts_data.rs": "4e29dcfa22e3b3d45d0ad46efb03708321aee8c0fb9dd946529ecf7cc81e079b",
+      "spirit_target_data.rs": "ca59115825f9eca91e46c7218c6444b4a978c253c993b7592ef9a7e59fc87d45",
+      "cage_data.rs": "86819d1bf5e994c557466efb8db06033faa6a01d576381e0a19adeef9ab3faed"
+    },
+    "erosionDataSha256": "70cf3920f3e09b835667d470c046b1d26f15ba52e9bf66c71af5763f8e507294"
+  },
+  "sourceHashes": {
+    "src/ambulance.rs": "7820bea9c5710f41f96436fd5cb0249e3a76f2be44a05ed9ebd0ac11c03621ff",
+    "src/reward_choices.rs": "f0275616948260b637e761f5cdaa3a8f412d2366b662ab4eda3465dae89ac2e6",
+    "src/double_dip.rs": "ce11657f4691d08a89ff6cfb15b0b5c5d87e7a42458c5909b72cc34557b72c88",
+    "src/hex_pool.rs": "e21c028439af06beb6f382632c9d90afff9487a4f9a0aaf0b6e009be52ebfffe",
+    "tools/HexBuild/Bartender.cs": "bda4d1e6ab1e7e893057c964970ef43fdcd6d45bdee9a40bcc01369c1170345e",
+    "tools/HexBuild/Program.cs": "285476ffef3a6ae42997a046ff6a4cd33d2adfb09c8c7c1ab15aab8eaafef209",
+    "tools/HexBuild/HexCatalog.cs": "d8d674bb89d314b4b3c757d9f3687f413028e424787c616f1cf1fe18c3b1f358",
+    "tools/HexBuild/RewardCatalog.cs": "dcdea42468bbe473c1476cbb8f4f7237ed91bda6f9fc15cc925ee8be0fdfd46d",
+    "tools/build_bartender_hks.py": "29e0e170d2222cd7a1e4bd3d32ecb721c26fbd4ef22e53def2183f99923897d5",
+    "tools/test_bartender.py": "433c47d28e366cbdd6a651adb1b3fef40f2176abd33fc189b7886e024dc72ee5",
+    "tools/mmv_hks_stage.py": "bedd39552e8962d64103ec4b388399136fb2a8c900387e156f0294d926235b06",
+    "tools/test_mmv_hks.py": "278607ac68c44072fd446b871903b2fff27a07aa131cef4ab02c6cab6846ea4a",
+    "compat/mmv/hks-interior.json": "0fa63fa4ae927d9d375e672b3a56668696206954d395825ff918f05e9ee13d70",
+    "docs/hexes.md": "d8e79999b50fd5dfe868357a82d6890b6b163cc62606bd794ffa06b8dc1dd640",
+    "docs/hexes.en.md": "b3a57c2be5dff9a120ee96fcfd418daaec0d06033aeb5cab7f5bbd859226e514",
+    "Cargo.toml": "4f1ceb47b0011de9a16b4e26bd33eeab680ad0f3f301825b78140dec0f176692",
+    "Cargo.lock": "df9c823cb675f18bae3a76c209a4c1c04a098fd377928bb9df34641623b1999b"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

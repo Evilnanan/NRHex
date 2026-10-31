@@ -43,7 +43,7 @@ pub fn weapon_exclusions(mut unavailable:HexSet,affinity:Option<i32>)->HexSet{
  unavailable
 }
 // Single-character powers share this classification with exceptional draws.
-pub fn exclusive_role(owner:i32)->Option<u8>{match owner{95001800=>Some(6),crate::marking::OWNER=>Some(3),crate::deliberate_punch::OWNER=>Some(5),_=>None}}
+pub fn exclusive_role(owner:i32)->Option<u8>{match owner{95001800=>Some(6),crate::marking::OWNER=>Some(3),crate::deliberate_punch::OWNER=>Some(5),95004900=>Some(7),_=>None}}
 pub fn role_exclusions(mut unavailable:HexSet,hero:Option<u8>)->HexSet{
  for (i,&id)in OWNER_IDS.iter().enumerate(){if exclusive_role(id).is_some_and(|required|hero!=Some(required)){unavailable.insert(i);}}
  for (id,excluded)in [
@@ -83,7 +83,7 @@ pub fn is_hex_good(encoded:u32)->bool{
    let caster=matches!(affinity,Some(57|61|1600|1700));let physical=affinity.is_some()&&!caster;
    let expected=[(95000900,(caster||flags&1!=0)&&flags&2==0),(95002000,caster||flags&1!=0),(95003500,caster||flags&1!=0),
     (95001100,physical||flags&2!=0),(95002600,physical||flags&2!=0),(95002400,physical),(95003100,physical||flags&2!=0),
-    (95001800,hero==Some(6)),(95001300,!matches!(hero,Some(2|4|6))),(95000400,matches!(hero,Some(1|3|5|7|8)))];
+    (95001800,hero==Some(6)),(95004900,hero==Some(7)),(95001300,!matches!(hero,Some(2|4|6))),(95000400,matches!(hero,Some(1|3|5|7|8)))];
    for (id,allowed)in expected{let ability=index(id);
     for seen in [HexSet::new(),all(HEX_COUNT)]{
      let round=crate::reward_cycle::Round::new(&excluded,&seen);assert_eq!(round.candidates.contains(&ability),allowed,"{hero:?}/{affinity:?}/{flags}/{id}");
@@ -177,6 +177,7 @@ pub fn is_hex_good(encoded:u32)->bool{
   assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004500)],42);
   assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004600)],43);
   assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004700)],44);
+  assert_eq!(crate::hex_pool::HISTORY_BITS[index(95004900)],46);
   assert_eq!(crate::reward_cycle::Round::new(&HexSet::new(),&HexSet::new()).candidates.len(),HEX_COUNT);
  }
  #[test]fn all_roles_preserve_their_filters_in_random_focused_and_refresh_paths(){
@@ -186,7 +187,7 @@ pub fn is_hex_good(encoded:u32)->bool{
     let expected=[
      (95000900,matches!(hero,Some(6|7))),
      (95002000,matches!(hero,Some(6|7))),
-     (95001800,hero==Some(6)),
+     (95001800,hero==Some(6)),(95004900,hero==Some(7)),
      (95001100,matches!(hero,Some(1..=10))&&!matches!(hero,Some(6|7))),
      (95001300,!matches!(hero,Some(2|4|6))),
      (95000400,matches!(hero,Some(1|3|5|7|8))),

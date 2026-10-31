@@ -106,6 +106,18 @@ def compose(source, before, after, plan):
                     block += render(new, *action['range'], {1: 'nrhex_cost'}, {1: 'nrhex_cost'})
                     block += '    AddStamina(nrhex_cost)\n    end'
                     add(start, end, block, name + ':cost')
+                elif kind == 'value-helpers':
+                    helpers = ''
+                    for helper in action['helpers']:
+                        reg = helper['register']; name_ = helper['name']
+                        if not re.fullmatch(r'NRHexMMV_[A-Za-z_]\w*', name_):
+                            raise ValueError('Invalid value-helper name')
+                        helpers += f'local function {name_}(nrhex_value)\n'
+                        helpers += render(new, *helper['range'], {reg: 'nrhex_value'}, {reg: 'nrhex_value'})
+                        helpers += '    return nrhex_value\nend\n\n'
+                        (start, end), = find(name, helper['old'])
+                        add(start, end, f'{name_}({helper["old"]})', name + ':value')
+                    add(named[name]['start'], named[name]['start'], helpers, name + ':helpers')
                 elif kind == 'flask-helper':
                     block = 'local function NRHexMMV_Flask(nrhex_value)\n'
                     block += render(new, *action['range'], {0: 'nrhex_value'}, {0: 'nrhex_value'})

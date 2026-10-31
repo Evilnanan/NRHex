@@ -74,7 +74,7 @@ pub unsafe fn update(actor:usize,base:usize){
  #[test]fn only_foreign_exclusives_owned_and_self_are_filtered_for_every_hero(){
   for hero in std::iter::once(None).chain((0..=255).map(Some)){
    let owned=mask([index(OWNER),index(95000300)]);let pool=candidates(&owned,&[],hero);
-   for (i,&id)in OWNER_IDS.iter().enumerate(){assert_eq!(pool.contains(&i),!owned.contains(&i)&&match id{95001800=>hero==Some(6),95004200=>hero==Some(3),95004800=>hero==Some(5),_=>id!=OWNER});}
+   for (i,&id)in OWNER_IDS.iter().enumerate(){assert_eq!(pool.contains(&i),!owned.contains(&i)&&match id{95001800=>hero==Some(6),95004200=>hero==Some(3),95004800=>hero==Some(5),95004900=>hero==Some(7),_=>id!=OWNER});}
   }
  }
  #[test]fn incompatible_and_normally_restricted_powers_remain_candidates(){
