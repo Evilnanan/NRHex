@@ -340,4 +340,4 @@ tools/HexBuild/StormAudio.cs直接从当前sd.bhd／sd.bdt选择性提取cs_m19�
 
 ## 调酒师
 
-`tools/HexBuild/Bartender.cs`、`tools/build_bartender_hks.py`在原生“切换武器附魔”链路中接入隐士专属海克斯，将属性选择改为魔、火、雷、圣轮换，强度、时长及适用条件全部复用原生。`ambulance::env`提供准确拥有查询，`reward_choices::exclusive_role`同时约束普通抽取和惊喜盲盒。MMV共用同一选择片段，原生依据与验证边界见[研究记录](research/bartender.md)。
+`tools/HexBuild/Bartender.cs`、`tools/build_bartender_hks.py`在原生“切换武器附魔”链路中接入隐士专属海克斯，将属性选择改为魔、火、雷、圣轮换，强度、时长及适用条件全部复用原生。`bartender::can_enchant`读取本次切换手的实时允许附魔位，不可附魔时不推进轮换；`ambulance::env`提供准确拥有及附魔资格查询，`reward_choices::exclusive_role`同时约束普通抽取和惊喜盲盒。MMV共用同一选择片段，原生依据与验证边界见[研究记录](research/bartender.md)。

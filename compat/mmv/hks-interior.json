@@ -279,7 +279,7 @@
     },
     "WeaponChangeCommonFunction": {
       "originalHash": "fb0727ba21dd5618bad2ad32db62d74d79c9725f6cea47b80844e9a2f4f13729",
-      "nrhexHash": "c99254b9cf4a7004259e0d7ea5a0562c0f6a53cc294d56820cf26110184c55e0",
+      "nrhexHash": "3c1d6b82705dc11d934ac27da399db57dd9a16ba895356bd92e730495dc50613",
       "mmvFunctionHash": "6562679dfb47b0a584f120286c9f31d388f802677e918b49f0d227ac5520e9f4",
       "actions": [
         {
@@ -298,7 +298,7 @@
               "name": "NRHexMMV_BartenderRoll",
               "range": [
                 75,
-                145
+                155
               ],
               "register": 1,
               "old": "math.random(1, 100)"

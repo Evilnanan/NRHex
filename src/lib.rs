@@ -1,5 +1,6 @@
 #![allow(non_snake_case, clippy::missing_safety_doc)]
 mod ambulance;
+mod bartender;
 #[cfg(feature="cage-lifecycle-probe")]mod cage_lifecycle_probe;
 #[cfg(feature="cage-demand")]mod cage_demand;
 #[cfg(all(feature="cage-demand",feature="cage-lifecycle-probe"))]

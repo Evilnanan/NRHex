@@ -122,6 +122,13 @@ pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
   let actor=read_ptr(context);let base=BASE.load(Ordering::Acquire);
   return i32::from(actor!=0&&is_local(actor,base)&&has_effect(actor,95004900,base));
  }
+ if code==crate::bartender::ELIGIBILITY_QUERY{
+  if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}
+  let actor=read_ptr(context);let base=BASE.load(Ordering::Acquire);
+  if actor==0||!is_local(actor,base)||!has_effect(actor,95004900,base){return 0;}
+  let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);
+  return i32::from(crate::bartender::can_enchant(actor,number(vm,2),base));
+ }
  if code==crate::deliberate_punch::QUERY{
   if ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{let base=BASE.load(Ordering::Acquire);let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);crate::deliberate_punch::event(read_ptr(context),number(vm,2)as i32,base);}return 0;
  }

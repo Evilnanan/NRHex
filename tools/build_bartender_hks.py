@@ -11,6 +11,8 @@ from mmv_hks_stage import hash_function
 ROOT = Path(__file__).resolve().parents[1]
 OWNER = 95004900
 QUERY = 990049
+ELIGIBILITY_QUERY = 990050
+LEGACY_HASH = 'c99254b9cf4a7004259e0d7ea5a0562c0f6a53cc294d56820cf26110184c55e0'
 MARKERS = tuple(range(6999981, 6999985))
 FID = 218
 NATIVE_HASH = 'fb0727ba21dd5618bad2ad32db62d74d79c9725f6cea47b80844e9a2f4f13729'
@@ -61,6 +63,11 @@ def patch(source):
         labels[f'next{i}'] = len(rotate)
     rotate += [abx(25, 1, const(75)), abx(25, a+3, const(MARKERS[0]))]
     labels['apply'] = len(rotate)
+    # Keep the selected roll for the native chain, but commit progress only
+    # for the changed hand's live enchantable weapon. a+3 holds its marker.
+    rotate += glob(a, 'env') + [abx(25, a+1, const(ELIGIBILITY_QUERY))] + glob(a+2, 'RELIC_WEAPONCHANGE_ENCHANT') + [abc(2, a, 3, 2)]
+    rotate += glob(a+1, 'TRUE') + [abc(4, 0, a, a+1)]
+    fix.append((len(rotate), 'end')); rotate.append(0)
     for marker in MARKERS: rotate += act(9001, marker)
     # Selected marker remains in a+3, the second argument of this call.
     rotate += glob(a+1, 'act') + [abx(25, a+2, const(2002)), abc(2, a+1, 3, 1)]
@@ -101,6 +108,16 @@ def patch(source):
     return target, ranges
 
 
+def upgrade(source):
+    current = reader(source).functions[FID]
+    if hash_function(current) == LEGACY_HASH:
+        original_source = (ROOT/'assets/original/action/script/c0000.hks').read_bytes()
+        original = reader(original_source).functions[FID]
+        assert not current['children'] and not original['children']
+        source = source[:current['start']] + original_source[original['start']:original['end']] + source[current['end']:]
+    return patch(source)
+
+
 def check(source):
     expected, ranges = patch((ROOT/'assets/original/action/script/c0000.hks').read_bytes())
     f = reader(source).functions[FID]; e = reader(expected).functions[FID]
@@ -126,11 +143,11 @@ def write_plan(source, ranges, mmv):
 if __name__ == '__main__':
     p=argparse.ArgumentParser();p.add_argument('--inplace',action='store_true');p.add_argument('--check',action='store_true');p.add_argument('--write-mmv-plan',type=Path);args=p.parse_args()
     path=ROOT/'dist/mod/action/script/c0000.hks';source=path.read_bytes()
-    if QUERY in reader(source).functions[FID]['constants']: target=source;ranges=check(source)
+    if ELIGIBILITY_QUERY in reader(source).functions[FID]['constants']: target=source;ranges=check(source)
     else:
         assert not args.check, 'Bartender patch missing'
-        target,ranges=patch(source);check(target)
-        out=ROOT/'work/bartender/hks';out.mkdir(parents=True,exist_ok=True)
+        target,ranges=upgrade(source);check(target)
+        out=ROOT/'work/bartender-skip/hks';out.mkdir(parents=True,exist_ok=True)
         (out/'before.hks').write_bytes(source);(out/'c0000.hks').write_bytes(target)
         (out/'validation.json').write_text(json.dumps(dict(ranges=ranges,exactInversePassed=True,onlyOwnershipAndRollAdapted=True),indent=2)+'\n')
         if args.inplace:path.write_bytes(target)

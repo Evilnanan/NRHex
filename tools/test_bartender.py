@@ -5,7 +5,7 @@ from pathlib import Path
 import struct
 import sys
 import unittest
-from build_bartender_hks import OWNER, QUERY, MARKERS, FID, patch, check, reader, ROOT
+from build_bartender_hks import OWNER, QUERY, ELIGIBILITY_QUERY, MARKERS, FID, patch, check, reader, ROOT
 from hks_bytecode import decode
 from mmv_hks_stage import compose, PLAN, runtime
 from mmv_hks_fragments import functions
@@ -54,10 +54,13 @@ class BartenderTests(unittest.TestCase):
         cls.lua.execute(helpers+merged[span['start']:span['end']])
         cls.lua.execute('TRUE=1; FALSE=0; GetSpEffectID=1116; AddSpEffect=2002; FALL_TYPE_DEFAULT=0; SetAIActionState=function() end; ExecPassiveAction=function() return TRUE end')
 
-    def run_chain(self,mode,effects,hand=0,roll=1,deferred=False,eligible=True):
+    def run_chain(self,mode,effects,hand=0,roll=1,deferred=False,eligible=True,can_enchant=(True,True)):
         calls=[];pending=[];buffs=[]
         def env(code,effect=None):
             if code==QUERY:return int(OWNER in effects)
+            if code==ELIGIBILITY_QUERY:
+                self.assertEqual(effect,hand)
+                return int(can_enchant[int(effect)])
             self.assertEqual(code,1116);return int(effect in effects)
         def apply(code,effect):
             effect=int(effect);calls.append((code,effect))
@@ -66,7 +69,7 @@ class BartenderTests(unittest.TestCase):
                 else:
                     self.assertEqual(code,2002)
                     effects.add(effect)
-                    if 7035702<=effect<=7035716 and effect%2==0 and eligible:buffs.append(effect+1)
+                    if 7035702<=effect<=7035716 and effect%2==0 and eligible and can_enchant[hand]:buffs.append(effect+1)
             if deferred:pending.append(update)
             else:update()
         if mode=='bytecode':execute(self.code,self.f['constants'],env,apply,hand,roll)
@@ -113,6 +116,25 @@ class BartenderTests(unittest.TestCase):
                     self.assertEqual(buffs,[expected+1])
                     self.assertEqual(len(calls),2)
                     self.assertEqual(self.run_chain(mode,{7035701},hand,roll),([],[]))
+
+    def test_ineligible_switch_keeps_every_rotation_position(self):
+        for mode in self.modes:
+            for original in (False,True):
+                for deferred in (False,True):
+                    for prior in (None,*MARKERS):
+                        for hand in (0,1):
+                            effects={OWNER,7035701}|({7035700} if original else set())|({prior} if prior else set())
+                            expected=0 if prior is None else (MARKERS.index(prior)+1)%4
+                            for _ in range(3):
+                                can=[True,True];can[hand]=False
+                                calls,buffs=self.run_chain(mode,effects,hand,deferred=deferred,can_enchant=can)
+                                self.assertEqual(buffs,[])
+                                self.assertFalse(any(e in MARKERS for c,e in calls))
+                                self.assertEqual(effects.intersection(MARKERS),{prior} if prior else set())
+                                effects.difference_update(range(7035718,7035722))
+                            calls,buffs=self.run_chain(mode,effects,hand,deferred=deferred)
+                            self.assertEqual(buffs,[7035703+4*expected+2*hand])
+                            self.assertEqual(effects.intersection(MARKERS),{MARKERS[expected]})
 
     def test_native_eligibility_remains_downstream_of_selection(self):
         for mode in self.modes:
