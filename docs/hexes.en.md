@@ -232,4 +232,4 @@ The more damage you take during an empowered Character Skill, the more damage yo
 <!-- hex:95004900 -->
 ## Bartender
 
-Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.
+Switching weapons changes their enchantment affinity.

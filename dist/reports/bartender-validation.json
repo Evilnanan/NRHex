@@ -59,16 +59,16 @@
     "installedFiles": {
       "dist/mod/regulation.bin": "52be705b1a12b352d1540e69820192b94f3802ad2cc772cbe2f26cdca783fb40",
       "dist/mod/event/common.emevd.dcx": "d28ddcf92c0f2ebb64e4dfe2f0402b7d35ce88884db51f33fe9b23a24d07ec40",
-      "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "47b76f4f000e1886d90be3d11a731f083e8192a73c437bbf5613d4730898eaa4",
-      "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "1fd95b333b41ffb4b59165b53dd492f08809cf00436444e95c9cce24e9fb1dbc",
-      "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "08ca6a5aa45ed32c83e1cac4fc230e49eb468591be59548546d626b35fd3b033",
-      "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "22b2c587790b15ec6877bd0e180ef1329b48a95ec5dde97eb36480240d00a897",
+      "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "b9d1a4f7b039ec1f3910d97de9a493dcf54f0c67bd44946fb7e3d7ce193c00db",
+      "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "6e8b18e9357fcd77038858b5a1a552e104d81fcc95433502e400a4ecb99fece3",
+      "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "24883344cdd76698f7d636c050073470d2ace457ebf25a1d9632fbfe2c0e90d3",
+      "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "785396b093a2ea3afdc229c3ed285371bfb66b4bfbbf201c75c815d59bcbe8ae",
       "dist/mmv/mod/regulation.bin": "8864f0ae3874012c16324182e5fbc9c1d5dd85f871d1b681d444a03c9d1c0c57",
       "dist/mmv/mod/event/common.emevd.dcx": "46ee2674e8d7beadfa4a49d4b8fc243fdfcc33684e85eca877f9be13e0194cbb",
-      "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "6fee5979f1b84889c6596277d6cbbf7bbe75668ae2fc9e5e34f464ec28cceda7",
-      "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "b4f352bf8ce61b3745d24ef83ae1ee3f958537ca056634e486c13b3dc8e17a72",
-      "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "e7e3cd1f908bb5e234e9f4af9539c8c9a39532cebcb7669d80ef9be0a00de1a1",
-      "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "d4f494a0ae0bb1dbfc32a21225edc351cb1815022bd88011b8d6e48c9a95f1ee",
+      "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "fb7b7c50f162ecf88b2350b6f628e66f68559003ee59af54aba0b4d016f9669c",
+      "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "cf002dfadc0bb0be45dfb7f777399eae4046013db163262b79b16326a2afe076",
+      "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "219e30372b1cf7d3ce08746f81daa2eeb7c0c8d4978dc25d0b2bb58d912f7151",
+      "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "ec20942e68cac479fc3a493d4a80be3ee533c3862b49456ead1583d2aa63b040",
       "dist/mmv/mod/action/script/c0000.hks": "0269a89c668bb75aa3f9bb1a1bd398d13793b48334d4dba8e6faee55dddef363",
       "dist/natives/NRHex.dll": "9e3d45222ce2fc6ab65a909caf5d3afb2fd4f8180870de982002aad68d90ae53",
       "dist/mmv/natives/NRHex.dll": "68fbfb07b0a366f5e925cd6ff787683c8f533c7c2c808f81cf762fdb014da83d"
@@ -174,11 +174,208 @@
     "tools/mmv_hks_stage.py": "bedd39552e8962d64103ec4b388399136fb2a8c900387e156f0294d926235b06",
     "tools/test_mmv_hks.py": "278607ac68c44072fd446b871903b2fff27a07aa131cef4ab02c6cab6846ea4a",
     "compat/mmv/hks-interior.json": "0fa63fa4ae927d9d375e672b3a56668696206954d395825ff918f05e9ee13d70",
-    "docs/hexes.md": "d8e79999b50fd5dfe868357a82d6890b6b163cc62606bd794ffa06b8dc1dd640",
-    "docs/hexes.en.md": "b3a57c2be5dff9a120ee96fcfd418daaec0d06033aeb5cab7f5bbd859226e514",
+    "docs/hexes.md": "3e244d3afaf8210c4e10bd9bf93c53a5687ca5381fb008faf143ad9327049d9d",
+    "docs/hexes.en.md": "ff4a53db73fa58a11149a6e9cb19fe349b07cb3018239ebff03ac4c716807b55",
     "Cargo.toml": "4f1ceb47b0011de9a16b4e26bd33eeab680ad0f3f301825b78140dec0f176692",
     "Cargo.lock": "df9c823cb675f18bae3a76c209a4c1c04a098fd377928bb9df34641623b1999b"
   },
   "gameplayVerified": false,
-  "multiplayerVerified": false
+  "multiplayerVerified": false,
+  "descriptionUpdate": {
+    "onlyOwner": 95004900,
+    "mechanicsUnchanged": true,
+    "parameterAndDllHashesUnchanged": true,
+    "readback": {
+      "standalone": {
+        "source": "docs/hexes.md",
+        "sourceSha256": "3E244D3AFAF8210C4E10BD9BF93C53A5687CA5381FB008FAF143AD9327049D9D",
+        "englishSource": "docs/hexes.en.md",
+        "englishSourceSha256": "FF4A53DB73FA58A11149A6E9CB19FE349B07CB3018239EBFF03AC4C716807B55",
+        "statusSource": "data/text/status-effects.json",
+        "statusSourceSha256": "3FB767674CABF0B303659C736560802C7B348483540FC4E561079B81CD565DC5",
+        "statusOnly": false,
+        "reports": [
+          {
+            "language": "zhocn",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "47B76F4F000E1886D90BE3D11A731F083E8192A73C437BBF5613D4730898EAA4",
+            "outputSha256": "B9D1A4F7B039EC1F3910D97DE9A493DCF54F0C67BD44946FB7E3D7CE193C00DB",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95004900,
+                "before": "每次切换武器时，按魔、火、雷、圣的顺序轮换武器附魔。",
+                "after": "每次切换武器时，切换武器的附魔属性"
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95004900,
+                "before": "每次切换武器时，按魔、火、雷、圣的顺序轮换武器附魔。",
+                "after": "每次切换武器时，切换武器的附魔属性"
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95004900,
+                "before": "每次切换武器时，按魔、火、雷、圣的顺序轮换武器附魔。",
+                "after": "每次切换武器时，切换武器的附魔属性"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "zhocn",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "1FD95B333B41FFB4B59165B53DD492F08809CF00436444E95C9CCE24E9FB1DBC",
+            "outputSha256": "6E8B18E9357FCD77038858B5A1A552E104D81FCC95433502E400A4ECB99FECE3",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95004900,
+                "before": "每次切换武器时，按魔、火、雷、圣的顺序轮换武器附魔。",
+                "after": "每次切换武器时，切换武器的附魔属性"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "08CA6A5AA45ED32C83E1CAC4FC230E49EB468591BE59548546D626B35FD3B033",
+            "outputSha256": "24883344CDD76698F7D636C050073470D2ACE457EBF25A1D9632FBFE2C0E90D3",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95004900,
+                "before": "Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.",
+                "after": "Switching weapons changes their enchantment affinity."
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95004900,
+                "before": "Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.",
+                "after": "Switching weapons changes their enchantment affinity."
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95004900,
+                "before": "Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.",
+                "after": "Switching weapons changes their enchantment affinity."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "22B2C587790B15EC6877BD0E180EF1329B48A95EC5DDE97EB36480240D00A897",
+            "outputSha256": "785396B093A2EA3AFDC229C3ED285371BFB66B4BFBBF201C75C815D59BCBE8AE",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95004900,
+                "before": "Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.",
+                "after": "Switching weapons changes their enchantment affinity."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          }
+        ]
+      },
+      "mmv": {
+        "source": "docs/hexes.md",
+        "sourceSha256": "3E244D3AFAF8210C4E10BD9BF93C53A5687CA5381FB008FAF143AD9327049D9D",
+        "englishSource": "docs/hexes.en.md",
+        "englishSourceSha256": "FF4A53DB73FA58A11149A6E9CB19FE349B07CB3018239EBFF03AC4C716807B55",
+        "statusSource": "data/text/status-effects.json",
+        "statusSourceSha256": "3FB767674CABF0B303659C736560802C7B348483540FC4E561079B81CD565DC5",
+        "statusOnly": false,
+        "reports": [
+          {
+            "language": "zhocn",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "6FEE5979F1B84889C6596277D6CBBF7BBE75668AE2FC9E5E34F464EC28CCEDA7",
+            "outputSha256": "FB7B7C50F162ECF88B2350B6F628E66F68559003EE59AF54ABA0B4D016F9669C",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95004900,
+                "before": "每次切换武器时，按魔、火、雷、圣的顺序轮换武器附魔。",
+                "after": "每次切换武器时，切换武器的附魔属性"
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95004900,
+                "before": "每次切换武器时，按魔、火、雷、圣的顺序轮换武器附魔。",
+                "after": "每次切换武器时，切换武器的附魔属性"
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95004900,
+                "before": "每次切换武器时，按魔、火、雷、圣的顺序轮换武器附魔。",
+                "after": "每次切换武器时，切换武器的附魔属性"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "zhocn",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "B4F352BF8CE61B3745D24EF83AE1EE3F958537CA056634E486C13B3DC8E17A72",
+            "outputSha256": "CF002DFADC0BB0BE45DFB7F777399EAE4046013DB163262B79B16326A2AFE076",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95004900,
+                "before": "每次切换武器时，按魔、火、雷、圣的顺序轮换武器附魔。",
+                "after": "每次切换武器时，切换武器的附魔属性"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "E7E3CD1F908BB5E234E9F4AF9539C8C9A39532CEBCB7669D80EF9BE0A00DE1A1",
+            "outputSha256": "219E30372B1CF7D3CE08746F81DAA2EEB7C0C8D4978DC25D0B2BB58D912F7151",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95004900,
+                "before": "Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.",
+                "after": "Switching weapons changes their enchantment affinity."
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95004900,
+                "before": "Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.",
+                "after": "Switching weapons changes their enchantment affinity."
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95004900,
+                "before": "Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.",
+                "after": "Switching weapons changes their enchantment affinity."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "D4F494A0AE0BB1DBFC32A21225EDC351CB1815022BD88011B8D6E48C9A95F1EE",
+            "outputSha256": "EC20942E68CAC479FC3A493D4A80BE3EE533C3862B49456EAD1583D2AA63B040",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95004900,
+                "before": "Switching weapons cycles their enchantment through Magic, Fire, Lightning, and Holy.",
+                "after": "Switching weapons changes their enchantment affinity."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          }
+        ]
+      }
+    }
+  }
 }
