@@ -5,9 +5,9 @@ pub const ELIGIBILITY_QUERY:i32=990050;
 struct WeaponRef{id:i32,padding:u32,row:usize,base_id:i32,base_padding:u32,reinforce_id:i32,reinforce_padding:u32,reinforce_row:usize,version:u32,version_padding:u32}
 
 pub unsafe fn can_enchant(actor:usize,hand:f32,base:usize)->bool{
- // RELIC_WEAPONCHANGE_ENCHANT: 0 right, 1 left. Do not fall back to
- // the other hand, and reject missing/non-integral HKS arguments.
- let source=if hand==0.{-2}else if hand==1.{-1}else{return false;};
+ // RELIC_WEAPONCHANGE_ENCHANT: 0 right, 1 left; native weapon sources
+ // are -1 right, -2 left (381220). Never fall back to the other hand.
+ let source=if hand==0.{-1}else if hand==1.{-2}else{return false;};
  if actor==0||base==0{return false;}
  let vtable=read_ptr(actor);if vtable==0{return false;}
  let address=read_ptr(vtable+0x250);if address==0{return false;}
@@ -25,7 +25,9 @@ pub unsafe fn can_enchant(actor:usize,hand:f32,base:usize)->bool{
  use super::*;
  thread_local!{static ROW:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
  unsafe extern "system" fn weapon(actor:usize,source:i32)->i32{
-  assert!(matches!(source,-2|-1));crate::read_i32(actor+if source==-2{8}else{12})
+  // Native 381220 maps -1 to the selected odd (right) slot, -2 to
+  // the selected even (left) slot. Keep this independent of HKS hand IDs.
+  assert!(matches!(source,-2|-1));crate::read_i32(actor+if source==-1{8}else{12})
  }
  unsafe extern "system" fn lookup(out:*mut WeaponRef,id:i32)->usize{
   assert!(matches!(id,1000|33000000|34000000|1000025|99000025));
