@@ -20,6 +20,9 @@ if(args.Contains("--stage-translations")){
 if(args.Contains("--snack-text-stage")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/snack-price/texts"),allRewards:true,onlyIds:new[]{Snack.Owner});return;
 }
+if(args.Contains("--echo-cost-texts")){
+ bool mmv=args.Contains("--mmv");HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/echo-cost70",mmv?"mmv-texts":"texts"),allRewards:true,onlyIds:new[]{95003500},inputMod:Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"));return;
+}
 if(args.Contains("--echo-expanded-text-stage")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,"work/echo-expanded/texts"),allRewards:true,onlyIds:new[]{95003500});return;
 }

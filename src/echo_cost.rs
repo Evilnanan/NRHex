@@ -10,8 +10,8 @@ pub const GETTER_PATTERN:&str="48 8B 41 08 48 85 C0 74 13 84 D2 75 05 0F BF 40 1
 pub static ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(std::ptr::null_mut());
 
 fn adjusted(cost:i32,kind:u8,owned:bool)->i32{
- // Positive integer costs multiplied by 1.5: round half up, without overflow.
- if owned&&matches!(kind,0|1)&&cost>0{cost.saturating_add(cost/2+cost%2)}else{cost}
+ // Positive integer costs multiplied by 1.7: round half up, without overflow.
+ if owned&&matches!(kind,0|1)&&cost>0{((i64::from(cost)*17+5)/10).min(i64::from(i32::MAX)) as i32}else{cost}
 }
 unsafe extern "system" fn stamina(context:usize,row:usize,cost:i32)->i32{
  let base=BASE.load(Ordering::Acquire);

@@ -167,7 +167,7 @@ Sprinting, dashing, and running toward a near-death ally consume no stamina. Res
 <!-- hex:95003500 -->
 ## Echo Casting
 
-Increases sorcery and incantation FP consumption by 100% and stamina consumption by 50%. Creates an additional projectile after casting.
+Increases sorcery and incantation FP consumption by 100% and stamina consumption by 70%. Creates an additional projectile after casting.
 
 <!-- hex:95003600 -->
 ## Set Meal
