@@ -46,7 +46,7 @@
 | 大力 | `strength.rs`、`strength_sword.rs`、`verify_strength_native.py`、`verify_mighty_sword_native.py`；亮剑持有者解除隐士／复仇者抽取限制。联动法术在完整43D260伤害／反应入口提升输入冲击，不再核对施法者距离；普通本地所属弹丸仍按5米命中点距离取得联动提升；hit+228原生来源kind=3识别弹丸，包含箭矢／弩矢／战技子弹。武器本体仍在构造时提升，联动法术延后处理以免重复；原生439E80目标反应映射及后续消费者读取提升值。退出整次结算后仅还原输入，保留原生输出，缓存命中与同一命中重入不重复提升。 |
 | 逃跑计划 | `escape.rs`、`verify_escape_native.py` |
 | 嘉豪身法 | `jiahao.rs`、`build_jiahao.py`、`JiahaoTae` |
-| 吵闹鬼 | `noisy.rs`、`verify_noisy.py`、`HexBuild`的私有熔岩链 |
+| 吵闹鬼 | `noisy.rs`、`noisy_ground.rs`、`verify_noisy.py`、`HexBuild`的私有熔岩链；[脚下落点](research/noisy-placement.md) |
 | 刷怪笼 | `HexBuild/Cages.cs`、`HexBuild/CagePresentation.cs`、`verify_cage_presentation.py`、`verify_cages.py`、`cage_local_events.py`、`build.ps1`、`data/reference/world/cage-bosses.json`；13种组合在4张地牢模板中，每组仅首成员的本地Birth在中央区域prefix+3900播放一次690047黑雾，其他成员用零行跳过替代原黑雾指令。单Boss不变，所有成员的4秒出场、动作、加载／重连分支、AI和奖励不变，无地图修改。区域类型1与指令ABI依据[NR EMEDF](https://soulsmods.github.io/emedf/nr-emedf.html#SpawnOneshotSFX)。增量入口--cage-presentation严格匹配旧事件并回读188个目标事件；52组／1504条成员时序已模拟，实机渲染与联机待验收。 |
 | 百般武艺 | `arts.rs`、`arts_data.rs`、`build_arts_data.py`、`build_arts_hks.py` |
 | 气球、强化【死灵术】、别停止咏唱 | `balloon.rs`／`balloon_runtime.rs`／`ability_damage.rs`（只提供基础攻击值，余下由原生结算）、`spirit.rs`／`spirit_runtime.rs`、`chant.rs`／`build_chant_hks.py`／`verify_chant_hks.py` |

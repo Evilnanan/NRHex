@@ -45,6 +45,7 @@ mod jiahao;
 mod arts;
 mod arts_network;
 mod noisy;
+mod noisy_ground;
 mod balloon;
 mod ability_damage;
 mod glass_cannon;

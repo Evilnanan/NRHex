@@ -93,7 +93,7 @@ pub unsafe extern "system" fn emit(manager:usize,out:usize,descriptor:usize,erro
  let original:Emit=std::mem::transmute(EMIT_ORIGINAL.load(Ordering::Acquire));
  let value=if ACTIVE.load(Ordering::Acquire)&&REPLAY.with(Cell::get).ticket==0{scope(descriptor,BASE.load(Ordering::Acquire))}else{None};
  let _guard=ScopeGuard(SCOPE.with(|s|s.replace(value.map_or(Scope::default(),|owner|Scope{descriptor,owner,consumed:false}))));
- let result=original(manager,out,descriptor,error);
+ let result=crate::noisy_ground::emit(original,manager,out,descriptor,error);
  crate::wraith::emitted(descriptor,out,BASE.load(Ordering::Acquire));
  result
 }
@@ -151,6 +151,7 @@ unsafe fn snapshot(scope:Scope,payload:usize,base:usize)->Option<Ticket>{
  Some(Ticket{descriptor:d,pose:ptr::read_unaligned((payload+0x190)as*const[u8;0x40]),base,wait:replay_delay(magic),area:replay.is_some(),shots:Arc::default(),owner:scope.owner,volley,shared:None})
 }
 pub unsafe extern "system" fn factory(manager:usize,payload:usize,error:usize)->usize{
+ crate::noisy_ground::factory(payload);
  let original:Factory=std::mem::transmute(FACTORY_ORIGINAL.load(Ordering::Acquire));
  let scope=SCOPE.with(|s|{let v=s.get();s.set(Scope{consumed:true,..v});v});
  let base=BASE.load(Ordering::Acquire);
