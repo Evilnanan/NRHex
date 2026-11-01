@@ -199,7 +199,7 @@ static class Parry {
    foreach(var e in selected)for(int index=0;index<tiers;index++){
     float beforeMilliseconds=totalMilliseconds[index]/2f;
     float beforeSeconds=beforeMilliseconds/1000f,afterSeconds=(totalMilliseconds[index]-beforeMilliseconds)/1000f;
-    var b=guardTemplate.GetParameterBytes(false).ToArray();BitConverter.GetBytes(GuardJudge).CopyTo(b,8);BitConverter.GetBytes((short)(first+indices[Key(e)]*tiers+index)).CopyTo(b,14);
+    var b=guardTemplate.GetParameterBytes(false).ToArray();BitConverter.GetBytes(ParryCounterHit.TagBase+first+indices[Key(e)]*tiers+index).CopyTo(b,8);BitConverter.GetBytes((short)(first+indices[Key(e)]*tiers+index)).CopyTo(b,14);
     a.Events.Add(new TAE.Event(Math.Max(0,e.StartTime-beforeSeconds),e.StartTime+afterSeconds,0,guardTemplate.Unk04,b,false){Group=group});added++;
    }
   }f.Bytes=TaeTiming.Rewrite(before[f.ID],t,Generated);}
@@ -232,7 +232,7 @@ static class Parry {
    $"pub const FIRST:u16={first};\npub const MIN_TIER:usize={minTier};\npub const TIERS:usize={tiers};\npub const CONDITIONS:&[(i32,u8,u16,u8)]=&[\n"+string.Join("\n",keys.Select(k=>$" ({k.Judge},{k.Source},{unchecked((ushort)k.Required)},{k.Extra}),"))+"\n];\n"+
    "pub const WEAPONS:&[(i32,f32)]=&[\n"+string.Join("\n",weapons.Select(r=>$" ({r.ID},{Float(r["saWeaponDamage"].Value)}),"))+"\n];\n"+
    "pub const BEHAVIORS:&[(i32,f32)]=&[\n"+string.Join("\n",behaviors.Select(r=>$" ({r.ID},{Float(attacks[Convert.ToInt32(r["refId"].Value)]["atkSuperArmorCorrection"].Value)}),"))+"\n];\n";
-  File.WriteAllText(Path.Combine(work,"parry_data.rs"),text);
+  File.WriteAllText(Path.Combine(work,"parry_data.rs"),text+ParryCounterHit.Catalog(behaviors,attacks));
   File.WriteAllText(Path.Combine(work,"actions-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),clips,added,verifiedWindows,alignmentOnlyChanges,conditionCount=keys.Length,firstState=first,endState=first+keys.Length*tiers,minTier,tiers,timeUnit="milliseconds",totalMilliseconds,beforeMilliseconds=pre,afterMilliseconds=post,anchor="each weapon attack event start",tier="clamp(ceil(basePoise/2),2,8)",weaponRows=weapons.Length,behaviorRows=behaviors.Length,guardJudge=GuardJudge,nativeGuardJudge=460,guardEventType=0,guardFlag=3,onlyWeaponBehaviorEvents=true,originalGuardClipsUntouched=true,originalEventsPreserved=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine($"PASS: {clips} attack clips, {added} conditional guard windows, {keys.Length} attack conditions; original events preserved");
  }

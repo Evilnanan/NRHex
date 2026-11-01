@@ -82,6 +82,24 @@ pub const RVA:usize=HAS_STATE_RVA;
 // TAE stores this tag in the per-frame guard behavior field. Resolve it to 460
 // before normal behavior lookup; never cache a window in wall time.
 pub const GUARD_JUDGE:i32=95002400;
+// The current TAE guard retains its condition key. This is an integer behavior
+// tag, not an effect ID; native lookup still receives ordinary guard 460.
+pub const GUARD_CONDITION_BASE:i32=96000000;
+fn guard_condition(judge:i32)->Option<((i32,u8,u16,u8),u8)>{
+ let state=u16::try_from(judge.checked_sub(GUARD_CONDITION_BASE)?).ok()?;
+ condition(state)
+}
+fn private_guard(judge:i32)->bool{judge==GUARD_JUDGE||guard_condition(judge).is_some()}
+unsafe fn counter_guard(player:usize)->bool{
+ let action=read_ptr(read_ptr(player+0x1b8)+8);
+ if action==0||ptr::read((action+0x58) as *const u8)&0x20==0{return false;}
+ let Some(((judge,forced,_,extra),_))=guard_condition(crate::read_i32(action+0x24c)) else{return false;};
+ let vt=read_ptr(player);
+ let get_source:unsafe extern "system" fn(usize)->i32=std::mem::transmute(read_ptr(vt+0x260));
+ let Some(source)=source(forced,if forced==0{get_source(player)}else{0}) else{return false;};
+ let behavior:crate::ArtsBehaviorFn=std::mem::transmute(read_ptr(vt+0x328));
+ data::COUNTER_BEHAVIORS.binary_search(&behavior(player,judge,source,0,extra)).is_ok()
+}
 pub const COST_RVA:usize=0x43a0fd;
 pub const COST_RESUME_RVA:usize=0x43a18e;
 pub const COST_PATTERN:&str="F3 41 0F 10 B6 4C 02 00 00 F3 41 0F 59 76 28 49 8B CF E8 0C 20 FF FF";
@@ -90,7 +108,7 @@ pub const REPEL_PATTERN:&str="48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41
 pub static COST_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static COST_RESUME:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static REPEL_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-pub fn native_guard_judge(judge:i32)->i32{if judge==GUARD_JUDGE{460}else{judge}}
+pub fn native_guard_judge(judge:i32)->i32{if private_guard(judge){460}else{judge}}
 thread_local!{static GUARD_SCOPES:RefCell<Vec<Option<(usize,u8,i32)>>>=const{RefCell::new(Vec::new())};}
 #[cfg(test)]thread_local!{static TEST_CONTEXT:std::cell::Cell<Option<(bool,usize)>>=const{std::cell::Cell::new(None)};}
 fn active_base()->Option<usize>{
@@ -110,7 +128,7 @@ unsafe fn owned_action(player:usize)->Option<usize>{
 unsafe fn attack_guard(player:usize)->bool{
  let Some(action)=owned_action(player) else{return false;};
  if !two_handed(player)||!grounded(player){return false;}
- (ptr::read((action+0x58) as *const u8)&0x20!=0&&crate::read_i32(action+0x24c)==GUARD_JUDGE)||
+ (ptr::read((action+0x58) as *const u8)&0x20!=0&&private_guard(crate::read_i32(action+0x24c)))||
  followup(player,active_base().unwrap_or(0))
 }
 unsafe fn followup(player:usize,base:usize)->bool{
@@ -139,13 +157,13 @@ pub unsafe fn enter(module:usize,hit:usize){
   // A hand-style change or takeoff can leave this frame's private TAE guard
   // bit behind. Suppress only that bit, never an ordinary native guard.
   if !two_handed(player)||!grounded(player)||!damaging_contact(hit){
-   if flags&0x20==0||judge!=GUARD_JUDGE{return None;}
+   if flags&0x20==0||!private_guard(judge){return None;}
    ptr::write((action+0x58) as *mut u8,flags&!0x20);
    return Some((action,flags&0x20,judge));
   }
   if !followup(player,base){return None;}
   ptr::write((action+0x58) as *mut u8,flags|0x20);
-  ptr::write_unaligned((action+0x24c) as *mut i32,GUARD_JUDGE);
+  ptr::write_unaligned((action+0x24c) as *mut i32,if flags&0x20!=0&&private_guard(judge){judge}else{GUARD_JUDGE});
   Some((action,flags&0x20,judge))
  })();GUARD_SCOPES.with(|s|s.borrow_mut().push(saved));
 }
@@ -173,6 +191,7 @@ unsafe fn on_guard_notification(module:usize,hit:usize,kind:i32)->(usize,bool){
  // accepted guard. No arbitrary timer: slow/multi-hit counters retain the
  // native category-103 multiplier for their whole attack, never stacking it.
  let present=has_effect(player,COUNTER,base);
+ let counter_hit=enabled&&present&&counter_guard(player);
  if enabled&&!present{apply(player,COUNTER,0);}
  else if !enabled&&present{remove(manager,COUNTER);}
  // One opportunity per accepted attack guard. Repeated guards while ready
@@ -181,12 +200,17 @@ unsafe fn on_guard_notification(module:usize,hit:usize,kind:i32)->(usize,bool){
   if !has_effect(player,RECOVERY_READY,base){apply(player,RECOVERY_READY,0);}
  }else if has_effect(player,RECOVERY_READY,base){remove(manager,RECOVERY_READY);}
  if !enabled{return (0,false);}
+ // An accepted parry during a Clash guard counter is also a recovery hit.
+ // Submit through the existing shared effect hook: it consumes READY before
+ // healing, so subsequent damage targets/segments cannot spend it again.
+ // Each new accepted guard still supplies one opportunity, as before.
+ if counter_hit{apply(player,RECOVERY,0);}
  // Re-applying an existing SpEffect does not reliably restart its init FFX.
  // Native reaction TAE events now own the one-shot spark and sound.
  if has_effect(player,CHAIN,base){remove(manager,CHAIN);}apply(player,CHAIN,0);
  (read_ptr(read_ptr(player+0x1b8)+8),continuing)
 }
-// Called only for our native category-103 on-hit pulse, through the existing
+// Called for the category-103 hit or counter-parry pulse, through the existing
 // shared effect hook. Remove the actor-owned opportunity synchronously BEFORE
 // submitting healing, so same-frame targets, delayed hits and reentry share it.
 // Keep COUNTER intact: every damage segment must still receive its x2 bonus.
@@ -331,9 +355,12 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
  // Exercise the real accepted-hit callback with isolated native API stubs.
  #[test]fn counter_arms_only_on_accepted_attack_guards_and_ordinary_guard_clears_it(){unsafe{
   let _lock=NOTIFY_TEST.lock().unwrap();
-  #[repr(C)]#[derive(Default)]struct Effects{reserved:[usize;2],owner:usize,ids:Vec<i32>,counter_applies:usize}
+  #[repr(C)]#[derive(Default)]struct Effects{reserved:[usize;2],owner:usize,ids:Vec<i32>,counter_applies:usize,recoveries:usize}
   unsafe extern "system" fn has(m:usize,id:i32)->u8{u8::from((*(m as *const Effects)).ids.contains(&id))}
-  unsafe extern "system" fn add(p:usize,id:i32,_:u8)->u8{let e=&mut *(read_ptr(p+0x190) as *mut Effects);if id==COUNTER{e.counter_applies+=1;}e.ids.push(id);1}
+  unsafe extern "system" fn add(p:usize,id:i32,_:u8)->u8{
+   if id==RECOVERY{return recover_once(p,active_base().unwrap(),||{(*(read_ptr(p+0x190) as *mut Effects)).recoveries+=1;1});}
+   let e=&mut *(read_ptr(p+0x190) as *mut Effects);if id==COUNTER{e.counter_applies+=1;}e.ids.push(id);1
+  }
   unsafe extern "system" fn remove(m:usize,id:i32)->u8{(*(m as *mut Effects)).ids.retain(|i|*i!=id);1}
   unsafe extern "system" fn source(_:usize)->i32{-1}
   unsafe extern "system" fn notify(m:usize,_:usize,k:i32,d:u64)->u64{
@@ -350,7 +377,7 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   }
   TEST_CONTEXT.with(|s|s.set(Some((true,base))));
   let mut effects=Effects{ids:vec![OWNER],..Effects::default()};
-  let mut actor=vec![0u8;0x718];let mut vt=vec![0usize;0x268/8];
+  let mut actor=vec![0u8;0x718];let mut vt=vec![0usize;0x330/8];
   let mut stats=vec![0u8;0x168];let mut action=vec![0u8;0x260];
   let mut physics=[0u8;0x98];physics[0x92]=1;
   let mut modules=[0usize;0x70/8];modules[0]=stats.as_mut_ptr() as usize;modules[1]=action.as_mut_ptr() as usize;modules[0x68/8]=physics.as_mut_ptr() as usize;
@@ -385,6 +412,35 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   on_guard_notification(m,h,3);assert!(effects.ids.contains(&RECOVERY_READY));
   for _ in 0..8{on_guard_notification(m,h,3);}
   assert_eq!(effects.ids.iter().filter(|&&id|id==RECOVERY_READY).count(),1);
+  // The current guard tag resolves the player's attack, not the incoming hit
+  // or a lingering previous COUNTER buff. Reaction-only chains never heal.
+  assert_eq!(effects.recoveries,0);
+  unsafe extern "system" fn counter_behavior(_:usize,judge:i32,source:i32,flags:u32,extra:u8)->i32{
+   assert_eq!(judge,380);assert_eq!(source,-1);assert_eq!(flags,0);assert_eq!(extra,0);
+   data::COUNTER_BEHAVIORS[0]
+  }
+  unsafe extern "system" fn ordinary_behavior(_:usize,_:i32,_:i32,_:u32,_:u8)->i32{-1}
+  let index=data::CONDITIONS.iter().position(|&v|v==(380,0,0,0)).unwrap();
+  let tag=GUARD_CONDITION_BASE+i32::from(data::FIRST)+(index*TIERS) as i32;
+  action[0x24c..0x250].copy_from_slice(&tag.to_le_bytes());
+  vt[0x328/8]=counter_behavior as *const () as usize;
+  // enter/leave must retain the attack tag even while CHAIN is still active.
+  enter(m,h);assert_eq!(crate::read_i32(action.as_ptr() as usize+0x24c),tag);
+  on_guard_notification(m,h,3);leave();
+  assert_eq!(effects.recoveries,1);assert!(!effects.ids.contains(&RECOVERY_READY));
+  for _ in 0..8{assert_eq!(recover_once(a,base,||panic!("post-parry target healed twice")),0);}
+  // A fresh accepted guard still grants one chance; cancelled notifications do not.
+  hit[0x2c1]=2;on_guard_notification(m,h,3);assert_eq!(effects.recoveries,1);hit[0x2c1]=0;
+  on_guard_notification(m,h,3);assert_eq!(effects.recoveries,2);
+  vt[0x328/8]=ordinary_behavior as *const () as usize;
+  on_guard_notification(m,h,3);assert_eq!(effects.recoveries,2);assert!(effects.ids.contains(&RECOVERY_READY));
+  // Without a preceding Clash parry, even a counter window only arms READY.
+  effects.ids.retain(|id|*id!=COUNTER);vt[0x328/8]=counter_behavior as *const () as usize;
+  let applies=effects.counter_applies;on_guard_notification(m,h,3);
+  assert_eq!(effects.recoveries,2);assert!(effects.ids.contains(&RECOVERY_READY));
+  effects.counter_applies=applies;
+  action[0x24c..0x250].copy_from_slice(&GUARD_JUDGE.to_le_bytes());
+
 
   assert_eq!(feedback_query(manager,FEEDBACK_RIGHT),Some(1));assert_eq!(feedback_query(manager,FEEDBACK_LEFT),Some(0));
   assert_eq!(feedback_query(manager,FEEDBACK_SOUND),Some(1));
@@ -503,7 +559,7 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
    action[0x58]=0x20;action[0x24c..0x250].copy_from_slice(&GUARD_JUDGE.to_le_bytes());actor[0x710]=0;
    stats[0x140..0x144].copy_from_slice(&100i32.to_le_bytes());ptr::write_unaligned((a+0x190) as *mut usize,1);TEST_CONTEXT.with(|s|s.set(Some((true,base))));
   }
-  for judge in [-1,460,1234,GUARD_JUDGE]{assert_eq!(native_guard_judge(judge),if judge==GUARD_JUDGE{460}else{judge});}
+  for judge in [-1,460,1234,GUARD_JUDGE]{assert_eq!(native_guard_judge(judge),if private_guard(judge){460}else{judge});}
   // Native chain lifetime authorizes the following hit after the original
   // attack animation has ended. Nested calculations restore flags exactly.
   action[0x58]=0x80;action[0x24c..0x250].copy_from_slice(&123i32.to_le_bytes());
@@ -666,6 +722,7 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   assert!(condition(data::FIRST+(data::CONDITIONS.len()*TIERS) as u16).is_none());
  }
  #[test]fn compiled_tables_have_unique_sorted_keys_and_native_stance_samples(){
+  assert!(data::COUNTER_BEHAVIORS.windows(2).all(|p|p[0]<p[1]));
   for table in [data::WEAPONS,data::BEHAVIORS]{assert!(table.windows(2).all(|p|p[0].0<p[1].0));}
   assert_eq!(lookup(data::WEAPONS,1000000),Some(3.));
   assert_eq!(lookup(data::WEAPONS,2000000),Some(5.));

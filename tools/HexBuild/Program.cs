@@ -83,6 +83,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--parry-counter-hit-stage")){ParryCounterHit.Stage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--bartender-stage")){Bartender.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--deliberate-punch-stage")){DeliberatePunch.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}

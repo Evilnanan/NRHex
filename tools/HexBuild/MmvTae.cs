@@ -10,7 +10,7 @@ static class MmvTae {
         return x.SequenceEqual(y) || alignment && y.Length == x.Length + 8 && y.Take(x.Length).SequenceEqual(x) && y.Skip(x.Length).All(v => v == 0);
     }
     static object Event(TAE.Event e) => new { e.Type, e.Unk04, e.StartTime, e.EndTime, group = e.Group?.GroupType, data = Convert.ToHexString(e.GetParameterBytes(false)) };
-    static bool Guard(TAE.Event e) => e.Type == 0 && e.GetParameterBytes(false).Length >= 12 && BitConverter.ToInt32(e.GetParameterBytes(false), 8) == 95002400;
+    static bool Guard(TAE.Event e) => e.Type == 0 && e.GetParameterBytes(false).Length >= 12 && (BitConverter.ToInt32(e.GetParameterBytes(false), 8) == 95002400 || ParryCounterHit.IsTag(BitConverter.ToInt32(e.GetParameterBytes(false), 8)));
     public static void Stage(string root, string mmv, Func<string, Memory<byte>, PARAM> parse) {
         const string relative = "chr/c0000.anibnd.dcx";
         var baseline = BND4.Read(Path.Combine(root, "assets/original", relative)).Files.ToDictionary(Name);
@@ -27,7 +27,7 @@ static class MmvTae {
         var behaviors = Unique(Table("BehaviorParam_PC"), "refType", "refId", "behaviorJudgeId").Where(r => Convert.ToInt32(r["refType"].Value) == 0 && attackGroups.ContainsKey(Convert.ToInt32(r["refId"].Value))).OrderBy(r => r.ID).ToArray();
         var usedAttacks = behaviors.Select(r => Convert.ToInt32(r["refId"].Value)).ToHashSet();
         var attacks = attackGroups.Where(p => usedAttacks.Contains(p.Key)).ToDictionary(p => p.Key, p => {
-            Check(p.Value.Select(r => Convert.ToSingle(r["atkSuperArmorCorrection"].Value)).Distinct().Count() == 1, $"Ambiguous MMV guarded attack: {p.Key}"); return p.Value[0];
+            Check(p.Value.Select(r => Convert.ToSingle(r["atkSuperArmorCorrection"].Value)).Distinct().Count() == 1 && Enumerable.Range(1,5).All(i => p.Value.Select(r => Convert.ToInt32(r["subCategory"+i].Value)).Distinct().Count() == 1), $"Ambiguous MMV guarded attack: {p.Key}"); return p.Value[0];
         });
         var judges = behaviors.Select(r => Convert.ToInt32(r["behaviorJudgeId"].Value)).ToHashSet();
         Check(!Table("SpEffectParam").Rows.Any(r => Convert.ToInt32(r["stateInfo"].Value) is >= 14000 and < 24000), "MMV uses the private parry state range");
@@ -91,7 +91,7 @@ static class MmvTae {
                 var a = current.Animations[i]; if (a.Events.Any(NativeGuard)) continue;
                 foreach (var e in a.Events.Where(Weapon)) for (int tier = 0; tier < 7; tier++) {
                     float half = Parry.GuardWindowMilliseconds[tier] / 2000f;
-                    var d = template.GetParameterBytes(false).ToArray(); BitConverter.GetBytes((short)(14000 + indices[Key(e)] * 7 + tier)).CopyTo(d, 14);
+                    var d = template.GetParameterBytes(false).ToArray(); BitConverter.GetBytes(ParryCounterHit.TagBase + 14000 + indices[Key(e)] * 7 + tier).CopyTo(d, 8); BitConverter.GetBytes((short)(14000 + indices[Key(e)] * 7 + tier)).CopyTo(d, 14);
                     Extras(i).Add(new TAE.Event(Math.Max(0, e.StartTime - half), e.StartTime + half, template.Type, template.Unk04, d, false) { Group = template.Group }); guardCount++;
                 }
             }
@@ -111,7 +111,7 @@ static class MmvTae {
             string.Join("\n", keys.Select(k => $" ({k.Judge},{k.Source},{unchecked((ushort)k.Required)},{k.Extra}),")) + "\n];\npub const WEAPONS:&[(i32,f32)]=&[\n" +
             string.Join("\n", weapons.Select(r => $" ({r.ID},{Float(r["saWeaponDamage"].Value)}),")) + "\n];\npub const BEHAVIORS:&[(i32,f32)]=&[\n" +
             string.Join("\n", behaviors.Select(r => $" ({r.ID},{Float(attacks[Convert.ToInt32(r["refId"].Value)]["atkSuperArmorCorrection"].Value)}),")) + "\n];\n";
-        File.WriteAllText(Path.Combine(root, "work/compat/mmv/staged/parry_data.rs"), data);
+        File.WriteAllText(Path.Combine(root, "work/compat/mmv/staged/parry_data.rs"), data + ParryCounterHit.Catalog(behaviors,attacks));
         File.WriteAllText(Path.Combine(root, "work/compat/mmv/staged/tae-validation.json"), JsonSerializer.Serialize(new { file = relative,
             sha256 = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(output))), guardCount, otherCount,
             conditionCount = keys.Length, weapons = weapons.Length, behaviors = behaviors.Length, reports, originalMmvPayloadsPreserved = true, gameplayVerified = false }, new JsonSerializerOptions { WriteIndented = true }));
