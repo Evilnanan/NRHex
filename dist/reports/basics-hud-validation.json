@@ -1,0 +1,83 @@
+{
+  "version": "0.17.279",
+  "owner": 95004400,
+  "scope": "native local PlayerHUD/Ult call only",
+  "callRva": "9A45DD",
+  "nativeUpdateRva": "99A020",
+  "runtimeSignatures": 218,
+  "displayRecordSize": 96,
+  "modifiedSnapshotByte": 3,
+  "originalDisplayRecordUnchanged": true,
+  "realGaugeAndSkillDisplayUnchanged": true,
+  "restoration": "native selection on next HUD update after ownership loss or reset",
+  "nativeCases": 64,
+  "unitTestsPassed": 465,
+  "ignoredTests": 32,
+  "validationScope": [
+    "original EXE skill/ultimate caller fragment",
+    "original EXE outer/inner Grayout selection branches",
+    "compiled hook and full renderer ABI/payload",
+    "GFx resources and timelines inspected statically"
+  ],
+  "stubs": [
+    "GFx label playback and visibility",
+    "ownership/reset effects and local actor fixtures",
+    "remaining native rendering skipped after selector"
+  ],
+  "nativeHud": {
+    "hud": "/menu/01_000_fe.gfx",
+    "sha256": "31c006e8a7c9cf14f1c017d69fdd92f00e15cc9a3ccf861930ecd35571c1d1e1",
+    "source": "Fresh data0.bhd decrypted with installed Smithbox; selected original data0.bdt entry extracted",
+    "playerHudSprite": 624,
+    "ultimateSprite": 527,
+    "skillSprite": 538,
+    "ultimatePath": "PlayerHUD/Ult",
+    "nativeSubpath": "Fade/Grayout",
+    "ultimateGraySprite": 525,
+    "frames": {
+      "Normal": 1,
+      "Grayout": 10,
+      "stops": [
+        9,
+        18
+      ]
+    },
+    "grayTransform": {
+      "target": "_ child",
+      "red": 0.5,
+      "green": 0.5,
+      "blue": 0.5,
+      "alpha": 0.5
+    },
+    "dialogGraySprite": 526,
+    "dialogGrayTransform": {
+      "alpha": 0.5,
+      "alsoMovesChild": true
+    },
+    "exeStringFileOffsets": {
+      "PlayerHUD/Ult": "0x2c57480",
+      "PlayerHUD/Skill": "0x2c57460",
+      "Fade/Grayout": "0x2c56498"
+    },
+    "gameplayVerified": false
+  },
+  "mmvOverridesHudGfx": false,
+  "allGameResourcesTextsAndUserConfigsUnchanged": true,
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "sourceHashes": {
+    "src/basics_hud.rs": "3b9d1e911859d82c413edc763189cf7ae260d442f4dd9394b3975e98b14b37c9",
+    "src/basics_hud_tests.rs": "ba68e1a69aad0af463689443fd7dcfeb3f8d720437102f2089cb981b1c41e5a6",
+    "src/lib.rs": "4b0f40c4c35dba45882c81e3ffb7a1986c2ba204e49944a66edfbd9ff282011b"
+  },
+  "deployedFiles": {
+    "dist/natives/NRHex.dll": "abe794a21cd93a18a2a02b954aa9eeb898b48bb00b2e9c4e2a8c67e3b2b7a67b",
+    "dist/mmv/natives/NRHex.dll": "0553d5dafe4562796e8a3879435a90c9435ecf630deda5998e44533c0f17f42f"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "dllLoadChecks": {
+    "standalone": "passed",
+    "mmv": "passed",
+    "scope": "Windows Python/Wine load and unsupported EXE guard; not gameplay"
+  }
+}
