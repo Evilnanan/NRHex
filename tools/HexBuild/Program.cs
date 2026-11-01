@@ -167,6 +167,7 @@ if(args.Contains("--marking-poison-stage")){MarkingPoison.Stage(root,bnd,Parse,H
 if(args.Contains("--marking-poison-actions")){MarkingPoison.Actions(root);return;}
 if(args.Contains("--escape-balance-stage")){int at=Array.IndexOf(args,"--escape-balance-stage");HexBalance.Stage(root,Path.GetFullPath(args[at+1]),Path.GetFullPath(args[at+2]),Parse,escapeOnly:true);return;}
 if(args.Contains("--hex-balance-stage")){int at=Array.IndexOf(args,"--hex-balance-stage");HexBalance.Stage(root,Path.GetFullPath(args[at+1]),Path.GetFullPath(args[at+2]),Parse);return;}
+if(args.Contains("--cage-escalation-balance-stage")){CageEscalation.StageBalance(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--cage-escalation-stage")){int at=Array.IndexOf(args,"--cage-escalation-stage");CageEscalation.Stage(root,Path.GetFullPath(args[at+1]),Path.GetFullPath(args[at+2]),Parse);return;}
 if(args.Contains("--marking-stage")){Marking.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--marking-check")){Marking.Verify(root,bnd,Parse);return;}

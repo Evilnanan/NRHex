@@ -1,0 +1,223 @@
+{
+  "version": "0.17.273",
+  "effect": 95001604,
+  "attackPerStack": 1.2,
+  "damageTakenPerStack": 0.8,
+  "firstOpeningStacks": 0,
+  "stacking": "multiplicative",
+  "targets": {
+    "standalone": {
+      "input": "Z:\\workspace\\NRHex\\dist/mod/regulation.bin",
+      "inputSha256": "A59EB28CC4ECC8559C9D03EF044FD9690314CD1AE650B95E6940D034D5AE9C22",
+      "outputSha256": "D1335B80F753EB2319B2920486A10EA66ADB325B943749CD1D8521BDBA53EA86",
+      "effect": 95001604,
+      "changes": [
+        {
+          "field": "physicsAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "magicAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "fireAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "thunderAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "darkAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "slashDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "blowDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "thrustDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "neutralDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "magicDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "fireDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "thunderDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "darkDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        }
+      ],
+      "attackPerStack": 1.2,
+      "damageTakenPerStack": 0.8,
+      "otherFieldsRowsAndTablesPreserved": true,
+      "gameplayVerified": false
+    },
+    "mmv": {
+      "input": "Z:\\workspace\\NRHex\\dist/mmv/mod/regulation.bin",
+      "inputSha256": "7FD4E9303D567E8FCA5E0B8C9C0E4E9FC96FFB461C6BB7EBCA0F156A9EACE61D",
+      "outputSha256": "647CA4D15E284B475445FF5E9AF3ED0F063701FE217612451D0A08E96EBDE439",
+      "effect": 95001604,
+      "changes": [
+        {
+          "field": "physicsAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "magicAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "fireAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "thunderAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "darkAttackRate",
+          "before": 1.1,
+          "after": 1.2
+        },
+        {
+          "field": "slashDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "blowDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "thrustDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "neutralDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "magicDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "fireDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "thunderDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        },
+        {
+          "field": "darkDamageCutRate",
+          "before": 0.9,
+          "after": 0.8
+        }
+      ],
+      "attackPerStack": 1.2,
+      "damageTakenPerStack": 0.8,
+      "otherFieldsRowsAndTablesPreserved": true,
+      "gameplayVerified": false
+    }
+  },
+  "nativeTests": {
+    "standalone": {
+      "sameIdCanStack": true,
+      "exclusiveStateDoesNotMatch": true,
+      "categoryDoesNotReplace": true,
+      "hudCounts": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        10,
+        50,
+        100,
+        255
+      ],
+      "nativeAttackCases": 30,
+      "nativeDefenseCases": 30
+    },
+    "mmv": {
+      "sameIdCanStack": true,
+      "exclusiveStateDoesNotMatch": true,
+      "categoryDoesNotReplace": true,
+      "hudCounts": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        10,
+        50,
+        100,
+        255
+      ],
+      "nativeAttackCases": 30,
+      "nativeDefenseCases": 30
+    }
+  },
+  "deployedFiles": {
+    "dist/mod/regulation.bin": "d1335b80f753eb2319b2920486a10ea66adb325b943749cd1d8521bdba53ea86",
+    "dist/mmv/mod/regulation.bin": "647ca4d15e284b475445ff5e9af3ed0f063701fe217612451d0a08e96ebde439",
+    "dist/natives/NRHex.dll": "2f28ea8483446d0f3aa500f166f9580b4db1d098a1e8195d9871b379063ecfda",
+    "dist/mmv/natives/NRHex.dll": "50ed79571adaf00d2131ae2af98a2e553861c80cb6a4f804fad6517fd965f3a5"
+  },
+  "unrelatedPackageFilesPreserved": true,
+  "eventsTextsAndConfigsUnchanged": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "buildsPassed": [
+    "standalone",
+    "mmv"
+  ],
+  "nativeTestScope": "Original native calculators executed against both generated parameter fixtures; no game process or event changes.",
+  "evidenceHashes": {
+    "native_check.py": "8d3c3c4ba335a4c62297bb10be791d3a97ad7163842f1982a96c070ee7cb0012",
+    "native-test.log": "4f4ed6694038f95088d969e1a4443225fcb5ab722cecc35ee0ae3013208e5e6c",
+    "native-tests.json": "d57f5ac181575a551503cbb1ee0dcd82683030c0e809a35263ca1fd619d3a748",
+    "mmv-build.json": "e67783f1f80848c91f6724707846f013dab2873ba243f641faeb46071cb9bec9"
+  }
+}

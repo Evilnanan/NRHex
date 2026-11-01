@@ -7,6 +7,8 @@ using System.Text.Json;
 // the opener's previous count. Each peer reconstructs native local effects.
 static class CageEscalation {
  public const int Effect=95001604, Icon=20406, DefenseIcon=20408, Bits=32;
+ public const float AttackPerStack=1.2f,DamageTakenPerStack=.8f;
+ static readonly string[] CutFields={"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"};
  const int LegacyEventBase=9102000;
  static bool Owned(EMEVD.Event e,uint prefix)=>
   (e.ID>=LegacyEventBase&&e.ID<LegacyEventBase+256||e.ID>=prefix+8500&&e.ID<prefix+9000)
@@ -117,20 +119,48 @@ static class CageEscalation {
   }
   return new{prefix,counter,shared,scratch,initialized,done,births=births.Length,encounters=report};
  }
+ public static void StageBalance(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string input=Path.Combine(root,mmv?"dist/mmv/mod/regulation.bin":"dist/mod/regulation.bin");
+  string directory=Path.Combine(root,".work/cage20",mmv?"mmv":"standalone");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var member=binder.Files.Single(f=>f.Name.Replace('\\','/').Split('/').Last()=="SpEffectParam.param");
+  var original=parse("SpEffectParam",member.Bytes);var rows=parse("SpEffectParam",member.Bytes);var effect=rows.Rows.Single(r=>r.ID==Effect);
+  var updates=Erosion.AttackRates.ToDictionary(f=>f,f=>AttackPerStack);foreach(string field in CutFields)updates.Add(field,DamageTakenPerStack);
+  var changes=new List<object>();
+  foreach(var(field,value)in updates){
+   float old=Convert.ToSingle(effect[field].Value);Check(old==value||old==(Erosion.AttackRates.Contains(field)?1.1f:.9f),"Unexpected cage escalation input");
+   Field(effect,field,value);changes.Add(new{field,before=old,after=value});
+  }
+  member.Bytes=rows.Write();string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);
+  var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Version==binder.Version&&final.Compression==binder.Compression&&final.Files.Count==binder.Files.Count,"Regulation metadata changed");
+  foreach(var pair in binder.Files.Zip(final.Files)){
+   var a=pair.First;var b=pair.Second;Check(a.ID==b.ID&&a.Name==b.Name&&a.Flags==b.Flags&&a.Bytes.Span.SequenceEqual(b.Bytes.Span),"Regulation readback mismatch");
+   if(b.ID!=member.ID)Check(b.Bytes.Span.SequenceEqual(before[b.ID]),"Unrelated parameter table changed");
+  }
+  var actual=parse("SpEffectParam",final.Files.Single(f=>f.ID==member.ID).Bytes);Check(actual.Rows.Count==original.Rows.Count,"Effect row count changed");
+  foreach(var pair in original.Rows.Zip(actual.Rows)){
+   var expected=new PARAM.Row(pair.First);if(expected.ID==Effect)foreach(var(field,value)in updates)Field(expected,field,value);
+   Check(expected.ID==pair.Second.ID&&expected.Name==pair.Second.Name&&expected.Cells.Count==pair.Second.Cells.Count&&expected.Cells.Zip(pair.Second.Cells).All(p=>p.First.Def.InternalName==p.Second.Def.InternalName&&Equals(p.First.Value,p.Second.Value)),"Unrelated effect row or field changed");
+  }
+  actual.Rows=actual.Rows.Where(r=>r.ID==Effect).ToList();File.WriteAllBytes(Path.Combine(directory,"effect.param"),actual.Write());
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{input,inputSha256=Hash(input),outputSha256=Hash(output),effect=Effect,changes,attackPerStack=AttackPerStack,damageTakenPerStack=DamageTakenPerStack,otherFieldsRowsAndTablesPreserved=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: cage escalation attack x1.20 / incoming damage x0.80 per stack; only thirteen fields changed");
+ }
  public static void Stage(string root,string input,string output,Func<string,Memory<byte>,PARAM> parse){
   Check(Path.GetFullPath(input)!=Path.GetFullPath(output),"Use a separate staging directory");Directory.CreateDirectory(Path.Combine(output,"event"));
   var binder=SFUtil.DecryptNightreignRegulation(Path.Combine(input,"regulation.bin"));var original=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
   var file=binder.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param");var rows=parse("SpEffectParam",file.Bytes);var old=parse("SpEffectParam",file.Bytes);
   var fx=new PARAM.Row(rows.Rows.Single(r=>r.ID==Cages.Mutation)){ID=Effect};
   foreach(var (f,v) in new (string,object)[]{("spCategory",10),("stateInfo",0),("saveCategory",-1),("effectEndurance",-1f),("isDisableNetSync",1),("iconId",Icon),("displayIconForPermamentEffect",1),("dispDartDebuffStacks",0),("spEffectTextId_1",-1),("maxHpRate",1f)})Field(fx,f,v);
-  foreach(string f in Erosion.AttackRates)Field(fx,f,1.1f);
+  foreach(string f in Erosion.AttackRates)Field(fx,f,AttackPerStack);
   Field(fx,"secondaryIconId",DefenseIcon);
   // wepParamChange=0 is unrestricted, not disabled. Likewise the throw flag
   // is an ONLY-throw filter. Only the spell applicability bits need enabling.
   foreach(string f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Field(fx,f,1);
-  foreach(string f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Field(fx,f,.9f);
+  foreach(string f in CutFields)Field(fx,f,DamageTakenPerStack);
   var existing=old.Rows.SingleOrDefault(r=>r.ID==Effect);
-  Check(existing==null||existing.Cells.Zip(fx.Cells).All(p=>Equals(p.First.Value,p.Second.Value)||p.First.Def.InternalName=="secondaryIconId"&&Convert.ToInt32(p.First.Value)==-1),"Existing escalation effect differs; review before replacing it");
+  Check(existing==null||existing.Cells.Zip(fx.Cells).All(p=>Equals(p.First.Value,p.Second.Value)||p.First.Def.InternalName=="secondaryIconId"&&Convert.ToInt32(p.First.Value)==-1||Erosion.AttackRates.Contains(p.First.Def.InternalName)&&Convert.ToSingle(p.First.Value)==1.1f||CutFields.Contains(p.First.Def.InternalName)&&Convert.ToSingle(p.First.Value)==.9f),"Existing escalation effect differs; review before replacing it");
   rows.Rows.RemoveAll(r=>r.ID==Effect);rows.Rows.Add(fx);rows.Rows=rows.Rows.OrderBy(r=>r.ID).ToList();file.Bytes=rows.Write();
   string regulation=Path.Combine(output,"regulation.bin");SFUtil.EncryptNightreignRegulation(regulation,binder,binder.Compression);
   var actual=SFUtil.DecryptNightreignRegulation(regulation);foreach(var f in actual.Files){Check(f.Bytes.Span.SequenceEqual(binder.Files.Single(b=>b.ID==f.ID).Bytes.Span),"Regulation readback");if(f.ID!=file.ID)Check(f.Bytes.Span.SequenceEqual(original[f.ID]),"Unrelated parameter table changed");}
@@ -155,7 +185,7 @@ static class CageEscalation {
    reports.Add(new{name,layout,inputSha256=Hash(Path.Combine(input,"event",name+".emevd.dcx")),sha256=Hash(target),changed,events=after.Events.Where(e=>e.ID==0||e.ID==Cages.OpenEvent||layout!=null&&(Owned(e,(uint)(4600+int.Parse(name.Substring(4,2)))*10000)||e.Instructions.Any(i=>Op(i,2004,8)&&U(i,4)==CageCoop.Ready)||e.Instructions.Any(i=>Op(i,2003,69)&&U(i,4)==(uint)(4600+int.Parse(name.Substring(4,2)))*10000+7404&&i.ArgData[8]==1))).Select(Cages.Dump)});
   }
   HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(output,"texts"),allRewards:true,onlyIds:new[]{Cages.Owner},inputMod:input);
-  File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{effect=Effect,icon=Icon,bits=Bits,attackPerStack=1.1,damageTakenPerStack=.9,firstOpeningStacks=0,reports,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{effect=Effect,icon=Icon,bits=Bits,attackPerStack=AttackPerStack,damageTakenPerStack=DamageTakenPerStack,firstOpeningStacks=0,reports,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: unlimited cage openings, personal gaol counts, native multiplicative effects and HUD stack aggregation staged");
  }
 }

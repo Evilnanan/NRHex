@@ -186,10 +186,10 @@ def native_checks(fixture_path):
                     calc(c.addressof(manager),c.addressof(context),-1,-1)
                     for off in (0x90,0xa4,0xa8,0xac,0xb0):
                         actual=struct.unpack_from('<f',context,off)[0]
-                        assert math.isclose(actual,1.1**count,rel_tol=2e-6),(count,kind,hex(off),actual)
+                        assert math.isclose(actual,1.2**count,rel_tol=2e-6),(count,kind,hex(off),actual)
                     attack=c.create_string_buffer(0x400);ordinary=c.create_string_buffer(20);conditional=c.create_string_buffer(20);additional=c.create_string_buffer(20)
                     defense(c.addressof(manager),c.addressof(ordinary),c.addressof(conditional),c.addressof(additional),c.addressof(attack))
-                    assert all(math.isclose(value,.9**count,rel_tol=2e-6) for value in struct.unpack('<5f',ordinary.raw)),(count,ordinary.raw.hex())
+                    assert all(math.isclose(value,.8**count,rel_tol=2e-6) for value in struct.unpack('<5f',ordinary.raw)),(count,ordinary.raw.hex())
                     assert struct.unpack('<5f',conditional.raw)==struct.unpack('<5f',additional.raw)==(1.,)*5
                     attack_cases+=1
         finally:assert k.VirtualFree(image,0,0x8000)
