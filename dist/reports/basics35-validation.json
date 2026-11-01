@@ -1,0 +1,36 @@
+{
+  "version": "0.17.278",
+  "owner": 95004400,
+  "hero": 7,
+  "previousDamageBonus": 0.5,
+  "damageBonus": 0.35,
+  "damageMultiplier": 1.35,
+  "unitTestsPassed": 470,
+  "testFeatures": [
+    "default",
+    "cage-demand"
+  ],
+  "standaloneFeatures": [
+    "default"
+  ],
+  "mmvFeatures": [
+    "cage-demand",
+    "mmv-compat",
+    "test-hotkeys"
+  ],
+  "nativeBasicsFixturePassed": true,
+  "otherHeroMultipliersUnchanged": true,
+  "allGameResourcesTextsAndUserConfigsUnchanged": true,
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "deployedFiles": {
+    "dist/natives/NRHex.dll": "815895a1975b5dee1a751705fdf5e43949c54e1138d12066274f5fc5ccf8316a",
+    "dist/mmv/natives/NRHex.dll": "11d95ccd28568b95ff8b3ea4403edc1edf4bb9cc0a7867d75ec882a24d77381b"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "dllLoadChecks": {
+    "standalone": "passed",
+    "mmv": "passed",
+    "scope": "Windows Python/Wine load and unsupported EXE guard; not gameplay"
+  }
+}
