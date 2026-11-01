@@ -188,6 +188,7 @@ if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd
 if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
 if(args.Contains("--momentum-stage")){Momentum.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--momentum-balance-stage")){Momentum.StageBalance(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--momentum-check")){Momentum.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-delivery-stage")){Momentum.FixDelivery(root,bnd,Parse);return;}
 if(args.Contains("--snack-stage")){Snack.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}

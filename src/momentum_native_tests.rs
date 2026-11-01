@@ -83,7 +83,7 @@ fn native_momentum_first_hit_and_unrefreshable_cycle_use_original_attack_rates()
  let calc=|row:&[u8;1024],initial:f32|{let n=[row.as_ptr()as usize];let rate=get(n.as_ptr()as usize);let mut out=initial;momentum_native_rate(&mut out,rate,base+0x503137)};
  // The full-HP reference and our passive use precisely the same multiplier.
  assert!((calc(&reference,1.)-1.1).abs()<0.00001);
- let initial=calc(&owner,1.);assert!((initial-1.3).abs()<0.00001);assert_eq!(CYCLE.lock().unwrap().elapsed,None);
+ let initial=calc(&owner,1.);assert!((initial-1.5).abs()<0.00001);assert_eq!(CYCLE.lock().unwrap().elapsed,None);
  let mut hit=[0u8;0x2c8];let h=hit.as_mut_ptr()as usize;int(h+0x280,130);hit[0x122]=1;int(h+0x40,10000);int(h+0x44,1);
  let mut ids=[0i32;8];let mut out=[0usize;4];let outp=out.as_mut_ptr()as usize;
  let select:unsafe extern "system" fn(usize,usize,usize)=std::mem::transmute(base+0x505e90);

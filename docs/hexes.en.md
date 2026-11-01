@@ -177,7 +177,7 @@ Increases the price of armaments sold by merchants. Purchasing an armament also 
 <!-- hex:95003700 -->
 ## Burst of Momentum
 
-After a hit: attack power +30% for 5 seconds, then attack power and damage negation -50% for 5 seconds.
+After a hit: attack power +50% for 5 seconds, then attack power and damage negation -50% for 5 seconds.
 
 <!-- hex:95003800 -->
 ## Ultimate Awakening

@@ -1,0 +1,254 @@
+{
+  "version": "0.17.272",
+  "effect": 95003700,
+  "positiveAttackMultiplier": 1.5,
+  "weakAttackMultiplier": 0.5,
+  "weakIncomingMultiplier": 1.5,
+  "cycleSeconds": [
+    5,
+    5
+  ],
+  "targets": {
+    "standalone": {
+      "parameters": {
+        "input": "Z:\\workspace\\NRHex\\dist/mod\\regulation.bin",
+        "inputSha256": "52BE705B1A12B352D1540E69820192B94F3802AD2CC772CBE2F26CDCA783FB40",
+        "outputSha256": "A59EB28CC4ECC8559C9D03EF044FD9690314CD1AE650B95E6940D034D5AE9C22",
+        "changes": [
+          {
+            "id": 95003700,
+            "field": "physicsAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003700,
+            "field": "magicAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003700,
+            "field": "fireAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003700,
+            "field": "thunderAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003700,
+            "field": "darkAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003702,
+            "field": "physicsAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          },
+          {
+            "id": 95003702,
+            "field": "magicAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          },
+          {
+            "id": 95003702,
+            "field": "fireAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          },
+          {
+            "id": 95003702,
+            "field": "thunderAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          },
+          {
+            "id": 95003702,
+            "field": "darkAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          }
+        ],
+        "positiveMultiplier": 1.5,
+        "negativeMultiplier": 0.5,
+        "otherFieldsRowsAndTablesPreserved": true,
+        "gameplayVerified": false
+      },
+      "textChanges": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "changedEntries": 3,
+          "onlyTextId": 95003700,
+          "outputSha256": "768EB1A714604DF0521779E12D35407E02F48053416DE30357E81E3D08DE4021"
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "changedEntries": 1,
+          "onlyTextId": 95003700,
+          "outputSha256": "1B2F0975B60215A94AA757EC97CEAC4626BDEFC78A96A2AE27E1D8214D963114"
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "changedEntries": 3,
+          "onlyTextId": 95003700,
+          "outputSha256": "9FF8DA2E03EF441761DCF1DAE58051E73C25B3FB807277E1C34902DC24926F61"
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "changedEntries": 1,
+          "onlyTextId": 95003700,
+          "outputSha256": "13F853A4353FAE603AD3D8F8BA42C68B15402BD70101801289037202B8B6F415"
+        }
+      ]
+    },
+    "mmv": {
+      "parameters": {
+        "input": "Z:\\workspace\\NRHex\\dist/mmv/mod\\regulation.bin",
+        "inputSha256": "8864F0AE3874012C16324182E5FBC9C1D5DD85F871D1B681D444A03C9D1C0C57",
+        "outputSha256": "7FD4E9303D567E8FCA5E0B8C9C0E4E9FC96FFB461C6BB7EBCA0F156A9EACE61D",
+        "changes": [
+          {
+            "id": 95003700,
+            "field": "physicsAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003700,
+            "field": "magicAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003700,
+            "field": "fireAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003700,
+            "field": "thunderAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003700,
+            "field": "darkAttackRate",
+            "before": 1.3,
+            "after": 1.5
+          },
+          {
+            "id": 95003702,
+            "field": "physicsAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          },
+          {
+            "id": 95003702,
+            "field": "magicAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          },
+          {
+            "id": 95003702,
+            "field": "fireAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          },
+          {
+            "id": 95003702,
+            "field": "thunderAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          },
+          {
+            "id": 95003702,
+            "field": "darkAttackRate",
+            "before": 0.3846154,
+            "after": 0.33333334
+          }
+        ],
+        "positiveMultiplier": 1.5,
+        "negativeMultiplier": 0.5,
+        "otherFieldsRowsAndTablesPreserved": true,
+        "gameplayVerified": false
+      },
+      "textChanges": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "changedEntries": 3,
+          "onlyTextId": 95003700,
+          "outputSha256": "754F4CCB1185D391F7DF8298362AFBED5D9A83F652B3513960B5F06A73B31325"
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "changedEntries": 1,
+          "onlyTextId": 95003700,
+          "outputSha256": "71C17A06C3CE48DA02730ACF51236A10DA8F4BFFA736E004089FD651878F2D48"
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "changedEntries": 3,
+          "onlyTextId": 95003700,
+          "outputSha256": "9DABCA483910B1E41FA60FA7E4E3208EB93E467FBAD6728313A5B0F5E8BE5A6E"
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "changedEntries": 1,
+          "onlyTextId": 95003700,
+          "outputSha256": "33763A6C4897791BC5A9709A18B333BD50E1DDBA80180882C74D2E440FED9DDF"
+        }
+      ]
+    }
+  },
+  "deployedFiles": {
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "768eb1a714604df0521779e12d35407e02f48053416de30357e81e3d08de4021",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "1b2f0975b60215a94aa757ec97ceac4626bdefc78a96a2ae27e1d8214d963114",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "9ff8da2e03ef441761dcf1dae58051e73c25b3fb807277e1c34902dc24926f61",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "13f853a4353fae603ad3d8f8ba42c68b15402bd70101801289037202b8b6f415",
+    "dist/mod/regulation.bin": "a59eb28cc4ecc8559c9d03ef044fd9690314cd1ae650b95e6940d034d5ae9c22",
+    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "754f4ccb1185d391f7df8298362afbed5d9a83f652b3513960b5f06a73b31325",
+    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "71c17a06c3ce48da02730acf51236a10da8f4bffa736e004089fd651878f2d48",
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "9dabca483910b1e41fa60fa7e4e3208eb93e467fbad6728313a5b0f5e8be5a6e",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "33763a6c4897791bc5a9709a18b333bd50e1ddba80180882c74d2e440fed9ddf",
+    "dist/mmv/mod/regulation.bin": "7fd4e9303d567e8fca5e0b8c9c0e4e9fc96ffb461c6bb7ebca0f156a9eace61d",
+    "dist/natives/NRHex.dll": "4463b47a8f3a6e3d5d3fb1d7e9cd14b0c7a2c189406a808e4ead578b020e8c7c",
+    "dist/mmv/natives/NRHex.dll": "41105a468083e180501e79beac5eca12886725f097d2e90bc2542f5cd453aab4"
+  },
+  "unrelatedPackageFilesPreserved": true,
+  "checks": {
+    "standaloneMomentumTestsPassed": 4,
+    "mmvParameterNativeTestPassed": 1,
+    "mmvTestNote": "Same compiled native harness with MMV parameter fixture; no MMV-specific runtime changes",
+    "installedParameterValidationPassed": true,
+    "dllBuildsPassed": [
+      "standalone",
+      "mmv"
+    ],
+    "dllLoadChecks": "Wine host load and unsupported executable rejection; no game process",
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "evidenceHashes": {
+    "native-test.log": "2ec165ccd8f2355bb12c81d833590182da198802e66bf4fa9a0b62e3093447a9",
+    "mmv-native-test.log": "f1c0006ad97f0fdac7a5716f7a20be64fac4b7c4a46015871dba14205e7e732d",
+    "installed-check.log": "af34df1da1189ab2cc6da63d0dab698e93a5862fa6477b1a3e089f0a9283abf1",
+    "mmv-build.json": "f0e4f6fd0d514b299e88bf06d7b8f8bf5ec12abf95562b8456086a655da66f34"
+  },
+  "nativeExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a"
+}

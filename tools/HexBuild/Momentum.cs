@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 static class Momentum {
  public const int Owner=95003700,Pulse=Owner+1,Weak=Owner+2,Visual=Owner+3;
- public const float Bonus=1.3f,WeakAttack=.5f/Bonus;
+ public const float Bonus=1.5f,WeakAttack=.5f/Bonus;
  public const int AttackVisualSource=320500,WeakVisualSource=8800271;
  static readonly string[] AttackFields={"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"};
  static readonly string[] CutFields={"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"};
@@ -58,7 +58,36 @@ static class Momentum {
  }
  public static void Verify(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){var current=SFUtil.DecryptNightreignRegulation(Path.Combine(root,"dist/mod/regulation.bin"));Validate(native,current,parse);
   Fixture(Path.Combine(root,"work/momentum"),current,parse);
-  Console.WriteLine("PASS: Momentum installed native +30%/-50% attack rates, 1.5 vulnerability and phase VFX");}
+  Console.WriteLine("PASS: Momentum installed native +50%/-50% attack rates, 1.5 vulnerability and phase VFX");}
+ public static void StageBalance(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string inputMod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),input=Path.Combine(inputMod,"regulation.bin");
+  string directory=Path.Combine(root,".work/momentum50",mmv?"mmv":"standalone");Directory.CreateDirectory(directory);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var member=binder.Files.Single(f=>Name(f)=="SpEffectParam.param");var original=parse("SpEffectParam",member.Bytes);var effects=parse("SpEffectParam",member.Bytes);
+  var changes=new List<object>();
+  foreach(int id in new[]{Owner,Weak})foreach(string field in AttackFields){
+   var row=effects.Rows.Single(r=>r.ID==id);float old=Convert.ToSingle(row[field].Value),value=id==Owner?Bonus:WeakAttack;
+   Check(old==value||Math.Abs(old-(id==Owner?1.3f:.5f/1.3f))<.000001,"Unexpected Momentum balance input");
+   Set(row,field,value);changes.Add(new{id,field,before=old,after=value});
+  }
+  member.Bytes=effects.Write();string output=Path.Combine(directory,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);
+  var final=SFUtil.DecryptNightreignRegulation(output);
+  Check(final.Version==binder.Version&&final.Compression==binder.Compression&&final.Files.Count==binder.Files.Count,"Regulation metadata changed");
+  foreach(var pair in binder.Files.Zip(final.Files)){
+   var a=pair.First;var b=pair.Second;Check(a.ID==b.ID&&a.Name==b.Name&&a.Flags==b.Flags&&a.Bytes.Span.SequenceEqual(b.Bytes.Span),"Regulation readback mismatch");
+   if(b.ID!=member.ID)Check(b.Bytes.Span.SequenceEqual(before[b.ID]),"Unrelated parameter table changed");
+  }
+  var current=parse("SpEffectParam",final.Files.Single(f=>f.ID==member.ID).Bytes);Check(current.Rows.Count==original.Rows.Count,"Effect row count changed");
+  foreach(var pair in original.Rows.Zip(current.Rows)){
+   var expected=new PARAM.Row(pair.First);if(expected.ID==Owner||expected.ID==Weak)foreach(string field in AttackFields)Set(expected,field,expected.ID==Owner?Bonus:WeakAttack);
+   Check(expected.ID==pair.Second.ID&&expected.Name==pair.Second.Name&&expected.Cells.Count==pair.Second.Cells.Count&&expected.Cells.Zip(pair.Second.Cells).All(p=>p.First.Def.InternalName==p.Second.Def.InternalName&&Equals(p.First.Value,p.Second.Value)),"Unrelated effect row or field changed");
+  }
+  foreach(string field in AttackFields)Check(Math.Abs(Convert.ToSingle(current.Rows.Single(r=>r.ID==Owner)[field].Value)*Convert.ToSingle(current.Rows.Single(r=>r.ID==Weak)[field].Value)-.5f)<.000001,"Weak phase multiplier changed");
+  Fixture(directory,final,parse);
+  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(directory,"texts"),allRewards:true,onlyIds:new[]{Owner},inputMod:inputMod);
+  File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{input,inputSha256=Hash(input),outputSha256=Hash(output),changes,positiveMultiplier=Bonus,negativeMultiplier=.5f,otherFieldsRowsAndTablesPreserved=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Momentum +50% attack, weak phase remains -50%; only ten rate fields changed; bilingual text verified");
+ }
  public static void FixDelivery(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse){
   string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,"work/momentum/delivery-fix");Directory.CreateDirectory(directory);
   var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(file=>file.ID,file=>file.Bytes.ToArray());
