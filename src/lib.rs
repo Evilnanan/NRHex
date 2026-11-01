@@ -48,7 +48,6 @@ mod noisy;
 mod noisy_ground;
 mod balloon;
 mod ability_damage;
-mod balloon_target;
 mod glass_cannon;
 mod parry;
 mod parry_turn;
@@ -372,7 +371,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);213] {
+fn signatures()->[(&'static str,u32);212] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -430,7 +429,6 @@ fn signatures()->[(&'static str,u32);213] {
   (STATUS_SORT_PATTERN,STATUS_SORT_RVA as u32),(HUD_SORT_PATTERN,HUD_SORT_RVA as u32),(SPEED_PATTERN,SPEED_RVA as u32),(HIT_BUILD_PATTERN,HIT_BUILD_RVA as u32),(MAGIC_ANIM_PATTERN,0x456870),
   (ATTACK_RATES_PATTERN,ATTACK_RATES_RVA as u32),(EFFECT_FILTER_PATTERN,EFFECT_FILTER_RVA as u32),
   (ability_damage::BASE_PATTERN,ability_damage::BASE_RVA as u32),
-  (balloon_target::PATTERN,balloon_target::RVA as u32),
   (FALL_HEIGHT_PATTERN,FALL_HEIGHT_RVA as u32),
   (SPRING_HEIGHT_PATTERN,SPRING_HEIGHT_RVA as u32),(SPRING_CONTEXT_PATTERN,0x3fa4c0),
   (CHR_POSITION_PATTERN,CHR_POSITION_RVA as u32),(CHR_ROTATION_PATTERN,CHR_ROTATION_RVA as u32),(MAP_POSITION_PATTERN,MAP_POSITION_RVA as u32),
@@ -632,7 +630,6 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   potential_fission::GROUP_SKIP.store(base.add(0x57a8e1)as*mut u8,Ordering::Release);
   sword_projectile::STOP.store(base.add(sword_projectile::STOP_RVA)as*mut u8,Ordering::Release);
   let arts_transfer_targets=[
-   (balloon_target::RVA,balloon_target::detour as*const u8,&balloon_target::ORIGINAL),
    (deliberate_punch::DISPATCH_RVA,deliberate_punch::dispatch as*const u8,&deliberate_punch::DISPATCH_ORIGINAL),
    (deliberate_punch::COMMIT_RVA,deliberate_punch::commit_detour as*const u8,&deliberate_punch::COMMIT_ORIGINAL),
    (deliberate_punch::OBJECT_RVA,deliberate_punch::object_detour as*const u8,&deliberate_punch::OBJECT_ORIGINAL),
@@ -713,7 +710,6 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   for (rva,detour,original) in arts_transfer_targets {
    let p=hook::prepare(base.add(rva) as *mut u8,detour,64)?;
    if rva==potential_fission::GROUP_RVA&&p.stolen!=7{return Err("Fission grouping must relocate only MOVZX ECX,[RDX+CA]".into());}
-   if rva==balloon_target::RVA&&p.stolen!=8{return Err("Balloon target input must relocate MOVZX EBX,[R14+161] (8 bytes)".into());}
    if rva==death_dance::RVA&&p.stolen!=6{return Err("Death dance must relocate exactly MOV ECX,[RBX+140]".into());}
    if rva==parry::RVA&&p.stolen!=7{return Err("Parry state query must relocate its two 7-byte MOV instructions".into());}
    if rva==parry::COST_RVA&&p.stolen!=9{return Err("Parry cost gate must relocate the nine-byte MOVSS".into());}

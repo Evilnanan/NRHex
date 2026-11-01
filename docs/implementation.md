@@ -49,7 +49,7 @@
 | 吵闹鬼 | `noisy.rs`、`noisy_ground.rs`、`verify_noisy.py`、`HexBuild`的私有熔岩链；[脚下落点](research/noisy-placement.md) |
 | 刷怪笼 | `HexBuild/Cages.cs`、`HexBuild/CagePresentation.cs`、`verify_cage_presentation.py`、`verify_cages.py`、`cage_local_events.py`、`build.ps1`、`data/reference/world/cage-bosses.json`；13种组合在4张地牢模板中，每组仅首成员的本地Birth在中央区域prefix+3900播放一次690047黑雾，其他成员用零行跳过替代原黑雾指令。单Boss不变，所有成员的4秒出场、动作、加载／重连分支、AI和奖励不变，无地图修改。区域类型1与指令ABI依据[NR EMEDF](https://soulsmods.github.io/emedf/nr-emedf.html#SpawnOneshotSFX)。增量入口--cage-presentation严格匹配旧事件并回读188个目标事件；52组／1504条成员时序已模拟，实机渲染与联机待验收。 |
 | 百般武艺 | `arts.rs`、`arts_data.rs`、`build_arts_data.py`、`build_arts_hks.py` |
-| 气球、强化【死灵术】、别停止咏唱 | `balloon.rs`／`balloon_runtime.rs`／`ability_damage.rs`／`balloon_target.rs`（自身最大HP基础攻击及目标最大HP的7%物理分量，余下由原生结算）、`spirit.rs`／`spirit_runtime.rs`、`chant.rs`／`build_chant_hks.py`／`verify_chant_hks.py` |
+| 气球、强化【死灵术】、别停止咏唱 | `balloon.rs`／`balloon_runtime.rs`／`ability_damage.rs`／`BalloonTargetDamage.cs`（自身最大HP基础攻击由原生结算，命中另附一次目标最大HP的7%穿盾扣血）、`spirit.rs`／`spirit_runtime.rs`、`chant.rs`／`build_chant_hks.py`／`verify_chant_hks.py` |
 | 大法师：法术槽随机、丢拾与装备同步 | `archmage.rs`、`archmage_runtime.rs`、`archmage_cost.rs`、`archmage_data.rs`、`HexBuild/Archmage.cs`、`build_archmage_hks.py` |
 | 不祥契约、偷心者 | `HexBuild/ContractHeart.cs`、`HexBuild/HeartMist.cs`、`ominous_pact.rs`、`heartstealer.rs`、`heartstealer_native_tests.rs`、`verify_contract_heart_native.py`、`verify_heartstealer.py` |
 | 夺萃之镰 | `essence_reaver.rs`、`HexBuild/EssenceReaver.cs`、`verify_essence_reaver.py`；原生击杀状态199计数，在本地角色原生专注值上限倍率查询 `0x50c230` 返回值上统一乘以 `1.01^击杀数`，其他原生倍率和属性结算保持不变。不再向Buff栏单独显示小图标：95002900的displayIconForPermamentEffect为0，潜在能力／词条图标仍保留；不显示层数、不创建逐杀增益，移除95002902层参数。击杀数以至多4个隐藏本地保存记录编码，复活／重载恢复，新远征／圆桌守卫内通知重置。 |

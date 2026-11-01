@@ -292,6 +292,7 @@ if(args.Contains("--devils-gaze-raw-check")){DevilsGaze.VerifyRaw(root,Parse);re
 if(args.Contains("--devils-gaze-hitfix")){DevilsGaze.StageHitFix(root,Parse);return;}
 if(args.Contains("--devils-gaze-probe")){DevilsGaze.Probe(root,bnd,Parse);return;}
 if(args.Contains("--devils-gaze-resources-stage")){DevilsGaze.StageResources(root);return;}
+if(args.Contains("--balloon-target-stage")){BalloonTargetDamage.Stage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--balloon-attribute-probe")){BalloonAttribute.Probe(root,Parse);return;}
 if(args.Contains("--balloon-attribute-stage")){BalloonAttribute.Stage(root,Parse);return;}
 if(args.Contains("--ability-buffs-probe")){AbilityBuffs.Probe(root,Parse);return;}

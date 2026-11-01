@@ -1,42 +1,407 @@
 {
-  "version": "0.17.275",
+  "version": "0.17.276",
   "effect": 95001700,
   "attack": 95001760,
-  "targetMaxHpFraction": 0.07,
-  "stage": "per-recipient physical input before native offense/defense/guard",
-  "temporaryVectorOnly": true,
-  "nativeInputRva": "43A39F",
-  "signatureBytes": 92,
-  "relocatedBytes": 8,
-  "deployedFiles": {
-    "dist/natives/NRHex.dll": "d2906a8b136993e9ad79e4915818683ff3cc56bc420819aea6a6cf57a8648713",
-    "dist/mmv/natives/NRHex.dll": "be2d0329b2772e5fbd65e180053752187ec15bba8a63ea29985c9002e32794ff"
+  "damageEffect": 95001702,
+  "targetMaxHpPercent": 7,
+  "stage": "independent native instantaneous HP effect delivered by the explosion attack",
+  "shieldPenetration": true,
+  "zeroHpDamageGuardStillDelivers": true,
+  "originalExplosionCalculationPreserved": true,
+  "oldPreCalculationHookRemoved": true,
+  "runtimeSignatureCount": 212,
+  "parameterChecks": {
+    "standalone": {
+      "inputSha256": "20A99154AB50AC4D728C8FC4F78EDBB456BA6CFE31D426BFC977E8DD09CFB291",
+      "outputSha256": "EF1EA7C906B7B87368A14B1B293E9C3A78938D022C0B2C87CDD97B5ECE02D6BB",
+      "attack": 95001760,
+      "effect": 95001702,
+      "source": 3269,
+      "percentMaxHp": 7,
+      "independentImmediateHpDamage": true,
+      "changedAttackFields": [
+        "spEffectId0"
+      ],
+      "templateOverrides": [
+        "soul",
+        "changeHpRate",
+        "effectTargetOpposeTarget"
+      ],
+      "otherRowsFieldsTablesPreserved": true,
+      "gameplayVerified": false
+    },
+    "mmv": {
+      "inputSha256": "D3E34527281712429C4223E74CF1F3FC5FC7F1999C4511346326D6D0C3734DD6",
+      "outputSha256": "EC4948F362AA36CEB253895442D0F6F495B124D5D30A73B3E94D5C849BCDC3D3",
+      "attack": 95001760,
+      "effect": 95001702,
+      "source": 3269,
+      "percentMaxHp": 7,
+      "independentImmediateHpDamage": true,
+      "changedAttackFields": [
+        "spEffectId0"
+      ],
+      "templateOverrides": [
+        "soul",
+        "changeHpRate",
+        "effectTargetOpposeTarget"
+      ],
+      "otherRowsFieldsTablesPreserved": true,
+      "gameplayVerified": false
+    }
   },
-  "allResourcePackagesAndConfigsUnchanged": true,
+  "nativeValidation": {
+    "cases": [
+      {
+        "package": "standalone",
+        "guard": 0,
+        "originalDamage": 0,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "standalone",
+        "guard": 0,
+        "originalDamage": 0,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "standalone",
+        "guard": 0,
+        "originalDamage": 100,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "standalone",
+        "guard": 0,
+        "originalDamage": 100,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "standalone",
+        "guard": 0,
+        "originalDamage": 10000,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "standalone",
+        "guard": 0,
+        "originalDamage": 10000,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "standalone",
+        "guard": 1,
+        "originalDamage": 0,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "standalone",
+        "guard": 1,
+        "originalDamage": 0,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "standalone",
+        "guard": 1,
+        "originalDamage": 100,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "standalone",
+        "guard": 1,
+        "originalDamage": 100,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "standalone",
+        "guard": 1,
+        "originalDamage": 10000,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "standalone",
+        "guard": 1,
+        "originalDamage": 10000,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 1000,
+        "nodeFlags": 0,
+        "hpDelta": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 1000,
+        "nodeFlags": 2,
+        "hpDelta": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 1000,
+        "nodeFlags": 4,
+        "hpDelta": -70
+      },
+      {
+        "package": "standalone",
+        "maxHp": 1000,
+        "nodeFlags": 8,
+        "hpDelta": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 10001,
+        "nodeFlags": 0,
+        "hpDelta": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 10001,
+        "nodeFlags": 2,
+        "hpDelta": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 10001,
+        "nodeFlags": 4,
+        "hpDelta": -700
+      },
+      {
+        "package": "standalone",
+        "maxHp": 10001,
+        "nodeFlags": 8,
+        "hpDelta": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 50000,
+        "nodeFlags": 0,
+        "hpDelta": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 50000,
+        "nodeFlags": 2,
+        "hpDelta": 0
+      },
+      {
+        "package": "standalone",
+        "maxHp": 50000,
+        "nodeFlags": 4,
+        "hpDelta": -3500
+      },
+      {
+        "package": "standalone",
+        "maxHp": 50000,
+        "nodeFlags": 8,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "guard": 0,
+        "originalDamage": 0,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "mmv",
+        "guard": 0,
+        "originalDamage": 0,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "mmv",
+        "guard": 0,
+        "originalDamage": 100,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "mmv",
+        "guard": 0,
+        "originalDamage": 100,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "mmv",
+        "guard": 0,
+        "originalDamage": 10000,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "mmv",
+        "guard": 0,
+        "originalDamage": 10000,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "mmv",
+        "guard": 1,
+        "originalDamage": 0,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "mmv",
+        "guard": 1,
+        "originalDamage": 0,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "mmv",
+        "guard": 1,
+        "originalDamage": 100,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "mmv",
+        "guard": 1,
+        "originalDamage": 100,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "mmv",
+        "guard": 1,
+        "originalDamage": 10000,
+        "cached": false,
+        "separateEffects": 1
+      },
+      {
+        "package": "mmv",
+        "guard": 1,
+        "originalDamage": 10000,
+        "cached": true,
+        "separateEffects": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 1000,
+        "nodeFlags": 0,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 1000,
+        "nodeFlags": 2,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 1000,
+        "nodeFlags": 4,
+        "hpDelta": -70
+      },
+      {
+        "package": "mmv",
+        "maxHp": 1000,
+        "nodeFlags": 8,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 10001,
+        "nodeFlags": 0,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 10001,
+        "nodeFlags": 2,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 10001,
+        "nodeFlags": 4,
+        "hpDelta": -700
+      },
+      {
+        "package": "mmv",
+        "maxHp": 10001,
+        "nodeFlags": 8,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 50000,
+        "nodeFlags": 0,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 50000,
+        "nodeFlags": 2,
+        "hpDelta": 0
+      },
+      {
+        "package": "mmv",
+        "maxHp": 50000,
+        "nodeFlags": 4,
+        "hpDelta": -3500
+      },
+      {
+        "package": "mmv",
+        "maxHp": 50000,
+        "nodeFlags": 8,
+        "hpDelta": 0
+      }
+    ],
+    "nativeCases": 48,
+    "gameplayVerified": false,
+    "multiplayerVerified": false,
+    "stubs": [
+      "security cookie",
+      "damage-module actor lookup",
+      "hit category context initialization",
+      "effect row lookup",
+      "final network-aware effect submission captured at 3C80A0"
+    ],
+    "nativePaths": [
+      "43C5C5 attack-effect list including zero-damage guard and cache skip",
+      "42D110 state-0 bypasses ailment guard scaling",
+      "506EC0/50B860 one-shot maximum-HP pulse"
+    ]
+  },
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "deployedFiles": {
+    "dist/natives/NRHex.dll": "0a3f71f8bcac5d94b3361571702c0ef46e2ebd7bbf5a8d52e11f27266dbfbd70",
+    "dist/mmv/natives/NRHex.dll": "0214776cf080f773ff6684206d19277b2f7fa0dd01066c651b22ae4b8817842a",
+    "dist/mod/regulation.bin": "ef1ea7c906b7b87368a14b1b293e9c3a78938d022c0b2c87cdd97b5ece02d6bb",
+    "dist/mmv/mod/regulation.bin": "ec4948f362aa36ceb253895442d0f6f495b124d5d30a73b3e94d5c849bcdc3d3"
+  },
+  "otherResourcesAndConfigsUnchanged": true,
   "gameTextUnchanged": true,
   "buildsPassed": [
     "standalone",
     "mmv"
   ],
-  "testLogs": {
-    "native-test.log": "1 test\ntest balloon_target::tests::balloon_target_native_input_hook_and_defense_pipeline ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 495 filtered out; finished in 0.84s\n\n",
-    "balloon-tests.log": "19 tests\ntest ability_damage::tests::only_balloon_context_selects_native_fixed_attack ... ok\ntest balloon::tests::action_entry_down_revival_and_late_duplicate_notifications_share_one_life ... ok\ntest balloon::tests::action_entry_emits_before_cleanup_but_healing_cannot_rearm ... ok\ntest balloon::tests::attribute_replacement_during_one_death_does_not_rearm ... ok\ntest balloon::tests::committed_down_then_death_only_explodes_once_despite_positive_hp ... ok\ntest balloon::tests::identity_loss_and_invalid_max_hp_cannot_transfer_pending_damage ... ok\ntest balloon::tests::native_death_reset_followed_by_living_spawn_rearms ... ok\ntest balloon::tests::only_completed_native_revival_rearms ... ok\ntest balloon::tests::ownership_cleanup_retains_snapshot_and_cannot_rearm ... ok\ntest balloon::tests::repeated_zero_hp_and_healing_before_commit_cannot_emit ... ok\ntest balloon_runtime::tests::death_explosion_calls_the_native_emitter_without_a_living_effect_update ... ok\ntest balloon_runtime::tests::native_commit_gates_balloon_and_positive_hp_does_not_fake_revival ... ok\ntest balloon_runtime::tests::native_state_wrapper_preserves_actor_byte_state_and_float_time ... ok\ntest balloon_target::tests::balloon_target_bonus_is_per_recipient_and_only_changes_temporary_physical_input ... ok\ntest balloon_target::tests::balloon_target_native_input_hook_and_defense_pipeline ... ignored, requires NRHEX_NATIVE_EXE; run alone\ntest balloon_team::native_tests::compiled_balloon_hooks_execute_native_relation_masks_without_changing_the_actor ... ignored, requires NRHEX_NATIVE_EXE; isolated native relationship table and hooks must run alone\ntest balloon_team::tests::attack_identity_rejects_unrelated_hits_before_resolving_a_source ... ok\ntest balloon_team::tests::only_the_private_attack_scope_changes_its_near_death_source_team ... ok\ntest balloon_team::tests::team_wrapper_preserves_pointer_return_and_does_not_change_target_or_unscoped_queries ... ok\n\ntest result: ok. 17 passed; 0 failed; 2 ignored; 0 measured; 477 filtered out; finished in 0.03s\n\n",
-    "ability-tests.log": "3 tests\ntest ability_damage::tests::base_attack_resolves_each_source_and_never_changes_unrelated_attacks ... ok\ntest ability_damage::tests::only_balloon_context_selects_native_fixed_attack ... ok\ntest ability_damage::tests::physical_base_mid_hook_preserves_native_row_and_registers ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 493 filtered out; finished in 0.01s\n\n",
-    "wrapper-test.log": "1 test\ntest tests::rear_calculation_wrapper_forwards_three_arguments_and_preserves_integer_and_float_returns ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 495 filtered out; finished in 0.00s\n\n"
+  "regressionTests": {
+    "balloon": 16,
+    "abilityDamage": 3
   },
   "gameplayVerified": false,
   "multiplayerVerified": false,
-  "runtimeSignaturesPassed": 213,
-  "dllLoadChecks": "Both DLLs load under Wine and reject unsupported host; no game process",
-  "nativeAttackDefenseGuardCases": 324,
-  "evidenceSha256": {
-    "native-test.log": "ca3f6c47b8463fcd771f8421a11e2c860b7401c56b888f11fec88d520a4dbe58",
-    "balloon-tests.log": "eca0a38c81f1e2533a2267c58f438f55002eb217924cce366c00b0527b6ac8b0",
-    "ability-tests.log": "1a90afcfc700994b37be7268e57ecc143f81af35640b63eae379032b5253b53f",
-    "wrapper-test.log": "26b27c82318b9810c7a873dcf8f5312ab779d4530998cbdd787303823d013048",
-    "signatures.log": "0564a3016e224c8c0fb4f59c99717116fd35e4e904693efa136fe50a538691ed",
-    "load.log": "07f3ea5c3fed10c6eea81b3d47c385b7fc7d4b18750c8523259ecfefaab277b7",
-    "mmv-load.log": "07f3ea5c3fed10c6eea81b3d47c385b7fc7d4b18750c8523259ecfefaab277b7",
-    "mmv-build.json": "919772c3ec06367244ea1c6e6190e81efd70fb3667da34625b70ab72bdc904e6"
+  "dllLoadChecks": {
+    "standalone": "passed; unsupported host rejected before hooks",
+    "mmv": "passed; unsupported host rejected before hooks"
   }
 }
