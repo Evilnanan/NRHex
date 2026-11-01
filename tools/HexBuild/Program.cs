@@ -189,6 +189,7 @@ if(args.Contains("--ultimate-awakening-stage")){UltimateAwakening.Stage(root,bnd
 if(args.Contains("--ultimate-awakening-check")){UltimateAwakening.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-probe")){Momentum.Probe(root,bnd,Parse);return;}
 if(args.Contains("--momentum-stage")){Momentum.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--drinking-balance-stage")){DrinkingBalance.Stage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--momentum-balance-stage")){Momentum.StageBalance(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--momentum-check")){Momentum.Verify(root,bnd,Parse);return;}
 if(args.Contains("--momentum-delivery-stage")){Momentum.FixDelivery(root,bnd,Parse);return;}
@@ -1028,7 +1029,7 @@ var drinking=Clone("SpEffectParam",8000000,95000501);Set(drinking,"maxHpRate",1f
 var fullHpAttack=pars["SpEffectParam"].Rows.Single(r=>r.ID==8670000);
 var drinkingRates=new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"};
 var drinkingPowerRates=new[]{"physicsAttackPowerRate","magicAttackPowerRate","fireAttackPowerRate","thunderAttackPowerRate","darkAttackPowerRate"};
-foreach(var f in drinkingRates){Require(Convert.ToSingle(fullHpAttack[f].Value)==1.07f,"Native full-HP damage multiplier changed");Set(drinking,f,1.05f);}
+foreach(var f in drinkingRates){Require(Convert.ToSingle(fullHpAttack[f].Value)==1.07f,"Native full-HP damage multiplier changed");Set(drinking,f,DrinkingBalance.AttackRate);}
 foreach(var f in drinkingPowerRates){Require(Convert.ToSingle(fullHpAttack[f].Value)==1f,"Native full-HP attack-power multiplier changed");Set(drinking,f,1f);}
 foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"}){Require(Convert.ToInt32(fullHpAttack[f].Value)==1,"Native full-HP spell applicability changed");Set(drinking,f,fullHpAttack[f].Value);}
 // Separate finite native effects implement multiplicative stacking without
@@ -1190,7 +1191,7 @@ Require(Convert.ToInt32(Effect(95000800)["stateInfo"].Value)==54&&Convert.ToSing
 Require(Convert.ToInt32(Effect(95000801)["stateInfo"].Value)==600&&Convert.ToSingle(Effect(95000801)["effectEndurance"].Value)==1f&&Convert.ToInt32(Effect(95000801)["vfxId"].Value)==503500&&Convert.ToInt32(Effect(95000801)["spCategory"].Value)==20,"Cat invisibility must be one second and must not replace native Art category");
 foreach(var id in new[]{95000808,95000816,95000824,95000832})Require(!effects.Rows.Any(r=>r.ID==id),"Wall diagnostic effects must be removed");
 Require(Convert.ToSingle(Effect(95000500)["changeHpEstusFlaskCorrectRate"].Value)==.5f&&Convert.ToSingle(Effect(95000501)["effectEndurance"].Value)==15f,"Drinking duration/healing multiplier mismatch");
-foreach(var field in drinkingRates)Require(Convert.ToSingle(Effect(95000501)[field].Value)==1.05f,"Drinking native-style attack multiplier mismatch");
+foreach(var field in drinkingRates)Require(Convert.ToSingle(Effect(95000501)[field].Value)==DrinkingBalance.AttackRate,"Drinking native-style attack multiplier mismatch");
 foreach(var field in drinkingPowerRates)Require(Convert.ToSingle(Effect(95000501)[field].Value)==1f,"Drinking must not change pre-defense attack-power multipliers");
 foreach(var field in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Require(Convert.ToInt32(Effect(95000501)[field].Value)==1,"Drinking spell applicability mismatch");
 Require(Convert.ToSingle(Effect(95000501)["conditionHpRate"].Value)==-1f,"Drinking must not require full HP");

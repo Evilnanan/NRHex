@@ -37,7 +37,7 @@ Fully restores the Art gauge upon activating an Ultimate Art. Cooldown: 60 secon
 <!-- hex:95000500 -->
 ## Heavy Drinking
 
-Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds.
+Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 8% for 15 seconds.
 
 <!-- hex:95000600 -->
 ## Regeneration

@@ -1,0 +1,425 @@
+{
+  "version": "0.17.274",
+  "attackPerStack": 1.08,
+  "durationSeconds": 15,
+  "layerSlots": 80,
+  "targets": {
+    "standalone": {
+      "parameters": {
+        "input": "Z:\\workspace\\NRHex\\dist/mod\\regulation.bin",
+        "inputSha256": "D1335B80F753EB2319B2920486A10EA66ADB325B943749CD1D8521BDBA53EA86",
+        "outputSha256": "20A99154AB50AC4D728C8FC4F78EDBB456BA6CFE31D426BFC977E8DD09CFB291",
+        "attackPerStack": 1.08,
+        "layerCount": 80,
+        "otherFieldsRowsAndTablesPreserved": true,
+        "gameplayVerified": false,
+        "changedLayerIds": [
+          95000501,
+          95005001,
+          95005002,
+          95005003,
+          95005004,
+          95005005,
+          95005006,
+          95005007,
+          95005008,
+          95005009,
+          95005010,
+          95005011,
+          95005012,
+          95005013,
+          95005014,
+          95005015,
+          95005016,
+          95005017,
+          95005018,
+          95005019,
+          95005020,
+          95005021,
+          95005022,
+          95005023,
+          95005024,
+          95005025,
+          95005026,
+          95005027,
+          95005028,
+          95005029,
+          95005030,
+          95005031,
+          95005032,
+          95005033,
+          95005034,
+          95005035,
+          95005036,
+          95005037,
+          95005038,
+          95005039,
+          95005040,
+          95005041,
+          95005042,
+          95005043,
+          95005044,
+          95005045,
+          95005046,
+          95005047,
+          95005048,
+          95005049,
+          95005050,
+          95005051,
+          95005052,
+          95005053,
+          95005054,
+          95005055,
+          95005056,
+          95005057,
+          95005058,
+          95005059,
+          95005060,
+          95005061,
+          95005062,
+          95005063,
+          95005064,
+          95005065,
+          95005066,
+          95005067,
+          95005068,
+          95005069,
+          95005070,
+          95005071,
+          95005072,
+          95005073,
+          95005074,
+          95005075,
+          95005076,
+          95005077,
+          95005078,
+          95005079
+        ],
+        "fieldsPerLayer": [
+          "darkAttackRate",
+          "fireAttackRate",
+          "magicAttackRate",
+          "physicsAttackRate",
+          "thunderAttackRate"
+        ],
+        "changedFields": 400,
+        "before": 1.05,
+        "after": 1.08
+      },
+      "texts": {
+        "source": "docs/hexes.md",
+        "sourceSha256": "7ACC681918B9A34EDC9CD75D8B44D9813FCAC17A5620C993CA57C8EE330D7875",
+        "englishSource": "docs/hexes.en.md",
+        "englishSourceSha256": "4AB7054C54AAFC5CD156688617877BA3CFF80DB1B18A17554431B0DB2DB70548",
+        "statusSource": "data/text/status-effects.json",
+        "statusSourceSha256": "95800208BBB57D554E233A8792C324D71DC957839BB1C8F64E3F828D3BD222EE",
+        "statusOnly": false,
+        "reports": [
+          {
+            "language": "zhocn",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "768EB1A714604DF0521779E12D35407E02F48053416DE30357E81E3D08DE4021",
+            "outputSha256": "4B3171C5815D9A4F996BBF93CE3C206D3C971D90F0ED08A98B1098CCE6C82DF3",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95000500,
+                "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒",
+                "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升8%攻击力，持续15秒"
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95000500,
+                "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒",
+                "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升8%攻击力，持续15秒"
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95000500,
+                "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒",
+                "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升8%攻击力，持续15秒"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "zhocn",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "1B2F0975B60215A94AA757EC97CEAC4626BDEFC78A96A2AE27E1D8214D963114",
+            "outputSha256": "2344F15EA8961819EAD0EA1BC7A1725F00FE8B461651A5633CEBE7B5AA706620",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95000500,
+                "before": "每层提升5%攻击力，持续15秒",
+                "after": "每层提升8%攻击力，持续15秒"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "9FF8DA2E03EF441761DCF1DAE58051E73C25B3FB807277E1C34902DC24926F61",
+            "outputSha256": "C3C42067DAF7267F058F29349E7300172B7BD36CE8FBD564BADEE6A1943F42E2",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95000500,
+                "before": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds.",
+                "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 8% for 15 seconds."
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95000500,
+                "before": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds.",
+                "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 8% for 15 seconds."
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95000500,
+                "before": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds.",
+                "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 8% for 15 seconds."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "13F853A4353FAE603AD3D8F8BA42C68B15402BD70101801289037202B8B6F415",
+            "outputSha256": "71CF08E33F9FC43AB724B1BFD247A3F5901C06978F02AF59D8F71B304F1C54F8",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95000500,
+                "before": "Boosts attack power by 5% for 15 seconds. This effect accumulates.",
+                "after": "Boosts attack power by 8% for 15 seconds. This effect accumulates."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          }
+        ]
+      }
+    },
+    "mmv": {
+      "parameters": {
+        "input": "Z:\\workspace\\NRHex\\dist/mmv/mod\\regulation.bin",
+        "inputSha256": "647CA4D15E284B475445FF5E9AF3ED0F063701FE217612451D0A08E96EBDE439",
+        "outputSha256": "D3E34527281712429C4223E74CF1F3FC5FC7F1999C4511346326D6D0C3734DD6",
+        "attackPerStack": 1.08,
+        "layerCount": 80,
+        "otherFieldsRowsAndTablesPreserved": true,
+        "gameplayVerified": false,
+        "changedLayerIds": [
+          95000501,
+          95005001,
+          95005002,
+          95005003,
+          95005004,
+          95005005,
+          95005006,
+          95005007,
+          95005008,
+          95005009,
+          95005010,
+          95005011,
+          95005012,
+          95005013,
+          95005014,
+          95005015,
+          95005016,
+          95005017,
+          95005018,
+          95005019,
+          95005020,
+          95005021,
+          95005022,
+          95005023,
+          95005024,
+          95005025,
+          95005026,
+          95005027,
+          95005028,
+          95005029,
+          95005030,
+          95005031,
+          95005032,
+          95005033,
+          95005034,
+          95005035,
+          95005036,
+          95005037,
+          95005038,
+          95005039,
+          95005040,
+          95005041,
+          95005042,
+          95005043,
+          95005044,
+          95005045,
+          95005046,
+          95005047,
+          95005048,
+          95005049,
+          95005050,
+          95005051,
+          95005052,
+          95005053,
+          95005054,
+          95005055,
+          95005056,
+          95005057,
+          95005058,
+          95005059,
+          95005060,
+          95005061,
+          95005062,
+          95005063,
+          95005064,
+          95005065,
+          95005066,
+          95005067,
+          95005068,
+          95005069,
+          95005070,
+          95005071,
+          95005072,
+          95005073,
+          95005074,
+          95005075,
+          95005076,
+          95005077,
+          95005078,
+          95005079
+        ],
+        "fieldsPerLayer": [
+          "darkAttackRate",
+          "fireAttackRate",
+          "magicAttackRate",
+          "physicsAttackRate",
+          "thunderAttackRate"
+        ],
+        "changedFields": 400,
+        "before": 1.05,
+        "after": 1.08
+      },
+      "texts": {
+        "source": "docs/hexes.md",
+        "sourceSha256": "7ACC681918B9A34EDC9CD75D8B44D9813FCAC17A5620C993CA57C8EE330D7875",
+        "englishSource": "docs/hexes.en.md",
+        "englishSourceSha256": "4AB7054C54AAFC5CD156688617877BA3CFF80DB1B18A17554431B0DB2DB70548",
+        "statusSource": "data/text/status-effects.json",
+        "statusSourceSha256": "95800208BBB57D554E233A8792C324D71DC957839BB1C8F64E3F828D3BD222EE",
+        "statusOnly": false,
+        "reports": [
+          {
+            "language": "zhocn",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "754F4CCB1185D391F7DF8298362AFBED5D9A83F652B3513960B5F06A73B31325",
+            "outputSha256": "201F89BB4DD531E133DD7966D2141EAFC44172A3EAB72C0E4E18F7701280FBB6",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95000500,
+                "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒",
+                "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升8%攻击力，持续15秒"
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95000500,
+                "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒",
+                "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升8%攻击力，持续15秒"
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95000500,
+                "before": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升5%攻击力，持续15秒",
+                "after": "你的圣杯瓶数量翻倍，但回复量减半。使用圣杯瓶后，提升8%攻击力，持续15秒"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "zhocn",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "71C17A06C3CE48DA02730ACF51236A10DA8F4BFFA736E004089FD651878F2D48",
+            "outputSha256": "36ED0A7FCAA0FF0F72432952AA94EF62F6FD11A3581EF3368CDB4A8CB8094F7B",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95000500,
+                "before": "每层提升5%攻击力，持续15秒",
+                "after": "每层提升8%攻击力，持续15秒"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "9DABCA483910B1E41FA60FA7E4E3208EB93E467FBAD6728313A5B0F5E8BE5A6E",
+            "outputSha256": "9673F8389092FF904AB86C24ACC2836705C79E4042D89DA756F7D4BA36A54B4F",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95000500,
+                "before": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds.",
+                "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 8% for 15 seconds."
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95000500,
+                "before": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds.",
+                "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 8% for 15 seconds."
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95000500,
+                "before": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 5% for 15 seconds.",
+                "after": "Doubles the number of Flask of Crimson Tears uses, but halves the HP restored. Using the flask boosts attack power by 8% for 15 seconds."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "33763A6C4897791BC5A9709A18B333BD50E1DDBA80180882C74D2E440FED9DDF",
+            "outputSha256": "3ED261B7F403A275FAA05B0168E4070CB9482AD21EF16095A8033D7168406511",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95000500,
+                "before": "Boosts attack power by 5% for 15 seconds. This effect accumulates.",
+                "after": "Boosts attack power by 8% for 15 seconds. This effect accumulates."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          }
+        ]
+      }
+    }
+  },
+  "deployedFiles": {
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "4b3171c5815d9a4f996bbf93ce3c206d3c971d90f0ed08a98b1098cce6c82df3",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "2344f15ea8961819ead0ea1bc7a1725f00fe8b461651a5633cebe7b5aa706620",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "c3c42067daf7267f058f29349e7300172b7bd36ce8fbd564badee6a1943f42e2",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "71cf08e33f9fc43ab724b1bfd247a3f5901c06978f02af59d8f71b304f1c54f8",
+    "dist/mod/regulation.bin": "20a99154ab50ac4d728c8fc4f78edbb456ba6cfe31d426bfc977e8dd09cfb291",
+    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "201f89bb4dd531e133dd7966d2141eafc44172a3eab72c0e4e18f7701280fbb6",
+    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "36ed0a7fcaa0ff0f72432952aa94ef62f6fd11a3581ef3368cdb4a8cb8094f7b",
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "9673f8389092ff904ab86c24acc2836705c79e4042d89da756f7d4ba36a54b4f",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "3ed261b7f403a275faa05b0168e4070cb9482ad21ef16095a8033d7168406511",
+    "dist/mmv/mod/regulation.bin": "d3e34527281712429c4223e74cf1f3fc5fc7f1999c4511346326d6d0c3734dd6",
+    "dist/natives/NRHex.dll": "9c24f05b8db54edce79d88a46b87d997a5283902102ea96c791f3a2f0441730d",
+    "dist/mmv/natives/NRHex.dll": "3d2c594261262a56f2f14893345190100659d3d75277ab9d4384e04e2dc5ce0a"
+  },
+  "unrelatedPackageFilesPreserved": true,
+  "buildsPassed": [
+    "standalone",
+    "mmv"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -34,8 +34,8 @@
   {
     "textId": 95000500,
     "ownerId": 95000500,
-    "zhInfo": "每层提升5%攻击力，持续15秒",
-    "enInfo": "Boosts attack power by 5% for 15 seconds. This effect accumulates."
+    "zhInfo": "每层提升8%攻击力，持续15秒",
+    "enInfo": "Boosts attack power by 8% for 15 seconds. This effect accumulates."
   },
   {
     "textId": 95000800,
