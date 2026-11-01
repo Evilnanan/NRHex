@@ -1,0 +1,42 @@
+{
+  "version": "0.17.275",
+  "effect": 95001700,
+  "attack": 95001760,
+  "targetMaxHpFraction": 0.07,
+  "stage": "per-recipient physical input before native offense/defense/guard",
+  "temporaryVectorOnly": true,
+  "nativeInputRva": "43A39F",
+  "signatureBytes": 92,
+  "relocatedBytes": 8,
+  "deployedFiles": {
+    "dist/natives/NRHex.dll": "d2906a8b136993e9ad79e4915818683ff3cc56bc420819aea6a6cf57a8648713",
+    "dist/mmv/natives/NRHex.dll": "be2d0329b2772e5fbd65e180053752187ec15bba8a63ea29985c9002e32794ff"
+  },
+  "allResourcePackagesAndConfigsUnchanged": true,
+  "gameTextUnchanged": true,
+  "buildsPassed": [
+    "standalone",
+    "mmv"
+  ],
+  "testLogs": {
+    "native-test.log": "1 test\ntest balloon_target::tests::balloon_target_native_input_hook_and_defense_pipeline ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 495 filtered out; finished in 0.84s\n\n",
+    "balloon-tests.log": "19 tests\ntest ability_damage::tests::only_balloon_context_selects_native_fixed_attack ... ok\ntest balloon::tests::action_entry_down_revival_and_late_duplicate_notifications_share_one_life ... ok\ntest balloon::tests::action_entry_emits_before_cleanup_but_healing_cannot_rearm ... ok\ntest balloon::tests::attribute_replacement_during_one_death_does_not_rearm ... ok\ntest balloon::tests::committed_down_then_death_only_explodes_once_despite_positive_hp ... ok\ntest balloon::tests::identity_loss_and_invalid_max_hp_cannot_transfer_pending_damage ... ok\ntest balloon::tests::native_death_reset_followed_by_living_spawn_rearms ... ok\ntest balloon::tests::only_completed_native_revival_rearms ... ok\ntest balloon::tests::ownership_cleanup_retains_snapshot_and_cannot_rearm ... ok\ntest balloon::tests::repeated_zero_hp_and_healing_before_commit_cannot_emit ... ok\ntest balloon_runtime::tests::death_explosion_calls_the_native_emitter_without_a_living_effect_update ... ok\ntest balloon_runtime::tests::native_commit_gates_balloon_and_positive_hp_does_not_fake_revival ... ok\ntest balloon_runtime::tests::native_state_wrapper_preserves_actor_byte_state_and_float_time ... ok\ntest balloon_target::tests::balloon_target_bonus_is_per_recipient_and_only_changes_temporary_physical_input ... ok\ntest balloon_target::tests::balloon_target_native_input_hook_and_defense_pipeline ... ignored, requires NRHEX_NATIVE_EXE; run alone\ntest balloon_team::native_tests::compiled_balloon_hooks_execute_native_relation_masks_without_changing_the_actor ... ignored, requires NRHEX_NATIVE_EXE; isolated native relationship table and hooks must run alone\ntest balloon_team::tests::attack_identity_rejects_unrelated_hits_before_resolving_a_source ... ok\ntest balloon_team::tests::only_the_private_attack_scope_changes_its_near_death_source_team ... ok\ntest balloon_team::tests::team_wrapper_preserves_pointer_return_and_does_not_change_target_or_unscoped_queries ... ok\n\ntest result: ok. 17 passed; 0 failed; 2 ignored; 0 measured; 477 filtered out; finished in 0.03s\n\n",
+    "ability-tests.log": "3 tests\ntest ability_damage::tests::base_attack_resolves_each_source_and_never_changes_unrelated_attacks ... ok\ntest ability_damage::tests::only_balloon_context_selects_native_fixed_attack ... ok\ntest ability_damage::tests::physical_base_mid_hook_preserves_native_row_and_registers ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 493 filtered out; finished in 0.01s\n\n",
+    "wrapper-test.log": "1 test\ntest tests::rear_calculation_wrapper_forwards_three_arguments_and_preserves_integer_and_float_returns ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 495 filtered out; finished in 0.00s\n\n"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "runtimeSignaturesPassed": 213,
+  "dllLoadChecks": "Both DLLs load under Wine and reject unsupported host; no game process",
+  "nativeAttackDefenseGuardCases": 324,
+  "evidenceSha256": {
+    "native-test.log": "ca3f6c47b8463fcd771f8421a11e2c860b7401c56b888f11fec88d520a4dbe58",
+    "balloon-tests.log": "eca0a38c81f1e2533a2267c58f438f55002eb217924cce366c00b0527b6ac8b0",
+    "ability-tests.log": "1a90afcfc700994b37be7268e57ecc143f81af35640b63eae379032b5253b53f",
+    "wrapper-test.log": "26b27c82318b9810c7a873dcf8f5312ab779d4530998cbdd787303823d013048",
+    "signatures.log": "0564a3016e224c8c0fb4f59c99717116fd35e4e904693efa136fe50a538691ed",
+    "load.log": "07f3ea5c3fed10c6eea81b3d47c385b7fc7d4b18750c8523259ecfefaab277b7",
+    "mmv-load.log": "07f3ea5c3fed10c6eea81b3d47c385b7fc7d4b18750c8523259ecfefaab277b7",
+    "mmv-build.json": "919772c3ec06367244ea1c6e6190e81efd70fb3667da34625b70ab72bdc904e6"
+  }
+}
