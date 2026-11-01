@@ -14,11 +14,7 @@ command+=['--lib','echo_compiled_hooks_replay_native_dispatch_and_release_refere
 r=subprocess.run(command,cwd=ROOT,env=env,capture_output=True,text=True,errors='replace');log=r.stdout+r.stderr
 (w/'native-test.log').write_text(log)
 assert r.returncode==0 and '1 passed; 0 failed;'in log,log
-fixture=ROOT/'.work/echo-cost/installed-magic.param'
-env['NRHEX_ECHO_MAGIC_FIXTURE']=str(fixture)
-if os.name!='nt' and env.get('NRHEX_CARGO_TARGET','').startswith('x86_64-pc-windows'):
- env['NRHEX_ECHO_MAGIC_FIXTURE']='Z:'+str(fixture).replace('/',chr(92))
-cost_command=[arg if arg!='echo_compiled_hooks_replay_native_dispatch_and_release_references' else 'native_echo_spell_stamina_cost_and_abi' for arg in command]
+cost_command=[arg if arg!='echo_compiled_hooks_replay_native_dispatch_and_release_references' else 'native_action_stamina_payment_and_immunity' for arg in command]
 r=subprocess.run(cost_command,cwd=ROOT,env=env,capture_output=True,text=True,errors='replace');cost_log=r.stdout+r.stderr
 (w/'native-cost-test.log').write_text(cost_log)
 assert r.returncode==0 and '1 passed; 0 failed;'in cost_log,cost_log
@@ -45,10 +41,10 @@ report['cases'].append('O Flame normal/charged roots isolate volley records with
 report['cases'].append('volley references balance on replay, owner loss, failed root creation and failed native volley allocation; original volley data is never reset')
 report['nativeFunctions'].extend(['52D590 volley candidate registration','52DB50 volley eligibility','52D660 volley consumption'])
 report['stubs'].append('52EF20 volley allocation and final 52DBF0 disposal use owned fixture records; pool allocation itself is not executed')
-report['sourceHashes'].update({p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest()for p in ['src/echo_cost.rs','src/echo_cost_native_tests.rs']})
-report['nativeFunctions'].extend(['E92250 installed normal/charged Magic stamina getter','3849AD actor virtual stamina modifier dispatch; 3849CF compiled hook; original NEG/cache store','4261D0 / 427F00 native stamina consumption and floor/guard flags'])
-report['cases'].extend(['normal Comet costs 60 and charged Comet costs 78; final native modifiers are applied before multiplying by 1.7, rounded half up; small costs 1/2/3/4/5 become 2/3/5/7/9','only local owned sorcery/incantation costs increase by 70%; foreign actor, ownerless, inactive, null row, non-spell and non-positive costs pass through','volatile GPR/XMM and nonvolatile frame/weapon/mode registers survive the compiled mid-function hook','reused cached cost charges each native interval without compounding; native no-consumption flags and -50 floor remain; ordinary behavior constructor unpatched'])
-report['stubs'].append('spell cost actor virtual method and local effect lookup; native normal/charged getter, final cost cache and stamina deduction execute')
+report['sourceHashes'].update({p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest()for p in ['src/echo_cost.rs','src/action_stamina.rs','src/action_stamina_tests.rs']})
+report['nativeFunctions'].extend(['E92250 native normal/charged Magic stamina getter','384AA1 compiled action payment hook; native cache unchanged; Echo base and surcharge split','4261D0 / 427F00 ordinary consumption; 427F69 native clamp for forced debit'])
+report['cases'].extend(['Magic fixtures with native costs 35/46 pay 60/78 when ordinary fees are payable; surcharge uses the cached fee after native modifiers, rounded half up; small costs preserve the previous total rounding','only local owned sorcery/incantation costs increase by 70%; foreign actor, ownerless, inactive, null row, non-spell and non-positive costs pass through','compiled action-payment hook executes the native cache consumer; native Storm weapons and charged variants keep ordinary immunity','cached native base cost stays unchanged; ordinary fees respect immunity; Echo surcharge bypasses actor/global immunity while retaining the native -50 floor; ordinary and Magic constructors unpatched'])
+report['stubs'].append('Magic row lookup, local effect lookup and weapon reference fixtures; native normal/charged getter, action payment and stamina clamp execute')
 report['independentVolleySpells']=[4300,4301,4302,6001,6710,6820,6830]+[profile['magic']for profile in catalog['expanded']['spells']]
 report['expandedProfiles']=catalog['expanded']
 report['directMeleeNotReplayed']=[4430,4440,4450,7080,7500,7510]

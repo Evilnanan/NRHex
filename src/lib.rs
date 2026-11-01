@@ -7,6 +7,7 @@ mod bartender;
 compile_error!("Use the demand implementation or lifecycle probe, not both");
 mod echo_cast;
 mod echo_cost;
+mod action_stamina;
 mod echo_cast_data { include!(concat!(env!("OUT_DIR"), "/echo_cast_data.rs")); }
 pub mod hook;
 pub mod log;
@@ -371,7 +372,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);212] {
+fn signatures()->[(&'static str,u32);214] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -394,6 +395,7 @@ fn signatures()->[(&'static str,u32);212] {
   (wraith::SERIAL_PATTERN,0x1f5700),(wraith::CAPACITY_PATTERN,0x1f2370),
   (wraith::CAN_PATTERN,wraith::CAN_RVA as u32),(wraith::USE_PATTERN,wraith::USE_RVA as u32),(wraith::PARAM_PATTERN,wraith::PARAM_RVA as u32),(wraith::TOKEN_PATTERN,wraith::TOKEN_RVA as u32),(wraith::XP_PATTERN,wraith::XP_RVA as u32),
   (echo_cost::PATTERN,echo_cost::RVA as u32),(echo_cost::GETTER_PATTERN,echo_cost::GETTER_RVA as u32),
+  (action_stamina::PATTERN,action_stamina::RVA as u32),(action_stamina::CLAMP_PATTERN,action_stamina::CLAMP_RVA as u32),
   (echo_cast::INITIALIZE_PATTERN,echo_cast::INITIALIZE_RVA as u32),(echo_cast::FINISH_PATTERN,echo_cast::FINISH_RVA as u32),(echo_cast::VOLLEY_CREATE_PATTERN,echo_cast::VOLLEY_CREATE_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
   (HAS_EFFECT_PATTERN,HAS_EFFECT_RVA as u32),(GAUGE_PATTERN,GAUGE_RVA as u32),
@@ -629,6 +631,8 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   parry::COST_RESUME.store(base.add(parry::COST_RESUME_RVA) as *mut u8,Ordering::Release);
   potential_fission::GROUP_SKIP.store(base.add(0x57a8e1)as*mut u8,Ordering::Release);
   sword_projectile::STOP.store(base.add(sword_projectile::STOP_RVA)as*mut u8,Ordering::Release);
+  action_stamina::CONTINUE.store(base.add(action_stamina::RVA+5)as*mut u8,Ordering::Release);
+  action_stamina::CLAMP.store(base.add(action_stamina::CLAMP_RVA)as*mut u8,Ordering::Release);
   let arts_transfer_targets=[
    (deliberate_punch::DISPATCH_RVA,deliberate_punch::dispatch as*const u8,&deliberate_punch::DISPATCH_ORIGINAL),
    (deliberate_punch::COMMIT_RVA,deliberate_punch::commit_detour as*const u8,&deliberate_punch::COMMIT_ORIGINAL),
@@ -648,7 +652,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (wraith::PARAM_RVA,wraith::param as *const u8,&wraith::PARAM_ORIGINAL),
    (wraith::TOKEN_RVA,wraith::token as *const u8,&wraith::TOKEN_ORIGINAL),
    (wraith::XP_RVA,wraith::xp as *const u8,&wraith::XP_ORIGINAL),
-   (echo_cost::RVA,echo_cost::detour as *const u8,&echo_cost::ORIGINAL),
+   (action_stamina::RVA,action_stamina::detour as *const u8,&action_stamina::ORIGINAL),
    (echo_cast::EMIT_RVA,echo_cast::emit as *const u8,&echo_cast::EMIT_ORIGINAL),
    (echo_cast::FACTORY_RVA,echo_cast::factory as *const u8,&echo_cast::FACTORY_ORIGINAL),
    (echo_cast::INITIALIZE_RVA,echo_cast::initialize as *const u8,&echo_cast::INITIALIZE_ORIGINAL),
@@ -709,6 +713,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let mut arts_transfer_prepared=Vec::new();
   for (rva,detour,original) in arts_transfer_targets {
    let p=hook::prepare(base.add(rva) as *mut u8,detour,64)?;
+   if rva==action_stamina::RVA&&p.stolen!=5{return Err("Action stamina payment must replace its five-byte native CALL".into());}
    if rva==potential_fission::GROUP_RVA&&p.stolen!=7{return Err("Fission grouping must relocate only MOVZX ECX,[RDX+CA]".into());}
    if rva==death_dance::RVA&&p.stolen!=6{return Err("Death dance must relocate exactly MOV ECX,[RBX+140]".into());}
    if rva==parry::RVA&&p.stolen!=7{return Err("Parry state query must relocate its two 7-byte MOV instructions".into());}
