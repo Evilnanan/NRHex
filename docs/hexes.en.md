@@ -235,6 +235,6 @@ The more damage you take during an empowered Character Skill, the more damage yo
 Switching weapons changes their enchantment affinity.
 
 <!-- hex:95005100 -->
-## Static
+## Lightning Conduit
 
-Moving builds static charge. When fully charged, your next attack hit calls down lightning.
+Moving builds static charge. At full charge, attacks transfer it to the target, while being attacked causes a discharge onto yourself. Lightning strikes after 1 second, strengthened by damage taken during that time.

@@ -6,12 +6,17 @@ unsafe fn float(p:usize,v:f32){ptr::write_unaligned(p as*mut f32,v);}
 unsafe extern "system" fn accepted(_:usize,_:usize,_:usize)->u8{assert!(active_contact());1}
 unsafe extern "system" fn rejected(_:usize,_:usize,_:usize)->u8{0}
 thread_local!{static ROW:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
-unsafe extern "system" fn lookup(out:usize,kind:i32,id:i32)->usize{assert_eq!((kind,id),(1,ATTACK));ptr::write_unaligned((out+0x10)as*mut usize,ROW.with(std::cell::Cell::get));out}
+unsafe extern "system" fn lookup(out:usize,kind:i32,id:i32)->usize{assert_eq!(kind,1);assert!(private_attack(id,kind));ptr::write_unaligned((out+0x10)as*mut usize,ROW.with(std::cell::Cell::get));out}
 thread_local!{static TEAM:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
 unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(id==OWNER)}
 unsafe extern "system" fn team(_:usize,_:i32)->usize{TEAM.with(std::cell::Cell::get)}
 unsafe extern "system" fn common(out:usize)->usize{ptr::write_unaligned(out as*mut usize,0);out}
 unsafe extern "system" fn mode()->u8{0}
+unsafe extern "system" fn apply(_:usize,id:i32,_:u8)->u8{assert_eq!(id,MARK);1}
+unsafe extern "system" fn effective_team(actor:usize,out:usize)->usize{ptr::write(out as*mut u8,ptr::read((actor+0x74)as*const u8));out}
+unsafe extern "system" fn immune(actor:usize,_:usize)->u8{ptr::read((actor+0x80)as*const u8)}
+unsafe extern "system" fn not_dead(_:usize)->u8{0}
+unsafe extern "system" fn module_actor(module:usize)->usize{read_ptr(module+8)}
 unsafe fn patch(base:usize,rva:usize,target:usize){let mut code=vec![0x48,0xb8];code.extend_from_slice(&target.to_le_bytes());code.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(code.as_ptr(),(base+rva)as*mut u8,code.len());}
 #[test]#[ignore="requires NRHEX_NATIVE_EXE; run alone"]
 fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
@@ -40,7 +45,7 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  {let _child=child(bp,BULLET+1);int(pp+4,BULLET+1);let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(cb);}
  assert!(Arc::ptr_eq(&seed(bp).unwrap(),&seed(cb).unwrap()));
  let mut hit=[0u8;0x300];let hp=hit.as_mut_ptr()as usize;int(hp+0x40,ATTACK);int(hp+0x44,1);let mut context=[0u8;0x120];let cp=context.as_mut_ptr()as usize;ptr::write_unaligned(cp as*mut usize,bp);int(cp+8,ATTACK);int(cp+12,1);
- crate::ability_damage::before_construct(cp);assert_eq!(context[0xf8],1);
+ for id in ATTACK..=ATTACK+3{int(cp+8,id);context[0xf8]=0;crate::ability_damage::before_construct(cp);assert_eq!(context[0xf8],1);}int(cp+8,ATTACK);
  let mut row=[0u8;0x200];let rp=row.as_mut_ptr()as usize;float(rp+0x84,30.);float(rp+0x1c0,30.);ROW.with(|s|s.set(rp));patch(base,0xe6d630,lookup as*const()as usize);
  let poise:unsafe extern "system" fn(usize,i32,usize,f32,usize,usize)->f32=std::mem::transmute(base+0x6ce2f0);
  let rescue:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+0x6cd640);
@@ -68,10 +73,16 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  int(pp+4,BULLET);float(pp+0x124,123.);
  {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
  assert!(!Arc::ptr_eq(&seed(bp).unwrap(),&seed(cb).unwrap()));assert_eq!(contact(accepted,hp,tp,bp),1);
+ int(pp+4,LEAK_BULLET);float(pp+0x124,187.5);int(bp+0xa4,LEAK_BULLET);
+ {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
+ int(cb+0xa4,LEAK_BULLET+1);
+ {let _c=child(bp,LEAK_BULLET+1);int(pp+4,LEAK_BULLET+1);let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(cb);}
+ assert!(Arc::ptr_eq(&seed(bp).unwrap(),&seed(cb).unwrap()));assert_eq!(seed(cb).unwrap().damage,187.5);
+ assert_eq!(contact(rejected,hp,tp,bp),0);assert_eq!(contact(accepted,hp,tp,cb),1);assert_eq!(contact(accepted,hp,tp,bp),0);
  retired(bp);assert!(seed(bp).is_none());retired(cb);finished(gp);
  // Exercise the actual outgoing callback with a downed registered teammate
  // and zero HP damage. Native rescue coefficients, not HP loss, decide it.
- for(rva,target)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(0x5197e0,team as*const()as usize),(crate::ambulance::COMMON_RVA,common as*const()as usize),(crate::ambulance::MODE_RVA,mode as*const()as usize)]{patch(base,rva,target);}
+ for(rva,target)in [(crate::APPLY_SELF_RVA,apply as*const()as usize),(crate::HAS_EFFECT_RVA,has as*const()as usize),(0x5197e0,team as*const()as usize),(crate::ambulance::COMMON_RVA,common as*const()as usize),(crate::ambulance::MODE_RVA,mode as*const()as usize)]{patch(base,rva,target);}
  let old_base=BASE.swap(base,Ordering::AcqRel);
  let mut source=[0usize;0x740/8];let sp=source.as_mut_ptr()as usize;source[1]=123;source[0x190/8]=1;
  let mut ally=[0usize;0x740/8];let ap=ally.as_mut_ptr()as usize;ally[1]=456;ptr::write((ap+0x710)as*mut u8,1);
@@ -79,10 +90,45 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  let module=[0usize,ap];let mp=module.as_ptr()as usize;
  int(hp+0x40,100);int(hp+0x44,1);int(hp+0x280,0);float(hp+0x150,30.);float(hp+0x258,1.);
  SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});STATE.lock().unwrap().meter.distance=30.;
- outgoing(mp,sp,hp);outgoing(mp,sp,hp);assert_eq!(STATE.lock().unwrap().pending.len(),1);assert_eq!(STATE.lock().unwrap().pending[0].damage,500.);
- STATE.lock().unwrap().pending.clear();STATE.lock().unwrap().meter.distance=30.;
- int(hp+0x40,ATTACK);outgoing(mp,sp,hp);assert_eq!(STATE.lock().unwrap().meter.distance,30.);
- int(hp+0x40,100);ptr::write((ap+0x710)as*mut u8,0);outgoing(mp,sp,hp);assert_eq!(STATE.lock().unwrap().meter.distance,30.);
+ {let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().marks.len(),1);assert_eq!(STATE.lock().unwrap().marks[0].sum,500.);
+ STATE.lock().unwrap().marks.clear();STATE.lock().unwrap().meter.distance=30.;
+ int(hp+0x40,ATTACK);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,30.);
+ int(hp+0x40,100);ptr::write((ap+0x710)as*mut u8,0);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,30.);
+ // Hostile incoming damage creates a self mark, first hit included; later
+ // unrelated sources add once per dispatch, even with zero final HP damage.
+ TEAM.with(|s|s.set(0));let incoming_module=[0usize,sp];let im=incoming_module.as_ptr()as usize;
+ let mut game=[0usize;2];let mut data=[0i32;0x70/4];data[0x68/4]=15;game[1]=data.as_ptr()as usize;ptr::write_unaligned((base+crate::GAME_DATA_RVA)as*mut usize,game.as_ptr()as usize);
+ SAMPLES.lock().unwrap().insert(hp,Sample{key:key(ap,sp,hp),value:400.});
+ {let _dispatch=dispatch_scope(im,hp);outgoing(im,ap,hp);outgoing(im,ap,hp);}
+ {let s=STATE.lock().unwrap();assert_eq!(s.marks.len(),1);let m=s.marks[0];assert!(m.leak);assert_eq!(m.target,123);assert_eq!(m.damage(),137.5);}
+ enter(im,0,hp);let environmental=[200.,0.,0.,0.,0.];
+ crate::glass_cannon::detour(out.as_mut_ptr(),environmental.as_ptr(),one.as_ptr(),cuts.as_ptr(),one.as_ptr(),one.as_ptr(),one.as_ptr(),one.as_ptr(),1.,1.,1.,1.,1.,1.,1.);leave();
+ assert_eq!(SAMPLES.lock().unwrap().get(&hp).unwrap().value,200.);
+ {let _dispatch=dispatch_scope(im,hp);outgoing(im,0,hp);}
+ assert_eq!(STATE.lock().unwrap().marks[0].damage(),187.5);
+ // Native target masks: selfTarget controls the owner; opposeTarget controls
+ // enemies. Use the original relationship methods, not a reimplementation.
+ let friendly_method=base+0x52c910;let hostile_method=base+0x52c920;
+ let friendly=&friendly_method as*const usize as usize;let hostile=&hostile_method as*const usize as usize;
+ ptr::write_unaligned((base+0x398d410+(2*81+2)*8)as*mut usize,&friendly as*const usize as usize);
+ ptr::write_unaligned((base+0x398d410+(2*81+6)*8)as*mut usize,&hostile as*const usize as usize);
+ ptr::write((sp+0x74)as*mut u8,2);ptr::write((ap+0x74)as*mut u8,6);
+ patch(base,0x3d1b30,effective_team as*const()as usize);
+ let relationship:unsafe extern "system" fn(usize,usize,usize)->i32=std::mem::transmute(base+0x52cb90);
+ let reference=[0usize,0,rp];
+ for(mask,self_hit,enemy_hit)in [(1,0,1),(4,1,0),(5,1,1)]{
+  ptr::write((rp+0x81)as*mut u8,mask);assert_eq!(relationship(sp,sp,reference.as_ptr()as usize),self_hit);assert_eq!(relationship(sp,ap,reference.as_ptr()as usize),enemy_hit);
+ }
+ // Native Chr-owned contact gate rejects TAE invulnerability before the
+ // relationship query. Leakage uses exactly this same gate as normal bolts.
+ patch(base,0x3d31b0,not_dead as*const()as usize);patch(base,0x42c120,module_actor as*const()as usize);
+ let mut vt=[0usize;0x208/8];vt[0x200/8]=immune as*const()as usize;source[0]=vt.as_ptr()as usize;
+ let stats=[0u8;0x260];let modules=[0usize,stats.as_ptr()as usize];source[0x1b8/8]=modules.as_ptr()as usize;
+ int(hp+0x40,ATTACK+2);ptr::write((rp+0x81)as*mut u8,4);
+ let gate:unsafe extern "system" fn(usize,usize,usize,u8)->u8=std::mem::transmute(base+0x436370);
+ ptr::write((sp+0x80)as*mut u8,0);assert_eq!(gate(im,sp,hp,0),1);
+ ptr::write((sp+0x80)as*mut u8,1);assert_eq!(gate(im,sp,hp,0),0);
+ ptr::write((sp+0x80)as*mut u8,0);assert_eq!(gate(im,sp,hp,0),1);
  reset();BASE.store(old_base,Ordering::Release);
  SAMPLES.lock().unwrap().clear();ACTIVE.store(old_active,Ordering::Release);crate::glass_cannon::ORIGINAL.store(old_calc,Ordering::Release);VirtualFree(memory,0,MEM_RELEASE);
 }}

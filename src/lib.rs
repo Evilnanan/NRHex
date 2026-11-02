@@ -2317,7 +2317,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  marking::update(player,base);
  basics::update(player,base);
  deliberate_punch::update(player,base);
- static_charge::update(player,base);
+ static_charge::update(player,base,dt);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  update_chant(player,base);
