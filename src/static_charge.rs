@@ -11,7 +11,7 @@ pub const TRANSPORT_RVA:usize=0x34058e;
 pub const TRANSPORT_PATTERN:&str="0F 10 42 30 0F 11 81 24 01 00 00";
 pub const PACKET_RVA:usize=0x33e1a3;
 pub const PACKET_PATTERN:&str="0F 10 47 30 0F 11 46 70";
-const DISTANCE:f64=100.;
+const DISTANCE:f64=80.;
 const MELEE_RANGE:f32=6.;
 #[derive(Default)]struct Meter{distance:f64,last:Option<(usize,u64,u32,[f32;4])>}
 impl Meter{
@@ -273,12 +273,12 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
   let mut m=Meter::default();m.observe(1,2,3,Some([0.,0.,0.,1.]));
   for p in [[10.,0.,0.,1.],[10.,10.,0.,1.],[10.,10.,10.,1.]]{m.observe(1,2,3,Some(p));}
   assert!(!m.take());
-  m.observe(1,2,3,Some([10.,10.,79.,1.]));assert!(!m.take());assert_eq!(m.distance,99.);
-  m.observe(1,2,3,Some([10.,10.,80.,1.]));assert!(m.take());assert!(!m.take());
-  m.observe(1,2,3,Some([10.,10.,85.,1.]));assert_eq!(m.distance,5.);
+  m.observe(1,2,3,Some([10.,10.,59.,1.]));assert!(!m.take());assert_eq!(m.distance,79.);
+  m.observe(1,2,3,Some([10.,10.,60.,1.]));assert!(m.take());assert!(!m.take());
+  m.observe(1,2,3,Some([10.,10.,65.,1.]));assert_eq!(m.distance,5.);
   m.observe(4,5,6,Some([999.,999.,999.,1.]));assert_eq!(m.distance,5.);
   m.observe(4,5,6,None);m.observe(4,5,6,Some([0.;4]));assert_eq!(m.distance,5.);
  }
- #[test]fn full_charge_is_one_token_and_does_not_bank_overflow(){let mut m=Meter::default();m.observe(1,2,3,Some([0.;4]));m.observe(1,2,3,Some([150.,0.,0.,1.]));assert_eq!(m.distance,100.);assert!(m.take());assert!(!m.take());}
+ #[test]fn full_charge_is_one_token_and_does_not_bank_overflow(){let mut m=Meter::default();m.observe(1,2,3,Some([0.;4]));m.observe(1,2,3,Some([150.,0.,0.,1.]));assert_eq!(m.distance,80.);assert!(m.take());assert!(!m.take());}
 }
 #[cfg(test)]#[path="static_charge_tests.rs"]mod native_tests;

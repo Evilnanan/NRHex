@@ -1,7 +1,7 @@
 {
-  "version": "0.17.285",
-  "baselineCommit": "dad0793",
-  "distanceMetres": 100,
+  "version": "0.17.286",
+  "baselineCommit": "9148721",
+  "distanceMetres": 80,
   "leakageDownedOwnerContact": "Rejected before native damage, rescue and hit reactions",
   "checkedAt": "Every root/wave collision",
   "playerStates": [
@@ -12,10 +12,7 @@
   "ordinaryLightningRescueUnchanged": true,
   "firstHitAndTwoSecondDamageSnapshotUnchanged": true,
   "validation": {
-    "regularPassed": 473,
-    "regularIgnored": 34,
-    "nativeIsolatedPassed": 1,
-    "mmvArtsPassed": 6,
+    "chargeTestsPassed": 8,
     "standaloneAndMmvBuild": true,
     "dllLoadSmoke": true,
     "gameplayTested": false,
@@ -149,19 +146,32 @@
     "README.md": "afc6a482eace7cf6d179e8286a27b47a9a73e5670446d0509271ea84f9ae3547"
   },
   "sourceHashes": {
-    "src/static_charge.rs": "8aa81ca5e3e6f70370c15e17f12f751d2020387242138c34bad92332e8c69762",
+    "src/static_charge.rs": "3a0e69aa1f3bb14900aa733eb292843af1a23a22bbb5f42e8aa8b2e0ccf1ab65",
     "src/static_charge_tests.rs": "8b0bb80c5f542620c4de4fddd1a617f7cf1e04fcbccdeda4b8f99484fa40c2bc",
-    "docs/research/static-charge.md": "af345decc88ffba26dea9922bf5fdca05e197d2ddce2fe412d00e8ab8488e598",
-    "Cargo.toml": "b6dc6eb4449025418ab720f1701b6c6dc210f4337d6985623557559a6d090ab1",
-    "Cargo.lock": "9905d17e2f2c2c4ed0c21f01d4eb6aaff6343e2fe215f8a1551d04dff9d012fc"
+    "docs/research/static-charge.md": "29f6fe5dfc7014ee8606a5f43e721aa21b1677b4ba14c70d0f33766ca95aeb99",
+    "Cargo.toml": "5033640f2349dbb1f0889daf8e51cca7cb05a22666dc460dcce7293c6d78e83d",
+    "Cargo.lock": "b9ac1cf209beea9b5173a6059dc13584566a8e22a03cd56d48f60c8fbaa4c89e"
   },
   "deployedFiles": {
-    "dist/natives/NRHex.dll": "9591234d1228a9de2a3705e20a170dccdcf1bd5e46a0027ff49586adef1a314d",
-    "dist/mmv/natives/NRHex.dll": "3d770d0455877b33af302cc5cdc872936f6fab8af682388c7b31d46c815bf398",
+    "dist/natives/NRHex.dll": "2a8b29bfed0d892244b65f6f55e2327665851f71f493e429d9c71ec9cf5e5339",
+    "dist/mmv/natives/NRHex.dll": "32c489092987252d0e85c69d783ead7e8705fcc346beec2484e8593677cc5e6a",
     "dist/mmv/mod/regulation.bin": "d86099f11d43bf56dd03b113ba3f09f67fe0dda04e7e4efbd7d4a7a0ed7e45ec",
     "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "edd4832533915ed70a7778a812d0cd0e5254dc7377884451e90942d631dae86a",
     "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "a60bb32ec5903a08c30cb5772674478544bf28b6e82cc018740f229efdc6f957",
     "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "9fe8c71d57f1bda053fd0f01a4443e3a89cd471ae9011bc8dbd50bc621d61c8a",
     "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "e64027b1e22e791bf4558e50de9b642273ff774cea20b9568b222000de9710ab"
+  },
+  "priorValidation": {
+    "version": "0.17.285",
+    "results": {
+      "regularPassed": 473,
+      "regularIgnored": 34,
+      "nativeIsolatedPassed": 1,
+      "mmvArtsPassed": 6,
+      "standaloneAndMmvBuild": true,
+      "dllLoadSmoke": true,
+      "gameplayTested": false,
+      "multiplayerTested": false
+    }
   }
 }
