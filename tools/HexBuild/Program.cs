@@ -14,6 +14,9 @@ NativeLibrary.SetDllImportResolver(typeof(BND4).Assembly,(n,a,p)=>{var f=Path.Co
 Directory.SetCurrentDirectory(game);
 if(args.Contains("--storm-audio-probe")){StormAudio.Probe(root,smith,game);return;}
 // Text-only work does not require parsing parameters or rebuilding gameplay assets.
+if(args.Contains("--metal-poise-texts")){
+ bool mmv=args.Contains("--mmv");HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/metal-poise",mmv?"mmv-texts":"texts"),allRewards:true,onlyIds:new[]{Metal.Owner},inputMod:Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"));return;
+}
 if(args.Contains("--stage-translations")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/texts"),allRewards:true);return;
 }

@@ -91,3 +91,56 @@ fn native_metal_consumption_scope_and_gift_transactions(){unsafe{
  }
  reset();BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);wraith::PARAM_ORIGINAL.store(old_param,Ordering::Release);CONSUME_ORIGINAL.store(old_consume,Ordering::Release);VirtualFree(image,0,MEM_RELEASE);
 }}
+
+// Parameter access is stubbed; execute the actual native poise calculation
+// and the compiled shared damage callback, including its cache/active gates.
+unsafe extern "system" fn attack_row(out:usize,_:i32,_:i32)->usize{
+ put(out+0x10,ROWS.with(|s|s.borrow()[0].1));out
+}
+unsafe extern "system" fn weapon_row(out:usize,_:i32)->usize{
+ put(out+8,ROWS.with(|s|s.borrow()[1].1));out
+}
+unsafe extern "system" fn poise_context(out:usize,_:usize)->usize{out}
+unsafe extern "system" fn poise_rate(_:usize,_:usize)->f32{1.5}
+#[test]#[ignore="requires NRHEX_NATIVE_EXE; run alone"]
+fn native_metal_poise_and_shared_damage_scope(){unsafe{
+ use sha2::{Digest,Sha256};
+ let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
+ let headers=crate::pe::Headers::parse(&raw,0).unwrap();
+ let image=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!image.is_null());let base=image as usize;
+ for section in &headers.sections{ptr::copy_nonoverlapping(raw[section.raw_offset as usize..].as_ptr(),(base+section.virtual_address as usize)as*mut u8,section.raw_size as usize);}
+ ptr::write((base+0x26909a0)as*mut u8,0xc3);ptr::write((base+0xea9a60)as*mut u8,0xc3);
+ for(rva,f)in [(0xe6d630,attack_row as*const()as usize),(0xea7fc0,weapon_row as*const()as usize),(0x50f2a0,poise_context as*const()as usize),(0x507f50,poise_rate as*const()as usize),(crate::HAS_EFFECT_RVA,has as*const()as usize)]{jump(base,rva,f);}
+ let float=|p:usize,v:f32|ptr::write_unaligned(p as*mut f32,v);
+ let mut attack=[0u8;0x200];let ap=attack.as_mut_ptr()as usize;float(ap+0x84,40.);float(ap+0x1b0,200.);
+ let mut weapon=[0u8;0x200];let wp=weapon.as_mut_ptr()as usize;float(wp+0xb8,20.);ROWS.with(|s|*s.borrow_mut()=vec![(0,ap),(1,wp)]);
+ let mut context=[0u8;0x120];let cp=context.as_mut_ptr()as usize;int(cp+8,40000);int(cp+12,1);
+ let poise:unsafe extern "system" fn(usize,i32,usize,f32,usize,usize)->f32=std::mem::transmute(base+0x6ce2f0);
+ // Weapon base 20 * motion correction 200%; fixed attacks use their own 40.
+ for fixed in [false,true]{context[0xf8]=u8::from(fixed);assert_eq!(poise(0,0,0,1.,cp,0),40.);assert_eq!(poise(0,0,0,1.,cp,1),60.);}
+ let old_base=BASE.swap(base,Ordering::AcqRel);let old_active=ACTIVE.swap(true,Ordering::AcqRel);
+ let mut world=vec![0usize;0x17500/8];let mut actor=[0usize;0x200/8];let player=actor.as_mut_ptr()as usize;actor[0x190/8]=1;actor[0x60/8]=1;
+ world[0x174e8/8]=player;put(base+crate::WORLD_RVA,world.as_ptr()as usize);put(base+crate::GAME_DATA_RVA,0);
+ let mut target=[0usize;0x200/8];let enemy=target.as_mut_ptr()as usize;let mut module=[0usize,enemy];
+ let cases=[(-1.,1000),(0.,1000),(0.25,1003),(40.,1400),(60.,1600),(99.5,1995),(100.,2000),(150.,2000),(f32::NAN,1000),(f32::INFINITY,1000),(f32::NEG_INFINITY,1000)];
+ for owned in [false,true]{for buff in [0,503529,503521,708710,IRONJAR]{for resetting in [false,true]{for cached in [false,true]{for source in [0,player,enemy]{for &(sa,boosted)in &cases{
+  EFFECTS.with(|s|{let mut effects=s.borrow_mut();effects.clear();if owned{effects.push(OWNER);}effects.push(buff);if resetting{effects.push(crate::reward_cycle_runtime::RESET);}});
+  let mut hit=[0u8;0x300];let h=hit.as_mut_ptr()as usize;float(h+0x148,sa);float(h+0x150,30.);int(h+0x280,1000);int(h+0x40,40000);int(h+0x44,1);hit[0x2c1]=if cached{8}else{0};let before=hit;
+  crate::on_rear_calculated(module.as_ptr()as usize,source,h);
+  let eligible=owned&&buff==IRONJAR&&!resetting&&!cached&&source==player;
+  assert_eq!(read_i32(h+0x280),if eligible{boosted}else{1000},"owned={owned} buff={buff} reset={resetting} cached={cached} source={source} poise={sa}");
+  hit[0x280..0x284].copy_from_slice(&before[0x280..0x284]);assert_eq!(hit,before,"Only HP damage may change");
+ }}}}}}
+ EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,IRONJAR]);
+ // No whitelist: normal attacks, skills, spells, consumables, custom/MMV
+ // attack IDs all consume the hit's own poise, without changing rescue/SA.
+ for attack in [40000,600000110,1001000,10350000,95005160,5100885]{
+  let mut hit=[0u8;0x300];let h=hit.as_mut_ptr()as usize;int(h+0x40,attack);int(h+0x44,1);float(h+0x148,40.);
+  for(damage,expected)in [(0,0),(-1,-1),(1000,1400),(1500,2100),(i32::MAX,i32::MAX)]{
+   int(h+0x280,damage);crate::on_rear_calculated(module.as_ptr()as usize,player,h);assert_eq!(read_i32(h+0x280),expected);
+  }
+  int(h+0x280,1000);module[1]=player;crate::on_rear_calculated(module.as_ptr()as usize,player,h);assert_eq!(read_i32(h+0x280),1000);module[1]=enemy;
+  ACTIVE.store(false,Ordering::Release);crate::on_rear_calculated(module.as_ptr()as usize,player,h);assert_eq!(read_i32(h+0x280),1000);ACTIVE.store(true,Ordering::Release);
+ }
+ BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);ROWS.with(|s|s.borrow_mut().clear());EFFECTS.with(|s|s.borrow_mut().clear());assert_ne!(VirtualFree(image,0,MEM_RELEASE),0);
+}}

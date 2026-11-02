@@ -1,11 +1,24 @@
-//! Metallization: original Ironjar Aromatic, local use-only quantity exemption.
-use crate::{ptr,read_ptr,has_effect,is_local,ACTIVE,BASE,native_actor,wraith};
+//! Metallization: free Ironjar uses and per-hit poise-based damage while active.
+use crate::{ptr,read_ptr,read_i32,has_effect,is_local,ACTIVE,BASE,native_actor,wraith};
 use std::{cell::Cell,sync::{Mutex,OnceLock,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95004600;
 pub const GOOD:i32=3520;
 pub const GROUND_LOT:i32=95546000;
 pub const REQUEST:i32=OWNER+1;
 pub const RECEIPT:i32=OWNER+2;
+pub const IRONJAR:i32=503520;
+// The native hit constructor has already applied attack/weapon corrections
+// and outgoing poise modifiers to +148. Never use armor poise or impact level.
+pub unsafe fn calculated(local:usize,target:usize,source:usize,hit:usize,base:usize){
+ if local==0||target==0||source!=local||source==target||hit==0
+    ||read_i32(hit+0x280)<=0||!has_effect(local,OWNER,base)
+    ||has_effect(local,crate::reward_cycle_runtime::RESET,base)
+    ||!has_effect(local,IRONJAR,base){return;}
+ let poise=ptr::read_unaligned((hit+0x148)as*const f32);
+ if !poise.is_finite()||poise<=0.{return;}
+ let damage=crate::sword::boosted(read_i32(hit+0x280),1.+poise.min(100.)/100.);
+ ptr::write_unaligned((hit+0x280)as*mut i32,damage);
+}
 pub const CONSUME_RVA:usize=0x669ae0;
 pub const CONSUME_PATTERN:&str="48 89 5C 24 10 56 57 41 56 48 83 EC 60 41 8B F0 4C 8B F2 48 8B D9 48 8B 01 FF 90 90 01 00 00 48";
 pub const QUANTITY_PATTERN:&str="40 53 48 83 EC 30 44 8B C2 48 8B D1 48 8D 4C 24 20 E8 6A E1 55 00 90 48 8B C8 E8 41 E2 55 00 8B";

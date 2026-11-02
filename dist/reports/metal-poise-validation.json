@@ -1,0 +1,241 @@
+{
+  "version": "0.17.283",
+  "owner": 95004600,
+  "activeEffect": 503520,
+  "damageFormula": "1 + min(hitPoiseDamage, 100) / 100",
+  "poiseField": "hit+0x148",
+  "hpField": "hit+0x280",
+  "multiHit": "Each hit uses its own outgoing poise; cached native recalculations skipped",
+  "nonFiniteOrNonPositivePoise": "No bonus",
+  "nativeExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "ironjarParameterFieldsMatchOriginal": true,
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "textValidation": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "732BCDBBCD54AAECBFD37ADBC1A6870A820108223316F59A272CB5FE059D7565",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "8A74C57F1EB1E60628C5B5047A01A5C44243BCFAFA2A992472D81E3CBABACFEA",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "89F05FD001E3A1BC097F47A1BC17D07293D3CE46255DD720EDA396FEC69E8256",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "DEB8B607CE142F6AAD2661D3331DE6069CBAAE461654DDBE05D463835ED205F5",
+          "outputSha256": "FA7C33001C4F6468EC1A79590CAF6E8B89089884DFA6A430C302580749B95C87",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "FABC73C124D0EB036B88918E4CE9909B3CBDAC0D24779B92966DD3556ADDC597",
+          "outputSha256": "E1F88F40F1B0297D4EDF9DCD2F53D6AABD08655B2E45B69F6CBB281C04EB14C4",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "94BB430B9FE23C1DC4BD023D922C8B49F77DD2F346E88C5D342EBF515D663BC6",
+          "outputSha256": "E2DA75CB1F19E89866B73563AFA72AEC2307A8E3E92A65AEBA2D4FCA9308BCD0",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.",
+              "after": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.",
+              "after": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.",
+              "after": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "F08326C8138C33B2501F41F02E18B3F171EB6BD24564961D23D5302E05CCA73B",
+          "outputSha256": "3C6C15024E523A2C4EE0CE137FCCDF4F6645DD912FBA42457555910064A81293",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.",
+              "after": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "732BCDBBCD54AAECBFD37ADBC1A6870A820108223316F59A272CB5FE059D7565",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "8A74C57F1EB1E60628C5B5047A01A5C44243BCFAFA2A992472D81E3CBABACFEA",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "89F05FD001E3A1BC097F47A1BC17D07293D3CE46255DD720EDA396FEC69E8256",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "AD6D05E238292D6D2901531BA393AF4E9D08544C59594368966D3C3694BDEF6E",
+          "outputSha256": "E2E20BB1B56DD94029F76D1BF7B2B8E544B9D38D6B98293C07228B3F5F0F701A",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "31B0B423913A6401CFA53E3F6C9D1D123AA0E35273A0759632287B29D2512564",
+          "outputSha256": "19F55F512438DF1AF3E0DC9474200B1ADE151DA3695F8EA5744BBDA95F842FB9",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "DE0E1D3DD0A07F60020AD7FF291A35900DED22342F42D7D14D7BFB5212FB6D89",
+          "outputSha256": "7D9EE71982154E1F86219B219415BDBC8BDF25F306C799FEEE89BC0F00142DF4",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.",
+              "after": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.",
+              "after": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.",
+              "after": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "190C34D0A58A57A67664FBEE7CA4D83845DC588217D0389F21EC21F84D472119",
+          "outputSha256": "A67FCB7D07676299F6CECF5739EC9C59107B8924A7B6ACBEBE3EA74B281D7289",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.",
+              "after": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "unchangedGameplayFiles": {
+    "dist/mod/regulation.bin": "7351c410fc72a67db24ae194fd0d1d271808b4a1c5892b132fa78f83b6d203af",
+    "dist/mod/event/common.emevd.dcx": "c1ae6c0cb194e654608b50039218bcf3089faf0f41bdd2592a519c5d103e96c7",
+    "dist/mmv/mod/regulation.bin": "be5251b9464d9760ca3a0864c5bd188f71f4fae3f4e8ce2eeb63693d726d5882",
+    "dist/mmv/mod/event/common.emevd.dcx": "62293066adf3788b27fdefce27a9d92a691c7dcea4684ca815d069d798164291"
+  },
+  "validation": {
+    "regularPassed": 473,
+    "regularIgnored": 34,
+    "nativeIsolatedPassed": 1,
+    "standaloneAndMmvBuild": true,
+    "dllLoadSmoke": true,
+    "gameplayTested": false,
+    "multiplayerTested": false
+  },
+  "sourceHashes": {
+    "src/metal.rs": "33191dfa29bc493ab16569b87952297e639975980fcf979b7d2f99522a3b2a09",
+    "src/metal_native_tests.rs": "28f5f752df0e0f3d5ab60368c65f8adb6389eab361a6f04cd22ead357f45d3b2",
+    "src/lib.rs": "632d29db05a25c361f68d1229b6b36f521d926c3a2ed07d4b3c1c2765a82440c",
+    "docs/research/metal.md": "4835fe41ce1800e6d87df9af60f518cb49b586af487d68c9904d622206954ea7",
+    "tools/HexBuild/Program.cs": "2fd62ed98d88b53d4a7d6f0da00144df68767be60cfe7dfb7121d88b042d6804",
+    "Cargo.toml": "fe8875c0c7378931392f5cde8d15caa4005703a2972e71d4385f219d11f0fbc1",
+    "Cargo.lock": "538e3eaec86fe7c6371ffbcaaa13397c76ed8e19c05a84a469d9e4d7f536acdf"
+  },
+  "deployedFiles": {
+    "dist/natives/NRHex.dll": "ec430501dd8c2f4fe1efa8b426e13c0ecfeef631fa4e9de35b22e3b245a4458d",
+    "dist/mmv/natives/NRHex.dll": "d4c6b078b559d76138bcd214fe94055027f04635b4d95137567f589d19cef920",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "fa7c33001c4f6468ec1a79590caf6e8b89089884dfa6a430c302580749b95c87",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "e1f88f40f1b0297d4edf9dcd2f53d6aabd08655b2e45b69f6cbb281c04eb14c4",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "e2da75cb1f19e89866b73563afa72aec2307a8e3e92a65aeba2d4fca9308bcd0",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "3c6c15024e523a2c4ee0ce137fccdf4f6645dd912fba42457555910064a81293",
+    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "e2e20bb1b56dd94029f76d1bf7b2b8e544b9d38d6b98293c07228b3f5f0f701a",
+    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "19f55f512438df1af3e0dc9474200b1ade151da3695f8ea5744bbda95f842fb9",
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "7d9ee71982154e1f86219b219415bdbc8bdf25f306c799feee89bc0f00142df4",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "a67fcb7d07676299f6cecf5739ec9c59107b8924a7b6acbebe3ea74b281d7289"
+  }
+}

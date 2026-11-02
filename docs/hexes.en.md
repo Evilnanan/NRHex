@@ -217,7 +217,7 @@ Attack power -30%. Damage increases with distance to the target. Greatly extends
 <!-- hex:95004600 -->
 ## Metallization
 
-Use Ironjar Aromatic without consuming it. Receive an Ironjar Aromatic.
+Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic.
 
 <!-- hex:95004700 -->
 ## Mystery Box
