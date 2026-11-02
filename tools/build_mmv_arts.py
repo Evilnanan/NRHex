@@ -41,10 +41,26 @@ def common(judge):
     return (judge // 1000) * 100000000 + judge % 1000
 
 
+def review_event(event):
+    # Clash now encodes its condition in the private guard judge. Compare
+    # that generated annotation in its original form without ignoring any
+    # timing, condition, source, or native attack changes. Never edit assets.
+    data = bytearray.fromhex(event['data'])
+    if event['Type'] == 0 and len(data) >= 16 and struct.unpack_from('<i', data)[0] == 3:
+        judge = struct.unpack_from('<i', data, 8)[0]
+        state = struct.unpack_from('<H', data, 14)[0]
+        if 14000 <= state < 24000 and judge == 96000000 + state:
+            struct.pack_into('<i', data, 8, 95002400)
+            return {**event, 'data': data.hex().upper()}
+    return event
+
+
 def evidence(raw, mid):
     arts = table(raw, 'SwordArtsParam'); behaviors = table(raw, 'BehaviorParam_PC')
     a = arts[mid]
-    return digest(dict(art=a, animations=raw['animations'].get(str(a['swordArtsType']+600), []),
+    animations = [{**animation, 'events': [review_event(e) for e in animation['events']]}
+                  for animation in raw['animations'].get(str(a['swordArtsType']+600), [])]
+    return digest(dict(art=a, animations=animations,
                        commonBehaviors={j: behaviors.get(common(j)) for j in judges(raw, a)}))
 
 

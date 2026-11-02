@@ -11,7 +11,8 @@ pub const TRANSPORT_RVA:usize=0x34058e;
 pub const TRANSPORT_PATTERN:&str="0F 10 42 30 0F 11 81 24 01 00 00";
 pub const PACKET_RVA:usize=0x33e1a3;
 pub const PACKET_PATTERN:&str="0F 10 47 30 0F 11 46 70";
-const DISTANCE:f64=30.;
+const DISTANCE:f64=60.;
+const MELEE_RANGE:f32=6.;
 #[derive(Default)]struct Meter{distance:f64,last:Option<(usize,u64,u32,[f32;4])>}
 impl Meter{
  fn observe(&mut self,identity:usize,handle:u64,map:u32,point:Option<[f32;4]>){
@@ -26,7 +27,7 @@ impl Meter{
 }
 #[derive(Clone,Copy)]struct Pending{handle:u64,damage:f32,point:[f32;4],leak:bool}
 #[derive(Clone,Copy)]struct Mark{owner:u64,target:u64,sum:f64,deadline:f64,level:i32,leak:bool,point:[f32;4]}
-impl Mark{fn damage(&self)->f32{((self.sum+f64::from(self.level.max(1))*10.)*if self.leak{0.25}else{1.}).min(f64::from(f32::MAX))as f32}}
+impl Mark{fn damage(&self)->f32{(self.sum+f64::from(self.level.max(1))*10.).min(f64::from(f32::MAX))as f32}}
 struct State{meter:Meter,marks:Vec<Mark>,pending:Vec<Pending>,scene:usize,time:f64}
 impl State{
  fn advance(&mut self,dt:f32)->Vec<Mark>{
@@ -54,6 +55,17 @@ unsafe fn visual(actor:usize,base:usize,ready:bool){
 }
 unsafe fn level(base:usize)->i32{let game=read_ptr(base+crate::GAME_DATA_RVA);let data=if game!=0{read_ptr(game+8)}else{0};if data!=0{read_i32(data+0x68).clamp(1,15)}else{1}}
 unsafe fn mark_visual(target:usize,base:usize){let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);apply(target,MARK,0);}
+// Actor +8 contains the entity handle used by BulletMan's source descriptor.
+// Its upper word can be -1 even for the live local player.
+unsafe fn resolve_actor(base: usize, handle: u64) -> usize {
+    if (handle >> 28) & 0xf != 1 || read_ptr(base + crate::WORLD_RVA) == 0 {
+        return 0;
+    }
+    let resolve: unsafe extern "system" fn(u64) -> usize =
+        std::mem::transmute(base + crate::CHR_HANDLE_RVA);
+    let actor = resolve(handle);
+    if actor != 0 && read_ptr(actor + 8) as u64 == handle { actor } else { 0 }
+}
 pub unsafe fn update(actor:usize,base:usize,dt:f32){
  if has_effect(actor,crate::reward_cycle_runtime::RESET,base){reset();visual(actor,base,false);return;}
  let owned=has_effect(actor,OWNER,base);
@@ -62,7 +74,7 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  let map=if context!=0{ptr::read_unaligned((context+0x2c)as*const u32)}else{(handle>>32)as u32};
  let p=crate::spatial_ready(actor).then(||crate::position(actor,base));
  let tracked=STATE.lock().map(|s|s.marks.iter().map(|m|m.target).collect::<BTreeSet<_>>()).unwrap_or_default();
- let positions=tracked.into_iter().filter_map(|h|{let t=crate::native_actor::resolve(base,h);(t!=0&&crate::spatial_ready(t)).then(||(h,crate::position(t,base)))}).collect::<BTreeMap<_,_>>();
+ let positions=tracked.into_iter().filter_map(|h|{let t=resolve_actor(base,h);(t!=0&&crate::spatial_ready(t)).then(||(h,crate::position(t,base)))}).collect::<BTreeMap<_,_>>();
  let (ready,marks,mut pending)=if let Ok(mut s)=STATE.lock(){
   let scene=read_ptr(base+0x3c131c8);
   if s.scene!=scene{s.meter.last=None;s.scene=scene;s.marks.clear();s.pending.clear();}
@@ -73,14 +85,14 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  }else{return;};
  visual(actor,base,ready);
  for mark in marks{
-  let target=crate::native_actor::resolve(base,mark.target);
+  let target=resolve_actor(base,mark.target);
   // Keep the last valid location if a killed target has already despawned.
   // Resolve the recipient again at detonation; the mark travels with them.
   let feet=if target!=0&&crate::spatial_ready(target){crate::position(target,base)}else{mark.point};
   let point=crate::noisy_ground::ground_at(feet,base).unwrap_or(feet);
   pending.push(Pending{handle:mark.owner,damage:mark.damage(),point,leak:mark.leak});
  }
- for ticket in pending{if crate::native_actor::resolve(base,ticket.handle)!=0&&!emit(ticket,base){if let Ok(mut s)=STATE.lock(){s.pending.push(ticket);}}}
+ for ticket in pending{if resolve_actor(base,ticket.handle)!=0&&!emit(ticket,base){if let Ok(mut s)=STATE.lock(){s.pending.push(ticket);}}}
 }
 // Native dispatch can contain preview calculations and nested dispatches. Only
 // its accepted-hit notification commits, once per dispatch, not once per frame.
@@ -137,6 +149,8 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  let outgoing=crate::is_local(source,base)&&has_effect(source,OWNER,base);
  let incoming=crate::is_local(target,base)&&has_effect(target,OWNER,base);
  let owner=if outgoing{
+  let categories=ptr::read_unaligned((hit+0x124) as *const [u32;8]);
+  if !crate::jiahao::melee_attack(&categories) || !crate::sword::near(crate::sword_hit_distance(source,hit,base),MELEE_RANGE){return;}
   if crate::ambulance::party_member(target,base)&&!crate::ambulance::static_rescue(target,hit,base){return;}source
  }else if incoming{
   // Friendly rescue is not an incoming attack against the recipient.
@@ -218,27 +232,27 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  use super::*;
  fn state()->State{State{meter:Meter::default(),marks:Vec::new(),pending:Vec::new(),scene:0,time:0.}}
  #[test]fn marked_window_counts_first_hit_and_later_sources_but_not_unmarked_targets(){
-  let mut s=state();s.meter.distance=30.;assert!(s.mark(1,2,100.,15,false,[0.;4]));
+  let mut s=state();s.meter.distance=DISTANCE;assert!(s.mark(1,2,100.,15,false,[0.;4]));
   s.credit(2,200.);s.credit(3,999.);assert_eq!(s.marks[0].damage(),450.);
   s.time=1.999;s.credit(2,50.);assert_eq!(s.marks[0].damage(),500.);
   s.time=2.;s.credit(2,1000.);assert_eq!(s.marks[0].damage(),500.);
  }
  #[test]fn detonation_uses_game_time_once_and_invalid_steps_do_not_advance(){
-  let mut s=state();s.meter.distance=30.;s.mark(1,2,100.,15,false,[0.;4]);
+  let mut s=state();s.meter.distance=DISTANCE;s.mark(1,2,100.,15,false,[0.;4]);
   for dt in [0.,-1.,f32::NAN,2.]{assert!(s.advance(dt).is_empty());}assert_eq!(s.time,0.);
   assert!(s.advance(1.).is_empty());s.credit(2,50.);let due=s.advance(1.);assert_eq!(due.len(),1);assert_eq!(due[0].damage(),300.);
   assert!(s.advance(1.).is_empty());assert!(s.marks.is_empty());
  }
- #[test]fn leakage_scales_total_including_level_and_overlapping_marks_keep_own_deadlines(){
-  let mut s=state();s.meter.distance=30.;assert!(s.mark(1,1,400.,15,true,[0.;4]));
-  assert_eq!(s.marks[0].damage(),137.5);s.time=0.5;s.credit(1,100.);
-  s.meter.distance=30.;assert!(s.mark(1,1,100.,15,true,[0.;4]));
+ #[test]fn leakage_uses_full_total_including_level_and_overlapping_marks_keep_own_deadlines(){
+  let mut s=state();s.meter.distance=DISTANCE;assert!(s.mark(1,1,400.,15,true,[0.;4]));
+  assert_eq!(s.marks[0].damage(),550.);s.time=0.5;s.credit(1,100.);
+  s.meter.distance=DISTANCE;assert!(s.mark(1,1,100.,15,true,[0.;4]));
   assert_eq!(s.marks[0].sum,500.);assert_eq!(s.marks[1].sum,100.);
-  s.time=2.;s.credit(1,200.);assert_eq!(s.marks[0].damage(),162.5);assert_eq!(s.marks[1].damage(),112.5);
+  s.time=2.;s.credit(1,200.);assert_eq!(s.marks[0].damage(),650.);assert_eq!(s.marks[1].damage(),450.);
  }
  #[test]fn each_charge_is_spent_once_and_can_be_spent_again_on_a_later_hit(){
-  let mut s=state();s.meter.distance=30.;assert!(s.mark(1,2,10.,1,false,[0.;4]));
-  assert!(!s.mark(1,3,20.,1,false,[0.;4]));s.meter.distance=30.;assert!(s.mark(1,3,20.,1,false,[0.;4]));assert_eq!(s.marks.len(),2);
+  let mut s=state();s.meter.distance=DISTANCE;assert!(s.mark(1,2,10.,1,false,[0.;4]));
+  assert!(!s.mark(1,3,20.,1,false,[0.;4]));s.meter.distance=DISTANCE;assert!(s.mark(1,3,20.,1,false,[0.;4]));assert_eq!(s.marks.len(),2);
  }
  #[test]fn accepted_scope_deduplicates_notifications_not_same_frame_attacks(){
   assert!(!first_contact(1,2));{let _a=dispatch_scope(1,2);assert!(first_contact(1,2));assert!(!first_contact(1,2));
@@ -252,11 +266,12 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  #[test]fn all_axes_accumulate_and_rebinding_only_rebases(){
   let mut m=Meter::default();m.observe(1,2,3,Some([0.,0.,0.,1.]));
   for p in [[10.,0.,0.,1.],[10.,10.,0.,1.],[10.,10.,10.,1.]]{m.observe(1,2,3,Some(p));}
-  assert!(m.take());assert!(!m.take());
-  m.observe(1,2,3,Some([10.,10.,15.,1.]));assert_eq!(m.distance,5.);
+  assert!(!m.take());
+  m.observe(1,2,3,Some([10.,10.,40.,1.]));assert!(m.take());assert!(!m.take());
+  m.observe(1,2,3,Some([10.,10.,45.,1.]));assert_eq!(m.distance,5.);
   m.observe(4,5,6,Some([999.,999.,999.,1.]));assert_eq!(m.distance,5.);
   m.observe(4,5,6,None);m.observe(4,5,6,Some([0.;4]));assert_eq!(m.distance,5.);
  }
- #[test]fn full_charge_is_one_token_and_does_not_bank_overflow(){let mut m=Meter::default();m.observe(1,2,3,Some([0.;4]));m.observe(1,2,3,Some([100.,0.,0.,1.]));assert_eq!(m.distance,30.);assert!(m.take());assert!(!m.take());}
+ #[test]fn full_charge_is_one_token_and_does_not_bank_overflow(){let mut m=Meter::default();m.observe(1,2,3,Some([0.;4]));m.observe(1,2,3,Some([100.,0.,0.,1.]));assert_eq!(m.distance,60.);assert!(m.take());assert!(!m.take());}
 }
 #[cfg(test)]#[path="static_charge_tests.rs"]mod native_tests;

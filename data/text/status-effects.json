@@ -86,9 +86,9 @@
   {
     "textId": 95005101,
     "ownerId": 95005100,
-    "zhSuffix": "（满充）",
+    "zhSuffix": "（充盈）",
     "enSuffix": " (Charged)",
-    "zhInfo": "静电已充满，下次攻击或受击时传导静电",
-    "enInfo": "Fully charged. Your next attack or incoming hit transfers static electricity."
+    "zhInfo": "下次近战攻击传导静电，受击则自身漏电。",
+    "enInfo": "Your next melee hit transfers static. Getting hit discharges it onto you."
   }
 ]

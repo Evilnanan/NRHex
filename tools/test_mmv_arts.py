@@ -1,7 +1,8 @@
 import copy
 import json
+import struct
 import unittest
-from build_mmv_arts import ROOT, PROFILE, generate, table, numbers
+from build_mmv_arts import ROOT, PROFILE, generate, table, numbers, review_event, evidence
 
 
 @unittest.skipUnless((ROOT/'work/compat/mmv/arts-parameters.json').exists(),'requires target export')
@@ -36,6 +37,24 @@ class ArtsTargetTests(unittest.TestCase):
         raw=copy.deepcopy(self.raw)
         next(r for r in raw['tables']['BehaviorParam_PC'] if r['ID']==700000569)['fields']['refId']=-1
         with self.assertRaisesRegex(ValueError,'changed: 126'):generate(raw,self.profile,self.native)
+
+    def test_private_guard_tag_migration_preserves_strict_review(self):
+        raw=copy.deepcopy(self.raw)
+        expected=evidence(raw,126)
+        event=next(e for a in raw['animations']['626'] for e in a['events'] if review_event(e)!=e)
+        before=copy.deepcopy(event)
+        legacy=review_event(event)
+        self.assertEqual(event,before)  # review must never rewrite the staged export
+        event.update(legacy)
+        self.assertEqual(evidence(raw,126),expected)
+        event['EndTime']+=0.01
+        self.assertNotEqual(evidence(raw,126),expected)
+        event.update(before)
+        data=bytearray.fromhex(event['data'])
+        struct.pack_into('<i',data,8,struct.unpack_from('<i',data,8)[0]+1)
+        event['data']=data.hex().upper()
+        self.assertEqual(review_event(event),event)  # wrong condition/tag pairing stays rejected
+        self.assertNotEqual(evidence(raw,126),expected)
 
     def test_new_skill_requires_review_and_conflicting_weapon_rows_fail(self):
         raw=copy.deepcopy(self.raw);row=copy.deepcopy(raw['tables']['SwordArtsParam'][0]);row['ID']=777777

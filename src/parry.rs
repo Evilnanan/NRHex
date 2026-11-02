@@ -192,11 +192,14 @@ unsafe fn on_guard_notification(module:usize,hit:usize,kind:i32)->(usize,bool){
  // native category-103 multiplier for their whole attack, never stacking it.
  let present=has_effect(player,COUNTER,base);
  let counter_hit=enabled&&present&&counter_guard(player);
- if enabled&&!present{apply(player,COUNTER,0);}
- else if !enabled&&present{remove(manager,COUNTER);}
+ let counter_submitted=if enabled{present||apply(player,COUNTER,0)!=0}
+ else{if present{remove(manager,COUNTER);}false};
  // One opportunity per accepted attack guard. Repeated guards while ready
  // do not accumulate charges; an ordinary guard revokes both kinds of bonus.
- if enabled&&has_effect(player,COUNTER,base){
+ // Native additions are pending until the next effect update: querying the
+ // newly submitted COUNTER here loses the first guard's recovery opportunity.
+ // Queue READY alongside it; recover_once still requires both to be active.
+ if counter_submitted{
   if !has_effect(player,RECOVERY_READY,base){apply(player,RECOVERY_READY,0);}
  }else if has_effect(player,RECOVERY_READY,base){remove(manager,RECOVERY_READY);}
  if !enabled{return (0,false);}
@@ -355,11 +358,13 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
  // Exercise the real accepted-hit callback with isolated native API stubs.
  #[test]fn counter_arms_only_on_accepted_attack_guards_and_ordinary_guard_clears_it(){unsafe{
   let _lock=NOTIFY_TEST.lock().unwrap();
-  #[repr(C)]#[derive(Default)]struct Effects{reserved:[usize;2],owner:usize,ids:Vec<i32>,counter_applies:usize,recoveries:usize}
+  #[repr(C)]#[derive(Default)]struct Effects{reserved:[usize;2],owner:usize,ids:Vec<i32>,counter_applies:usize,recoveries:usize,pending:Vec<i32>,defer:bool,reject_counter:bool}
   unsafe extern "system" fn has(m:usize,id:i32)->u8{u8::from((*(m as *const Effects)).ids.contains(&id))}
   unsafe extern "system" fn add(p:usize,id:i32,_:u8)->u8{
    if id==RECOVERY{return recover_once(p,active_base().unwrap(),||{(*(read_ptr(p+0x190) as *mut Effects)).recoveries+=1;1});}
-   let e=&mut *(read_ptr(p+0x190) as *mut Effects);if id==COUNTER{e.counter_applies+=1;}e.ids.push(id);1
+   let e=&mut *(read_ptr(p+0x190) as *mut Effects);
+   if id==COUNTER{if e.reject_counter{return 0;}e.counter_applies+=1;}
+   if e.defer{e.pending.push(id);}else{e.ids.push(id);}1
   }
   unsafe extern "system" fn remove(m:usize,id:i32)->u8{(*(m as *mut Effects)).ids.retain(|i|*i!=id);1}
   unsafe extern "system" fn source(_:usize)->i32{-1}
@@ -404,6 +409,23 @@ pub unsafe extern "system" fn detour(manager:usize,state:u16)->u8{
   }
   let manager=&mut effects as *mut Effects as usize;
   assert_eq!(feedback_query(manager,FEEDBACK_SOUND),Some(0));
+  // Real native additions remain pending until the next effect update. The
+  // first accepted Clash must queue both effects despite HAS_EFFECT=false.
+  effects.defer=true;
+  on_guard_notification(m,h,3);
+  assert!(!effects.ids.contains(&COUNTER));
+  assert!(effects.pending.contains(&COUNTER));
+  assert!(effects.pending.contains(&RECOVERY_READY),"first Clash lost its recovery opportunity");
+  assert_eq!(effects.recoveries,0);
+  assert_eq!(recover_once(a,base,||panic!("pending effects healed early")),0);
+  effects.ids.extend(effects.pending.drain(..));
+  assert_eq!(recover_once(a,base,||1),1);
+  assert_eq!(recover_once(a,base,||panic!("first counter healed twice")),0);
+  effects.ids=vec![OWNER];effects.counter_applies=0;effects.defer=false;
+  // A rejected counter submission must not arm an unrelated future recovery.
+  effects.reject_counter=true;on_guard_notification(m,h,3);
+  assert!(!effects.ids.contains(&COUNTER));assert!(!effects.ids.contains(&RECOVERY_READY));
+  effects.reject_counter=false;effects.ids=vec![OWNER];
   on_guard_notification(m,h,3);assert!(effects.ids.contains(&COUNTER));assert!(!effects.ids.contains(&SPARK_RIGHT));
   assert!(effects.ids.contains(&RECOVERY_READY));
   assert_eq!(recover_once(a,base,||1),1);assert!(!effects.ids.contains(&RECOVERY_READY));

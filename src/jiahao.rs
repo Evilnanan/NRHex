@@ -6,9 +6,12 @@ pub const BACK_START:i32=6999701;
 pub const BACKSTEP_CATEGORY:usize=129;
 pub const BACKSTEP_RESTORE_PERCENT:f32=25.;
 pub const CRITICAL_RESTORE_PERCENT:f32=25.;
-pub fn is_backstep_attack(mask:&[u32;8])->bool{
+pub(crate) fn melee_attack(mask:&[u32;8])->bool{
  let tagged=|category:usize|mask[category/32]&(1<<(category%32))!=0;
- tagged(BACKSTEP_CATEGORY)&&tagged(130)&&!tagged(105)
+ tagged(130)&&!tagged(105)
+}
+pub fn is_backstep_attack(mask:&[u32;8])->bool{
+ melee_attack(mask) && mask[BACKSTEP_CATEGORY/32] & (1 << (BACKSTEP_CATEGORY%32)) != 0
 }
 /// Native gauge getter returns 0..100; apply to resolved HP damage before hit rewards.
 pub fn boosted(damage:i32,gauge_percent:f32)->i32{

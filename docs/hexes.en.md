@@ -217,7 +217,7 @@ Attack power -30%. Damage increases with distance to the target. Greatly extends
 <!-- hex:95004600 -->
 ## Metallization
 
-Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic.
+Gain an Ironjar Aromatic with unlimited uses. While active, attacks with higher poise damage deal more damage.
 
 <!-- hex:95004700 -->
 ## Mystery Box
@@ -237,4 +237,4 @@ Switching weapons changes their enchantment affinity.
 <!-- hex:95005100 -->
 ## Lightning Conduit
 
-Moving builds static charge. At full charge, attacks transfer it to the target, while being attacked causes a discharge onto yourself. Lightning strikes after 2 seconds, strengthened by damage taken during that time.
+Move to charge. Your next melee hit marks the target. Getting hit marks you instead. Damage taken over 2s powers the bolt.

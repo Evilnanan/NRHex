@@ -18,6 +18,47 @@ unsafe extern "system" fn immune(actor:usize,_:usize)->u8{ptr::read((actor+0x80)
 unsafe extern "system" fn not_dead(_:usize)->u8{0}
 unsafe extern "system" fn module_actor(module:usize)->usize{read_ptr(module+8)}
 unsafe fn patch(base:usize,rva:usize,target:usize){let mut code=vec![0x48,0xb8];code.extend_from_slice(&target.to_le_bytes());code.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(code.as_ptr(),(base+rva)as*mut u8,code.len());}
+
+// Replay the observed player entity handle through the real game lookup and
+// deadline update. Only the final emission and registry contents are fixtures.
+unsafe fn check_timed_release(base: usize, world: &mut [usize], player: usize, target: usize) {
+    const PLAYER: u64 = 0xffff_ffff_10e0_0000;
+    const TARGET: u64 = PLAYER + 1;
+    thread_local! { static EMISSIONS: RefCell<Vec<(u64,i32,[f32;4])>> = const { RefCell::new(Vec::new()) }; }
+    unsafe extern "system" fn capture(_:usize,out:usize,descriptor:usize,_:usize)->usize {
+        EMISSIONS.with(|e| e.borrow_mut().push((read_ptr(descriptor) as u64,
+            read_i32(descriptor+0x14),ptr::read_unaligned((descriptor+0x80) as *const [f32;4]))));
+        int(out,1);out
+    }
+    let slots = [player,0,target,0];
+    let mut vt = [0usize;6];
+    vt[4] = base + 0x4ac680;
+    vt[5] = base + 0x4ac6e0;
+    let registry = [vt.as_ptr() as usize,14,2,slots.as_ptr() as usize];
+    world[0x170b8/8+14] = registry.as_ptr() as usize;
+    // Native kind-1 decoding tables normally initialized during game startup.
+    let layout = base + 0x39a8870 + 24;
+    int(layout,0xff);int(layout+4,20);int(layout+8,0xfffff);
+    ptr::write_unaligned((player+8) as *mut u64,PLAYER);
+    ptr::write_unaligned((target+8) as *mut u64,TARGET);
+    assert_eq!(crate::native_actor::resolve(base,PLAYER),0);
+    assert_eq!(resolve_actor(base,PLAYER),player);
+    assert_eq!(resolve_actor(base,TARGET),target);
+    let original = crate::echo_cast::EMIT_ORIGINAL.swap(capture as *const () as *mut u8,Ordering::AcqRel);
+    ptr::write_unaligned((base+0x3c0ae30) as *mut usize,1);
+    let point = [2.,3.,4.,1.];
+    for (handle,leak,bullet) in [(TARGET,false,BULLET),(PLAYER,true,LEAK_BULLET)] {
+        reset();
+        {let mut s=STATE.lock().unwrap();s.meter.distance=DISTANCE;assert!(s.mark(PLAYER,handle,100.,1,leak,point));}
+        update(player,base,1.);
+        assert!(EMISSIONS.with(|e| e.borrow().is_empty()));
+        update(player,base,1.);
+        assert_eq!(EMISSIONS.with(|e| std::mem::take(&mut *e.borrow_mut())),[(PLAYER,bullet,point)]);
+    }
+    reset();
+    crate::echo_cast::EMIT_ORIGINAL.store(original,Ordering::Release);
+    world[0x170b8/8+14]=0;
+}
 #[test]#[ignore="requires NRHEX_NATIVE_EXE; run alone"]
 fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
@@ -87,25 +128,39 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  let mut source=[0usize;0x740/8];let sp=source.as_mut_ptr()as usize;source[1]=123;source[0x190/8]=1;
  let mut ally=[0usize;0x740/8];let ap=ally.as_mut_ptr()as usize;ally[1]=456;ptr::write((ap+0x710)as*mut u8,1);
  let mut world=vec![0usize;0x17500/8];world[0x174e8/8]=sp;ptr::write_unaligned((base+crate::WORLD_RVA)as*mut usize,world.as_ptr()as usize);TEAM.with(|s|s.set(ap));
+ check_timed_release(base,&mut world,sp,ap);source[1]=123;ally[1]=456;
  let module=[0usize,ap];let mp=module.as_ptr()as usize;
  int(hp+0x40,100);int(hp+0x44,1);int(hp+0x280,0);float(hp+0x150,30.);float(hp+0x258,1.);
- SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});STATE.lock().unwrap().meter.distance=30.;
+ SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});STATE.lock().unwrap().meter.distance=DISTANCE;
+ // Drive the real outgoing callback at an exact hit distance. Failed contacts keep the charge.
+ let mut physics=[0u8;0x90];let mut parts=[0usize;0x70/8];parts[0x68/8]=physics.as_mut_ptr() as usize;
+ source[0x60/8]=sp;source[0x1b8/8]=parts.as_ptr() as usize;
+ float(hp+0x1f4,crate::sword::CASTER_HEIGHT);
+ for (melee,ranged,distance) in [(false,false,1.),(true,true,1.),(true,false,6.01)] {
+  int(hp+0x124+4*4,if melee{4}else{0});int(hp+0x124+3*4,if ranged{1<<9}else{0});
+  float(hp+0x1f0,distance);
+  SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});
+  let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);
+  assert_eq!(STATE.lock().unwrap().meter.distance,DISTANCE);
+ }
+ float(hp+0x1f0,6.);SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});
  {let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().marks.len(),1);assert_eq!(STATE.lock().unwrap().marks[0].sum,500.);
- STATE.lock().unwrap().marks.clear();STATE.lock().unwrap().meter.distance=30.;
- int(hp+0x40,ATTACK);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,30.);
- int(hp+0x40,100);ptr::write((ap+0x710)as*mut u8,0);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,30.);
+ STATE.lock().unwrap().marks.clear();STATE.lock().unwrap().meter.distance=DISTANCE;
+ int(hp+0x40,ATTACK);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,DISTANCE);
+ int(hp+0x40,100);ptr::write((ap+0x710)as*mut u8,0);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,DISTANCE);
  // Hostile incoming damage creates a self mark, first hit included; later
  // unrelated sources add once per dispatch, even with zero final HP damage.
+ int(hp+0x124+4*4,0);int(hp+0x124+3*4,1<<9);float(hp+0x1f0,30.);
  TEAM.with(|s|s.set(0));let incoming_module=[0usize,sp];let im=incoming_module.as_ptr()as usize;
  let mut game=[0usize;2];let mut data=[0i32;0x70/4];data[0x68/4]=15;game[1]=data.as_ptr()as usize;ptr::write_unaligned((base+crate::GAME_DATA_RVA)as*mut usize,game.as_ptr()as usize);
  SAMPLES.lock().unwrap().insert(hp,Sample{key:key(ap,sp,hp),value:400.});
  {let _dispatch=dispatch_scope(im,hp);outgoing(im,ap,hp);outgoing(im,ap,hp);}
- {let s=STATE.lock().unwrap();assert_eq!(s.marks.len(),1);let m=s.marks[0];assert!(m.leak);assert_eq!(m.target,123);assert_eq!(m.damage(),137.5);}
+ {let s=STATE.lock().unwrap();assert_eq!(s.marks.len(),1);let m=s.marks[0];assert!(m.leak);assert_eq!(m.target,123);assert_eq!(m.damage(),550.);}
  enter(im,0,hp);let environmental=[200.,0.,0.,0.,0.];
  crate::glass_cannon::detour(out.as_mut_ptr(),environmental.as_ptr(),one.as_ptr(),cuts.as_ptr(),one.as_ptr(),one.as_ptr(),one.as_ptr(),one.as_ptr(),1.,1.,1.,1.,1.,1.,1.);leave();
  assert_eq!(SAMPLES.lock().unwrap().get(&hp).unwrap().value,200.);
  {let _dispatch=dispatch_scope(im,hp);outgoing(im,0,hp);}
- assert_eq!(STATE.lock().unwrap().marks[0].damage(),187.5);
+ assert_eq!(STATE.lock().unwrap().marks[0].damage(),750.);
  // Native target masks: selfTarget controls the owner; opposeTarget controls
  // enemies. Use the original relationship methods, not a reimplementation.
  let friendly_method=base+0x52c910;let hostile_method=base+0x52c920;

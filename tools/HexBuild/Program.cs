@@ -91,6 +91,7 @@ PARAM Parse(string name,Memory<byte> bytes){
 }
 if(args.Contains("--parry-counter-hit-stage")){ParryCounterHit.Stage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--lightning-melee-stage")){StaticCharge.MeleeStage(root,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-delay-stage")){StaticCharge.DelayStage(root,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-rework-stage")){StaticCharge.Rework(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--static-charge-stage")){StaticCharge.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}

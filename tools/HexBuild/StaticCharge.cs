@@ -14,7 +14,7 @@ static class StaticCharge {
   for(int i=0;i<4;i++){
    var attack=clone("AtkParam_Pc",69300,Owner+60+i);
    bool wave=(i&1)!=0,leak=i>=2;
-   foreach(var(f,v)in new(string,object)[]{("atkPhys",0),("atkMag",0),("atkFire",0),("atkThun",1),("atkDark",0),("atkSuperArmor",30f),("atkSuperArmorCorrection",100),("reviveDamage",30f),("reviveDamageCorrection",100),("ultimateChargeCorrection",100),("dmgLevel",wave?2:3),("dmgLevel_vsPlayer",wave?2:3),("selfTarget",leak?1:0),("opposeTarget",i==2?0:1),("friendlyTarget",0)})Set(attack,f,v);
+   foreach(var(f,v)in new(string,object)[]{("atkPhys",0),("atkMag",0),("atkFire",0),("atkThun",1),("atkDark",0),("atkSuperArmor",30f),("atkSuperArmorCorrection",100),("reviveDamage",30f),("reviveDamageCorrection",100),("ultimateChargeCorrection",100),("dmgLevel",wave?2:3),("dmgLevel_vsPlayer",wave?2:3),("selfTarget",leak?1:0),("opposeTarget",leak?0:1),("friendlyTarget",0)})Set(attack,f,v);
   }
   // Each discharge has one root and three native water-wave stages. Leakage
   // uses its own rows so allowing self contact never affects outgoing bolts.
@@ -126,6 +126,34 @@ static class StaticCharge {
   HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner},inputMod:mod);
   File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),touchedRows=touched.ToDictionary(x=>x.Key,x=>x.Value.Order().ToArray()),unrelatedRowsAndTablesUnchanged=true,onlyMarkerCleanupAdded=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: Lightning Conduit rework staged; unrelated rows, events and texts preserved");
+ }
+
+ public static void MeleeStage(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes,bool mmv){
+  string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod");
+  string dir=Path.Combine(root,"work/lightning-melee",mmv?"mmv":"standalone");
+  Directory.CreateDirectory(dir);
+  string input=Path.Combine(mod,"regulation.bin"),output=Path.Combine(dir,"regulation.bin");
+  var binder=SFUtil.DecryptNightreignRegulation(input);
+  var file=binder.Files.Single(f=>Name(f)=="AtkParam_Pc.param");
+  var table=parse("AtkParam_Pc",file.Bytes);
+  var wave=table.Rows.Single(r=>r.ID==Owner+63);
+  var original=new PARAM.Row(wave);
+  Check(Convert.ToInt32(wave["selfTarget"].Value)==1 && Convert.ToInt32(wave["friendlyTarget"].Value)==0,"Unexpected leakage wave target mask");
+  Set(wave,"opposeTarget",0);
+  file.Bytes=table.Write();
+  SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);
+  var actual=SFUtil.DecryptNightreignRegulation(output);
+  Check(actual.Files.Count==binder.Files.Count && actual.Version==binder.Version && actual.Compression==binder.Compression,"Regulation roundtrip mismatch");
+  foreach(var f in actual.Files)Check(f.Bytes.Span.SequenceEqual(binder.Files.Single(x=>x.ID==f.ID).Bytes.Span),"Binder member roundtrip mismatch");
+  var verified=parse("AtkParam_Pc",actual.Files.Single(f=>f.ID==file.ID).Bytes);
+  foreach(var id in new[]{Owner+62,Owner+63}){
+   var attack=verified.Rows.Single(r=>r.ID==id);
+   Check(Convert.ToInt32(attack["selfTarget"].Value)==1 && Convert.ToInt32(attack["friendlyTarget"].Value)==0 && Convert.ToInt32(attack["opposeTarget"].Value)==0,"Leakage must only target the owner");
+  }
+  Set(original,"opposeTarget",0);
+  Check(Same(original,verified.Rows.Single(r=>r.ID==Owner+63)),"Unexpected leakage wave change");
+  HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner},inputMod:mod);
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output)}));
  }
 
  public static void DelayStage(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes,bool mmv){
