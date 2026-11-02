@@ -91,9 +91,10 @@ pub fn leave(){CALCULATIONS.with(|s|{s.borrow_mut().pop();});}
 // to the combiner input preserves subsequent additive attacker contributions,
 // including when object defense is zero. No division by a defensive rate.
 unsafe extern "system" fn object_delta(attack:*const f32,rate:f32){
+ crate::static_charge::object_delta(attack,rate);
  CALCULATIONS.with(|s|{if let Some(c)=s.borrow_mut().last_mut().filter(|c|c.eligible){c.delta=std::array::from_fn(|i|*attack.add(i)*(1.-rate));}});
 }
-unsafe extern "system" fn scale_delta(rate:f32){CALCULATIONS.with(|s|{if let Some(c)=s.borrow_mut().last_mut().filter(|c|c.eligible){for d in &mut c.delta{*d*=rate;}}});}
+unsafe extern "system" fn scale_delta(rate:f32){crate::static_charge::scale_delta(rate);CALCULATIONS.with(|s|{if let Some(c)=s.borrow_mut().last_mut().filter(|c|c.eligible){for d in &mut c.delta{*d*=rate;}}});}
 pub unsafe fn raw_attack(attack:*const f32,holy:f32)->Option<[f32;5]>{
  if attack.is_null(){return None;}
  CALCULATIONS.with(|s|{let mut stack=s.borrow_mut();let c=stack.last_mut()?;if !c.eligible||c.sampled{return None;}c.sampled=true;Some(std::array::from_fn(|i|*attack.add(i)+c.delta[i]*if i==4{holy}else{1.}))})

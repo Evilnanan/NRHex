@@ -233,3 +233,8 @@ The more damage you take during an empowered Character Skill, the more damage yo
 ## Bartender
 
 Switching weapons changes their enchantment affinity.
+
+<!-- hex:95005100 -->
+## Static
+
+Moving builds static charge. When fully charged, your next attack hit calls down lightning.

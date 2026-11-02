@@ -42,10 +42,10 @@ pub unsafe extern "system" fn contact(hit:usize,target:usize,bullet:usize)->u8{
  let original:unsafe extern "system" fn(usize,usize,usize)->u8=std::mem::transmute(CONTACT_ORIGINAL.load(Ordering::Acquire));
  let item=ACTIVE.load(Ordering::Acquire)&&bullet!=0&&read_i32(bullet+0x2c0)>=0;
  let passive=ACTIVE.load(Ordering::Acquire)&&bullet!=0
-  &&source_data::PASSIVE_BULLETS.binary_search(&read_i32(bullet+0xa4)).is_ok();
+  &&(crate::static_charge::private_bullet(read_i32(bullet+0xa4))||source_data::PASSIVE_BULLETS.binary_search(&read_i32(bullet+0xa4)).is_ok());
  let _passive=PassiveGuard::enter(passive);
  let _scope=ItemGuard::enter(item);
- original(hit,target,bullet)
+ crate::static_charge::contact(original,hit,target,bullet)
 }
 struct CollectGuard(bool);
 impl CollectGuard{
@@ -59,7 +59,7 @@ pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
  let spell=ACTIVE.load(Ordering::Acquire)&&descriptor!=0&&matches!(ptr::read(descriptor as*const u8),3|4|10);
  let _scope=CollectGuard::enter(spell);
  let item=ACTIVE.load(Ordering::Acquire)&&ITEM_CONTACT.with(Cell::get);
- let replacement=carrier(if descriptor==0{0}else{ptr::read(descriptor as*const u8)},item,PASSIVE_CONTACT.with(Cell::get));
+ let replacement=if crate::static_charge::active_contact(){PASSIVE_CARRIER}else{carrier(if descriptor==0{0}else{ptr::read(descriptor as*const u8)},item,PASSIVE_CONTACT.with(Cell::get))};
  let begin=if ACTIVE.load(Ordering::Acquire)&&out!=0{read_ptr(out+8)}else{0};
  let appended=if ACTIVE.load(Ordering::Acquire)&&out!=0{read_ptr(out+0x10).saturating_sub(begin)/4}else{0};
  original(manager,out,descriptor);
@@ -79,7 +79,7 @@ pub unsafe extern "system" fn collect(manager:usize,out:usize,descriptor:usize){
 }
 // Restore Sword-dependent spell eligibility; accepted spells retain their 15-point tier.
 pub unsafe fn spell_contact(node:usize,descriptor:usize,owner:usize)->bool{
- if node==0||descriptor==0||!COLLECT_SPELL.with(Cell::get)||!matches!(ptr::read(descriptor as*const u8),3|4|10){return false;}
+ if crate::static_charge::active_contact()||node==0||descriptor==0||!COLLECT_SPELL.with(Cell::get)||!matches!(ptr::read(descriptor as*const u8),3|4|10){return false;}
  let param=read_ptr(node);if param==0{return false;}
  if ptr::read_unaligned((param+0x156)as*const u16)!=152||read_i32(param+0x12c)!=CARRIER{return false;}
  // 506200 passes its manager's ChrIns owner to 511010. Match the same

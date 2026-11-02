@@ -1,0 +1,162 @@
+{
+  "version": "0.17.280",
+  "name": "静电",
+  "owner": 95005100,
+  "chargedVisual": 95005101,
+  "attack": 95005160,
+  "bullets": [
+    95005150,
+    95005151,
+    95005152,
+    95005153
+  ],
+  "distanceMetres": 30,
+  "basePoise": 30,
+  "baseRescue": 30,
+  "icon": [
+    21206,
+    22206
+  ],
+  "readyVfx": 1697100,
+  "sharedExistingSfx": [
+    525562,
+    300173,
+    525652
+  ],
+  "newArtAssets": false,
+  "customLateModifiersInSnapshot": false,
+  "repeatAttackerBonusesOnLightning": false,
+  "downedAllyTrigger": true,
+  "oneExtraHitPerTargetPerDischarge": true,
+  "unitTestsPassed": 467,
+  "nativeSignatureCount": 220,
+  "nativeCases": [
+    "native descriptor float copy",
+    "per-root snapshot and inherited instance generations",
+    "native neutral-defense combiner",
+    "target defenses retained without repeated offense",
+    "native fixed poise and rescue bases",
+    "outgoing downed teammate with zero HP damage",
+    "nested hit dedup and native rejection retry"
+  ],
+  "regressions": [
+    "Haymaker",
+    "Glass Cannon",
+    "ground probe",
+    "Ambulance",
+    "Echo Cast",
+    "Sword projectile lifecycle"
+  ],
+  "validationScope": "isolated native code and controlled actors/collision; builds and semantic file comparisons",
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "parameterAndEventValidation": {
+    "standalone": {
+      "inputSha256": "EF1EA7C906B7B87368A14B1B293E9C3A78938D022C0B2C87CDD97B5ECE02D6BB",
+      "outputSha256": "7C5043923329D4A4F6EC6EA33C0B19D096920B7B89A2B6AEEE38B92333AD219A",
+      "eventInputSha256": "D28DDCF92C0F2EBB64E4DFE2F0402B7D35CE88884DB51F33FE9B23A24D07EC40",
+      "eventOutputSha256": "51A08CE6C350FF4C6E3FEDBCBE2154204267BA1C0C1D8D7A3A17B6148D3A3CAE",
+      "hexCount": 45,
+      "historyBit": 47,
+      "historyBytes": 6,
+      "addedRows": {
+        "SpEffectParam": [
+          95005100,
+          95005101,
+          96210047
+        ],
+        "AttachEffectParam": [
+          95005100
+        ],
+        "PermanentBuffParam": [
+          95005100
+        ],
+        "EquipParamGoods": [
+          95005100
+        ],
+        "ItemTableParam": [
+          95110147
+        ],
+        "Bullet": [
+          95005150,
+          95005151,
+          95005152,
+          95005153
+        ],
+        "AtkParam_Pc": [
+          95005160
+        ]
+      },
+      "allExistingRowsAndUnrelatedTablesUnchanged": true,
+      "onlyThreeExistingEventsExtended": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "mmv": {
+      "inputSha256": "EC4948F362AA36CEB253895442D0F6F495B124D5D30A73B3E94D5C849BCDC3D3",
+      "outputSha256": "885563ACE1F2F70F6631C1D933AA568166FE75A5A64AB5D2ED32584A885FA3DF",
+      "eventInputSha256": "46EE2674E8D7BEADFA4A49D4B8FC243FDFCC33684E85ECA877F9BE13E0194CBB",
+      "eventOutputSha256": "E3DF304CC9259830874056A229DE0F8AC07B4140651C510EC42311E8E32FED98",
+      "hexCount": 45,
+      "historyBit": 47,
+      "historyBytes": 6,
+      "addedRows": {
+        "SpEffectParam": [
+          95005100,
+          95005101,
+          96210047
+        ],
+        "AttachEffectParam": [
+          95005100
+        ],
+        "PermanentBuffParam": [
+          95005100
+        ],
+        "EquipParamGoods": [
+          95005100
+        ],
+        "ItemTableParam": [
+          95110147
+        ],
+        "Bullet": [
+          95005150,
+          95005151,
+          95005152,
+          95005153
+        ],
+        "AtkParam_Pc": [
+          95005160
+        ]
+      },
+      "allExistingRowsAndUnrelatedTablesUnchanged": true,
+      "onlyThreeExistingEventsExtended": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    }
+  },
+  "deployedFiles": {
+    "dist/natives/NRHex.dll": "18cbbc13af60e798c53a3dee440f347ca31631311f1b546b54cad3fda2d50b72",
+    "dist/mmv/natives/NRHex.dll": "04cfefb918c645293bee8917626b20923cb8dc8aece0496d7ec8df20ff0c3168",
+    "dist/mod/regulation.bin": "7c5043923329d4a4f6ec6ea33c0b19d096920b7b89a2b6aeee38b92333ad219a",
+    "dist/mod/event/common.emevd.dcx": "51a08ce6c350ff4c6e3fedbcbe2154204267ba1c0c1d8d7a3a17b6148d3a3cae",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "7d90bef32390bbad617ea66c9d6eb1aee78ccff5b5196e978e85d810a4b2b330",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "14cdd9b517008eae8dcf349e92311a65f4e69ca5f214d5a4d3bbb6b88b418e01",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "ca396323e2d884d02cdfb9ff5de15647fc7b4a97eee88d598d4d36c84c0d0d5f",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "627c98c76abca55d32d42870579df13beb759477544438f1d15f7ffdf880b9f0",
+    "dist/mmv/mod/regulation.bin": "885563ace1f2f70f6631c1d933aa568166fe75a5a64ab5d2ed32584a885fa3df",
+    "dist/mmv/mod/event/common.emevd.dcx": "e3df304cc9259830874056a229de0f8ac07b4140651c510ec42311e8e32fed98",
+    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "dafbe0ea8e75a509fd2c145f8cc2e6c7e35c0b90da102e0920665543a21125c5",
+    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "605874c667fe18c3c907225c7716cae70c128782f57e0a208fb59f65944eb27b",
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "2198909f66ddf8495dea49780a055db22114c2d1fd2ff3db0323cb2944cad164",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "a07b69c6150edb4f4794819548091c6123a794c0eb26462e76dc4520bfe8c405"
+  },
+  "sourceHashes": {
+    "src/static_charge.rs": "24a99635ee778bc2cd982046ab102283cb72db8bc27cdcae41c9870073209f94",
+    "src/static_charge_tests.rs": "f59a1d28e33426af99bfe66e6db572483e07bb5cc9a546076822c6fed58c3953",
+    "src/glass_cannon.rs": "0db5814c4f3f34fe7ef56b91d47830957839d43b7e16874574d3e16c4a8b7ba9",
+    "tools/HexBuild/StaticCharge.cs": "2934224b4a8fdc9ddb8821a81dbc447c898c3b152e839eae03ce483eae568bc0",
+    "src/hex_pool.rs": "4aaa5f5b306e59946a1fe3b325f3fefa9bf29559b48c46712d97d3aa9bdbbf5b"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "standaloneAndMmvDllLoadChecksPassed": true
+}

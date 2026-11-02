@@ -88,6 +88,7 @@ PARAM Parse(string name,Memory<byte> bytes){
 }
 if(args.Contains("--parry-counter-hit-stage")){ParryCounterHit.Stage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--static-charge-stage")){StaticCharge.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--bartender-stage")){Bartender.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--deliberate-punch-stage")){DeliberatePunch.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--sniper-stage")){Sniper.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
@@ -952,6 +953,7 @@ UltimateTiming.Mechanics(Clone);
 Ambulance.RecoveryEffect(Clone,pars["SpEffectParam"]);
 Erosion.Mechanics(Clone);
 Bartender.Mechanics(Clone);
+StaticCharge.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
 foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
@@ -1367,6 +1369,7 @@ Metal.Events(ev);
 DoubleDip.Events(ev,hexes);
 DeliberatePunch.Events(ev);
 Bartender.Events(ev);
+StaticCharge.Events(ev);
 Basics.Events(ev);
 Sniper.Events(ev);
 UltimateUnstoppable.Events(ev);

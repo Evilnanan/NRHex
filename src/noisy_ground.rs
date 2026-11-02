@@ -41,6 +41,10 @@ unsafe fn probe(sweep:Sweep,geometry:usize,origin:[f32;4])->Option<[f32;4]>{
  if result!=&mut hit as*mut u32||hit&0xffffff==0xffffff{return None;}
  surface(origin,contact.0,normal.0,fraction)
 }
+pub(crate) unsafe fn ground_at(origin:[f32;4],base:usize)->Option<[f32;4]>{
+ let manager=read_ptr(base+0x3c1e028);if manager==0{return None;}
+ probe(std::mem::transmute(base+crate::SPIRIT_SWEEP_RVA),read_ptr(manager+0x98),origin)
+}
 unsafe fn locate(player:usize,base:usize)->Option<[f32;4]>{
  if !crate::spatial_ready(player){return None;}
  let manager=read_ptr(base+0x3c1e028);if manager==0{return None;}

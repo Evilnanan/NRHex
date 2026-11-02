@@ -170,6 +170,7 @@ pub unsafe extern "system" fn bind(ins:usize,payload:usize,target:usize,transfor
  let original:unsafe extern "system" fn(usize,usize,usize,usize,i32,u32)=std::mem::transmute(BIND_ORIGINAL.load(Ordering::Acquire));
  original(ins,payload,target,transform,mode,index);
  crate::echo_cast::held_bound(ins);
+ crate::static_charge::bound(ins);
  let Some(mut flight)=INITIALIZE.with(Cell::get)else{return;};
  let p=point(ins);if !finite(p){return;}
  let row=param(ins,BASE.load(Ordering::Acquire));
@@ -187,10 +188,12 @@ pub unsafe extern "system" fn child(ins:usize,position:usize,orientation:usize,b
  if position!=0&&flight.is_some_and(|value|outside(value,ptr::read_unaligned(position as*const Point))){return 0;}
  let _guard=ChildGuard(CHILD.with(|s|s.replace(Some(flight))));
  let _echo=crate::echo_cast::child_scope(ins,bullet);
+ let _static=crate::static_charge::child(ins,bullet);
  original(ins,position,orientation,bullet,mode)
 }
 pub unsafe extern "system" fn reset(ins:usize){
  crate::echo_cast::held_reset(ins);
+ crate::static_charge::retired(ins);
  if let Ok(mut state)=STATE.lock(){state.instances.remove(&ins);}
  let original:unsafe extern "system" fn(usize)=std::mem::transmute(RESET_ORIGINAL.load(Ordering::Acquire));original(ins);
 }

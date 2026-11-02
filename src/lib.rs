@@ -50,6 +50,7 @@ mod noisy;
 mod noisy_ground;
 mod balloon;
 mod ability_damage;
+mod static_charge;
 mod glass_cannon;
 mod parry;
 mod parry_turn;
@@ -373,7 +374,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);218] {
+fn signatures()->[(&'static str,u32);220] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -407,6 +408,7 @@ fn signatures()->[(&'static str,u32);218] {
   (balloon_team::TEAM_PATTERN,balloon_team::TEAM_RVA as u32),
   (balloon_team::HIT_PATTERN,balloon_team::HIT_RVA as u32),
   (balloon_team::BULLET_PATTERN,balloon_team::BULLET_RVA as u32),
+  (static_charge::TRANSPORT_PATTERN,static_charge::TRANSPORT_RVA as u32),(static_charge::PACKET_PATTERN,static_charge::PACKET_RVA as u32),
   (balloon_team::PARAM_PATTERN,balloon_team::PARAM_RVA as u32),
   (parry::NOTIFY_PATTERN,parry::NOTIFY_RVA as u32),(parry::COST_PATTERN,parry::COST_RVA as u32),(parry::REPEL_PATTERN,parry::REPEL_RVA as u32),
   (THROW_ANIM_PATTERN,THROW_ANIM_RVA as u32),(GAUGE_ADD_PERCENT_PATTERN,GAUGE_ADD_PERCENT_RVA as u32),
@@ -1006,6 +1008,7 @@ unsafe fn strengthen_constructed_hit(hit:usize) {
 }
 unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  if !ACTIVE.load(Ordering::Acquire)||hit==0||context==0{return;}
+ static_charge::constructed(hit,context);
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);
  if world==0{return;}
  let local=read_ptr(world+0x174e8);
@@ -1036,6 +1039,7 @@ unsafe fn position(player:usize,base:usize)->[f32;4] {
 // Receiver-side native category calculation also covers bullet/network contexts
 // whose original construction did not expose the player's source pointer.
 unsafe extern "system" fn on_sword_before_calculation(module:usize,source:usize,hit:usize){
+ static_charge::enter(module,source,hit);
  parry::enter(module,hit);
  glass_cannon::enter(module,source,hit);
  deliberate_punch::enter(module,hit);
@@ -1047,6 +1051,7 @@ unsafe extern "system" fn on_sword_before_calculation(module:usize,source:usize,
  ptr::write_unaligned((hit+0x124) as *mut [u32;8],categories);
 }
 unsafe extern "system" fn on_rear_calculated(module:usize,source:usize,hit:usize) {
+ static_charge::leave();
  deliberate_punch::leave();
  glass_cannon::leave();
  parry::finish_guard(module,hit);
@@ -2298,7 +2303,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  let world=read_ptr(base+WORLD_RVA);
  if world==0{return;}
  if read_ptr(world+0x174e8)!=player {return;}
- if !dt.is_finite()||dt<=0.0||dt>1.0{return;}
+ if !dt.is_finite()||dt<=0.0||dt>1.0{static_charge::suspend();return;}
  ambulance::update(player,base,dt);
  ultimate_challenge::update(player,base,dt);
  echo_cast::update(player,base,dt);
@@ -2312,6 +2317,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  marking::update(player,base);
  basics::update(player,base);
  deliberate_punch::update(player,base);
+ static_charge::update(player,base);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  update_chant(player,base);

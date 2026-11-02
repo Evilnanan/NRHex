@@ -51,6 +51,15 @@ pub unsafe extern "system" fn detour(out:*mut f32,attack:*const f32,rates:*const
 unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f32,rates:*const f32,
  effects:*const f32,armor:*const f32,guard:*const f32,conditional:*const f32,additional:*const f32,
  deflection:f32,repeated:f32,rebound:f32,attack_rate:f32,positional:f32,target_state:f32,balance:f32)->f32{
+ // Snapshot the native offense before our later bonuses and before target
+ // defenses. Keep attack motion/range coefficients, neutralize all defenses.
+ if let Some(raw)=crate::static_charge::raw_attack(attack){
+  let one=[1.;5];let n=one.as_ptr();let mut scratch=[0.;5];
+  crate::static_charge::candidate(original(scratch.as_mut_ptr(),raw.as_ptr(),rates,n,n,n,n,n,1.,repeated,1.,attack_rate,positional,1.,balance));
+ }
+ let lightning=crate::static_charge::lightning();
+ let fixed=[0.,0.,0.,lightning.unwrap_or(0.),0.];let one=[1.;5];
+ let (attack,rates,repeated,attack_rate,positional,balance)=if lightning.is_some(){(fixed.as_ptr(),one.as_ptr(),1.,1.,1.,1.)}else{(attack,rates,repeated,attack_rate,positional,balance)};
  // 439E80 passes a local five-element attack vector. For environment sources
  // its earlier steps are multiplicative; apply live Libra base/depth and the
  // recipient fraction to the raw holy component here, retaining every native

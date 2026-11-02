@@ -9,7 +9,7 @@ pub const BASE_PATTERN:&str="66 44 0F 6E C1 48 8D 55 A8 49 8B CD 45 33 C9 4C 8B 
 pub static ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 
 unsafe fn fixed_attack(context:usize){
- if context!=0&&read_i32(context+8)==balloon::ATTACK&&read_i32(context+0xc)==1 {
+ if context!=0&&(read_i32(context+8)==balloon::ATTACK||read_i32(context+8)==crate::static_charge::ATTACK)&&read_i32(context+0xc)==1 {
   // Native 6C3200 selects its fixed-attack branch with context+F8. The
   // ordinary branch uses equipped-weapon attack, unsuitable for HP scaling.
   // This per-attack context is copied by E70350 before cached/network hits.

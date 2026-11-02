@@ -87,7 +87,7 @@ fn within_cone(direction:[f32;2],offset:[f32;2])->bool{
  let length=(a*a+b*b)*(x*x+z*z);let dot=a*x+b*z;
  length>1e-12&&dot>0.&&dot*dot>=length*(0.75-1e-7)
 }
-unsafe fn party_member(actor:usize,base:usize)->bool{
+pub(crate) unsafe fn party_member(actor:usize,base:usize)->bool{
  let world=read_ptr(base+crate::WORLD_RVA);if world==0||actor==0{return false;}
  if read_ptr(world+0x174e8)==actor{return true;}
  let get:unsafe extern "system" fn(usize,i32)->usize=std::mem::transmute(base+0x5197e0);
@@ -202,7 +202,11 @@ unsafe fn outgoing_power(target:usize,hit:usize,base:usize,row:usize)->i32{
  }
  rescue_power(ptr::read_unaligned((hit+0x150)as*const f32),rate,ptr::read_unaligned((hit+0x258)as*const f32))
 }
+pub(crate) unsafe fn static_rescue(target:usize,hit:usize,base:usize)->bool{
+ party_member(target,base)&&ptr::read((target+0x710)as*const u8)==1&&outgoing_power(target,hit,base,common_row(base))>0
+}
 unsafe extern "system" fn outgoing(module:usize,source:usize,hit:usize){
+ crate::static_charge::outgoing(module,source,hit);
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);let Some(owner)=owned(source,base)else{return;};
  let target=read_ptr(module+8);
