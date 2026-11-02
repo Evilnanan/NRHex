@@ -1,0 +1,167 @@
+{
+  "version": "0.17.285",
+  "baselineCommit": "dad0793",
+  "distanceMetres": 100,
+  "leakageDownedOwnerContact": "Rejected before native damage, rescue and hit reactions",
+  "checkedAt": "Every root/wave collision",
+  "playerStates": [
+    1,
+    2
+  ],
+  "ownerMatch": "Full target+8 handle equals bullet+B0 source handle",
+  "ordinaryLightningRescueUnchanged": true,
+  "firstHitAndTwoSecondDamageSnapshotUnchanged": true,
+  "validation": {
+    "regularPassed": 473,
+    "regularIgnored": 34,
+    "nativeIsolatedPassed": 1,
+    "mmvArtsPassed": 6,
+    "standaloneAndMmvBuild": true,
+    "dllLoadSmoke": true,
+    "gameplayTested": false,
+    "multiplayerTested": false
+  },
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "mmvBaselineSync": {
+    "reason": "Local ignored MMV package lacked 0.17.284 lightning mask/text updates",
+    "parameterStage": {
+      "inputSha256": "BE5251B9464D9760CA3A0864C5BD188F71F4FAE3F4E8CE2EEB63693D726D5882",
+      "outputSha256": "D86099F11D43BF56DD03B113BA3F09F67FE0DDA04E7E4EFBD7D4A7A0ED7E45EC"
+    },
+    "textStage": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "050A4EFD83D52E125E6A479FA320A6F3E747697AAFE872307EBE1479BECA1CCD",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "6272B26C9E80295479A3F815E3A652B833C8F3CE0D003AA5B7D26910E9C22D1A",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "DFFCA7733F0702D6EBBA24BF2F1EACC84762DCFD7DCEAD5B2776C822788C8F4A",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "E2E20BB1B56DD94029F76D1BF7B2B8E544B9D38D6B98293C07228B3F5F0F701A",
+          "outputSha256": "EDD4832533915ED70A7778A812D0CD0E5254DC7377884451E90942D631DAE86A",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95005100,
+              "before": "移动时积累静电。充满后，攻击会将静电传导给目标，而被攻击则会漏电。带电2秒后引发雷击，期间受到的伤害会增益给本次雷击",
+              "after": "移动时积累静电。充满后，下次近战攻击传导静电，受击则自身漏电。2秒后落雷，期间受到的伤害越高，雷击越强"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95005100,
+              "before": "移动时积累静电。充满后，攻击会将静电传导给目标，而被攻击则会漏电。带电2秒后引发雷击，期间受到的伤害会增益给本次雷击",
+              "after": "移动时积累静电。充满后，下次近战攻击传导静电，受击则自身漏电。2秒后落雷，期间受到的伤害越高，雷击越强"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95005100,
+              "before": "移动时积累静电。充满后，攻击会将静电传导给目标，而被攻击则会漏电。带电2秒后引发雷击，期间受到的伤害会增益给本次雷击",
+              "after": "移动时积累静电。充满后，下次近战攻击传导静电，受击则自身漏电。2秒后落雷，期间受到的伤害越高，雷击越强"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "19F55F512438DF1AF3E0DC9474200B1ADE151DA3695F8EA5744BBDA95F842FB9",
+          "outputSha256": "A60BB32EC5903A08C30CB5772674478544BF28B6E82CC018740F229EFDC6F957",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005101,
+              "before": "引雷（满充）",
+              "after": "引雷（充盈）"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95005101,
+              "before": "静电已充满，下次攻击或受击时传导静电",
+              "after": "下次近战攻击传导静电，受击则自身漏电。"
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95005100,
+              "before": "移动时积累静电。充满后，攻击会将静电传导给目标，而被攻击则会漏电。带电2秒后引发雷击，期间受到的伤害会增益给本次雷击",
+              "after": "移动时积累静电。充满后，下次近战攻击传导静电，受击则自身漏电。2秒后落雷，期间受到的伤害越高，雷击越强"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "7D9EE71982154E1F86219B219415BDBC8BDF25F306C799FEEE89BC0F00142DF4",
+          "outputSha256": "9FE8C71D57F1BDA053FD0F01A4443E3A89CD471AE9011BC8DBD50BC621D61C8A",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95005100,
+              "before": "Moving builds static charge. At full charge, attacks transfer it to the target, while being attacked causes a discharge onto yourself. Lightning strikes after 2 seconds, strengthened by damage taken during that time.",
+              "after": "Move to charge. Your next melee hit marks the target. Getting hit marks you instead. Damage taken over 2s powers the bolt."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95005100,
+              "before": "Moving builds static charge. At full charge, attacks transfer it to the target, while being attacked causes a discharge onto yourself. Lightning strikes after 2 seconds, strengthened by damage taken during that time.",
+              "after": "Move to charge. Your next melee hit marks the target. Getting hit marks you instead. Damage taken over 2s powers the bolt."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95005100,
+              "before": "Moving builds static charge. At full charge, attacks transfer it to the target, while being attacked causes a discharge onto yourself. Lightning strikes after 2 seconds, strengthened by damage taken during that time.",
+              "after": "Move to charge. Your next melee hit marks the target. Getting hit marks you instead. Damage taken over 2s powers the bolt."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "A67FCB7D07676299F6CECF5739EC9C59107B8924A7B6ACBEBE3EA74B281D7289",
+          "outputSha256": "E64027B1E22E791BF4558E50DE9B642273FF774CEA20B9568B222000DE9710AB",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95005101,
+              "before": "Fully charged. Your next attack or incoming hit transfers static electricity.",
+              "after": "Your next melee hit transfers static. Getting hit discharges it onto you."
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95005100,
+              "before": "Moving builds static charge. At full charge, attacks transfer it to the target, while being attacked causes a discharge onto yourself. Lightning strikes after 2 seconds, strengthened by damage taken during that time.",
+              "after": "Move to charge. Your next melee hit marks the target. Getting hit marks you instead. Damage taken over 2s powers the bolt."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "unchangedFiles": {
+    "dist/mod/regulation.bin": "90f8aabc9c139ac8efdf901a94c228c7eb0ab082f5caef0a84ef84b2c6d09c64",
+    "dist/mod/event/common.emevd.dcx": "c1ae6c0cb194e654608b50039218bcf3089faf0f41bdd2592a519c5d103e96c7",
+    "dist/mmv/mod/event/common.emevd.dcx": "62293066adf3788b27fdefce27a9d92a691c7dcea4684ca815d069d798164291",
+    "README.md": "afc6a482eace7cf6d179e8286a27b47a9a73e5670446d0509271ea84f9ae3547"
+  },
+  "sourceHashes": {
+    "src/static_charge.rs": "8aa81ca5e3e6f70370c15e17f12f751d2020387242138c34bad92332e8c69762",
+    "src/static_charge_tests.rs": "8b0bb80c5f542620c4de4fddd1a617f7cf1e04fcbccdeda4b8f99484fa40c2bc",
+    "docs/research/static-charge.md": "af345decc88ffba26dea9922bf5fdca05e197d2ddce2fe412d00e8ab8488e598",
+    "Cargo.toml": "b6dc6eb4449025418ab720f1701b6c6dc210f4337d6985623557559a6d090ab1",
+    "Cargo.lock": "9905d17e2f2c2c4ed0c21f01d4eb6aaff6343e2fe215f8a1551d04dff9d012fc"
+  },
+  "deployedFiles": {
+    "dist/natives/NRHex.dll": "9591234d1228a9de2a3705e20a170dccdcf1bd5e46a0027ff49586adef1a314d",
+    "dist/mmv/natives/NRHex.dll": "3d770d0455877b33af302cc5cdc872936f6fab8af682388c7b31d46c815bf398",
+    "dist/mmv/mod/regulation.bin": "d86099f11d43bf56dd03b113ba3f09f67fe0dda04e7e4efbd7d4a7a0ed7e45ec",
+    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "edd4832533915ed70a7778a812d0cd0e5254dc7377884451e90942d631dae86a",
+    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "a60bb32ec5903a08c30cb5772674478544bf28b6e82cc018740f229efdc6f957",
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "9fe8c71d57f1bda053fd0f01a4443e3a89cd471ae9011bc8dbd50bc621d61c8a",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "e64027b1e22e791bf4558e50de9b642273ff774cea20b9568b222000de9710ab"
+  }
+}

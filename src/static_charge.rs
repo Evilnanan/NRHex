@@ -11,7 +11,7 @@ pub const TRANSPORT_RVA:usize=0x34058e;
 pub const TRANSPORT_PATTERN:&str="0F 10 42 30 0F 11 81 24 01 00 00";
 pub const PACKET_RVA:usize=0x33e1a3;
 pub const PACKET_PATTERN:&str="0F 10 47 30 0F 11 46 70";
-const DISTANCE:f64=60.;
+const DISTANCE:f64=100.;
 const MELEE_RANGE:f32=6.;
 #[derive(Default)]struct Meter{distance:f64,last:Option<(usize,u64,u32,[f32;4])>}
 impl Meter{
@@ -221,6 +221,12 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  if !ACTIVE.load(Ordering::Acquire)||bullet==0||!private_bullet(read_i32(bullet+0xa4)){return original(hit,target,bullet);}
  let Some(seed)=seed(bullet)else{return 0;};if target==0{return 0;}
  let handle=read_ptr(target+8)as u64;
+ // Leakage has no contact with its downed/reviving owner, including rescue
+ // and hit reactions. Check at collision time, not when the mark is placed.
+ // Ordinary lightning must still be able to rescue downed teammates.
+ if (LEAK_BULLET..=BULLET+7).contains(&read_i32(bullet+0xa4))
+    &&handle==read_ptr(bullet+0xb0)as u64
+    &&matches!(ptr::read((target+0x710)as*const u8),1|2){return 0;}
  {let Ok(mut targets)=seed.targets.lock()else{return 0;};if !targets.insert(handle){return 0;}}
  let _guard=ContactGuard(CONTACT.with(|s|s.replace(true)));
  let result=original(hit,target,bullet);
@@ -267,11 +273,12 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
   let mut m=Meter::default();m.observe(1,2,3,Some([0.,0.,0.,1.]));
   for p in [[10.,0.,0.,1.],[10.,10.,0.,1.],[10.,10.,10.,1.]]{m.observe(1,2,3,Some(p));}
   assert!(!m.take());
-  m.observe(1,2,3,Some([10.,10.,40.,1.]));assert!(m.take());assert!(!m.take());
-  m.observe(1,2,3,Some([10.,10.,45.,1.]));assert_eq!(m.distance,5.);
+  m.observe(1,2,3,Some([10.,10.,79.,1.]));assert!(!m.take());assert_eq!(m.distance,99.);
+  m.observe(1,2,3,Some([10.,10.,80.,1.]));assert!(m.take());assert!(!m.take());
+  m.observe(1,2,3,Some([10.,10.,85.,1.]));assert_eq!(m.distance,5.);
   m.observe(4,5,6,Some([999.,999.,999.,1.]));assert_eq!(m.distance,5.);
   m.observe(4,5,6,None);m.observe(4,5,6,Some([0.;4]));assert_eq!(m.distance,5.);
  }
- #[test]fn full_charge_is_one_token_and_does_not_bank_overflow(){let mut m=Meter::default();m.observe(1,2,3,Some([0.;4]));m.observe(1,2,3,Some([100.,0.,0.,1.]));assert_eq!(m.distance,60.);assert!(m.take());assert!(!m.take());}
+ #[test]fn full_charge_is_one_token_and_does_not_bank_overflow(){let mut m=Meter::default();m.observe(1,2,3,Some([0.;4]));m.observe(1,2,3,Some([150.,0.,0.,1.]));assert_eq!(m.distance,100.);assert!(m.take());assert!(!m.take());}
 }
 #[cfg(test)]#[path="static_charge_tests.rs"]mod native_tests;

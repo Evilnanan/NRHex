@@ -120,6 +120,22 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  {let _c=child(bp,LEAK_BULLET+1);int(pp+4,LEAK_BULLET+1);let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(cb);}
  assert!(Arc::ptr_eq(&seed(bp).unwrap(),&seed(cb).unwrap()));assert_eq!(seed(cb).unwrap().damage,187.5);
  assert_eq!(contact(rejected,hp,tp,bp),0);assert_eq!(contact(accepted,hp,tp,cb),1);assert_eq!(contact(accepted,hp,tp,bp),0);
+ // Check every root/wave stage at contact time. Rejecting leakage must not
+ // call native damage/rescue, nor spend dedup eligibility before revival.
+ let mut downed=[0u8;0x740];let dp=downed.as_mut_ptr()as usize;
+ ptr::write_unaligned((dp+8)as*mut u64,0xffff_ffff_10e0_0000);
+ unsafe extern "system" fn must_not_contact(_:usize,_:usize,_:usize)->u8{panic!("Downed owner reached native leakage contact")}
+ for id in BULLET..=BULLET+7{int(bp+0xa4,id);
+  for own in [false,true]{ptr::write_unaligned((bp+0xb0)as*mut u64,read_ptr(dp+8)as u64+u64::from(!own));
+   for state in [0u8,1,2]{downed[0x710]=state;seed(bp).unwrap().targets.lock().unwrap().clear();
+    let blocked=id>=LEAK_BULLET&&own&&state!=0;
+    let before=downed;
+    assert_eq!(contact(if blocked{must_not_contact}else{accepted},hp,dp,bp),u8::from(!blocked));
+    assert_eq!(downed,before);assert_eq!(seed(bp).unwrap().targets.lock().unwrap().len(),usize::from(!blocked));
+    if blocked{downed[0x710]=0;assert_eq!(contact(accepted,hp,dp,bp),1);}
+   }
+  }
+ }
  retired(bp);assert!(seed(bp).is_none());retired(cb);finished(gp);
  // Exercise the actual outgoing callback with a downed registered teammate
  // and zero HP damage. Native rescue coefficients, not HP loss, decide it.
