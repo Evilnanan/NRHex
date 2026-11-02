@@ -10,7 +10,7 @@ static class StaticCharge {
   var mark=clone("SpEffectParam",8000000,Owner+2);
   // Native GOLD Dragonbolt Blessing visuals only: no resistance, rebound or
   // damage modifiers inherited from the original prayer.
-  foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",-1),("effectEndurance",1f),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0),("vfxId",1697100)})Set(mark,f,v);
+  foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",-1),("effectEndurance",2f),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0),("vfxId",1697100)})Set(mark,f,v);
   for(int i=0;i<4;i++){
    var attack=clone("AtkParam_Pc",69300,Owner+60+i);
    bool wave=(i&1)!=0,leak=i>=2;
@@ -126,5 +126,24 @@ static class StaticCharge {
   HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner},inputMod:mod);
   File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),touchedRows=touched.ToDictionary(x=>x.Key,x=>x.Value.Order().ToArray()),unrelatedRowsAndTablesUnchanged=true,onlyMarkerCleanupAdded=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: Lightning Conduit rework staged; unrelated rows, events and texts preserved");
+ }
+
+ public static void DelayStage(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes,bool mmv){
+  string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=Path.Combine(root,"work/lightning-delay2",mmv?"mmv":"staged"),input=Path.Combine(mod,"regulation.bin");Directory.CreateDirectory(dir);
+  var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=binder.Files.Single(f=>Name(f)=="SpEffectParam.param");var table=parse("SpEffectParam",file.Bytes);
+  var mark=table.Rows.Single(r=>r.ID==Owner+2);Check(Convert.ToSingle(mark["effectEndurance"].Value)==1f,"Expected one-second mark baseline");Set(mark,"effectEndurance",2f);file.Bytes=table.Write();
+  string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,binder,binder.Compression);var actual=SFUtil.DecryptNightreignRegulation(output);
+  Check(actual.Version==binder.Version&&actual.Compression==binder.Compression&&actual.Files.Count==binder.Files.Count,"Binder metadata changed");
+  foreach(var f in actual.Files){
+   var expected=binder.Files.Single(x=>x.ID==f.ID);Check(f.Name==expected.Name&&f.Flags==expected.Flags&&f.Bytes.Span.SequenceEqual(expected.Bytes.Span),"Parameter roundtrip mismatch");
+   if(f.ID!=file.ID){Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated table changed");continue;}
+   var old=parse("SpEffectParam",before[f.ID]);var now=parse("SpEffectParam",f.Bytes);Check(old.Rows.Count==now.Rows.Count,"Unexpected row count");
+   foreach(var row in now.Rows){var previous=old.Rows.Single(r=>r.ID==row.ID);if(row.ID==Owner+2){Check(Convert.ToSingle(row["effectEndurance"].Value)==2f,"Mark duration mismatch");Set(row,"effectEndurance",1f);}Check(Same(previous,row),"Unrelated row or field changed");}
+  }
+  string eventInput=Path.Combine(mod,"event/common.emevd.dcx"),eventOutput=Path.Combine(dir,"common.emevd.dcx");File.Copy(eventInput,eventOutput,true);
+  HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner},inputMod:mod);
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),changedRow=Owner+2,changedField="effectEndurance",beforeSeconds=1,afterSeconds=2,allOtherFieldsRowsTablesAndEventsUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: two-second mark staged; all other parameters and events unchanged");
  }
 }

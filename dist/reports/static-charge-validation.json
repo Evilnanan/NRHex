@@ -1,5 +1,5 @@
 {
-  "version": "0.17.281",
+  "version": "0.17.282",
   "name": "引雷",
   "owner": 95005100,
   "chargedStatus": 95005101,
@@ -21,7 +21,7 @@
     95005157
   ],
   "distanceMetres": 30,
-  "delayGameSeconds": 1,
+  "delayGameSeconds": 2,
   "firstHitIncluded": true,
   "allAcceptedAttackSourcesAccumulate": true,
   "customLateModifiersInSnapshot": false,
@@ -71,95 +71,57 @@
   "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
   "parameterAndEventValidation": {
     "standalone": {
-      "inputSha256": "7C5043923329D4A4F6EC6EA33C0B19D096920B7B89A2B6AEEE38B92333AD219A",
-      "outputSha256": "7906687148B303C4180D6BC92018085C0452FA74F8230879D434B7A477BBF010",
-      "eventInputSha256": "51A08CE6C350FF4C6E3FEDBCBE2154204267BA1C0C1D8D7A3A17B6148D3A3CAE",
+      "inputSha256": "7906687148B303C4180D6BC92018085C0452FA74F8230879D434B7A477BBF010",
+      "outputSha256": "7351C410FC72A67DB24AE194FD0D1D271808B4A1C5892B132FA78F83B6D203AF",
+      "eventInputSha256": "C1AE6C0CB194E654608B50039218BCF3089FAF0F41BDD2592A519C5D103E96C7",
       "eventOutputSha256": "C1AE6C0CB194E654608B50039218BCF3089FAF0F41BDD2592A519C5D103E96C7",
-      "touchedRows": {
-        "SpEffectParam": [
-          95005101,
-          95005102
-        ],
-        "Bullet": [
-          95005150,
-          95005151,
-          95005152,
-          95005153,
-          95005154,
-          95005155,
-          95005156,
-          95005157
-        ],
-        "AtkParam_Pc": [
-          95005160,
-          95005161,
-          95005162,
-          95005163
-        ]
-      },
-      "unrelatedRowsAndTablesUnchanged": true,
-      "onlyMarkerCleanupAdded": true,
-      "gameplayVerified": false,
-      "multiplayerVerified": false
+      "changedRow": 95005102,
+      "changedField": "effectEndurance",
+      "beforeSeconds": 1,
+      "afterSeconds": 2,
+      "allOtherFieldsRowsTablesAndEventsUnchanged": true,
+      "gameplayVerified": false
     },
     "mmv": {
-      "inputSha256": "885563ACE1F2F70F6631C1D933AA568166FE75A5A64AB5D2ED32584A885FA3DF",
-      "outputSha256": "3F0AACDD9D3F219B08822088B97A711CD0D1EE42268881EE329525533B0EE20C",
-      "eventInputSha256": "E3DF304CC9259830874056A229DE0F8AC07B4140651C510EC42311E8E32FED98",
+      "inputSha256": "3F0AACDD9D3F219B08822088B97A711CD0D1EE42268881EE329525533B0EE20C",
+      "outputSha256": "BE5251B9464D9760CA3A0864C5BD188F71F4FAE3F4E8CE2EEB63693D726D5882",
+      "eventInputSha256": "62293066ADF3788B27FDEFCE27A9D92A691C7DCEA4684CA815D069D798164291",
       "eventOutputSha256": "62293066ADF3788B27FDEFCE27A9D92A691C7DCEA4684CA815D069D798164291",
-      "touchedRows": {
-        "SpEffectParam": [
-          95005101,
-          95005102
-        ],
-        "Bullet": [
-          95005150,
-          95005151,
-          95005152,
-          95005153,
-          95005154,
-          95005155,
-          95005156,
-          95005157
-        ],
-        "AtkParam_Pc": [
-          95005160,
-          95005161,
-          95005162,
-          95005163
-        ]
-      },
-      "unrelatedRowsAndTablesUnchanged": true,
-      "onlyMarkerCleanupAdded": true,
-      "gameplayVerified": false,
-      "multiplayerVerified": false
+      "changedRow": 95005102,
+      "changedField": "effectEndurance",
+      "beforeSeconds": 1,
+      "afterSeconds": 2,
+      "allOtherFieldsRowsTablesAndEventsUnchanged": true,
+      "gameplayVerified": false
     }
   },
   "deployedFiles": {
-    "dist/natives/NRHex.dll": "3dbb833b7bf13ed658395d45055b9c207bfb52d8bc543e64d17a68adc3ee1b69",
-    "dist/mmv/natives/NRHex.dll": "83277b9865b3c3a51bf067c82242f32ed3961b44538776809f9fcbbc54d0c33c",
-    "dist/mod/regulation.bin": "7906687148b303c4180d6bc92018085c0452fa74f8230879d434b7a477bbf010",
+    "dist/natives/NRHex.dll": "2f6c274593bed0127ad2576b5e997259f58bc7fa3bbab7711e9ed4480992a9bf",
+    "dist/mmv/natives/NRHex.dll": "6cd8f28f54b6ff77c89028e9a25c559dbaa8397f873328fb8c2522e7fe3deef6",
+    "dist/mod/regulation.bin": "7351c410fc72a67db24ae194fd0d1d271808b4a1c5892b132fa78f83b6d203af",
     "dist/mod/event/common.emevd.dcx": "c1ae6c0cb194e654608b50039218bcf3089faf0f41bdd2592a519c5d103e96c7",
-    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "3e098e4160c4198342393679568e51e8f955cdca247ea5a44b404d912314fb7c",
-    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "072d076e1bb8643959cde6266a93e3b53ed65f97b89c2b45fc54e6d3f0b87cfe",
-    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "671181c4fb6e582a38d3aaa37a3977a5d5768e185a7d21319ff8823fd7197cb7",
-    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "013b3ab1df40d12d4081b349d91545718d79fd542c997238fb8d7e8848edd7d3",
-    "dist/mmv/mod/regulation.bin": "3f0aacdd9d3f219b08822088b97a711cd0d1ee42268881ee329525533b0ee20c",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "deb8b607ce142f6aad2661d3331de6069cbaae461654ddbe05d463835ed205f5",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "fabc73c124d0eb036b88918e4ce9909b3cbdac0d24779b92966dd3556addc597",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "94bb430b9fe23c1dc4bd023d922c8b49f77dd2f346e88c5d342ebf515d663bc6",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "f08326c8138c33b2501f41f02e18b3f171eb6bd24564961d23d5302e05cca73b",
+    "dist/mmv/mod/regulation.bin": "be5251b9464d9760ca3a0864c5bd188f71f4fae3f4e8ce2eeb63693d726d5882",
     "dist/mmv/mod/event/common.emevd.dcx": "62293066adf3788b27fdefce27a9d92a691c7dcea4684ca815d069d798164291",
-    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "c7bf23498327d728e855ac134da03c9c14f626147a048374e3ae821a87608f46",
-    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "e5086187295c47978640283e41dbd7029eb0f8de29417774495d67c6accd4e63",
-    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "8a14237154f23ba656e8a7f6d6eff3e3317825d8fbd601aa1ec25fa0aaeb1be2",
-    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "01d515d7c4453d4d0c61968d507979526eb6c0c3eecd7bc1cf5ad05738406c2f"
+    "dist/mmv/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "ad6d05e238292d6d2901531ba393af4e9d08544c59594368966d3c3694bdef6e",
+    "dist/mmv/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "31b0b423913a6401cfa53e3f6c9d1d123aa0e35273a0759632287b29d2512564",
+    "dist/mmv/mod/msg/engus/item_dlc01.msgbnd.dcx": "de0e1d3dd0a07f60020ad7ff291a35900ded22342f42d7d14d7bfb5212fb6d89",
+    "dist/mmv/mod/msg/engus/menu_dlc01.msgbnd.dcx": "190c34d0a58a57a67664fbee7ca4d83845dc588217d0389f21ec21f84d472119"
   },
   "sourceHashes": {
-    "src/static_charge.rs": "86dc2809c3b56eeedb48857cf94626a8a23ca19857e097c39196b7548841a69b",
+    "src/static_charge.rs": "46f39318fed8c2dcbcc1471b59fb490f9c4d5ac7bc5edc8d368f9384dabb1032",
     "src/static_charge_tests.rs": "9b59e7bbf86305b0ce06e2e518c2d4d9f55be4ad5246ed671c190b0a239eda94",
     "src/glass_cannon.rs": "0db5814c4f3f34fe7ef56b91d47830957839d43b7e16874574d3e16c4a8b7ba9",
     "src/status_display.rs": "01435046367bc03119d24e2aa5d45e63b9be038f17834737a4aefbfb9fe00d1d",
-    "tools/HexBuild/StaticCharge.cs": "aae26475abba4e1b55da61786368887996907fb70b125e292522fd720fbefb5a",
+    "tools/HexBuild/StaticCharge.cs": "b874576e5218451ce8e5020157e059d04f5ed45107f1e44e76e2e269924d50c3",
     "data/text/status-effects.json": "89f05fd001e3a1bc097f47a1bc17d07293d3ce46255dd720eda396fec69e8256"
   },
-  "validationScope": "isolated native code and controlled actors; builds and semantic file comparisons",
+  "validationScope": "Two-second timing tests, standalone/MMV builds and semantic file comparison; unchanged native paths retain 0.17.281 isolated validation",
   "gameplayVerified": false,
-  "multiplayerVerified": false
+  "multiplayerVerified": false,
+  "markVisualSeconds": 2,
+  "nativePathValidationBaseline": "0.17.281"
 }

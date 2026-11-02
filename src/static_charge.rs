@@ -1,4 +1,4 @@
-//! Movement charge -> one-second recipient mark -> native lightning discharge.
+//! Movement charge -> two-second recipient mark -> native lightning discharge.
 use crate::{ptr,read_ptr,read_i32,has_effect,ACTIVE,BASE};
 use std::{cell::{RefCell,Cell},collections::{BTreeMap,BTreeSet},sync::{Arc,Mutex},sync::atomic::Ordering};
 pub const OWNER:i32=95005100;
@@ -35,7 +35,7 @@ impl State{
  }
  fn credit(&mut self,target:u64,damage:f32){for mark in &mut self.marks{if mark.target==target&&self.time<mark.deadline{mark.sum=(mark.sum+f64::from(damage)).min(f64::from(f32::MAX));}}}
  fn mark(&mut self,owner:u64,target:u64,damage:f32,level:i32,leak:bool,point:[f32;4])->bool{
-  if !self.meter.take(){return false;}self.marks.push(Mark{owner,target,sum:f64::from(damage),deadline:self.time+1.,level,leak,point});true
+  if !self.meter.take(){return false;}self.marks.push(Mark{owner,target,sum:f64::from(damage),deadline:self.time+2.,level,leak,point});true
  }
 }
 static STATE:Mutex<State>=Mutex::new(State{meter:Meter{distance:0.,last:None},marks:Vec::new(),pending:Vec::new(),scene:0,time:0.});
@@ -220,13 +220,13 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  #[test]fn marked_window_counts_first_hit_and_later_sources_but_not_unmarked_targets(){
   let mut s=state();s.meter.distance=30.;assert!(s.mark(1,2,100.,15,false,[0.;4]));
   s.credit(2,200.);s.credit(3,999.);assert_eq!(s.marks[0].damage(),450.);
-  s.time=0.999;s.credit(2,50.);assert_eq!(s.marks[0].damage(),500.);
-  s.time=1.;s.credit(2,1000.);assert_eq!(s.marks[0].damage(),500.);
+  s.time=1.999;s.credit(2,50.);assert_eq!(s.marks[0].damage(),500.);
+  s.time=2.;s.credit(2,1000.);assert_eq!(s.marks[0].damage(),500.);
  }
  #[test]fn detonation_uses_game_time_once_and_invalid_steps_do_not_advance(){
   let mut s=state();s.meter.distance=30.;s.mark(1,2,100.,15,false,[0.;4]);
   for dt in [0.,-1.,f32::NAN,2.]{assert!(s.advance(dt).is_empty());}assert_eq!(s.time,0.);
-  assert!(s.advance(0.5).is_empty());s.credit(2,50.);let due=s.advance(0.5);assert_eq!(due.len(),1);assert_eq!(due[0].damage(),300.);
+  assert!(s.advance(1.).is_empty());s.credit(2,50.);let due=s.advance(1.);assert_eq!(due.len(),1);assert_eq!(due[0].damage(),300.);
   assert!(s.advance(1.).is_empty());assert!(s.marks.is_empty());
  }
  #[test]fn leakage_scales_total_including_level_and_overlapping_marks_keep_own_deadlines(){
@@ -234,7 +234,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
   assert_eq!(s.marks[0].damage(),137.5);s.time=0.5;s.credit(1,100.);
   s.meter.distance=30.;assert!(s.mark(1,1,100.,15,true,[0.;4]));
   assert_eq!(s.marks[0].sum,500.);assert_eq!(s.marks[1].sum,100.);
-  s.time=1.;s.credit(1,200.);assert_eq!(s.marks[0].damage(),162.5);assert_eq!(s.marks[1].damage(),112.5);
+  s.time=2.;s.credit(1,200.);assert_eq!(s.marks[0].damage(),162.5);assert_eq!(s.marks[1].damage(),112.5);
  }
  #[test]fn each_charge_is_spent_once_and_can_be_spent_again_on_a_later_hit(){
   let mut s=state();s.meter.distance=30.;assert!(s.mark(1,2,10.,1,false,[0.;4]));
