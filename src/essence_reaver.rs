@@ -2,6 +2,67 @@
 //! A byte occupies one hidden saved record; kills never allocate visible FP buffs.
 use crate::{has_effect,is_local,read_i32,read_ptr};
 use std::sync::{Mutex,atomic::{AtomicPtr,Ordering}};
+use std::cell::Cell;
+
+// Native kill notification 0x45 initializes its final word to zero and sends
+// all 20 bytes. Leave the native special-kill bit and rune award untouched.
+pub const SEND_RVA:usize=0x4f4258;
+pub const SEND_PATTERN:&str="41 B9 14 00 00 00 4C 8D 45 E0 41 8D 51 31 E8 65 E2 8F 00";
+pub static SEND_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(std::ptr::null_mut());
+const ELITE_TAG:[u8;2]=*b"R5";
+
+fn elite_threat(id:i32)->bool{
+ matches!(id,7730..=7769|7830..=7869|7930..=7969)
+}
+unsafe fn elite_victim(victim:usize,base:usize)->bool{
+ let Some(npc)=crate::native_actor::npc_id(victim,base) else{return false};
+ if crate::spirit::is_private_npc(npc){return false;}
+ if crate::spirit::boss_npc(npc){return true;}
+ // Default effects survive death cleanup in the NPC row. These three blocks
+ // are spEffectID0..7, 8..15 and 16..31 in NpcParam (regulation 10350000).
+ let row=read_ptr(read_ptr(victim+0x5b8));
+ if row!=0 && (0x4c..=0x68).step_by(4).chain((0x178..=0x194).step_by(4))
+     .chain((0x1e8..=0x224).step_by(4)).any(|off|elite_threat(read_i32(row+off))){return true;}
+ let manager=read_ptr(victim+0x190);
+ if manager==0{return false;}
+ let mut node=read_ptr(manager+8);
+ while node!=0{
+  if read_i32(node+0x68) as u32&0x800c0003==0 && elite_threat(read_i32(node+8)){return true;}
+  node=read_ptr(node+0x38);
+ }
+ false
+}
+unsafe extern "system" fn tag_reward(victim:usize,packet:*mut [u8;20]){
+ if crate::ACTIVE.load(Ordering::Acquire) && (&*packet)[18..20]==[0,0]
+     && elite_victim(victim,crate::BASE.load(Ordering::Acquire)){
+  (&mut *packet)[18..20].copy_from_slice(&ELITE_TAG);
+ }
+}
+// Mid-function: RDI is the victim, [RBP-20h] the completed packet, RCX the
+// network manager. All remaining volatile arguments are set by the continuation.
+#[unsafe(naked)]
+pub unsafe extern "system" fn send_hook(){core::arch::naked_asm!(
+ "sub rsp, 0x30","mov [rsp+0x20],rcx","mov rcx,rdi","lea rdx,[rbp-0x20]",
+ "call {tag}","mov rcx,[rsp+0x20]","add rsp,0x30","jmp qword ptr [rip+{next}]",
+ tag=sym tag_reward,next=sym SEND_ORIGINAL
+);}
+pub(crate) fn take_elite_tag(packet:&mut [u8;20])->bool{
+ if packet[18..20]!=ELITE_TAG{return false;}
+ packet[18..20].fill(0);
+ true
+}
+
+// The native reward dispatch synchronously emits PULSE on the beneficiary.
+// Keep nested dispatches isolated and only weight an actual matching pulse.
+thread_local!{static KILL:Cell<(usize,usize,bool)>=const{Cell::new((0,0,false))};}
+pub(crate) fn with_kill<T>(recipient:usize,victim:usize,remote_elite:bool,run:impl FnOnce()->T)->T{
+ KILL.with(|scope|{
+  let previous=scope.replace((recipient,victim,remote_elite));
+  let result=run();
+  scope.set(previous);
+  result
+ })
+}
 
 pub const RATE_RVA:usize=0x50c230;
 pub const RATE_PATTERN:&str="48 89 5C 24 08 57 48 83 EC 40 48 8B 59 08 0F B6 FA 0F 29 74 24 30 F3 0F 10 35 ? ? ? ? 48 85 DB 74 39 0F 29 7C 24 20 0F 57 FF 0F 1F 44 00 00 F7 43 68 03 00 0C 80 75 15 40 0F B6 D7 48 8B CB E8 5B 41 00 00";
@@ -42,7 +103,7 @@ impl Counter{
   if reset{self.count=Some(0);}
   *self.count.get_or_insert(saved)
  }
- fn kill(&mut self,saved:u32){let current=self.observe(saved,false);self.count=Some(current.saturating_add(1));}
+ fn kill(&mut self,saved:u32,layers:u32){let current=self.observe(saved,false);self.count=Some(current.saturating_add(layers));}
 }
 fn marker(digit:usize,value:u8)->Option<i32>{(value!=0).then_some(FIRST+digit as i32*256+value as i32)}
 fn decode(ids:&[i32])->u32{
@@ -70,7 +131,9 @@ pub unsafe fn pulse(player:usize,effect:i32,base:usize)->bool{
  if effect!=PULSE||!is_local(player,base){return false;}
  if !has_effect(player,OWNER,base)||has_effect(player,RESET,base){return true;}
  let saved=decode(&snapshot(player).markers);
- if let Ok(mut s)=STATE.lock(){s.kill(saved);}
+ let (recipient,victim,remote_elite)=KILL.with(Cell::get);
+ let elite=recipient==player && (remote_elite || elite_victim(victim,base));
+ if let Ok(mut s)=STATE.lock(){s.kill(saved,if elite{5}else{1});}
  true
 }
 pub unsafe fn update(player:usize,base:usize){
@@ -118,11 +181,11 @@ pub unsafe fn update(player:usize,base:usize){
   }
  }
  #[test]fn kills_before_update_are_all_counted_and_revival_does_not_erase_partial_writes(){
-  let mut s=Counter::default();for _ in 0..100{s.kill(0);}assert_eq!(s.count,Some(100));
+  let mut s=Counter::default();for _ in 0..100{s.kill(0,1);}assert_eq!(s.count,Some(100));
   assert_eq!(s.observe(0,false),100);assert_eq!(s.observe(18,false),100);
   let mut loaded=Counter::default();assert_eq!(loaded.observe(100,false),100);
-  loaded.kill(100);assert_eq!(loaded.count,Some(101));
-  assert_eq!(s.observe(100,true),0);assert_eq!(s.observe(0,false),0);s.kill(0);assert_eq!(s.count,Some(1));
+  loaded.kill(100,5);assert_eq!(loaded.count,Some(105));
+  assert_eq!(s.observe(100,true),0);assert_eq!(s.observe(0,false),0);s.kill(0,1);assert_eq!(s.count,Some(1));
  }
  #[test]fn saved_records_include_pending_but_exclude_removed_nodes(){unsafe{
   let mut actor=vec![0u8;0x198];let mut manager=vec![0u64;3];let mut nodes=vec![[0u64;17];6];
@@ -179,6 +242,25 @@ pub unsafe fn update(player:usize,base:usize){
   assert!(pulse(player,PULSE,memory));update(player,memory);assert!(snapshot(player).markers.len()<=4);assert!((rate_for(m,1.0,memory)-1.01).abs()<0.000001);
   remove(m,OWNER);assert!(pulse(player,PULSE,memory));update(player,memory);assert!(snapshot(player).markers.len()<=4);assert_eq!(rate_for(m,1.2,memory),1.2);
   add(player,OWNER,0);assert!((rate_for(m,1.0,memory)-1.01).abs()<0.000001);
+  // Ordinary and elite variants of the same NPC; all party sizes and the
+  // nested notification path must keep the grade on its own recipient.
+  let mut victim=vec![0usize;0x600/8];
+  let mut vt=[0usize;0x1a8/8];vt[0x1a0/8]=memory+0x4d1ea0;
+  let mut row=[0i32;0x270/4];let npc=[row.as_ptr() as usize,21400000];
+  victim[0]=vt.as_ptr() as usize;victim[0x5b8/8]=npc.as_ptr() as usize;
+  let v=victim.as_ptr() as usize;
+  let mut expected=1;
+  for (off,id,amount) in [(0x4c,7720,1),(0x4c,7730,5),(0x178,7830,5),(0x224,7969,5),(0x224,7770,1)]{
+   row.fill(0);row[off/4]=id;
+   with_kill(player,v,false,||pulse(player,PULSE,memory));expected+=amount;
+   update(player,memory);assert_eq!(decode(&snapshot(player).markers),expected);
+  }
+  with_kill(player,0,true,||{
+   with_kill(player,0,false,||pulse(player,PULSE,memory));
+   pulse(player,PULSE,memory);
+  });
+  pulse(player,PULSE,memory);
+  update(player,memory);assert_eq!(decode(&snapshot(player).markers),expected+7);
   manager[2]=1;assert_eq!(rate_for(m,1.2,memory),1.2);
   NODES.with(|s|s.borrow_mut().clear());*STATE.lock().unwrap()=Counter::default();assert_eq!(VirtualFree(memory as *mut _,0,MEM_RELEASE),1);
  }}

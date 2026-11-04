@@ -17,7 +17,7 @@ pub(crate) const RECEIVE_RVA: usize = 0x4f4090;
 pub(crate) const RECEIVE_PATTERN: &str = "48 89 5C 24 08 57 48 83 EC 20 48 8B 1D 27 DE 72 03 48 8B FA 48 85 DB";
 pub(crate) static RECEIVE_ORIGINAL: AtomicPtr<u8> = AtomicPtr::new(ptr::null_mut());
 thread_local! {
-    static RECEIPT: std::cell::Cell<Option<crate::spirit_kills::Key>> = const { std::cell::Cell::new(None) };
+    static RECEIPT: std::cell::Cell<Option<(crate::spirit_kills::Key,bool)>> = const { std::cell::Cell::new(None) };
 }
 
 pub(crate) unsafe extern "system" fn receive_detour(context: usize, packet: *mut [u8; 20]) -> u8 {
@@ -25,7 +25,8 @@ pub(crate) unsafe extern "system" fn receive_detour(context: usize, packet: *mut
         std::mem::transmute(RECEIVE_ORIGINAL.load(Ordering::Acquire));
     let result = original(context, packet);
     let key = if result != 0 && !packet.is_null() && ACTIVE.load(Ordering::Acquire) {
-        crate::spirit_kills::Key::from_packet(&ptr::read_unaligned(packet))
+        let elite=crate::essence_reaver::take_elite_tag(&mut *packet);
+        crate::spirit_kills::Key::from_packet(&*packet).map(|key|(key,elite))
     } else {
         None
     };
@@ -38,12 +39,13 @@ pub(crate) unsafe extern "system" fn kill_detour(
 ) -> i32 {
     let original: KillFn = std::mem::transmute(KILL_ORIGINAL.load(Ordering::Acquire));
     let receipt = if victim == 0 { RECEIPT.with(|receipt| receipt.take()) } else { None };
-    let result = original(recipient, runes, victim, special);
+    let result = crate::essence_reaver::with_kill(recipient,victim,receipt.is_some_and(|(_,elite)|elite),
+        || original(recipient, runes, victim, special));
     let base = crate::BASE.load(Ordering::Acquire);
     if ACTIVE.load(Ordering::Acquire) && crate::is_local(recipient, base) {
         if victim != 0 {
             observe_soul(victim, base, true);
-        } else if let Some(key) = receipt {
+        } else if let Some((key,_)) = receipt {
             if local_hero(base) == Some(6) {
                 let attributes = stats(recipient);
                 let down = attributes != 0 && incapacitated(recipient, attributes);

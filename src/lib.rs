@@ -374,7 +374,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);220] {
+fn signatures()->[(&'static str,u32);221] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -431,6 +431,7 @@ fn signatures()->[(&'static str,u32);220] {
   (essence_reaver::RATE_PATTERN,essence_reaver::RATE_RVA as u32),
   (status_display::ROUTE_PATTERN,status_display::ROUTE_RVA as u32),
   (spirit_runtime::KILL_PATTERN,spirit_runtime::KILL_RVA as u32),
+  (essence_reaver::SEND_PATTERN,essence_reaver::SEND_RVA as u32),
   (spirit_runtime::RECEIVE_PATTERN,spirit_runtime::RECEIVE_RVA as u32),
   (STATUS_SORT_PATTERN,STATUS_SORT_RVA as u32),(HUD_SORT_PATTERN,HUD_SORT_RVA as u32),(SPEED_PATTERN,SPEED_RVA as u32),(HIT_BUILD_PATTERN,HIT_BUILD_RVA as u32),(MAGIC_ANIM_PATTERN,0x456870),
   (ATTACK_RATES_PATTERN,ATTACK_RATES_RVA as u32),(EFFECT_FILTER_PATTERN,EFFECT_FILTER_RVA as u32),
@@ -714,6 +715,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (archmage_cost::COST_RVA,archmage_cost::wrapper as *const u8,&archmage_cost::COST_ORIGINAL),
    (DEATH_RVA,death_detour as *const u8,&DEATH_ORIG),
    (spirit_runtime::KILL_RVA,spirit_runtime::kill_detour as *const u8,&spirit_runtime::KILL_ORIGINAL),
+   (essence_reaver::SEND_RVA,essence_reaver::send_hook as *const u8,&essence_reaver::SEND_ORIGINAL),
    (spirit_runtime::RECEIVE_RVA,spirit_runtime::receive_detour as *const u8,&spirit_runtime::RECEIVE_ORIGINAL),
    (SPIRIT_MODEL_RVA,spirit_runtime::spirit_model_detour as *const u8,&SPIRIT_MODEL_ORIG)];
   let mut arts_transfer_prepared=Vec::new();

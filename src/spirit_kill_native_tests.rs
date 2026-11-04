@@ -10,6 +10,7 @@ thread_local! {
     static AMOUNT: Cell<i32> = const { Cell::new(0) };
     static PACKET_AVAILABLE: Cell<bool> = const { Cell::new(true) };
     static OWNED: Cell<bool> = const { Cell::new(true) };
+    static WIRE: Cell<[u8;20]> = const { Cell::new([0;20]) };
 }
 
 unsafe fn pointer(address: usize, value: usize) {
@@ -28,6 +29,12 @@ unsafe extern "system" fn npc_row(actor: usize) -> usize { read_ptr(actor + 0x5b
 unsafe extern "system" fn think(_: usize) -> i32 { 48010000 }
 unsafe extern "system" fn multiplier(_: usize) -> f32 { 1. }
 unsafe extern "system" fn no_op() {}
+unsafe extern "system" fn part_ref(stats:usize)->usize{read_ptr(stats+0x78)}
+unsafe extern "system" fn part_id(stats:usize)->i32{crate::read_i32(stats+0xc8)}
+unsafe extern "system" fn network_send(manager:usize,id:i32,packet:*const [u8;20],size:i32){
+    assert_eq!((manager,id,size),(123,0x45,20));
+    WIRE.with(|v|v.set(ptr::read_unaligned(packet)));
+}
 unsafe extern "system" fn false_flag() -> u8 { 0 }
 unsafe extern "system" fn effect(_: usize, id: i32) -> u8 {
     u8::from(id == spirit::OWNER && OWNED.with(Cell::get))
@@ -48,10 +55,7 @@ unsafe extern "system" fn cue(_: usize, id: i32, flag: u8) -> u8 {
 }
 unsafe extern "system" fn dequeue(_: usize, packet: *mut [u8; 20]) -> u8 {
     if !PACKET_AVAILABLE.with(Cell::get) { return 0; }
-    let mut bytes = [0u8; 20];
-    bytes[..4].copy_from_slice(&0x3c000000u32.to_le_bytes());
-    bytes[12..16].copy_from_slice(&0x10000001u32.to_le_bytes());
-    ptr::write_unaligned(packet, bytes);
+    ptr::write_unaligned(packet, WIRE.with(Cell::get));
     1
 }
 
@@ -131,12 +135,37 @@ fn native_kill_settlement_preserves_rewards_and_captures_without_last_attacker()
     pointer(actor + 0x190, actor);
     pointer(actor + 0x5b8, row_reference.as_ptr() as usize);
     integer(attributes + 0x144, 10000);
-    let context = [0usize, 0x3c000000];
+    let mut context = [0usize;12];context[1]=0x3c000000;
     let reference = [0usize, context.as_ptr() as usize];
     pointer(attributes + 0x78, reference.as_ptr() as usize);
     integer(attributes + 0xc8, 0x10000001);
     assert_eq!(reward_key(attributes), crate::spirit_kills::Key::new(0x3c000000, 0x10000001));
     let native: unsafe extern "system" fn(usize) -> f32 = std::mem::transmute(base + 0x3de710);
+
+    // Run the original 0x45 packet builder through the installed mid-function
+    // detour. Only the native session services and transport are stand-ins.
+    use crate::essence_reaver as reaver;
+    let send_hook=crate::hook::install((base+reaver::SEND_RVA) as *mut u8,reaver::send_hook as *const u8,false,64).unwrap();
+    let old_send=reaver::SEND_ORIGINAL.swap(send_hook.trampoline,Ordering::AcqRel);
+    for (rva,stub) in [(0x426e20,part_ref as *const () as usize),(0x426f30,part_id as *const () as usize),
+        (0xe3d6a0,false_flag as *const () as usize),(0x4e7950,false_flag as *const () as usize),
+        (0x4e78c0,no_op as *const () as usize),(0xdf24d0,network_send as *const () as usize)]{jump(base,rva,stub);}
+    pointer(base+0x3c21ec8,123);pointer(base+0x3c0f338,1);
+    let send:unsafe extern "system" fn(usize,usize,i32)=std::mem::transmute(base+0x4f4130);
+    for (npc,elite) in [(40800000,false),(48010010,true)]{
+        let reference=[row.as_ptr() as usize,npc];
+        pointer(actor+0x5b8,reference.as_ptr() as usize);pointer(actor+0x190,0);
+        send(0,actor,81);
+        let mut packet=WIRE.with(Cell::get);
+        assert_eq!(crate::spirit_kills::Key::from_packet(&packet),reward_key(attributes));
+        assert_eq!(packet[17]&1,1);assert_eq!(&packet[8..12],&81u32.to_le_bytes());
+        assert_eq!(reaver::take_elite_tag(&mut packet),elite);assert_eq!(packet[18..],[0,0]);
+        let mut received=[0;20];
+        assert_eq!(receive_detour(0,&mut received),1);
+        assert_eq!(RECEIPT.with(|r|r.take()),reward_key(attributes).map(|key|(key,elite)));
+        assert_eq!(received,packet);
+    }
+    pointer(actor+0x5b8,row_reference.as_ptr() as usize);pointer(actor+0x190,actor);
 
     observe_soul(actor, base, false);
     assert_eq!(state.lock().unwrap().request_status().0, None);
@@ -196,6 +225,9 @@ fn native_kill_settlement_preserves_rewards_and_captures_without_last_attacker()
     *state.lock().unwrap() = old_state;
     KILL_ORIGINAL.store(old_original, Ordering::Release);
     RECEIVE_ORIGINAL.store(old_receive, Ordering::Release);
+    reaver::SEND_ORIGINAL.store(old_send,Ordering::Release);
+    VirtualFree(send_hook.trampoline as *mut _,0,MEM_RELEASE);
+    if !send_hook.relay.is_null(){VirtualFree(send_hook.relay as *mut _,0,MEM_RELEASE);}
     crate::BASE.store(old_base, Ordering::Release);
     ACTIVE.store(old_active, Ordering::Release);
     VirtualFree(hook.trampoline as *mut _, 0, MEM_RELEASE);
