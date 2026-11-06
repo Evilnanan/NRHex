@@ -71,6 +71,7 @@ thread_local!{
 type Dispatch=unsafe extern "system" fn(usize,usize,usize,u8,u8)->u64;
 pub unsafe extern "system" fn dispatch(module:usize,source:usize,hit:usize,mode:u8,extra:u8)->u64{
  let _static=crate::static_charge::dispatch_scope(module,hit);
+ let _soul=crate::soul_critical::scope(module,hit);
  let mut serial=None;
  if ACTIVE.load(Ordering::Acquire)&&module!=0&&hit!=0{
   let owner=identity(read_ptr(module+8),BASE.load(Ordering::Acquire));

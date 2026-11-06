@@ -57,9 +57,9 @@ unsafe fn calculate(original:Calculate,bypass:bool,out:*mut f32,attack:*const f3
   let one=[1.;5];let n=one.as_ptr();let mut scratch=[0.;5];
   crate::static_charge::candidate(original(scratch.as_mut_ptr(),raw.as_ptr(),rates,n,n,n,n,n,1.,repeated,1.,attack_rate,positional,1.,balance));
  }
- let lightning=crate::static_charge::lightning();
- let fixed=[0.,0.,0.,lightning.unwrap_or(0.),0.];let one=[1.;5];
- let (attack,rates,repeated,attack_rate,positional,balance)=if lightning.is_some(){(fixed.as_ptr(),one.as_ptr(),1.,1.,1.,1.)}else{(attack,rates,repeated,attack_rate,positional,balance)};
+ let snapshot=crate::static_charge::fixed_components();
+ let fixed=snapshot.unwrap_or([0.;5]);let one=[1.;5];
+ let (attack,rates,repeated,attack_rate,positional,balance)=if snapshot.is_some(){(fixed.as_ptr(),one.as_ptr(),1.,1.,1.,1.)}else{(attack,rates,repeated,attack_rate,positional,balance)};
  // 439E80 passes a local five-element attack vector. For environment sources
  // its earlier steps are multiplicative; apply live Libra base/depth and the
  // recipient fraction to the raw holy component here, retaining every native

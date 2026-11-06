@@ -1,6 +1,10 @@
 use std::{env, fs, path::PathBuf};
 
 fn main() {
+    println!("cargo:rerun-if-env-changed=NRHEX_SOUL_CRITICAL_DATA");
+    let soul=env::var_os("NRHEX_SOUL_CRITICAL_DATA").map(PathBuf::from).unwrap_or_else(||PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap()).join("src/soul_critical_data.rs"));
+    println!("cargo:rerun-if-changed={}",soul.display());
+    fs::copy(soul,PathBuf::from(env::var_os("OUT_DIR").unwrap()).join("soul_critical_data.rs")).expect("Cannot stage Soul Critical data");
     println!("cargo:rerun-if-env-changed=NRHEX_EROSION_DATA");
     let erosion = env::var_os("NRHEX_EROSION_DATA").map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap()).join("src/erosion_sources.rs"));

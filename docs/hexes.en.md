@@ -238,3 +238,8 @@ Switching weapons changes their enchantment affinity.
 ## Lightning Conduit
 
 Move to charge. Your next melee hit marks the target. Getting hit marks you instead. Damage taken over 2s powers the bolt.
+
+<!-- hex:95005200 -->
+## Soul Critical
+
+Critical hits unleash a shockwave.

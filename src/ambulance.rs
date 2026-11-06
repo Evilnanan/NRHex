@@ -207,6 +207,7 @@ pub(crate) unsafe fn static_rescue(target:usize,hit:usize,base:usize)->bool{
 }
 unsafe extern "system" fn outgoing(module:usize,source:usize,hit:usize){
  crate::static_charge::outgoing(module,source,hit);
+ crate::soul_critical::outgoing(module,source,hit);
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);let Some(owner)=owned(source,base)else{return;};
  let target=read_ptr(module+8);

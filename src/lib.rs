@@ -51,6 +51,7 @@ mod noisy_ground;
 mod balloon;
 mod ability_damage;
 mod static_charge;
+mod soul_critical;
 mod glass_cannon;
 mod parry;
 mod parry_turn;
@@ -2321,6 +2322,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  basics::update(player,base);
  deliberate_punch::update(player,base);
  static_charge::update(player,base,dt);
+ soul_critical::update(player,base);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  update_chant(player,base);

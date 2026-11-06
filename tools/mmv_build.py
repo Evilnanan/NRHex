@@ -246,6 +246,10 @@ def main(argv=None) -> int:
         report.update(status='resources-staged', requiredAdapters=[])
         if args.stage_only:
             return 0
+        with (REPORTS / 'soul-critical-catalog.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--soul-critical-map', str(REPORTS / 'staged')], cwd=ROOT,
+                           stdout=log, stderr=subprocess.STDOUT, check=True)
         with (REPORTS / 'sword-auto.log').open('w', encoding='utf8') as log:
             subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
                             '--mmv-sword-range-catalog', str(REPORTS / 'staged')], cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
@@ -297,7 +301,8 @@ def main(argv=None) -> int:
                                     'NRHEX_ARCHMAGE_DATA': str(REPORTS / 'staged/archmage_data.rs'),
                                     'NRHEX_ARTS_DATA': str(REPORTS / 'staged/arts_data.rs'),
                                     'NRHEX_SPIRIT_DATA': str(REPORTS / 'staged/spirit_target_data.rs'),
-                                    'NRHEX_CAGE_DATA': str(REPORTS / 'staged/cage_data.rs')},
+                                    'NRHEX_CAGE_DATA': str(REPORTS / 'staged/cage_data.rs'),
+                                    'NRHEX_SOUL_CRITICAL_DATA': str(REPORTS / 'staged/soul_critical_data.rs')},
                                stdout=log, stderr=subprocess.STDOUT, check=True)
         if runtime_inputs != {str(p.relative_to(ROOT)): digest(p) for p in runtime_paths} or before != shared_inputs():
             raise ValueError('NRHex inputs changed during compilation; rerun before packaging')
@@ -308,6 +313,7 @@ def main(argv=None) -> int:
         report['packages'] = [package(ROOT, mmv, report['partialPreview']['files'], me3, v, not args.build_only, args.community_destination) for v in variants]
         report.update(status='built-awaiting-install' if args.build_only else 'built-awaiting-game-test', runtimeInputs=runtime_inputs,
                       parryDataSha256=digest(REPORTS / 'staged/parry_data.rs'),
+                      soulCriticalDataSha256=digest(REPORTS / 'staged/soul_critical_data.rs'),
                       nativeCoexistenceVerified=False, releaseReady=False)
         print(f'Built MMV {", ".join(variants)}. Installed: {not args.build_only}. Game startup and native DLL coexistence still require testing.')
         return 0

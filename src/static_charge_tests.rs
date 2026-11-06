@@ -8,7 +8,7 @@ unsafe extern "system" fn rejected(_:usize,_:usize,_:usize)->u8{0}
 thread_local!{static ROW:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
 unsafe extern "system" fn lookup(out:usize,kind:i32,id:i32)->usize{assert_eq!(kind,1);assert!(private_attack(id,kind));ptr::write_unaligned((out+0x10)as*mut usize,ROW.with(std::cell::Cell::get));out}
 thread_local!{static TEAM:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
-unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(id==OWNER)}
+unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(id==OWNER||id==crate::soul_critical::OWNER)}
 unsafe extern "system" fn team(_:usize,_:i32)->usize{TEAM.with(std::cell::Cell::get)}
 unsafe extern "system" fn common(out:usize)->usize{ptr::write_unaligned(out as*mut usize,0);out}
 unsafe extern "system" fn mode()->u8{0}
@@ -101,6 +101,24 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  CALC.with(|s|s.borrow_mut().push(Calculation{lightning:Some(800.),object:0.5,..Default::default()}));
  let result=crate::glass_cannon::detour(out.as_mut_ptr(),inflated.as_ptr(),twice.as_ptr(),cuts.as_ptr(),one.as_ptr(),cuts.as_ptr(),one.as_ptr(),one.as_ptr(),1.,2.,1.,2.,2.,1.,2.);
  assert_eq!(result,100.);assert_eq!(out,[0.,0.,0.,100.,0.]);leave();
+ // Soul Critical uses the same native transport, with a fixed 5:3 split and
+ // new-target defenses. Source offense must not be applied a second time.
+ CALC.with(|s|s.borrow_mut().push(Calculation{lightning:Some(800.),soul:true,object:0.5,..Default::default()}));
+ let result=crate::glass_cannon::detour(out.as_mut_ptr(),inflated.as_ptr(),twice.as_ptr(),cuts.as_ptr(),one.as_ptr(),cuts.as_ptr(),one.as_ptr(),one.as_ptr(),1.,2.,1.,2.,2.,1.,2.);
+ assert_eq!(result,100.);assert_eq!(out,[62.5,37.5,0.,0.,0.]);leave();
+ // Root factory roundtrip retains a separate scalar for each proc. Poise and
+ // rescue are independent of HP and do not inherit the critical's scaling.
+ int(pp+4,crate::soul_critical::BULLET);float(pp+0x124,900.);
+ int(bp+0xa4,crate::soul_critical::BULLET);
+ {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
+ int(hp+0x40,crate::soul_critical::ATTACK);int(cp+8,crate::soul_critical::ATTACK);
+ context[0xf8]=0;crate::ability_damage::before_construct(cp);assert_eq!(context[0xf8],1);
+ constructed(hp,cp);assert_eq!(ptr::read_unaligned(hp as*const[f32;5]),[562.5,337.5,0.,0.,0.]);
+ float(rp+0x84,10.);assert_eq!(poise(0,0,0,999.,cp,0),10.);assert_eq!(rescue(cp),30.);
+ int(pp+4,BULLET);float(pp+0x124,777.25);int(bp+0xa4,BULLET);int(hp+0x40,ATTACK);int(cp+8,ATTACK);float(rp+0x84,30.);
+ {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
+ {let _child=child(bp,BULLET+1);int(pp+4,BULLET+1);let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(cb);}
+
  // Real neutral native combiner keeps the captured offense and removes cuts.
  let k=Key{source:1,target:2,attack:3,table:1,components:[0;5],point:[0;3]};
  CALC.with(|s|s.borrow_mut().push(Calculation{key:Some(k),hit:hp,delta:[50.,0.,0.,0.,0.],..Default::default()}));
@@ -144,6 +162,7 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  let mut source=[0usize;0x740/8];let sp=source.as_mut_ptr()as usize;source[1]=123;source[0x190/8]=1;
  let mut ally=[0usize;0x740/8];let ap=ally.as_mut_ptr()as usize;ally[1]=456;ptr::write((ap+0x710)as*mut u8,1);
  let mut world=vec![0usize;0x17500/8];world[0x174e8/8]=sp;ptr::write_unaligned((base+crate::WORLD_RVA)as*mut usize,world.as_ptr()as usize);TEAM.with(|s|s.set(ap));
+ crate::soul_critical::native_fixture(base,sp,ap,hp);
  check_timed_release(base,&mut world,sp,ap);source[1]=123;ally[1]=456;
  let module=[0usize,ap];let mp=module.as_ptr()as usize;
  int(hp+0x40,100);int(hp+0x44,1);int(hp+0x280,0);float(hp+0x150,30.);float(hp+0x258,1.);
