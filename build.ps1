@@ -238,6 +238,8 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Wraith HKS build failed.' }
         python -X utf8 tools/build_onyx_hks.py --inplace
         if ($LASTEXITCODE -ne 0) { throw 'Onyx mastery action integration failed.' }
+        python -X utf8 tools/build_static_evasion_hks.py --inplace
+        if ($LASTEXITCODE -ne 0) { throw 'Static evasion movement observers failed.' }
     }
     if (-not $DllOnly) {
         python -X utf8 tools/build_basics_hks.py --inplace

@@ -12,6 +12,7 @@ pub const TRANSPORT_PATTERN:&str="0F 10 42 30 0F 11 81 24 01 00 00";
 pub const PACKET_RVA:usize=0x33e1a3;
 pub const PACKET_PATTERN:&str="0F 10 47 30 0F 11 46 70";
 const DISTANCE:f64=80.;
+pub const EVASION_QUERY:i32=990055;
 const MELEE_RANGE:f32=6.;
 #[derive(Default)]struct Meter{distance:f64,last:Option<(usize,u64,u32,[f32;4])>}
 impl Meter{
@@ -25,10 +26,23 @@ impl Meter{
  }
  fn take(&mut self)->bool{if self.distance<DISTANCE{return false;}self.distance=0.;true}
 }
+// Baseline movement is always sampled once by update. Action callbacks add
+// only the extra 2x distance, making their order relative to update irrelevant.
+#[derive(Default)]struct Evasion{meter:Meter,action:i32}
+impl Evasion{
+ fn sample(&mut self,action:i32,phase:i32,identity:usize,handle:u64,map:u32,point:Option<[f32;4]>)->f64{
+  if !(1..=6).contains(&action)||!(0..=2).contains(&phase){return 0.;}
+  if phase==2&&self.action!=action{return 0.;}
+  if phase==0{self.meter.last=None;}
+  self.action=action;self.meter.distance=0.;self.meter.observe(identity,handle,map,point);
+  let bonus=self.meter.distance*2.;
+  if phase==2{*self=Self::default();}bonus
+ }
+}
 #[derive(Clone,Copy)]struct Pending{handle:u64,damage:f32,point:[f32;4],leak:bool}
 #[derive(Clone,Copy)]struct Mark{owner:u64,target:u64,sum:f64,deadline:f64,level:i32,leak:bool,point:[f32;4]}
 impl Mark{fn damage(&self)->f32{(self.sum+f64::from(self.level.max(1))*10.).min(f64::from(f32::MAX))as f32}}
-struct State{meter:Meter,marks:Vec<Mark>,pending:Vec<Pending>,scene:usize,time:f64}
+struct State{meter:Meter,evasion:Evasion,marks:Vec<Mark>,pending:Vec<Pending>,scene:usize,time:f64}
 impl State{
  fn advance(&mut self,dt:f32)->Vec<Mark>{
   if !dt.is_finite()||dt<=0.||dt>1.{return Vec::new();}self.time+=f64::from(dt);
@@ -39,9 +53,9 @@ impl State{
   if !self.meter.take(){return false;}self.marks.push(Mark{owner,target,sum:f64::from(damage),deadline:self.time+2.,level,leak,point});true
  }
 }
-static STATE:Mutex<State>=Mutex::new(State{meter:Meter{distance:0.,last:None},marks:Vec::new(),pending:Vec::new(),scene:0,time:0.});
-pub fn suspend(){if let Ok(mut s)=STATE.lock(){s.meter.last=None;}}
-pub fn reset(){if let Ok(mut s)=STATE.lock(){s.meter=Meter::default();s.marks.clear();s.pending.clear();s.time=0.;}if let Ok(mut s)=SAMPLES.lock(){s.clear();}}
+static STATE:Mutex<State>=Mutex::new(State{meter:Meter{distance:0.,last:None},evasion:Evasion{meter:Meter{distance:0.,last:None},action:0},marks:Vec::new(),pending:Vec::new(),scene:0,time:0.});
+pub fn suspend(){if let Ok(mut s)=STATE.lock(){s.meter.last=None;s.evasion=Evasion::default();}}
+pub fn reset(){if let Ok(mut s)=STATE.lock(){s.meter=Meter::default();s.evasion=Evasion::default();s.marks.clear();s.pending.clear();s.time=0.;}if let Ok(mut s)=SAMPLES.lock(){s.clear();}}
 thread_local!{static CONTACT:Cell<bool>=const{Cell::new(false)};}
 struct ContactGuard(bool);
 impl Drop for ContactGuard{fn drop(&mut self){CONTACT.with(|s|s.set(self.0));}}
@@ -66,6 +80,18 @@ unsafe fn resolve_actor(base: usize, handle: u64) -> usize {
     let actor = resolve(handle);
     if actor != 0 && read_ptr(actor + 8) as u64 == handle { actor } else { 0 }
 }
+pub unsafe fn evasion(actor:usize,phase:i32,action:i32,base:usize){
+ if actor==0||!crate::is_local(actor,base){return;}
+ let owned=has_effect(actor,OWNER,base)&&!has_effect(actor,crate::reward_cycle_runtime::RESET,base);
+ let coord=read_ptr(actor+0x60);let handle=read_ptr(actor+8)as u64;let context=read_ptr(base+crate::MAP_CONTEXT_RVA);
+ let map=if context!=0{ptr::read_unaligned((context+0x2c)as*const u32)}else{(handle>>32)as u32};
+ let point=crate::spatial_ready(actor).then(||crate::position(actor,base));
+ if let Ok(mut s)=STATE.lock(){
+  if !owned||s.scene!=read_ptr(base+0x3c131c8){s.evasion=Evasion::default();return;}
+  let bonus=s.evasion.sample(action,phase,coord,handle,map,point);
+  s.meter.distance=(s.meter.distance+bonus).min(DISTANCE);
+ }
+}
 pub unsafe fn update(actor:usize,base:usize,dt:f32){
  if has_effect(actor,crate::reward_cycle_runtime::RESET,base){reset();visual(actor,base,false);return;}
  let owned=has_effect(actor,OWNER,base);
@@ -77,9 +103,9 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
  let positions=tracked.into_iter().filter_map(|h|{let t=resolve_actor(base,h);(t!=0&&crate::spatial_ready(t)).then(||(h,crate::position(t,base)))}).collect::<BTreeMap<_,_>>();
  let (ready,marks,mut pending)=if let Ok(mut s)=STATE.lock(){
   let scene=read_ptr(base+0x3c131c8);
-  if s.scene!=scene{s.meter.last=None;s.scene=scene;s.marks.clear();s.pending.clear();}
+  if s.scene!=scene{s.meter.last=None;s.evasion=Evasion::default();s.scene=scene;s.marks.clear();s.pending.clear();}
   for mark in &mut s.marks{if let Some(p)=positions.get(&mark.target){if p[..3].iter().all(|v|v.is_finite()){mark.point=*p;}}}
-  if owned{s.meter.observe(coord,handle,map,p);}else{s.meter.last=None;}
+  if owned{s.meter.observe(coord,handle,map,p);}else{s.meter.last=None;s.evasion=Evasion::default();}
   let due=s.advance(dt);
   (owned&&s.meter.distance>=DISTANCE,due,std::mem::take(&mut s.pending))
  }else{return;};
@@ -240,7 +266,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
 }
 #[cfg(test)]mod tests{
  use super::*;
- fn state()->State{State{meter:Meter::default(),marks:Vec::new(),pending:Vec::new(),scene:0,time:0.}}
+ fn state()->State{State{meter:Meter::default(),evasion:Evasion::default(),marks:Vec::new(),pending:Vec::new(),scene:0,time:0.}}
  #[test]fn marked_window_counts_first_hit_and_later_sources_but_not_unmarked_targets(){
   let mut s=state();s.meter.distance=DISTANCE;assert!(s.mark(1,2,100.,15,false,[0.;4]));
   s.credit(2,200.);s.credit(3,999.);assert_eq!(s.marks[0].damage(),450.);
@@ -268,6 +294,32 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
   assert!(!first_contact(1,2));{let _a=dispatch_scope(1,2);assert!(first_contact(1,2));assert!(!first_contact(1,2));
    {let _b=dispatch_scope(3,4);assert!(first_contact(3,4));assert!(!first_contact(1,2));}assert!(!first_contact(1,2));}
   let _next=dispatch_scope(1,2);assert!(first_contact(1,2));
+ }
+ #[test]fn evasion_tripling_is_distance_based_and_independent_of_update_order(){
+  for action in 1..=6{for callback_first in [false,true]{
+   let mut m=Meter::default();let mut e=Evasion::default();let p=|x|Some([x,0.,0.,1.]);
+   m.observe(1,2,3,p(0.));assert_eq!(e.sample(action,0,1,2,3,p(0.)),0.);
+   for x in [1.,2.,5.]{
+    if !callback_first{m.observe(1,2,3,p(x));}
+    m.distance=(m.distance+e.sample(action,1,1,2,3,p(x))).min(DISTANCE);
+    if callback_first{m.observe(1,2,3,p(x));}
+    assert_eq!(e.sample(action,1,1,2,3,p(x)),0.);
+   }
+   assert_eq!(m.distance,15.);m.distance+=e.sample(action,2,1,2,3,p(6.));m.observe(1,2,3,p(6.));assert_eq!(m.distance,18.);
+   m.observe(1,2,3,p(10.));assert_eq!(m.distance,22.);assert!(e.meter.last.is_none());
+  }}
+ }
+ #[test]fn evasion_rebases_invalid_positions_and_action_lifecycle(){
+  let mut e=Evasion::default();let p=|x|Some([x,0.,0.,1.]);
+  e.sample(1,0,1,2,3,p(0.));assert_eq!(e.sample(1,1,1,2,3,p(2.)),4.);
+  // Self-transition 2 shares an activation callback; changing the update
+  // token preserves its freshly established baseline, not a cached multiplier.
+  e.sample(1,0,1,2,3,p(2.));assert_eq!(e.sample(3,1,1,2,3,p(3.)),2.);
+  assert_eq!(e.sample(1,2,1,2,3,p(4.)),0.);assert_eq!(e.sample(3,2,1,2,3,p(4.)),2.);
+  assert_eq!(e.sample(4,1,1,2,3,p(100.)),0.);
+  for (identity,handle,map,point)in [(2,2,3,p(200.)),(2,4,3,p(300.)),(2,4,5,p(400.)),(2,4,5,None),(2,4,5,p(500.))]{assert_eq!(e.sample(4,1,identity,handle,map,point),0.);}
+  assert_eq!(e.sample(4,1,2,4,5,p(500.)),0.);
+  let mut m=Meter::default();m.distance=79.;m.distance=(m.distance+e.sample(4,1,2,4,5,p(502.))).min(DISTANCE);assert_eq!(m.distance,80.);assert!(m.take());assert_eq!(m.distance,0.);
  }
  #[test]fn both_modes_have_private_root_and_wave_rows(){
   for id in ATTACK..=ATTACK+3{assert!(private_attack(id,1));assert!(!private_attack(id,0));}

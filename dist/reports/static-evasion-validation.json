@@ -1,0 +1,48 @@
+{
+  "version": "0.17.292",
+  "baselineCommit": "b60893fbc4f763b8f4289599569d6929cb6874b6",
+  "feature": "引雷翻滚、后跃3倍距离隐藏效果",
+  "chargeThreshold": 80,
+  "evasionMultiplier": 3,
+  "ordinaryMultiplier": 1,
+  "callbacks": 17,
+  "hksQuery": 990055,
+  "variants": {
+    "standalone": {
+      "testsPassed": 489,
+      "ignored": 34,
+      "dllSha256": "e7bc6a31c775dc30e5f0a9fd88813351b3236513789b58a7fa12cb973c759ff8",
+      "hksSha256": "c29e8f0ac317c8923d5b0d4b388f86959d5de6bb45584e7da35b5207315b507e",
+      "dllLoadCheck": "Windows Python via Wine; unsupported host rejected without installing hooks",
+      "profilePassed": true
+    },
+    "mmv": {
+      "testsPassed": 490,
+      "ignored": 34,
+      "dllSha256": "0aa737635f580f1633c9c6550bbdd5f48f70ff6497e6fd1d7498ca2379850fb6",
+      "hksSha256": "6a1c679a7cb88cd9a7250fb7c8f782d6d3e3f7962a074b6e0208d6b89530bb4f",
+      "dllLoadCheck": "Windows Python via Wine; unsupported host rejected without installing hooks",
+      "profilePassed": true
+    }
+  },
+  "hksValidation": {
+    "exactInversePassed": true,
+    "originalInstructionsAndBranchesPreserved": true,
+    "mmvFunctions": 172,
+    "luaBytecodePrefixCases": 29280,
+    "interiorCases": 6400,
+    "flaskScenarios": 32
+  },
+  "coverage": [
+    "All six evasion nodes",
+    "Base update before/after action callbacks",
+    "Repeated same-position callbacks",
+    "Exit and ordinary movement",
+    "Self-transition update identity",
+    "Invalid position and map/actor/coordinate rebasing",
+    "80m cap and no stored overflow"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "descriptionUnchanged": true
+}
