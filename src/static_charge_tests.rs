@@ -115,17 +115,11 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  context[0xf8]=0;crate::ability_damage::before_construct(cp);assert_eq!(context[0xf8],1);
  constructed(hp,cp);assert_eq!(ptr::read_unaligned(hp as*const[f32;5]),[562.5,337.5,0.,0.,0.]);
  float(rp+0x84,10.);assert_eq!(poise(0,0,0,999.,cp,0),10.);assert_eq!(rescue(cp),30.);
- // A delayed visual root carries the immutable snapshot to its wave. It has
- // no contact and must not reserve a target before the damaging child exists.
+ // Entry visuals carry no damage snapshot and cannot reserve a hit target.
  let leadin_target=[0u64,200];let lp=leadin_target.as_ptr()as usize;
- int(pp+4,crate::soul_critical::PRELUDE);float(pp+0x124,1200.);int(bp+0xa4,crate::soul_critical::PRELUDE);
+ int(pp+4,crate::soul_critical::PRELUDE);float(pp+0x124,0.);int(bp+0xa4,crate::soul_critical::PRELUDE);
  {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
- assert_eq!(contact(accepted,hp,lp,bp),0);assert!(seed(bp).unwrap().targets.lock().unwrap().is_empty());
- int(cb+0xa4,crate::soul_critical::BULLET);
- {let _c=child(bp,crate::soul_critical::BULLET);int(pp+4,crate::soul_critical::BULLET);float(pp+0x124,1.);let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(cb);}
- assert_eq!(seed(cb).unwrap().damage,1200.);assert!(Arc::ptr_eq(&seed(bp).unwrap(),&seed(cb).unwrap()));
- assert_eq!(contact(accepted,hp,lp,cb),1);assert_eq!(contact(accepted,hp,lp,cb),0);
-
+ assert!(seed(bp).is_none());assert_eq!(contact(accepted,hp,lp,bp),0);
  int(pp+4,BULLET);float(pp+0x124,777.25);int(bp+0xa4,BULLET);int(hp+0x40,ATTACK);int(cp+8,ATTACK);float(rp+0x84,30.);
  {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
  {let _child=child(bp,BULLET+1);int(pp+4,BULLET+1);let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(cb);}

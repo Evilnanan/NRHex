@@ -192,7 +192,8 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
 // factory captures it and restores neutral coefficients before native use.
 // Thus network-recreated roots do not depend on a process-global last damage.
 #[repr(C,align(16))]struct Descriptor([u8;0x110]);
-pub unsafe fn emit_soul(handle:u64,damage:f32,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage,point,leak:false},crate::soul_critical::PRELUDE,base)}
+pub unsafe fn emit_soul(handle:u64,damage:f32,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage,point,leak:false},crate::soul_critical::BULLET,base)}
+pub unsafe fn emit_soul_prelude(handle:u64,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage:0.,point,leak:false},crate::soul_critical::PRELUDE,base)}
 unsafe fn emit(p:Pending,base:usize)->bool{emit_kind(p,if p.leak{LEAK_BULLET}else{BULLET},base)}
 unsafe fn emit_kind(p:Pending,bullet:i32,base:usize)->bool{
  let manager=read_ptr(base+0x3c0ae30);if manager==0{return false;}
@@ -222,7 +223,7 @@ pub unsafe fn factory(payload:usize)->SeedGuard{
  let private=ACTIVE.load(Ordering::Acquire)&&payload!=0&&private_bullet(read_i32(payload+4));
  let seed=if private{CHILD.with(|s|s.borrow().clone()).or_else(||{
   let damage=ptr::read_unaligned((payload+0x124)as*const f32);
-  (matches!(read_i32(payload+4),BULLET|LEAK_BULLET|crate::soul_critical::BULLET|crate::soul_critical::PRELUDE)&&damage.is_finite()&&damage>0.).then(||Arc::new(Discharge{damage,targets:Mutex::new(BTreeSet::new())}))
+  (matches!(read_i32(payload+4),BULLET|LEAK_BULLET|crate::soul_critical::BULLET)&&damage.is_finite()&&damage>0.).then(||Arc::new(Discharge{damage,targets:Mutex::new(BTreeSet::new())}))
  })}else{None};
  let restore=if private{let p=payload+0x124;let v=ptr::read_unaligned(p as*const[f32;4]);ptr::write_unaligned(p as*mut[f32;4],[1.;4]);Some((p,v))}else{None};
  SeedGuard(SEED.with(|s|s.replace(seed)),restore)

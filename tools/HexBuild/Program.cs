@@ -99,6 +99,7 @@ if(args.Contains("--soul-critical-map")){SoulCritical.TargetMap(root,args[Array.
 if(args.Contains("--onyx-check")){OnyxMastery.Verify(root,bnd,Parse,args.Contains("--mmv"),args.Contains("--tune"));return;}
 if(args.Contains("--onyx-dash-map")){int at=Array.IndexOf(args,"--onyx-dash-map");OnyxMastery.DashMap(args[at+1],args[at+2],Parse);return;}
 if(args.Contains("--onyx-mastery-stage")){OnyxMastery.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
+if(args.Contains("--soul-entry-stage")){SoulCritical.EntryStage(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--soul-leadin-stage")){SoulCritical.PreludeStage(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--soul-critical-stage")){SoulCritical.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--static-charge-stage")){StaticCharge.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}

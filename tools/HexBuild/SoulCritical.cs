@@ -15,7 +15,7 @@ static class SoulCritical {
  }
  public static void Prelude(Func<string,int,int,PARAM.Row> clone){
   var r=clone("Bullet",7720606,Owner+51);
-  foreach(var(f,v)in new(string,object)[]{("atkId_Bullet",-1),("sfxId_Bullet",677210),("life",0.5f),("HitBulletID",-1),("hitRadius",0f),("hitRadiusMax",0f),("spreadTime",0f),("intervalCreateBulletId",Owner+50),("intervalCreateWaitTime",0.3f),("intervalCreateTimeMin",10f),("intervalCreateTimeMax",10f),("launchConditionType",0),("isHitBothTeam",0)})Set(r,f,v);
+  foreach(var(f,v)in new(string,object)[]{("atkId_Bullet",-1),("sfxId_Bullet",677210),("life",0.5f),("HitBulletID",-1),("hitRadius",0f),("hitRadiusMax",0f),("spreadTime",0f),("intervalCreateBulletId",-1),("intervalCreateWaitTime",0f),("intervalCreateTimeMin",0f),("intervalCreateTimeMax",0f),("launchConditionType",0),("isHitBothTeam",0)})Set(r,f,v);
  }
  // MMV legitimately contains non-finite floats; compare their exact bits.
  static string Value(object? v)=>v switch{
@@ -191,8 +191,24 @@ static class SoulCritical {
   Check(Same(p.Rows.Single(r=>r.ID==Owner+51),now.Rows.Single(r=>r.ID==Owner+51)),"Prelude roundtrip mismatch");
   foreach(var f in actual.Files.Where(f=>Name(f)!="Bullet.param"))Check(f.Bytes.Span.SequenceEqual(old[f.ID]),"Unrelated table changed");
   Resources(root,mod,dir);
-  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{version="0.17.291",preludeBullet=Owner+51,visual=677210,delaySeconds=0.3,lifeSeconds=0.5,intervalSeconds=10,childBullet=Owner+50,preludeAttack=-1,allExistingRowsUnchanged=true,regulationSha256=Hash(output),gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: visual-only 0.3s carrier appended; existing shockwave and all other rows unchanged");
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{version="0.17.293",preludeBullet=Owner+51,visual=677210,delaySeconds=0,lifeSeconds=0.5,intervalSeconds=0,childBullet=-1,preludeAttack=-1,allExistingRowsUnchanged=true,regulationSha256=Hash(output),gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: entry visual appended without a damaging child; existing shockwave and all other rows unchanged");
+ }
+
+ public static void EntryStage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=Path.Combine(root,"work/soul-entry",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
+  string input=Path.Combine(mod,"regulation.bin");var b=SFUtil.DecryptNightreignRegulation(input);var old=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=b.Files.Single(f=>Name(f)=="Bullet.param");var p=parse("Bullet",file.Bytes);var before=parse("Bullet",file.Bytes);
+  var original=parse("Bullet",native.Files.Single(f=>Name(f)=="Bullet.param").Bytes);PARAM.Row? expected=null;
+  Prelude((n,source,id)=>expected=new PARAM.Row(original.Rows.Single(r=>r.ID==source)){ID=id});
+  var row=p.Rows.Single(r=>r.ID==Owner+51);foreach(string field in new[]{"intervalCreateBulletId","intervalCreateWaitTime","intervalCreateTimeMin","intervalCreateTimeMax"})row[field].Value=expected![field].Value;
+  Check(Same(row,expected!,false),"Entry visual has unexpected changes");file.Bytes=p.Write();string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,b,b.Compression);
+  var actual=SFUtil.DecryptNightreignRegulation(output);var now=parse("Bullet",actual.Files.Single(f=>Name(f)=="Bullet.param").Bytes);
+  Check(now.Rows.Count==before.Rows.Count&&before.Rows.Where(r=>r.ID!=Owner+51).Zip(now.Rows.Where(r=>r.ID!=Owner+51)).All(pair=>Same(pair.First,pair.Second)),"Unrelated bullet changed");
+  Check(Same(row,now.Rows.Single(r=>r.ID==Owner+51)),"Entry visual readback mismatch");
+  foreach(var f in actual.Files.Where(f=>Name(f)!="Bullet.param"))Check(f.Bytes.Span.SequenceEqual(old[f.ID]),"Unrelated parameter table changed");
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{version="0.17.293",preludeBullet=Owner+51,visual=677210,preludeTrigger="critical entry",waveTrigger="accepted primary hit",childBullet=-1,delaySeconds=0,preludeAttack=-1,onlyFourPreludeFieldsChanged=true,inputSha256=Hash(input),outputSha256=Hash(output),gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: prelude child disabled; existing wave and all unrelated rows unchanged");
  }
 
 }

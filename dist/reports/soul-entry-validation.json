@@ -1,0 +1,103 @@
+{
+  "version": "0.17.293",
+  "baselineCommit": "317b637654b9908854d27dcdb3e7fff79c610d25",
+  "behavior": {
+    "preludeBullet": 95005251,
+    "visual": 677210,
+    "preludeTrigger": "valid critical execution entry; once per entry at actual throw target feet",
+    "waveBullet": 95005250,
+    "waveTrigger": "accepted primary-hit callback; factory failure retries on update",
+    "intentionalDelaySeconds": 0,
+    "preludeChildBullet": -1,
+    "interruptionBeforeMainHitDoesNotExplode": true,
+    "damageFormula": "400 + 0.5 * cumulative final critical damage through main hit"
+  },
+  "nativeTargetGetter": {
+    "rva": "0x4fcb40",
+    "pattern": "40 53 48 83 EC 20 48 8B D9 48 8B 0D 58 25 71 03 48 85 C9",
+    "uniqueExactMatchVerified": true,
+    "exeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a"
+  },
+  "checks": {
+    "standaloneRust": {
+      "passed": 490,
+      "failed": 0,
+      "ignored": 34
+    },
+    "mmvRust": {
+      "passed": 491,
+      "failed": 0,
+      "ignored": 34
+    },
+    "nativeIsolated": {
+      "passed": 1,
+      "failed": 0,
+      "coverage": [
+        "real throw animation and target getter",
+        "entry visual once, interrupt and reentry",
+        "wave request emitted before main-hit callback returns",
+        "duplicate main hit suppression",
+        "fixed damage snapshot, poise and rescue"
+      ]
+    },
+    "hexBuild": true,
+    "standaloneRelease": true,
+    "mmvRelease": true,
+    "bothDllLoadAndUnsupportedHostRejection": true,
+    "bothMe3ProfilesSupported": true,
+    "runtimeSourcesMatchMmvBuildInputs": true
+  },
+  "resourceStages": {
+    "standalone": {
+      "version": "0.17.293",
+      "preludeBullet": 95005251,
+      "visual": 677210,
+      "preludeTrigger": "critical entry",
+      "waveTrigger": "accepted primary hit",
+      "childBullet": -1,
+      "delaySeconds": 0,
+      "preludeAttack": -1,
+      "onlyFourPreludeFieldsChanged": true,
+      "inputSha256": "B69D12756A2D153953876555111B9AA0AC9A363B0B4E4C7790C1AC55B3828E60",
+      "outputSha256": "F97986F68FF8264F46F3B74814307F3CDA350A4297F4B6CF0F100C53B2D84F93",
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "mmv": {
+      "version": "0.17.293",
+      "preludeBullet": 95005251,
+      "visual": 677210,
+      "preludeTrigger": "critical entry",
+      "waveTrigger": "accepted primary hit",
+      "childBullet": -1,
+      "delaySeconds": 0,
+      "preludeAttack": -1,
+      "onlyFourPreludeFieldsChanged": true,
+      "inputSha256": "7F92D9E2E4A58B64719DDA90A8414D0FF1641EB0CF582F5CFEE1D616A8049646",
+      "outputSha256": "5A7D37339859D039A934395CD6EB012E17C3C6E77F3A02D3C21701FB1F049235",
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    }
+  },
+  "artifacts": {
+    "standalone": {
+      "regulationSha256": "f97986f68ff8264f46f3b74814307f3cda350a4297f4b6cf0f100c53b2d84f93",
+      "dllSha256": "7ad0b967d7a306b6af83f8f3dded34bcc7b2ba3522f04f99ec53872fb6b27a60"
+    },
+    "mmv": {
+      "regulationSha256": "5a7d37339859d039a934395cd6eb012e17c3c6e77f3a02d3c21701fb1f049235",
+      "dllSha256": "874b2224b3e5ccae513aef45652aad663ad7ce2e2e6c954f0dce88c7ce75a220"
+    }
+  },
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "unchanged": [
+    "existing damaging wave and attack parameters",
+    "FXR resources",
+    "HKS",
+    "description text",
+    "README",
+    "user INIs"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

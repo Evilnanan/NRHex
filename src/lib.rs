@@ -376,7 +376,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);221] {
+fn signatures()->[(&'static str,u32);222] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -413,7 +413,7 @@ fn signatures()->[(&'static str,u32);221] {
   (static_charge::TRANSPORT_PATTERN,static_charge::TRANSPORT_RVA as u32),(static_charge::PACKET_PATTERN,static_charge::PACKET_RVA as u32),
   (balloon_team::PARAM_PATTERN,balloon_team::PARAM_RVA as u32),
   (parry::NOTIFY_PATTERN,parry::NOTIFY_RVA as u32),(parry::COST_PATTERN,parry::COST_RVA as u32),(parry::REPEL_PATTERN,parry::REPEL_RVA as u32),
-  (THROW_ANIM_PATTERN,THROW_ANIM_RVA as u32),(GAUGE_ADD_PERCENT_PATTERN,GAUGE_ADD_PERCENT_RVA as u32),
+  (soul_critical::TARGET_PATTERN,soul_critical::TARGET_RVA as u32),(THROW_ANIM_PATTERN,THROW_ANIM_RVA as u32),(GAUGE_ADD_PERCENT_PATTERN,GAUGE_ADD_PERCENT_RVA as u32),
   (NULLIFY_SITE_PATTERN,NULLIFY_SITE_RVA as u32),(REMOVE_EFFECT_PATTERN,REMOVE_EFFECT_RVA as u32),
   (REBOUND_PATTERN,REBOUND_RVA as u32),
   (HIT_COMPLETE_PATTERN,HIT_COMPLETE_RVA as u32),(HAS_STATE_PATTERN,HAS_STATE_RVA as u32),
