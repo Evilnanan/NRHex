@@ -349,6 +349,7 @@
     "map/mapstudio/m49_29_00_00.msb.dcx": "e18de3c5a5a6a91640e25e7c07f5a7ac93247acc5b958870c2beb7f778fabd34",
     "map/mapstudio/m60_42_38_10.msb.dcx": "281b3ebf2cbc5dfc86fbc896632a0a1fc9bf91a3549cacb678dccdf0e1790feb",
     "map/mapstudio/m60_43_38_10.msb.dcx": "824a59fa0771ddbf0879e7786864f5da4861492af877fda6c4d6244a0dbe3389",
-    "script/talk/m00_00_00_00.talkesdbnd.dcx": "b63974de9c3d16bc830858ddef22031cee63548e22bb9b99aeedf0ff89d6c9a0"
+    "script/talk/m00_00_00_00.talkesdbnd.dcx": "b63974de9c3d16bc830858ddef22031cee63548e22bb9b99aeedf0ff89d6c9a0",
+    "sfx/sfxbnd_c3600.ffxbnd.dcx": "6d3ff7610836973b611bb6f03f4b65ebb9475103d774924d05756a88feea4f65"
   }
 }

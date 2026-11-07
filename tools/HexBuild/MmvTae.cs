@@ -4,10 +4,10 @@ using System.Text.Json;
 static class MmvTae {
     static void Check(bool ok, string why) { if (!ok) throw new InvalidDataException(why); }
     static string Name(BinderFile f) => f.Name.Replace('\\', '/').Split('/').Last();
-    static bool Equal(TAE.Event a, TAE.Event b, bool alignment = false) {
+    static bool Equal(TAE.Event a, TAE.Event b, bool alignment = false, int maxPadding = 8) {
         if (a.Type != b.Type || a.Unk04 != b.Unk04 || a.StartTime != b.StartTime || a.EndTime != b.EndTime || a.Group?.GroupType != b.Group?.GroupType) return false;
         var x = a.GetParameterBytes(false); var y = b.GetParameterBytes(false);
-        return x.SequenceEqual(y) || alignment && y.Length == x.Length + 8 && y.Take(x.Length).SequenceEqual(x) && y.Skip(x.Length).All(v => v == 0);
+        return x.SequenceEqual(y) || alignment && y.Length > x.Length && y.Length <= x.Length + maxPadding && (y.Length-x.Length)%8==0 && y.Take(x.Length).SequenceEqual(x) && y.Skip(x.Length).All(v => v == 0);
     }
     static object Event(TAE.Event e) => new { e.Type, e.Unk04, e.StartTime, e.EndTime, group = e.Group?.GroupType, data = Convert.ToHexString(e.GetParameterBytes(false)) };
     static bool Guard(TAE.Event e) => e.Type == 0 && e.GetParameterBytes(false).Length >= 12 && (BitConverter.ToInt32(e.GetParameterBytes(false), 8) == 95002400 || ParryCounterHit.IsTag(BitConverter.ToInt32(e.GetParameterBytes(false), 8)));
@@ -53,10 +53,11 @@ static class MmvTae {
             if (shared.TryGetValue(name, out var nf) && baseline.TryGetValue(name, out var bf) && !nf.Bytes.Span.SequenceEqual(bf.Bytes.Span)) {
                 var originals = TAE.Read(bf.Bytes).Animations.ToDictionary(a => a.ID);
                 foreach (var a in TAE.Read(nf.Bytes).Animations) {
+                    if(OnyxMastery.AddedAnimation(name,a.ID)){Check(!originals.ContainsKey(a.ID)&&!current.Animations.Any(x=>x.ID==a.ID),"Onyx animation collision");continue;}
                     Check(originals.TryGetValue(a.ID, out var old), $"New NRHex animation needs adapter: {name}/{a.ID}");
                     var extras = a.Events.ToList();
                     for (int j = 0; j < old!.Events.Count; j++) {
-                        int found = extras.FindIndex(e => Equal(old.Events[j], e, j == 0));
+                        int found = extras.FindIndex(e => Equal(old.Events[j], e, j == 0, name=="a841.tae"?24:8));
                         Check(found >= 0, $"NRHex changed a native event: {name}/{a.ID}/{j}"); extras.RemoveAt(found);
                     }
                     extras.RemoveAll(Guard); if (extras.Count == 0) continue;
@@ -112,9 +113,11 @@ static class MmvTae {
             string.Join("\n", weapons.Select(r => $" ({r.ID},{Float(r["saWeaponDamage"].Value)}),")) + "\n];\npub const BEHAVIORS:&[(i32,f32)]=&[\n" +
             string.Join("\n", behaviors.Select(r => $" ({r.ID},{Float(attacks[Convert.ToInt32(r["refId"].Value)]["atkSuperArmorCorrection"].Value)}),")) + "\n];\n";
         File.WriteAllText(Path.Combine(root, "work/compat/mmv/staged/parry_data.rs"), data + ParryCounterHit.Catalog(behaviors,attacks));
+        OnyxMastery.Animations(Path.Combine(root,"work/compat/mmv/staged/mod"),output,addStart:false);
+        OnyxMastery.DashMap(Path.Combine(root,"work/compat/mmv/staged/mod/regulation.bin"),Path.Combine(root,"src/onyx_dash_mmv_data.rs"),parse);
         File.WriteAllText(Path.Combine(root, "work/compat/mmv/staged/tae-validation.json"), JsonSerializer.Serialize(new { file = relative,
             sha256 = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(output))), guardCount, otherCount,
-            conditionCount = keys.Length, weapons = weapons.Length, behaviors = behaviors.Length, reports, originalMmvPayloadsPreserved = true, gameplayVerified = false }, new JsonSerializerOptions { WriteIndented = true }));
+            conditionCount = keys.Length, weapons = weapons.Length, behaviors = behaviors.Length, reports, originalMmvEventsPreserved = true, onyxAnimationsAdded = new[]{40003,40004}, onyxTaePaddingMayBeReserialized = true, gameplayVerified = false }, new JsonSerializerOptions { WriteIndented = true }));
         Console.WriteLine($"Staged MMV animation overlay: {guardCount} guards, {otherCount} other events, {keys.Length} conditions");
     }
     public static void Audit(string root, string mmv) {
@@ -131,7 +134,7 @@ static class MmvTae {
                 if (!baseline.TryGetValue(a.ID, out var old)) { additions.Add(new { file = name, animation = a.ID, newAnimation = true }); continue; }
                 var remaining = a.Events.ToList();
                 for (int i = 0; i < old.Events.Count; i++) {
-                    var e = old.Events[i]; int at = remaining.FindIndex(c => Equal(e, c, i == 0));
+                    var e = old.Events[i]; int at = remaining.FindIndex(c => Equal(e, c, i == 0, name=="a841.tae"?24:8));
                     if (at >= 0) remaining.RemoveAt(at);
                     else missing.Add(new { file = name, animation = a.ID, index = i, before = Event(e), candidates = a.Events.Where(c => c.Type == e.Type).Select(Event) });
                 }

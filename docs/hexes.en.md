@@ -243,3 +243,8 @@ Move to charge. Your next melee hit marks the target. Getting hit marks you inst
 ## Soul Critical
 
 Critical hits unleash a shockwave.
+
+<!-- hex:95005300 -->
+## Mastery: Onyx Lord’s Greatsword
+
+Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.

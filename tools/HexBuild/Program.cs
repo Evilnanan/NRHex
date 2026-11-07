@@ -96,6 +96,9 @@ if(args.Contains("--lightning-delay-stage")){StaticCharge.DelayStage(root,Parse,
 if(args.Contains("--lightning-rework-stage")){StaticCharge.Rework(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--mmv-raider-check")){MmvRaider.Verify(args[Array.IndexOf(args,"--mmv-raider-check")+1],Parse);return;}
 if(args.Contains("--soul-critical-map")){SoulCritical.TargetMap(root,args[Array.IndexOf(args,"--soul-critical-map")+1],Parse);return;}
+if(args.Contains("--onyx-check")){OnyxMastery.Verify(root,bnd,Parse,args.Contains("--mmv"),args.Contains("--tune"));return;}
+if(args.Contains("--onyx-dash-map")){int at=Array.IndexOf(args,"--onyx-dash-map");OnyxMastery.DashMap(args[at+1],args[at+2],Parse);return;}
+if(args.Contains("--onyx-mastery-stage")){OnyxMastery.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--soul-critical-stage")){SoulCritical.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--static-charge-stage")){StaticCharge.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--bartender-stage")){Bartender.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
@@ -964,6 +967,7 @@ Erosion.Mechanics(Clone);
 Bartender.Mechanics(Clone);
 StaticCharge.Mechanics(Clone);
 SoulCritical.Mechanics(Clone);
+OnyxMastery.Mechanics(Clone,pars["ItemLotParam_map"]);
 PotentialFission.Mechanics(Clone);
 foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
@@ -1381,6 +1385,7 @@ DeliberatePunch.Events(ev);
 Bartender.Events(ev);
 StaticCharge.Events(ev);
 SoulCritical.Events(ev);
+OnyxMastery.Events(ev);
 Basics.Events(ev);
 Sniper.Events(ev);
 UltimateUnstoppable.Events(ev);
@@ -1439,3 +1444,8 @@ SoulCritical.TargetMap(root,Path.Combine(root,"dist"),Parse,Path.Combine(root,"s
 var soulResources=Path.Combine(root,".work/soul-critical/full");Directory.CreateDirectory(soulResources);
 SoulCritical.Resources(root,Path.Combine(root,"dist/mod"),soulResources);
 File.Copy(Path.Combine(soulResources,"sfxbnd_commoneffects_dlc01.ffxbnd.dcx"),Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"),true);
+
+OnyxMastery.Animations(Path.Combine(root,"dist/mod"),Path.Combine(root,"dist/mod/chr/c0000.anibnd.dcx"));
+OnyxMastery.Resources(root,Path.Combine(root,"dist/mod"),Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"));
+
+OnyxMastery.DashMap(Path.Combine(root,"dist/mod/regulation.bin"),Path.Combine(root,"src/onyx_dash_data.rs"),Parse);

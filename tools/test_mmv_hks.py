@@ -88,7 +88,7 @@ class FragmentTests(unittest.TestCase):
                         return call
                     mapping = {}
                     for name in global_names:
-                        if name in ('env', 'act', 'ExecWallJump', 'ExecEventHalfBlend', 'GetHalfBlendInfo', 'GetVariable'):
+                        if name in ('env', 'act', 'ExecWallJump', 'ExecEventHalfBlend', 'ExecEventAllBody', 'GetHalfBlendInfo', 'GetVariable'):
                             mapping[name] = function(name)
                         elif name == 'TRUE': mapping[name] = 1
                         elif name.startswith('Event_'): mapping[name] = name
@@ -135,7 +135,7 @@ class FragmentTests(unittest.TestCase):
             tail = ', '.join(['"__fallthrough__"', *outputs.values()])
             compiled = lua.eval('function(' + ','.join(inputs.values()) + ')\n' + fragment.lua() + 'return ' + tail + '\nend')
             names = {f['constants'][d['bx']] for d in fragment.code if d['op'] in (91, 27)}
-            callables = {'env', 'act', 'ExecWallJump', 'GetVariable', 'SetVariable', 'IsChargeMagic', 'CheckIfHoldMagic'}
+            callables = {'env', 'act', 'ExecWallJump', 'GetVariable', 'SetVariable', 'IsChargeMagic', 'CheckIfHoldMagic', 'ExecEventAllBody'}
             for seed in range(256):
                 def world():
                     calls = []

@@ -1,0 +1,21 @@
+{
+  "version": "0.17.290",
+  "owner": 95005300,
+  "privateRows": 11,
+  "weapon": 8010000,
+  "giftLot": 95553000,
+  "meteorCount": 5,
+  "meteorIntervalSeconds": 0.6,
+  "initialFpCost": 27,
+  "perMeteorBaseStamina": 20,
+  "rawPhysical": 100,
+  "rawMagic": 100,
+  "sourceClassification": "weapon art",
+  "nativeOnyxRowsUnchanged": true,
+  "spellSlotEventsAbsent": true,
+  "emptyFpChannelBlocked": true,
+  "regulationSha256": "A4C13F1BE748C1085DB8DB8E662BF5FC24866387891AC1F82513A9967775062B",
+  "animationSha256": "35D5B30C85E127E96829C7F2947DB94798592F77AC4020BB11408F74220D4369",
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

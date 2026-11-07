@@ -306,6 +306,46 @@
           ]
         }
       ]
+    },
+    "SwordArtsLoopLoop_onUpdate": {
+      "originalHash": "410b429a5de549351eae0089d7e3b907fd09af0ca87a247529967c8d5d2b018b",
+      "nrhexHash": "427977e3cd7836d1309dec24334232253d614c734b9041463fe02bab13a7a904",
+      "mmvFunctionHash": "5fabbe6650cafe7d80ec9281b3e8aae11ca1fb8aabdd18d51b6072a278832434",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            43
+          ]
+        },
+        {
+          "kind": "replace",
+          "old": "env(HasEnoughArtsPoints,",
+          "new": "env(990054,",
+          "count": 2
+        }
+      ]
+    },
+    "SwordArtsHalfLoopLoop_Upper_onUpdate": {
+      "originalHash": "f723d1994a1d1f1e2724499f2a4573ffc1c36eeac3db02aeca2fa5e51ebd0610",
+      "nrhexHash": "d0cdf0b788a5ef030f1a682f2d3a67b885af283657e3292627e2e447c24da766",
+      "mmvFunctionHash": "552f26c63590eedf82af8e80bdb00acd3d0b9c270365c854a3290b1abe1962ec",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            43
+          ]
+        },
+        {
+          "kind": "replace",
+          "old": "env(HasEnoughArtsPoints,",
+          "new": "env(990054,",
+          "count": 3
+        }
+      ]
     }
   }
 }

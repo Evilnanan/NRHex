@@ -28,6 +28,8 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Skill pool build failed.' }
         dotnet run --project tools/HexBuild/HexBuild.csproj -- $PSScriptRoot
         if ($LASTEXITCODE -ne 0) { throw 'Parameter/event/text build failed.' }
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --onyx-check
+        if ($LASTEXITCODE -ne 0) { throw 'Onyx mastery resource validation failed.' }
         python -X utf8 tools/verify_cage_groups.py
         if ($LASTEXITCODE -ne 0) { throw 'Cage group lifecycle/HUD/native reward verification failed.' }
         dotnet run --project tools/HexBuild -- $PSScriptRoot --effect-sync-probe
@@ -233,7 +235,9 @@ try {
     }
     if (-not $DllOnly) {
         python -X utf8 tools/build_wraith_hks.py --inplace
-        if ($LASTEXITCODE -ne 0) { throw 'Wraith item action observers failed.' }
+        if ($LASTEXITCODE -ne 0) { throw 'Wraith HKS build failed.' }
+        python -X utf8 tools/build_onyx_hks.py --inplace
+        if ($LASTEXITCODE -ne 0) { throw 'Onyx mastery action integration failed.' }
     }
     if (-not $DllOnly) {
         python -X utf8 tools/build_basics_hks.py --inplace

@@ -52,6 +52,7 @@ mod balloon;
 mod ability_damage;
 mod static_charge;
 mod soul_critical;
+mod onyx_mastery;
 mod glass_cannon;
 mod parry;
 mod parry_turn;
@@ -1149,11 +1150,12 @@ unsafe fn arts_weapon(reference:usize)->Option<arts::Weapon>{
 unsafe fn arts_overlay(reference:usize)->Option<i32>{
  if !ACTIVE.load(Ordering::Acquire){return None;}
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);if world==0{return None;}
- let player=read_ptr(world+0x174e8);if player==0||!has_effect(player,arts::OWNER,base){return None;}
+ let player=read_ptr(world+0x174e8);if player==0||(!has_effect(player,arts::OWNER,base)&&!onyx_mastery::owned(player,base)){return None;}
  let w=arts_weapon(reference)?;let equip=read_ptr(player+0x670);if equip==0{return None;}
  // Only this player's six weapon slots use the getter overlay. Native inventory
  // and drops stay original; the serializer separately patches outgoing snapshots.
  if !(0..6).any(|i|read_i32(equip+0x1c+4*i) as u32==w.handle){return None;}
+ if onyx_mastery::selected(player,w,base){return Some(1041);}
  ARTS.get()?.lock().ok()?.selected(w)
 }
 unsafe fn arts_shadow(reference:usize,id:i32)->([u64;3],[u64;4]){
@@ -1214,7 +1216,7 @@ unsafe extern "system" fn arts_serialize_detour(payload:usize,handle:usize,calle
   arts_weapon_handle(handle as *const u32,base).and_then(|w|{
    let world=read_ptr(base+WORLD_RVA);let player=read_ptr(world+0x174e8);let equip=read_ptr(player+0x670);
    if equip==0||!(0..6).any(|i|read_i32(equip+0x1c+4*i) as u32==w.handle){return None;}
-   ARTS.get().and_then(|s|s.lock().ok()?.selected(w).map(|skill|(w.base,skill)))
+   arts_actor_selection(player,w,base).map(|skill|(w.base,skill))
   })
  }else{None};
  let result=arts_serialize_call(original,payload,handle,selected);
@@ -1300,6 +1302,7 @@ unsafe fn arts_emitter(module:usize,behavior:i32,descriptor:usize,source:i32)->O
  arts::emitter_dummy(selected,w.base,behavior,read_i32(descriptor))
 }
 unsafe fn arts_actor_selection(player:usize,w:arts::Weapon,base:usize)->Option<i32>{
+ if onyx_mastery::selected(player,w,base){return Some(1041);}
  if is_local(player,base){return ARTS.get()?.lock().ok()?.selected(w);}
  // Peer instances already carry the transmitted +1C skill. Cross-weapon TAE
  // behavior still needs the same variation lookup as the owning player's overlay.
@@ -1318,6 +1321,7 @@ unsafe fn arts_behavior_call(original:ArtsBehaviorFn,player:usize,judge:i32,sour
  // Preserve the native five-argument call and its side effects, including miss
  // and common-fallback results. Change only the resulting PC behavior row ID.
  let native=original(player,judge,source,flags,extra);
+ if ACTIVE.load(Ordering::Acquire){if let Some(id)=onyx_mastery::behavior(player,judge,source,BASE.load(Ordering::Acquire)){return id;}}
  if !ACTIVE.load(Ordering::Acquire)||!arts::behavior_judge(judge){return native;}
  let base=BASE.load(Ordering::Acquire);
  if player==0||!has_effect(player,arts::OWNER,base){return native;}
@@ -2323,6 +2327,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  deliberate_punch::update(player,base);
  static_charge::update(player,base,dt);
  soul_critical::update(player,base);
+ onyx_mastery::update(player,base);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  update_chant(player,base);

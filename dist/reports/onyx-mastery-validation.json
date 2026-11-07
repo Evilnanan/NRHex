@@ -1,0 +1,73 @@
+{
+  "version": "0.17.290",
+  "feature": "精通【黑王大剑】",
+  "prototype": true,
+  "standaloneTests": {
+    "passed": 487,
+    "logSha256": "9d2db3cf576fb4132c7b4ef4415d4ddb1a5358f5bf2fb07caba88eecc88b094d"
+  },
+  "mmvTests": {
+    "passed": 488,
+    "logSha256": "afe7d11e238821cf79dddeaa1089565505e70e19549c79d16f7d07f8b2b9a626"
+  },
+  "nativePaymentFixture": {
+    "passed": true,
+    "cases": 1752,
+    "logSha256": "707f25749278820ac999436f0182fa9f6bcc519e757792424c89c753f768d95e"
+  },
+  "hksTests": {
+    "passed": 6,
+    "mmvFunctions": 158,
+    "prefixDifferentialCases": 27040,
+    "interiorDifferentialCases": 6400,
+    "flaskScenarios": 32,
+    "exactInversePassed": true,
+    "logSha256": "ac2d3439897d497f642ef9ac56778318b06f9635e6190cc173048090e0d2daaf"
+  },
+  "dllLoadChecks": {
+    "standalone": true,
+    "mmv": true,
+    "scope": "Loaded in Windows Python via Wine; unsupported host rejected without hooks"
+  },
+  "resourcesChecked": true,
+  "bilingualTextsChecked": true,
+  "me3ProfilesChecked": [
+    "dist/NRHex.me3",
+    "dist/mmv/NRHex-MMV.me3"
+  ],
+  "artifacts": {
+    "standalone": {
+      "natives/NRHex.dll": "3e188f99f9287ced27c450674c741f873ae19adac6776c1dde9dbdd7f331d740",
+      "mod/regulation.bin": "a4c13f1be748c1085db8db8e662bf5fc24866387891ac1f82513a9967775062b",
+      "mod/action/script/c0000.hks": "d38f52d3f89b58d0968789327a9a628a7cda067ddd7f154b0e23f04fed251cbc",
+      "mod/chr/c0000.anibnd.dcx": "35d5b30c85e127e96829c7f2947db94798592f77ac4020bb11408f74220d4369",
+      "mod/event/common.emevd.dcx": "17a547e6fe21a5750870caeb3ae49ac2f84b026fb3db72cadd8813ab978ad8dd",
+      "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "ccd9e7867e4b1761fec38e93f429891c3534ab2030e153f722cbe28d3dbd14e3",
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": "7552e1e4a0b924268a0085f01e84547576ca42e33ad1816092adea19402121d0",
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": "7d992b2365a3ae0b2e03c920bd4904a9754d35f940c08163a01bfbb3e347632e",
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "9388e9104efa57a66710359fce326a4412a89ba6cb5ea1a5785839109b1ad39f",
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "720713be26e72e9a1bd80444b64624be960364572fa3ec597fdaabc1952f7b08"
+    },
+    "mmv": {
+      "natives/NRHex.dll": "896a4b52a07b3d643ca7139aa22cf5f592ecef42ec6dd320dca8c75c3927d8cc",
+      "mod/regulation.bin": "7ef53787f86de37689c798382fc89857301c0529bdcf5b213cc7b8bea05e47b1",
+      "mod/action/script/c0000.hks": "8d7e0e0297178a9a34b15cb576267b73798b0de282af426966b5db1f2dc28a32",
+      "mod/chr/c0000.anibnd.dcx": "1e296cb2065ed01f704f5876efa04d248649d8b999290a4e9a96bfc530952544",
+      "mod/event/common.emevd.dcx": "13da70f9e31b1fc0c67c01fd2c8abfb02fe472eec169930409a1ff66037d8eb2",
+      "mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "215f47b7a357865d7a22a88617136aa4944e76a85bd35682eba5989e4a11b1de",
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": "dff8dcba2df3c771f57ef42c3ecc9ae10b746d7165b032b1d1d6108e91de47e1",
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": "80de60ec0cdfe6b16f42cff45d3fcb3ce9e6179724e53c4c2a571ccc22657271",
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "7e24696336365a6d91c7a8133693a44285748d837676d4f4ff9cba362f5c44dc",
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "3824dddc553b9a9349d8daa98299b66b368d3b3558ed8af6499f3e9f4a218a58"
+    }
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pending": [
+    "Native selector playback of imported Meteorite motion",
+    "Greatsword pose and transition",
+    "Meteor aim, spawn height and indoor collision",
+    "Release, interruption, exhaustion and five-meteor termination in game",
+    "Multiplayer replication"
+  ]
+}

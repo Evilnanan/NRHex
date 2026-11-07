@@ -48,6 +48,7 @@ impl Arts {
  /// Native world UID includes the producing player and the drop sequence.
  /// It identifies the actual ground item, even for otherwise identical weapons.
  pub fn network_pending(&self)->bool{self.network_dirty}
+ pub fn invalidate_network(&mut self){self.network_dirty=true;}
  pub fn network_sent(&mut self){self.network_dirty=false;}
  pub fn dropped(&mut self,uid:u32,w:Weapon){
   if uid==0{return;}if let Some(id)=self.selected(w){self.drops.insert(uid,Entry{weapon:w,selected:id});}

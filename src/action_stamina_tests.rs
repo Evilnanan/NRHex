@@ -1,6 +1,10 @@
 use super::*;
 use crate::win::*;
 use std::sync::atomic::{AtomicBool,AtomicI32};
+static ONYX_STARTED:AtomicBool=AtomicBool::new(false);
+static ONYX_FINISHED:AtomicBool=AtomicBool::new(false);
+static ONYX:AtomicBool=AtomicBool::new(false);
+static WEAPON_ID:AtomicI32=AtomicI32::new(2000000);
 static ECHO:AtomicBool=AtomicBool::new(true);
 static ARTS:AtomicBool=AtomicBool::new(true);
 static ROW:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
@@ -10,10 +14,10 @@ static SOURCE:AtomicI32=AtomicI32::new(-1);
 unsafe fn put(p:usize,v:usize){ptr::write_unaligned(p as*mut usize,v);}
 unsafe fn int(p:usize,v:i32){ptr::write_unaligned(p as*mut i32,v);}
 unsafe fn jump(base:usize,rva:usize,f:usize){let mut b=vec![0xff,0x25,0,0,0,0];b.extend_from_slice(&f.to_le_bytes());ptr::copy_nonoverlapping(b.as_ptr(),(base+rva)as*mut u8,b.len());}
-unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(match id{crate::echo_cast::OWNER=>ECHO.load(Ordering::Relaxed),crate::arts::OWNER=>ARTS.load(Ordering::Relaxed),_=>false})}
+unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(match id{crate::onyx_mastery::STARTED=>ONYX_STARTED.load(Ordering::Relaxed),crate::onyx_mastery::FINISH=>ONYX_FINISHED.load(Ordering::Relaxed),crate::onyx_mastery::OWNER=>ONYX.load(Ordering::Relaxed),crate::echo_cast::OWNER=>ECHO.load(Ordering::Relaxed),crate::arts::OWNER=>ARTS.load(Ordering::Relaxed),_=>false})}
 unsafe extern "system" fn lookup(out:usize,id:i32)->usize{put(out+8,if id==4021{ROW.load(Ordering::Relaxed)as usize}else{0});out}
 unsafe extern "system" fn source(_:usize,out:*mut u32,hand:i32)->*mut u32{SOURCE.store(hand,Ordering::Relaxed);*out=123;out}
-unsafe extern "system" fn reference(out:usize,_:usize)->usize{put(out,123);put(out+8,ENTRY.load(Ordering::Relaxed)as usize);int(out+0x10,2000000);out}
+unsafe extern "system" fn reference(out:usize,_:usize)->usize{put(out,123);put(out+8,ENTRY.load(Ordering::Relaxed)as usize);int(out+0x10,WEAPON_ID.load(Ordering::Relaxed));out}
 unsafe extern "system" fn release(_:usize){}
 #[unsafe(naked)]unsafe extern "system" fn run(_:usize){core::arch::naked_asm!(
  "push rbx", "sub rsp,0x20", "mov rbx,rcx", "jmp qword ptr [rip+{start}]",start=sym START
@@ -36,7 +40,7 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
  let p=crate::hook::prepare((base+RVA)as*mut u8,detour as*const u8,64).unwrap();assert_eq!(p.stolen,5);crate::hook::write_code((base+RVA)as*mut u8,&p.patch).unwrap();
  let saved_base=BASE.swap(base,Ordering::AcqRel);let saved_active=ACTIVE.swap(true,Ordering::AcqRel);
  CONTINUE.store((base+RVA+5)as*mut u8,Ordering::Release);CLAMP.store((base+CLAMP_RVA)as*mut u8,Ordering::Release);
- let mut world=vec![0usize;0x17500/8];let mut actor=[0usize;0x200/8];let a=actor.as_mut_ptr()as usize;
+ let mut world=vec![0usize;0x17500/8];let mut actor=[0usize;0x800/8];let a=actor.as_mut_ptr()as usize;
  let mut stats=[0u32;0x200/4];let st=stats.as_mut_ptr()as usize;let modules=[st];put(a+0x1b8,modules.as_ptr()as usize);put(a+0x190,a);
  let mut vt=[0usize;0x260/8];vt[0x258/8]=source as*const()as usize;put(a,vt.as_ptr()as usize);
  let mut entry=[0usize;4];int(entry.as_mut_ptr()as usize+8,123);int(entry.as_mut_ptr()as usize+0x1c,100);ENTRY.store(entry.as_mut_ptr()as*mut u8,Ordering::Release);
@@ -83,6 +87,41 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
  int(context+0xc,-1);int(context+8,400000220);int(context+0xc0,-30);
  int(entry.as_mut_ptr()as usize+0x1c,crate::arts::STORM);int(st+0x15c,200);run(context);assert_eq!(read_i32(st+0x15c),200);int(entry.as_mut_ptr()as usize+0x1c,100);
  state.lock().unwrap().reforge(w,100);int(st+0x15c,200);run(context);assert_eq!(read_i32(st+0x15c),200);
+ // Mastery discounts the actual source weapon, including paired attacks, and
+ // retains native immunity. A spell or the other hand's weapon is unaffected.
+ ECHO.store(false,Ordering::Relaxed);ARTS.store(false,Ordering::Relaxed);
+ for owned in [false,true]{ONYX.store(owned,Ordering::Relaxed);
+  for weapon in [8010000,8010025,2000000]{WEAPON_ID.store(weapon,Ordering::Relaxed);
+   for immune in [false,true]{ptr::write((st+0x189)as*mut u8,u8::from(immune));
+    for (behavior,cost,dash)in [(100400000,35,false),(100400120,24,true),(100400125,30,true),(100400320,32,true),(300805901,30,false),(crate::onyx_mastery::BEHAVIOR,20,false)]{
+     for hand in [-1,-2]{int(context+8,behavior);int(context+0xc,-1);int(context+0x38,hand);int(context+0xc0,-cost);int(st+0x15c,200);run(context);
+      let wanted=if immune{0}else if owned&&crate::onyx_mastery::weapon(weapon){if dash{0}else{cost/2+cost%2}}else{cost};
+      assert_eq!(read_i32(st+0x15c),200-wanted,"weapon={weapon} behavior={behavior} owned={owned} immune={immune}");
+      assert_eq!(read_i32(context+0xc0),-cost);cases+=1;
+     }
+    }
+    int(context+8,-1);int(context+0xc,4021);int(context+0xc0,-35);int(st+0x15c,200);run(context);assert_eq!(read_i32(st+0x15c),if immune{200}else{165});
+   }
+  }
+ }
+ // An empty-FP animation never produces the startup marker. The same motion
+ // category on another weapon must not acquire the channel either.
+ int(st+0x140,100);
+ for owner in [false,true]{ONYX.store(owner,Ordering::Relaxed);for weapon in [8010000,2000000]{WEAPON_ID.store(weapon,Ordering::Relaxed);
+  for started in [false,true]{ONYX_STARTED.store(started,Ordering::Relaxed);for finish in [false,true]{ONYX_FINISHED.store(finish,Ordering::Relaxed);
+   for hand in [0,1]{
+    assert_eq!(crate::onyx_mastery::query(a,0,241,hand,base),0);
+    assert_eq!(crate::onyx_mastery::may_loop(a,base),owner&&weapon==8010000&&started);
+    assert_eq!(crate::onyx_mastery::query(a,1,241,hand,base),i32::from(!owner||weapon!=8010000||finish));
+    assert_eq!(crate::onyx_mastery::free_channel(a,base),owner&&weapon==8010000);
+    assert_eq!(crate::onyx_mastery::query(a,1,13,hand,base),0);assert!(!crate::onyx_mastery::free_channel(a,base));assert!(!crate::onyx_mastery::may_loop(a,base));
+   }
+  }}
+ }}
+ ONYX.store(true,Ordering::Relaxed);WEAPON_ID.store(8010000,Ordering::Relaxed);ONYX_STARTED.store(true,Ordering::Relaxed);ONYX_FINISHED.store(true,Ordering::Relaxed);
+ for (hp,down)in [(0,0),(100,1),(100,2)]{int(st+0x140,hp);ptr::write((a+0x710)as*mut u8,down);assert_eq!(crate::onyx_mastery::query(a,1,241,1,base),0);assert!(!crate::onyx_mastery::may_loop(a,base));}
+ int(st+0x140,100);ptr::write((a+0x710)as*mut u8,0);
+ ONYX.store(false,Ordering::Relaxed);WEAPON_ID.store(2000000,Ordering::Relaxed);
  // Recovery, zero fees and signed edge values are never forced debits.
  int(context+0xc,4021);
  for delta in [0,10]{int(context+0xc0,delta);int(st+0x15c,100);run(context);assert_eq!(read_i32(st+0x15c),100+delta);}

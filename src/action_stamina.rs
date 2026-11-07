@@ -38,6 +38,7 @@ unsafe extern "system" fn consume(context:usize,stats:usize,delta:i32,force:u8){
  if !ACTIVE.load(Ordering::Acquire)||delta>=0||delta==i32::MIN||stats==0||!crate::is_local(actor,base)||crate::native_actor::stats(actor)!=stats{
   add(stats,delta,force);return;
  }
+ let delta=-crate::onyx_mastery::cost(context,actor,-delta,base);
  if storm(context,actor,base){force_debit(stats,-delta);return;}
  let extra=crate::echo_cost::extra(context,-delta,base);
  add(stats,delta,force);
