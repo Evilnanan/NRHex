@@ -94,6 +94,7 @@ if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.
 if(args.Contains("--lightning-melee-stage")){StaticCharge.MeleeStage(root,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-delay-stage")){StaticCharge.DelayStage(root,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-rework-stage")){StaticCharge.Rework(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
+if(args.Contains("--mmv-raider-check")){MmvRaider.Verify(args[Array.IndexOf(args,"--mmv-raider-check")+1],Parse);return;}
 if(args.Contains("--soul-critical-map")){SoulCritical.TargetMap(root,args[Array.IndexOf(args,"--soul-critical-map")+1],Parse);return;}
 if(args.Contains("--soul-critical-stage")){SoulCritical.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--static-charge-stage")){StaticCharge.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}

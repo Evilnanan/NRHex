@@ -244,6 +244,11 @@ def main(argv=None) -> int:
             raise ValueError('NRHex resources changed during staging; discard preview and rerun')
         validate_lock(json.loads(LOCK.read_text(encoding='utf8')), inventory(mmv))
         report.update(status='resources-staged', requiredAdapters=[])
+        with (REPORTS / 'raider-check.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--mmv-raider-check', str(REPORTS / 'staged')], cwd=ROOT,
+                           stdout=log, stderr=subprocess.STDOUT, check=True)
+        report['raiderAdapter'] = json.loads((REPORTS / 'staged/raider-validation.json').read_text(encoding='utf8'))
         if args.stage_only:
             return 0
         with (REPORTS / 'soul-critical-catalog.log').open('w', encoding='utf8') as log:

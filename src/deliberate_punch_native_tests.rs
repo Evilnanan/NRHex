@@ -4,8 +4,8 @@ use super::*;
 use crate::win::*;
 use sha2::{Digest,Sha256};
 use std::cell::Cell;
-thread_local!{static BASIC:Cell<bool>=const{Cell::new(false)};}
-unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(matches!(id,OWNER|704000)||id==crate::basics::OWNER&&BASIC.with(Cell::get))}
+thread_local!{static BASIC:Cell<bool>=const{Cell::new(false)};static MMV:Cell<u8>=const{Cell::new(0)};}
+unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(matches!(id,OWNER|704000)||id==crate::basics::OWNER&&BASIC.with(Cell::get)||id==7031601&&MMV.with(|v|v.get()&1!=0)||id==7031602&&MMV.with(|v|v.get()&2!=0))}
 #[unsafe(naked)]unsafe extern "system" fn object_fixture(_:usize,_:f32){core::arch::naked_asm!("push rbp","sub rsp,0x20","lea rbp,[rcx+0x78]","movaps xmm0,xmm1","jmp {detour}",detour=sym object_detour);}
 #[unsafe(naked)]unsafe extern "system" fn scale_fixture(_:usize,_:f32){core::arch::naked_asm!("push rbp","sub rsp,0x20","lea rbp,[rcx+0x78]","movaps xmm2,xmm1","shufps xmm2,xmm2,0","jmp {detour}",detour=sym scale_detour);}
 #[unsafe(naked)]unsafe extern "system" fn commit_fixture(_:usize,_:usize)->i32{core::arch::naked_asm!("push r12","push r14","sub rsp,0x28","mov r12,rcx","mov r14,rdx","jmp {detour}",detour=sym commit_detour);}
@@ -48,5 +48,33 @@ fn native_punch_shadow_commit_and_additive_bonus(){unsafe{
  ptr::write_unaligned((hit+0x40)as*mut i32,600000210);ptr::write_unaligned((hit+0x44)as*mut i32,1);constructed(actor,hit,base);
  for basic in [false,true]{BASIC.with(|s|s.set(basic));ptr::write_unaligned((hit+0x280)as*mut i32,100);crate::basics::calculated(actor,actor+8,actor,hit,base);assert_eq!(read_i32(hit+0x280),if basic{264}else{114});}
  event(actor,0,base);assert_eq!(bonus(actor,hit,base),0.);
+ // Native AttackRate is already present when Basics receives finalized HP
+ // damage. Run the real combiner before our compiled callback, with armor/
+ // guard coefficients and both native buff states, then compare additive math.
+ for effects in 0..4{MMV.with(|v|v.set(effects));let native=if effects&1!=0{1.5}else{1.}*if effects&2!=0{2.}else{1.};
+  for basic in [false,true]{BASIC.with(|v|v.set(basic));
+   for (attack,empowered) in [(600000200,false),(600000210,true),(600000231,true)]{
+    data[0xc7]=5;event(actor,1,base);STATE.lock().unwrap().add(2200.,2200);event(actor,3,base);
+    ptr::write_unaligned((hit+0x40)as*mut i32,attack);ptr::write_unaligned((hit+0x44)as*mut i32,1);constructed(actor,hit,base);
+    let raw=[1000.,0.,0.,0.,0.];let rates=[native,1.,1.,1.,1.];let cuts=[0.5;5];let one=[1.;5];let mut out=[0.;5];
+    let damage=crate::glass_cannon::detour(out.as_mut_ptr(),raw.as_ptr(),rates.as_ptr(),cuts.as_ptr(),one.as_ptr(),cuts.as_ptr(),one.as_ptr(),one.as_ptr(),1.,1.,1.,1.,1.,1.,1.);
+    assert_eq!(damage,250.*native);ptr::write_unaligned((hit+0x280)as*mut i32,damage as i32);
+    crate::basics::calculated(actor,actor+8,actor,hit,base);
+    let bonus=if basic{1.5}else{0.}+if empowered{1.}else{0.};
+    let expected=if cfg!(feature="mmv-compat"){250.*(native+bonus)}else{250.*native*(1.+bonus)};
+    assert_eq!(read_i32(hit+0x280),expected.round()as i32,"effects={effects}, basic={basic}, attack={attack}");
+   }
+  }
+ }
+ // No shared bonus without an eligible local skill; inactive temporary buffs
+ // and non-MMV builds retain existing behavior. Only final HP may be written.
+ BASIC.with(|v|v.set(true));MMV.with(|v|v.set(2));event(actor,0,base);
+ for (hero,attack,table,remote,expected) in [(5,600000210,1,false,if cfg!(feature="mmv-compat"){350}else{500}),(5,600000210,0,false,200),(5,100000,1,false,200),(1,600000210,1,false,200),(5,600000210,1,true,200)]{
+  data[0xc7]=hero;ptr::write_unaligned((hit+0x40)as*mut i32,attack);ptr::write_unaligned((hit+0x44)as*mut i32,table);ptr::write_unaligned((hit+0x280)as*mut i32,200);
+  let before=ptr::read_unaligned(hit as*const[u8;0x300]);
+  crate::basics::calculated(actor,actor+8,if remote{actor+16}else{actor},hit,base);assert_eq!(read_i32(hit+0x280),expected);
+  let after=ptr::read_unaligned(hit as*const[u8;0x300]);for i in 0..after.len(){if !(0x280..0x284).contains(&i){assert_eq!(after[i],before[i]);}}
+ }
+ MMV.with(|v|v.set(0));data[0xc7]=5;ptr::write_unaligned((hit+0x280)as*mut i32,100);crate::basics::calculated(actor,actor+8,actor,hit,base);assert_eq!(read_i32(hit+0x280),250);
  STATE.lock().unwrap().clear();BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);crate::glass_cannon::ORIGINAL.store(old_calc,Ordering::Release);for(p,old)in saved{p.store(old,Ordering::Release);}VirtualFree(memory,0,MEM_RELEASE);
 }}

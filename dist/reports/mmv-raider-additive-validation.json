@@ -1,0 +1,124 @@
+{
+  "version": "0.17.289",
+  "baselineCommit": "7264a645d2b76e5f051d5e1d81e3cdcfa0e55354",
+  "feature": "MMV Raider skill boost additive with Back to Basics and Haymaker",
+  "formula": {
+    "nativeRate": "m = active(7031601) ? 1.5 : 1, multiplied by active(7031602) ? 2 : 1",
+    "old": "m * (1 + basicsBonus + punchBonus)",
+    "new": "m + basicsBonus + punchBonus",
+    "finalHpAdjustment": "1 + (basicsBonus + punchBonus) / m",
+    "rounding": "Native finalized integer HP and existing sword::boosted rounding retained."
+  },
+  "mmvParametersAndTiming": {
+    "inputSha256": "E9D90E459B459B7A63A7943B711F61900BF825C25DA73D26CF033A88518210B9",
+    "taeSha256": "356BC4E364F3DDDA5BF4455ECD77566ABE2677DB9DAE5A0454BFC309E11343C3",
+    "rows": [
+      {
+        "id": 7031601,
+        "physicsAttackRate": 1.5,
+        "damageTaken": 1.3
+      },
+      {
+        "id": 7031602,
+        "physicsAttackRate": 2,
+        "damageTaken": 1.3
+      }
+    ],
+    "windows": [
+      {
+        "animation": 541010,
+        "effect": 7031601,
+        "buffStart": 0,
+        "buffEnd": 1.800001,
+        "hits": [
+          {
+            "StartTime": 0.6666667,
+            "EndTime": 0.8
+          },
+          {
+            "StartTime": 0.6666667,
+            "EndTime": 0.8
+          }
+        ]
+      },
+      {
+        "animation": 541020,
+        "effect": 7031602,
+        "buffStart": 0,
+        "buffEnd": 3.000001,
+        "hits": [
+          {
+            "StartTime": 1.8666667,
+            "EndTime": 2.0333333
+          },
+          {
+            "StartTime": 1.8666667,
+            "EndTime": 2.0333333
+          },
+          {
+            "StartTime": 1.8666667,
+            "EndTime": 2.0333333
+          }
+        ]
+      }
+    ],
+    "parametersUnchanged": true,
+    "physicalSourceTool": 60400000,
+    "gameplayVerified": false,
+    "multiplayerVerified": false
+  },
+  "nativeEffectiveStatusQuery": {
+    "rva": "0x508df0",
+    "rejectedFlags": "0x800c0003",
+    "verifiedFromCurrentExe": true
+  },
+  "nativeExecutableSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "variants": {
+    "standalone": {
+      "dllSha256": "43334be26ca440d58898cbc0f159677e46720dbc62e800bd2da53e25e1139a22",
+      "resourcesUnchangedFromVersion": "0.17.288",
+      "regularTestsPassed": 484,
+      "nativeCombinerAndCompiledDamageCallbackPassed": true,
+      "dllLoadAndUnsupportedHostGuardPassed": true,
+      "me3ProfileCheckPassed": true
+    },
+    "mmv": {
+      "dllSha256": "81b0a85aa896cca1114142fa9c538e768b353ff56b1e96313c3d59f46cfe83fa",
+      "resourcesUnchangedFromVersion": "0.17.288",
+      "regularTestsPassed": 485,
+      "nativeCombinerAndCompiledDamageCallbackPassed": true,
+      "dllLoadAndUnsupportedHostGuardPassed": true,
+      "me3ProfileCheckPassed": true
+    }
+  },
+  "mmvBuild": {
+    "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+    "generatedData": {
+      "parry_data.rs": "848a4c61c58c5bb31e8c0fff8c91e110132f0b3d459e05459c108cf21dfa1fef",
+      "sword_map.rs": "31a68b2bc78b810237c78f934dd1ea90f58f35e8a65a47d0c2ea4276889e16f7",
+      "echo_cast_data.rs": "180f34c5ca27757ef11d2f755ce53ac32cdb766b411bb3a9418bad788c40fa17",
+      "archmage_data.rs": "2db323bf9c622d3d50bf676cd2a82656965ef19440ea27ec692b7e415f82516b",
+      "arts_data.rs": "4e29dcfa22e3b3d45d0ad46efb03708321aee8c0fb9dd946529ecf7cc81e079b",
+      "spirit_target_data.rs": "ca59115825f9eca91e46c7218c6444b4a978c253c993b7592ef9a7e59fc87d45",
+      "cage_data.rs": "86819d1bf5e994c557466efb8db06033faa6a01d576381e0a19adeef9ab3faed"
+    },
+    "erosionDataSha256": "70cf3920f3e09b835667d470c046b1d26f15ba52e9bf66c71af5763f8e507294",
+    "soulCriticalDataSha256": "22c55eec027d9c54faa8843f92b82da70b6bb09c9d5e3dba80cf3a23d2f0835d"
+  },
+  "sourceSha256": {
+    "src/basics.rs": "6a7cfbd9faa7f72494b7f18e9be768d602007ad89b1d6e42ffe982c0206a8f5c",
+    "src/deliberate_punch_native_tests.rs": "6baf7850aef1c7c572618f84fb3d47ee60b46d79523e5ae99f795f49549db116",
+    "tools/HexBuild/MmvRaider.cs": "2a040b1840c927a727385080507fdd80a5479b91d1f4e7c70358b1e2dbb52063",
+    "tools/HexBuild/Program.cs": "b8284f2444175d6ccf803ba3d39bcda76bcdc18f3494a91b280b1982f2e86e1b",
+    "tools/mmv_build.py": "0a61330ba9d26a214db913543d06e8013c443ecf8a2a31b67124b930754fd308",
+    "Cargo.toml": "95050d4c88e0586383b2030519829eef94c814c224af35fef6f18b328a1af15d",
+    "Cargo.lock": "eff950ab1155674fb0462d8aed02ac32d747150d78d952270dbc43ac8383f947"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "notes": [
+    "Native math executes the original EXE combiner; actors, active status selection and native dispatch surroundings are isolated fixtures.",
+    "The current pure-physical Retaliate source tool and buff windows are validated at MMV build time.",
+    "No parameter, animation, text, README or user configuration edits."
+  ]
+}

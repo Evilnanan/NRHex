@@ -24,6 +24,17 @@ pub fn multiplier(hero:Option<u8>,attack:i32,table:i32)->f32{
   _=>1.,
  }
 }
+// MMV's 7031601/2 already contribute a linear physical AttackRate (1.5/2)
+// inside the native damage value. Retaliate's source tool is physical-only.
+// Replace m * (1 + basics + punch) with m + basics + punch, retaining native
+// defenses, the original MMV proc window and its independent incoming penalty.
+fn merge_raider_rate(factor:f32,native_rate:f32)->f32{1.+(factor-1.)/native_rate}
+unsafe fn raider_rate(actor:usize,hero:Option<u8>,attack:i32,table:i32,base:usize)->f32{
+ if !cfg!(feature="mmv-compat")||hero!=Some(5)||multiplier(hero,attack,table)==1.{return 1.;}
+ let normal=if has_effect(actor,7031601,base){1.5}else{1.};
+ let empowered=if has_effect(actor,7031602,base){2.}else{1.};
+ normal*empowered
+}
 pub unsafe fn sealed(actor:usize,base:usize)->bool{
  actor!=0&&crate::is_local(actor,base)&&has_effect(actor,OWNER,base)&&!has_effect(actor,crate::reward_cycle_runtime::RESET,base)
 }
@@ -71,7 +82,10 @@ pub unsafe fn calculated(local:usize,target:usize,source:usize,hit:usize,base:us
  let basic=sealed(local,base);
  let mut factor=if source==local&&basic{multiplier(hero,read_i32(hit+0x40),read_i32(hit+0x44))}
   else if basic&&hero==Some(6)&&family_source(local,source,base){3.}else{1.};
- if source==local{factor+=crate::deliberate_punch::bonus(local,hit,base);}
+ if source==local{
+  factor+=crate::deliberate_punch::bonus(local,hit,base);
+  if factor!=1.{factor=merge_raider_rate(factor,raider_rate(local,hero,read_i32(hit+0x40),read_i32(hit+0x44),base));}
+ }
 
  if factor!=1.{ptr::write_unaligned((hit+0x280)as*mut i32,crate::sword::boosted(read_i32(hit+0x280),factor));}
 }
@@ -102,6 +116,15 @@ pub unsafe extern "system" fn restage_detour(){
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn mmv_raider_bonuses_share_one_additive_group(){
+  for native in [1f32,1.5,2.,3.]{for basic in [0f32,1.5]{for punch in [0f32,1.,4200./2200.]{
+   let factor=merge_raider_rate(1.+basic+punch,native);
+   assert!((native*factor-(native+basic+punch)).abs()<1e-6);
+  }}}
+  assert_eq!(merge_raider_rate(1.,2.),1.); // MMV alone is unchanged.
+  assert_eq!(crate::sword::boosted(200,merge_raider_rate(3.5,2.)),450);
+  assert_eq!(crate::sword::boosted(150,merge_raider_rate(2.5,1.5)),300);
+ }
  #[test]fn role_values_do_not_leak_to_other_attacks_or_roles(){
   for (hero,attack,factor)in [(1,600000000,1.5),(2,600000050,1.5),(3,600000110,1.5),(5,600000210,2.5),(7,82310,1.35),(8,960200,1.15),(8,600000350,1.5),(8,600000355,1.15)]{
    assert_eq!(multiplier(Some(hero),attack,1),factor);
