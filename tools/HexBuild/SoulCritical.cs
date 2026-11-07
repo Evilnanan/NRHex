@@ -11,6 +11,11 @@ static class SoulCritical {
   for(int i=0;i<5;i++)Set(attack,"spEffectId"+i,-1);
   var bullet=clone("Bullet",7720606,Owner+50);
   foreach(var(f,v)in new(string,object)[]{("atkId_Bullet",Owner+60),("HitBulletID",-1),("launchConditionType",0),("isUseSharedHitList",1),("dmgHitRecordLifeTime",1f),("isHitBothTeam",0)})Set(bullet,f,v);
+  Prelude(clone);
+ }
+ public static void Prelude(Func<string,int,int,PARAM.Row> clone){
+  var r=clone("Bullet",7720606,Owner+51);
+  foreach(var(f,v)in new(string,object)[]{("atkId_Bullet",-1),("sfxId_Bullet",677210),("life",0.5f),("HitBulletID",-1),("hitRadius",0f),("hitRadiusMax",0f),("spreadTime",0f),("intervalCreateBulletId",Owner+50),("intervalCreateWaitTime",0.3f),("intervalCreateTimeMin",10f),("intervalCreateTimeMax",10f),("launchConditionType",0),("isHitBothTeam",0)})Set(r,f,v);
  }
  // MMV legitimately contains non-finite floats; compare their exact bits.
  static string Value(object? v)=>v switch{
@@ -155,20 +160,39 @@ static class SoulCritical {
   }
   var boss=BND4.Read(nativePath);string input=Path.Combine(mod,"sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx");var b=BND4.Read(input);var old=b.Files.ToArray();
   var shared=BND4.Read(sharedPath).Files.Select(Name).ToHashSet();
-  foreach(string ext in new[]{".fxr",".ffxreslist"}){
-   var source=boss.Files.Single(f=>Name(f)=="f000677224"+ext);var existing=b.Files.SingleOrDefault(f=>Name(f)==Name(source));
+  foreach(int effect in new[]{677224,677210})foreach(string ext in new[]{".fxr",".ffxreslist"}){
+   var source=boss.Files.Single(f=>Name(f)==$"f{effect:D9}"+ext);var existing=b.Files.SingleOrDefault(f=>Name(f)==Name(source));
    if(existing!=null){Check(existing.Bytes.Span.SequenceEqual(source.Bytes.Span),"Conflicting Soul Critical FXR");continue;}
    int group=ext==".fxr"?0:400000;int id=b.Files.Where(f=>f.ID>=group&&f.ID<group+100000).Max(f=>f.ID)+1;
    b.Files.Add(new BinderFile(source.Flags,id,source.Name,source.Bytes.ToArray()));
   }
-  var list=b.Files.Single(f=>Name(f)=="f000677224.ffxreslist");
+  foreach(int effect in new[]{677224,677210}){
+  var list=b.Files.Single(f=>Name(f)==$"f{effect:D9}.ffxreslist");
   foreach(string line in System.Text.Encoding.UTF8.GetString(list.Bytes.Span).Split(['\r','\n'],StringSplitOptions.RemoveEmptyEntries)){
    string name=Path.GetFileNameWithoutExtension(line.Trim())+(Path.GetExtension(line.Trim())==".tif"?".tpf":".flver");Check(shared.Contains(name)||b.Files.Any(f=>Name(f)==name),"Missing Soul Critical FXR dependency: "+name);
+  }
   }
   string path=Path.Combine(output,"sfxbnd_commoneffects_dlc01.ffxbnd.dcx");b.Files.Sort((a,c)=>a.ID.CompareTo(c.ID));b.Write(path);var final=BND4.Read(path);
   foreach(var f in old){var now=final.Files.Single(x=>x.ID==f.ID);Check(now.Name==f.Name&&now.Flags==f.Flags&&now.Bytes.Span.SequenceEqual(f.Bytes.Span),"Unrelated FXR changed");}
   foreach(var f in b.Files){var now=final.Files.Single(x=>x.ID==f.ID);Check(now.Bytes.Span.SequenceEqual(f.Bytes.Span),"FXR readback failed");}
   File.WriteAllText(Path.Combine(output,"sfx-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(path),nativeSha256=Hash(nativePath),added=final.Files.Count-old.Length,unrelatedMembersPreserved=true,dependenciesResolved=true,gameplayVerified=false}));
+ }
+
+ public static void PreludeStage(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=Path.Combine(root,"work/soul-leadin",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
+  var b=SFUtil.DecryptNightreignRegulation(Path.Combine(mod,"regulation.bin"));var old=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=b.Files.Single(f=>Name(f)=="Bullet.param");var p=parse("Bullet",file.Bytes);var before=parse("Bullet",file.Bytes);
+  var original=parse("Bullet",native.Files.Single(f=>Name(f)=="Bullet.param").Bytes);
+  PARAM.Row Clone(string n,int source,int id){Check(n=="Bullet"&&!p.Rows.Any(r=>r.ID==id),"Prelude row collision");var row=new PARAM.Row(original.Rows.Single(r=>r.ID==source)){ID=id};p.Rows.Add(row);return row;}
+  Prelude(Clone);p.Rows=p.Rows.OrderBy(r=>r.ID).ToList();file.Bytes=p.Write();
+  string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,b,b.Compression);
+  var actual=SFUtil.DecryptNightreignRegulation(output);var now=parse("Bullet",actual.Files.Single(f=>Name(f)=="Bullet.param").Bytes);
+  Check(now.Rows.Count==before.Rows.Count+1&&before.Rows.OrderBy(r=>r.ID).Zip(now.Rows.Where(r=>r.ID!=Owner+51).OrderBy(r=>r.ID)).All(pair=>Same(pair.First,pair.Second)),"Existing bullet changed");
+  Check(Same(p.Rows.Single(r=>r.ID==Owner+51),now.Rows.Single(r=>r.ID==Owner+51)),"Prelude roundtrip mismatch");
+  foreach(var f in actual.Files.Where(f=>Name(f)!="Bullet.param"))Check(f.Bytes.Span.SequenceEqual(old[f.ID]),"Unrelated table changed");
+  Resources(root,mod,dir);
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{version="0.17.291",preludeBullet=Owner+51,visual=677210,delaySeconds=0.3,lifeSeconds=0.5,intervalSeconds=10,childBullet=Owner+50,preludeAttack=-1,allExistingRowsUnchanged=true,regulationSha256=Hash(output),gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: visual-only 0.3s carrier appended; existing shockwave and all other rows unchanged");
  }
 
 }

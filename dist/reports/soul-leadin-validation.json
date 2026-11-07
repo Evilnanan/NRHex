@@ -1,0 +1,73 @@
+{
+  "version": "0.17.291",
+  "baselineCommit": "b3024883c9733e9e7e1549338d06fbf8a4f820f0",
+  "feature": "灵魂暴击前导试作",
+  "prelude": 677210,
+  "delaySeconds": 0.3,
+  "snapshot": "Locked at primary hit; shared by visual root and damaging child",
+  "nativeFixturePassed": true,
+  "nativeFixtureScope": "Native descriptor transport and damage calculation; isolated parent/child bindings and prelude contact rejection; not live projectile timing",
+  "variants": {
+    "standalone": {
+      "resources": {
+        "version": "0.17.291",
+        "preludeBullet": 95005251,
+        "visual": 677210,
+        "delaySeconds": 0.3,
+        "lifeSeconds": 0.5,
+        "intervalSeconds": 10,
+        "childBullet": 95005250,
+        "preludeAttack": -1,
+        "allExistingRowsUnchanged": true,
+        "regulationSha256": "B69D12756A2D153953876555111B9AA0AC9A363B0B4E4C7790C1AC55B3828E60",
+        "gameplayVerified": false,
+        "multiplayerVerified": false
+      },
+      "sfx": {
+        "inputSha256": "CCD9E7867E4B1761FEC38E93F429891C3534AB2030E153F722CBE28D3DBD14E3",
+        "outputSha256": "B9C84B6470424DECF0C0D8723D4C17940DACEF1E3FB019E993F6116B42810757",
+        "nativeSha256": "836F33263CDD45F11BF0A060C1295DA153A68C60E81A2FAF63D9762D95C55050",
+        "added": 2,
+        "unrelatedMembersPreserved": true,
+        "dependenciesResolved": true,
+        "gameplayVerified": false
+      },
+      "testsPassed": 487,
+      "dllLoadCheck": "Wine Windows host: loaded; unsupported EXE rejected without hooks",
+      "dllSha256": "0248205501932eecfbc9c297b9ede6572ae12bb3915a6d83105b1eaf6a3fe398",
+      "profilePassed": true
+    },
+    "mmv": {
+      "resources": {
+        "version": "0.17.291",
+        "preludeBullet": 95005251,
+        "visual": 677210,
+        "delaySeconds": 0.3,
+        "lifeSeconds": 0.5,
+        "intervalSeconds": 10,
+        "childBullet": 95005250,
+        "preludeAttack": -1,
+        "allExistingRowsUnchanged": true,
+        "regulationSha256": "7F92D9E2E4A58B64719DDA90A8414D0FF1641EB0CF582F5CFEE1D616A8049646",
+        "gameplayVerified": false,
+        "multiplayerVerified": false
+      },
+      "sfx": {
+        "inputSha256": "215F47B7A357865D7A22A88617136AA4944E76A85BD35682EBA5989E4A11B1DE",
+        "outputSha256": "B58B7672F6F204C78CAC3D65D29F8BEA42AE3586AE806FD0C1674FA58AFE4901",
+        "nativeSha256": "836F33263CDD45F11BF0A060C1295DA153A68C60E81A2FAF63D9762D95C55050",
+        "added": 2,
+        "unrelatedMembersPreserved": true,
+        "dependenciesResolved": true,
+        "gameplayVerified": false
+      },
+      "testsPassed": 488,
+      "dllLoadCheck": "Wine Windows host: loaded; unsupported EXE rejected without hooks",
+      "dllSha256": "edcf465b6c58600275fb114390f29eda048b2393f746e65666a3dac925c9621f",
+      "profilePassed": true
+    }
+  },
+  "userFeedbackOnPriorWave": "Effect tested and satisfactory; no broader scene or multiplayer coverage inferred",
+  "newPreludeGameplayVerified": false,
+  "multiplayerVerified": false
+}

@@ -4,6 +4,7 @@ use std::{cell::RefCell,sync::{Mutex,atomic::Ordering}};
 mod data {include!(concat!(env!("OUT_DIR"),"/soul_critical_data.rs"));}
 pub const OWNER:i32=95005200;
 pub const BULLET:i32=OWNER+50;
+pub const PRELUDE:i32=OWNER+51;
 pub const ATTACK:i32=OWNER+60;
 #[derive(Clone,Copy,Debug,PartialEq,Eq)]struct Identity{owner:u64,target:u64,animation:i32,throw:usize}
 #[derive(Default)]struct Critical{identity:Option<Identity>,sum:f64,fired:bool}
