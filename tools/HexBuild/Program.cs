@@ -96,10 +96,13 @@ if(args.Contains("--lightning-delay-stage")){StaticCharge.DelayStage(root,Parse,
 if(args.Contains("--lightning-rework-stage")){StaticCharge.Rework(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--mmv-raider-check")){MmvRaider.Verify(args[Array.IndexOf(args,"--mmv-raider-check")+1],Parse);return;}
 if(args.Contains("--soul-critical-map")){SoulCritical.TargetMap(root,args[Array.IndexOf(args,"--soul-critical-map")+1],Parse);return;}
+if(args.Contains("--onyx-behavior-stage")){int at=Array.IndexOf(args,"--onyx-behavior-stage");OnyxBehavior.Stage(root,args[at+1],args[at+2],args[at+3]);return;}
+if(args.Contains("--onyx-planted-stage")){int at=Array.IndexOf(args,"--onyx-planted-stage");OnyxMastery.RefreshPlanted(args[at+1],args[at+2],Parse);return;}
 if(args.Contains("--onyx-check")){OnyxMastery.Verify(root,bnd,Parse,args.Contains("--mmv"),args.Contains("--tune"));return;}
 if(args.Contains("--onyx-dash-map")){int at=Array.IndexOf(args,"--onyx-dash-map");OnyxMastery.DashMap(args[at+1],args[at+2],Parse);return;}
 if(args.Contains("--onyx-mastery-stage")){OnyxMastery.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--onyx-reward-stage")){OnyxMastery.RewardStage(root,Parse,args.Contains("--mmv"));return;}
+if(args.Contains("--soul-visual-stage")){SoulCritical.VisualStage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--soul-entry-stage")){SoulCritical.EntryStage(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--soul-leadin-stage")){SoulCritical.PreludeStage(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--soul-critical-stage")){SoulCritical.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
@@ -1449,6 +1452,7 @@ SoulCritical.Resources(root,Path.Combine(root,"dist/mod"),soulResources);
 File.Copy(Path.Combine(soulResources,"sfxbnd_commoneffects_dlc01.ffxbnd.dcx"),Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"),true);
 
 OnyxMastery.Animations(Path.Combine(root,"dist/mod"),Path.Combine(root,"dist/mod/chr/c0000.anibnd.dcx"));
+OnyxBehavior.Stage(root,Path.Combine(root,"assets/original/chr/c0000.behbnd.dcx"),Path.Combine(root,"dist/mod/chr/c0000.behbnd.dcx"),Path.Combine(root,"work/onyx-behavior/standalone"));
 OnyxMastery.Resources(root,Path.Combine(root,"dist/mod"),Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"));
 
 OnyxMastery.DashMap(Path.Combine(root,"dist/mod/regulation.bin"),Path.Combine(root,"src/onyx_dash_data.rs"),Parse);

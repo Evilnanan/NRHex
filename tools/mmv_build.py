@@ -211,6 +211,25 @@ def main(argv=None) -> int:
             report[name + 'Adapter'] = result
             entries = [result] if name == 'tae' else result['files']
             report['partialPreview']['files'].update({('map/mapstudio/' if name == 'maps' else '') + f['file']: f['sha256'] for f in entries})
+        print('Registering Onyx channel motion in the MMV behavior graph...', flush=True)
+        behavior_work = REPORTS / 'onyx-behavior'
+        with (REPORTS / 'onyx-behavior.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--onyx-behavior-stage', str(mmv / 'mod/chr/c0000.behbnd.dcx'),
+                            str(REPORTS / 'staged/mod/chr/c0000.behbnd.dcx'), str(behavior_work)],
+                           cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+        behavior = json.loads((behavior_work / 'validation.json').read_text(encoding='utf8'))
+        report['onyxBehaviorAdapter'] = behavior
+        report['partialPreview']['files'][behavior['file']] = behavior['sha256']
+        report['partialPreview']['files']['chr/c0000_a9x.anibnd.dcx'] = digest(REPORTS / 'staged/mod/chr/c0000_a9x.anibnd.dcx')
+        # Apply the private launch-chain revision even when the standalone
+        # resource snapshot predates it; never alter the MMV source package.
+        with (REPORTS / 'onyx-planted.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--onyx-planted-stage', str(REPORTS / 'staged/mod'), str(REPORTS / 'staged/mod')],
+                           cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+        for name in ['regulation.bin', 'chr/c0000.anibnd.dcx']:
+            report['partialPreview']['files'][name] = digest(REPORTS / 'staged/mod' / name)
         print('Adding reviewed MMV field bosses to the demand-created cage pool...', flush=True)
         with (REPORTS / 'cages.log').open('w', encoding='utf8') as log:
             subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),

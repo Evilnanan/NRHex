@@ -10,6 +10,7 @@ static ARTS:AtomicBool=AtomicBool::new(true);
 static ROW:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 static ENTRY:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 static START:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+static MELEE_START:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 static SOURCE:AtomicI32=AtomicI32::new(-1);
 unsafe fn put(p:usize,v:usize){ptr::write_unaligned(p as*mut usize,v);}
 unsafe fn int(p:usize,v:i32){ptr::write_unaligned(p as*mut i32,v);}
@@ -19,6 +20,15 @@ unsafe extern "system" fn lookup(out:usize,id:i32)->usize{put(out+8,if id==4021{
 unsafe extern "system" fn source(_:usize,out:*mut u32,hand:i32)->*mut u32{SOURCE.store(hand,Ordering::Relaxed);*out=123;out}
 unsafe extern "system" fn reference(out:usize,_:usize)->usize{put(out,123);put(out+8,ENTRY.load(Ordering::Relaxed)as usize);int(out+0x10,WEAPON_ID.load(Ordering::Relaxed));out}
 unsafe extern "system" fn release(_:usize){}
+unsafe extern "system" fn actor_identity(actor:usize)->usize{actor}
+#[unsafe(naked)]unsafe extern "system" fn run_melee(_:usize,_:i32,_:i32,_:i32){core::arch::naked_asm!(
+ "push rbx", "push rbp", "push rsi", "sub rsp,0x100",
+ "mov rsi,rcx", "mov eax,edx", "mov [rsp+0xa8],r8d", "mov [rsp+0x50],r9d",
+ "lea rbp,[rsp+0x10]", "jmp qword ptr [rip+{start}]",start=sym MELEE_START
+);}
+#[unsafe(naked)]unsafe extern "system" fn finish_melee(){core::arch::naked_asm!(
+ "add rsp,0x100", "pop rsi", "pop rbp", "pop rbx", "ret"
+);}
 #[unsafe(naked)]unsafe extern "system" fn run(_:usize){core::arch::naked_asm!(
  "push rbx", "sub rsp,0x20", "mov rbx,rcx", "jmp qword ptr [rip+{start}]",start=sym START
 );}
@@ -38,6 +48,10 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
  jump(base,crate::ARTS_REF_RVA,reference as*const()as usize);jump(base,0x6a1d90,release as*const()as usize);
  jump(base,RVA+5,finish as*const()as usize);START.store((base+0x384a8b)as*mut u8,Ordering::Release);
  let p=crate::hook::prepare((base+RVA)as*mut u8,detour as*const u8,64).unwrap();assert_eq!(p.stolen,5);crate::hook::write_code((base+RVA)as*mut u8,&p.patch).unwrap();
+ jump(base,0x42c120,actor_identity as*const()as usize);jump(base,MELEE_RVA+5,finish_melee as*const()as usize);
+ MELEE_START.store((base+0x434768)as*mut u8,Ordering::Release);
+ MELEE_CONTINUE.store((base+MELEE_RVA+5)as*mut u8,Ordering::Release);
+ let p=crate::hook::prepare((base+MELEE_RVA)as*mut u8,melee_detour as*const u8,64).unwrap();assert_eq!(p.stolen,5);crate::hook::write_code((base+MELEE_RVA)as*mut u8,&p.patch).unwrap();
  let saved_base=BASE.swap(base,Ordering::AcqRel);let saved_active=ACTIVE.swap(true,Ordering::AcqRel);
  CONTINUE.store((base+RVA+5)as*mut u8,Ordering::Release);CLAMP.store((base+CLAMP_RVA)as*mut u8,Ordering::Release);
  let mut world=vec![0usize;0x17500/8];let mut actor=[0usize;0x800/8];let a=actor.as_mut_ptr()as usize;
@@ -97,9 +111,9 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
  for owned in [false,true]{ONYX.store(owned,Ordering::Relaxed);
   for weapon in [8010000,8010025,2000000]{for slot in 0..6{int(eq+0x9c+slot*4,weapon);}
    for immune in [false,true]{ptr::write((st+0x189)as*mut u8,u8::from(immune));
-    for (behavior,cost,dash)in [(100400000,35,false),(100400120,24,true),(100400125,30,true),(100400320,32,true),(300805901,30,false),(crate::onyx_mastery::BEHAVIOR,20,false)]{
+    for (behavior,cost,dash)in [(100400000,35,false),(100400100,35,false),(100400105,35,false),(100400300,45,false),(100400305,45,false),(100400160,45,false),(100400360,45,false),(100400120,24,true),(100400125,30,true),(100400320,32,true),(300805901,30,false),(crate::onyx_mastery::BEHAVIOR,20,false)]{
      for hand in [-1,-2]{int(context+8,behavior);int(context+0xc,-1);int(context+0x38,hand);int(context+0xc0,-cost);int(st+0x15c,200);run(context);
-      let wanted=if immune{0}else if owned&&crate::onyx_mastery::weapon(weapon){if dash{0}else{cost/2+cost%2}}else{cost};
+      let wanted=if immune{0}else if owned&&crate::onyx_mastery::weapon(weapon){if dash{0}else if matches!(behavior,100400100|100400105|100400300|100400305|100400160|100400360){cost/2+cost%2}else{cost-cost/4}}else{cost};
       assert_eq!(read_i32(st+0x15c),200-wanted,"weapon={weapon} behavior={behavior} owned={owned} immune={immune}");
       assert_eq!(read_i32(context+0xc0),-cost);cases+=1;
      }
@@ -108,17 +122,32 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
    }
   }
  }
- // An empty-FP animation never produces the startup marker. The same motion
+ // Execute the real melee caller: its weapon descriptor and behavior reference
+ // differ from the projectile context. Never discount the opposite weapon.
+ for owned in [false,true]{ONYX.store(owned,Ordering::Relaxed);
+  for weapon in [8010000,8010025,2000000,-1]{
+   for immune in [false,true]{ptr::write((st+0x189)as*mut u8,u8::from(immune));
+    for (behavior,cost,dash)in [(100400000,35,false),(100400100,35,false),(100400105,35,false),(100400300,45,false),(100400305,45,false),(100400160,45,false),(100400360,45,false),(100400120,24,true),(100400125,30,true),(100400200,40,false),(-1,20,false)]{
+     int(st+0x15c,200);run_melee(a,cost,weapon,behavior);
+     let wanted=if immune{0}else if owned&&crate::onyx_mastery::weapon(weapon)&&behavior>=0{if dash{0}else if matches!(behavior,100400100|100400105|100400300|100400305|100400160|100400360){(cost+1)/2}else{cost-cost/4}}else{cost};
+     assert_eq!(read_i32(st+0x15c),200-wanted,"melee weapon={weapon} behavior={behavior} owned={owned} immune={immune}");cases+=1;
+    }
+   }
+  }
+ }
+ // The native startup selection is independent of the short TAE marker. The same motion
  // category on another weapon must not acquire the channel either.
  int(st+0x140,100);
  for owner in [false,true]{ONYX.store(owner,Ordering::Relaxed);for weapon in [8010000,2000000]{for slot in 0..6{int(eq+0x9c+slot*4,weapon);}
-  for started in [false,true]{ONYX_STARTED.store(started,Ordering::Relaxed);for finish in [false,true]{ONYX_FINISHED.store(finish,Ordering::Relaxed);
+  for started in [false,true]{ONYX_STARTED.store(false,Ordering::Relaxed);for finish in [false,true]{ONYX_FINISHED.store(finish,Ordering::Relaxed);
    for hand in [0,1]{
-    assert_eq!(crate::onyx_mastery::query(a,0,241,hand,base),0);
+    assert_eq!(crate::onyx_mastery::query(a,0,241,hand,started,base),0);
     assert_eq!(crate::onyx_mastery::may_loop(a,base),owner&&weapon==8010000&&started);
-    assert_eq!(crate::onyx_mastery::query(a,1,241,hand,base),i32::from(!owner||weapon!=8010000||finish));
+    for wave in [false,true]{ONYX_STARTED.store(wave,Ordering::Relaxed);assert_eq!(crate::onyx_mastery::planted(a,base),owner&&weapon==8010000&&started&&wave);}
+    ONYX_STARTED.store(false,Ordering::Relaxed);
+    assert_eq!(crate::onyx_mastery::query(a,1,241,hand,started,base),i32::from(!owner||weapon!=8010000||finish));
     assert_eq!(crate::onyx_mastery::free_channel(a,base),owner&&weapon==8010000);
-    assert_eq!(crate::onyx_mastery::query(a,1,13,hand,base),0);assert!(!crate::onyx_mastery::free_channel(a,base));assert!(!crate::onyx_mastery::may_loop(a,base));
+    assert_eq!(crate::onyx_mastery::query(a,1,13,hand,started,base),0);assert!(!crate::onyx_mastery::free_channel(a,base));assert!(!crate::onyx_mastery::may_loop(a,base));
    }
   }}
  }}
@@ -131,19 +160,19 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
    int(eq+0x9c+if onyx_hand==0{left as usize*8}else{right as usize*8+4},8010002);
    for (hand,source)in [(0,-2),(1,-1)]{
     let selected=hand==onyx_hand;
-    crate::onyx_mastery::query(a,0,241,hand,base);
+    crate::onyx_mastery::query(a,0,241,hand,true,base);
     assert_eq!(crate::onyx_mastery::may_loop(a,base),selected);
     assert_eq!(crate::onyx_mastery::free_channel(a,base),selected);
     assert_eq!(crate::onyx_mastery::behavior(a,crate::onyx_mastery::JUDGE,source,base),selected.then_some(crate::onyx_mastery::BEHAVIOR));
     int(context+8,100400000);int(context+0xc,-1);int(context+0x38,source);int(context+0xc0,-35);int(st+0x15c,200);run(context);
-    assert_eq!(read_i32(st+0x15c),if selected{182}else{165});cases+=1;
+    assert_eq!(read_i32(st+0x15c),if selected{173}else{165});cases+=1;
    }
   }
  }}
  for source in [-7,16,i32::MIN,i32::MAX]{assert_eq!(crate::onyx_mastery::behavior(a,crate::onyx_mastery::JUDGE,source,base),None);}
  int(eq+4,0);int(eq+8,0);for slot in 0..6{int(eq+0x9c+slot*4,8010000);}
  ONYX_FINISHED.store(true,Ordering::Relaxed);
- for (hp,down)in [(0,0),(100,1),(100,2)]{int(st+0x140,hp);ptr::write((a+0x710)as*mut u8,down);assert_eq!(crate::onyx_mastery::query(a,1,241,1,base),0);assert!(!crate::onyx_mastery::may_loop(a,base));}
+ for (hp,down)in [(0,0),(100,1),(100,2)]{int(st+0x140,hp);ptr::write((a+0x710)as*mut u8,down);assert_eq!(crate::onyx_mastery::query(a,1,241,1,true,base),0);assert!(!crate::onyx_mastery::may_loop(a,base));}
  int(st+0x140,100);ptr::write((a+0x710)as*mut u8,0);
  ONYX.store(false,Ordering::Relaxed);WEAPON_ID.store(2000000,Ordering::Relaxed);
  // Recovery, zero fees and signed edge values are never forced debits.

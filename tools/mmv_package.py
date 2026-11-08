@@ -14,6 +14,7 @@ import tomllib
 OPTIONAL_MMV_NATIVES = {'NightreignFPSFOV.dll', 'UnlockTheFps.dll', 'UltrawideFix.dll'}
 COMMUNITY_DIRECTORY = 'MayhemAugments'
 COMMUNITY_PROFILE = 'Mayhem Augments.me3'
+DAMAGE_COMPETITION = 'testmods/DamageCompetition/damage_competition_nightreign.dll'
 
 
 def installed_community(mmv: Path) -> dict | None:
@@ -162,7 +163,11 @@ def community_profile(source: Path, fixes: Path | None = None) -> tuple[str, dic
     owned = {COMMUNITY_DIRECTORY, COMMUNITY_PROFILE} if installed else set()
     if installed and any(p.get('id') == 'mmv-fixes' and p.get('path') == 'MMV-Fixes/mod' for p in installed.get('packages', [])):
         owned.add('MMV-Fixes')
-    for name in (COMMUNITY_DIRECTORY, COMMUNITY_PROFILE, *(['MMV-Fixes'] if fixes else [])):
+    if installed and any(n.get('id') == 'damage-competition' and
+                         n.get('path') == 'DamageCompetition/damage_competition_nightreign.dll'
+                         for n in installed.get('natives', [])):
+        owned.add('DamageCompetition')
+    for name in (COMMUNITY_DIRECTORY, COMMUNITY_PROFILE, 'DamageCompetition', *(['MMV-Fixes'] if fixes else [])):
         if (source.parent / name).exists() and name not in owned:
             raise ValueError(f'Portable package name already exists in MMV: {name}')
     return readable_profile(parsed), parsed, payload
@@ -181,6 +186,21 @@ def enabled_fixes(root: Path) -> Path | None:
         return None
     package = Path(entries[0]['path'])
     return package if package.is_absolute() else (path.parent / package).resolve()
+
+
+def add_damage_competition(root: Path, parsed: dict, payload: dict, variant: str) -> None:
+    source = root / 'dist' / DAMAGE_COMPETITION
+    data = source.read_bytes()
+    natives = parsed.setdefault('natives', [])
+    if any(n.get('id') == 'damage-competition' or
+           Path(n.get('path', n.get('source', ''))).name.lower() == source.name.lower()
+           for n in natives):
+        raise ValueError('Damage Competition is already present in the MMV source profile')
+    path = str(source.resolve())
+    if variant == 'community':
+        path = 'DamageCompetition/' + source.name
+        payload[path] = data
+    natives.append(dict(id='damage-competition', path=path))
 
 
 def output_path(root: Path, mmv: Path, variant: str, community_destination: Path | None = None) -> Path:
@@ -245,6 +265,8 @@ def build(root: Path, mmv: Path, files: dict, me3: Path, variant='dist', install
     else:
         text, parsed, fixes_payload = community_profile(sources[0], enabled_fixes(root))
         payload.update(fixes_payload)
+    add_damage_competition(root, parsed, payload, variant)
+    text = readable_profile(parsed)
     payload[profile_name] = text.encode('utf8')
     # Validate the concrete profile before publishing any new files.
     preview = root / f'work/compat/mmv/profile-preview-{variant}.me3'

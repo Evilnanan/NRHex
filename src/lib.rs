@@ -7,6 +7,7 @@ mod bartender;
 compile_error!("Use the demand implementation or lifecycle probe, not both");
 mod echo_cast;
 mod echo_cost;
+mod onyx_fp;
 mod action_stamina;
 mod basics_hud;
 mod echo_cast_data { include!(concat!(env!("OUT_DIR"), "/echo_cast_data.rs")); }
@@ -376,7 +377,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);222] {
+fn signatures()->[(&'static str,u32);228] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -399,7 +400,7 @@ fn signatures()->[(&'static str,u32);222] {
   (wraith::SERIAL_PATTERN,0x1f5700),(wraith::CAPACITY_PATTERN,0x1f2370),
   (wraith::CAN_PATTERN,wraith::CAN_RVA as u32),(wraith::USE_PATTERN,wraith::USE_RVA as u32),(wraith::PARAM_PATTERN,wraith::PARAM_RVA as u32),(wraith::TOKEN_PATTERN,wraith::TOKEN_RVA as u32),(wraith::XP_PATTERN,wraith::XP_RVA as u32),
   (echo_cost::PATTERN,echo_cost::RVA as u32),(echo_cost::GETTER_PATTERN,echo_cost::GETTER_RVA as u32),
-  (action_stamina::PATTERN,action_stamina::RVA as u32),(action_stamina::CLAMP_PATTERN,action_stamina::CLAMP_RVA as u32),
+  (action_stamina::MELEE_PATTERN,action_stamina::MELEE_RVA as u32),(action_stamina::PATTERN,action_stamina::RVA as u32),(action_stamina::CLAMP_PATTERN,action_stamina::CLAMP_RVA as u32),
   (basics_hud::PATTERN,basics_hud::RVA as u32),(basics_hud::SITE_PATTERN,basics_hud::SITE_RVA as u32),(basics_hud::UPDATE_PATTERN,basics_hud::UPDATE_RVA as u32),(basics_hud::BIND_PATTERN,basics_hud::BIND_RVA as u32),
   (echo_cast::INITIALIZE_PATTERN,echo_cast::INITIALIZE_RVA as u32),(echo_cast::FINISH_PATTERN,echo_cast::FINISH_RVA as u32),(echo_cast::VOLLEY_CREATE_PATTERN,echo_cast::VOLLEY_CREATE_RVA as u32),
   (APPLY_PATTERN,APPLY_RVA as u32),(APPLY_SELF_PATTERN,APPLY_SELF_RVA as u32),
@@ -472,6 +473,8 @@ fn signatures()->[(&'static str,u32);222] {
   ("E8 DF 4B 4B 00",0x20cb0c),("E8 1D 36 BB FF",0xb0e0ce),("E8 65 75 AD FF",0xbea186),
   (ARTS_REWARD_COPY_PATTERN,0x574fa8),(ARTS_PICKUP_PATTERN,ARTS_PICKUP_RVA as u32),
   (ARTS_ITEM_CREATE_PATTERN,ARTS_ITEM_CREATE_RVA as u32),(ARTS_BULLET_PATTERN,ARTS_BULLET_RVA as u32),
+  (onyx_mastery::ARTS_FEE_PATTERN,onyx_mastery::ARTS_FEE_RVA as u32),(onyx_mastery::FP_ADD_PATTERN,onyx_mastery::FP_ADD_RVA as u32),
+  (onyx_fp::CHECK_PATTERN,onyx_fp::CHECK_RVA as u32),(onyx_fp::RESERVE_PATTERN,onyx_fp::RESERVE_RVA as u32),(onyx_fp::RATE_PATTERN,onyx_fp::RATE_RVA as u32),
   (SELF_MARK_PATTERN,SELF_MARK_RVA as u32),(LAVA_SFX_CREATE_PATTERN,LAVA_SFX_CREATE_RVA as u32),
   (LAVA_SFX_UPDATE_PATTERN,LAVA_SFX_UPDATE_RVA as u32),(SFX_MATRIX_PATTERN,SFX_MATRIX_RVA as u32),
   (CHR_HANDLE_PATTERN,CHR_HANDLE_RVA as u32),(LAVA_CLEANUP_PATTERN,LAVA_CLEANUP_RVA as u32),
@@ -638,6 +641,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   parry::COST_RESUME.store(base.add(parry::COST_RESUME_RVA) as *mut u8,Ordering::Release);
   potential_fission::GROUP_SKIP.store(base.add(0x57a8e1)as*mut u8,Ordering::Release);
   sword_projectile::STOP.store(base.add(sword_projectile::STOP_RVA)as*mut u8,Ordering::Release);
+  action_stamina::MELEE_CONTINUE.store(base.add(action_stamina::MELEE_RVA+5)as*mut u8,Ordering::Release);
   action_stamina::CONTINUE.store(base.add(action_stamina::RVA+5)as*mut u8,Ordering::Release);
   basics_hud::CONTINUE.store(base.add(basics_hud::RVA+5)as*mut u8,Ordering::Release);
   action_stamina::CLAMP.store(base.add(action_stamina::CLAMP_RVA)as*mut u8,Ordering::Release);
@@ -660,6 +664,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (wraith::PARAM_RVA,wraith::param as *const u8,&wraith::PARAM_ORIGINAL),
    (wraith::TOKEN_RVA,wraith::token as *const u8,&wraith::TOKEN_ORIGINAL),
    (wraith::XP_RVA,wraith::xp as *const u8,&wraith::XP_ORIGINAL),
+   (action_stamina::MELEE_RVA,action_stamina::melee_detour as *const u8,&action_stamina::MELEE_ORIGINAL),
    (action_stamina::RVA,action_stamina::detour as *const u8,&action_stamina::ORIGINAL),
    (basics_hud::RVA,basics_hud::detour as *const u8,&basics_hud::ORIGINAL),
    (echo_cast::EMIT_RVA,echo_cast::emit as *const u8,&echo_cast::EMIT_ORIGINAL),
@@ -704,6 +709,9 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (ARTS_PICKUP_RVA,arts_pickup_detour as *const u8,&ARTS_PICKUP_ORIG),
    (ARTS_ITEM_CREATE_RVA,arts_item_create_detour as *const u8,&ARTS_ITEM_CREATE_ORIG),
    (ARTS_BULLET_RVA,arts_bullet_detour as *const u8,&ARTS_BULLET_ORIG),
+   (onyx_fp::CHECK_RVA,onyx_fp::check as *const u8,&onyx_fp::CHECK_ORIGINAL),
+   (onyx_fp::RESERVE_RVA,onyx_fp::reserve as *const u8,&onyx_fp::RESERVE_ORIGINAL),
+   (onyx_fp::RATE_RVA,onyx_fp::rate as *const u8,&onyx_fp::RATE_ORIGINAL),
    (SELF_MARK_RVA,self_mark_detour as *const u8,&SELF_MARK_ORIG),
    (LAVA_SFX_CREATE_RVA,lava_sfx_create_detour as *const u8,&LAVA_SFX_CREATE_ORIG),
    (LAVA_SFX_UPDATE_RVA,lava_sfx_update_detour as *const u8,&LAVA_SFX_UPDATE_ORIG),
@@ -723,7 +731,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let mut arts_transfer_prepared=Vec::new();
   for (rva,detour,original) in arts_transfer_targets {
    let p=hook::prepare(base.add(rva) as *mut u8,detour,64)?;
-   if rva==action_stamina::RVA&&p.stolen!=5{return Err("Action stamina payment must replace its five-byte native CALL".into());}
+   if matches!(rva,action_stamina::RVA|action_stamina::MELEE_RVA)&&p.stolen!=5{return Err("Action stamina payment must replace its five-byte native CALL".into());}
    if rva==basics_hud::RVA&&p.stolen!=5{return Err("Basics HUD must replace only the ultimate gauge CALL".into());}
    if rva==potential_fission::GROUP_RVA&&p.stolen!=7{return Err("Fission grouping must relocate only MOVZX ECX,[RDX+CA]".into());}
    if rva==death_dance::RVA&&p.stolen!=6{return Err("Death dance must relocate exactly MOV ECX,[RBX+140]".into());}
@@ -1290,7 +1298,8 @@ unsafe extern "system" fn arts_behavior_detour(player:usize,judge:i32,source:i32
 unsafe extern "system" fn arts_bullet_detour(module:usize,behavior:i32,event:i32,descriptor:usize,source:i32,original_source:i32,flag0:u8,flag1:u8,kind:u8,error:usize)->u8{
  let original:ArtsBulletFn=std::mem::transmute(ARTS_BULLET_ORIG.load(Ordering::Acquire));
  let replacement=arts_emitter(module,behavior,descriptor,source);
- arts_bullet_call(original,module,behavior,event,descriptor,source,original_source,flag0,flag1,kind,error,replacement)
+ let call=||arts_bullet_call(original,module,behavior,event,descriptor,source,original_source,flag0,flag1,kind,error,replacement);
+ if ACTIVE.load(Ordering::Acquire)&&module!=0{onyx_mastery::emit(read_ptr(module),behavior,descriptor,source,error,BASE.load(Ordering::Acquire),call)}else{call()}
 }
 unsafe fn arts_emitter(module:usize,behavior:i32,descriptor:usize,source:i32)->Option<i32>{
  if !ACTIVE.load(Ordering::Acquire)||module==0||descriptor==0{return None;}

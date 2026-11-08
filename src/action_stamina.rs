@@ -9,6 +9,35 @@ pub const CLAMP_PATTERN:&str="48 8D 8B 60 01 00 00 83 FF CE 7D 16 B8 CE FF FF FF
 pub static ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static CONTINUE:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static CLAMP:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+pub const MELEE_RVA:usize=0x434783;
+pub const MELEE_PATTERN:&str="E8 48 1A FF FF 48 8B CE E8 90 79 FF FF 8B 54 24 48 48 8B C8 4C 8B 00 41";
+pub static MELEE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+pub static MELEE_CONTINUE:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+
+unsafe extern "system" fn melee(actor:usize,stats:usize,delta:i32,weapon:i32,behavior:i32){
+ let base=BASE.load(Ordering::Acquire);
+ let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);
+ let eligible=ACTIVE.load(Ordering::Acquire)&&delta<0&&delta!=i32::MIN&&stats!=0&&crate::is_local(actor,base)&&crate::native_actor::stats(actor)==stats;
+ let adjusted=if eligible{-crate::onyx_mastery::melee_cost(actor,weapon,behavior,-delta,base)}else{delta};
+ add(stats,adjusted,0);
+}
+// Native melee hitbox creation pays separately from bullet/spell contexts.
+// RAX is the owner, [RBP+98] the resolved weapon in the attack descriptor,
+// and [original RSP+50] the native BehaviorParam reference's ID.
+#[unsafe(naked)]pub unsafe extern "system" fn melee_detour(){core::arch::naked_asm!(
+ "sub rsp,0xd0",
+ "mov [rsp+0x30],rax", "mov [rsp+0x38],rcx", "mov [rsp+0x40],rdx",
+ "mov [rsp+0x48],r8", "mov [rsp+0x50],r9", "mov [rsp+0x58],r10", "mov [rsp+0x60],r11",
+ "movdqu [rsp+0x70],xmm0", "movdqu [rsp+0x80],xmm1", "movdqu [rsp+0x90],xmm2",
+ "movdqu [rsp+0xa0],xmm3", "movdqu [rsp+0xb0],xmm4", "movdqu [rsp+0xc0],xmm5",
+ "mov r8d,edx", "mov rdx,rcx", "mov rcx,rax", "mov r9d,[rbp+0x98]",
+ "mov eax,[rsp+0x120]", "mov [rsp+0x20],eax", "call {callback}",
+ "movdqu xmm0,[rsp+0x70]", "movdqu xmm1,[rsp+0x80]", "movdqu xmm2,[rsp+0x90]",
+ "movdqu xmm3,[rsp+0xa0]", "movdqu xmm4,[rsp+0xb0]", "movdqu xmm5,[rsp+0xc0]",
+ "mov rax,[rsp+0x30]", "mov rcx,[rsp+0x38]", "mov rdx,[rsp+0x40]",
+ "mov r8,[rsp+0x48]", "mov r9,[rsp+0x50]", "mov r10,[rsp+0x58]", "mov r11,[rsp+0x60]",
+ "add rsp,0xd0", "jmp qword ptr [rip+{next}]",callback=sym melee,next=sym MELEE_CONTINUE
+);}
 
 // Recreate 427F00's native frame, then enter its original clamp/write/return.
 // RCX=stats, EDX=absolute stamina. Neither actor nor global immunity is changed.

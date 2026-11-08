@@ -309,14 +309,14 @@
     },
     "SwordArtsLoopLoop_onUpdate": {
       "originalHash": "410b429a5de549351eae0089d7e3b907fd09af0ca87a247529967c8d5d2b018b",
-      "nrhexHash": "427977e3cd7836d1309dec24334232253d614c734b9041463fe02bab13a7a904",
+      "nrhexHash": "5c4513c64929a212df7c16c060b4ff059b94ea99c3b349c6124bab495aa07f77",
       "mmvFunctionHash": "5fabbe6650cafe7d80ec9281b3e8aae11ca1fb8aabdd18d51b6072a278832434",
       "actions": [
         {
           "kind": "prefix",
           "range": [
             0,
-            43
+            47
           ]
         },
         {
@@ -329,14 +329,14 @@
     },
     "SwordArtsHalfLoopLoop_Upper_onUpdate": {
       "originalHash": "f723d1994a1d1f1e2724499f2a4573ffc1c36eeac3db02aeca2fa5e51ebd0610",
-      "nrhexHash": "d0cdf0b788a5ef030f1a682f2d3a67b885af283657e3292627e2e447c24da766",
+      "nrhexHash": "929bddc082c0a334afebb7963c423d797d3ee35b52547b2752f56071f74890cb",
       "mmvFunctionHash": "552f26c63590eedf82af8e80bdb00acd3d0b9c270365c854a3290b1abe1962ec",
       "actions": [
         {
           "kind": "prefix",
           "range": [
             0,
-            43
+            47
           ]
         },
         {
@@ -344,6 +344,46 @@
           "old": "env(HasEnoughArtsPoints,",
           "new": "env(990054,",
           "count": 3
+        }
+      ]
+    },
+    "SwordArtsOneShot_onUpdate": {
+      "originalHash": "741a4faa05a85de067bb61745e2ee1aabdb9ff49931d1532c9c0a8a542bc1319",
+      "nrhexHash": "f0228223828edac20bceee606e168fcfd3053eeae989170c6fc7f3c6f25f21c8",
+      "mmvFunctionHash": "5484f192d2dc704ae63eea06c16e8ff44c3cf8adae663d646b6d01d6538b01f0",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            39
+          ]
+        },
+        {
+          "kind": "replace",
+          "old": "env(IsAnimEnd,",
+          "new": "env(990056,",
+          "count": 2
+        }
+      ]
+    },
+    "SwordArtsHalfOneShot_Upper_onUpdate": {
+      "originalHash": "bd50a09f6b4327de44183558b9650bbab2845cf7a333ea92df16115845e890d8",
+      "nrhexHash": "20a44ff4fd9011a56eb5f55447a9e396a907c19b8e653f12ef6b442329d9d4c4",
+      "mmvFunctionHash": "3e625df8f0469e1f1de91dd6f2386e1282bc6af86566ea5dfdb0d2ee92c3a78a",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            39
+          ]
+        },
+        {
+          "kind": "replace",
+          "old": "env(IsAnimEnd,",
+          "new": "env(990056,",
+          "count": 1
         }
       ]
     }

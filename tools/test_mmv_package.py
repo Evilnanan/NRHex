@@ -6,7 +6,8 @@ import tomllib
 from pathlib import Path
 import unittest
 
-from mmv_package import profile, output_path, community_profile, COMMUNITY_PROFILE, source_profiles
+from mmv_package import (profile, output_path, community_profile, COMMUNITY_PROFILE,
+                         source_profiles, add_damage_competition, DAMAGE_COMPETITION)
 
 
 class OutputTests(unittest.TestCase):
@@ -24,6 +25,33 @@ class OutputTests(unittest.TestCase):
 
 
 class ProfileTests(unittest.TestCase):
+    def test_damage_competition_payload_is_portable_and_excludes_runtime_files(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder).resolve()
+            source = root / 'dist' / DAMAGE_COMPETITION
+            source.parent.mkdir(parents=True)
+            source.write_bytes(b'damage competition')
+            (source.parent / 'runtime.log').write_text('private log')
+            for variant in ('dist', 'community'):
+                parsed, payload = {}, {}
+                add_damage_competition(root, parsed, payload, variant)
+                entry = parsed['natives'][0]
+                if variant == 'community':
+                    self.assertEqual(entry['path'], 'DamageCompetition/damage_competition_nightreign.dll')
+                    target = root / 'relocated MMV'
+                    for name, data in payload.items():
+                        path = target / name
+                        path.parent.mkdir(parents=True, exist_ok=True)
+                        path.write_bytes(data)
+                    self.assertFalse(Path(entry['path']).is_absolute())
+                    self.assertEqual((target / entry['path']).read_bytes(), source.read_bytes())
+                    self.assertEqual(set(payload), {entry['path']})
+                else:
+                    self.assertEqual(Path(entry['path']), source)
+                    self.assertEqual(payload, {})
+                with self.assertRaisesRegex(ValueError, 'already present'):
+                    add_damage_competition(root, parsed, payload, variant)
+
     def test_community_relocates_and_keeps_independent_fixes(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder).resolve()

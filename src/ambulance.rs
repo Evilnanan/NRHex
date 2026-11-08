@@ -122,15 +122,23 @@ pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
  if code==crate::onyx_mastery::QUERY{
   if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}
   let base=BASE.load(Ordering::Acquire);let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);
-  return crate::onyx_mastery::query(read_ptr(context),number(vm,2)as i32,number(vm,3)as i32,number(vm,4)as i32,base);
+  return crate::onyx_mastery::query(read_ptr(context),number(vm,2)as i32,number(vm,3)as i32,number(vm,4)as i32,number(vm,5)==0.,base);
  }
  if code==crate::onyx_mastery::FP_QUERY{
-  if ACTIVE.load(Ordering::Acquire)&&context!=0&&crate::onyx_mastery::free_channel(read_ptr(context),BASE.load(Ordering::Acquire)){return 1;}
+  if ACTIVE.load(Ordering::Acquire)&&context!=0{if let Some(enough)=crate::onyx_mastery::channel_available(read_ptr(context),BASE.load(Ordering::Acquire)){return i32::from(enough);}}
   return std::mem::transmute::<*mut u8,Env>(ENV_ORIGINAL.load(Ordering::Acquire))(context,344,vm);
+ }
+ if code==crate::onyx_mastery::START_END_QUERY{
+  if ACTIVE.load(Ordering::Acquire)&&context!=0&&crate::onyx_mastery::planted(read_ptr(context),BASE.load(Ordering::Acquire)){return 1;}
+  return std::mem::transmute::<*mut u8,Env>(ENV_ORIGINAL.load(Ordering::Acquire))(context,339,vm);
  }
  if code==1114&&ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{
   let base=BASE.load(Ordering::Acquire);let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);
-  if number(vm,2)==841.&&number(vm,3)==40003.&&!crate::onyx_mastery::may_loop(read_ptr(context),base){return 0;}
+  if number(vm,2)==841.&&number(vm,3)==40003.{
+   let allowed=crate::onyx_mastery::may_loop(read_ptr(context),base);
+   let native=std::mem::transmute::<*mut u8,Env>(ENV_ORIGINAL.load(Ordering::Acquire))(context,code,vm);
+   return if allowed{native}else{0};
+  }
  }
  // The owner ID is not exactly representable as an HKS f32 constant.
  if code==990049{
