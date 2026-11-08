@@ -1,6 +1,6 @@
 //! Onyx mastery uses native weapon-art provenance and the accepted action fee.
 //! Motion resources import the existing player Meteorite clips; no spell slot.
-use crate::{has_effect,read_i32,native_actor};
+use crate::{has_effect,read_i32,read_ptr,native_actor};
 use std::{cell::Cell,sync::atomic::{AtomicBool,Ordering}};
 pub const OWNER:i32=95005300;
 pub const RECEIPT:i32=OWNER+1;
@@ -20,8 +20,19 @@ pub fn weapon(id:i32)->bool{id/10000==801}
 pub unsafe fn owned(actor:usize,base:usize)->bool{actor!=0&&has_effect(actor,OWNER,base)}
 pub unsafe fn selected(actor:usize,w:crate::arts::Weapon,base:usize)->bool{weapon(w.base)&&owned(actor,base)}
 unsafe fn ready(actor:usize)->bool{let stats=native_actor::stats(actor);stats!=0&&!native_actor::incapacitated(actor,stats)}
+/// PlayerIns +250 resolves the action's source directly to its equipped ID.
+/// Unlike the randomized-art reader this also accepts static weapons without
+/// an instance record and reinforced IDs absent from the default-art catalog.
+unsafe fn source_weapon(actor:usize,source:i32)->bool{
+ if actor==0||!(-6..=15).contains(&source){return false;}
+ let vt=read_ptr(actor);if vt==0{return false;}let address=read_ptr(vt+0x250);if address==0{return false;}
+ let get:unsafe extern "system" fn(usize,i32)->i32=std::mem::transmute(address);
+ weapon(get(actor,source))
+}
 unsafe fn hand_owned(actor:usize,hand:i32,base:usize)->bool{
- matches!(hand,0|1)&&owned(actor,base)&&crate::arts_hand_weapon(actor,hand,base).is_some_and(|w|weapon(w.base))
+ // c_SwordArtsHand is HAND_LEFT=0 / HAND_RIGHT=1, unlike the bartender's
+ // RELIC_WEAPONCHANGE_ENCHANT variable, which uses the opposite numbering.
+ matches!(hand,0|1)&&owned(actor,base)&&source_weapon(actor,if hand==0{-2}else{-1})
 }
 /// Called before native one-shot/loop updates. Never masks native cancellation.
 pub unsafe fn query(actor:usize,phase:i32,art:i32,hand:i32,base:usize)->i32{
@@ -41,13 +52,12 @@ pub unsafe fn may_loop(actor:usize,base:usize)->bool{
 }
 pub unsafe fn behavior(actor:usize,judge:i32,source:i32,base:usize)->Option<i32>{
  if judge!=JUDGE||!owned(actor,base){return None;}
- crate::arts_source_weapon(actor,source,base).filter(|w|weapon(w.base)).map(|_|BEHAVIOR)
+ source_weapon(actor,source).then_some(BEHAVIOR)
 }
 fn discounted(cost:i32,dash:bool)->i32{if cost<=0||dash{0}else{cost/2+cost%2}}
 pub unsafe fn cost(context:usize,actor:usize,cost:i32,base:usize)->i32{
  if cost<=0||read_i32(context+0xc)>=0||read_i32(context+8)<0||!owned(actor,base){return cost;}
- let Some(w)=crate::arts_source_weapon(actor,read_i32(context+0x38),base)else{return cost;};
- if !weapon(w.base){return cost;}
+ if !source_weapon(actor,read_i32(context+0x38)){return cost;}
  discounted(cost,data::DASH_BEHAVIORS.binary_search(&read_i32(context+8)).is_ok())
 }
 pub fn reset(){NETWORK_OWNED.store(false,Ordering::Release);GIVEN.store(false,Ordering::Release);ACTION.with(|a|a.set((0,-1)));}

@@ -1,0 +1,147 @@
+{
+  "version": "0.17.294",
+  "baselineCommit": "f93c8916f3bee8584d3bea24a7d6025361477207",
+  "feature": "精通【黑王大剑】武器判定与原生随机词条奖励",
+  "runtime": {
+    "sourceGetter": "PlayerIns vtable+0x250 -> 0x66cde0 -> 0x3818c0 -> 0x381220",
+    "requiresInstanceRecord": false,
+    "requiresDefaultArtCatalogEntry": false,
+    "paths": [
+      "stamina discount",
+      "dash attack exemption",
+      "channel eligibility",
+      "channel FP eligibility",
+      "meteor behavior"
+    ],
+    "hksHandMapping": {
+      "0": "left/source -2",
+      "1": "right/source -1"
+    }
+  },
+  "verification": {
+    "standaloneTests": 490,
+    "mmvTests": 491,
+    "nativeFixtureCasesPerVariant": 1788,
+    "nativeSourceGetterAndSlotDecoderExecuted": true,
+    "nativeFixtureCoverage": [
+      "missing instance record",
+      "reinforced weapon IDs",
+      "all nine left/right selected slot pairs",
+      "other hand unarmed",
+      "actual stamina payment",
+      "native immunity",
+      "channel owner/start/finish and incapacitation guards",
+      "meteor behavior provenance"
+    ],
+    "externalActorAndEffectEnvironment": "synthetic fixture",
+    "checks": {
+      "tests.log": {
+        "passed": true,
+        "logSha256": "ae5d12ba88e99cde4a93b022918765936e50bd172f525afd8b09317bf4315601"
+      },
+      "mmv-tests.log": {
+        "passed": true,
+        "logSha256": "7511e5211f81a5c1196c06515bd938de8f512514a57dc7d32ceefec7cf4090f3"
+      },
+      "native.log": {
+        "passed": true,
+        "logSha256": "0d68d20124704cdc41ddb4bfac9b9ea7dbc4995554eb277807ffd195a21ee7ed"
+      },
+      "mmv-native.log": {
+        "passed": true,
+        "logSha256": "f6cce0e726836652587c51ff1f977436d29945728261a31ff2797420d1ff2186"
+      },
+      "load-standalone.log": {
+        "passed": true,
+        "logSha256": "4a4cc94f4d2e73d580371df78ba814bd0c809a98c0fbb9ce1fbe421fc421d44c"
+      },
+      "load-mmv.log": {
+        "passed": true,
+        "logSha256": "f4b893d491060b43df43f38058bc8c2c2a7e12a4b9cec186fea56aea0cc6265e"
+      },
+      "profile.log": {
+        "passed": true,
+        "logSha256": "d6418e69a8957f331362e72045199136caaac2bd79ad9709b81cb98dbadf95b1"
+      },
+      "profile-mmv.log": {
+        "passed": true,
+        "logSha256": "cdbd7812e20f921f01ff8702596ea8bb9639f62c81042640274a6f89a27e59a2"
+      },
+      "hexbuild.log": {
+        "passed": true,
+        "logSha256": "9f4e6cc487d54d9bdf7ae8f6194e01ac24c716c8d9ce18a1bf434a85f6a52476"
+      },
+      "release.log": {
+        "passed": true,
+        "logSha256": "d34ed7fa647b7ce505069919bd9b6a6caeaa3016dc0182245ed4fb21ffc5ee2d"
+      },
+      "mmv-build.log": {
+        "passed": true,
+        "logSha256": "7143d859875c4b4ffa774946d6735fabd0acd9a1176bae36210ff669c59b63c4"
+      }
+    }
+  },
+  "reward": {
+    "standalone": {
+      "version": "0.17.294",
+      "giftLot": 95553000,
+      "category": 6,
+      "customWeapon": 8010000,
+      "targetWeapon": 8010000,
+      "ordinaryAffixSlots": 1,
+      "affixTable": 501200200,
+      "positiveWeightCandidates": 77,
+      "deepNightSlotsUnchanged": true,
+      "onlyGiftCategoryChanged": true,
+      "inputSha256": "F97986F68FF8264F46F3B74814307F3CDA350A4297F4B6CF0F100C53B2D84F93",
+      "outputSha256": "86158A5DBD6C59EE06CE80F46701CF881D1807957AD7F5E00395592DBCE4BE54",
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "mmv": {
+      "version": "0.17.294",
+      "giftLot": 95553000,
+      "category": 6,
+      "customWeapon": 8010000,
+      "targetWeapon": 8010000,
+      "ordinaryAffixSlots": 1,
+      "affixTable": 501200200,
+      "positiveWeightCandidates": 78,
+      "deepNightSlotsUnchanged": true,
+      "onlyGiftCategoryChanged": true,
+      "inputSha256": "5A7D37339859D039A934395CD6EB012E17C3C6E77F3A02D3C21701FB1F049235",
+      "outputSha256": "263D340E3096221F09C6657AD551B96AFD0378824DD6EF487161DAB72EF34848",
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    }
+  },
+  "artifacts": {
+    "standalone": {
+      "dllSha256": "19a2cef1dd7372359843cc269afdc763b268d9a037ef467786f46fbd5af458db",
+      "regulationSha256": "86158a5dbd6c59ee06ce80f46701cf881d1807957ad7f5e00395592dbce4be54"
+    },
+    "mmv": {
+      "dllSha256": "576cdc674849b294a0b865689deb7fc48da5c4e403b0eefffa6dc2b85586c6fb",
+      "regulationSha256": "263d340e3096221f09c6657ad551b96afd0378824dd6ef487161dab72ef34848"
+    }
+  },
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "runtimeSourcesMatchMmvBuildInputs": true,
+  "userFeedback": "Prior MMV prototype grants the weapon but unreinforced gifted weapon appeared to retain native stamina and art even while in combat and holding the art button; no live weapon handle captured.",
+  "unchanged": [
+    "HKS",
+    "TAE and imported motions",
+    "meteor attacks and effects",
+    "original custom weapon and affix tables",
+    "same-expedition gift receipt",
+    "README",
+    "user INIs"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pending": [
+    "Actual in-game art transition and imported motion playback",
+    "New gifted weapon random affix visibility and pickup",
+    "Multiplayer behavior"
+  ]
+}

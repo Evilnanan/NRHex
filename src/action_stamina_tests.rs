@@ -90,8 +90,12 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
  // Mastery discounts the actual source weapon, including paired attacks, and
  // retains native immunity. A spell or the other hand's weapon is unaffected.
  ECHO.store(false,Ordering::Relaxed);ARTS.store(false,Ordering::Relaxed);
+ // Use the real PlayerIns ID getter and source/slot decoder. Deliberately
+ // remove the instance record; Onyx must not depend on randomized-art data.
+ let mut equipment=[0u32;0x200/4];let eq=equipment.as_mut_ptr()as usize;
+ put(a+0x670,eq);vt[0x250/8]=base+0x66cde0;ENTRY.store(ptr::null_mut(),Ordering::Relaxed);
  for owned in [false,true]{ONYX.store(owned,Ordering::Relaxed);
-  for weapon in [8010000,8010025,2000000]{WEAPON_ID.store(weapon,Ordering::Relaxed);
+  for weapon in [8010000,8010025,2000000]{for slot in 0..6{int(eq+0x9c+slot*4,weapon);}
    for immune in [false,true]{ptr::write((st+0x189)as*mut u8,u8::from(immune));
     for (behavior,cost,dash)in [(100400000,35,false),(100400120,24,true),(100400125,30,true),(100400320,32,true),(300805901,30,false),(crate::onyx_mastery::BEHAVIOR,20,false)]{
      for hand in [-1,-2]{int(context+8,behavior);int(context+0xc,-1);int(context+0x38,hand);int(context+0xc0,-cost);int(st+0x15c,200);run(context);
@@ -107,7 +111,7 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
  // An empty-FP animation never produces the startup marker. The same motion
  // category on another weapon must not acquire the channel either.
  int(st+0x140,100);
- for owner in [false,true]{ONYX.store(owner,Ordering::Relaxed);for weapon in [8010000,2000000]{WEAPON_ID.store(weapon,Ordering::Relaxed);
+ for owner in [false,true]{ONYX.store(owner,Ordering::Relaxed);for weapon in [8010000,2000000]{for slot in 0..6{int(eq+0x9c+slot*4,weapon);}
   for started in [false,true]{ONYX_STARTED.store(started,Ordering::Relaxed);for finish in [false,true]{ONYX_FINISHED.store(finish,Ordering::Relaxed);
    for hand in [0,1]{
     assert_eq!(crate::onyx_mastery::query(a,0,241,hand,base),0);
@@ -118,7 +122,27 @@ fn native_action_stamina_payment_and_immunity(){unsafe{
    }
   }}
  }}
- ONYX.store(true,Ordering::Relaxed);WEAPON_ID.store(8010000,Ordering::Relaxed);ONYX_STARTED.store(true,Ordering::Relaxed);ONYX_FINISHED.store(true,Ordering::Relaxed);
+ // Only the actual source hand qualifies, across all nine selected-slot pairs.
+ // Empty hands, other weapons and invalid source selectors never borrow Onyx.
+ ONYX.store(true,Ordering::Relaxed);ONYX_STARTED.store(true,Ordering::Relaxed);ONYX_FINISHED.store(false,Ordering::Relaxed);ptr::write((st+0x189)as*mut u8,0);
+ for left in 0..3{for right in 0..3{int(eq+4,left);int(eq+8,right);
+  for onyx_hand in [0,1]{
+   for slot in 0..6{int(eq+0x9c+slot*4,110000);}
+   int(eq+0x9c+if onyx_hand==0{left as usize*8}else{right as usize*8+4},8010002);
+   for (hand,source)in [(0,-2),(1,-1)]{
+    let selected=hand==onyx_hand;
+    crate::onyx_mastery::query(a,0,241,hand,base);
+    assert_eq!(crate::onyx_mastery::may_loop(a,base),selected);
+    assert_eq!(crate::onyx_mastery::free_channel(a,base),selected);
+    assert_eq!(crate::onyx_mastery::behavior(a,crate::onyx_mastery::JUDGE,source,base),selected.then_some(crate::onyx_mastery::BEHAVIOR));
+    int(context+8,100400000);int(context+0xc,-1);int(context+0x38,source);int(context+0xc0,-35);int(st+0x15c,200);run(context);
+    assert_eq!(read_i32(st+0x15c),if selected{182}else{165});cases+=1;
+   }
+  }
+ }}
+ for source in [-7,16,i32::MIN,i32::MAX]{assert_eq!(crate::onyx_mastery::behavior(a,crate::onyx_mastery::JUDGE,source,base),None);}
+ int(eq+4,0);int(eq+8,0);for slot in 0..6{int(eq+0x9c+slot*4,8010000);}
+ ONYX_FINISHED.store(true,Ordering::Relaxed);
  for (hp,down)in [(0,0),(100,1),(100,2)]{int(st+0x140,hp);ptr::write((a+0x710)as*mut u8,down);assert_eq!(crate::onyx_mastery::query(a,1,241,1,base),0);assert!(!crate::onyx_mastery::may_loop(a,base));}
  int(st+0x140,100);ptr::write((a+0x710)as*mut u8,0);
  ONYX.store(false,Ordering::Relaxed);WEAPON_ID.store(2000000,Ordering::Relaxed);

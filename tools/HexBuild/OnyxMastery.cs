@@ -21,7 +21,9 @@ static class OnyxMastery {
   Set(behavior,"refId",Owner+50);Set(behavior,"behaviorJudgeId",Judge);Set(behavior,"stamina",20);
   var lot=clone("ItemLotParam_map",lots.Rows.First(r=>Convert.ToInt32(r["lotItemCategory01"].Value)==2&&Convert.ToInt32(r["lotItemId01"].Value)>0).ID,Lot);
   for(int n=1;n<=8;n++){Set(lot,$"lotItemId{n:00}",-1);Set(lot,$"lotItemCategory{n:00}",0);Set(lot,$"lotItemBasePoint{n:00}",0);Set(lot,$"lotItemNum{n:00}",0);}
-  foreach(var(f,v)in new[]{("lotItemId01",8010000),("lotItemCategory01",2),("lotItemBasePoint01",1000),("lotItemNum01",1),("getItemFlagId",0),("cumulateNumFlagId",0),("cumulateNumMax",0)})Set(lot,f,v);
+  // Category 6 generates the native custom weapon, including its random
+  // attachment table. Category 2 only grants the bare EquipParamWeapon.
+  foreach(var(f,v)in new[]{("lotItemId01",8010000),("lotItemCategory01",6),("lotItemBasePoint01",1000),("lotItemNum01",1),("getItemFlagId",0),("cumulateNumFlagId",0),("cumulateNumMax",0)})Set(lot,f,v);
  }
  // MMV legitimately contains non-finite floats; compare their exact bits.
  static string Value(object? v)=>v switch{
@@ -34,6 +36,29 @@ static class OnyxMastery {
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
+ public static void RewardStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=Path.Combine(root,"work/onyx-fix",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
+  string input=Path.Combine(mod,"regulation.bin");var b=SFUtil.DecryptNightreignRegulation(input);var before=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  PARAM Table(string name)=>parse(name,b.Files.Single(f=>Name(f)==name+".param").Bytes);
+  var custom=Table("EquipParamCustomWeapon").Rows.Single(r=>r.ID==8010000);
+  Check(Convert.ToInt32(custom["targetWeaponId"].Value)==8010000&&Convert.ToInt32(custom["swordArtsTableId"].Value)==1041&&Convert.ToInt32(custom["weaponLevel"].Value)==0&&Convert.ToInt32(custom["isCursed"].Value)==0,"Native Onyx generation row changed");
+  int table=Convert.ToInt32(custom["attachEffectTableId_1"].Value);
+  Check(table==501200200&&Convert.ToInt32(custom["attachEffectTableId_2"].Value)==-1&&Convert.ToInt32(custom["attachEffectTableId_3"].Value)==-1,"Expected one native ordinary-mode affix slot");
+  // Tables legitimately contain repeated IDs; keep every target-specific row.
+  var pool=Table("AttachEffectTableParam").Rows.Where(r=>r.ID==table).ToArray();
+  var candidates=pool.Where(r=>Convert.ToInt32(r["chanceWeight"].Value)>0).ToArray();
+  Check(candidates.Length>1&&candidates.All(r=>Convert.ToInt32(r["attachEffectId"].Value)>0),"Native affix pool is missing or contains an empty positive-weight reward");
+  var file=b.Files.Single(f=>Name(f)=="ItemLotParam_map.param");var lots=Table("ItemLotParam_map");var row=lots.Rows.Single(r=>r.ID==Lot);var old=new PARAM.Row(row);
+  Check(Convert.ToInt32(row["lotItemId01"].Value)==8010000&&Convert.ToInt32(row["lotItemCategory01"].Value) is 2 or 6,"Unexpected mastery gift");
+  Set(row,"lotItemCategory01",6);file.Bytes=lots.Write();string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,b,b.Compression);
+  var actual=SFUtil.DecryptNightreignRegulation(output);var now=parse("ItemLotParam_map",actual.Files.Single(f=>Name(f)=="ItemLotParam_map.param").Bytes);
+  Check(Same(row,now.Rows.Single(r=>r.ID==Lot)),"Gift readback differs");
+  now.Rows.Single(r=>r.ID==Lot)["lotItemCategory01"].Value=old["lotItemCategory01"].Value;
+  var original=parse("ItemLotParam_map",before[file.ID]);Check(now.Rows.Count==original.Rows.Count&&now.Rows.Zip(original.Rows).All(p=>Same(p.First,p.Second)),"Unrelated lot row or field changed");
+  foreach(var f in actual.Files.Where(f=>f.ID!=file.ID))Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated parameter table changed");
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{version="0.17.294",giftLot=Lot,category=6,customWeapon=8010000,targetWeapon=8010000,ordinaryAffixSlots=1,affixTable=table,positiveWeightCandidates=candidates.Length,deepNightSlotsUnchanged=true,onlyGiftCategoryChanged=true,inputSha256=Hash(input),outputSha256=Hash(output),gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine($"PASS: native custom Onyx reward with {candidates.Length} weighted affix candidates; only private lot category changed");
+ }
  public static void Events(EMEVD ev){
   foreach(int id in new[]{1111,9100941}){
    var e=ev.Events.Single(e=>e.ID==id);Check(e.Parameters.Count==0,"Parameterized lifecycle");
