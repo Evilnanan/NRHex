@@ -227,7 +227,7 @@ Grants two random Mayhem Augments.
 <!-- hex:95004800 -->
 ## Haymaker
 
-The more damage you take during an empowered Character Skill, the more damage your counterattack deals.
+The more damage you take during enhanced Retaliate, the more damage your counterattack deals.
 
 <!-- hex:95004900 -->
 ## Bartender

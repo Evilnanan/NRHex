@@ -1,0 +1,154 @@
+{
+  "version": "0.17.299",
+  "change": "Haymaker English terminology only",
+  "description": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals.",
+  "readback": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "29F1E725F4E0D37F10A96B852CB0FF04AF9D58A495395B81ED4938BE5717DC7E",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "C74EDBF7313664709129276CA55A0B59587159D954F83C4984ECB0252A11A371",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "89B3CB283B5A20F4BD2BFCE81422C922E2890415030FF8E154586EF683AA38B0",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "C98C9D4142712DBE0F1403592E1BF0CF6CCAE6A6EDA6DA0A18EF8002A096334A",
+          "outputSha256": "C98C9D4142712DBE0F1403592E1BF0CF6CCAE6A6EDA6DA0A18EF8002A096334A",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "D4CD0AAF936FF6379FF082B71E5BE5A6B116FA257B621AA5CD743E86F7F7B85C",
+          "outputSha256": "D4CD0AAF936FF6379FF082B71E5BE5A6B116FA257B621AA5CD743E86F7F7B85C",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "6DE439EC7B82F03EA6974D61D5F8A1574FB89A9B67D9996BED044EDD8DA5F1D3",
+          "outputSha256": "2E736440373E4CC9FB157115658968B204AE727CA3C5577986BC9C3A38642328",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004800,
+              "before": "The more damage you take during an empowered Character Skill, the more damage your counterattack deals.",
+              "after": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004800,
+              "before": "The more damage you take during an empowered Character Skill, the more damage your counterattack deals.",
+              "after": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004800,
+              "before": "The more damage you take during an empowered Character Skill, the more damage your counterattack deals.",
+              "after": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "4AC4576AAFFF25C6D4ADC494467E644B2B96C68500901D08F60AF3114875EBA7",
+          "outputSha256": "72596A77FCA52AB13BEE6949340DE7C80D18D7D1B829C8790E44DA4815E2D530",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004800,
+              "before": "The more damage you take during an empowered Character Skill, the more damage your counterattack deals.",
+              "after": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "29F1E725F4E0D37F10A96B852CB0FF04AF9D58A495395B81ED4938BE5717DC7E",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "C74EDBF7313664709129276CA55A0B59587159D954F83C4984ECB0252A11A371",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "89B3CB283B5A20F4BD2BFCE81422C922E2890415030FF8E154586EF683AA38B0",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "D2A97D3068A7BF026C0FEA98FF612703C52D9E697785ABC29BFA84C8DE4D9BE5",
+          "outputSha256": "D2A97D3068A7BF026C0FEA98FF612703C52D9E697785ABC29BFA84C8DE4D9BE5",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "CCFF551A9EB7B7E0B9BF465C1B1264A94193D982F689868F7F1708CD4A946F41",
+          "outputSha256": "CCFF551A9EB7B7E0B9BF465C1B1264A94193D982F689868F7F1708CD4A946F41",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "1A42EAEA959AB6085135BFBFDF995421403C92408099481DBAFC4E04F06E8A4B",
+          "outputSha256": "548F27BFD0F8E7280D30F1E8C277ED2F6262FA336C827983E02D46C5E063D3E9",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004800,
+              "before": "The more damage you take during an empowered Character Skill, the more damage your counterattack deals.",
+              "after": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004800,
+              "before": "The more damage you take during an empowered Character Skill, the more damage your counterattack deals.",
+              "after": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004800,
+              "before": "The more damage you take during an empowered Character Skill, the more damage your counterattack deals.",
+              "after": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "71D5A5CB120A2ED1899AA05E03C8F6A1E3DC04DD6138481C4AD9369E61A1FAA1",
+          "outputSha256": "F76EEC4800E44E556E4389905D7C69F6D347B9B7731F9B1553E9D8D0F40E73C2",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004800,
+              "before": "The more damage you take during an empowered Character Skill, the more damage your counterattack deals.",
+              "after": "The more damage you take during enhanced Retaliate, the more damage your counterattack deals."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "unchangedArtifacts": {
+    "dist/natives/NRHex.dll": "8befee64c25ed163e2459592ea449dbe656dd400683065cf315abe5a137fe04f",
+    "dist/mod/regulation.bin": "4e1c0e693cf93fbc296cb462b98214a3ac4da3013ad387e2fdd8daad133ed220",
+    "dist/mmv/natives/NRHex.dll": "d2c3f6a62b1167943ffe9694e5f1be921c3ec1acb7723cd449acc15121e30afa",
+    "dist/mmv/mod/regulation.bin": "90d9a6a4782045aea178a1818b65c287e4479b141445f9ae0e43b5ec351919bc"
+  },
+  "chineseTextUnchanged": true,
+  "mechanicsUnchanged": true,
+  "gameplayVerified": false
+}
