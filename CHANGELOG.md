@@ -10,7 +10,7 @@
 
 夺萃之镰英文说明改为“Defeating an enemy permanently increases maximum FP by 1%.”，移除重复强调出征期限的措辞，相关状态说明同步优化；仅更新英文文本。
 
-蓄意轰拳英文说明及相关状态文本将“an empowered Character Skill”改为“enhanced Retaliate”，统一无赖强化技艺的官方用词。
+蓄意轰拳英文说明及相关状态文本使用“an enhanced skill”，沿用官方对“强化”的措辞，并以skill指代技艺。
 
 精通【黑王大剑】英文说明缩短为“Obtain an Onyx Lord’s Greatsword. Its attacks use less stamina. Hold its skill to summon meteors.”，减少武器全名重复，保留赠送武器、耗精降低和引导陨石的信息。
 
