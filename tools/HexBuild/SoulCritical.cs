@@ -181,8 +181,8 @@ static class SoulCritical {
   File.WriteAllText(Path.Combine(output,"sfx-validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(path),nativeSha256=Hash(nativePath),added=final.Files.Count-old.Length,unrelatedMembersPreserved=true,dependenciesResolved=true,gameplayVerified=false}));
  }
 
- public static void VisualStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
-  string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=Path.Combine(root,"work/soul-prelude-disabled",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
+ public static void VisualStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv,string? inputMod=null,string? outputStage=null){
+  string mod=inputMod??Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=outputStage??Path.Combine(root,"work/soul-prelude-disabled",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
   string input=Path.Combine(mod,"regulation.bin");var b=SFUtil.DecryptNightreignRegulation(input);var old=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
   var file=b.Files.Single(f=>Name(f)=="Bullet.param");var p=parse("Bullet",file.Bytes);var before=parse("Bullet",file.Bytes);
   var row=p.Rows.Single(r=>r.ID==Owner+51);int previous=Convert.ToInt32(row["sfxId_Bullet"].Value);
@@ -198,7 +198,7 @@ static class SoulCritical {
    Check(Same(a,c),"Unexpected bullet field change");
   }
   foreach(var f in actual.Files){var intended=b.Files.Single(x=>x.ID==f.ID);Check(f.Name==intended.Name&&f.Flags==intended.Flags,"Binder member changed");if(Name(f)!="Bullet.param")Check(f.Bytes.Span.SequenceEqual(old[f.ID]),"Unrelated parameter table changed");}
-  Resources(root,mod,dir);
+  if(inputMod==null)Resources(root,mod,dir);
   File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{preludeBullet=Owner+51,oldVisual=previous,visual=PreludeVisual,oldLife=previousLife,life=PreludeLife,changedFields=new[]{previous!=PreludeVisual?"Bullet/95005251/sfxId_Bullet":null,previousLife!=PreludeLife?"Bullet/95005251/life":null}.Where(f=>f!=null).ToArray(),inputSha256=Hash(input),outputSha256=Hash(output),gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: only Soul Critical prelude SFX/lifetime updated; all other fields, damage and binder members preserved");
  }

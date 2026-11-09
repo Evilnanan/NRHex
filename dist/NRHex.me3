@@ -25,7 +25,3 @@ config = "testmods/DeepUnlocker/DeepUnlocker.ini"
 
 [[natives]]
 path = "testmods/RelicDecay/RelicDecay.dll"
-
-[[natives]]
-id = "damage-competition"
-path = "testmods/DamageCompetition/damage_competition_nightreign.dll"

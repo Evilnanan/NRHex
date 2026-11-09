@@ -104,7 +104,7 @@ if(args.Contains("--onyx-dash-map")){int at=Array.IndexOf(args,"--onyx-dash-map"
 if(args.Contains("--onyx-mastery-stage")){OnyxMastery.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--onyx-reward-stage")){OnyxMastery.RewardStage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--onyx-balance-stage")){OnyxMastery.BalanceStage(root,Parse,args.Contains("--mmv"));return;}
-if(args.Contains("--soul-visual-stage")){SoulCritical.VisualStage(root,Parse,args.Contains("--mmv"));return;}
+if(args.Contains("--soul-visual-stage")){SoulCritical.VisualStage(root,Parse,args.Contains("--mmv"),args.Contains("--input-mod")?args[Array.IndexOf(args,"--input-mod")+1]:null,args.Contains("--output-stage")?args[Array.IndexOf(args,"--output-stage")+1]:null);return;}
 if(args.Contains("--soul-entry-stage")){SoulCritical.EntryStage(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--soul-leadin-stage")){SoulCritical.PreludeStage(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--soul-critical-stage")){SoulCritical.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}

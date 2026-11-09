@@ -9,6 +9,7 @@ from collections import Counter
 import hashlib
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -230,6 +231,17 @@ def main(argv=None) -> int:
                            cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
         for name in ['regulation.bin', 'chr/c0000.anibnd.dcx']:
             report['partialPreview']['files'][name] = digest(REPORTS / 'staged/mod' / name)
+        # Shared binary snapshots may predate a source-only prelude disable.
+        print('Synchronizing Soul Critical prelude with the current build settings...', flush=True)
+        soul_stage = REPORTS / 'soul-visual'
+        with (REPORTS / 'soul-visual.log').open('w', encoding='utf8') as log:
+            subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                            '--soul-visual-stage', '--mmv', '--input-mod', str(REPORTS / 'staged/mod'),
+                            '--output-stage', str(soul_stage)], cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+        soul_visual = json.loads((soul_stage / 'validation.json').read_text(encoding='utf8'))
+        shutil.copy2(soul_stage / 'regulation.bin', REPORTS / 'staged/mod/regulation.bin')
+        report['soulVisualAdapter'] = soul_visual
+        report['partialPreview']['files']['regulation.bin'] = digest(REPORTS / 'staged/mod/regulation.bin')
         print('Adding reviewed MMV field bosses to the demand-created cage pool...', flush=True)
         with (REPORTS / 'cages.log').open('w', encoding='utf8') as log:
             subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
@@ -255,8 +267,11 @@ def main(argv=None) -> int:
         report['spiritAdapter'] = json.loads((REPORTS / 'staged/spirit-validation.json').read_text(encoding='utf8'))
         report['partialPreview']['files']['regulation.bin'] = digest(REPORTS / 'staged/mod/regulation.bin')
 
-        if set(report['partialPreview']['files']) != set(before):
-            raise ValueError('Adapters do not cover exactly the current shared resource set; review added/removed files')
+        # The behavior/motion adapter generates these two runtime files even
+        # when the standalone resource snapshot does not contain them yet.
+        generated_motion = {'chr/c0000.behbnd.dcx', 'chr/c0000_a9x.anibnd.dcx'}
+        if set(report['partialPreview']['files']) != set(before) | generated_motion:
+            raise ValueError('Adapters do not cover exactly the shared resources and generated Onyx motion files')
         report['partialPreview'].update(stage='merged-resources', releaseReady=False)
         write_json(REPORTS / 'staged/manifest.json', report['partialPreview'])
         if before != shared_inputs():

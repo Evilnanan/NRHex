@@ -18,8 +18,6 @@ MayhemAugments/
   mod/                   合并后的 MA 适配资源
   natives/NRHex.dll     无测试热键的群友版
   natives/NRHex.ini
-DamageCompetition/
-  damage_competition_nightreign.dll
 MMV-Fixes/               测试入口已显式启用时，携带独立修复包
   mod/
   natives/MMVFixes.dll
@@ -29,7 +27,6 @@ MMV-Fixes/               测试入口已显式启用时，携带独立修复包
 
 独立修复包从当前测试入口的显式启用项取得，只携带经 manifest 哈希核对的运行文件；不合入 MA 资源。以后不需要这些修复时，从 `Mayhem Augments.me3` 删除 ID 为 `mmv-fixes` 的一个 package 和一个 native，再删除 `MMV-Fixes/` 即可。删除整个增量包的两个目录和新入口即可恢复使用 MMV 原入口。MMV 升级后须重新核对和构建适配资源，不能把旧合并包直接当作通用补丁。
 
-Damage Competition 的源 DLL 位于 `dist/testmods/DamageCompetition/`，独立测试版和 MMV 测试版均加载它。MMV 群友版构建会自动复制至根目录下的独立 `DamageCompetition/` 目录，并生成相对路径加载项，仅携带源 DLL。
 
 ## 入口与输入
 
