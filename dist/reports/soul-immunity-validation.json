@@ -1,0 +1,371 @@
+{
+  "version": "0.17.299",
+  "baselineCommit": "8f6dc5566e863c0c082674a3a9b5638135c5ce0a",
+  "soulCritical": {
+    "bypassesInvulnerability": "original victim of this individual wave only",
+    "hookRva": "0x3df380",
+    "nativeContactGateRva": "0x436370",
+    "perWaveVictimHandleBits": 64,
+    "transport": "three exact finite f32 integers, 22/22/20 bits, tagged top limb; first coefficient remains damage",
+    "changesActorFlags": false,
+    "ordinaryNestedHitsRetainImmunity": true,
+    "otherTargetsRetainImmunity": true,
+    "lightningRetainsImmunity": true,
+    "dedupPreserved": true,
+    "deadAndRelationshipGatesPreserved": true,
+    "formulaAndTimingChanged": false
+  },
+  "onyxMastery": {
+    "physical": 100,
+    "magic": 100,
+    "perMeteorBaseFp": 10,
+    "startupFp": 27,
+    "fiveMeteorBaseTotalFp": 77,
+    "nativeFpRatesAndCeilingPreserved": true,
+    "existingWildcardExceptionPreserved": true,
+    "description": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑",
+    "parameters": {
+      "standalone": {
+        "version": "0.17.299",
+        "attack": 95005360,
+        "physical": 100,
+        "magic": 100,
+        "onlyMeteorDamageChanged": true,
+        "inputSha256": "86158A5DBD6C59EE06CE80F46701CF881D1807957AD7F5E00395592DBCE4BE54",
+        "outputSha256": "4E1C0E693CF93FBC296CB462B98214A3AC4DA3013AD387E2FDD8DAAD133ED220",
+        "gameplayVerified": false,
+        "multiplayerVerified": false
+      },
+      "mmv": {
+        "version": "0.17.299",
+        "attack": 95005360,
+        "physical": 100,
+        "magic": 100,
+        "onlyMeteorDamageChanged": true,
+        "inputSha256": "263D340E3096221F09C6657AD551B96AFD0378824DD6EF487161DAB72EF34848",
+        "outputSha256": "90D9A6A4782045AEA178A1818B65C287E4479B141445F9AE0E43B5EC351919BC",
+        "gameplayVerified": false,
+        "multiplayerVerified": false
+      }
+    },
+    "textReadback": {
+      "standalone": {
+        "source": "docs/hexes.md",
+        "sourceSha256": "29F1E725F4E0D37F10A96B852CB0FF04AF9D58A495395B81ED4938BE5717DC7E",
+        "englishSource": "docs/hexes.en.md",
+        "englishSourceSha256": "5B801CAD7147F2051A7153E98517F7C48CF281CC510D2D00EF897ED14451AB9E",
+        "statusSource": "data/text/status-effects.json",
+        "statusSourceSha256": "DFFCA7733F0702D6EBBA24BF2F1EACC84762DCFD7DCEAD5B2776C822788C8F4A",
+        "statusOnly": false,
+        "reports": [
+          {
+            "language": "zhocn",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "9388E9104EFA57A66710359FCE326A4412A89BA6CB5EA1A5785839109B1AD39F",
+            "outputSha256": "C98C9D4142712DBE0F1403592E1BF0CF6CCAE6A6EDA6DA0A18EF8002A096334A",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95005300,
+                "before": "能够更加熟练地使用黑王大剑。获得黑王大剑",
+                "after": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑"
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95005300,
+                "before": "能够更加熟练地使用黑王大剑。获得黑王大剑",
+                "after": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑"
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95005300,
+                "before": "能够更加熟练地使用黑王大剑。获得黑王大剑",
+                "after": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "zhocn",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "720713BE26E72E9A1BD80444B64624BE960364572FA3EC597FDAABC1952F7B08",
+            "outputSha256": "D4CD0AAF936FF6379FF082B71E5BE5A6B116FA257B621AA5CD743E86F7F7B85C",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95005300,
+                "before": "能够更加熟练地使用黑王大剑。获得黑王大剑",
+                "after": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "7552E1E4A0B924268A0085F01E84547576CA42E33AD1816092ADEA19402121D0",
+            "outputSha256": "8D09934F821D28062BE4190CE7FB67398E9F602A237D611C715BD2EB1FB6110C",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95005300,
+                "before": "Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.",
+                "after": "Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword."
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95005300,
+                "before": "Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.",
+                "after": "Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword."
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95005300,
+                "before": "Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.",
+                "after": "Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "7D992B2365A3AE0B2E03C920BD4904A9754D35F940C08163A01BFBB3E347632E",
+            "outputSha256": "3B10A68FC1022EDB8697B222ABB879091500F3BCBB95CCCA54442202664E5E25",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95005300,
+                "before": "Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.",
+                "after": "Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          }
+        ]
+      },
+      "mmv": {
+        "source": "docs/hexes.md",
+        "sourceSha256": "29F1E725F4E0D37F10A96B852CB0FF04AF9D58A495395B81ED4938BE5717DC7E",
+        "englishSource": "docs/hexes.en.md",
+        "englishSourceSha256": "5B801CAD7147F2051A7153E98517F7C48CF281CC510D2D00EF897ED14451AB9E",
+        "statusSource": "data/text/status-effects.json",
+        "statusSourceSha256": "DFFCA7733F0702D6EBBA24BF2F1EACC84762DCFD7DCEAD5B2776C822788C8F4A",
+        "statusOnly": false,
+        "reports": [
+          {
+            "language": "zhocn",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "7E24696336365A6D91C7A8133693A44285748D837676D4F4FF9CBA362F5C44DC",
+            "outputSha256": "D2A97D3068A7BF026C0FEA98FF612703C52D9E697785ABC29BFA84C8DE4D9BE5",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95005300,
+                "before": "能够更加熟练地使用黑王大剑。获得黑王大剑",
+                "after": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑"
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95005300,
+                "before": "能够更加熟练地使用黑王大剑。获得黑王大剑",
+                "after": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑"
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95005300,
+                "before": "能够更加熟练地使用黑王大剑。获得黑王大剑",
+                "after": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "zhocn",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "3824DDDC553B9A9349D8DAA98299B66B368D3B3558ED8AF6499F3E9F4A218A58",
+            "outputSha256": "CCFF551A9EB7B7E0B9BF465C1B1264A94193D982F689868F7F1708CD4A946F41",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95005300,
+                "before": "能够更加熟练地使用黑王大剑。获得黑王大剑",
+                "after": "降低黑王大剑的攻击耗精。战技可持续引导召唤陨石。获得黑王大剑"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "DFF8DCBA2DF3C771F57EF42C3ECC9AE10B746D7165B032B1D1D6108E91DE47E1",
+            "outputSha256": "ABE4865B19C652831DCA33126F9877E5EFD22D0AF20CE1A36A8A158C45943327",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95005300,
+                "before": "Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.",
+                "after": "Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword."
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95005300,
+                "before": "Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.",
+                "after": "Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword."
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95005300,
+                "before": "Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.",
+                "after": "Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "80DE60EC0CDFE6B16F42CFF45D3FCB3CE9E6179724E53C4C2A571CCC22657271",
+            "outputSha256": "AF6A9F2BAB1C78846928A73566A8E0F293A64A907D16CA03FDA09F3646E28700",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95005300,
+                "before": "Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.",
+                "after": "Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          }
+        ]
+      }
+    }
+  },
+  "verification": {
+    "standaloneTests": 492,
+    "mmvTests": 493,
+    "nativeIsolatedTestsPerVariant": 2,
+    "onyxNativePaymentCasesPerVariant": 70,
+    "nativeInvulnerabilityHookAndContactGateExecuted": true,
+    "externalActorAndParameterLookupEnvironment": "synthetic fixtures",
+    "dllLoadChecks": "Windows load and unsupported host refusal; not a game process",
+    "checks": {
+      "tests.log": {
+        "passed": true,
+        "logSha256": "afe1ca245c8bf33b050363bfa92a378df20ec16461a00baf196d4a577e09df9c"
+      },
+      "mmv-tests.log": {
+        "passed": true,
+        "logSha256": "48f240a56694068ff387aabf73b42bf164fb2fe35f6b514d9023ac46ad429742"
+      },
+      "native.log": {
+        "passed": true,
+        "logSha256": "82876c9d61c873b1e0b937295f26e461a1bca9775476de79b3f0d07d2989084f"
+      },
+      "onyx-native.log": {
+        "passed": true,
+        "logSha256": "dd42e2f297c2539ad308c4ea6522b18d6819ec6990f9ad822f0dbf31b31d2dc5"
+      },
+      "signature.log": {
+        "passed": true,
+        "logSha256": "0149dfdc00ae92c746f24603dc0fa87828f77f2730f57c4cbfcdec3780fb88c7"
+      },
+      "hexbuild.log": {
+        "passed": true,
+        "logSha256": "12a33dbc9910f830a8b778288866330030350ae1b88509e4561c38e8978ddddc"
+      },
+      "onyx-stage.log": {
+        "passed": true,
+        "logSha256": "0801b14673ed42adadd925433761232fb5b6537e942483226e9a271fbf014724"
+      },
+      "onyx-stage-mmv.log": {
+        "passed": true,
+        "logSha256": "0801b14673ed42adadd925433761232fb5b6537e942483226e9a271fbf014724"
+      },
+      "release.log": {
+        "passed": true,
+        "logSha256": "fd419efc97343eb42440caddf629b6d115efbce686c954b12a8b434dbffb609e"
+      },
+      "mmv-build.log": {
+        "passed": true,
+        "logSha256": "dd677f4bb9f23122acb828b7db147dbe0729dc7d11b4fcaf51b4a649c32ae3ba"
+      },
+      "load-standalone.log": {
+        "passed": true,
+        "logSha256": "4a4cc94f4d2e73d580371df78ba814bd0c809a98c0fbb9ce1fbe421fc421d44c"
+      },
+      "load-mmv.log": {
+        "passed": true,
+        "logSha256": "f4b893d491060b43df43f38058bc8c2c2a7e12a4b9cec186fea56aea0cc6265e"
+      },
+      "profile.log": {
+        "passed": true,
+        "logSha256": "bd120a5db87cadbba568acd3eaf24b5622e5f85cadaa18f5ce69c1f6d075ecba"
+      },
+      "profile-mmv.log": {
+        "passed": true,
+        "logSha256": "cdbd7812e20f921f01ff8702596ea8bb9639f62c81042640274a6f89a27e59a2"
+      }
+    }
+  },
+  "artifacts": {
+    "standalone": {
+      "dllSha256": "8befee64c25ed163e2459592ea449dbe656dd400683065cf315abe5a137fe04f",
+      "regulationSha256": "4e1c0e693cf93fbc296cb462b98214a3ac4da3013ad387e2fdd8daad133ed220",
+      "texts": {
+        "zhocn/item_dlc01.msgbnd.dcx": "c98c9d4142712dbe0f1403592e1bf0cf6ccae6a6eda6da0a18ef8002a096334a",
+        "zhocn/menu_dlc01.msgbnd.dcx": "d4cd0aaf936ff6379ff082b71e5be5a6b116fa257b621aa5cd743e86f7f7b85c",
+        "engus/item_dlc01.msgbnd.dcx": "8d09934f821d28062be4190ce7fb67398e9f602a237d611c715bd2eb1fb6110c",
+        "engus/menu_dlc01.msgbnd.dcx": "3b10a68fc1022edb8697b222abb879091500f3bcbb95ccca54442202664e5e25"
+      }
+    },
+    "mmv": {
+      "dllSha256": "d2c3f6a62b1167943ffe9694e5f1be921c3ec1acb7723cd449acc15121e30afa",
+      "regulationSha256": "90d9a6a4782045aea178a1818b65c287e4479b141445f9ae0e43b5ec351919bc",
+      "texts": {
+        "zhocn/item_dlc01.msgbnd.dcx": "d2a97d3068a7bf026c0fea98ff612703c52d9e697785abc29bfa84c8de4d9be5",
+        "zhocn/menu_dlc01.msgbnd.dcx": "ccff551a9eb7b7e0b9bf465c1b1264a94193d982f689868f7f1708cd4a946f41",
+        "engus/item_dlc01.msgbnd.dcx": "abe4865b19c652831dca33126f9877e5efd22d0af20ce1a36a8a158c45943327",
+        "engus/menu_dlc01.msgbnd.dcx": "af6a9f2bab1c78846928a73566a8e0f293a64a907d16ca03fda09f3646e28700"
+      }
+    }
+  },
+  "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "mmvGeneratedData": {
+    "parry_data.rs": "848a4c61c58c5bb31e8c0fff8c91e110132f0b3d459e05459c108cf21dfa1fef",
+    "sword_map.rs": "31a68b2bc78b810237c78f934dd1ea90f58f35e8a65a47d0c2ea4276889e16f7",
+    "echo_cast_data.rs": "180f34c5ca27757ef11d2f755ce53ac32cdb766b411bb3a9418bad788c40fa17",
+    "archmage_data.rs": "2db323bf9c622d3d50bf676cd2a82656965ef19440ea27ec692b7e415f82516b",
+    "arts_data.rs": "4e29dcfa22e3b3d45d0ad46efb03708321aee8c0fb9dd946529ecf7cc81e079b",
+    "spirit_target_data.rs": "ca59115825f9eca91e46c7218c6444b4a978c253c993b7592ef9a7e59fc87d45",
+    "cage_data.rs": "86819d1bf5e994c557466efb8db06033faa6a01d576381e0a19adeef9ab3faed"
+  },
+  "runtimeSourcesMatchMmvBuildInputs": true,
+  "sources": {
+    "src/soul_immunity.rs": "3b6b0097e1a57d9b4509e2fb7958047d25d3478e06ef8e042c4c1f4d926431ba",
+    "src/soul_critical.rs": "5a3474d501a50a36d70d7566dce0b5a2feb8c6966103fbedebb33e2e256acb69",
+    "src/static_charge.rs": "3a25058c261dcb2ae6b713011411213d3f45cd4476b50e6d73e7eecbcf4fa445",
+    "src/static_charge_tests.rs": "03b12336febb696229e4b4810d831cc511c235c30a0bc75bf9f54211ceb216c3",
+    "src/onyx_mastery.rs": "d386d4c45db92748ed8eb9629bac59a6bb649c91dfe368c4b64eeaaad0fddbc4",
+    "src/onyx_fp_tests.rs": "e9fa30c85db6118eba8fd4dc1a6d0fa49527d9b0b45bfc42fc35b208467dbc54",
+    "tools/HexBuild/OnyxMastery.cs": "a9762b8c6e482d755908af04d06c28022ad4f4b0a3cb240f2be86d2bd3cbd66e",
+    "tools/HexBuild/Program.cs": "fccdfaa6af2c6ae998018d259eecd012dc8fbfe9eb10290be5f3c0e06280ba39",
+    "docs/hexes.md": "29f1e725f4e0d37f10a96b852cb0ff04af9d58a495395b81ed4938be5717dc7e",
+    "docs/hexes.en.md": "5b801cad7147f2051a7153e98517f7c48cf281cc510d2d00ef897ed14451ab9e"
+  },
+  "unchanged": [
+    "HKS",
+    "TAE and imported motions",
+    "SFX",
+    "Soul Critical parameters and formula",
+    "user INIs",
+    "README"
+  ],
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "pending": [
+    "Live NPC critical-victim immunity bypass and surrounding targets",
+    "Live meteor damage and FP use",
+    "Multiplayer target identity and effects"
+  ]
+}

@@ -26,7 +26,7 @@ impl Critical{
   if !main{return None;}self.fired=true;Some((400.+self.sum*0.5).min(f64::from(f32::MAX))as f32)
  }
 }
-#[derive(Clone,Copy)]struct Wave{owner:u64,damage:f32,point:[f32;4]}
+#[derive(Clone,Copy)]struct Wave{owner:u64,target:u64,damage:f32,point:[f32;4]}
 struct State{critical:Critical,prelude:Prelude,pending:Vec<Wave>,scene:usize}
 static STATE:Mutex<State>=Mutex::new(State{critical:Critical{identity:None,sum:0.,fired:false},prelude:Prelude{current:None,played:false},pending:Vec::new(),scene:0});
 pub fn reset(){if let Ok(mut s)=STATE.lock(){s.critical=Critical::default();s.prelude=Prelude::default();s.pending.clear();}}
@@ -54,10 +54,10 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  let point=if crate::spatial_ready(target){crate::position(target,base)}else{ptr::read_unaligned((hit+0x1f0)as*const[f32;4])};
  if !point[..3].iter().all(|v|v.is_finite()){return;}
  let id=Identity{owner:read_ptr(source+8)as u64,target:read_ptr(target+8)as u64,animation,throw};
- let wave=STATE.lock().ok().and_then(|mut s|s.critical.credit(id,damage,data::HITS[index].2)).map(|damage|Wave{owner:id.owner,damage,point});
+ let wave=STATE.lock().ok().and_then(|mut s|s.critical.credit(id,damage,data::HITS[index].2)).map(|damage|Wave{owner:id.owner,target:id.target,damage,point});
  // Create the real wave in the accepted main-hit callback. The earlier visual
  // has no child and cannot schedule damage when a critical is interrupted.
- if let Some(wave)=wave{if !crate::static_charge::emit_soul(wave.owner,wave.damage,wave.point,base){if let Ok(mut s)=STATE.lock(){s.pending.push(wave);}}}
+ if let Some(wave)=wave{if !crate::static_charge::emit_soul(wave.owner,wave.target,wave.damage,wave.point,base){if let Ok(mut s)=STATE.lock(){s.pending.push(wave);}}}
 }
 pub unsafe fn update(actor:usize,base:usize){
  let current=current(actor,base);let owner=read_ptr(actor+8)as u64;let scene=read_ptr(base+0x3c131c8);
@@ -86,7 +86,7 @@ pub unsafe fn update(actor:usize,base:usize){
   if wave.owner!=owner{continue;}
   // The struck character's feet are the center; no long downward projectile
   // that could select a basement or a floor below the critical target.
-  if !crate::static_charge::emit_soul(wave.owner,wave.damage,wave.point,base){if let Ok(mut s)=STATE.lock(){s.pending.push(wave);}}
+  if !crate::static_charge::emit_soul(wave.owner,wave.target,wave.damage,wave.point,base){if let Ok(mut s)=STATE.lock(){s.pending.push(wave);}}
  }
 }
 #[cfg(test)]mod tests{

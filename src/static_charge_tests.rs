@@ -6,7 +6,7 @@ unsafe fn float(p:usize,v:f32){ptr::write_unaligned(p as*mut f32,v);}
 unsafe extern "system" fn accepted(_:usize,_:usize,_:usize)->u8{assert!(active_contact());1}
 unsafe extern "system" fn rejected(_:usize,_:usize,_:usize)->u8{0}
 thread_local!{static ROW:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
-unsafe extern "system" fn lookup(out:usize,kind:i32,id:i32)->usize{assert_eq!(kind,1);assert!(private_attack(id,kind));ptr::write_unaligned((out+0x10)as*mut usize,ROW.with(std::cell::Cell::get));out}
+unsafe extern "system" fn lookup(out:usize,kind:i32,id:i32)->usize{assert_eq!(kind,1);assert!(private_attack(id,kind));int(out,id);int(out+8,kind);ptr::write_unaligned((out+0x10)as*mut usize,ROW.with(std::cell::Cell::get));out}
 thread_local!{static TEAM:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
 unsafe extern "system" fn has(_:usize,id:i32)->u8{u8::from(id==OWNER||id==crate::soul_critical::OWNER)}
 unsafe extern "system" fn team(_:usize,_:i32)->usize{TEAM.with(std::cell::Cell::get)}
@@ -218,12 +218,54 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  // relationship query. Leakage uses exactly this same gate as normal bolts.
  patch(base,0x3d31b0,not_dead as*const()as usize);patch(base,0x42c120,module_actor as*const()as usize);
  let mut vt=[0usize;0x208/8];vt[0x200/8]=immune as*const()as usize;source[0]=vt.as_ptr()as usize;
- let stats=[0u8;0x260];let modules=[0usize,stats.as_ptr()as usize];source[0x1b8/8]=modules.as_ptr()as usize;
+ let mut stats=[0u8;0x260];let modules=[0usize,stats.as_ptr()as usize];source[0x1b8/8]=modules.as_ptr()as usize;
  int(hp+0x40,ATTACK+2);ptr::write((rp+0x81)as*mut u8,4);
  let gate:unsafe extern "system" fn(usize,usize,usize,u8)->u8=std::mem::transmute(base+0x436370);
  ptr::write((sp+0x80)as*mut u8,0);assert_eq!(gate(im,sp,hp,0),1);
  ptr::write((sp+0x80)as*mut u8,1);assert_eq!(gate(im,sp,hp,0),0);
  ptr::write((sp+0x80)as*mut u8,0);assert_eq!(gate(im,sp,hp,0),1);
+ // Execute the real common immunity predicate through the installed detour,
+ // then continue the real contact gate's later rejection/relationship checks.
+ let prepared=crate::hook::prepare((base+crate::soul_immunity::RVA)as*mut u8,crate::soul_immunity::immunity as*const u8,64).unwrap();
+ let previous=crate::soul_immunity::ORIGINAL.swap(prepared.trampoline,Ordering::AcqRel);
+ crate::hook::write_code((base+crate::soul_immunity::RVA)as*mut u8,&prepared.patch).unwrap();
+ unsafe extern "system" fn native_immunity(actor:usize,reference:usize)->u8{
+  let f:unsafe extern "system" fn(usize,usize,u8)->u8=std::mem::transmute(BASE.load(Ordering::Acquire)+crate::soul_immunity::RVA);f(actor,reference,0)
+ }
+ thread_local!{static GATE_MODULE:Cell<usize>=const{Cell::new(0)};}
+ unsafe extern "system" fn native_contact(hit:usize,target:usize,_:usize)->u8{
+  let f:unsafe extern "system" fn(usize,usize,usize,u8)->u8=std::mem::transmute(BASE.load(Ordering::Acquire)+0x436370);f(GATE_MODULE.with(Cell::get),target,hit,0)
+ }
+ GATE_MODULE.with(|s|s.set(im));vt[0x200/8]=native_immunity as*const()as usize;
+ stats[0x58]=1; // Native complete TAE invulnerability, not a synthetic bool getter.
+ let victim=read_ptr(sp+8)as u64;let limbs=crate::soul_immunity::encode(victim);
+ ptr::write_unaligned((dp+0x30)as*mut[f32;4],[900.,limbs[0],limbs[1],limbs[2]]);
+ copy(pp,dp);int(pp+4,crate::soul_critical::BULLET);int(bp+0xa4,crate::soul_critical::BULLET);int(hp+0x40,crate::soul_critical::ATTACK);
+ {let _f=factory(pp);assert_eq!(ptr::read_unaligned((pp+0x124)as*const[f32;4]),[1.;4]);factory_done(gp);let _i=initialize(gp);bound(bp);}
+ assert_eq!(seed(bp).unwrap().victim,Some(victim));
+ assert_eq!(gate(im,sp,hp,0),0); // Same attack without its matching contact scope.
+ // Rejected unrelated gates do not spend this wave's target allowance.
+ stats[0x25c]=1;assert_eq!(contact(native_contact,hp,sp,bp),0);stats[0x25c]=0;
+ ptr::write((rp+0x81)as*mut u8,0);assert_eq!(contact(native_contact,hp,sp,bp),0);ptr::write((rp+0x81)as*mut u8,4);
+ source[1]=victim as usize+1;assert_eq!(contact(native_contact,hp,sp,bp),0);source[1]=victim as usize;
+ int(hp+0x40,ATTACK);assert_eq!(contact(native_contact,hp,sp,bp),0);int(hp+0x40,crate::soul_critical::ATTACK);
+ // Nested ordinary collisions must mask, then restore, the outer exception.
+ unsafe extern "system" fn nested_contact(hit:usize,target:usize,_:usize)->u8{
+  assert_eq!(contact(native_contact,hit,target,0),0);native_contact(hit,target,0)
+ }
+ assert_eq!(contact(nested_contact,hp,sp,bp),1);assert_eq!(contact(native_contact,hp,sp,bp),0);
+ assert_eq!(gate(im,sp,hp,0),0);assert_eq!(stats[0x58],1); // No actor flags were changed.
+ // Metadata survives independent root reconstruction; it is not last-target state.
+ {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
+ assert_eq!(contact(native_contact,hp,sp,bp),1);
+ // Old/non-tagged packets and lightning never gain an exception.
+ ptr::write_unaligned((pp+0x128)as*mut[f32;3],[1.;3]);
+ {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
+ assert_eq!(seed(bp).unwrap().victim,None);assert_eq!(contact(native_contact,hp,sp,bp),0);
+ int(pp+4,BULLET);int(bp+0xa4,BULLET);ptr::write_unaligned((pp+0x128)as*mut[f32;3],limbs);int(hp+0x40,ATTACK);
+ {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
+ assert_eq!(seed(bp).unwrap().victim,None);assert_eq!(contact(native_contact,hp,sp,bp),0);
+ crate::soul_immunity::ORIGINAL.store(previous,Ordering::Release);
  reset();BASE.store(old_base,Ordering::Release);
  SAMPLES.lock().unwrap().clear();ACTIVE.store(old_active,Ordering::Release);crate::glass_cannon::ORIGINAL.store(old_calc,Ordering::Release);VirtualFree(memory,0,MEM_RELEASE);
 }}

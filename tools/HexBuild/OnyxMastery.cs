@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 static class OnyxMastery {
  public const int Owner=95005300;
  public const float MeteorRange=20f, MeteorSpeed=15f;
- public const int MeteorPhysical=50, MeteorMagic=50;
+ public const int MeteorPhysical=100, MeteorMagic=100;
  public const int Receipt=Owner+1, Finish=6955300, Started=6955301, Lot=95553000, Behavior=95005390, Judge=3998;
  public static readonly int[] Markers=[Receipt,Finish,Started];
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone,PARAM lots){
@@ -49,6 +49,31 @@ static class OnyxMastery {
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
+ public static void BalanceStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=Path.Combine(root,"work/onyx-balance",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
+  string input=Path.Combine(mod,"regulation.bin"),output=Path.Combine(dir,"regulation.bin");
+  var b=SFUtil.DecryptNightreignRegulation(input);var original=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=b.Files.Single(f=>Name(f)=="AtkParam_Pc.param");var p=parse("AtkParam_Pc",file.Bytes);
+  var row=p.Rows.Single(r=>r.ID==Owner+60);
+  Check(new[]{"atkPhys","atkMag"}.All(f=>Convert.ToInt32(row[f].Value) is 50 or 100),"Unexpected meteor damage baseline");
+  Set(row,"atkPhys",MeteorPhysical);Set(row,"atkMag",MeteorMagic);file.Bytes=p.Write();
+  SFUtil.EncryptNightreignRegulation(output,b,b.Compression);var read=SFUtil.DecryptNightreignRegulation(output);
+  Check(read.Files.Count==b.Files.Count&&read.Version==b.Version&&read.Compression==b.Compression,"Regulation structure changed");
+  foreach(var f in read.Files)Check(f.Bytes.Span.SequenceEqual(b.Files.Single(x=>x.ID==f.ID).Bytes.Span),"Parameter readback differs");
+  foreach(var f in read.Files.Where(f=>f.ID!=file.ID))Check(f.Bytes.Span.SequenceEqual(original[f.ID]),"Unrelated table changed");
+  var before=parse("AtkParam_Pc",original[file.ID]);var after=parse("AtkParam_Pc",read.Files.Single(f=>f.ID==file.ID).Bytes);
+  Check(before.Rows.Count==after.Rows.Count,"Attack row count changed");
+  foreach(var (old,now) in before.Rows.Zip(after.Rows)){
+   // MMV may repeat native row IDs; compare in order without deduplicating.
+   Check(old.ID==now.ID&&old.Name==now.Name,"Attack row identity/order changed");
+   foreach(var c in old.Cells)if(old.ID==Owner+60&&c.Def.InternalName is "atkPhys" or "atkMag")
+    Check(Convert.ToInt32(now[c.Def.InternalName].Value)==100,"Meteor damage differs");
+   else Check(Value(c.Value)==Value(now[c.Def.InternalName].Value),"Unrelated attack field changed");
+  }
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{version="0.17.299",attack=Owner+60,physical=MeteorPhysical,magic=MeteorMagic,onlyMeteorDamageChanged=true,inputSha256=Hash(input),outputSha256=Hash(output),gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(dir,"texts"),allRewards:true,onlyIds:new[]{Owner},inputMod:mod);
+  Console.WriteLine("PASS: only meteor damage and mastery descriptions staged; parameter and text readback passed");
+ }
  public static void RefreshPlanted(string sourceMod,string outputMod,Func<string,Memory<byte>,PARAM> parse){
   Directory.CreateDirectory(Path.Combine(outputMod,"chr"));
   var b=SFUtil.DecryptNightreignRegulation(Path.Combine(sourceMod,"regulation.bin"));var original=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());

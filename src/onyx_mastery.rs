@@ -12,7 +12,7 @@ pub const JUDGE:i32=3998;
 pub const QUERY:i32=990053;
 pub const FP_QUERY:i32=990054;
 pub const START_END_QUERY:i32=990056;
-pub const METEOR_FP:i16=5;
+pub const METEOR_FP:i16=10;
 pub const ARTS_FEE_RVA:usize=0x6ce5a0;
 pub const ARTS_FEE_PATTERN:&str="40 53 48 83 EC 20 4C 8B 49 08 4D 85 C0";
 pub const FP_ADD_RVA:usize=0x4261c0;
@@ -56,7 +56,7 @@ pub unsafe fn free_channel(actor:usize,base:usize)->bool{
  let (source,hand,_)=ACTION.with(Cell::get);
  source==actor&&hand_owned(actor,hand,base)&&ready(actor)
 }
-/// A private five-point art fee passed through the native art multiplier and
+/// A private ten-point art fee passed through the native art multiplier and
 /// rounding routine. Never edit the shared SwordArtsParam or its 27-FP startup.
 unsafe fn meteor_fee(actor:usize,base:usize)->i32{
  let _scope=crate::onyx_fp::Guard::enter(actor,None,base);

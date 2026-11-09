@@ -192,10 +192,10 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
 // factory captures it and restores neutral coefficients before native use.
 // Thus network-recreated roots do not depend on a process-global last damage.
 #[repr(C,align(16))]struct Descriptor([u8;0x110]);
-pub unsafe fn emit_soul(handle:u64,damage:f32,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage,point,leak:false},crate::soul_critical::BULLET,base)}
-pub unsafe fn emit_soul_prelude(handle:u64,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage:0.,point,leak:false},crate::soul_critical::PRELUDE,base)}
-unsafe fn emit(p:Pending,base:usize)->bool{emit_kind(p,if p.leak{LEAK_BULLET}else{BULLET},base)}
-unsafe fn emit_kind(p:Pending,bullet:i32,base:usize)->bool{
+pub unsafe fn emit_soul(handle:u64,target:u64,damage:f32,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage,point,leak:false},crate::soul_critical::BULLET,Some(target),base)}
+pub unsafe fn emit_soul_prelude(handle:u64,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage:0.,point,leak:false},crate::soul_critical::PRELUDE,None,base)}
+unsafe fn emit(p:Pending,base:usize)->bool{emit_kind(p,if p.leak{LEAK_BULLET}else{BULLET},None,base)}
+unsafe fn emit_kind(p:Pending,bullet:i32,victim:Option<u64>,base:usize)->bool{
  let manager=read_ptr(base+0x3c0ae30);if manager==0{return false;}
  let mut d=Descriptor([0;0x110]);let at=d.0.as_mut_ptr()as usize;
  ptr::write_unaligned(at as*mut u64,p.handle);
@@ -203,7 +203,8 @@ unsafe fn emit_kind(p:Pending,bullet:i32,base:usize)->bool{
  ptr::write_unaligned((at+0x14)as*mut i32,bullet);
  for offset in [0x28,0x2c]{ptr::write_unaligned((at+offset)as*mut i32,0x10);}
  d.0[0xa8]=0xff;d.0[0x105]=0xff;
- ptr::write_unaligned((at+0x30)as*mut[f32;4],[p.damage,1.,1.,1.]);
+ let v=victim.map(crate::soul_immunity::encode).unwrap_or([1.;3]);
+ ptr::write_unaligned((at+0x30)as*mut[f32;4],[p.damage,v[0],v[1],v[2]]);
  ptr::write_unaligned((at+0x44)as*mut u32,15); // fixed independent pose + direct row + network
  ptr::write_unaligned((at+0x50)as*mut[[f32;4];4],[[1.,0.,0.,0.],[0.,1.,0.,0.],[0.,0.,1.,0.],[p.point[0],p.point[1],p.point[2],1.]]);
  ptr::write_unaligned((at+0xb8)as*mut u64,u64::MAX);
@@ -211,7 +212,7 @@ unsafe fn emit_kind(p:Pending,bullet:i32,base:usize)->bool{
  let emit:unsafe extern "system" fn(usize,usize,usize,usize)->usize=std::mem::transmute(crate::echo_cast::EMIT_ORIGINAL.load(Ordering::Acquire));
  emit(manager,&mut out as*mut i32 as usize,at,&mut error as*mut i32 as usize);out>=0
 }
-struct Discharge{damage:f32,targets:Mutex<BTreeSet<u64>>}
+struct Discharge{damage:f32,victim:Option<u64>,targets:Mutex<BTreeSet<u64>>}
 #[derive(Default)]struct Flights{groups:BTreeMap<usize,(i32,Arc<Discharge>)>,instances:BTreeMap<usize,(u64,Arc<Discharge>)>}
 static FLIGHTS:Mutex<Flights>=Mutex::new(Flights{groups:BTreeMap::new(),instances:BTreeMap::new()});
 thread_local!{static SEED:RefCell<Option<Arc<Discharge>>>=const{RefCell::new(None)};static CHILD:RefCell<Option<Arc<Discharge>>>=const{RefCell::new(None)};}
@@ -223,7 +224,8 @@ pub unsafe fn factory(payload:usize)->SeedGuard{
  let private=ACTIVE.load(Ordering::Acquire)&&payload!=0&&private_bullet(read_i32(payload+4));
  let seed=if private{CHILD.with(|s|s.borrow().clone()).or_else(||{
   let damage=ptr::read_unaligned((payload+0x124)as*const f32);
-  (matches!(read_i32(payload+4),BULLET|LEAK_BULLET|crate::soul_critical::BULLET)&&damage.is_finite()&&damage>0.).then(||Arc::new(Discharge{damage,targets:Mutex::new(BTreeSet::new())}))
+  let victim=if read_i32(payload+4)==crate::soul_critical::BULLET{crate::soul_immunity::decode(ptr::read_unaligned((payload+0x128)as*const[f32;3]))}else{None};
+  (matches!(read_i32(payload+4),BULLET|LEAK_BULLET|crate::soul_critical::BULLET)&&damage.is_finite()&&damage>0.).then(||Arc::new(Discharge{damage,victim,targets:Mutex::new(BTreeSet::new())}))
  })}else{None};
  let restore=if private{let p=payload+0x124;let v=ptr::read_unaligned(p as*const[f32;4]);ptr::write_unaligned(p as*mut[f32;4],[1.;4]);Some((p,v))}else{None};
  SeedGuard(SEED.with(|s|s.replace(seed)),restore)
@@ -247,6 +249,9 @@ pub unsafe fn constructed(hit:usize,context:usize){
  // calculation independently suppresses offensive factors already captured.
 }
 pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,hit:usize,target:usize,bullet:usize)->u8{
+ // Every nested collision masks an outer victim exception, including ordinary
+ // attacks. Restore it only when the nested synchronous contact returns.
+ let _outer=crate::soul_immunity::contact(None);
  if !ACTIVE.load(Ordering::Acquire)||bullet==0||!private_bullet(read_i32(bullet+0xa4)){return original(hit,target,bullet);}
  // The visual carrier must never consume a target in the shared hit list.
  if read_i32(bullet+0xa4)==crate::soul_critical::PRELUDE{return 0;}
@@ -259,6 +264,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
     &&handle==read_ptr(bullet+0xb0)as u64
     &&matches!(ptr::read((target+0x710)as*const u8),1|2){return 0;}
  {let Ok(mut targets)=seed.targets.lock()else{return 0;};if !targets.insert(handle){return 0;}}
+ let _immunity=crate::soul_immunity::contact((read_i32(bullet+0xa4)==crate::soul_critical::BULLET&&seed.victim==Some(handle)).then_some((target,hit)));
  let _guard=ContactGuard(CONTACT.with(|s|s.replace(true)));
  let result=original(hit,target,bullet);
  // Native rejection (e.g. dodge) must leave that target eligible for the wave.

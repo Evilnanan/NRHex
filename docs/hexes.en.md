@@ -247,4 +247,4 @@ Critical hits unleash a shockwave.
 <!-- hex:95005300 -->
 ## Mastery: Onyx Lord’s Greatsword
 
-Wield the Onyx Lord’s Greatsword with greater mastery. Obtain an Onyx Lord’s Greatsword.
+Reduce stamina consumption when attacking with the Onyx Lord’s Greatsword. Its skill can be channeled to summon meteors. Obtain an Onyx Lord’s Greatsword.

@@ -36,12 +36,12 @@ fn native_meteor_fee_is_paid_only_for_accepted_root_shots(){unsafe{
  int(st+0x140,100);int(st+0x154,1000);
  let mut descriptor=[0u8;0x18];descriptor[0x10]=1;let d=descriptor.as_ptr()as usize;let mut error=-1;let e=&mut error as*mut i32 as usize;
  let mut checks=0;
- for (rate,cost)in [(1f32,5),(0.8,4),(0.5,3),(0.,0),(2.,10)]{
+ for (rate,cost)in [(1f32,10),(0.8,8),(0.45,5),(0.,0),(2.,20)]{
   ptr::write_unaligned((rp+0x2e4)as*mut f32,rate);
   // Magic multipliers are intentionally irrelevant to a weapon art.
   ptr::write_unaligned((rp+0x2e8)as*mut f32,100.);
   assert_eq!(meteor_fee(a,base),cost);
-  for fp in [0,1,4,5,6,10,25]{
+  for fp in [0,1,7,8,9,10,11,19,20,50]{
    int(st+0x150,fp);query(a,1,241,1,true,base);
    assert_eq!(channel_available(a,base),Some(fp>=cost));
    let mut calls=0;let result=emit(a,BEHAVIOR,d,-1,e,base,||{calls+=1;1});
@@ -50,13 +50,13 @@ fn native_meteor_fee_is_paid_only_for_accepted_root_shots(){unsafe{
   }
  }
  ptr::write_unaligned((rp+0x2e4)as*mut f32,1.);
- int(st+0x150,25);for _ in 0..5{assert_eq!(emit(a,BEHAVIOR,d,-1,e,base,||1),1);}assert_eq!(read_i32(st+0x150),0);
+ int(st+0x150,50);for _ in 0..5{assert_eq!(emit(a,BEHAVIOR,d,-1,e,base,||1),1);}assert_eq!(read_i32(st+0x150),0);
  assert_eq!(emit(a,BEHAVIOR,d,-1,e,base,||panic!("free sixth meteor")),0);
  int(st+0x150,100);assert_eq!(emit(a,BEHAVIOR,d,-1,e,base,||0),0);assert_eq!(read_i32(st+0x150),100);
  // Native setter immunity, inactive cost effects, remote/other behaviors and
  // a non-emitting TAE descriptor must retain their own original behavior.
  ptr::write((st+0x189)as*mut u8,0x10);assert_eq!(emit(a,BEHAVIOR,d,-1,e,base,||1),1);assert_eq!(read_i32(st+0x150),100);ptr::write((st+0x189)as*mut u8,0);
- ptr::write_unaligned((rp+0x2e4)as*mut f32,0.);int(n+0x68,2);assert_eq!(meteor_fee(a,base),5);int(n+0x68,0);
+ ptr::write_unaligned((rp+0x2e4)as*mut f32,0.);int(n+0x68,2);assert_eq!(meteor_fee(a,base),10);int(n+0x68,0);
  for behavior in [95005350,95005353,95005354,300805900]{assert_eq!(emit(a,behavior,d,-1,e,base,||7),7);assert_eq!(read_i32(st+0x150),100);}
  assert_eq!(emit(a+8,BEHAVIOR,d,-1,e,base,||7),7);
  descriptor[0x10]=0;assert_eq!(emit(a,BEHAVIOR,descriptor.as_ptr()as usize,-1,e,base,||7),7);descriptor[0x10]=1;
@@ -87,7 +87,7 @@ fn native_meteor_fee_is_paid_only_for_accepted_root_shots(){unsafe{
  put(wn,wild_row.as_mut_ptr()as usize);int(wn+8,crate::arts::OWNER);put(wn+0x38,n);put(m+8,wn);
  ARTS_OWNED.store(true,Ordering::Relaxed);
  let reference=[1041usize,art_row.as_ptr()as usize];
- for(rate,start,meteor)in [(1f32,27,5),(0.8,22,4),(0.5,14,3),(0.,0,0),(2.,54,10)]{
+ for(rate,start,meteor)in [(1f32,27,10),(0.8,22,8),(0.45,13,5),(0.,0,0),(2.,54,20)]{
   ptr::write_unaligned((rp+0x2e4)as*mut f32,rate);int(st+0x150,100);
   let saved_wild=wild_node;let saved_node=node;let saved_row=wild_row;
   for button in 0..4{assert_eq!(check(am,button,1),1);reserve(am,button,1);assert_eq!(read_i32(am+0x10),start);checks+=1;}
@@ -104,7 +104,7 @@ fn native_meteor_fee_is_paid_only_for_accepted_root_shots(){unsafe{
  WEAPON.store(8010000,Ordering::Relaxed);LEFT_WEAPON.store(2000000,Ordering::Relaxed);
  int(st+0x150,100);reserve(am,0,1);
  let add:unsafe extern "system" fn(usize,i32)=std::mem::transmute(base+FP_ADD_RVA);add(st,-read_i32(am+0x10));
- for _ in 0..5{assert_eq!(emit(a,BEHAVIOR,d,-1,e,base,||1),1);}assert_eq!(read_i32(st+0x150),48,"Wildcard must not waive the 52-FP total");
+ for _ in 0..5{assert_eq!(emit(a,BEHAVIOR,d,-1,e,base,||1),1);}assert_eq!(read_i32(st+0x150),23,"Wildcard must not waive the 77-FP total");
  crate::ACTIVE.store(false,Ordering::Release);reserve(am,0,1);assert_eq!(read_i32(am+0x10),0);
  ARTS_OWNED.store(false,Ordering::Relaxed);crate::ACTIVE.store(saved_active,Ordering::Release);crate::BASE.store(saved_base,Ordering::Release);
  assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);println!("PASS: {checks} native affordability/payment cases, five-shot total, failure, immunity and ownership boundaries");
