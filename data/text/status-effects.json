@@ -51,7 +51,7 @@
     "zhName": "专注值上限提升",
     "enName": "Maximum FP Increased",
     "zhInfo": "每层永久提升1%专注值上限，效果叠加时以乘算计算",
-    "enInfo": "Raises maximum FP by 1% per stack for the rest of the expedition. Stacks apply multiplicatively."
+    "enInfo": "Permanently increases maximum FP by 1% per stack. Stacks apply multiplicatively."
   },
   {
     "textId": 95002503,

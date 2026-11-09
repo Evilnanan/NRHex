@@ -142,7 +142,7 @@ Releases a mist that charms enemies upon landing a charged attack. Cooldown: 30 
 <!-- hex:95002900 -->
 ## Essence Reaver
 
-Defeating an enemy raises maximum FP by 1% for the rest of the expedition.
+Defeating an enemy permanently increases maximum FP by 1%.
 
 <!-- hex:95003000 -->
 ## Death's Dance

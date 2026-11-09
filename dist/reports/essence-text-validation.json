@@ -1,0 +1,166 @@
+{
+  "version": "0.17.299",
+  "change": "Essence Reaver English wording only",
+  "description": "Defeating an enemy permanently increases maximum FP by 1%.",
+  "readback": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "29F1E725F4E0D37F10A96B852CB0FF04AF9D58A495395B81ED4938BE5717DC7E",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "71BF37C144C83D30EA8A0D2A444858F0165460B9780252CDE221160AA4E656AC",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "AB7F985E46C0A8C94589C71C930A3C7F8A7966E5FF4DD46727AE9F8786A906C4",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "C98C9D4142712DBE0F1403592E1BF0CF6CCAE6A6EDA6DA0A18EF8002A096334A",
+          "outputSha256": "C98C9D4142712DBE0F1403592E1BF0CF6CCAE6A6EDA6DA0A18EF8002A096334A",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "D4CD0AAF936FF6379FF082B71E5BE5A6B116FA257B621AA5CD743E86F7F7B85C",
+          "outputSha256": "D4CD0AAF936FF6379FF082B71E5BE5A6B116FA257B621AA5CD743E86F7F7B85C",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "8D09934F821D28062BE4190CE7FB67398E9F602A237D611C715BD2EB1FB6110C",
+          "outputSha256": "6DE439EC7B82F03EA6974D61D5F8A1574FB89A9B67D9996BED044EDD8DA5F1D3",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95002900,
+              "before": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition.",
+              "after": "Defeating an enemy permanently increases maximum FP by 1%."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95002900,
+              "before": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition.",
+              "after": "Defeating an enemy permanently increases maximum FP by 1%."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95002900,
+              "before": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition.",
+              "after": "Defeating an enemy permanently increases maximum FP by 1%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "3B10A68FC1022EDB8697B222ABB879091500F3BCBB95CCCA54442202664E5E25",
+          "outputSha256": "4AC4576AAFFF25C6D4ADC494467E644B2B96C68500901D08F60AF3114875EBA7",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95002902,
+              "before": "Raises maximum FP by 1% per stack for the rest of the expedition. Stacks apply multiplicatively.",
+              "after": "Permanently increases maximum FP by 1% per stack. Stacks apply multiplicatively."
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95002900,
+              "before": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition.",
+              "after": "Defeating an enemy permanently increases maximum FP by 1%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "29F1E725F4E0D37F10A96B852CB0FF04AF9D58A495395B81ED4938BE5717DC7E",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "71BF37C144C83D30EA8A0D2A444858F0165460B9780252CDE221160AA4E656AC",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "AB7F985E46C0A8C94589C71C930A3C7F8A7966E5FF4DD46727AE9F8786A906C4",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "D2A97D3068A7BF026C0FEA98FF612703C52D9E697785ABC29BFA84C8DE4D9BE5",
+          "outputSha256": "D2A97D3068A7BF026C0FEA98FF612703C52D9E697785ABC29BFA84C8DE4D9BE5",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "CCFF551A9EB7B7E0B9BF465C1B1264A94193D982F689868F7F1708CD4A946F41",
+          "outputSha256": "CCFF551A9EB7B7E0B9BF465C1B1264A94193D982F689868F7F1708CD4A946F41",
+          "changes": [],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "ABE4865B19C652831DCA33126F9877E5EFD22D0AF20CE1A36A8A158C45943327",
+          "outputSha256": "1A42EAEA959AB6085135BFBFDF995421403C92408099481DBAFC4E04F06E8A4B",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95002900,
+              "before": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition.",
+              "after": "Defeating an enemy permanently increases maximum FP by 1%."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95002900,
+              "before": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition.",
+              "after": "Defeating an enemy permanently increases maximum FP by 1%."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95002900,
+              "before": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition.",
+              "after": "Defeating an enemy permanently increases maximum FP by 1%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "AF6A9F2BAB1C78846928A73566A8E0F293A64A907D16CA03FDA09F3646E28700",
+          "outputSha256": "71D5A5CB120A2ED1899AA05E03C8F6A1E3DC04DD6138481C4AD9369E61A1FAA1",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95002902,
+              "before": "Raises maximum FP by 1% per stack for the rest of the expedition. Stacks apply multiplicatively.",
+              "after": "Permanently increases maximum FP by 1% per stack. Stacks apply multiplicatively."
+            },
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95002900,
+              "before": "Defeating an enemy raises maximum FP by 1% for the rest of the expedition.",
+              "after": "Defeating an enemy permanently increases maximum FP by 1%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "unchangedArtifacts": {
+    "dist/natives/NRHex.dll": "8befee64c25ed163e2459592ea449dbe656dd400683065cf315abe5a137fe04f",
+    "dist/mod/regulation.bin": "4e1c0e693cf93fbc296cb462b98214a3ac4da3013ad387e2fdd8daad133ed220",
+    "dist/mmv/natives/NRHex.dll": "d2c3f6a62b1167943ffe9694e5f1be921c3ec1acb7723cd449acc15121e30afa",
+    "dist/mmv/mod/regulation.bin": "90d9a6a4782045aea178a1818b65c287e4479b141445f9ae0e43b5ec351919bc"
+  },
+  "chineseTextUnchanged": true,
+  "mechanicsUnchanged": true,
+  "gameplayVerified": false
+}
