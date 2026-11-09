@@ -1,0 +1,54 @@
+{
+  "version": "0.17.299",
+  "baselineCommit": "27b0c0029d9d5c663e3c59eb76cb9827c202069a",
+  "change": "Monster Cage starts at one stack",
+  "event": 9100961,
+  "firstOpeningStacks": 1,
+  "laterOpeningStacks": "saturating 32-bit opener/gaol count, including this use",
+  "attackPerStack": 1.2,
+  "damageTakenPerStack": 0.8,
+  "patch": "Move the existing counter increment before the 32 shared-bit writes and remap its instruction parameter bindings",
+  "nativeKeyAndRejectedRequestsDoNotIncrement": true,
+  "eachSharedBitWrittenExactlyOnce": true,
+  "counterStorageAndExistingValuesPreserved": true,
+  "eventReadbackPassed": true,
+  "patchIdempotencePassed": true,
+  "unrelatedEventsAndMetadataPreserved": true,
+  "artifacts": {
+    "standalone": {
+      "beforeSha256": "ea9a4ea167bdd122a534cca053cc44dcbde2b5c3acab4c80a31796e39110c0cb",
+      "afterSha256": "b7f0c52347702842906dcf755c1da005f536469aa0aa9d500d629fd538c793d4",
+      "reportSha256": "f47e1eac35a53e0d488275f3575e442805dc12fcd59098eda94115fa5c3a6bb2",
+      "eventCases": 4052
+    },
+    "mmv": {
+      "beforeSha256": "f8442bca05e53cf27c04758a1beb07e1fd470c564d2c00ac06570334e7a0de9e",
+      "afterSha256": "47665e9b6fd1f942037a9f046f9295b4afbfb0b24ef721b1e0b450eb1c7ba44b",
+      "reportSha256": "87ccde0b3ae23c246c3fb390706eedadc612b79ca76eee5f472a65c608ffcec4",
+      "eventCases": 5704
+    }
+  },
+  "unchangedArtifacts": {
+    "dist/natives/NRHex.dll": "8befee64c25ed163e2459592ea449dbe656dd400683065cf315abe5a137fe04f",
+    "dist/mod/regulation.bin": "4e1c0e693cf93fbc296cb462b98214a3ac4da3013ad387e2fdd8daad133ed220",
+    "dist/mmv/natives/NRHex.dll": "d2c3f6a62b1167943ffe9694e5f1be921c3ec1acb7723cd449acc15121e30afa",
+    "dist/mmv/mod/regulation.bin": "90d9a6a4782045aea178a1818b65c287e4479b141445f9ae0e43b5ec351919bc",
+    "dist/mod/event/m46_50_00_00.emevd.dcx": "43debb24a53f903e9d42321f588cf467f1a0983ae15cdcc7732a66a93a238b4d",
+    "dist/mod/event/m46_60_00_00.emevd.dcx": "948aa35731f0156cc752b8f9d69faa0e10f69a0d040d224bde42871963f2de8f",
+    "dist/mod/event/m46_70_00_00.emevd.dcx": "a06b626588df9e614e2b0f869109d4953a3e5fcd4c2ee1919084a4480477986c",
+    "dist/mod/event/m46_80_00_00.emevd.dcx": "f79684ffa8a5a5400443456d5bf9b9975d26b359401726c392d45f3043ae7dc2",
+    "dist/mmv/mod/event/m46_70_00_00.emevd.dcx": "0cd0a6095c4fd944b0552fe9ccab5913159bb7809a4209cc424e8a459416912f",
+    "dist/mmv/mod/event/m46_50_00_00.emevd.dcx": "5d928333ac7c2bfc02bfa596c7ac22709a442d4e1c4290d8a3ce53fda9cbfe52",
+    "dist/mmv/mod/event/m46_60_00_00.emevd.dcx": "db9d551887c046bc8379115cf87d7bd7258cc54f84f166af2a545340a9ae0272",
+    "dist/mmv/mod/event/m46_80_00_00.emevd.dcx": "30eb7487d44c7ed9c3fe6274c394919fa603cdd65306b8c649da7ae52a8d0618"
+  },
+  "verification": "Serialized events interpreted with native event-value flag updates; no in-game or multiplayer execution",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "sourceHashes": {
+    "tools/HexBuild/CageEscalation.cs": "d11787a35c69114c8a0ba48af2cf23b9ae7eeb747a9adfe5c5f252daefabe282",
+    "tools/HexBuild/Program.cs": "ac38e8361748dfa4c1d56d293f95709e265e2283d11925dc8d73d76969530b2f",
+    "tools/cage_usage_events.py": "7a77d9500bf438a539f5a40e2f7c2357723d46e602b921bd23f528b007b1086e",
+    "tools/verify_cage_escalation.py": "84a00390bd2b6d5f4b768e42a570308d22cab0a92d2ef8a97bae24b3e139bafa"
+  }
+}

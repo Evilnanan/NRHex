@@ -66,6 +66,7 @@ class BuffVM:
 
 
 def event_checks(report):
+    assert report['firstOpeningStacks']==1
     opener=report['reports'][0]['events'][0]
     cases=0
     workers=set()
@@ -77,11 +78,12 @@ def event_checks(report):
         for a in args:
             for owner in (False,True):
                 for keys in (0,1):
-                    for count in (0,1,2,4,5,6,31,32,255,1024,65536):
+                    for count in (0,1,2,4,5,6,31,32,255,1024,65536,0xfffffffe,0xffffffff):
                         for player in (1,2,3):
                             result=opening(opener,a,owner,keys,count,player=player)
                             assert result['request']==owner
-                            assert result['count']==count+int(owner)
+                            assert result['count']==min(count+int(owner),0xffffffff)
+                            assert result['increments']==int(owner)
                             assert result['removed']==int(not owner and keys>0)
                             assert result['opened']==(not owner and keys>0)
                             if owner:
@@ -89,11 +91,12 @@ def event_checks(report):
                                 assert len(writes)==33 and len({f for f,v in writes})==33
                                 # Actual network encoding sends all ON before OFF.
                                 for flag,value in sorted(writes,key=lambda x:not x[1]):flags[flag]=value
-                                assert sum(int(flags[layout['shared']+bit])<<bit for bit in range(32))==count
+                                assert sum(int(flags[layout['shared']+bit])<<bit for bit in range(32))==min(count+1,0xffffffff)
                             cases+=1
             for guard in ('busy','request','normal_open','night'):
                 result=opening(opener,a,keys=1,count=9,**{guard:True})
-                assert result['increments']==0 and not result['messages']
+                assert result['count']==9 and result['increments']==0 and not result['writes']
+                assert result['removed']==0 and not result['messages']
         for enc in layout['encounters']:
             assert p+8500<=enc['id']<p+9000 and enc['id'] not in workers
             workers.add(enc['id'])

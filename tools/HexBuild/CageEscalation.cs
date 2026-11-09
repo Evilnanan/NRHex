@@ -4,7 +4,7 @@ using System.Text.Json;
 
 // Final event pass, run after the standalone or MMV encounter pool is complete.
 // Category 5 counters are peer/map-instance local; category 7 publishes only
-// the opener's previous count. Each peer reconstructs native local effects.
+// the opener's count including this opening. Each peer reconstructs local effects.
 static class CageEscalation {
  public const int Effect=95001604, Icon=20406, DefenseIcon=20408, Bits=32;
  public const float AttackPerStack=1.2f,DamageTakenPerStack=.8f;
@@ -35,7 +35,7 @@ static class CageEscalation {
   }
  }
  public static EMEVD.Event Open(EMEVD.Event old){
-  if(old.Parameters.Any(p=>p.SourceStartByte>=32))return old;
+  if(old.Parameters.Any(p=>p.SourceStartByte>=32))return FirstOpening(old);
   var next=new EMEVD.Event(old.ID,old.RestBehavior){Name=old.Name};
   int removed=0,increments=0;
   void Add(EMEVD.Instruction i)=>next.Instructions.Add(i);
@@ -60,7 +60,57 @@ static class CageEscalation {
    int at=next.Instructions.Count;Add(new(ins.Bank,ins.ID,ins.ArgData.ToArray()){Layer=ins.Layer});
    foreach(var p in old.Parameters.Where(p=>p.InstructionIndex==n))next.Parameters.Add(new EMEVD.Parameter{InstructionIndex=at,TargetStartByte=p.TargetStartByte,SourceStartByte=p.SourceStartByte,ByteCount=p.ByteCount,UnkID=p.UnkID});
   }
-  Check(removed==1&&increments==1,"Expected one personal limit and increment");return next;
+  Check(removed==1&&increments==1,"Expected one personal limit and increment");return FirstOpening(next);
+ }
+ // Keep the native saturated counter, but publish it after counting this use.
+ // Move the instruction and all parameter bindings together; no new flags.
+ static EMEVD.Event FirstOpening(EMEVD.Event old){
+  int first=(int)old.Parameters.Single(p=>p.SourceStartByte==32).InstructionIndex;
+  int increment=old.Instructions.FindIndex(i=>Op(i,2003,127));
+  Check(increment>=0&&old.Instructions.Count(i=>Op(i,2003,127))==1,"Expected one opener increment");
+  Check(increment==first-1||increment==first+Bits*4,"Unexpected increment/publication ordering");
+  Check(U(old.Instructions[increment],4)==Bits&&U(old.Instructions[increment],8)==uint.MaxValue,"Counter width or saturation changed");
+  Check(old.Parameters.Count(p=>p.InstructionIndex==increment)==1&&old.Parameters.Any(p=>p.InstructionIndex==increment&&p.SourceStartByte==28&&p.TargetStartByte==0&&p.ByteCount==4),"Counter binding changed");
+  for(int bit=0;bit<Bits;bit++){
+   int at=first+bit*4;
+   Check(old.Instructions[at].ArgData.SequenceEqual(I(1003,1,(byte)2,(byte)1,(byte)0,0u).ArgData)&&Op(old.Instructions[at],1003,1),"Publication condition changed");
+   foreach(var (offset,op,on) in new[]{(1,69,0),(3,69,1)})Check(Op(old.Instructions[at+offset],2003,op)&&old.Instructions[at+offset].ArgData.SequenceEqual(I(2003,69,(byte)0,0u,(byte)on).ArgData),"Publication write changed");
+   Check(Op(old.Instructions[at+2],1000,3)&&old.Instructions[at+2].ArgData.SequenceEqual(I(1000,3,(byte)1).ArgData),"Publication skip changed");
+   foreach(var(offset,source)in new[]{(0,32+bit*8),(1,36+bit*8),(3,36+bit*8)})Check(old.Parameters.Count(p=>p.InstructionIndex==at+offset)==1&&old.Parameters.Any(p=>p.InstructionIndex==at+offset&&p.SourceStartByte==source&&p.TargetStartByte==4&&p.ByteCount==4),"Publication binding changed");
+  }
+  if(increment==first-1)return old;
+  var order=Enumerable.Range(0,old.Instructions.Count).ToList();order.RemoveAt(increment);order.Insert(first,increment);
+  var next=new EMEVD.Event(old.ID,old.RestBehavior){Name=old.Name};
+  foreach(int index in order){var i=old.Instructions[index];next.Instructions.Add(new(i.Bank,i.ID,i.ArgData.ToArray()){Layer=i.Layer});}
+  foreach(var p in old.Parameters)next.Parameters.Add(new EMEVD.Parameter{InstructionIndex=order.IndexOf((int)p.InstructionIndex),TargetStartByte=p.TargetStartByte,SourceStartByte=p.SourceStartByte,ByteCount=p.ByteCount,UnkID=p.UnkID});
+  return next;
+ }
+ public static void StageFirstOpening(string root,bool mmv){
+  string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=Path.Combine(root,"work/cage-first-layer",mmv?"mmv":"standalone");Directory.CreateDirectory(Path.Combine(dir,"event"));
+  string input=Path.Combine(mod,"event/common_func.emevd.dcx"),output=Path.Combine(dir,"event/common_func.emevd.dcx");
+  var before=EMEVD.Read(input);var next=EMEVD.Read(input);var old=next.Events.Single(e=>e.ID==Cages.OpenEvent);
+  Check(old.Parameters.Any(p=>p.SourceStartByte>=32),"Expected installed unlimited cage opener");
+  next.Events[next.Events.IndexOf(old)]=Open(old);next.Write(output);var read=EMEVD.Read(output);
+  Check(before.Format==read.Format&&before.Compression==read.Compression&&before.StringData.SequenceEqual(read.StringData)&&before.LinkedFileOffsets.SequenceEqual(read.LinkedFileOffsets),"Event metadata changed");
+  Check(next.Events.Count==read.Events.Count&&next.Events.Zip(read.Events).All(p=>Cages.Same(p.First,p.Second)),"Event readback changed");
+  foreach(var(a,b)in before.Events.Zip(read.Events))Check(Cages.Same(a.ID==Cages.OpenEvent?Open(a):a,b),"Unrelated event changed");
+  Check(Cages.Same(read.Events.Single(e=>e.ID==Cages.OpenEvent),Open(read.Events.Single(e=>e.ID==Cages.OpenEvent))),"Opener patch is not idempotent");
+  var reports=new List<object>{new{name="common_func",events=new[]{Cages.Dump(read.Events.Single(e=>e.ID==Cages.OpenEvent))}}};
+  foreach(string name in new[]{"m46_50_00_00","m46_60_00_00","m46_70_00_00","m46_80_00_00"}){
+   uint prefix=(uint)(4600+int.Parse(name.Substring(4,2)))*10000;var map=EMEVD.Read(Path.Combine(mod,"event",name+".emevd.dcx"));
+   var workers=map.Events.Where(e=>Owned(e,prefix)).ToArray();Check(workers.Length is 50 or 109,"Unexpected escalation workers");
+   var compare=workers[0].Instructions.Single(i=>Op(i,3,20));uint shared=U(compare,4),scratch=U(compare,12),done=scratch+33;
+   var encounters=workers.Select(e=>{
+    var members=e.Instructions.Where(i=>Op(i,2004,8)&&U(i,4)==Effect).Select(i=>U(i)).ToArray();
+    var flags=e.Instructions.Where(i=>Op(i,3,0)&&i.ArgData[0]==1&&i.ArgData[1]==1).Select(i=>U(i,4)).ToArray();
+    var battle=map.Events.Single(b=>b.Instructions.Any(i=>Op(i,3,0)&&i.ArgData[0]==0&&U(i,4)==done)&&b.Instructions.Any(i=>Op(i,2004,1)&&i.ArgData[4]==1&&members.Contains(U(i))));
+    return new{id=e.ID,battle=battle.ID,choice=flags[1],members,shown=flags.Skip(2).ToArray()};
+   }).ToArray();
+   var ids=workers.Select(e=>e.ID).Concat(encounters.Select(e=>e.battle)).Append(0).ToHashSet();
+   reports.Add(new{name,sha256=Hash(Path.Combine(mod,"event",name+".emevd.dcx")),layout=new{prefix,counter=prefix+5700,shared,scratch,initialized=scratch+32,done,encounters},events=map.Events.Where(e=>ids.Contains(e.ID)).Select(Cages.Dump)});
+  }
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{version="0.17.299",firstOpeningStacks=1,inputSha256=Hash(input),outputSha256=Hash(output),onlyOpenerInstructionOrderAndBindingsChanged=true,reports,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: one-based cage opening staged; serialized event readback, unrelated events and idempotence verified");
  }
  static object Map(EMEVD map,uint prefix){
   StripMap(map,prefix);
@@ -185,7 +235,7 @@ static class CageEscalation {
    reports.Add(new{name,layout,inputSha256=Hash(Path.Combine(input,"event",name+".emevd.dcx")),sha256=Hash(target),changed,events=after.Events.Where(e=>e.ID==0||e.ID==Cages.OpenEvent||layout!=null&&(Owned(e,(uint)(4600+int.Parse(name.Substring(4,2)))*10000)||e.Instructions.Any(i=>Op(i,2004,8)&&U(i,4)==CageCoop.Ready)||e.Instructions.Any(i=>Op(i,2003,69)&&U(i,4)==(uint)(4600+int.Parse(name.Substring(4,2)))*10000+7404&&i.ArgData[8]==1))).Select(Cages.Dump)});
   }
   HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(output,"texts"),allRewards:true,onlyIds:new[]{Cages.Owner},inputMod:input);
-  File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{effect=Effect,icon=Icon,bits=Bits,attackPerStack=AttackPerStack,damageTakenPerStack=DamageTakenPerStack,firstOpeningStacks=0,reports,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(output,"validation.json"),JsonSerializer.Serialize(new{effect=Effect,icon=Icon,bits=Bits,attackPerStack=AttackPerStack,damageTakenPerStack=DamageTakenPerStack,firstOpeningStacks=1,reports,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: unlimited cage openings, personal gaol counts, native multiplicative effects and HUD stack aggregation staged");
  }
 }

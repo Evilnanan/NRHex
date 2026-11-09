@@ -46,6 +46,7 @@ if(args.Contains("--double-dip-popup-stage")){DoubleDip.StagePopup(root);return;
 
 if(args.Contains("--cage-network-selector")){CageNetwork.Stage(root);return;}
 if(args.Contains("--cage-usage")){CageUsage.Stage(root);return;}
+if(args.Contains("--cage-first-layer")){CageEscalation.StageFirstOpening(root,args.Contains("--mmv"));return;}
 if(args.Contains("--cage-without-prelude")){CageUsage.StageWithoutPrelude(root);return;}
 if(args.Contains("--audit-peer-lifecycle")){Cages.StagePeerLifecycle(root);return;}
 if(args.Contains("--cage-peer-generation-only")){Cages.StagePeerGeneration(root);return;}

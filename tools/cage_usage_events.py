@@ -79,6 +79,8 @@ def opening(event, parameters, owner=True, keys=0, count=0, busy=False,
         elif n=='SetNetworkconnectedEventFlag':flags[a[1]]=bool(a[2]);writes.append((a[1],bool(a[2])))
         elif n=='IncrementEventValue':
             assert a==([counter,32,0xffffffff] if wide else [counter,3,5]);count=min(count+1,a[2]);increments+=1
+            if wide:
+                for bit in range(32):flags[counter+bit]=bool(count & (1<<bit))
         elif n=='RemoveItemFromPlayer':removed+=a[2]
         elif n=='RecordUserDispLog':messages.append(a)
         elif n=='EndUnconditionally':return finish()
