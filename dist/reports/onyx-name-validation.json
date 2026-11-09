@@ -1,0 +1,184 @@
+{
+  "version": "0.17.299",
+  "change": "Rename Onyx mastery",
+  "owner": 95005300,
+  "chineseName": "黑王",
+  "englishName": "Onyx Lord",
+  "readback": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "FDCBB99AAC76D2D0547ED4E2ADD172BEC90CD97CF953F5B25B9ADE5598FBCA3B",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "7E2E067F2E477FCDD34A9FEAC59D45F725E6F789E93BE7FF5298870C407CDFD8",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "70132BA137011EDA1DDBC71D40986F57327779734D748AB86C0101C1C7D216AA",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "C98C9D4142712DBE0F1403592E1BF0CF6CCAE6A6EDA6DA0A18EF8002A096334A",
+          "outputSha256": "4EC3979297F99C955B538B7829891AEFE486F62A2372C954F228B2D4AC8EE3E7",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95005300,
+              "before": "精通【黑王大剑】",
+              "after": "黑王"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95005300,
+              "before": "精通【黑王大剑】",
+              "after": "黑王"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "D4CD0AAF936FF6379FF082B71E5BE5A6B116FA257B621AA5CD743E86F7F7B85C",
+          "outputSha256": "09B311888C4914518A1B409F2ACD12948502190E2694A999D0CE1D91886EB5BA",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005300,
+              "before": "精通【黑王大剑】",
+              "after": "黑王"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "9C42407C3E3F8E3EADF14C58E58474895641F3257DA345881970AFA7204D695D",
+          "outputSha256": "6876279B5B8AF1F25F38F68F36AF460302C3AD24F9F9603CFF2A1A83B104398F",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95005300,
+              "before": "Mastery: Onyx Lord’s Greatsword",
+              "after": "Onyx Lord"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95005300,
+              "before": "Mastery: Onyx Lord’s Greatsword",
+              "after": "Onyx Lord"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "69905A03651E10B86D4E73022E8AEEDC732BFF1FF87C36BBD32CDCD580F45B64",
+          "outputSha256": "42DB34CB75A406E75A0B79935E23C230E88AFE6ACDBF3FD33AC83227707AF257",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005300,
+              "before": "Mastery: Onyx Lord’s Greatsword",
+              "after": "Onyx Lord"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "FDCBB99AAC76D2D0547ED4E2ADD172BEC90CD97CF953F5B25B9ADE5598FBCA3B",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "7E2E067F2E477FCDD34A9FEAC59D45F725E6F789E93BE7FF5298870C407CDFD8",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "70132BA137011EDA1DDBC71D40986F57327779734D748AB86C0101C1C7D216AA",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "D2A97D3068A7BF026C0FEA98FF612703C52D9E697785ABC29BFA84C8DE4D9BE5",
+          "outputSha256": "5D00DACA1B3209A9112500E1AA09ACF530DDD18D779B542570C6EBA22687668A",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95005300,
+              "before": "精通【黑王大剑】",
+              "after": "黑王"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95005300,
+              "before": "精通【黑王大剑】",
+              "after": "黑王"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "CCFF551A9EB7B7E0B9BF465C1B1264A94193D982F689868F7F1708CD4A946F41",
+          "outputSha256": "D868E1297C30C303A3419E471D63A7BA7D311B9CDC3FAC0D2627AE87F7E4D30B",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005300,
+              "before": "精通【黑王大剑】",
+              "after": "黑王"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "43649C6BCA02C8767C220AD197104FFE1B91A6FFF693CE7C43DB3DBF7946420B",
+          "outputSha256": "43C616F872650EB372CEA1B62791EAE6DAE993D5104076838C701249DBF57F8E",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95005300,
+              "before": "Mastery: Onyx Lord’s Greatsword",
+              "after": "Onyx Lord"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95005300,
+              "before": "Mastery: Onyx Lord’s Greatsword",
+              "after": "Onyx Lord"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "B80981510A2641FCA9E51E21CD4869E0342CC607AD1C975E1A74489152C3A565",
+          "outputSha256": "2301AD8734F57FE316F07D2B5A0BCBC42AA62993A72FDCBAF520F2CE5F989EF2",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005300,
+              "before": "Mastery: Onyx Lord’s Greatsword",
+              "after": "Onyx Lord"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "unchangedArtifacts": {
+    "dist/natives/NRHex.dll": "8befee64c25ed163e2459592ea449dbe656dd400683065cf315abe5a137fe04f",
+    "dist/mod/regulation.bin": "4e1c0e693cf93fbc296cb462b98214a3ac4da3013ad387e2fdd8daad133ed220",
+    "dist/mmv/natives/NRHex.dll": "d2c3f6a62b1167943ffe9694e5f1be921c3ec1acb7723cd449acc15121e30afa",
+    "dist/mmv/mod/regulation.bin": "90d9a6a4782045aea178a1818b65c287e4479b141445f9ae0e43b5ec351919bc"
+  },
+  "descriptionsUnchanged": true,
+  "mechanicsUnchanged": true,
+  "gameplayVerified": false
+}

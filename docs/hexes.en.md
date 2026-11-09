@@ -245,6 +245,6 @@ Move to charge. Your next melee hit marks the target. Getting hit marks you inst
 Critical hits unleash a shockwave.
 
 <!-- hex:95005300 -->
-## Mastery: Onyx Lord’s Greatsword
+## Onyx Lord
 
 Obtain an Onyx Lord’s Greatsword. Its attacks use less stamina. Hold its skill to summon meteors.
