@@ -266,6 +266,7 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  {let _f=factory(pp);factory_done(gp);let _i=initialize(gp);bound(bp);}
  assert_eq!(seed(bp).unwrap().victim,None);assert_eq!(contact(native_contact,hp,sp,bp),0);
  crate::soul_immunity::ORIGINAL.store(previous,Ordering::Release);
+ crate::soul_target::native_fixture(base);
  reset();BASE.store(old_base,Ordering::Release);
  SAMPLES.lock().unwrap().clear();ACTIVE.store(old_active,Ordering::Release);crate::glass_cannon::ORIGINAL.store(old_calc,Ordering::Release);VirtualFree(memory,0,MEM_RELEASE);
 }}

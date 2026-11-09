@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 static class OnyxMastery {
  public const int Owner=95005300;
- public const float MeteorRange=20f, MeteorSpeed=15f;
+ public const float MeteorRange=30f, MeteorSpeed=15f;
  public const int MeteorPhysical=100, MeteorMagic=100;
  public const int Receipt=Owner+1, Finish=6955300, Started=6955301, Lot=95553000, Behavior=95005390, Judge=3998;
  public static readonly int[] Markers=[Receipt,Finish,Started];
@@ -49,6 +49,26 @@ static class OnyxMastery {
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
+ public static void RangeStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string input=Path.Combine(root,mmv?"dist/mmv/mod/regulation.bin":"dist/mod/regulation.bin");
+  string dir=Path.Combine(root,"work/onyx-range",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
+  var b=SFUtil.DecryptNightreignRegulation(input);var original=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=b.Files.Single(f=>Name(f)=="Bullet.param");var table=parse("Bullet",file.Bytes);var row=table.Rows.Single(r=>r.ID==Owner+53);
+  float oldLife=Convert.ToSingle(row["life"].Value);
+  Check(new[]{"initVellocity","minVellocity","maxVellocity"}.All(f=>Convert.ToSingle(row[f].Value)==MeteorSpeed)&&Convert.ToSingle(row["lifeRandomRange"].Value)==0,"Unexpected meteor flight settings");
+  Set(row,"life",MeteorRange/MeteorSpeed);file.Bytes=table.Write();
+  string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,b,b.Compression);
+  var read=SFUtil.DecryptNightreignRegulation(output);
+  Check(read.Version==b.Version&&read.Compression==b.Compression&&read.Files.Count==b.Files.Count,"Regulation structure changed");
+  foreach(var f in read.Files)Check(f.Bytes.Span.SequenceEqual(b.Files.Single(v=>v.ID==f.ID).Bytes.Span),"Parameter readback differs");
+  foreach(var f in read.Files.Where(f=>f.ID!=file.ID))Check(f.Bytes.Span.SequenceEqual(original[f.ID]),"Unrelated table changed");
+  var after=parse("Bullet",read.Files.Single(f=>f.ID==file.ID).Bytes);var actual=after.Rows.Single(r=>r.ID==Owner+53);
+  Check(Convert.ToSingle(actual["life"].Value)==MeteorRange/MeteorSpeed,"Meteor lifetime mismatch");
+  Set(actual,"life",oldLife);var before=parse("Bullet",original[file.ID]);
+  Check(before.Rows.Count==after.Rows.Count&&before.Rows.Zip(after.Rows).All(p=>Same(p.First,p.Second)),"Unrelated bullet changed");
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{input,inputSha256=Hash(input),output,outputSha256=Hash(output),bullet=Owner+53,oldLife,life=MeteorRange/MeteorSpeed,range=MeteorRange,onlyLifetimeChanged=true}));
+  Console.WriteLine($"PASS: meteor {Owner+53} lifetime {oldLife} -> {MeteorRange/MeteorSpeed}; only one field changed. {output}");
+ }
  public static void BalanceStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
   string mod=Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"),dir=Path.Combine(root,"work/onyx-balance",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
   string input=Path.Combine(mod,"regulation.bin"),output=Path.Combine(dir,"regulation.bin");

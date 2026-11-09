@@ -54,6 +54,8 @@ mod ability_damage;
 mod static_charge;
 mod soul_critical;
 mod soul_immunity;
+mod soul_target;
+mod soul_impact;
 mod onyx_mastery;
 mod glass_cannon;
 mod parry;
@@ -378,7 +380,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);229] {
+fn signatures()->[(&'static str,u32);232] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -415,6 +417,7 @@ fn signatures()->[(&'static str,u32);229] {
   (static_charge::TRANSPORT_PATTERN,static_charge::TRANSPORT_RVA as u32),(static_charge::PACKET_PATTERN,static_charge::PACKET_RVA as u32),
   (balloon_team::PARAM_PATTERN,balloon_team::PARAM_RVA as u32),
   (parry::NOTIFY_PATTERN,parry::NOTIFY_RVA as u32),(parry::COST_PATTERN,parry::COST_RVA as u32),(parry::REPEL_PATTERN,parry::REPEL_RVA as u32),
+  (soul_target::PATTERN,soul_target::RVA as u32),(soul_target::CONTACT_PATTERN,soul_target::CONTACT_RVA as u32),(soul_immunity::GATE_PATTERN,soul_immunity::GATE_RVA as u32),
   (soul_immunity::PATTERN,soul_immunity::RVA as u32),(soul_critical::TARGET_PATTERN,soul_critical::TARGET_RVA as u32),(THROW_ANIM_PATTERN,THROW_ANIM_RVA as u32),(GAUGE_ADD_PERCENT_PATTERN,GAUGE_ADD_PERCENT_RVA as u32),
   (NULLIFY_SITE_PATTERN,NULLIFY_SITE_RVA as u32),(REMOVE_EFFECT_PATTERN,REMOVE_EFFECT_RVA as u32),
   (REBOUND_PATTERN,REBOUND_RVA as u32),
@@ -622,8 +625,8 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let dispatch_target=base.add(HIT_BUILD_RVA) as *mut u8;
   let dispatch_prepared=hook::prepare(dispatch_target,strength_detour as *const u8,64)?;
   let combination_target=base.add(strength_sword::RVA) as *mut u8;
-  let combination_prepared=hook::prepare(combination_target,strength_sword::detour as *const u8,64)?;
-  strength_sword::ORIGINAL.store(combination_prepared.trampoline,Ordering::Release);
+  let combination_prepared=hook::prepare(combination_target,deliberate_punch::dispatch as *const u8,64)?;
+  link_dispatch_hooks(combination_prepared.trampoline);
   let charged_target=base.add(sword_hit_rules::RVA) as *mut u8;
   let charged_prepared=hook::prepare(charged_target,sword_hit_rules::detour as *const u8,64)?;
   sword_hit_rules::ORIGINAL.store(charged_prepared.trampoline,Ordering::Release);
@@ -646,9 +649,11 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   action_stamina::CONTINUE.store(base.add(action_stamina::RVA+5)as*mut u8,Ordering::Release);
   basics_hud::CONTINUE.store(base.add(basics_hud::RVA+5)as*mut u8,Ordering::Release);
   action_stamina::CLAMP.store(base.add(action_stamina::CLAMP_RVA)as*mut u8,Ordering::Release);
+  soul_immunity::GATE_RESUME.store(base.add(soul_immunity::GATE_RVA+7)as*mut u8,Ordering::Release);
   let arts_transfer_targets=[
+   (soul_target::RVA,soul_target::update as*const u8,&soul_target::ORIGINAL),
+   (soul_immunity::GATE_RVA,soul_immunity::gate_detour as*const u8,&soul_immunity::GATE_ORIGINAL),
    (soul_immunity::RVA,soul_immunity::immunity as*const u8,&soul_immunity::ORIGINAL),
-   (deliberate_punch::DISPATCH_RVA,deliberate_punch::dispatch as*const u8,&deliberate_punch::DISPATCH_ORIGINAL),
    (deliberate_punch::COMMIT_RVA,deliberate_punch::commit_detour as*const u8,&deliberate_punch::COMMIT_ORIGINAL),
    (deliberate_punch::OBJECT_RVA,deliberate_punch::object_detour as*const u8,&deliberate_punch::OBJECT_ORIGINAL),
    (deliberate_punch::SCALE_RVA,deliberate_punch::scale_detour as*const u8,&deliberate_punch::SCALE_ORIGINAL),
@@ -701,10 +706,9 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    (parry::REPEL_RVA,parry::repel as *const u8,&parry::REPEL_ORIGINAL),
    (parry::RVA,parry::detour as *const u8,&parry::ORIGINAL),
    (erosion::COLLECT_RVA,erosion::collect as *const u8,&erosion::COLLECT_ORIGINAL),
-   (erosion::CONTACT_RVA,erosion::contact as *const u8,&erosion::CONTACT_ORIGINAL),
+   (erosion::CONTACT_RVA,devils_gaze_hit::detour as *const u8,&erosion::CONTACT_ORIGINAL),
    (slingshot_runtime::RVA,slingshot_runtime::detour as *const u8,&slingshot_runtime::ORIGINAL),
    (slingshot_runtime::HORIZONTAL_RVA,slingshot_runtime::horizontal as *const u8,&slingshot_runtime::HORIZONTAL_ORIGINAL),
-   (devils_gaze_hit::RVA,devils_gaze_hit::detour as *const u8,&devils_gaze_hit::ORIGINAL),
    (ARTS_DROP_RVA,arts_drop_detour as *const u8,&ARTS_DROP_ORIG),
    (ARTS_SERIALIZE_RVA,arts_serialize_wrapper as *const u8,&ARTS_SERIALIZE_ORIG),
    (ARTS_REWARD_COPY_RVA,arts_reward_copy_detour as *const u8,&ARTS_REWARD_COPY_ORIG),
@@ -741,6 +745,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
    if rva==parry::COST_RVA&&p.stolen!=9{return Err("Parry cost gate must relocate the nine-byte MOVSS".into());}
    original.store(p.trampoline,Ordering::Release);arts_transfer_prepared.push((rva,p));
   }
+  link_contact_hooks(erosion::CONTACT_ORIGINAL.load(Ordering::Acquire));
   if arts_param_prepared.stolen!=5{return Err("Arts param entry must relocate its five-byte native jump".into());}
   #[cfg(feature="cage-lifecycle-probe")]
   arts_transfer_prepared.extend(cage_lifecycle_probe::prepare(base as usize)?);
@@ -761,34 +766,35 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   ARTS_PARAM_ORIG.store(arts_param_prepared.trampoline,Ordering::Release);
   ARTS_RAW_ORIG.store(arts_raw_prepared.trampoline,Ordering::Release);
   ARTS_BEHAVIOR_ORIG.store(arts_behavior_prepared.trampoline,Ordering::Release);
+  let mut patches:Vec<(*mut u8,&[u8])>=vec![
+   (speed_target,&speed_prepared.patch),
+   (apply_target,&apply_prepared.patch),
+   (sort_target,&sort_prepared.patch),
+   (hud_sort_target,&hud_sort_prepared.patch),
+   (status_route_target,&status_route_prepared.patch),
+   (nullify_target,&nullify_prepared.patch),
+   (balloon_target,&balloon_prepared.patch),
+   (glass_target,&glass_prepared.patch),
+   (hit_target,&hit_prepared.patch),
+   (damage_target,&damage_prepared.patch),
+   (request_target,&request_prepared.patch),
+   (reward_target,&reward_prepared.patch),
+   (dispatch_target,&dispatch_prepared.patch),
+   (combination_target,&combination_prepared.patch),
+   (charged_target,&charged_prepared.patch),
+   (rates_target,&rates_prepared.patch),
+   (filter_target,&filter_prepared.patch),
+   (arts_id_target,&arts_id_prepared.patch),
+   (arts_param_target,&arts_param_prepared.patch),
+   (arts_raw_target,&arts_raw_prepared.patch),
+   (arts_behavior_target,&arts_behavior_prepared.patch),
+];
+  patches.extend(arts_transfer_prepared.iter().map(|(rva,p)|(base.add(*rva)as*mut u8,p.patch.as_slice())));
+  patches.push((target,&prepared.patch));
+  hook::validate_patch_sites(patches.iter().map(|(p,b)|(*p as usize,b.len())))?;
   let mut result=Ok(());
   hook::with_threads_frozen(true,||{
-   result=hook::write_code(speed_target,&speed_prepared.patch)
-    .and_then(|_|hook::write_code(apply_target,&apply_prepared.patch))
-    .and_then(|_|hook::write_code(sort_target,&sort_prepared.patch))
-    .and_then(|_|hook::write_code(hud_sort_target,&hud_sort_prepared.patch))
-    .and_then(|_|hook::write_code(status_route_target,&status_route_prepared.patch))
-    .and_then(|_|hook::write_code(nullify_target,&nullify_prepared.patch))
-    .and_then(|_|hook::write_code(balloon_target,&balloon_prepared.patch))
-    .and_then(|_|hook::write_code(glass_target,&glass_prepared.patch))
-    .and_then(|_|hook::write_code(hit_target,&hit_prepared.patch))
-    .and_then(|_|hook::write_code(damage_target,&damage_prepared.patch))
-    .and_then(|_|hook::write_code(request_target,&request_prepared.patch))
-    .and_then(|_|hook::write_code(reward_target,&reward_prepared.patch))
-    .and_then(|_|hook::write_code(dispatch_target,&dispatch_prepared.patch))
-    .and_then(|_|hook::write_code(combination_target,&combination_prepared.patch))
-    .and_then(|_|hook::write_code(charged_target,&charged_prepared.patch))
-    .and_then(|_|hook::write_code(rates_target,&rates_prepared.patch))
-    .and_then(|_|hook::write_code(filter_target,&filter_prepared.patch))
-    .and_then(|_|hook::write_code(arts_id_target,&arts_id_prepared.patch))
-    .and_then(|_|hook::write_code(arts_param_target,&arts_param_prepared.patch))
-    .and_then(|_|hook::write_code(arts_raw_target,&arts_raw_prepared.patch))
-    .and_then(|_|hook::write_code(arts_behavior_target,&arts_behavior_prepared.patch))
-    .and_then(|_|{
-     for (rva,p) in &arts_transfer_prepared {hook::write_code(base.add(*rva) as *mut u8,&p.patch)?;}
-     Ok(())
-    })
-    .and_then(|_|hook::write_code(target,&prepared.patch));
+   result=patches.iter().try_for_each(|(p,b)|hook::write_code(*p,b));
   });
   result?;ACTIVE.store(true,Ordering::Release);
   nlog_info!("Installed character-update hook at RVA {UPDATE_RVA:#x}; waiting for the local player.");
@@ -1039,6 +1045,17 @@ unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  marking::constructed(hit,context,||has_effect(local,marking::OWNER,base),||marking::air_started(local));
 }
 
+// One native patch per shared entry. Publish the complete chain before enabling it.
+// 33C120: environmental immunity -> erosion/static-charge scope -> native.
+fn link_contact_hooks(native:*mut u8){
+ erosion::CONTACT_ORIGINAL.store(native,Ordering::Release);
+ devils_gaze_hit::ORIGINAL.store(erosion::contact as*const()as*mut u8,Ordering::Release);
+}
+// 43D260: accepted-hit scopes -> projectile impact modifiers -> native.
+fn link_dispatch_hooks(native:*mut u8){
+ strength_sword::ORIGINAL.store(native,Ordering::Release);
+ deliberate_punch::DISPATCH_ORIGINAL.store(strength_sword::detour as*const()as*mut u8,Ordering::Release);
+}
 unsafe fn spatial_ready(player:usize)->bool {
  if player==0 {return false;}
  let coord=read_ptr(player+0x60);let modules=read_ptr(player+0x1b8);
@@ -2391,6 +2408,21 @@ unsafe fn update_test_hotkeys(player:usize,base:usize){
 
 #[cfg(test)]
 mod tests {
+ #[test]
+ fn shared_dispatch_chain_preserves_arguments_and_native_return(){unsafe{
+  unsafe extern "system" fn native(m:usize,s:usize,h:usize,a:u8,b:u8)->u64{
+   assert_eq!((m,s,h,a,b),(11,22,33,4,5));0x1234_5678_9abc_def0
+  }
+  let active=ACTIVE.swap(false,Ordering::AcqRel);
+  let old_strength=strength_sword::ORIGINAL.load(Ordering::Acquire);
+  let old_punch=deliberate_punch::DISPATCH_ORIGINAL.load(Ordering::Acquire);
+  link_dispatch_hooks(native as*const()as*mut u8);
+  assert_eq!(deliberate_punch::DISPATCH_ORIGINAL.load(Ordering::Acquire),strength_sword::detour as*const()as*mut u8);
+  assert_eq!(deliberate_punch::dispatch(11,22,33,4,5),0x1234_5678_9abc_def0);
+  strength_sword::ORIGINAL.store(old_strength,Ordering::Release);
+  deliberate_punch::DISPATCH_ORIGINAL.store(old_punch,Ordering::Release);
+  ACTIVE.store(active,Ordering::Release);
+ }}
  use super::*;
  #[test] fn sword_range_reads_contact_not_attack_origin_or_direction(){unsafe{
   let mut hit=[0u8;0x2d0];

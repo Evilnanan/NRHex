@@ -4,10 +4,39 @@ use std::{cell::Cell,sync::atomic::{AtomicPtr,Ordering}};
 pub const RVA:usize=0x3df380;
 pub const PATTERN:&str="40 55 56 41 56 48 83 EC 30 48 8B 81 B8 01 00 00 48 8B F1 45 0F B6 F0 48 8B EA 48 8B 48 08 F6 41 58 01";
 pub static ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+pub const GATE_RVA:usize=0x436638;
+pub const GATE_PATTERN:&str="80 BF 21 01 00 00 02 0F 85 96 00 00 00 C6 44 24 20 01";
+pub static GATE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
+pub static GATE_RESUME:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 thread_local!{static CONTACT:Cell<Option<(usize,usize)>>=const{Cell::new(None)};}
 pub struct Guard(Option<(usize,usize)>);
 impl Drop for Guard{fn drop(&mut self){CONTACT.with(|s|s.set(self.0));}}
 pub fn contact(target:Option<(usize,usize)>)->Guard{Guard(CONTACT.with(|s|s.replace(target)))}
+// Supply only the comparison operand. Keep the hit's ordinary classification,
+// all actor flags, and the native protected-hit continuation (extra=1) intact.
+unsafe extern "system" fn gate_operand(module:usize,hit:usize)->u8{
+ let actual=ptr::read((hit+0x121)as*const u8);
+ if ACTIVE.load(Ordering::Acquire)&&module!=0&&CONTACT.with(|s|s.get()==Some((read_ptr(module+8),hit)))
+  &&read_i32(hit+0x40)==crate::soul_critical::ATTACK&&read_i32(hit+0x44)==1{2}else{actual}
+}
+#[unsafe(naked)]
+pub unsafe extern "system" fn gate_detour(){
+ core::arch::naked_asm!(
+  "pushfq", "sub rsp,0xc8",
+  "mov [rsp+0x20],rax", "mov [rsp+0x28],rcx", "mov [rsp+0x30],rdx", "mov [rsp+0x38],r8",
+  "mov [rsp+0x40],r9", "mov [rsp+0x48],r10", "mov [rsp+0x50],r11",
+  "movdqu [rsp+0x60],xmm0", "movdqu [rsp+0x70],xmm1", "movdqu [rsp+0x80],xmm2",
+  "movdqu [rsp+0x90],xmm3", "movdqu [rsp+0xa0],xmm4", "movdqu [rsp+0xb0],xmm5",
+  "mov rcx,rsi", "mov rdx,rdi", "call {operand}", "cmp al,2",
+  "pushfq", "pop rax", "mov [rsp+0xc8],rax",
+  "mov rax,[rsp+0x20]", "mov rcx,[rsp+0x28]", "mov rdx,[rsp+0x30]", "mov r8,[rsp+0x38]",
+  "mov r9,[rsp+0x40]", "mov r10,[rsp+0x48]", "mov r11,[rsp+0x50]",
+  "movdqu xmm0,[rsp+0x60]", "movdqu xmm1,[rsp+0x70]", "movdqu xmm2,[rsp+0x80]",
+  "movdqu xmm3,[rsp+0x90]", "movdqu xmm4,[rsp+0xa0]", "movdqu xmm5,[rsp+0xb0]",
+  "add rsp,0xc8", "popfq", "jmp qword ptr [rip+{resume}]",
+  operand=sym gate_operand,resume=sym GATE_RESUME
+ );
+}
 // Three exact, finite f32 integers carry all 64 handle bits through the
 // existing four-coefficient local/network transport. The last limb is tagged;
 // old neutral coefficients cannot accidentally identify a victim.

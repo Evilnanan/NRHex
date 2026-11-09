@@ -23,7 +23,7 @@ impl Critical{
   if self.identity.is_some_and(|old|old.owner==id.owner&&old.animation==id.animation&&old.throw==id.throw&&old.target!=id.target){return None;}
   if self.identity!=Some(id){*self=Self{identity:Some(id),..Self::default()};}
   if self.fired{return None;}self.sum=(self.sum+f64::from(damage)).min(f64::from(f32::MAX));
-  if !main{return None;}self.fired=true;Some((400.+self.sum*0.5).min(f64::from(f32::MAX))as f32)
+  if !main{return None;}self.fired=true;Some((400.+self.sum*0.25).min(f64::from(f32::MAX))as f32)
  }
 }
 #[derive(Clone,Copy)]struct Wave{owner:u64,target:u64,damage:f32,point:[f32;4]}
@@ -98,9 +98,9 @@ pub unsafe fn update(actor:usize,base:usize){
   assert!(!p.observe(Some(a)));assert!(!p.observe(None));assert!(p.observe(Some(a)));p.played=true;
   assert!(p.observe(Some(Entry{owner:2,..a})));
  }
- #[test]fn final_damage_accumulates_through_main_once_without_time_gate(){let mut c=Critical::default();assert_eq!(c.credit(id(2),100,false),None);assert_eq!(c.credit(id(2),50,false),None);assert_eq!(c.credit(id(2),1000,true),Some(975.));assert_eq!(c.credit(id(2),1000,true),None);assert_eq!(c.credit(id(2),500,false),None);assert_eq!(c.credit(id(3),400,true),None);c=Critical::default();assert_eq!(c.credit(id(3),400,true),Some(600.));}
- #[test]fn interruption_and_new_critical_clear_the_budget(){let mut c=Critical::default();c.credit(id(2),100,false);c=Critical::default();assert_eq!(c.credit(id(2),400,true),Some(600.));c=Critical::default();assert_eq!(c.credit(id(2),400,true),Some(600.));}
- #[test]fn only_accepted_positive_hits_and_exact_split(){let mut c=Critical::default();assert_eq!(c.credit(id(2),0,true),None);assert_eq!(c.credit(id(2),-10,true),None);assert_eq!(c.credit(id(2),1000,true),Some(900.));assert_eq!(components(900.),[562.5,337.5,0.,0.,0.]);}
+ #[test]fn final_damage_accumulates_through_main_once_without_time_gate(){let mut c=Critical::default();assert_eq!(c.credit(id(2),100,false),None);assert_eq!(c.credit(id(2),50,false),None);assert_eq!(c.credit(id(2),1000,true),Some(687.5));assert_eq!(c.credit(id(2),1000,true),None);assert_eq!(c.credit(id(2),500,false),None);assert_eq!(c.credit(id(3),400,true),None);c=Critical::default();assert_eq!(c.credit(id(3),400,true),Some(500.));}
+ #[test]fn interruption_and_new_critical_clear_the_budget(){let mut c=Critical::default();c.credit(id(2),100,false);c=Critical::default();assert_eq!(c.credit(id(2),400,true),Some(500.));c=Critical::default();assert_eq!(c.credit(id(2),400,true),Some(500.));}
+ #[test]fn only_accepted_positive_hits_and_exact_split(){let mut c=Critical::default();assert_eq!(c.credit(id(2),0,true),None);assert_eq!(c.credit(id(2),-10,true),None);assert_eq!(c.credit(id(2),1000,true),Some(650.));assert_eq!(components(650.),[406.25,243.75,0.,0.,0.]);}
  #[test]fn duplicate_notifications_and_nested_dispatches_are_independent(){assert!(!first(1,2));let _a=scope(1,2);assert!(first(1,2));assert!(!first(1,2));{let _b=scope(3,4);assert!(first(3,4));assert!(!first(1,2));}assert!(!first(1,2));}
  #[test]fn generated_map_is_sorted_and_does_not_classify_our_wave(){assert!(!data::HITS.is_empty());assert!(data::HITS.windows(2).all(|w|(w[0].0,w[0].1)<(w[1].0,w[1].1)));assert!(data::HITS.iter().all(|r|r.0!=ATTACK));for (attack,main) in [(2100510,false),(2100511,true)]{assert!(data::HITS.contains(&(attack,31700,main)));}}
 }
@@ -140,14 +140,14 @@ pub unsafe fn update(actor:usize,base:usize){
  ptr::write_unaligned((hit+0x40)as*mut i32,ATTACK);{let _scope=scope(mp,hit);outgoing(mp,source,hit);}assert_eq!(STATE.lock().unwrap().critical.sum,100.);
  ptr::write_unaligned((hit+0x40)as*mut i32,2100511);ptr::write_unaligned((hit+0x280)as*mut i32,1000);
  for _ in 0..2{let _scope=scope(mp,hit);outgoing(mp,source,hit);}
- {let s=STATE.lock().unwrap();assert_eq!(s.critical.sum,1100.);assert!(s.pending.is_empty());} EMITTED.with(|v|assert_eq!(v.borrow().last(),Some(&(BULLET,950.))));EMITTED.with(|v|assert_eq!(v.borrow().len(),3));
+ {let s=STATE.lock().unwrap();assert_eq!(s.critical.sum,1100.);assert!(s.pending.is_empty());} EMITTED.with(|v|assert_eq!(v.borrow().last(),Some(&(BULLET,675.))));EMITTED.with(|v|assert_eq!(v.borrow().len(),3));
  // Native inactive throw state returns -1; the per-frame path clears a spent
  // action, even if the next critical reuses the same ChrThrowMan and target.
  ptr::write_unaligned((tp+0x68)as*mut i32,0);assert_eq!(current(source,base),None);
  {let mut s=STATE.lock().unwrap();s.pending.clear();s.scene=read_ptr(base+0x3c131c8);}
  update(source,base);assert!(STATE.lock().unwrap().critical.identity.is_none());
  ptr::write_unaligned((tp+0x68)as*mut i32,1);
- {let _scope=scope(mp,hit);outgoing(mp,source,hit);}assert!(STATE.lock().unwrap().pending.is_empty());EMITTED.with(|v|assert_eq!(v.borrow().last(),Some(&(BULLET,900.))));
+ {let _scope=scope(mp,hit);outgoing(mp,source,hit);}assert!(STATE.lock().unwrap().pending.is_empty());EMITTED.with(|v|assert_eq!(v.borrow().last(),Some(&(BULLET,650.))));
  crate::echo_cast::EMIT_ORIGINAL.store(old_emit,Ordering::Release);ptr::write_unaligned((base+0x3c0ae30)as*mut usize,old_manager);
  ptr::copy_nonoverlapping(original_resolver.as_ptr(),resolver as*mut u8,12);
  ptr::write_unaligned((target+0x60)as*mut usize,old_coord);ptr::write_unaligned((target+0x1b8)as*mut usize,old_modules);

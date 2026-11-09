@@ -237,6 +237,13 @@ pub unsafe fn initialize(group:usize)->SeedGuard{
 }
 pub unsafe fn bound(instance:usize){if instance==0{return;}if let Ok(mut f)=FLIGHTS.lock(){f.instances.remove(&instance);if let Some(s)=SEED.with(|s|s.borrow().clone()){f.instances.insert(instance,(read_ptr(instance+8)as u64,s));}}}
 unsafe fn seed(instance:usize)->Option<Arc<Discharge>>{if instance==0{return None;}FLIGHTS.lock().ok()?.instances.get(&instance).filter(|(h,_)|*h==read_ptr(instance+8)as u64).map(|(_,s)|s.clone())}
+pub unsafe fn pending_soul_victim(instance:usize)->Option<u64>{
+ let seed=seed(instance)?;
+ if read_i32(instance+0xa4)!=crate::soul_critical::BULLET{return None;}
+ let victim=seed.victim?;
+ let pending=!seed.targets.lock().ok()?.contains(&victim);
+ pending.then_some(victim)
+}
 pub unsafe fn child(instance:usize,bullet:i32)->ChildGuard{ChildGuard(CHILD.with(|s|s.replace(if private_bullet(bullet){seed(instance)}else{None})))}
 pub fn finished(group:usize){if let Ok(mut f)=FLIGHTS.lock(){f.groups.remove(&group);}}
 pub fn retired(instance:usize){if let Ok(mut f)=FLIGHTS.lock(){f.instances.remove(&instance);}}
@@ -266,6 +273,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  {let Ok(mut targets)=seed.targets.lock()else{return 0;};if !targets.insert(handle){return 0;}}
  let _immunity=crate::soul_immunity::contact((read_i32(bullet+0xa4)==crate::soul_critical::BULLET&&seed.victim==Some(handle)).then_some((target,hit)));
  let _guard=ContactGuard(CONTACT.with(|s|s.replace(true)));
+ let _impact=crate::soul_impact::contact(hit,target,bullet);
  let result=original(hit,target,bullet);
  // Native rejection (e.g. dodge) must leave that target eligible for the wave.
  if result==0{if let Ok(mut targets)=seed.targets.lock(){targets.remove(&handle);}}

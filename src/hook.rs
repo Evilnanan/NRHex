@@ -289,8 +289,19 @@ pub unsafe fn write_code(target: *mut u8, bytes: &[u8]) -> Result<(), String> {
     Ok(())
 }
 
-/// Install a hook; returns the trampoline pointer (call it to reach the
-/// original).
+/// Reject duplicate/overlapping patches before any game code is written.
+pub fn validate_patch_sites(sites:impl IntoIterator<Item=(usize,usize)>)->Result<(),String>{
+    let mut ranges=sites.into_iter().map(|(start,len)|start.checked_add(len).filter(|_|len>0)
+        .map(|end|(start,end)).ok_or_else(||format!("Invalid hook range {start:#x}+{len:#x}")))
+        .collect::<Result<Vec<_>,_>>()?;
+    ranges.sort_unstable();
+    for pair in ranges.windows(2){
+        if pair[1].0<pair[0].1{return Err(format!("Overlapping hooks {:#x}..{:#x} and {:#x}..{:#x}; compose one entry chain",pair[0].0,pair[0].1,pair[1].0,pair[1].1));}
+    }
+    Ok(())
+}
+
+/// Install a hook; returns the trampoline pointer (call it to reach the original).
 pub unsafe fn install(
     target: *mut u8,
     detour: *const u8,
@@ -356,6 +367,15 @@ pub fn report_failure(what: &str, err: &str) {
 mod tests {
     use super::*;
     use std::sync::{Arc, atomic::{AtomicBool, AtomicUsize, Ordering}};
+
+    #[test]
+    fn patch_plan_rejects_duplicate_and_overlapping_sites_before_writes(){
+        assert!(validate_patch_sites([(0x33c120,5),(0x33c120,5)]).is_err());
+        assert!(validate_patch_sites([(100,8),(105,5)]).is_err());
+        assert!(validate_patch_sites([(105,5),(100,5),(200,7)]).is_ok());
+        assert!(validate_patch_sites([(usize::MAX,1)]).is_err());
+        assert!(validate_patch_sites([(100,0)]).is_err());
+    }
 
     #[test]
     #[ignore = "suspends this test process; run alone"]

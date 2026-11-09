@@ -30,8 +30,8 @@ unsafe fn with_impact(hit:usize,enabled:bool,call:impl FnOnce()){
  if let Some(level)=original{ptr::write((hit+0x24)as*mut u8,level);}
  SCOPES.with(|s|{s.borrow_mut().pop();});
 }
-type Dispatch=unsafe extern "system" fn(usize,usize,usize,u8,u8);
-pub unsafe extern "system" fn detour(module:usize,source:usize,hit:usize,a:u8,b:u8){
+type Dispatch=unsafe extern "system" fn(usize,usize,usize,u8,u8)->u64;
+pub unsafe extern "system" fn detour(module:usize,source:usize,hit:usize,a:u8,b:u8)->u64{
  let original:Dispatch=std::mem::transmute(ORIGINAL.load(Ordering::Acquire));
  let base=BASE.load(Ordering::Acquire);
  let enabled=if ACTIVE.load(Ordering::Acquire)&&module!=0&&hit!=0&&is_local(source,base)
@@ -41,7 +41,9 @@ pub unsafe extern "system" fn detour(module:usize,source:usize,hit:usize,a:u8,b:
   eligible(true,read_ptr(module+8)!=source,has_effect(source,crate::strength::OWNER,base),
    has_effect(source,sword::OWNER,base),spell,ranged,distance)
  }else{false};
- with_impact(hit,enabled,||original(module,source,hit,a,b));
+ let mut result=0;
+ with_impact(hit,enabled,||result=original(module,source,hit,a,b));
+ result
 }
 
 #[cfg(test)]mod tests{
