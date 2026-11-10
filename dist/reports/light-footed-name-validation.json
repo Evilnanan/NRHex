@@ -1,0 +1,175 @@
+{
+  "version": "0.17.305",
+  "owner": 95005400,
+  "chineseName": "轻装上阵",
+  "englishName": "Travel Light",
+  "onlyNamesChanged": true,
+  "readback": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "472215BA2190020EB99D3B16306C3ACCA056379B6F8721CB783715ED45C2F8D7",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "64A1C2B6F413A5CC725B9DDA812D0263E9DD77B46C817DE4545CB8BBA99EBB59",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "70132BA137011EDA1DDBC71D40986F57327779734D748AB86C0101C1C7D216AA",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "51FEE90E231377151768BAEE1C056A275885FB68744F2644B021EEBEDC89008B",
+          "outputSha256": "DD0DA3514003AF6456E887634E5280F3EDE82B57010EF4296317F7C0E684B983",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95005400,
+              "before": "轻盈步伐",
+              "after": "轻装上阵"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95005400,
+              "before": "轻盈步伐",
+              "after": "轻装上阵"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "0098E6E6701BC90F5012294F3A2EA87E089C35D1B6E19CB1C835756A1248068D",
+          "outputSha256": "480B44C995F22AA674503A3DA3B42737A2650EB4AA20F43DC8D19CFE8B5C9594",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005400,
+              "before": "轻盈步伐",
+              "after": "轻装上阵"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "DED6953A235BA0C215D6DA49379F1E917C270F7F6A49D743E7D01037077B847C",
+          "outputSha256": "EFB24A851458FC2459CCCC3570E7851F0DF4092803289A77A89F2E0AAB6A830E",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95005400,
+              "before": "Light-footed",
+              "after": "Travel Light"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95005400,
+              "before": "Light-footed",
+              "after": "Travel Light"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "12E97E05F15E545B3109DAD255D810502F2110C68A14D4AF8B4D54A5B9A17795",
+          "outputSha256": "261573B7CB3D18CAB3ABF9D09E280E2A5341E1B77B2C27D2C449A3820884F87B",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005400,
+              "before": "Light-footed",
+              "after": "Travel Light"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "472215BA2190020EB99D3B16306C3ACCA056379B6F8721CB783715ED45C2F8D7",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "64A1C2B6F413A5CC725B9DDA812D0263E9DD77B46C817DE4545CB8BBA99EBB59",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "70132BA137011EDA1DDBC71D40986F57327779734D748AB86C0101C1C7D216AA",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "A96F75B68DD0938202840A9A35AB54457566D7A72BB68122A722F1FDC00FB9B5",
+          "outputSha256": "585C17139E21C91144F7D65DE095192CC5881141E605AA35FCE127199FF5B682",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95005400,
+              "before": "轻盈步伐",
+              "after": "轻装上阵"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95005400,
+              "before": "轻盈步伐",
+              "after": "轻装上阵"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "9DB2A9B568AAAC12F856BCE8F8D2E86617AEA7542A38A8B96AB3F7191F070286",
+          "outputSha256": "ACD706C566A5BD1F1B0C2DA0EC8A1EF2738E8C6A9BF01B0A0A33117C93F56FD8",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005400,
+              "before": "轻盈步伐",
+              "after": "轻装上阵"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "66D4711C336EEE7ECA88DAC17F35C3102A3F873431D35410636878C5F904F8B7",
+          "outputSha256": "2CD6A6CFB7CCE48065EEB309AA298634A29F911FE114E36583B7443429731538",
+          "changes": [
+            {
+              "fmg": "AttachEffectName.fmg",
+              "id": 95005400,
+              "before": "Light-footed",
+              "after": "Travel Light"
+            },
+            {
+              "fmg": "PermanentBuffName.fmg",
+              "id": 95005400,
+              "before": "Light-footed",
+              "after": "Travel Light"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "6DFF68B5FFF6A369BA4BEB9D4E56D4EC89C194699E27C2C18DC1893553103238",
+          "outputSha256": "351BB8241980F808E9C69B9564D69EA546680424E56FD6B051F07502A13112BB",
+          "changes": [
+            {
+              "fmg": "SpEffectName.fmg",
+              "id": 95005400,
+              "before": "Light-footed",
+              "after": "Travel Light"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  }
+}
