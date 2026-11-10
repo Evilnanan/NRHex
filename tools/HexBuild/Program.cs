@@ -90,6 +90,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--light-footed-stage")){int at=Array.IndexOf(args,"--light-footed-stage");LightFooted.Stage(root,bnd,Parse,HexCatalog.Load(root),args[at+1],args[at+2]);return;}
 if(args.Contains("--parry-counter-hit-stage")){ParryCounterHit.Stage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--lightning-melee-stage")){StaticCharge.MeleeStage(root,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
@@ -929,6 +930,7 @@ foreach(var h in hexes){
  if(h.Id==95000200){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,.75f);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"addLifeForceStatus","addWillpowerStatus","addEndureStatus","addStrengthStatus","addDexterityStatus","addMagicStatus","addFaithStatus","addLuckStatus"})Set(s,f,10);}
  if(h.Id==95000300){foreach(var f in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(s,f,GlassCannon.AttackRate);foreach(var f in new[]{"magParamChange","miracleParamChange","shamanParamChange"})Set(s,f,1);foreach(var f in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,f,10f);}
  if(h.Id==95001700){Set(s,"maxHpRate",1.5f);foreach(string field in new[]{"slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"})Set(s,field,field=="thrustDamageCutRate"?BalloonBalance.ThrustDamageRate:1.3f);}
+ if(h.Id==LightFooted.Owner)LightFooted.OwnerEffect(s);
  if(h.Id==ContractHeart.Contract)ContractHeart.Owners(s);
  if(h.Id==HeartMist.Owner)HeartMist.OwnerEffect(s,pars["SpEffectParam"].Rows.Single(r=>r.ID==8320400));
  if(h.Id==EssenceReaver.Owner)EssenceReaver.Owners(s);
@@ -1402,6 +1404,7 @@ Bartender.Events(ev);
 StaticCharge.Events(ev);
 SoulCritical.Events(ev);
 OnyxMastery.Events(ev);
+LightFooted.Events(ev);
 Basics.Events(ev);
 Sniper.Events(ev);
 UltimateUnstoppable.Events(ev);

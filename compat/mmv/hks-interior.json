@@ -386,6 +386,45 @@
           "count": 1
         }
       ]
+    },
+    "MagicCommonFunction": {
+      "originalHash": "9c78e786ce4e98cd6a9966487cfe34377e9820bee50cc74c2452e63e61b51a17",
+      "nrhexHash": "9632b227c88096cef92745892a2fdf477be9ed46d4ae66fd35f6fbf271989703",
+      "mmvFunctionHash": "1fc874ec288b0a69b5623b02e5e3815001e95aaa7878edb73bacb0815fcdfa2e",
+      "actions": [
+        {
+          "kind": "replace-fragment",
+          "anchor": "SetVariable(\"ToggleDash\", 0)",
+          "range": [
+            0,
+            20
+          ]
+        }
+      ],
+      "forceInterior": true
+    },
+    "ItemCommonFunction": {
+      "originalHash": "0b6086799ec5ca6cd6556113a29bdf84e359a2a32cdc0d540dde691798b802f5",
+      "nrhexHash": "eedd5056385dc8012f05db66f6d666b748dfe2ada660bb4ff2bd4dd05176d078",
+      "mmvFunctionHash": "ae45ec7680242f752f0118debf97bc438d632853727dd65b8d94cee9ffdfe06e",
+      "actions": [
+        {
+          "kind": "prefix",
+          "range": [
+            0,
+            4
+          ]
+        },
+        {
+          "kind": "replace-fragment",
+          "anchor": "SetVariable(\"ToggleDash\", 0)",
+          "range": [
+            17,
+            37
+          ]
+        }
+      ],
+      "forceInterior": true
     }
   },
   "sourceFixes": {

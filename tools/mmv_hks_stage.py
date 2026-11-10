@@ -74,7 +74,7 @@ def compose(source, before, after, plan):
         if name not in named or named[name]['count'] != 1:
             raise ValueError(f'MMV action missing or ambiguous: {name}')
         argc = struct.unpack('>I', new['header'][4:8])[0]
-        if new['code'].endswith(old['code']) and new['constants'][:len(old['constants'])] == old['constants']:
+        if new['code'].endswith(old['code']) and new['constants'][:len(old['constants'])] == old['constants'] and not plan['functions'].get(name, {}).get('forceInterior', False):
             if len(named[name]['args']) != argc:
                 raise ValueError(f'MMV argument signature changed: {name}')
             end = new['count'] - old['count']
@@ -100,6 +100,9 @@ def compose(source, before, after, plan):
                     inputs = {int(k): v for k, v in action.get('inputs', {}).items()}
                     block = render(new, *action['range'], inputs)
                     add(at, at, '\n' + block, name + ':interior')
+                elif kind == 'replace-fragment':
+                    (start, end), = find(name, action['anchor'])
+                    add(start, end, render(new, *action['range']), name + ':guarded-replacement')
                 elif kind == 'sprint-cost':
                     (start, end), = find(name, 'AddStamina(STAMINA_REDUCE_SPRINTSTART)')
                     block = 'do\n    local nrhex_cost = STAMINA_REDUCE_SPRINTSTART\n'
