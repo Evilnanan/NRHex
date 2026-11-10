@@ -105,6 +105,8 @@ if(args.Contains("--onyx-mastery-stage")){OnyxMastery.Stage(root,bnd,Parse,HexCa
 if(args.Contains("--onyx-reward-stage")){OnyxMastery.RewardStage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--onyx-balance-stage")){OnyxMastery.BalanceStage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--onyx-range-stage")){OnyxMastery.RangeStage(root,Parse,args.Contains("--mmv"));return;}
+if(args.Contains("--onyx-flight-stage")){OnyxMastery.FlightStage(root,Parse,args.Contains("--mmv"));return;}
+if(args.Contains("--onyx-dash-stage")){int at=Array.IndexOf(args,"--onyx-dash-stage");OnyxDash.Build(args[at+1],args[at+2]);return;}
 if(args.Contains("--soul-visual-stage")){SoulCritical.VisualStage(root,Parse,args.Contains("--mmv"),args.Contains("--input-mod")?args[Array.IndexOf(args,"--input-mod")+1]:null,args.Contains("--output-stage")?args[Array.IndexOf(args,"--output-stage")+1]:null);return;}
 if(args.Contains("--soul-entry-stage")){SoulCritical.EntryStage(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--soul-leadin-stage")){SoulCritical.PreludeStage(root,bnd,Parse,args.Contains("--mmv"));return;}
@@ -1459,3 +1461,4 @@ OnyxBehavior.Stage(root,Path.Combine(root,"assets/original/chr/c0000.behbnd.dcx"
 OnyxMastery.Resources(root,Path.Combine(root,"dist/mod"),Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"));
 
 OnyxMastery.DashMap(Path.Combine(root,"dist/mod/regulation.bin"),Path.Combine(root,"src/onyx_dash_data.rs"),Parse);
+OnyxDash.Build(Path.Combine(root,"dist/mod/chr/c0000.anibnd.dcx"),Path.Combine(root,"dist/mod/chr/c0000.anibnd.dcx"));

@@ -12,6 +12,7 @@ pub const JUDGE:i32=3998;
 pub const QUERY:i32=990053;
 pub const FP_QUERY:i32=990054;
 pub const START_END_QUERY:i32=990056;
+pub const DASH_QUERY:i32=990057;
 pub const METEOR_FP:i16=10;
 pub const ARTS_FEE_RVA:usize=0x6ce5a0;
 pub const ARTS_FEE_PATTERN:&str="40 53 48 83 EC 20 4C 8B 49 08 4D 85 C0";
@@ -39,6 +40,13 @@ unsafe fn hand_owned(actor:usize,hand:i32,base:usize)->bool{
  // c_SwordArtsHand is HAND_LEFT=0 / HAND_RIGHT=1, unlike the bartender's
  // RELIC_WEAPONCHANGE_ENCHANT variable, which uses the opposite numbering.
  matches!(hand,0|1)&&owned(actor,base)&&source_weapon(actor,if hand==0{-2}else{-1})
+}
+/// The HKS caller additionally requires ATTACK_RIGHT_HEAVYDASH and this clip's
+/// per-frame TAE flag 28. No wall-time timer or movement state survives a cancel.
+pub unsafe fn dash_ready(actor:usize,base:usize)->bool{
+ if !crate::is_local(actor,base)||!ready(actor){return false;}
+ let equipment=read_ptr(actor+0x670);
+ equipment!=0&&read_i32(equipment)==1&&hand_owned(actor,1,base)&&crate::parry::grounded(actor)
 }
 pub unsafe fn fp_exception(actor:usize,hand:Option<i32>,base:usize)->bool{
  crate::is_local(actor,base)&&owned(actor,base)&&has_effect(actor,crate::arts::OWNER,base)
@@ -138,3 +146,4 @@ pub unsafe fn update(actor:usize,base:usize){
  #[test]fn target_dash_map_is_sorted_and_excludes_stationary_attacks(){assert!(data::DASH_BEHAVIORS.windows(2).all(|a|a[0]<a[1]));for id in [100400120,100400125]{assert!(data::DASH_BEHAVIORS.contains(&id));}for id in [100400000,100400200,300805901,BEHAVIOR]{assert!(!data::DASH_BEHAVIORS.contains(&id));}}
 }
 #[cfg(test)]#[path="onyx_fp_tests.rs"]mod fp_tests;
+#[cfg(test)]#[path="onyx_dash_tests.rs"]mod dash_tests;

@@ -65,7 +65,10 @@ static class MmvTae {
                     Check(matches.Length == 1, $"Ambiguous nonempty MMV animation: {name}/{a.ID}"); var target = matches[0];
                     foreach (var e in extras) {
                         float start = e.StartTime, end = e.EndTime;
-                        if (e.Type == 302 && start > 0) {
+                        if (name=="a40.tae"&&a.ID==30210&&e.Type==227&&BitConverter.ToInt32(e.GetParameterBytes(false))==OnyxDash.Flag) {
+                            Check(start==0&&Math.Abs(end-OnyxDash.FootContact(old))<0.00001f,"Onyx dash source window changed");
+                            end=OnyxDash.FootContact(target.v);
+                        } else if (e.Type == 302 && start > 0) {
                             // Ultimate markers follow native expenditure/release events.
                             // MMV can add alternate conditioned bullet IDs; match the
                             // original source/judge, or the original gauge event payload.

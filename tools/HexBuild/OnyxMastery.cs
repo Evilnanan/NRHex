@@ -12,9 +12,14 @@ static class OnyxMastery {
   foreach(int id in Markers){var r=clone("SpEffectParam",8000000,id);
    foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",id==Receipt?10:-1),("effectEndurance",id==Receipt?-1f:0.15f),("dontDeleteOnDead",id==Receipt?1:0),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(r,f,v);}
   var attack=clone("AtkParam_Pc",303400807,Owner+60);
-  foreach(var(f,v)in new(string,object)[]{("atkPhys",MeteorPhysical),("atkMag",MeteorMagic),("atkSuperArmor",10f),("dmgLevel",7),("dmgLevel_vsPlayer",7),("knockbackDist",1f)})Set(attack,f,v);
+  // The weapon-art damage template ignores map collision (2). A moving
+  // meteor needs normal map contacts (0), independently of Bullet penetration.
+  foreach(var(f,v)in new(string,object)[]{("atkPhys",MeteorPhysical),("atkMag",MeteorMagic),("atkSuperArmor",10f),("dmgLevel",7),("dmgLevel_vsPlayer",7),("knockbackDist",1f),("mapHitType",0)})Set(attack,f,v);
   foreach(var(source,id)in new[]{(3600810,Owner+50),(3600811,Owner+51),(3600812,Owner+52),(3600860,Owner+53),(3600861,Owner+54)}){
    var r=clone("Bullet",source,id);
+   // Remove the boss carrier's fixed -30 degree yaw bias. Keep the native
+   // elevation and symmetric scatter, and the later locked-target aiming.
+   if(id==Owner+50)Set(r,"shootAngle",-180);
    Set(r,"HitBulletID",id is Owner+50 or Owner+51 or Owner+53?id+1:-1);
    // One native terminal child per carrier: do not expire a 0.05s carrier
    // before its one-second periodic launch can run.
@@ -49,6 +54,30 @@ static class OnyxMastery {
  static void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
  static void Set(PARAM.Row r,string f,object v)=>r[f].Value=Convert.ChangeType(v,r[f].Value.GetType());
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
+ public static void FlightStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string input=Path.Combine(root,mmv?"dist/mmv/mod/regulation.bin":"dist/mod/regulation.bin");
+  string dir=Path.Combine(root,"work/onyx-flight",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
+  var b=SFUtil.DecryptNightreignRegulation(input);var original=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var changes=new[]{(table:"AtkParam_Pc",id:Owner+60,field:"mapHitType",value:0,previous:2),(table:"Bullet",id:Owner+50,field:"shootAngle",value:-180,previous:-210)};
+  foreach(var c in changes){var file=b.Files.Single(f=>Name(f)==c.table+".param");var p=parse(c.table,file.Bytes);var row=p.Rows.Single(r=>r.ID==c.id);
+   int old=Convert.ToInt32(row[c.field].Value);Check(old==c.previous||old==c.value,$"Unexpected {c.table}/{c.id}/{c.field}");Set(row,c.field,c.value);file.Bytes=p.Write();}
+  string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,b,b.Compression);
+  var read=SFUtil.DecryptNightreignRegulation(output);
+  Check(read.Version==b.Version&&read.Compression==b.Compression&&read.Files.Count==b.Files.Count,"Regulation structure changed");
+  foreach(var f in read.Files){
+   var intended=b.Files.Single(v=>v.ID==f.ID);Check(f.Name==intended.Name&&f.Flags==intended.Flags&&f.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Parameter readback differs");
+   var change=changes.SingleOrDefault(c=>Name(f)==c.table+".param");
+   if(change.table==null){Check(f.Bytes.Span.SequenceEqual(original[f.ID]),"Unrelated table changed");continue;}
+   var before=parse(change.table,original[f.ID]);var after=parse(change.table,f.Bytes);Check(before.Rows.Count==after.Rows.Count,"Row count changed");
+   foreach(var(old,now)in before.Rows.Zip(after.Rows)){
+    Check(old.ID==now.ID&&old.Name==now.Name,"Row identity/order changed");
+    foreach(var cell in old.Cells)if(old.ID==change.id&&cell.Def.InternalName==change.field)Check(Convert.ToInt32(now[cell.Def.InternalName].Value)==change.value,"Flight fix missing");
+    else Check(Value(cell.Value)==Value(now[cell.Def.InternalName].Value),"Unrelated field changed");
+   }
+  }
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{input,inputSha256=Hash(input),output,outputSha256=Hash(output),normalMapCollision=true,carrierYaw=-180,onlyTwoPrivateFieldsChanged=true,gameplayVerified=false}));
+  Console.WriteLine($"PASS: only private meteor map collision and carrier yaw changed; all rows and tables verified. {output}");
+ }
  public static void RangeStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
   string input=Path.Combine(root,mmv?"dist/mmv/mod/regulation.bin":"dist/mod/regulation.bin");
   string dir=Path.Combine(root,"work/onyx-range",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
