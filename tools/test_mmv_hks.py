@@ -119,7 +119,7 @@ class FragmentTests(unittest.TestCase):
         for path in ('assets/original/action/script/c0000.hks', 'dist/mod/action/script/c0000.hks'):
             reader = Reader((ROOT / path).read_bytes()); reader.function(); readers.append(reader)
         merged, report = compose(source, *readers, json.loads(PLAN.read_text(encoding='utf8')))
-        self.assertEqual(len(report['functions']), 173)
+        self.assertEqual(len(report['functions']), 174)
         self.assertIn('ExecTravelMagnification', report['functions'])
         self.assertTrue(report['inverseRestoresMmvSource'])
         by_name = {f['name']: f for f in readers[1].functions}
@@ -181,6 +181,73 @@ class FragmentTests(unittest.TestCase):
                 results.append((state.globals().ExecChangeFlask(), calls))
             self.assertEqual(*results)
         print(f'PASS: {len(report["functions"])} MMV functions, {cases} interior-fragment cases, 32 full Flask scenarios')
+
+    def test_right_hand_mobile_arts_routing(self):
+        from mmv_hks_stage import compose, PLAN
+        mmv = Path(os.environ.get('NRHEX_MMV', 'D:/Users/OwO/Documents/me3-profiles/MMV'))
+        if not mmv.exists(): self.skipTest('Set NRHEX_MMV to run the full source integration test')
+        source = (mmv / 'mod/action/script/c0000.hks').read_bytes().decode('utf-8-sig')
+        readers = []
+        for path in ('assets/original/action/script/c0000.hks', 'dist/mod/action/script/c0000.hks'):
+            reader = Reader((ROOT / path).read_bytes()); reader.function(); readers.append(reader)
+        plan = json.loads(PLAN.read_text(encoding='utf8'))
+        merged, report = compose(source, *readers, plan)
+        fixes = [e for e in report['edits'] if e['reason'].endswith(':source-fix')]
+        self.assertEqual([e['reason'] for e in fixes], ['ExecAttack:source-fix'])
+        self.assertEqual(fixes[0]['after'], fixes[0]['before'].replace(
+            'c_SwordArtsID == 328', 'IsHalfBlendArts(c_SwordArtsID) == TRUE'))
+
+        def routing(text):
+            named = functions(text)
+            predicate = named['IsHalfBlendArts']
+            start = text.index('    elseif request == SWORDARTS_REQUEST_RIGHT_NORMAL then', named['ExecAttack']['start'])
+            end = text.index('    elseif request == SWORDARTS_REQUEST_RIGHT_STEP then', start)
+            body = text[start:end].split('\n', 1)[1]
+            lua = LuaRuntime(unpack_returned_tuples=True)
+            lua.execute('''
+                TRUE=1; FALSE=0; HAND_RIGHT=1; c_SwordArtsHand=1
+                Event_SwordArtsHalfOneShot="half"
+                function env(...) return 0 end
+                function IsAttackSwordArts(...) return TRUE end
+                function SetSwordArtsPointInfo(...) end
+                function GetSwordArtsDiffCategory(...) return category end
+                function SetVariable(...) end
+                function GetVariable(...) return 0 end
+                function ExecEventHalfBlend(event, blend) result={"half",event,blend} end
+                function ExecEventAllBody(event) result={"full",event} end
+            ''')
+            lua.execute(text[predicate['start']:predicate['end']])
+            action = lua.eval('function(blend_type) ' + body + ' end')
+            return lua, action
+
+        old, old_action = routing(source)
+        for art in (20, 184):  # Spinning Weapon / Familial Rancor
+            old.globals().c_SwordArtsID = art; old.globals().category = 0
+            self.assertEqual(old.globals().IsHalfBlendArts(art), 1)
+            old_action(0)
+            self.assertEqual(old.globals().result[1], 'full')
+
+        lua, action = routing(merged)
+        # Cover all current action types, including MMV's 328/334/335, and
+        # retain full-body routing for ordinary skills such as Onyx (241).
+        mobile = {20, 58, 168, 182, 183, 202, 206, 217, 184, 199, 203, 213, 328, 335, 334}
+        cases = 0
+        for art, category, blend in itertools.product(range(501), (0, 2, 24, 48), (0, 1)):
+            lua.globals().c_SwordArtsID = art; lua.globals().category = category
+            action(blend)
+            result = lua.globals().result
+            self.assertEqual(result[1], 'half' if art in mobile else 'full', (art, category, blend))
+            if art in mobile:
+                self.assertEqual((result[2], result[3]), ('half', blend))
+            else:
+                self.assertEqual(result[2], 'W_SwordArtsOneShot')
+            cases += 1
+
+        changed = source.replace(plan['sourceFixes']['ExecAttack']['old'],
+                                 plan['sourceFixes']['ExecAttack']['new'])
+        with self.assertRaisesRegex(ValueError, 'MMV source fix needs review: ExecAttack'):
+            compose(changed, *readers, plan)
+        print(f'PASS: reproduced both MMV movement regressions; {cases} repaired routing cases; source drift rejected')
 
 
 if __name__ == '__main__':

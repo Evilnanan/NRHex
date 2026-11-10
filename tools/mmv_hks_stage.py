@@ -136,6 +136,18 @@ def compose(source, before, after, plan):
             raise ValueError(f'MMV Arts callback changed: {name}')
         add(f['body'],f['body'],arts_prefix(spec['mode']),name+':mmv-arts')
         adapted.append(name)
+    # Fix reviewed MMV source regressions separately from translated NRHex
+    # additions. Include them in the same exact-inverse preservation check.
+    for name, spec in plan.get('sourceFixes', {}).items():
+        if name not in named or named[name]['count'] != 1:
+            raise ValueError(f'MMV source fix missing/ambiguous: {name}')
+        f = named[name]
+        if hashlib.sha256(source[f['start']:f['end']].encode()).hexdigest() != spec['sourceSha256']:
+            raise ValueError(f'MMV source fix needs review: {name}')
+        (start, end), = find(name, spec['old'])
+        add(start, end, spec['new'], name + ':source-fix')
+        if name not in adapted:
+            adapted.append(name)
     ordered = sorted(edits, key=lambda e: (e['start'], e['end']))
     for left, right in zip(ordered, ordered[1:]):
         if left['end'] > right['start'] or left['start'] == right['start']:

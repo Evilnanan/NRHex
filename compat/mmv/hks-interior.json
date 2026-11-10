@@ -387,5 +387,12 @@
         }
       ]
     }
+  },
+  "sourceFixes": {
+    "ExecAttack": {
+      "sourceSha256": "e7a0d153351c59d6249901d9ee09c899f247169f578686b6537ad5dd3d58c365",
+      "old": "if c_SwordArtsID == 328 then\r\n\t\t\tExecEventHalfBlend(Event_SwordArtsHalfOneShot, blend_type)\r\n\t\telse\r\n\t\t\tExecEventAllBody(\"W_SwordArtsOneShot\")",
+      "new": "if IsHalfBlendArts(c_SwordArtsID) == TRUE then\r\n\t\t\tExecEventHalfBlend(Event_SwordArtsHalfOneShot, blend_type)\r\n\t\telse\r\n\t\t\tExecEventAllBody(\"W_SwordArtsOneShot\")"
+    }
   }
 }
