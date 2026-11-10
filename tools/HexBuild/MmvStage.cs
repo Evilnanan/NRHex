@@ -89,6 +89,8 @@ static class MmvStage {
             target.Bytes = result.Write();
             changedTables.Add(tableName, result);
         }
+        foreach (var (name, table) in MmvWylderBleed.Restore(original, merged, parse,
+            Path.Combine(mmv, "mod/chr/c0000.anibnd.dcx"))) changedTables[name] = table;
         var regulation = Path.Combine(output, "regulation.bin");
         SFUtil.EncryptNightreignRegulation(regulation, merged, merged.Compression);
         var readback = SFUtil.DecryptNightreignRegulation(regulation);
