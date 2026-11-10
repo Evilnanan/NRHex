@@ -21,21 +21,26 @@ void Check(bool ok,string why){if(!ok)throw new InvalidDataException(why);}
 string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
 void BinderCheck(BND4 a,BND4 b){Check(a.Version==b.Version&&a.Compression==b.Compression&&a.Files.Count==b.Files.Count,"Binder metadata mismatch");foreach(var (x,y) in a.Files.Zip(b.Files))Check(x.ID==y.ID&&x.Name==y.Name&&x.Flags==y.Flags&&x.Bytes.Span.SequenceEqual(y.Bytes.Span),"Binder member mismatch: "+x.Name);}
 using var boneSpec=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"compat/mmv-fixes/c6220-twist-bones.json")));
+using var corvianSpec=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"compat/mmv-fixes/c6210-twist-bones.json")));
+var boneSpecs=new[]{boneSpec.RootElement,corvianSpec.RootElement};
 using var iconSpec=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"compat/mmv-fixes/dlc-missing-icons.json")));
 var inputs=new Dictionary<string,string>();
-foreach(var spec in new[]{boneSpec.RootElement,iconSpec.RootElement})foreach(var field in spec.GetProperty("sourceFiles").EnumerateObject()){
+foreach(var spec in boneSpecs.Append(iconSpec.RootElement))foreach(var field in spec.GetProperty("sourceFiles").EnumerateObject()){
  var path=Path.Combine(mmv,"mod",field.Name);Check(Hash(path)==field.Value.GetString(),"MMV changed; review/remove this fix before rebuilding: "+field.Name);inputs[path]=Hash(path);
 }
 foreach(var field in iconSpec.RootElement.GetProperty("originalFiles").EnumerateObject()){
  var path=Path.Combine(original,field.Name);Check(Hash(path)==field.Value.GetString(),"Original icon input changed: "+field.Name);inputs[path]=Hash(path);
 }
 Directory.CreateDirectory(Path.Combine(output,"mod/chr"));Directory.CreateDirectory(Path.Combine(output,"mod/menu"));
-var specBone=boneSpec.RootElement;
-var behavior=BND4.Read(Path.Combine(mmv,"mod/chr/c6220.behbnd.dcx"));
-var before=BND4.Read(Path.Combine(mmv,"mod/chr/c6220.behbnd.dcx"));
+int behaviorPatchedFields=0;
+foreach(var specBone in boneSpecs){
+var model=specBone.GetProperty("id").GetString()!.Split('-')[0];
+Check(model is "c6210" or "c6220","Unexpected behavior model");
+var behavior=BND4.Read(Path.Combine(mmv,$"mod/chr/{model}.behbnd.dcx"));
+var before=BND4.Read(Path.Combine(mmv,$"mod/chr/{model}.behbnd.dcx"));
 var member=behavior.Files.Single(f=>f.ID==specBone.GetProperty("behaviorMemberId").GetInt32());
 Check(Sha(member.Bytes.ToArray())==specBone.GetProperty("behaviorSha256").GetString(),"Behavior member changed");
-var skeleton=BND4.Read(Path.Combine(mmv,"mod/chr/c6220.anibnd.dcx")).Files.Single(f=>f.ID==specBone.GetProperty("skeletonMemberId").GetInt32());
+var skeleton=BND4.Read(Path.Combine(mmv,$"mod/chr/{model}.anibnd.dcx")).Files.Single(f=>f.ID==specBone.GetProperty("skeletonMemberId").GetInt32());
 Check(Sha(skeleton.Bytes.ToArray())==specBone.GetProperty("skeletonSha256").GetString(),"Skeleton member changed");
 var bytes=member.Bytes.ToArray();var allowed=new HashSet<int>();
 foreach(var patch in specBone.GetProperty("patches").EnumerateArray()){
@@ -44,10 +49,12 @@ foreach(var patch in specBone.GetProperty("patches").EnumerateArray()){
  Check(BitConverter.ToInt16(next)>=0&&BitConverter.ToInt16(next)<specBone.GetProperty("boneCount").GetInt32(),"Bone index out of range");
  foreach(int at in Enumerable.Range(offset,2))Check(allowed.Add(at),"Overlapping bone patches");
  next.CopyTo(bytes,offset);
+ behaviorPatchedFields++;
 }
 var previous=member.Bytes.ToArray();Check(previous.Where((value,index)=>value!=bytes[index]&&!allowed.Contains(index)).Count()==0,"Unrelated behavior changed");member.Bytes=bytes;
 foreach(var (a,b) in before.Files.Zip(behavior.Files))if(a.ID!=member.ID)Check(a.Bytes.Span.SequenceEqual(b.Bytes.Span),"Unrelated behavior member changed");
-var behaviorPath=Path.Combine(output,"mod/chr/c6220.behbnd.dcx");behavior.Write(behaviorPath);BinderCheck(behavior,BND4.Read(behaviorPath));
+var behaviorPath=Path.Combine(output,$"mod/chr/{model}.behbnd.dcx");behavior.Write(behaviorPath);BinderCheck(behavior,BND4.Read(behaviorPath));
+}
 
 const string bank="21_common_dlc01_h";
 var layouts=BND4.Read(Path.Combine(mmv,"mod/menu",bank+".sblytbnd.dcx"));var textures=TPF.Read(Path.Combine(mmv,"mod/menu",bank+".tpf.dcx"));
@@ -77,5 +84,5 @@ foreach(var x in oldLayouts){var y=readLayouts.Files.Single(f=>f.ID==x.ID);Check
 foreach(var x in oldTextures){var y=readTextures.Textures.Single(f=>f.Name==x.Name);Check(x.Format==y.Format&&x.Flags1==y.Flags1&&x.Type==y.Type&&x.Data.SequenceEqual(y.Bytes),"Existing MMV texture changed");}
 Check(inputs.All(x=>Hash(x.Key)==x.Value),"Source modified during build");
 var files=Directory.GetFiles(Path.Combine(output,"mod"),"*",SearchOption.AllDirectories).ToDictionary(p=>Path.GetRelativePath(output,p).Replace('\\','/'),Hash);
-File.WriteAllText(Path.Combine(output,"manifest.json"),JsonSerializer.Serialize(new{schemaVersion=1,name="MMV-Fixes",sourceFiles=inputs.Where(x=>Path.GetFullPath(x.Key).StartsWith(mmv+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)).ToDictionary(x=>x.Key,x=>x.Value),buildInputs=inputs,files,fixes=new[]{"c6220-twist-bones","dlc-missing-icons"},restoredIcons=added.Order(),behaviorPatchedFields=4,existingMmvAtlasEntriesUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-Console.WriteLine($"PASS: four bone fields corrected; {added.Count} missing icons restored in two supplemental atlases; MMV inputs unchanged. {output}");
+File.WriteAllText(Path.Combine(output,"manifest.json"),JsonSerializer.Serialize(new{schemaVersion=1,name="MMV-Fixes",sourceFiles=inputs.Where(x=>Path.GetFullPath(x.Key).StartsWith(mmv+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)).ToDictionary(x=>x.Key,x=>x.Value),buildInputs=inputs,files,fixes=boneSpecs.Select(s=>s.GetProperty("id").GetString()!).Append("dlc-missing-icons").ToArray(),restoredIcons=added.Order(),behaviorPatchedFields,existingMmvAtlasEntriesUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+Console.WriteLine($"PASS: {behaviorPatchedFields} bone fields corrected; {added.Count} missing icons restored in two supplemental atlases; MMV inputs unchanged. {output}");

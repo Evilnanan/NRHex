@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "c6210-twist-bones",
+  "description": "Corvian Knight behavior references bones outside its 115-bone skeleton.",
+  "sourceFiles": {
+    "chr/c6210.behbnd.dcx": "2b97f4b5905e19ecbb973fe0178056d1f89245fac0179a104edb5ec771f71821",
+    "chr/c6210.anibnd.dcx": "dbd151e5ecf35b95e53b42d6b9d5c871581782b9e77f3475ee1514d008e62d6e"
+  },
+  "behaviorMemberId": 7000500,
+  "behaviorSha256": "7c811a715dd4d69299672194f7b5580a026607fe58d7d455731b48dd56523c7a",
+  "skeletonMemberId": 1000000,
+  "skeletonSha256": "95877149ccc88f1367166bfb17d327f7d2440be8171b429eef433abda107404e",
+  "boneCount": 115,
+  "patches": [
+    {
+      "offset": 2804,
+      "before": "7c00",
+      "after": "4800",
+      "field": "startBoneIndex",
+      "node": "Fall_Twist_Neck"
+    },
+    {
+      "offset": 2806,
+      "before": "7c00",
+      "after": "4800",
+      "field": "endBoneIndex",
+      "node": "Fall_Twist_Neck"
+    },
+    {
+      "offset": 2996,
+      "before": "8200",
+      "after": "4900",
+      "field": "startBoneIndex",
+      "node": "Fall_Twist_Head"
+    },
+    {
+      "offset": 2998,
+      "before": "8200",
+      "after": "4900",
+      "field": "endBoneIndex",
+      "node": "Fall_Twist_Head"
+    }
+  ]
+}
