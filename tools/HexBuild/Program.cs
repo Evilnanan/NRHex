@@ -90,6 +90,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--metal-guard-stage")){int at=Array.IndexOf(args,"--metal-guard-stage");MetalGuard.Stage(root,bnd,Parse,args[at+1],args[at+2]);return;}
 if(args.Contains("--parry-counter-hit-stage")){ParryCounterHit.Stage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--hub-cleanup-stage")){HubCleanup.Stage(root,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--lightning-melee-stage")){StaticCharge.MeleeStage(root,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}

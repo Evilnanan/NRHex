@@ -1107,7 +1107,6 @@ unsafe extern "system" fn on_rear_calculated(module:usize,source:usize,hit:usize
  basics::calculated(local,target,source,hit,base);
  if source!=local{return;}
  sniper::calculated(local,target,source,hit,base);
- metal::calculated(local,target,source,hit,base);
  damage=read_i32(hit+0x280);
  if damage>0&&noisy::lava_attack(read_i32(hit+0x40),read_i32(hit+0x44)){
   // Native calculation already includes eligible fire/ordinary attack buffs.

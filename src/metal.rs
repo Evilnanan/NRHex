@@ -1,5 +1,5 @@
-//! Metallization: free Ironjar uses and per-hit poise-based damage while active.
-use crate::{ptr,read_ptr,read_i32,has_effect,is_local,ACTIVE,BASE,native_actor,wraith};
+//! Metallization: free Ironjar uses and reduced guard stamina loss while active.
+use crate::{ptr,read_ptr,has_effect,is_local,ACTIVE,BASE,native_actor,wraith};
 use std::{cell::Cell,sync::{Mutex,OnceLock,atomic::{AtomicPtr,Ordering}}};
 pub const OWNER:i32=95004600;
 pub const GOOD:i32=3520;
@@ -7,17 +7,14 @@ pub const GROUND_LOT:i32=95546000;
 pub const REQUEST:i32=OWNER+1;
 pub const RECEIPT:i32=OWNER+2;
 pub const IRONJAR:i32=503520;
-// The native hit constructor has already applied attack/weapon corrections
-// and outgoing poise modifiers to +148. Never use armor poise or impact level.
-pub unsafe fn calculated(local:usize,target:usize,source:usize,hit:usize,base:usize){
- if local==0||target==0||source!=local||source==target||hit==0
-    ||read_i32(hit+0x280)<=0||!has_effect(local,OWNER,base)
-    ||has_effect(local,crate::reward_cycle_runtime::RESET,base)
-    ||!has_effect(local,IRONJAR,base){return;}
- let poise=ptr::read_unaligned((hit+0x148)as*const f32);
- if !poise.is_finite()||poise<=0.{return;}
- let damage=crate::sword::boosted(read_i32(hit+0x280),1.+poise.min(100.)/100.);
- ptr::write_unaligned((hit+0x280)as*mut i32,damage);
+pub const GUARD:i32=OWNER+3;
+// Native stateInfo 158 multiplies guard stamina loss; it does not change
+// shield damage absorption, weapon hardness or the attack's poise damage.
+pub unsafe fn update_guard(actor:usize,base:usize){
+ if !is_local(actor,base){return;}
+ let stats=native_actor::stats(actor);if stats==0{return;}
+ let wanted=enabled(actor,base)&&has_effect(actor,IRONJAR,base)&&!native_actor::incapacitated(actor,stats);
+ crate::maintain_status_effect(actor,stats,GUARD,wanted,base);
 }
 pub const CONSUME_RVA:usize=0x669ae0;
 pub const CONSUME_PATTERN:&str="48 89 5C 24 10 56 57 41 56 48 83 EC 60 41 8B F0 4C 8B F2 48 8B D9 48 8B 01 FF 90 90 01 00 00 48";
@@ -57,6 +54,7 @@ unsafe fn snapshot(root:usize,base:usize)->Vec<(u32,u32)>{
  wraith::instances(root,GOOD,base).into_iter().map(|(index,serial)|(serial,quantity(root,index))).collect()
 }
 pub unsafe fn update(actor:usize,base:usize){
+ update_guard(actor,base);
  if !enabled(actor,base){return;}let stats=native_actor::stats(actor);if stats==0{return;}
  let acknowledged=has_effect(actor,RECEIPT,base);
  let (given,requested,ready)={let Ok(mut state)=STATE.lock()else{return;};state.bind(actor,ptr::read_unaligned((actor+8)as*const u64));state.given|=acknowledged;(state.given,state.requested.clone(),state.idle_frames>=3)};

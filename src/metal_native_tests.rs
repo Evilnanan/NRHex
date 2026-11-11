@@ -1,6 +1,6 @@
 //! Real native item-deduction branch and compiled local scope/gift transaction.
 use super::*;
-use crate::win::*;
+use crate::{win::*,read_i32};
 use std::cell::RefCell;
 thread_local!{
  static EFFECTS:RefCell<Vec<i32>>=const{RefCell::new(Vec::new())};
@@ -102,8 +102,54 @@ unsafe extern "system" fn weapon_row(out:usize,_:i32)->usize{
 }
 unsafe extern "system" fn poise_context(out:usize,_:usize)->usize{out}
 unsafe extern "system" fn poise_rate(_:usize,_:usize)->f32{1.5}
+#[test]#[ignore="requires NRHEX_NATIVE_EXE and NRHEX_METAL_GUARD_FIXTURE; run alone"]
+fn native_metal_guard_multiplier_and_lease_scope(){unsafe{
+ use sha2::{Digest,Sha256};
+ let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
+ let fixture=std::fs::read(std::env::var_os("NRHEX_METAL_GUARD_FIXTURE").unwrap()).unwrap();
+ let n=u16::from_le_bytes(fixture[10..12].try_into().unwrap())as usize;
+ let rows:Vec<_>=[GUARD,701535,701550].into_iter().map(|id|{
+  let at=(0..n).map(|i|64+i*24).find(|&at|i32::from_le_bytes(fixture[at..at+4].try_into().unwrap())==id).unwrap();
+  let off=u64::from_le_bytes(fixture[at+8..at+16].try_into().unwrap())as usize;
+  fixture[off..off+0x390].to_vec()
+ }).collect();
+ for(row,rate)in rows.iter().zip([0.5f32,0.2,0.9]){assert_eq!(f32::from_le_bytes(row[0x388..0x38c].try_into().unwrap()),rate);assert_eq!(u16::from_le_bytes(row[0x156..0x158].try_into().unwrap()),158);}
+ let headers=crate::pe::Headers::parse(&raw,0).unwrap();let image=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!image.is_null());let base=image as usize;
+ for sec in &headers.sections{ptr::copy_nonoverlapping(raw[sec.raw_offset as usize..].as_ptr(),(base+sec.virtual_address as usize)as*mut u8,sec.raw_size as usize);}
+ // Both real native guard-multiplier aggregators multiply valid state158
+ // entries. Use the installed row bytes, including the native Guardian rows.
+ let mut manager=[0usize;0x80/8];let m=manager.as_mut_ptr()as usize;put(m+0x28,usize::MAX);
+ let mut nodes=[[0usize;0x80/8];3];
+ let native:unsafe extern "system" fn(usize,u8)->f32=std::mem::transmute(base+0x506ce0);
+ let all:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+0x506dc0);
+ for count in 0..=3{
+  put(m+8,if count==0{0}else{nodes[0].as_ptr()as usize});
+  for i in 0..count{let p=nodes[i].as_mut_ptr()as usize;put(p,rows[i].as_ptr()as usize);put(p+0x38,if i+1<count{nodes[i+1].as_ptr()as usize}else{0});int(p+0x68,4);}
+  let expected=[1f32,0.5,0.1,0.09][count];
+  for hand in 0..=2{assert!((native(m,hand)-expected).abs()<0.000001);}
+  assert!((all(m)-expected).abs()<0.000001);
+ }
+ for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(crate::APPLY_SELF_RVA,add as*const()as usize),(crate::REMOVE_EFFECT_RVA,remove as*const()as usize)]{jump(base,rva,f);}
+ let mut world=vec![0usize;0x17500/8];let mut actor=[0usize;0x800/8];let a=actor.as_mut_ptr()as usize;let mut stats=[0u64;0x200/8];let st=stats.as_mut_ptr()as usize;
+ let mut modules=[0usize;0x200/8];modules[0]=st;put(a+0x1b8,modules.as_ptr()as usize);put(a+0x190,m);world[0x174e8/8]=a;put(base+crate::WORLD_RVA,world.as_ptr()as usize);
+ let old_base=BASE.swap(base,Ordering::AcqRel);let old_active=ACTIVE.swap(true,Ordering::AcqRel);let mut cases=0;
+ for owned in [false,true]{for buff in [0,503521,503522,503529,708710,IRONJAR]{for resetting in [false,true]{for down in [0u8,1,2]{for hp in [0,100]{
+  *crate::STATUS_REFRESH.get_or_init(||Mutex::new(Default::default())).lock().unwrap()=Default::default();
+  EFFECTS.with(|s|{let mut e=s.borrow_mut();*e=vec![buff,GUARD];if owned{e.push(OWNER);}if resetting{e.push(crate::reward_cycle_runtime::RESET);}});EVENTS.with(|s|s.borrow_mut().clear());
+  int(st+0x140,hp);ptr::write((a+0x710)as*mut u8,down);update_guard(a,base);update_guard(a,base);
+  let wanted=owned&&buff==IRONJAR&&!resetting&&down==0&&hp>0;
+  assert_eq!(has(a,GUARD)!=0,wanted);assert_eq!(EVENTS.with(|s|s.borrow().iter().filter(|&&id|id==GUARD).count()),usize::from(wanted));cases+=1;
+ }}}}}
+ int(st+0x140,100);ptr::write((a+0x710)as*mut u8,0);EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,IRONJAR]);
+ *crate::STATUS_REFRESH.get().unwrap().lock().unwrap()=Default::default();update_guard(a,base);assert_ne!(has(a,GUARD),0);
+ remove(m,IRONJAR);update_guard(a,base);assert_eq!(has(a,GUARD),0);add(a,IRONJAR,0);update_guard(a,base);assert_ne!(has(a,GUARD),0);
+ remove(m,OWNER);update_guard(a,base);assert_eq!(has(a,GUARD),0);
+ world[0x174e8/8]=0;EVENTS.with(|s|s.borrow_mut().clear());EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,IRONJAR]);update_guard(a,base);assert!(EVENTS.with(|s|s.borrow().is_empty()));
+ *crate::STATUS_REFRESH.get().unwrap().lock().unwrap()=Default::default();EFFECTS.with(|s|s.borrow_mut().clear());BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(image,0,MEM_RELEASE),0);
+ println!("PASS: installed guard rows, native multiplier/Guardian stacking, {cases} lifecycle combinations and expiration/reentry/locality");
+}}
 #[test]#[ignore="requires NRHEX_NATIVE_EXE; run alone"]
-fn native_metal_poise_and_shared_damage_scope(){unsafe{
+fn retired_metal_poise_bonus_leaves_shared_damage_unchanged(){unsafe{
  use sha2::{Digest,Sha256};
  let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
  let headers=crate::pe::Headers::parse(&raw,0).unwrap();
@@ -122,21 +168,19 @@ fn native_metal_poise_and_shared_damage_scope(){unsafe{
  let mut world=vec![0usize;0x17500/8];let mut actor=[0usize;0x200/8];let player=actor.as_mut_ptr()as usize;actor[0x190/8]=1;actor[0x60/8]=1;
  world[0x174e8/8]=player;put(base+crate::WORLD_RVA,world.as_ptr()as usize);put(base+crate::GAME_DATA_RVA,0);
  let mut target=[0usize;0x200/8];let enemy=target.as_mut_ptr()as usize;let mut module=[0usize,enemy];
- let cases=[(-1.,1000),(0.,1000),(0.25,1003),(40.,1400),(60.,1600),(99.5,1995),(100.,2000),(150.,2000),(f32::NAN,1000),(f32::INFINITY,1000),(f32::NEG_INFINITY,1000)];
- for owned in [false,true]{for buff in [0,503529,503521,708710,IRONJAR]{for resetting in [false,true]{for cached in [false,true]{for source in [0,player,enemy]{for &(sa,boosted)in &cases{
+ let cases=[-1.,0.,0.25,40.,60.,99.5,100.,150.,f32::NAN,f32::INFINITY,f32::NEG_INFINITY];
+ for owned in [false,true]{for buff in [0,503529,503521,708710,IRONJAR]{for resetting in [false,true]{for cached in [false,true]{for source in [0,player,enemy]{for &sa in &cases{
   EFFECTS.with(|s|{let mut effects=s.borrow_mut();effects.clear();if owned{effects.push(OWNER);}effects.push(buff);if resetting{effects.push(crate::reward_cycle_runtime::RESET);}});
   let mut hit=[0u8;0x300];let h=hit.as_mut_ptr()as usize;float(h+0x148,sa);float(h+0x150,30.);int(h+0x280,1000);int(h+0x40,40000);int(h+0x44,1);hit[0x2c1]=if cached{8}else{0};let before=hit;
   crate::on_rear_calculated(module.as_ptr()as usize,source,h);
-  let eligible=owned&&buff==IRONJAR&&!resetting&&!cached&&source==player;
-  assert_eq!(read_i32(h+0x280),if eligible{boosted}else{1000},"owned={owned} buff={buff} reset={resetting} cached={cached} source={source} poise={sa}");
-  hit[0x280..0x284].copy_from_slice(&before[0x280..0x284]);assert_eq!(hit,before,"Only HP damage may change");
+  assert_eq!(read_i32(h+0x280),1000,"owned={owned} buff={buff} reset={resetting} cached={cached} source={source} poise={sa}");
+  assert_eq!(hit,before,"Retired Metal bonus must not change any hit fields");
  }}}}}}
  EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,IRONJAR]);
- // No whitelist: normal attacks, skills, spells, consumables, custom/MMV
- // attack IDs all consume the hit's own poise, without changing rescue/SA.
+ // Removing the bonus must also leave skills, spells, items and MMV hits unchanged.
  for attack in [40000,600000110,1001000,10350000,95005160,5100885]{
   let mut hit=[0u8;0x300];let h=hit.as_mut_ptr()as usize;int(h+0x40,attack);int(h+0x44,1);float(h+0x148,40.);
-  for(damage,expected)in [(0,0),(-1,-1),(1000,1400),(1500,2100),(i32::MAX,i32::MAX)]{
+  for(damage,expected)in [(0,0),(-1,-1),(1000,1000),(1500,1500),(i32::MAX,i32::MAX)]{
    int(h+0x280,damage);crate::on_rear_calculated(module.as_ptr()as usize,player,h);assert_eq!(read_i32(h+0x280),expected);
   }
   int(h+0x280,1000);module[1]=player;crate::on_rear_calculated(module.as_ptr()as usize,player,h);assert_eq!(read_i32(h+0x280),1000);module[1]=enemy;
