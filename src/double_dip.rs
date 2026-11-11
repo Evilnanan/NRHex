@@ -1,5 +1,5 @@
 //! Double the Joy: persist two draws, then grant directly through local common.
-//! Only already owned/self/foreign character-exclusive powers are unavailable.
+//! Bartender bypasses role exclusivity here; owned/self remain unavailable.
 use crate::{has_effect,is_local,read_ptr,native_actor,hex_pool::{OWNER_IDS,HISTORY_BITS},reward_choices::HexSet};
 use std::sync::Mutex;
 pub const OWNER:i32=95004700;
@@ -10,7 +10,8 @@ pub const POPUP_RVA:usize=0x7c5080;
 pub const POPUP_PATTERN:&str="48 89 5C 24 18 55 56 57 48 83 EC 20 48 8B 05 3D 28 44 03 41 0F B6 D8 8B FA 48 8B E9 48 8B B0 80 00 00 00";
 const MENU_RVA:usize=0x3c14a70;
 fn marker(index:usize)->i32{FIRST_MARKER+HISTORY_BITS[index]as i32}
-fn role_allowed(owner:i32,hero:Option<u8>)->bool{owner!=OWNER&&crate::reward_choices::exclusive_role(owner).is_none_or(|required|hero==Some(required))}
+// Bartender works independently of Recluse; its normal draw restriction stays.
+fn role_allowed(owner:i32,hero:Option<u8>)->bool{owner!=OWNER&&(owner==95004900||crate::reward_choices::exclusive_role(owner).is_none_or(|required|hero==Some(required)))}
 fn candidates(owned:&HexSet,selected:&[usize],hero:Option<u8>)->Vec<usize>{
  OWNER_IDS.iter().enumerate().filter_map(|(i,&owner)|(!owned.contains(&i)&&!selected.contains(&i)&&role_allowed(owner,hero)).then_some(i)).collect()
 }
@@ -74,7 +75,18 @@ pub unsafe fn update(actor:usize,base:usize){
  #[test]fn only_foreign_exclusives_owned_and_self_are_filtered_for_every_hero(){
   for hero in std::iter::once(None).chain((0..=255).map(Some)){
    let owned=mask([index(OWNER),index(95000300)]);let pool=candidates(&owned,&[],hero);
-   for (i,&id)in OWNER_IDS.iter().enumerate(){assert_eq!(pool.contains(&i),!owned.contains(&i)&&match id{95001800=>hero==Some(6),95004200=>hero==Some(3),95004800=>hero==Some(5),95004900=>hero==Some(7),_=>id!=OWNER});}
+   for (i,&id)in OWNER_IDS.iter().enumerate(){assert_eq!(pool.contains(&i),!owned.contains(&i)&&match id{95001800=>hero==Some(6),95004200=>hero==Some(3),95004800=>hero==Some(5),_=>id!=OWNER});}
+  }
+ }
+ #[test]fn bartender_is_drawable_for_every_hero_only_in_box_and_never_duplicates(){
+  let bartender=index(95004900);
+  for hero in 1..=10{
+   let mut owned=all(OWNER_IDS.len());owned.remove(&bartender);
+   assert_eq!(select(vec![],&owned,Some(hero),|_|Some(0)),Some(vec![bartender]));
+   assert_eq!(select(vec![bartender],&owned,Some(hero),|_|panic!("duplicate draw")),Some(vec![bartender]));
+   owned.insert(bartender);assert_eq!(select(vec![],&owned,Some(hero),|_|panic!("owned draw")),Some(vec![]));
+   let normal=crate::reward_choices::combat_exclusions(HexSet::new(),Some(hero),Some(1100));
+   assert_eq!(normal.contains(&bartender),hero!=7);
   }
  }
  #[test]fn incompatible_and_normally_restricted_powers_remain_candidates(){

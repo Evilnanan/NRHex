@@ -1,0 +1,35 @@
+{
+  "version": "0.17.307",
+  "branch": "main",
+  "baselineCommit": "5d4b3eab1720f053dcd6a7639ebc0fe9274de19d",
+  "behavior": {
+    "ability": 95004900,
+    "mysteryBoxAllHeroes": true,
+    "normalDrawRecluseOnly": true,
+    "ownedAndSelectedExcluded": true,
+    "otherExclusivesPreserved": true
+  },
+  "validation": {
+    "standalone": {
+      "testsPassed": 497,
+      "testsFailed": 0,
+      "nativeTestsIgnored": 36,
+      "releaseBuild": true,
+      "unsupportedHostLoadCheck": true
+    },
+    "mmv": {
+      "testsPassed": 498,
+      "testsFailed": 0,
+      "nativeTestsIgnored": 36,
+      "releaseBuild": true,
+      "unsupportedHostLoadCheck": true
+    }
+  },
+  "artifacts": {
+    "dist/natives/NRHex.dll": "961D608261B2B60A216A180D23235AEE3DB96578C488D4D2CD4F892D53EC0CD3",
+    "dist/mmv/natives/NRHex.dll": "CFE55F570595B607356AE0B8F9419FAAAD2FD7C4405E1667C96E1E3A69A5D5B5"
+  },
+  "metalGuardFeatureIncluded": false,
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}
