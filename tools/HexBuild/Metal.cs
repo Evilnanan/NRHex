@@ -9,6 +9,7 @@ static class Metal {
  static void Set(PARAM.Row row,string field,object value)=>row[field].Value=Convert.ChangeType(value,row[field].Value.GetType());
  static string Hash(string path)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path)));
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone,PARAM lots){
+  MetalGuard.Effect(clone("SpEffectParam",8000000,MetalGuard.EffectId));
   foreach(int id in Markers){var row=clone("SpEffectParam",8000000,id);foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("saveCategory",id==Owner+2?10:-1),("effectEndurance",-1f),("dontDeleteOnDead",1),("isDisableNetSync",1),("iconId",-1),("spEffectTextId_1",-1),("displayIconForPermamentEffect",0)})Set(row,f,v);}
   var template=lots.Rows.First(r=>Convert.ToInt32(r["lotItemCategory01"].Value)==1);
   var lot=clone("ItemLotParam_map",template.ID,Lot);
@@ -19,6 +20,7 @@ static class Metal {
  static EMEVD.Instruction Has(int id)=>I(4,5,(sbyte)1,20000u,id,(byte)1,(sbyte)0,1f);
  static bool Removal(EMEVD.Instruction i,int effect)=>i.Bank==2004&&i.ID==21&&i.ArgData.Length==8&&BitConverter.ToInt32(i.ArgData)==20000&&BitConverter.ToInt32(i.ArgData,4)==effect;
  public static void Events(EMEVD events){
+  MetalGuard.Events(events);
   Check(!events.Events.Any(e=>e.ID==GrantEvent),"Metal grant event collision");
   var parent=events.Events.Single(e=>e.ID==0);Check(parent.Parameters.Count==0,"Parameterized common constructor");parent.Instructions.Insert(0,I(2000,0,0,GrantEvent,0));
   var grant=new EMEVD.Event(GrantEvent,EMEVD.Event.RestBehaviorType.Restart);
@@ -47,6 +49,7 @@ static class Metal {
   foreach(var(n,f,v)in new[]{("SpEffectParam","iconId",h.SmallIcon),("AttachEffectParam","statusIconId",h.SmallIcon),("PermanentBuffParam","iconId",h.LargeIcon),("EquipParamGoods","iconId",h.LargeIcon-1000)})Check(Convert.ToInt32(Table(current,n).Rows.Single(r=>r.ID==iconReference.Id)[f].Value)==v,"Celestial Body icon reference differs: "+n);
   var s=Table(current,"SpEffectParam").Rows.Single(r=>r.ID==Owner);
   var expected=new PARAM.Row(Table(native,"SpEffectParam").Rows.Single(r=>r.ID==8000000)){ID=Owner};foreach(var(f,v)in new(string,object)[]{("maxHpRate",1f),("spCategory",20),("iconId",h.SmallIcon),("spEffectTextId_1",Owner),("displayIconForPermamentEffect",0)})Set(expected,f,v);Check(CageAI.Same(expected,s),"Owner differs from neutral template");
+  MetalGuard.Validate(Table(current,"SpEffectParam").Rows.Single(r=>r.ID==MetalGuard.EffectId));
   foreach(int id in Markers){var marker=Table(current,"SpEffectParam").Rows.Single(r=>r.ID==id);Check(Convert.ToInt32(marker["saveCategory"].Value)==(id==Owner+2?10:-1)&&Convert.ToInt32(marker["dontDeleteOnDead"].Value)==1&&Convert.ToInt32(marker["iconId"].Value)==-1,"Invalid gift marker");}
   var lot=Table(current,"ItemLotParam_map").Rows.Single(r=>r.ID==Lot);Check(Convert.ToInt32(lot["lotItemId01"].Value)==Good&&Convert.ToInt32(lot["lotItemNum01"].Value)==1&&Convert.ToInt32(lot["lotItemCategory01"].Value)==1,"Grant must contain one native Ironjar");
   var reward=goods.Rows.Single(r=>r.ID==Owner);var attach=Table(current,"AttachEffectParam").Rows.Single(r=>r.ID==Owner);var permanent=Table(current,"PermanentBuffParam").Rows.Single(r=>r.ID==Owner);var table=Table(current,"ItemTableParam").Rows.Single(r=>r.ID==RewardCatalog.Table(Owner));
@@ -82,7 +85,7 @@ static class Metal {
   foreach(var file in actual.Files){var intended=b.Files.Single(f=>f.ID==file.ID);Check(file.Name==intended.Name&&file.Flags==intended.Flags&&file.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Packed parameter readback failed");var n=names.SingleOrDefault(n=>Name(file)==n+".param");if(n==null){Check(file.Bytes.Span.SequenceEqual(before[file.ID]),"Unrelated table changed");continue;}var old=parse(n,before[file.ID]);var now=parse(n,file.Bytes);Check(now.Rows.Count==old.Rows.Count+added[n].Count&&old.Rows.OrderBy(r=>r.ID).Zip(now.Rows.Where(r=>!added[n].Contains(r.ID)).OrderBy(r=>r.ID)).All(p=>CageAI.Same(p.First,p.Second)),"Existing parameter row changed");}Validate(native,actual,parse,hexes);
   var eventInput=Common(root);var ev=EMEVD.Read(eventInput);var previous=EMEVD.Read(eventInput);Events(ev);string eventOutput=Path.Combine(dir,"common.emevd.dcx");ev.Write(eventOutput);var final=EMEVD.Read(eventOutput);ValidateEvents(final);
   Check(final.Format==previous.Format&&final.Compression==previous.Compression&&final.Events.Count==previous.Events.Count+1&&final.StringData.SequenceEqual(previous.StringData)&&final.LinkedFileOffsets.SequenceEqual(previous.LinkedFileOffsets),"Event metadata changed");
-  foreach(var e in previous.Events){var now=final.Events.Single(x=>x.ID==e.ID);Check(Cages.Same(now,ev.Events.Single(x=>x.ID==e.ID)),"Event roundtrip failed");if(e.ID is 1111 or 9100941)now.Instructions.RemoveAll(i=>Markers.Prepend(Owner).Any(id=>Removal(i,id)));if(e.ID==0)now.Instructions.RemoveAll(i=>i.Bank==2000&&i.ID==0&&i.ArgData.Length==12&&BitConverter.ToInt32(i.ArgData,4)==GrantEvent);Check(Cages.Same(e,now),"Unrelated event changed");}
+  foreach(var e in previous.Events){var now=final.Events.Single(x=>x.ID==e.ID);Check(Cages.Same(now,ev.Events.Single(x=>x.ID==e.ID)),"Event roundtrip failed");if(e.ID is 1111 or 9100941)now.Instructions.RemoveAll(i=>Markers.Prepend(Owner).Append(MetalGuard.EffectId).Any(id=>Removal(i,id)));if(e.ID==0)now.Instructions.RemoveAll(i=>i.Bank==2000&&i.ID==0&&i.ArgData.Length==12&&BitConverter.ToInt32(i.ArgData,4)==GrantEvent);Check(Cages.Same(e,now),"Unrelated event changed");}
   RewardCatalog.Write(Path.Combine(dir,"hex_pool.rs"),hexes);
   File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{version="0.17.251",inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),hexCount=hexes.Length,historyBit=43,historyBytes=6,addedRows=added.ToDictionary(p=>p.Key,p=>p.Value.Order().ToArray()),existingRowsAndUnrelatedTablesUnchanged=true,originalIronjarUnchanged=true,onlyThreeExistingEventsExtended=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: Metal original-item gift, append-only rewards and lifecycle staged; all existing parameters preserved");

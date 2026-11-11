@@ -1,0 +1,303 @@
+{
+  "version": "0.17.306",
+  "branch": "feat/metal-guard",
+  "baselineCommit": "5d4b3eab1720f053dcd6a7639ebc0fe9274de19d",
+  "behavior": {
+    "owner": 95004600,
+    "ironjar": 503520,
+    "effect": 95004603,
+    "guardStaminaMultiplier": 0.5,
+    "oldPoiseDamageBonusRemoved": true,
+    "freeUseAndGiftPreserved": true,
+    "effectSeconds": 2,
+    "refreshIntervalMilliseconds": 750,
+    "networkSync": true
+  },
+  "checks": {
+    "standaloneRust": {
+      "passed": 496,
+      "failed": 0,
+      "ignored": 37
+    },
+    "mmvRust": {
+      "passed": 497,
+      "failed": 0,
+      "ignored": 37
+    },
+    "isolatedNativeTests": 3,
+    "guardLifecycleCases": 144,
+    "realNativeMultipliers": [
+      0.5,
+      0.1,
+      0.09
+    ],
+    "existingConsumptionAndGiftRegression": true,
+    "retiredDamageBonusRegression": true,
+    "descriptionsReadBack": true,
+    "dllUnsupportedHostLoadChecks": true,
+    "currentExeAndSignaturesVerified": true
+  },
+  "parameters": {
+    "standalone": {
+      "owner": 95004600,
+      "effect": 95004603,
+      "guardStaminaMultiplier": 0.5,
+      "effectSeconds": 2,
+      "stateInfo": 158,
+      "inputSha256": "E0A8272E6D2A419D1072A8F5C849669026B660CC28126A084A7324B1D4E4F5C6",
+      "outputSha256": "F69AD5CAFB47BE5582993725142E1627786DC562A847E9C33A196681C4FD0E0F",
+      "eventInputSha256": "17A547E6FE21A5750870CAEB3AE49AC2F84B026FB3DB72CADD8813AB978AD8DD",
+      "eventOutputSha256": "CA77A0489129F01398037ABDEE3EAF98B9A5A80CD04A78C7AEA4F85037A35F26",
+      "allExistingParameterRowsPreserved": true,
+      "onlyTwoCleanupInstructionsAdded": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    },
+    "mmv": {
+      "owner": 95004600,
+      "effect": 95004603,
+      "guardStaminaMultiplier": 0.5,
+      "effectSeconds": 2,
+      "stateInfo": 158,
+      "inputSha256": "E52D261197DC54D6537F5BFDD66028128B5BB787FEE8E894BFFFE98D613B74CD",
+      "outputSha256": "06104B01DAD2DC21E9F23C81B1DB01C2B63C314CD3D2958CEF939AB91D0DA5EE",
+      "eventInputSha256": "13DA70F9E31B1FC0C67C01FD2C8ABFB02FE472EEC169930409A1FF66037D8EB2",
+      "eventOutputSha256": "78D915C6E286FE6D4DC9792CF14C492B06A9D0E18BB32C8DA044BCC2C714AF0F",
+      "allExistingParameterRowsPreserved": true,
+      "onlyTwoCleanupInstructionsAdded": true,
+      "gameplayVerified": false,
+      "multiplayerVerified": false
+    }
+  },
+  "texts": {
+    "standalone": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "79F8EB7E2012C592FFC72599A11AEFF9E5D0048F2ABD4B4A41226D0D8C5C28C6",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "7D4D969944C315260CBE7ECF984A2A2A8337723D4AEB560DF0E0102F16A486B7",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "70132BA137011EDA1DDBC71D40986F57327779734D748AB86C0101C1C7D216AA",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "4EC3979297F99C955B538B7829891AEFE486F62A2372C954F228B2D4AC8EE3E7",
+          "outputSha256": "0AD6B46A44B7DD12A438C8C2C7B36809F7AFE8F7AC737590CA53E5087A4DD29E",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。铁壶香药生效期间，攻击伤害受削韧值增益。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，提升防御强度，使格挡耗精降低50%。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。铁壶香药生效期间，攻击伤害受削韧值增益。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，提升防御强度，使格挡耗精降低50%。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。铁壶香药生效期间，攻击伤害受削韧值增益。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，提升防御强度，使格挡耗精降低50%。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "09B311888C4914518A1B409F2ACD12948502190E2694A999D0CE1D91886EB5BA",
+          "outputSha256": "068F5105D8DAA78371F42948F0642B77017F51CC7C5CA6DBC536A15B0CEBD574",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。铁壶香药生效期间，攻击伤害受削韧值增益。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，提升防御强度，使格挡耗精降低50%。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "6876279B5B8AF1F25F38F68F36AF460302C3AD24F9F9603CFF2A1A83B104398F",
+          "outputSha256": "12F9512CF83B35E6FC69F4341841E74BB954370CA18A1D48893B47A1FE413B20",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": "Gain an Ironjar Aromatic with unlimited uses. While active, attacks with higher poise damage deal more damage.",
+              "after": "Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": "Gain an Ironjar Aromatic with unlimited uses. While active, attacks with higher poise damage deal more damage.",
+              "after": "Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": "Gain an Ironjar Aromatic with unlimited uses. While active, attacks with higher poise damage deal more damage.",
+              "after": "Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "42DB34CB75A406E75A0B79935E23C230E88AFE6ACDBF3FD33AC83227707AF257",
+          "outputSha256": "72EB7A2AAB59B6453C9F522A93A2A641A1B3963B48136ABFA2FC7C3378DE7370",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": "Gain an Ironjar Aromatic with unlimited uses. While active, attacks with higher poise damage deal more damage.",
+              "after": "Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    },
+    "mmv": {
+      "source": "docs/hexes.md",
+      "sourceSha256": "79F8EB7E2012C592FFC72599A11AEFF9E5D0048F2ABD4B4A41226D0D8C5C28C6",
+      "englishSource": "docs/hexes.en.md",
+      "englishSourceSha256": "7D4D969944C315260CBE7ECF984A2A2A8337723D4AEB560DF0E0102F16A486B7",
+      "statusSource": "data/text/status-effects.json",
+      "statusSourceSha256": "70132BA137011EDA1DDBC71D40986F57327779734D748AB86C0101C1C7D216AA",
+      "statusOnly": false,
+      "reports": [
+        {
+          "language": "zhocn",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "5D00DACA1B3209A9112500E1AA09ACF530DDD18D779B542570C6EBA22687668A",
+          "outputSha256": "44B41ECAF6808B5926B4F4133F72B0DC8D038F223AFCDF9A97533A92D74AFD89",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，提升防御强度，使格挡耗精降低50%。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，提升防御强度，使格挡耗精降低50%。获得铁壶香药"
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，提升防御强度，使格挡耗精降低50%。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "zhocn",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "D868E1297C30C303A3419E471D63A7BA7D311B9CDC3FAC0D2627AE87F7E4D30B",
+          "outputSha256": "BDC95A7A949E521BB71D41FC4B0698A7989279C9B4531C00F2F07973B1F8D80E",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": "你可以无限使用铁壶香药。铁壶香药生效期间，每点攻击削韧值提升1%攻击伤害，最多提升100%。获得铁壶香药",
+              "after": "你可以无限使用铁壶香药。铁壶香药生效期间，提升防御强度，使格挡耗精降低50%。获得铁壶香药"
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "item_dlc01.msgbnd.dcx",
+          "inputSha256": "43C616F872650EB372CEA1B62791EAE6DAE993D5104076838C701249DBF57F8E",
+          "outputSha256": "FB9C8D173AA11A2D50E525FFF44C63D7CEA18EDF2D76C33319F43D9F48893DD0",
+          "changes": [
+            {
+              "fmg": "AttachEffectInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic.",
+              "after": "Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%."
+            },
+            {
+              "fmg": "PermanentBuffInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic.",
+              "after": "Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%."
+            },
+            {
+              "fmg": "PermanentBuffCaption.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic.",
+              "after": "Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        },
+        {
+          "language": "engus",
+          "file": "menu_dlc01.msgbnd.dcx",
+          "inputSha256": "2301AD8734F57FE316F07D2B5A0BCBC42AA62993A72FDCBAF520F2CE5F989EF2",
+          "outputSha256": "14C3308C784B685BAD1D74191F66E99E0D868507F3080CBE52207886BCB58A15",
+          "changes": [
+            {
+              "fmg": "SpEffectInfo.fmg",
+              "id": 95004600,
+              "before": "Use Ironjar Aromatic without consuming it. While it is active, each point of an attack's poise damage increases that attack's damage by 1%, up to 100%. Receive an Ironjar Aromatic.",
+              "after": "Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%."
+            }
+          ],
+          "unrelatedEntriesAndMembersUnchanged": true
+        }
+      ]
+    }
+  },
+  "artifacts": {
+    "standalone": {
+      "natives/NRHex.dll": "6897a2cac61bf056a3d5b1be17f90bda66bdf27f23200f0a17a16b8156f5f63a",
+      "mod/regulation.bin": "f69ad5cafb47be5582993725142e1627786dc562a847e9c33a196681c4fd0e0f",
+      "mod/event/common.emevd.dcx": "ca77a0489129f01398037abdee3eaf98b9a5a80cd04a78c7aea4f85037a35f26",
+      "mod/action/script/c0000.hks": "61c6f96e0c7b4985b65dfaf51ec9f2a7f5fe77b7214f8974df6919b492b234b6",
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": "12f9512cf83b35e6fc69f4341841e74bb954370ca18a1d48893b47a1fe413b20",
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": "72eb7a2aab59b6453c9f522a93a2a641a1b3963b48136abfa2fc7c3378de7370",
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "0ad6b46a44b7dd12a438c8c2c7b36809f7afe8f7ac737590ca53e5087a4dd29e",
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "068f5105d8daa78371f42948f0642b77017f51cc7c5ca6dbc536a15b0cebd574"
+    },
+    "mmv": {
+      "natives/NRHex.dll": "9def4938a75f5bbb35e48db2382dd4c9032c8bccf01f317e0741d748db984820",
+      "mod/regulation.bin": "06104b01dad2dc21e9f23c81b1db01c2b63c314cd3d2958cef939ab91d0da5ee",
+      "mod/event/common.emevd.dcx": "78d915c6e286fe6d4dc9792cf14c492b06a9d0e18bb32c8da044bcc2c714af0f",
+      "mod/action/script/c0000.hks": "4d6633d18c34e41b5c61b80ba8dea6de787abbe536cd603353d980763fb13270",
+      "mod/msg/engus/item_dlc01.msgbnd.dcx": "fb9c8d173aa11a2d50e525fff44c63d7cea18edf2d76c33319f43d9f48893dd0",
+      "mod/msg/engus/menu_dlc01.msgbnd.dcx": "14c3308c784b685bad1d74191f66e99e0d868507f3080cbe52207886bcb58a15",
+      "mod/msg/zhocn/item_dlc01.msgbnd.dcx": "44b41ecaf6808b5926b4f4133f72b0dc8d038f223afcdf9a97533a92d74afd89",
+      "mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "bdc95a7a949e521bb71d41fc4b0698a7989279c9b4531c00f2f07973b1f8d80e"
+    }
+  },
+  "mmvBuild": {
+    "version": "0.17.306",
+    "mmvFingerprint": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+    "generatedData": {
+      "parry_data.rs": "848a4c61c58c5bb31e8c0fff8c91e110132f0b3d459e05459c108cf21dfa1fef",
+      "sword_map.rs": "31a68b2bc78b810237c78f934dd1ea90f58f35e8a65a47d0c2ea4276889e16f7",
+      "echo_cast_data.rs": "180f34c5ca27757ef11d2f755ce53ac32cdb766b411bb3a9418bad788c40fa17",
+      "archmage_data.rs": "2db323bf9c622d3d50bf676cd2a82656965ef19440ea27ec692b7e415f82516b",
+      "arts_data.rs": "4e29dcfa22e3b3d45d0ad46efb03708321aee8c0fb9dd946529ecf7cc81e079b",
+      "spirit_target_data.rs": "ca59115825f9eca91e46c7218c6444b4a978c253c993b7592ef9a7e59fc87d45",
+      "cage_data.rs": "86819d1bf5e994c557466efb8db06033faa6a01d576381e0a19adeef9ab3faed"
+    },
+    "erosionDataSha256": "70cf3920f3e09b835667d470c046b1d26f15ba52e9bf66c71af5763f8e507294",
+    "dllSha256": "9def4938a75f5bbb35e48db2382dd4c9032c8bccf01f317e0741d748db984820"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}
