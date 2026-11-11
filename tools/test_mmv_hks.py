@@ -62,7 +62,9 @@ class FragmentTests(unittest.TestCase):
         lua = LuaRuntime(unpack_returned_tuples=True)
         pack = lua.eval('function(f, ...) local function p(...) return {n=select("#",...), ...} end return p(f(...)) end')
         cases = 0; translated = 0
+        plan = json.loads((ROOT / 'compat/mmv/hks-interior.json').read_text())
         for before, after in zip(readers[0].functions, readers[1].functions):
+            if plan['functions'].get(after['name'], {}).get('forceInterior', False): continue
             if before['code'] == after['code'] or not after['code'].endswith(before['code']): continue
             code = after['code'][:-len(before['code'])]
             argc = struct.unpack('>I', after['header'][4:8])[0]
@@ -88,7 +90,7 @@ class FragmentTests(unittest.TestCase):
                         return call
                     mapping = {}
                     for name in global_names:
-                        if name in ('env', 'act', 'ExecWallJump', 'ExecEventHalfBlend', 'ExecEventAllBody', 'GetHalfBlendInfo', 'GetVariable'):
+                        if name in ('env', 'act', 'ExecWallJump', 'ExecEventHalfBlend', 'ExecEventAllBody', 'GetHalfBlendInfo', 'GetVariable', 'ChangeMoveSpeedIndex', 'SprintStart_onActivate'):
                             mapping[name] = function(name)
                         elif name == 'TRUE': mapping[name] = 1
                         elif name.startswith('Event_'): mapping[name] = name

@@ -248,3 +248,8 @@ Critical hits unleash a shockwave.
 ## Onyx Lord
 
 Obtain an Onyx Lord’s Greatsword. Its attacks use less stamina. Hold its skill to summon meteors.
+
+<!-- hex:95005400 -->
+## Travel Light
+
+Damage negation -50%. Move faster while using items, casting spells, or using skills that allow movement.
