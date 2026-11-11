@@ -104,6 +104,7 @@ if(args.Contains("--mmv-raider-check")){MmvRaider.Verify(args[Array.IndexOf(args
 if(args.Contains("--soul-critical-map")){SoulCritical.TargetMap(root,args[Array.IndexOf(args,"--soul-critical-map")+1],Parse);return;}
 if(args.Contains("--onyx-behavior-stage")){int at=Array.IndexOf(args,"--onyx-behavior-stage");OnyxBehavior.Stage(root,args[at+1],args[at+2],args[at+3]);return;}
 if(args.Contains("--onyx-planted-stage")){int at=Array.IndexOf(args,"--onyx-planted-stage");OnyxMastery.RefreshPlanted(args[at+1],args[at+2],Parse);return;}
+if(args.Contains("--lightning-ram-stage")){LightningRam.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--onyx-check")){OnyxMastery.Verify(root,bnd,Parse,args.Contains("--mmv"),args.Contains("--tune"));return;}
 if(args.Contains("--onyx-dash-map")){int at=Array.IndexOf(args,"--onyx-dash-map");OnyxMastery.DashMap(args[at+1],args[at+2],Parse);return;}
 if(args.Contains("--onyx-mastery-stage")){OnyxMastery.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
@@ -936,6 +937,7 @@ foreach(var h in hexes){
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==Erosion.Owner)Erosion.Owners(s);
  if(h.Id==Sniper.Owner)Sniper.OwnerEffect(s);
+ if(h.Id==LightningRam.Owner)Set(s,"isDisableNetSync",0);
  if(h.Id==Bartender.Owner)Bartender.OwnerEffect(s,pars["SpEffectParam"].Rows.Single(r=>r.ID==7035700));
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
@@ -984,6 +986,7 @@ Bartender.Mechanics(Clone);
 StaticCharge.Mechanics(Clone);
 SoulCritical.Mechanics(Clone);
 OnyxMastery.Mechanics(Clone,pars["ItemLotParam_map"]);
+LightningRam.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
 foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
@@ -1402,6 +1405,7 @@ Bartender.Events(ev);
 StaticCharge.Events(ev);
 SoulCritical.Events(ev);
 OnyxMastery.Events(ev);
+LightningRam.Events(ev);
 Basics.Events(ev);
 Sniper.Events(ev);
 UltimateUnstoppable.Events(ev);

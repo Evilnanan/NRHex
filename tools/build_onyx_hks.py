@@ -39,6 +39,9 @@ def upgrade(source):
  for f in r.functions:
   if QUERY not in f['constants']:continue
   words=[w[0]for w in struct.iter_unpack('>I',f['code'])];cs=f['constants'][:]
+  offset=next(i-2 for i,w in enumerate(words)if decode(w)['op']==25 and cs[decode(w)['bx']]==QUERY)
+  if offset:
+   scratch=decode(words[offset])['a'];assert words[offset+12]==abc(2,scratch,6,2);continue
   scratch=decode(words[0])['a']
   assert decode(words[0])['op']==91 and cs[decode(words[0])['bx']]=='env'
   assert cs[decode(words[2])['bx']]==QUERY
@@ -133,8 +136,8 @@ def verify(data):
  r=Reader(data);r.function();assert all(QUERY in r.functions[i]['constants']for i in [553,554,566,567]);assert any(FP_QUERY in f['constants']for f in r.functions)
  for f in r.functions:
   if QUERY in f['constants']:
-   words=[w[0]for w in struct.iter_unpack('>I',f['code'])];scratch=decode(words[0])['a']
-   assert words[12]==abc(2,scratch,6,2) and 'IsEnoughArtPointsL2' in f['constants']
+   words=[w[0]for w in struct.iter_unpack('>I',f['code'])];offset=next(i-2 for i,w in enumerate(words)if decode(w)['op']==25 and f['constants'][decode(w)['bx']]==QUERY);scratch=decode(words[offset])['a']
+   assert words[offset+12]==abc(2,scratch,6,2) and 'IsEnoughArtPointsL2' in f['constants']
  assert all(START_END_QUERY in f['constants']for f in r.functions if f['name']in ['SwordArtsOneShot_onUpdate','SwordArtsHalfOneShot_Upper_onUpdate'])
  return True
 if __name__=='__main__':

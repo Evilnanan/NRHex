@@ -349,14 +349,14 @@
     },
     "SwordArtsOneShot_onUpdate": {
       "originalHash": "741a4faa05a85de067bb61745e2ee1aabdb9ff49931d1532c9c0a8a542bc1319",
-      "nrhexHash": "f0228223828edac20bceee606e168fcfd3053eeae989170c6fc7f3c6f25f21c8",
+      "nrhexHash": "90ca21d9abbb984055ad5aff87cd6eb3f5bfc0460c1344b50d8944ae1596dac5",
       "mmvFunctionHash": "5484f192d2dc704ae63eea06c16e8ff44c3cf8adae663d646b6d01d6538b01f0",
       "actions": [
         {
           "kind": "prefix",
           "range": [
             0,
-            39
+            150
           ]
         },
         {

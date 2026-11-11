@@ -116,6 +116,14 @@ unsafe fn toward_down(owner:Identity,base:usize,angle:f32,speed:f32)->bool{
 }
 type Env=unsafe extern "system" fn(usize,i32,usize)->i32;
 pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
+ if matches!(code,326|crate::lightning_ram::QUERY|crate::lightning_ram::STOP_QUERY)&&ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{
+  let actor=read_ptr(context);let base=BASE.load(Ordering::Acquire);
+  let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);
+  if code==326&&crate::lightning_ram::art(actor,number(vm,2)as i32,base){return 113;}
+  if code==crate::lightning_ram::QUERY{return crate::lightning_ram::query(actor,number(vm,2)as i32,number(vm,3)as i32,number(vm,4)>0.,number(vm,5)!=0.,number(vm,6),base);}
+  if code==crate::lightning_ram::STOP_QUERY{if crate::is_local(actor,base){crate::lightning_ram::reset();}return 0;}
+ }
+
  if code==crate::onyx_mastery::DASH_QUERY{
   return i32::from(ACTIVE.load(Ordering::Acquire)&&context!=0&&crate::onyx_mastery::dash_ready(read_ptr(context),BASE.load(Ordering::Acquire)));
  }

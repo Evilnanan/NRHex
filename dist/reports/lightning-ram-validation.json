@@ -1,0 +1,28 @@
+{
+  "version": "0.17.308",
+  "branch": "feat/lightning-ram",
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "standaloneTestsPassed": 502,
+  "mmvTestsPassed": 503,
+  "optInTestsNotRunInOrdinarySuite": 37,
+  "nativeVelocityAndFeeBoundaryTestPassed": true,
+  "runtimeSignatureCount": 233,
+  "nativeExeHash": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+  "hksLuaBytecodeDifferentialCases": 29120,
+  "mmvInteriorFragmentCases": 6912,
+  "hksNativeBodiesPreserved": true,
+  "parameterAndEventReadbackPassed": true,
+  "me3ProfilesValidated": true,
+  "unsupportedHostLoadChecksPassed": true,
+  "files": {
+    "dist/natives/NRHex.dll": "ef461b91d7d24c8fa8be078b1644ba465f44f1ef513f6843fb2d17f2b5860940",
+    "dist/mod/regulation.bin": "33927ff4f6241c286d8d7bd29c946c045e20f6d1cac4ec60f65ce926c89705f8",
+    "dist/mod/event/common.emevd.dcx": "028054923a1b00dbd2dcc524093a15b6db38fa7fc53dbf1dc9d4cfad5382ddc3",
+    "dist/mod/action/script/c0000.hks": "975060724214006749f5d21a013f346b0aed5d12a67893c0b4f28d2f0657778c",
+    "dist/mmv/natives/NRHex.dll": "253226bead08a41bce6b4fcaabc9419e038f17c0197866ba36a0ddf9ccf7c43d",
+    "dist/mmv/mod/regulation.bin": "6e99e191ef6471e28ea4a5f7c720fe58105e3ba11d33ad1d5e93410d990b3ff1",
+    "dist/mmv/mod/event/common.emevd.dcx": "2803e440799c9db3d059606a1e96c994360b1e5a1a70da83e8e6a436c5e572cf",
+    "dist/mmv/mod/action/script/c0000.hks": "026f1e26749911031c7ecf6215fec4ba169874da3b2f762eae3e911c75d4cd6f"
+  }
+}

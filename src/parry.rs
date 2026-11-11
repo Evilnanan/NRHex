@@ -280,6 +280,7 @@ pub unsafe extern "system" fn notify_detour(module:usize,hit:usize,kind:i32,dire
  let turn=if action!=0{crate::parry_turn::accepted(module,hit,continuing)}else{None};
  let original:unsafe extern "system" fn(usize,usize,i32,u64)->u64=std::mem::transmute(NOTIFY_ORIGINAL.load(Ordering::Acquire));
  let result=original(module,hit,kind,direction);
+ crate::lightning_ram::reaction(module,hit,kind);
  finish_notification(action);
  if let Some(turn)=turn{crate::parry_turn::apply(turn);}
  result

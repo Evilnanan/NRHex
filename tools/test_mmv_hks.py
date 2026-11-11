@@ -88,7 +88,7 @@ class FragmentTests(unittest.TestCase):
                         return call
                     mapping = {}
                     for name in global_names:
-                        if name in ('env', 'act', 'ExecWallJump', 'ExecEventHalfBlend', 'ExecEventAllBody', 'GetHalfBlendInfo', 'GetVariable'):
+                        if name in ('env', 'act', 'ExecWallJump', 'ExecEventHalfBlend', 'ExecEventAllBody', 'GetHalfBlendInfo', 'GetVariable', 'ExecNearDeath', 'ExecDeath', 'ExecTalk', 'ExecMovableEventAnim', 'ExecDamage', 'ExecBirdAct', 'ExecFookShot'):
                             mapping[name] = function(name)
                         elif name == 'TRUE': mapping[name] = 1
                         elif name.startswith('Event_'): mapping[name] = name

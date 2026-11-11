@@ -60,8 +60,8 @@ thread_local!{static CONTACT:Cell<bool>=const{Cell::new(false)};}
 struct ContactGuard(bool);
 impl Drop for ContactGuard{fn drop(&mut self){CONTACT.with(|s|s.set(self.0));}}
 pub fn active_contact()->bool{CONTACT.with(Cell::get)}
-pub fn private_attack(id:i32,table:i32)->bool{table==1&&((ATTACK..=ATTACK+3).contains(&id)||id==crate::soul_critical::ATTACK)}
-pub fn private_bullet(id:i32)->bool{(BULLET..=BULLET+7).contains(&id)||matches!(id,crate::soul_critical::BULLET|crate::soul_critical::PRELUDE)}
+pub fn private_attack(id:i32,table:i32)->bool{table==1&&((ATTACK..=ATTACK+3).contains(&id)||id==crate::soul_critical::ATTACK||id==crate::lightning_ram::ATTACK)}
+pub fn private_bullet(id:i32)->bool{(BULLET..=BULLET+7).contains(&id)||matches!(id,crate::soul_critical::BULLET|crate::soul_critical::PRELUDE|crate::lightning_ram::BULLET)}
 unsafe fn visual(actor:usize,base:usize,ready:bool){
  let current=has_effect(actor,READY,base);if ready==current{return;}
  if ready{let apply:unsafe extern "system" fn(usize,i32,u8)->u8=std::mem::transmute(base+crate::APPLY_SELF_RVA);apply(actor,READY,0);}
@@ -133,14 +133,14 @@ fn first_contact(module:usize,hit:usize)->bool{DISPATCH.with(|s|{let mut s=s.bor
 unsafe fn key(source:usize,target:usize,hit:usize)->Key{Key{source:if source!=0{read_ptr(source+8)as u64}else{0},target:read_ptr(target+8)as u64,attack:read_i32(hit+0x40),table:read_i32(hit+0x44),components:ptr::read_unaligned(hit as*const[u32;5]),point:ptr::read_unaligned((hit+0x1f0)as*const[u32;3])}}
 struct Sample{key:Key,value:f32}
 static SAMPLES:Mutex<BTreeMap<usize,Sample>>=Mutex::new(BTreeMap::new());
-#[derive(Default)]struct Calculation{key:Option<Key>,hit:usize,delta:[f32;5],sampled:bool,lightning:Option<f32>,soul:bool,object:f32}
+#[derive(Default)]struct Calculation{key:Option<Key>,hit:usize,delta:[f32;5],sampled:bool,lightning:Option<f32>,soul:bool,ram:bool,object:f32}
 thread_local!{static CALC:RefCell<Vec<Calculation>>=const{RefCell::new(Vec::new())};}
 pub unsafe fn enter(module:usize,source:usize,hit:usize){
  let mut c=Calculation{object:1.,..Default::default()};
  if ACTIVE.load(Ordering::Acquire)&&module!=0&&hit!=0{
   let target=read_ptr(module+8);let base=BASE.load(Ordering::Acquire);
   let private=private_attack(read_i32(hit+0x40),read_i32(hit+0x44));
-  if private{c.soul=read_i32(hit+0x40)==crate::soul_critical::ATTACK;c.lightning=Some(if c.soul{ptr::read_unaligned(hit as*const[f32;5]).iter().sum()}else{ptr::read_unaligned((hit+0xc)as*const f32)});}
+  if private{c.ram=read_i32(hit+0x40)==crate::lightning_ram::ATTACK;c.soul=read_i32(hit+0x40)==crate::soul_critical::ATTACK;c.lightning=Some(if c.soul||c.ram{ptr::read_unaligned(hit as*const[f32;5]).iter().sum()}else{ptr::read_unaligned((hit+0xc)as*const f32)});}
   // Capture any source while the local owner holds the augment. A later
   // accepted hit can reuse a preview made before the first mark was applied.
   let world=read_ptr(base+crate::WORLD_RVA);let local=if world!=0{read_ptr(world+0x174e8)}else{0};
@@ -159,7 +159,7 @@ pub fn candidate(value:f32){if !value.is_finite()||value<0.{return;}CALC.with(|s
 // These inputs have already passed the attacker's native aggregation. A new
 // elemental strike must not aggregate those bonuses again. Preserve only the
 // new target's defensive coefficients, including object defense (possibly 0).
-pub fn fixed_components()->Option<[f32;5]>{CALC.with(|s|s.borrow().last().and_then(|c|c.lightning.map(|d|{let d=d*c.object;if c.soul{crate::soul_critical::components(d)}else{[0.,0.,0.,d,0.]}})))}
+pub fn fixed_components()->Option<[f32;5]>{CALC.with(|s|s.borrow().last().and_then(|c|c.lightning.map(|d|{let d=d*c.object;if c.ram{[d,0.,0.,0.,0.]}else if c.soul{crate::soul_critical::components(d)}else{[0.,0.,0.,d,0.]}})))}
 pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);let target=read_ptr(module+8);if target==0{return;}
@@ -192,6 +192,7 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
 // factory captures it and restores neutral coefficients before native use.
 // Thus network-recreated roots do not depend on a process-global last damage.
 #[repr(C,align(16))]struct Descriptor([u8;0x110]);
+pub unsafe fn emit_ram(handle:u64,generation:u64,damage:f32,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage,point,leak:false},crate::lightning_ram::BULLET,Some(generation),base)}
 pub unsafe fn emit_soul(handle:u64,target:u64,damage:f32,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage,point,leak:false},crate::soul_critical::BULLET,Some(target),base)}
 pub unsafe fn emit_soul_prelude(handle:u64,point:[f32;4],base:usize)->bool{emit_kind(Pending{handle,damage:0.,point,leak:false},crate::soul_critical::PRELUDE,None,base)}
 unsafe fn emit(p:Pending,base:usize)->bool{emit_kind(p,if p.leak{LEAK_BULLET}else{BULLET},None,base)}
@@ -224,8 +225,8 @@ pub unsafe fn factory(payload:usize)->SeedGuard{
  let private=ACTIVE.load(Ordering::Acquire)&&payload!=0&&private_bullet(read_i32(payload+4));
  let seed=if private{CHILD.with(|s|s.borrow().clone()).or_else(||{
   let damage=ptr::read_unaligned((payload+0x124)as*const f32);
-  let victim=if read_i32(payload+4)==crate::soul_critical::BULLET{crate::soul_immunity::decode(ptr::read_unaligned((payload+0x128)as*const[f32;3]))}else{None};
-  (matches!(read_i32(payload+4),BULLET|LEAK_BULLET|crate::soul_critical::BULLET)&&damage.is_finite()&&damage>0.).then(||Arc::new(Discharge{damage,victim,targets:Mutex::new(BTreeSet::new())}))
+  let victim=if matches!(read_i32(payload+4),crate::soul_critical::BULLET|crate::lightning_ram::BULLET){crate::soul_immunity::decode(ptr::read_unaligned((payload+0x128)as*const[f32;3]))}else{None};
+  (matches!(read_i32(payload+4),BULLET|LEAK_BULLET|crate::soul_critical::BULLET|crate::lightning_ram::BULLET)&&damage.is_finite()&&damage>0.).then(||Arc::new(Discharge{damage,victim,targets:Mutex::new(BTreeSet::new())}))
  })}else{None};
  let restore=if private{let p=payload+0x124;let v=ptr::read_unaligned(p as*const[f32;4]);ptr::write_unaligned(p as*mut[f32;4],[1.;4]);Some((p,v))}else{None};
  SeedGuard(SEED.with(|s|s.replace(seed)),restore)
@@ -251,7 +252,7 @@ pub unsafe fn constructed(hit:usize,context:usize){
  if let Ok(mut s)=SAMPLES.lock(){s.remove(&hit);}
  if !private_attack(read_i32(hit+0x40),read_i32(hit+0x44)){return;}
  let damage=seed(read_ptr(context)).or_else(||SEED.with(|s|s.borrow().clone())).map_or(0.,|s|s.damage);
- ptr::write_unaligned(hit as*mut[f32;5],if read_i32(hit+0x40)==crate::soul_critical::ATTACK{crate::soul_critical::components(damage)}else{[0.,0.,0.,damage,0.]});
+ ptr::write_unaligned(hit as*mut[f32;5],if read_i32(hit+0x40)==crate::lightning_ram::ATTACK{[damage,0.,0.,0.,0.]}else if read_i32(hit+0x40)==crate::soul_critical::ATTACK{crate::soul_critical::components(damage)}else{[0.,0.,0.,damage,0.]});
  // Native attack context is fixed, no equipped-weapon contribution. Recipient
  // calculation independently suppresses offensive factors already captured.
 }
@@ -259,10 +260,15 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  // Every nested collision masks an outer victim exception, including ordinary
  // attacks. Restore it only when the nested synchronous contact returns.
  let _outer=crate::soul_immunity::contact(None);
+ let _ram_outer=crate::lightning_ram::ContactScope::enter(false);
  if !ACTIVE.load(Ordering::Acquire)||bullet==0||!private_bullet(read_i32(bullet+0xa4)){return original(hit,target,bullet);}
  // The visual carrier must never consume a target in the shared hit list.
  if read_i32(bullet+0xa4)==crate::soul_critical::PRELUDE{return 0;}
  let Some(seed)=seed(bullet)else{return 0;};if target==0{return 0;}
+ let ram=read_i32(bullet+0xa4)==crate::lightning_ram::BULLET;
+ let base=BASE.load(Ordering::Acquire);
+ if ram&&!crate::lightning_ram::allow_contact(target,bullet,seed.victim,base){return 0;}
+ let _ram=crate::lightning_ram::ContactScope::enter(ram&&crate::lightning_ram::local_bullet(bullet));
  let handle=read_ptr(target+8)as u64;
  // Leakage has no contact with its downed/reviving owner, including rescue
  // and hit reactions. Check at collision time, not when the mark is placed.
@@ -275,6 +281,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  let _guard=ContactGuard(CONTACT.with(|s|s.replace(true)));
  let _impact=crate::soul_impact::contact(hit,target,bullet);
  let result=original(hit,target,bullet);
+ if ram{crate::lightning_ram::accepted_contact(target,bullet,seed.victim,result,base);}
  // Native rejection (e.g. dodge) must leave that target eligible for the wave.
  if result==0{if let Ok(mut targets)=seed.targets.lock(){targets.remove(&handle);}}
  result
