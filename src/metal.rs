@@ -8,8 +8,8 @@ pub const REQUEST:i32=OWNER+1;
 pub const RECEIPT:i32=OWNER+2;
 pub const IRONJAR:i32=503520;
 pub const GUARD:i32=OWNER+3;
-// Native stateInfo 158 multiplies guard stamina loss; it does not change
-// shield damage absorption, weapon hardness or the attack's poise damage.
+// Native guard stamina and outgoing poise multipliers share this lease;
+// shield absorption, weapon hardness and HP damage stay unchanged.
 pub unsafe fn update_guard(actor:usize,base:usize){
  if !is_local(actor,base){return;}
  let stats=native_actor::stats(actor);if stats==0{return;}

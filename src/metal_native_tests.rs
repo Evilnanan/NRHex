@@ -111,7 +111,7 @@ fn native_metal_guard_multiplier_and_lease_scope(){unsafe{
  let rows:Vec<_>=[GUARD,701535,701550].into_iter().map(|id|{
   let at=(0..n).map(|i|64+i*24).find(|&at|i32::from_le_bytes(fixture[at..at+4].try_into().unwrap())==id).unwrap();
   let off=u64::from_le_bytes(fixture[at+8..at+16].try_into().unwrap())as usize;
-  fixture[off..off+0x390].to_vec()
+  fixture[off..off+0x400].to_vec()
  }).collect();
  for(row,rate)in rows.iter().zip([0.5f32,0.2,0.9]){assert_eq!(f32::from_le_bytes(row[0x388..0x38c].try_into().unwrap()),rate);assert_eq!(u16::from_le_bytes(row[0x156..0x158].try_into().unwrap()),158);}
  let headers=crate::pe::Headers::parse(&raw,0).unwrap();let image=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!image.is_null());let base=image as usize;
@@ -122,12 +122,23 @@ fn native_metal_guard_multiplier_and_lease_scope(){unsafe{
  let mut nodes=[[0usize;0x80/8];3];
  let native:unsafe extern "system" fn(usize,u8)->f32=std::mem::transmute(base+0x506ce0);
  let all:unsafe extern "system" fn(usize)->f32=std::mem::transmute(base+0x506dc0);
+ let poise:unsafe extern "system" fn(usize,usize)->f32=std::mem::transmute(base+0x507f50);
+ assert_eq!(f32::from_le_bytes(rows[0][0x334..0x338].try_into().unwrap()),1.25);
+ // Keep the real native eligibility and poise aggregation; only the CRT
+ // security-cookie failure sink is irrelevant in this isolated image.
+ ptr::write((base+0x26909a0)as*mut u8,0xc3);
+ // Kind 12 additionally requires a source actor (511119); neutral weapon
+ // applicability accepts it without invoking actor-specific virtual methods.
+ let source_actor=[0usize;16];put(m+0x10,source_actor.as_ptr()as usize);
+ let mut context=[0u8;0x80];
  for count in 0..=3{
   put(m+8,if count==0{0}else{nodes[0].as_ptr()as usize});
   for i in 0..count{let p=nodes[i].as_mut_ptr()as usize;put(p,rows[i].as_ptr()as usize);put(p+0x38,if i+1<count{nodes[i+1].as_ptr()as usize}else{0});int(p+0x68,4);}
   let expected=[1f32,0.5,0.1,0.09][count];
   for hand in 0..=2{assert!((native(m,hand)-expected).abs()<0.000001);}
   assert!((all(m)-expected).abs()<0.000001);
+  for kind in 0..=12{context[0]=kind;assert_eq!(poise(m,context.as_ptr()as usize),if count==0{1.}else{1.25},"context={kind}, effects={count}");}
+  put(m+0x10,0);assert_eq!(poise(m,context.as_ptr()as usize),1.);put(m+0x10,source_actor.as_ptr()as usize);
  }
  for(rva,f)in [(crate::HAS_EFFECT_RVA,has as*const()as usize),(crate::APPLY_SELF_RVA,add as*const()as usize),(crate::REMOVE_EFFECT_RVA,remove as*const()as usize)]{jump(base,rva,f);}
  let mut world=vec![0usize;0x17500/8];let mut actor=[0usize;0x800/8];let a=actor.as_mut_ptr()as usize;let mut stats=[0u64;0x200/8];let st=stats.as_mut_ptr()as usize;
@@ -146,7 +157,7 @@ fn native_metal_guard_multiplier_and_lease_scope(){unsafe{
  remove(m,OWNER);update_guard(a,base);assert_eq!(has(a,GUARD),0);
  world[0x174e8/8]=0;EVENTS.with(|s|s.borrow_mut().clear());EFFECTS.with(|s|*s.borrow_mut()=vec![OWNER,IRONJAR]);update_guard(a,base);assert!(EVENTS.with(|s|s.borrow().is_empty()));
  *crate::STATUS_REFRESH.get().unwrap().lock().unwrap()=Default::default();EFFECTS.with(|s|s.borrow_mut().clear());BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(image,0,MEM_RELEASE),0);
- println!("PASS: installed guard rows, native multiplier/Guardian stacking, {cases} lifecycle combinations and expiration/reentry/locality");
+ println!("PASS: installed guard/poise rows, 13 native source contexts and missing-source exclusion, native multiplier/Guardian stacking, {cases} lifecycle combinations and expiration/reentry/locality");
 }}
 #[test]#[ignore="requires NRHEX_NATIVE_EXE; run alone"]
 fn retired_metal_poise_bonus_leaves_shared_damage_unchanged(){unsafe{

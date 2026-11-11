@@ -217,7 +217,7 @@ Attack power -30%. Damage increases with distance to the target. Greatly extends
 <!-- hex:95004600 -->
 ## Metallization
 
-Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost, reducing stamina lost when blocking by 50%.
+Gain an Ironjar Aromatic with unlimited uses. While active, improves guard boost and poise damage.
 
 <!-- hex:95004700 -->
 ## Mystery Box
