@@ -8,7 +8,9 @@ static class MmvBinders {
     static string Hash(byte[] data) => Convert.ToHexString(SHA256.HashData(data));
     // Explicitly keep MMV's shared Storm Ruler appearance. Sword no longer applies
     // its retired visual effects; these resources are still used by the weapon art.
-    static readonly HashSet<string> KeepMmv = ["f000450940.fxr", "f000450950.fxr", "s88350.flver",
+    // Hotfix1 removed s88350.flver; both retained Storm resource lists use
+    // s88880 instead. MA may supply its otherwise absent s88350 model.
+    static readonly HashSet<string> KeepMmv = ["f000450940.fxr", "f000450950.fxr",
         "f000450940.ffxreslist", "f000450950.ffxreslist"];
     public static void Stage(string root, string mmv, string originalSfx) {
         var reports = new List<object>();

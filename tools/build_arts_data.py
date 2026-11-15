@@ -16,7 +16,7 @@ ids=[x['ID'] for x in arts];assert len(ids)==len(set(ids)) and {100,303,1200}.is
 assert texts['names']['zhocn']['303']=='小圆盾格挡'
 defaults=sorted((x['ID'],x['fields']['swordArtsParamId']) for x in p['weapons'])
 weapons={x['ID']:x['fields'] for x in p['weapons']}
-element_weapons={name:sorted(i for i,w in weapons.items() if w[field]>0) for name,field in [('FIRE_WEAPONS','attackBaseFire'),('MAGIC_WEAPONS','attackBaseMagic')]}
+element_weapons={name:sorted(i for i,w in weapons.items() if w[field]>0) for name,field in [('FIRE_WEAPONS','attackBaseFire'),('MAGIC_WEAPONS','attackBaseMagic'),('HOLY_WEAPONS','attackBaseDark')]}
 for skill,name in [(1014,"Taker's Flames"),(1183,'Devourer of Worlds'),(1184,'Familial Rancor')]:
  row=next(x for x in arts if x['ID']==skill)
  assert texts['names']['engus'][str(row['fields']['textId'])]==name
@@ -31,6 +31,7 @@ assert dict(canonical)[1047]==1301 and dict(canonical)[1173]==707
 assert {300707900,301301901}.issubset(behaviors)
 text='// Generated from hash-guarded original regulation. Bows have a separate pool.\n'
 text+='pub const MMV_SKILLS:&[i32]=&[];\npub const MMV_JUDGES:&[i32]=&[];\npub const MMV_BEHAVIORS:&[(i32,i32,i32)]=&[];\n'
+text+='pub const MMV_BOW_SKILLS:&[i32]=&[];\npub const MMV_AMMO_JUDGES:&[i32]=&[];\n'
 text+=f'pub const POOL: [i32; {len(ordinary_skills)}] = '+str(ordinary_skills).replace(' ', '')+';\n'
 text+=f'pub const BOW_POOL: [i32; {len(bow_skills)}] = '+str(bow_skills).replace(' ', '')+';\n'
 text+=f'pub const BOW_WEAPONS: [i32; {len(bow_weapons)}] = '+str(bow_weapons).replace(' ', '')+';\n'
@@ -45,6 +46,6 @@ names=json.loads((smith/'Assets/PARAM/NR/Param Row Names/English/SwordArtsParam.
 names={x['ID']:' / '.join(x['Entries']) for x in names['Entries']}
 report=dict(poolCount=len(ids),ordinaryPoolCount=len(ordinary_skills),bowPoolCount=len(bow_skills),bowSkills=bow_skills,bowWeapons=bow_weapons,bowWeaponTypes=[50,51,53],excludedUnusableSkills=[0,1,2,10,117,1007,9999],skills=[dict(id=x['ID'],textId=x['fields']['textId'],name=texts['names']['engus'][str(x['fields']['textId'])],chineseName=texts['names']['zhocn'][str(x['fields']['textId'])],alias=names.get(x['ID'],''),animationType=x['fields']['swordArtsType']) for x in arts],protectedOriginalSkills=[1200,303],excludedUnnamedSkills=excluded,actualNameTextChecked=True,textSources=texts['sources'],includesUniqueSkills=True,compatibilityFiltering='bows_and_exclude_model_dependent_viper_bite')
 report.update(canonicalSkillBehaviorVariations=[dict(skill=i,variation=v) for i,v in canonical],nativeBehaviorRows=len(behaviors),genericBehaviorMapping=True)
-report.update(compatibilityFiltering='bows_model_dependencies_and_weapon_base_elemental_attack',elementRequirements={'1014':'attackBaseFire > 0','1183':'attackBaseFire > 0','1184':'attackBaseMagic > 0'},elementWeaponCounts={n:len(v) for n,v in element_weapons.items()})
+report.update(compatibilityFiltering='bows_model_dependencies_and_weapon_base_elemental_attack',elementRequirements={'1011':'attackBaseFire > 0','1014':'attackBaseFire > 0','1019':'attackBaseFire > 0 and attackBaseMagic > 0','1022':'attackBaseDark > 0','1024':'attackBaseMagic > 0','1183':'attackBaseFire > 0','1184':'attackBaseMagic > 0','1187':'attackBaseDark > 0'},elementWeaponCounts={n:len(v) for n,v in element_weapons.items()})
 (root/'dist/reports/arts-pool.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
 print(f'PASS: {len(ids)} named standard/unique skills; actual Chinese/English texts checked; original Storm Ruler/Buckler Parry weapons protected.')

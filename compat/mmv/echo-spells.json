@@ -18,7 +18,7 @@
       "roots": [],
       "worldRoots": [],
       "stream": false,
-      "evidenceSha256": "f8e6197520dd3fc7451084c914e48a14f05e40dcf27e2f8acc6bb16ddb3b93cf",
+      "evidenceSha256": "23637bedab16ace351ec800697ede1ed77f7121d75dfad4f48de994df555f205",
       "reason": "仅自身的防护效果，不重放自身增益。"
     },
     {
@@ -27,7 +27,7 @@
       "roots": [],
       "worldRoots": [],
       "stream": false,
-      "evidenceSha256": "df22caf15e4f3d0760db9d42dcf1ce1c7f8afcb90ffc0f58637db5235c3eb0b0",
+      "evidenceSha256": "9ae1d5e11746555e23227856533265d626c4b1032f17ddaec56ae052053f87a8",
       "reason": "仅自身的回复效果，不重放自身增益。"
     },
     {
@@ -159,7 +159,7 @@
       ],
       "worldRoots": [],
       "stream": false,
-      "evidenceSha256": "516e34e8c1dc6618a915077db0d8cd2efbbc02c18d934e04b1319df2b6750b68"
+      "evidenceSha256": "c9d1f379739ca019b7925e35f8230d465afcc4ed615ef7cd654c4b34d1bab226"
     },
     {
       "magic": 2004510,
@@ -170,7 +170,7 @@
       ],
       "worldRoots": [],
       "stream": false,
-      "evidenceSha256": "121390065ed9c3cb4ce293daa6e6b9099ea2a193654a13e99c26201a33b94e30"
+      "evidenceSha256": "2d938fe3a9b4577b0dc854f2d4330df98e4b167251c960e3517a11510397bd85"
     },
     {
       "magic": 2004700,
@@ -181,7 +181,7 @@
       ],
       "worldRoots": [],
       "stream": false,
-      "evidenceSha256": "e446bfa250e3f7b7f4255411c217d334e33e232279ebe7d5eb1f61425746c9c4"
+      "evidenceSha256": "77f163aad1bc55a3b2b8d15bcca836db381a6586d1a0321ed54d82afacda35fb"
     },
     {
       "magic": 2004710,
@@ -405,7 +405,7 @@
       ],
       "worldRoots": [],
       "stream": false,
-      "evidenceSha256": "bad4b6be36a7fd89a1035a45132d92623fc2a15815698f8ea794a545c4c309c6"
+      "evidenceSha256": "fb0d0574caa13a6fc3d9ba01f400c63cd6f7f07a9cd008b82bacfac9fbe96ad3"
     },
     {
       "magic": 2007420,
@@ -416,7 +416,7 @@
       ],
       "worldRoots": [],
       "stream": false,
-      "evidenceSha256": "77f9d827fdb84ee5712043d5fddecbf3fbb3ca571abf52cdd789fc220035a34e"
+      "evidenceSha256": "e9bab66b68b0ac9f95c5102c4382b4356bce042c90425c9f4bfc5d29a98383a0"
     },
     {
       "magic": 2007700,

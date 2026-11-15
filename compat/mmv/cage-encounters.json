@@ -1418,7 +1418,7 @@
           "combat": false
         }
       ],
-      "mapSha256": "5c51f58c1379422b7044a09c303bcf2a6d990e68d14daf15182faadf0f26d407",
+      "mapSha256": "31d723615e4b120069157f75b6ddda4ecd256e6839054c586c5abe929bda502b",
       "eventSha256": "0efc4414d507941da4a7862bb56d9b4a4ea0d59b4cbdc6e2e2a272f0db51b980"
     },
     {
@@ -1448,7 +1448,7 @@
           "combat": true
         }
       ],
-      "mapSha256": "5c51f58c1379422b7044a09c303bcf2a6d990e68d14daf15182faadf0f26d407",
+      "mapSha256": "31d723615e4b120069157f75b6ddda4ecd256e6839054c586c5abe929bda502b",
       "eventSha256": "0efc4414d507941da4a7862bb56d9b4a4ea0d59b4cbdc6e2e2a272f0db51b980"
     },
     {
@@ -1469,7 +1469,7 @@
           "combat": true
         }
       ],
-      "mapSha256": "5c51f58c1379422b7044a09c303bcf2a6d990e68d14daf15182faadf0f26d407",
+      "mapSha256": "31d723615e4b120069157f75b6ddda4ecd256e6839054c586c5abe929bda502b",
       "eventSha256": "0efc4414d507941da4a7862bb56d9b4a4ea0d59b4cbdc6e2e2a272f0db51b980"
     },
     {
@@ -1490,7 +1490,7 @@
           "combat": true
         }
       ],
-      "mapSha256": "5c51f58c1379422b7044a09c303bcf2a6d990e68d14daf15182faadf0f26d407",
+      "mapSha256": "31d723615e4b120069157f75b6ddda4ecd256e6839054c586c5abe929bda502b",
       "eventSha256": "0efc4414d507941da4a7862bb56d9b4a4ea0d59b4cbdc6e2e2a272f0db51b980"
     },
     {
@@ -1521,7 +1521,7 @@
         }
       ],
       "auxiliaryEvent": 1038102220,
-      "mapSha256": "8b3b005d0b95cecc40d4d10a6fceae89ff1eb7b148b01978a5bf5d3b71bcae59",
+      "mapSha256": "e3d8c18804acff4bd4ff8642223afb192a4464943ea6a4a676d30372690388e3",
       "eventSha256": "e5939b864f6f7a832886e302a54a1ab14f684b5fa089e4a5b29f619f5e99a50b"
     },
     {
@@ -1543,7 +1543,7 @@
         }
       ],
       "auxiliaryEvent": null,
-      "mapSha256": "d5ab70a9ca7ecaf4f2e9409d1f8caff0d6adac6cd4df039c5cc1024ecb896442",
+      "mapSha256": "45c2359f740232141c60467bec35a14efd1ec6670f032170b8ccbb9ff3ab1e1f",
       "eventSha256": "fb4a228665eedcc2294aecece8858b606f6b31f0b10670fe4c1225bfe097a083"
     },
     {
@@ -1565,7 +1565,7 @@
         }
       ],
       "auxiliaryEvent": null,
-      "mapSha256": "db959699b98bb0c7bcfba1738ccce9d8f160ae02b8ea7de2386385033a32c1bb",
+      "mapSha256": "d20ff23c7493032e11e01191cb72902f974e2416e557d64cd95c9c41e9e1dc9c",
       "eventSha256": "1618bbbd7f09f11461292473cff9f18705823a71c6a4537918057fa6359c6c8c"
     }
   ],

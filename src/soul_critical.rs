@@ -41,6 +41,24 @@ unsafe fn current(actor:usize,base:usize)->Option<(i32,usize)>{
  let get:unsafe extern "system" fn(usize)->i32=std::mem::transmute(base+crate::THROW_ANIM_RVA);let anim=get(module);
  if !(31700..31800).contains(&anim){return None;}let throw=read_ptr(module+0x10);(throw!=0).then_some((anim,throw))
 }
+fn select_main(hits:&[(i32,i32,bool)],variants:&[(i32,i32,i32,bool)],attack:i32,animation:i32,weapon:impl FnOnce()->Option<i32>)->Option<bool>{
+ if let Ok(i)=hits.binary_search_by_key(&(attack,animation),|r|(r.0,r.1)){return Some(hits[i].2);}
+ // Only ask for equipment when this target has a weapon-dependent critical.
+ variants.binary_search_by_key(&(attack,animation),|r|(r.0,r.1)).ok()?;
+ let id=weapon()?;if id<0{return None;}
+ // EA7FC0 resolves the equipped ID's final two digits as reinforcement.
+ // Preserve affinity (hundreds) and prefer an exact generated row if present.
+ variants.binary_search_by_key(&(attack,animation,id),|r|(r.0,r.1,r.2)).or_else(|_|variants.binary_search_by_key(&(attack,animation,id/100*100),|r|(r.0,r.1,r.2))).ok().map(|i|variants[i].3)
+}
+unsafe fn current_weapon(actor:usize)->Option<i32>{
+ // Same native active attack-source and weapon-ID accessors as the guard
+ // selector. Do not guess the right hand or keep inventory pointers cached.
+ let vt=read_ptr(actor);if vt==0{return None;}
+ let source=read_ptr(vt+0x260);let weapon=read_ptr(vt+0x250);if source==0||weapon==0{return None;}
+ let source:unsafe extern "system" fn(usize)->i32=std::mem::transmute(source);
+ let weapon:unsafe extern "system" fn(usize,i32)->i32=std::mem::transmute(weapon);
+ let id=weapon(actor,source(actor));(id>=0).then_some(id)
+}
 pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  if !ACTIVE.load(Ordering::Acquire)||module==0||source==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);
@@ -48,13 +66,13 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  let target=read_ptr(module+8);if target==0||target==source{return;}
  let Some((animation,throw))=current(source,base)else{return;};
  let attack=read_i32(hit+0x40);
- let Ok(index)=data::HITS.binary_search_by_key(&(attack,animation),|r|(r.0,r.1))else{return;};
+ let Some(main)=select_main(data::HITS,data::HITS_BY_WEAPON,attack,animation,||current_weapon(source))else{return;};
  if !first(module,hit){return;}
  let damage=read_i32(hit+0x280);if damage<=0{return;}
  let point=if crate::spatial_ready(target){crate::position(target,base)}else{ptr::read_unaligned((hit+0x1f0)as*const[f32;4])};
  if !point[..3].iter().all(|v|v.is_finite()){return;}
  let id=Identity{owner:read_ptr(source+8)as u64,target:read_ptr(target+8)as u64,animation,throw};
- let wave=STATE.lock().ok().and_then(|mut s|s.critical.credit(id,damage,data::HITS[index].2)).map(|damage|Wave{owner:id.owner,target:id.target,damage,point});
+ let wave=STATE.lock().ok().and_then(|mut s|s.critical.credit(id,damage,main)).map(|damage|Wave{owner:id.owner,target:id.target,damage,point});
  // Create the real wave in the accepted main-hit callback. The earlier visual
  // has no child and cannot schedule damage when a critical is interrupted.
  if let Some(wave)=wave{if !crate::static_charge::emit_soul(wave.owner,wave.target,wave.damage,wave.point,base){if let Ok(mut s)=STATE.lock(){s.pending.push(wave);}}}
@@ -92,6 +110,26 @@ pub unsafe fn update(actor:usize,base:usize){
 #[cfg(test)]mod tests{
  use super::*;
  fn id(target:u64)->Identity{Identity{owner:1,target,animation:31700,throw:9}}
+ #[test]fn weapon_specific_main_hit_does_not_fire_ordinary_multihit_critical_early(){
+  let hits=[(1900531,31720,true)];let variants=[(1900530,31720,19010000,false),(1900530,31720,19600000,true)];
+  let mut ordinary=Critical::default();let mut single=Critical::default();
+  assert_eq!(ordinary.credit(id(2),100,select_main(&hits,&variants,1900530,31720,||Some(19010000)).unwrap()),None);
+  assert_eq!(ordinary.credit(id(2),400,select_main(&hits,&variants,1900531,31720,||panic!("common hit must not query equipment")).unwrap()),Some(525.));
+  assert_eq!(single.credit(id(2),100,select_main(&hits,&variants,1900530,31720,||Some(19600000)).unwrap()),Some(425.));
+  assert_eq!(select_main(&hits,&variants,1900530,31720,||Some(1)),None);
+  assert_eq!(select_main(&hits,&variants,1900530,31720,||Some(19010005)),Some(false));
+  assert_eq!(select_main(&hits,&variants,1900530,31720,||Some(19600025)),Some(true));
+  assert_eq!(select_main(&hits,&variants,1900530,31720,||Some(19010505)),None);
+  assert_eq!(select_main(&hits,&variants,1900530,31720,||None),None);
+  assert_eq!(select_main(&hits,&variants,ATTACK,31720,||panic!("unknown hit must not query equipment")),None);
+ }
+ #[test]fn critical_weapon_uses_native_attack_source_in_either_hand(){unsafe{
+  unsafe extern "system" fn source(actor:usize)->i32{read_i32(actor+8)}
+  unsafe extern "system" fn weapon(_:usize,hand:i32)->i32{match hand{-1=>19600000,-2=>19010000,_=>-1}}
+  let mut vt=[0usize;0x268/8];vt[0x250/8]=weapon as *const()as usize;vt[0x260/8]=source as *const()as usize;
+  let mut actor=[vt.as_ptr()as usize,0];let p=actor.as_mut_ptr()as usize;
+  for(hand,expected)in[(-1,Some(19600000)),(-2,Some(19010000)),(0,None)]{ptr::write_unaligned((p+8)as*mut i32,hand);assert_eq!(current_weapon(p),expected);}
+ }}
  #[test]fn prelude_plays_once_on_entry_and_rearms_after_exit_or_actor_change(){
   let mut p=Prelude::default();let a=Entry{owner:1,animation:31700,throw:9};
   assert!(!p.observe(None));assert!(p.observe(Some(a)));assert!(p.observe(Some(a)));p.played=true;
@@ -102,7 +140,7 @@ pub unsafe fn update(actor:usize,base:usize){
  #[test]fn interruption_and_new_critical_clear_the_budget(){let mut c=Critical::default();c.credit(id(2),100,false);c=Critical::default();assert_eq!(c.credit(id(2),400,true),Some(500.));c=Critical::default();assert_eq!(c.credit(id(2),400,true),Some(500.));}
  #[test]fn only_accepted_positive_hits_and_exact_split(){let mut c=Critical::default();assert_eq!(c.credit(id(2),0,true),None);assert_eq!(c.credit(id(2),-10,true),None);assert_eq!(c.credit(id(2),1000,true),Some(650.));assert_eq!(components(650.),[406.25,243.75,0.,0.,0.]);}
  #[test]fn duplicate_notifications_and_nested_dispatches_are_independent(){assert!(!first(1,2));let _a=scope(1,2);assert!(first(1,2));assert!(!first(1,2));{let _b=scope(3,4);assert!(first(3,4));assert!(!first(1,2));}assert!(!first(1,2));}
- #[test]fn generated_map_is_sorted_and_does_not_classify_our_wave(){assert!(!data::HITS.is_empty());assert!(data::HITS.windows(2).all(|w|(w[0].0,w[0].1)<(w[1].0,w[1].1)));assert!(data::HITS.iter().all(|r|r.0!=ATTACK));for (attack,main) in [(2100510,false),(2100511,true)]{assert!(data::HITS.contains(&(attack,31700,main)));}}
+ #[test]fn generated_map_is_sorted_and_does_not_classify_our_wave(){assert!(!data::HITS.is_empty());assert!(data::HITS.windows(2).all(|w|(w[0].0,w[0].1)<(w[1].0,w[1].1)));assert!(data::HITS.iter().all(|r|r.0!=ATTACK));assert!(data::HITS_BY_WEAPON.windows(2).all(|w|(w[0].0,w[0].1,w[0].2)<(w[1].0,w[1].1,w[1].2)));assert!(data::HITS_BY_WEAPON.iter().all(|r|r.0!=ATTACK&&!data::HITS.iter().any(|h|(h.0,h.1)==(r.0,r.1))));for (attack,main) in [(2100510,false),(2100511,true)]{assert!(data::HITS.contains(&(attack,31700,main)));}}
 }
 
 // Called by the isolated EXE test: executes the real current-throw getter,

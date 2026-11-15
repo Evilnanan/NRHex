@@ -1382,9 +1382,16 @@ unsafe fn arts_behavior_call(original:ArtsBehaviorFn,player:usize,judge:i32,sour
  let native=original(player,judge,source,flags,extra);
  if ACTIVE.load(Ordering::Acquire){if let Some(id)=lightning_ram::behavior(player,judge,source,BASE.load(Ordering::Acquire)){return id;}}
  if ACTIVE.load(Ordering::Acquire){if let Some(id)=onyx_mastery::behavior(player,judge,source,BASE.load(Ordering::Acquire)){return id;}}
- if !ACTIVE.load(Ordering::Acquire)||!arts::behavior_judge(judge){return native;}
+ if !ACTIVE.load(Ordering::Acquire)||!(arts::behavior_judge(judge)||arts::bow_ammo_judge(judge)){return native;}
  let base=BASE.load(Ordering::Acquire);
  if player==0||!has_effect(player,arts::OWNER,base){return native;}
+ if arts::bow_ammo_judge(judge){
+  // The native bow conversion encodes the firing hand in the ammunition
+  // source. Stored equipment style can remain single-handed while firing.
+  let Some(weapon_source)=arts::bow_weapon_source(source) else{return native;};
+  let Some(w)=arts_source_weapon(player,weapon_source,base) else{return native;};
+  return arts_actor_selection(player,w,base).and_then(|skill|arts::bow_ammo_behavior(judge,skill,w.base,native)).unwrap_or(native);
+ }
  let Some(w)=arts_source_weapon(player,source,base) else{return native;};
  arts_actor_selection(player,w,base).and_then(|skill|arts::behavior(judge,skill)).unwrap_or(native)
 }

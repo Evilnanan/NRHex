@@ -2272,12 +2272,18 @@
   "nativeBehaviorRows": 10855,
   "genericBehaviorMapping": true,
   "elementRequirements": {
+    "1011": "attackBaseFire > 0",
     "1014": "attackBaseFire > 0",
+    "1019": "attackBaseFire > 0 and attackBaseMagic > 0",
+    "1022": "attackBaseDark > 0",
+    "1024": "attackBaseMagic > 0",
     "1183": "attackBaseFire > 0",
-    "1184": "attackBaseMagic > 0"
+    "1184": "attackBaseMagic > 0",
+    "1187": "attackBaseDark > 0"
   },
   "elementWeaponCounts": {
     "FIRE_WEAPONS": 310,
-    "MAGIC_WEAPONS": 543
+    "MAGIC_WEAPONS": 543,
+    "HOLY_WEAPONS": 254
   }
 }

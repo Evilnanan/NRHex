@@ -76,7 +76,7 @@ static class HexTexts {
     Check(member.Name==old.Name&&member.Flags==old.Flags&&member.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Text readback mismatch");
     if(replacements.TryGetValue(member.Name.Replace('\\','/').Split('/').Last(),out var wanted)){
      var a=FMG.Read(member.Bytes);var b=FMG.Read(old.Bytes);
-     Check(a.Version==b.Version&&a.BigEndian==b.BigEndian&&a.Entries.Count==b.Entries.Count+wanted.Keys.Count(id=>!b.Entries.Any(e=>e.ID==id))&&b.Entries.All(old=>a.Entries.Single(e=>e.ID==old.ID).Text==(wanted.TryGetValue(old.ID,out var value)?value:old.Text))&&wanted.All(v=>a.Entries.Single(e=>e.ID==v.Key).Text==v.Value),"Unrelated text changed");
+     Check(a.Version==b.Version&&a.BigEndian==b.BigEndian&&a.Entries.Count==b.Entries.Count+wanted.Keys.Count(id=>!b.Entries.Any(e=>e.ID==id))&&a.Entries.Where(e=>!wanted.ContainsKey(e.ID)).Select(e=>(e.ID,e.Text)).SequenceEqual(b.Entries.Where(e=>!wanted.ContainsKey(e.ID)).Select(e=>(e.ID,e.Text)))&&wanted.All(v=>a.Entries.Single(e=>e.ID==v.Key).Text==v.Value),"Unrelated text changed");
     }else Check(member.Bytes.Span.SequenceEqual(old.Bytes.Span),"Unrelated text member changed");
    }
    reports.Add(new{language,file,inputSha256=Hash(input),outputSha256=Hash(target),changes,unrelatedEntriesAndMembersUnchanged=true});

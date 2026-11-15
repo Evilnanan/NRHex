@@ -24,7 +24,7 @@ def table(raw, name):
 
 
 def array(source, name):
-    return re.search(r'pub const '+name+r':[^=]+ = \[(.*?)\];', source, re.S)[1]
+    return re.search(r'pub const '+name+r':[^=]+=\s*&?\[(.*?)\];', source, re.S)[1]
 
 
 def numbers(source, name):
@@ -80,7 +80,7 @@ def generate(raw, profile, native):
         source = arts[mid]['sparringGroundsWeaponId']
         if source not in weapons: raise ValueError(f'Missing original skill sample weapon: {mid}')
         variations[mid] = weapons[source]['behaviorVariationId']
-    added=[]; mapping=[]
+    added=[]; mapping=[]; added_bows=[]; ammo_judges=set()
     for record in reviewed:
         mid=record['id']; art=arts[mid]
         if evidence(raw,mid)!=record['evidenceSha256']:
@@ -91,21 +91,41 @@ def generate(raw, profile, native):
         if art['swordArtsType']==255 or (art['isGrayOutRightHand'] and art['isGrayOutBothHand']) or not raw['names'].get(str(art['textId'])):
             raise ValueError(f'Unusable new skill: {mid}')
         js=judges(raw,art)
-        if not js or any(j<1000 or common(j) not in behaviors for j in js):
-            raise ValueError(f'New skill requires weapon-specific behavior review: {mid}')
-        mapping.extend((mid,j,common(j)) for j in js)
-        added.append(mid); ordinary.add(mid)
+        overrides=record.get('behaviorOverrides', [])
+        if overrides:
+            native_judges=record.get('nativeJudges', [])
+            if set(native_judges)&{r['judge'] for r in overrides} or sorted(native_judges+[r['judge'] for r in overrides])!=js:
+                raise ValueError(f'Incomplete explicit behavior review: {mid}')
+            for r in overrides:
+                row=behaviors.get(r['row'])
+                if row is None or digest(row)!=r['sha256']:
+                    raise ValueError(f'Reviewed explicit behavior changed: {mid}/{r["judge"]}')
+                mapping.append((mid,r['judge'],r['row']))
+        else:
+            if not js or any(j<1000 or common(j) not in behaviors for j in js):
+                raise ValueError(f'New skill requires weapon-specific behavior review: {mid}')
+            mapping.extend((mid,j,common(j)) for j in js)
+        added.append(mid)
+        if record.get('pool','ordinary')=='bow':
+            if not record.get('ammunition') or not overrides:
+                raise ValueError(f'Bow skill requires ammunition review: {mid}')
+            bows.append(mid); added_bows.append(mid); ammo_judges.update(js)
+        elif record.get('pool','ordinary')=='ordinary':ordinary.add(mid)
+        else:raise ValueError(f'Unknown skill pool: {mid}')
     output='// Generated MMV Arts catalogue; shared runtime and native inventory remain unchanged.\n'
     arrays=dict(POOL=sorted(ordinary), BOW_POOL=bows,
                 BOW_WEAPONS=sorted(i for i,w in weapons.items() if w['wepType'] in (50,51,53)),
                 FIRE_WEAPONS=sorted(i for i,w in weapons.items() if w['attackBaseFire']>0),
                 MAGIC_WEAPONS=sorted(i for i,w in weapons.items() if w['attackBaseMagic']>0),
+                HOLY_WEAPONS=sorted(i for i,w in weapons.items() if w['attackBaseDark']>0),
                 BEHAVIORS=sorted(behaviors))
     for name, values in arrays.items():
         output+=f'pub const {name}: [i32; {len(values)}] = ['+','.join(map(str,values))+'];\n'
     for name, values in [('DEFAULTS', sorted((i,w['swordArtsParamId']) for i,w in weapons.items())),('SKILL_VARIATIONS',sorted(variations.items()))]:
         output+=f'pub const {name}: [(i32,i32); {len(values)}] = [\n'+''.join(f' ({i},{v}),\n' for i,v in values)+'];\n'
     output+='pub const MMV_SKILLS:&[i32]=&['+','.join(map(str,added))+'];\n'
+    output+='pub const MMV_BOW_SKILLS:&[i32]=&['+','.join(map(str,added_bows))+'];\n'
+    output+='pub const MMV_AMMO_JUDGES:&[i32]=&['+','.join(map(str,sorted(ammo_judges)))+'];\n'
     output+='pub const MMV_JUDGES:&[i32]=&['+','.join(map(str,sorted({j for _,j,_ in mapping})))+'];\n'
     output+='pub const MMV_BEHAVIORS:&[(i32,i32,i32)]=&[\n'+''.join(f' ({i},{j},{b}),\n' for i,j,b in sorted(mapping))+'];\n'
     old_weapons=set(numbers(native,'DEFAULTS')[::2])
@@ -113,7 +133,7 @@ def generate(raw, profile, native):
                 addedBowWeapons=sorted(set(arrays['BOW_WEAPONS'])-set(numbers(native,'BOW_WEAPONS'))),
                 addedFireWeapons=sorted(set(arrays['FIRE_WEAPONS'])-set(numbers(native,'FIRE_WEAPONS'))),
                 addedMagicWeapons=sorted(set(arrays['MAGIC_WEAPONS'])-set(numbers(native,'MAGIC_WEAPONS'))),
-                addedSkills=added,ordinaryPool=len(ordinary),bowPool=len(bows),explicitBehaviorMappings=len(mapping),
+                addedSkills=added,addedBowSkills=added_bows,ordinaryPool=len(ordinary),bowPool=len(bows),explicitBehaviorMappings=len(mapping),
                 exclusions=[r for r in reviewed if not r['enabled']],gameplayVerified=False)
     return output,report
 

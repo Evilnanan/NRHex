@@ -57,8 +57,20 @@ def inventory(mmv: Path) -> dict:
     if not profiles:
         raise ValueError('MMV profile is missing')
     paths = [*files_under(mmv / 'mod'), *files_under(mmv / 'dll'), *profiles]
+    # Hotfix1 moved ChanceSetter to tools/. Pin referenced DLLs and their
+    # adjacent configuration even when they live outside the usual dll tree.
+    for profile in profiles:
+        for native in tomllib.loads(profile.read_text(encoding='utf-8-sig')).get('natives', []):
+            path = mmv / native['path']
+            if not path.resolve().is_relative_to(mmv.resolve()):
+                raise ValueError(f'External MMV native input is not supported: {path}')
+            for candidate in (path, path.with_suffix('.ini'), path.with_suffix('.yaml')):
+                if candidate.is_file():
+                    if candidate.is_symlink() or any(p.is_symlink() or p.is_junction() for p in candidate.parents if p != mmv and mmv in p.parents):
+                        raise ValueError(f'Linked MMV native input is not supported: {candidate}')
+                    paths.append(candidate)
     files = {}
-    for path in sorted(paths, key=lambda p: p.relative_to(mmv).as_posix()):
+    for path in sorted(set(paths), key=lambda p: p.relative_to(mmv).as_posix()):
         if path.is_symlink():
             raise ValueError(f'Linked MMV profile is not supported: {path}')
         files[path.relative_to(mmv).as_posix()] = dict(bytes=path.stat().st_size, sha256=digest(path))
@@ -70,7 +82,7 @@ def lock_data(current: dict) -> dict:
     # Detailed inventory stays in work/; pin the whole pack and diagnostically useful files in Git.
     critical = {name: entry for name, entry in current['files'].items()
                 if name.endswith(('.me3', '.dll', 'regulation.bin', 'c0000.hks'))}
-    return dict(schemaVersion=1, scope='mod/**, dll/** and root *.me3; excluding *.log, logs/** and dll/target/release/0987.txt',
+    return dict(schemaVersion=1, scope='mod/**, dll/**, root *.me3 and referenced native DLL/config files; excluding *.log, logs/** and dll/target/release/0987.txt',
                 fileCount=current['fileCount'], totalBytes=current['totalBytes'], sha256=current['sha256'],
                 criticalFiles=critical, compatibilityVerified=False)
 

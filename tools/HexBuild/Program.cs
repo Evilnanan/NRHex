@@ -21,7 +21,8 @@ if(args.Contains("--metal-poise-texts")){
  bool mmv=args.Contains("--mmv");HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/metal-poise",mmv?"mmv-texts":"texts"),allRewards:true,onlyIds:new[]{Metal.Owner},inputMod:Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"));return;
 }
 if(args.Contains("--stage-translations")){
- HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/texts"),allRewards:true);return;
+ bool mmv=args.Contains("--mmv");
+ HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,mmv?".work/texts/mmv":".work/texts"),allRewards:true,inputMod:Path.Combine(root,mmv?"dist/mmv/mod":"dist/mod"));return;
 }
 if(args.Contains("--snack-text-stage")){
  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(root,".work/snack-price/texts"),allRewards:true,onlyIds:new[]{Snack.Owner});return;
@@ -109,6 +110,7 @@ if(args.Contains("--mmv-raider-check")){MmvRaider.Verify(args[Array.IndexOf(args
 if(args.Contains("--soul-critical-map")){SoulCritical.TargetMap(root,args[Array.IndexOf(args,"--soul-critical-map")+1],Parse);return;}
 if(args.Contains("--onyx-behavior-stage")){int at=Array.IndexOf(args,"--onyx-behavior-stage");OnyxBehavior.Stage(root,args[at+1],args[at+2],args[at+3]);return;}
 if(args.Contains("--onyx-planted-stage")){int at=Array.IndexOf(args,"--onyx-planted-stage");OnyxMastery.RefreshPlanted(args[at+1],args[at+2],Parse);return;}
+if(args.Contains("--lightning-ram-power")){LightningRam.PowerStage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-ram-extreme")){LightningRam.Extreme(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-ram-objects")){LightningRam.Objects(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-ram-physical")){LightningRam.Physical(root,Parse,args.Contains("--mmv"));return;}

@@ -350,7 +350,7 @@
     "SwordArtsOneShot_onUpdate": {
       "originalHash": "741a4faa05a85de067bb61745e2ee1aabdb9ff49931d1532c9c0a8a542bc1319",
       "nrhexHash": "7c9be7b52b5ee333836a7364fe8fb90dcbcf43d14775c60fa59382b8dc7ff141",
-      "mmvFunctionHash": "5484f192d2dc704ae63eea06c16e8ff44c3cf8adae663d646b6d01d6538b01f0",
+      "mmvFunctionHash": "2ff2e08a05c2a2be0a32b5533d6236cec98dc71379ed8f17f4d30c0f5c204a8a",
       "actions": [
         {
           "kind": "prefix",
@@ -388,11 +388,5 @@
       ]
     }
   },
-  "sourceFixes": {
-    "ExecAttack": {
-      "sourceSha256": "e7a0d153351c59d6249901d9ee09c899f247169f578686b6537ad5dd3d58c365",
-      "old": "if c_SwordArtsID == 328 then\r\n\t\t\tExecEventHalfBlend(Event_SwordArtsHalfOneShot, blend_type)\r\n\t\telse\r\n\t\t\tExecEventAllBody(\"W_SwordArtsOneShot\")",
-      "new": "if IsHalfBlendArts(c_SwordArtsID) == TRUE then\r\n\t\t\tExecEventHalfBlend(Event_SwordArtsHalfOneShot, blend_type)\r\n\t\telse\r\n\t\t\tExecEventAllBody(\"W_SwordArtsOneShot\")"
-    }
-  }
+  "sourceFixes": {}
 }

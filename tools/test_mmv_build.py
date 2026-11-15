@@ -27,7 +27,7 @@ class MmvPreflightTests(unittest.TestCase):
         for file in ['mod/regulation.bin', 'dll/example.dll', 'MMV.me3']:
             path = self.mmv / file
             original = path.read_bytes()
-            path.write_bytes(original + b'changed')
+            path.write_bytes(original + (b'\n# changed\n' if file.endswith('.me3') else b'changed'))
             with self.assertRaisesRegex(ValueError, 'baseline changed'):
                 build.validate_lock(lock, build.inventory(self.mmv))
             path.write_bytes(original)
@@ -42,6 +42,19 @@ class MmvPreflightTests(unittest.TestCase):
         (self.mmv / 'dll/example.dll').unlink()
         with self.assertRaisesRegex(ValueError, 'baseline changed'):
             build.validate_lock(lock, build.inventory(self.mmv))
+
+    def test_referenced_native_outside_dll_tree_is_pinned(self):
+        (self.mmv / 'tools').mkdir()
+        (self.mmv / 'tools/ChanceSetter.dll').write_bytes(b'library')
+        config = self.mmv / 'tools/ChanceSetter.ini'
+        config.write_text('configVersion = 11')
+        (self.mmv / 'MMV.me3').write_text('profileVersion = "v1"\n[[natives]]\npath = "tools/ChanceSetter.dll"\n')
+        before = build.inventory(self.mmv)
+        self.assertIn('tools/ChanceSetter.dll', before['files'])
+        self.assertIn('tools/ChanceSetter.ini', before['files'])
+        config.write_text('configVersion = 12')
+        with self.assertRaisesRegex(ValueError, 'baseline changed'):
+            build.validate_lock(build.lock_data(before), build.inventory(self.mmv))
 
     def test_logs_do_not_invalidate_baseline(self):
         before = build.inventory(self.mmv)

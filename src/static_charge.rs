@@ -248,13 +248,20 @@ pub unsafe fn pending_soul_victim(instance:usize)->Option<u64>{
 pub unsafe fn child(instance:usize,bullet:i32)->ChildGuard{ChildGuard(CHILD.with(|s|s.replace(if private_bullet(bullet){seed(instance)}else{None})))}
 pub fn finished(group:usize){if let Ok(mut f)=FLIGHTS.lock(){f.groups.remove(&group);}}
 pub fn retired(instance:usize){if let Ok(mut f)=FLIGHTS.lock(){f.instances.remove(&instance);}}
+pub unsafe fn before_construct(context:usize){
+ if context==0||read_i32(context+0xc)!=1||!crate::lightning_ram::attack(read_i32(context+8)){return;}
+ let damage=seed(read_ptr(context)).or_else(||SEED.with(|s|s.borrow().clone())).map_or(0.,|s|s.damage);
+ // Select before native poise/rescue construction, preserving source
+ // modifiers, native copies and recipient rescue rules.
+ ptr::write_unaligned((context+8)as*mut i32,crate::lightning_ram::attack_for_damage(damage));
+}
 pub unsafe fn constructed(hit:usize,context:usize){
  if let Ok(mut s)=SAMPLES.lock(){s.remove(&hit);}
  if !private_attack(read_i32(hit+0x40),read_i32(hit+0x44)){return;}
  let damage=seed(read_ptr(context)).or_else(||SEED.with(|s|s.borrow().clone())).map_or(0.,|s|s.damage);
  let ram=crate::lightning_ram::attack(read_i32(hit+0x40));
  // Only the extreme contact selects native atkBehaviorId=12 (ultimate
- // stagger). Its row otherwise matches the regular fixed-damage attack.
+ // stagger). Each speed tier also has its own base poise/rescue values.
  // Persist the private row ID in the hit, including native copies/dispatch.
  if ram{ptr::write_unaligned((hit+0x40)as*mut i32,crate::lightning_ram::attack_for_damage(damage));}
  ptr::write_unaligned(hit as*mut[f32;5],if ram{[damage,0.,0.,0.,0.]}else if read_i32(hit+0x40)==crate::soul_critical::ATTACK{crate::soul_critical::components(damage)}else{[0.,0.,0.,damage,0.]});
@@ -273,7 +280,8 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  let ram=read_i32(bullet+0xa4)==crate::lightning_ram::BULLET;
  let base=BASE.load(Ordering::Acquire);
  if ram&&!crate::lightning_ram::allow_contact(target,bullet,seed.victim,base){return 0;}
- let _ram=crate::lightning_ram::ContactScope::enter(ram&&crate::lightning_ram::local_bullet(bullet));
+ let rescue=ram&&crate::ambulance::party_member(target,base);
+ let _ram=crate::lightning_ram::ContactScope::enter(ram&&!rescue&&crate::lightning_ram::local_bullet(bullet));
  let handle=read_ptr(target+8)as u64;
  // Leakage has no contact with its downed/reviving owner, including rescue
  // and hit reactions. Check at collision time, not when the mark is placed.
@@ -285,7 +293,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  let _immunity=crate::soul_immunity::contact((read_i32(bullet+0xa4)==crate::soul_critical::BULLET&&seed.victim==Some(handle)).then_some((target,hit)));
  let _guard=ContactGuard(CONTACT.with(|s|s.replace(true)));
  let _impact=crate::soul_impact::contact(hit,target,bullet);
- let _ram_impact=if ram{Some(crate::lightning_ram::contact_impact(hit,target,seed.damage,base))}else{None};
+ let _ram_impact=if ram&&!rescue{Some(crate::lightning_ram::contact_impact(hit,target,seed.damage,base))}else{None};
  let result=original(hit,target,bullet);
  if ram{crate::lightning_ram::accepted_contact(target,bullet,seed.victim,result,base);}
  // Native rejection (e.g. dodge) must leave that target eligible for the wave.
@@ -294,9 +302,16 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn ram_power_selection_preserves_other_attack_contexts(){unsafe{
+  let mut context=[0u8;0x110];let cp=context.as_mut_ptr()as usize;
+  for (id,table)in[(ATTACK,1),(crate::soul_critical::ATTACK,1),(300000710,1),(crate::lightning_ram::ATTACK,0)]{
+   ptr::write_unaligned((cp+8)as*mut i32,id);ptr::write_unaligned((cp+12)as*mut i32,table);
+   let original=context;before_construct(cp);assert_eq!(context,original);
+  }
+ }}
  #[test]fn ram_extreme_stagger_row_tracks_seed_speed_without_changing_damage(){unsafe{
   let mut hit=[0u8;0x80];let h=hit.as_mut_ptr()as usize;let context=[0usize;1];
-  for (speed,id)in[(6.,crate::lightning_ram::ATTACK),(10.,crate::lightning_ram::ATTACK),(14.99,crate::lightning_ram::ATTACK),(15.,crate::lightning_ram::EXTREME_ATTACK),(30.,crate::lightning_ram::EXTREME_ATTACK)]{
+  for (speed,id)in[(6.,crate::lightning_ram::ATTACK),(10.,crate::lightning_ram::FAST_ATTACK),(14.99,crate::lightning_ram::FAST_ATTACK),(15.,crate::lightning_ram::EXTREME_ATTACK),(30.,crate::lightning_ram::EXTREME_ATTACK)]{
    let damage=speed*speed*1.5;
    let _guard=SeedGuard(SEED.with(|s|s.replace(Some(Arc::new(Discharge{damage,victim:None,targets:Mutex::new(BTreeSet::new())})))),None);
    ptr::write_unaligned((h+0x40)as*mut i32,crate::lightning_ram::ATTACK);ptr::write_unaligned((h+0x44)as*mut i32,1);
@@ -377,3 +392,4 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  #[test]fn full_charge_is_one_token_and_does_not_bank_overflow(){let mut m=Meter::default();m.observe(1,2,3,Some([0.;4]));m.observe(1,2,3,Some([150.,0.,0.,1.]));assert_eq!(m.distance,80.);assert!(m.take());assert!(!m.take());}
 }
 #[cfg(test)]#[path="static_charge_tests.rs"]mod native_tests;
+#[cfg(test)]#[path="lightning_ram_power_tests.rs"]mod ram_power_tests;

@@ -113,9 +113,10 @@ static class SoulCritical {
   TAE.Animation? Resolve(int group,long id,HashSet<(int,long)> seen){if(!seen.Add((group,id))||!animations.TryGetValue((group,id),out var a))return null;
    if(a.MiniHeader is TAE.Animation.AnimMiniHeader.ImportOtherAnim import)return Resolve((int)(import.ImportFromAnimID/1000000),import.ImportFromAnimID%1000000,seen);return a;}
   var pairs=new HashSet<(int variation,int motion)>();
+  var weaponPairs=new Dictionary<int,HashSet<(int variation,int motion)>>();
   // Native skill/ultimate source tools use a placeholder straight-sword motion
   // with shield variation 3000. Exclude those auxiliary descriptors, not MMV weapons.
-  foreach(var w in weapons){if(!(w.ID>=60000000&&w.ID<=65000000&&I(w,"wepmotionCategory")==23&&I(w,"behaviorVariationId")==3000))pairs.Add((I(w,"behaviorVariationId"),I(w,"wepmotionCategory")));if(I(w,"heroID")>0&&I(w,"heroBehaviorVariationID")>=0)pairs.Add((I(w,"heroBehaviorVariationID"),I(w,"heroMovesetOverrideID")>0?I(w,"heroMovesetOverrideID"):I(w,"wepmotionCategory")));}
+  foreach(var w in weapons){var wp=new HashSet<(int variation,int motion)>();if(!(w.ID>=60000000&&w.ID<=65000000&&I(w,"wepmotionCategory")==23&&I(w,"behaviorVariationId")==3000))wp.Add((I(w,"behaviorVariationId"),I(w,"wepmotionCategory")));if(I(w,"heroID")>0&&I(w,"heroBehaviorVariationID")>=0)wp.Add((I(w,"heroBehaviorVariationID"),I(w,"heroMovesetOverrideID")>0?I(w,"heroMovesetOverrideID"):I(w,"wepmotionCategory")));pairs.UnionWith(wp);if(!weaponPairs.TryGetValue(w.ID,out var existing))weaponPairs[w.ID]=wp;else existing.UnionWith(wp);}
   int[] AttackIds(PARAM.Row behavior){var result=new HashSet<int>();var seen=new HashSet<int>();
    void Attack(int id){if(attacks.TryGetValue(id,out var a)&&I(a,"throwFlag")==2)result.Add(id);}
    void Bullet(int id){if(!seen.Add(id)||!bullets.TryGetValue(id,out var b))return;Check(bulletGroups[id].All(r=>Same(r,b,false)),"Ambiguous referenced critical bullet "+id);Attack(I(b,"atkId_Bullet"));Bullet(I(b,"HitBulletID"));Bullet(I(b,"intervalCreateBulletId"));}
@@ -123,6 +124,8 @@ static class SoulCritical {
   }
   double Score(int id){var r=attacks[id];return new[]{"Phys","Mag","Fire","Thun","Dark"}.Sum(e=>V(r,"atk"+e+"Correction"))+new[]{"Phys","Mag","Fire","Thun","Dark"}.Sum(e=>V(r,"atk"+e));}
   var entries=new SortedDictionary<(int attack,int animation),bool>();var evidence=new List<object>();var conflicts=new List<object>();
+  var ambiguous=new HashSet<(int attack,int animation)>();
+  var contexts=new Dictionary<(int variation,int motion,int attack,int animation),bool>();
   foreach(var (variation,motion) in pairs.OrderBy(p=>p.variation).ThenBy(p=>p.motion))foreach(int anim in new[]{31700,31710,31720,31730,31740,31750,31760}){
    var animation=Resolve(motion,anim,new());if(animation==null)continue;
    var hits=new List<(float time,int judge,int[] attacks)>();
@@ -135,15 +138,21 @@ static class SoulCritical {
    // equal scores. Runtime uses actual FINAL damage, never this ranking score.
    int main=Enumerable.Range(0,hits.Count).OrderBy(i=>hits[i].attacks.Max(Score)).ThenBy(i=>hits[i].time).Last();
    for(int i=0;i<hits.Count;i++)foreach(int id in hits[i].attacks){var key=(id,anim);bool primary=i==main;
-    if(entries.TryGetValue(key,out var old)&&old!=primary)conflicts.Add(new{variation,motion,anim,id,old,primary});else entries[key]=primary;
+    var context=(variation,motion,id,anim);Check(!contexts.TryGetValue(context,out var previous)||previous==primary,"Ambiguous repeated critical hit inside one weapon motion");contexts[context]=primary;
+    if(entries.TryGetValue(key,out var old)&&old!=primary){conflicts.Add(new{variation,motion,anim,id,old,primary});ambiguous.Add(key);}else entries[key]=primary;
    }
    evidence.Add(new{variation,motion,animation=anim,mainIndex=main,hits=hits.Select(h=>new{h.time,h.judge,h.attacks,score=h.attacks.Max(Score)})});
   }
+  var weaponEntries=new SortedDictionary<(int attack,int animation,int weapon),bool>();
+  foreach(var key in ambiguous){
+   foreach(var (weapon,wp) in weaponPairs){var values=wp.Where(p=>contexts.ContainsKey((p.variation,p.motion,key.attack,key.animation))).Select(p=>contexts[(p.variation,p.motion,key.attack,key.animation)]).Distinct().ToArray();Check(values.Length<=1,"Critical weapon/hero motion remains ambiguous: "+weapon);if(values.Length==1)weaponEntries[(key.attack,key.animation,weapon)]=values[0];}
+   Check(weaponEntries.Keys.Any(k=>k.attack==key.attack&&k.animation==key.animation),"No weapon mapping for ambiguous critical hit");entries.Remove(key);
+  }
   string evidencePath=Path.Combine(root,"work/soul-critical/maps",Path.GetFileName(Path.GetDirectoryName(output))+".json");Directory.CreateDirectory(Path.GetDirectoryName(evidencePath)!);
-  File.WriteAllText(evidencePath,JsonSerializer.Serialize(new{taeSha256=Hash(taePath),entries=entries.Count,conflicts,evidence},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(evidencePath,JsonSerializer.Serialize(new{taeSha256=Hash(taePath),entries=entries.Count,conflicts,resolvedByWeapon=weaponEntries.Select(e=>new{e.Key.attack,e.Key.animation,e.Key.weapon,primary=e.Value}),evidence},new JsonSerializerOptions{WriteIndented=true}));
   if(!Path.GetFullPath(output).StartsWith(Path.GetFullPath(Path.Combine(root,"src"))+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))File.Copy(evidencePath,Path.ChangeExtension(output,"json"),true);
-  Check(conflicts.Count==0,"Ambiguous Soul Critical main hits; inspect generated map report");Check(entries.Count>100,"Incomplete Soul Critical map");
-  File.WriteAllText(output,"// Generated from this target's weapon, behavior, bullet, attack and resolved TAE data.\npub const HITS:&[(i32,i32,bool)]=&[\n"+string.Join("\n",entries.Select(e=>$" ({e.Key.attack},{e.Key.animation},{e.Value.ToString().ToLowerInvariant()}),"))+"\n];\n");
+  Check(entries.Count>100,"Incomplete Soul Critical map");
+  File.WriteAllText(output,"// Generated from this target's weapon, behavior, bullet, attack and resolved TAE data.\npub const HITS:&[(i32,i32,bool)]=&[\n"+string.Join("\n",entries.Select(e=>$" ({e.Key.attack},{e.Key.animation},{e.Value.ToString().ToLowerInvariant()}),"))+"\n];\npub const HITS_BY_WEAPON:&[(i32,i32,i32,bool)]=&[\n"+string.Join("\n",weaponEntries.Select(e=>$" ({e.Key.attack},{e.Key.animation},{e.Key.weapon},{e.Value.ToString().ToLowerInvariant()}),"))+"\n];\n");
  }
  public static void Resources(string root,string mod,string output){
   string nativePath=Path.Combine(root,".work/soul-critical/sfxbnd_c7720.ffxbnd.dcx");

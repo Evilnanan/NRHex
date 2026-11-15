@@ -18,17 +18,33 @@ class ArtsTargetTests(unittest.TestCase):
         weapons=table(self.raw,'EquipParamWeapon')
         defaults=numbers(self.output,'DEFAULTS')
         self.assertEqual(dict(zip(defaults[::2],defaults[1::2])),{i:w['swordArtsParamId'] for i,w in weapons.items()})
-        self.assertEqual(self.report['addedWeapons'],302)
-        self.assertEqual(self.report['addedBowWeapons'],[7230000,41071000,41080000,41081000])
-        for name,field in [('FIRE_WEAPONS','attackBaseFire'),('MAGIC_WEAPONS','attackBaseMagic')]:
+        self.assertEqual(self.report['addedWeapons'],346)
+        self.assertEqual(self.report['addedBowWeapons'],[7230000,40500000,41071000,41080000,41081000])
+        for name,field in [('FIRE_WEAPONS','attackBaseFire'),('MAGIC_WEAPONS','attackBaseMagic'),('HOLY_WEAPONS','attackBaseDark')]:
             self.assertEqual(numbers(self.output,name),sorted(i for i,w in weapons.items() if w[field]>0))
 
     def test_only_reviewed_portable_skills_and_native_bow_split(self):
-        self.assertEqual(len(self.report['addedSkills']),37)
-        self.assertEqual(self.report['ordinaryPool'],212)
-        self.assertEqual(numbers(self.output,'BOW_POOL'),numbers(self.native,'BOW_POOL'))
+        self.assertEqual(len(self.report['addedSkills']),41)
+        self.assertEqual(self.report['ordinaryPool'],215)
+        self.assertTrue({159,5210,5470,5600} <= set(self.report['addedSkills']))
+        self.assertTrue({4210,5600}.isdisjoint(numbers(self.output,'POOL')))
+        self.assertEqual(numbers(self.output,'BOW_POOL'),numbers(self.native,'BOW_POOL')+[5600])
+        self.assertEqual(numbers(self.output,'MMV_BOW_SKILLS'),[5600])
+        self.assertEqual(numbers(self.output,'MMV_AMMO_JUDGES'),[900,901])
         self.assertTrue(set(numbers(self.native,'POOL'))<=set(numbers(self.output,'POOL')))
         self.assertTrue({1007,146,1201,4040,4050,5170,5270,5340,5360,8000}.isdisjoint(numbers(self.output,'POOL')))
+
+    def test_explicit_weapon_and_ammunition_rows_are_guarded(self):
+        mapping=numbers(self.output,'MMV_BEHAVIORS')
+        rows=set(zip(mapping[::3],mapping[1::3],mapping[2::3]))
+        self.assertTrue({(159,3994,300300994),(159,3995,300300995),(5600,900,105000900),(5600,901,105000901)}<=rows)
+        self.assertNotIn((159,700,100300700),rows)  # no-FP fallback stays the held weapon's attack
+        raw=copy.deepcopy(self.raw)
+        next(r for r in raw['tables']['BehaviorParam_PC']if r['ID']==105000900)['fields']['refId']=-1
+        with self.assertRaisesRegex(ValueError,'explicit behavior changed: 5600'):generate(raw,self.profile,self.native)
+        profile=copy.deepcopy(self.profile)
+        next(r for r in profile['skills']if r['id']==159)['behaviorOverrides'].pop()
+        with self.assertRaisesRegex(ValueError,'Incomplete explicit behavior review'):generate(self.raw,profile,self.native)
 
     def test_changed_attack_or_animation_cannot_silently_enable(self):
         raw=copy.deepcopy(self.raw)

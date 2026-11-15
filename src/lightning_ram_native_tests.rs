@@ -42,7 +42,8 @@ unsafe extern "system" fn collected_query_fixture(collector:usize,hit:usize){
  ptr::write((collector+0x20)as*mut u8,1);
 }
 unsafe extern "system" fn entity_slot(pool:usize,index:u32)->usize{if index<2{pool+(index as usize+1)*8}else{0}}
-unsafe extern "system" fn no_party(_:usize,_:i32)->usize{0}
+thread_local!{static PARTY:std::cell::Cell<usize>=const{std::cell::Cell::new(0)};}
+unsafe extern "system" fn no_party(_:usize,_:i32)->usize{PARTY.with(std::cell::Cell::get)}
 unsafe extern "system" fn module_actor(module:usize)->usize{read_ptr(module+8)}
 unsafe extern "system" fn zero_float(_:usize)->f32{0.}
 unsafe extern "system" fn no_flag(_:usize)->u8{0}
@@ -183,7 +184,9 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
    fixture(physics.as_mut_ptr()as usize,desired.0.as_mut_ptr(),time.as_ptr(),base+MOTION_RVA);
    let s=STATE.lock().unwrap();
    if soft{assert!(s.active&&!s.crash&&!s.push);assert!(V::from(submitted.0).len()>13.&&V::from(submitted.0).len()<16.);assert_eq!(s.effective_speed,0.);}
-   else{assert!(!s.active&&s.push&&!s.crash);assert_eq!(submitted.0,[0.;4]);}
+   // 12 m/s toward the wall, but 15.62 m/s total: an accepted frontal
+   // collision now takes the 7-impact tier and discards the whole velocity.
+   else{assert!(!s.active&&!s.push&&s.crash&&s.crash_pending);assert_eq!(submitted.0,[0.;4]);}
   }
   // Native capsule has rejected the normal component but accepted 30m/s
   // along the wall. Even a 16m/s normal impact must not stop this grazing roll.
@@ -346,7 +349,7 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
   stats[0x140/4]=hp;stats[0x144/4]=300;damage[0x80/8]=0;
   *STATE.lock().unwrap()=State{actor:a,handle:123,stats:stats.as_mut_ptr()as usize,..Default::default()};
   STATE.lock().unwrap().wall_stop(15.);
-  crash_damage(a,base);assert_eq!(stats[0x140/4],(hp-30).max(0));assert_eq!(damage[0x80/8],1);
+  crash_damage(a,base);assert_eq!(stats[0x140/4],(hp-75).max(0));assert_eq!(damage[0x80/8],1);
   crash_damage(a,base);assert_eq!(damage[0x80/8],1);
  }
  stats[0x140/4]=100;reset();
@@ -376,7 +379,22 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  for _ in 0..4{assert_eq!(query(a,113,1,true,false,0.,base),1);assert!(STATE.lock().unwrap().drive);}
  let before=STATE.lock().unwrap().motion.velocity;
  assert_eq!(query(a,113,1,true,true,0.,base),2);
+ assert!(STATE.lock().unwrap().drive);assert_eq!(stats[0x15c/4],1,"eligibility does not debit stamina");
+ stats[0x15c/4]=-17; // The accepted native roll may spend beyond the remaining point.
+ for _ in 0..4{assert_eq!(query(a,113,1,true,false,0.,base),1);assert!(STATE.lock().unwrap().drive);}
+ assert_eq!(query(a,113,1,true,true,0.,base),2);
  assert!(!STATE.lock().unwrap().drive);assert_eq!(STATE.lock().unwrap().motion.velocity,before);
+ for stamina in [-50,-1,0,1,17,18]{
+  reset();stats[0x15c/4]=stamina;
+  assert_eq!(query(a,113,1,true,false,0.,base),0);
+  assert_eq!(STATE.lock().unwrap().active,stamina>0,"startup eligibility at {stamina}");
+ }
+ reset();stats[0x15c/4]=1;query(a,113,1,true,false,0.,base);
+ {let mut s=STATE.lock().unwrap();s.started=true;s.rolling=true;}
+ assert_eq!(query(a,113,1,true,true,0.,base),2);
+ stats[0x15c/4]=-17;
+ assert_eq!(query(a,113,1,true,false,0.,base),0);assert!(STATE.lock().unwrap().drive);
+ assert_eq!(query(a,113,1,true,true,0.,base),3,"recover at next boundary when unpowered and slow");
  reset();stats[0x150/4]=100;stats[0x15c/4]=100;
  // Every empty slot uses the same three real art getter detours as Wildcard Arts.
  let old_id=crate::ARTS_ID_ORIG.swap(id_art as*const()as*mut u8,Ordering::AcqRel);
@@ -703,7 +721,7 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
   // Only party enumeration is a fixture; both identity lookup functions run
   // unmodified EXE code through the real entity-pool virtual interface.
   let mut jump=vec![0x48,0xb8];jump.extend_from_slice(&(no_party as*const()as usize).to_le_bytes());jump.extend_from_slice(&[0xff,0xe0]);ptr::copy_nonoverlapping(jump.as_ptr(),(base+0x5197e0)as*mut u8,jump.len());
-  let mut victim=vec![0usize;0x200/8];let target=victim.as_mut_ptr()as usize;victim[1]=0x2b01173311200006;victim[0x60/8]=target;victim[0x1b8/8]=modules.as_ptr()as usize;
+  let mut victim=vec![0usize;0x740/8];let target=victim.as_mut_ptr()as usize;victim[1]=0x2b01173311200006;victim[0x60/8]=target;victim[0x1b8/8]=modules.as_ptr()as usize;
   let mut bullet=[0usize;0xc0/8];let b=bullet.as_ptr()as usize;bullet[0xb0/8]=entity as usize;
   *STATE.lock().unwrap()=State{actor:a,handle:entity,active:true,generation:77,..Default::default()};CONTACTS.lock().unwrap().clear();
   ptr::write_unaligned((physics.as_mut_ptr()as usize+0x70)as*mut[f32;4],[0.,0.,0.,1.]);
@@ -714,6 +732,11 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
   STATE.lock().unwrap().active=false;assert!(!allow_contact(target,b,Some(77),base));
   bullet[0xb0/8]=(entity+1)as usize;assert!(allow_contact(target,b,Some(19),base));accepted_contact(target,b,Some(19),1,base);assert!(!allow_contact(target,b,Some(19),base));
   CONTACTS.lock().unwrap().clear();
+  PARTY.with(|p|p.set(target));
+  for down in [0u8,1,2,3]{ptr::write((target+0x710)as*mut u8,down);assert_eq!(allow_contact(target,b,Some(19),base),down==1);}
+  ptr::write((target+0x710)as*mut u8,1);accepted_contact(target,b,Some(19),1,base);assert!(!allow_contact(target,b,Some(19),base));
+  ptr::write_unaligned((physics.as_mut_ptr()as usize+0x70)as*mut[f32;4],[7.,0.,0.,1.]);assert!(allow_contact(target,b,Some(19),base));
+  PARTY.with(|p|p.set(0));CONTACTS.lock().unwrap().clear();
   println!("PASS: old pool lookup rejects live entity handle; real entity lookup resolves local/remote owner; stale identity, roll generation, self and duplicate-contact guards preserved");
  }
  reset();MOTION_ORIGINAL.store(old_orig,Ordering::Release);BASE.store(old_base,Ordering::Release);ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);

@@ -17,7 +17,7 @@ unsafe fn fixed_attack(context:usize){
  }
 }
 pub unsafe extern "system" fn before_construct(context:usize){
- if ACTIVE.load(Ordering::Acquire){fixed_attack(context);}
+ if ACTIVE.load(Ordering::Acquire){crate::static_charge::before_construct(context);fixed_attack(context);}
 }
 
 unsafe fn source_actor(context:usize,resolve:unsafe extern "system" fn(u64)->usize)->usize {

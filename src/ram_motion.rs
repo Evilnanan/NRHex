@@ -44,14 +44,15 @@ pub fn frontal_speed(incoming:V,normal:V)->Option<f32>{
  (closing>=incoming.len()*0.7&&closing>0.).then_some(closing)
 }
 pub fn wall_impact(incoming:V,rejected:V,normal:V)->Option<f32>{
- let closing=frontal_speed(incoming,normal)?;
+ frontal_speed(incoming,normal)?;
  // A floor correcting vertical fall is not a wall. Require rejected lateral
  // travel into this surface as well as the full 3D normal impulse; tilted
  // walls still use the 3D incoming speed for impact severity.
  let lateral=-(rejected.0*normal.0+rejected.2*normal.2);
- // Angle decides whether rolling ends; normal speed only decides severity.
+ // Angle decides whether rolling ends. Once stopped, all incoming motion is
+ // discarded, so severity uses the pre-collision total speed.
  // Fast grazing contact must keep the tangent accepted by the native capsule.
- (lateral>0.5&& -rejected.dot(normal)>0.5).then_some(closing)
+ (lateral>0.5&& -rejected.dot(normal)>0.5).then_some(incoming.len())
 }
 /// Trade forward kinetic energy for clearance over a verified low ledge.
 /// Geometry must prove a reachable top and clear torso path before calling.
@@ -353,8 +354,10 @@ impl Motion{
   assert_eq!(wall_impact(V(1.1253592,-9.837262,0.96821654),V(0.,-10.979669,0.),slope),None);
  }
  fn run(hz:f32,drive:bool,normal:Option<V>)->Motion{let mut m=Motion{velocity:V(0.,0.,-4.),..Default::default()};for _ in 0..(hz*10.)as usize{assert!(m.advance(1./hz,drive,V(0.,0.,-1.),normal));}m}
- #[test]fn collision_severity_uses_normal_speed_not_total_speed(){
-  assert_eq!(wall_impact(V(10.,0.,-12.),V(0.,0.,-12.),V(0.,0.,1.)),Some(12.));
+ #[test]fn collision_severity_uses_total_speed_after_frontal_gate(){
+  let incoming=V(10.,0.,-12.);
+  assert_eq!(wall_impact(incoming,V(0.,0.,-12.),V(0.,0.,1.)),Some(incoming.len()));
+  assert!(wall_impact(incoming,V(0.,0.,-12.),V(0.,0.,1.)).unwrap()>=CRASH_SPEED);
   assert_eq!(wall_impact(V(16.,0.,-3.),V(0.,0.,-3.),V(0.,0.,1.)),None);
   assert_eq!(wall_impact(V(0.,0.,-16.),V(0.,0.,-16.),V(0.,0.,1.)),Some(16.));
   assert_eq!(wall_impact(V(0.,0.,-16.),V::default(),V(0.,0.,1.)),None);

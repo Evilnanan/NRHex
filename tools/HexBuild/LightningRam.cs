@@ -14,7 +14,9 @@ static class LightningRam {
    if(n.StartsWith("spEffectId"))Set(attack,n,-1);
   }
   foreach(var(f,v)in new(string,object)[]{("atkPhys",1),("atkSuperArmor",6f),("atkSuperArmorCorrection",100),("ultimateChargeCorrection",30),("reviveDamage",0f),("reviveDamageCorrection",0),("atkAttribute",0),("spAttribute",0),("selfTarget",0),("friendlyTarget",0),("opposeTarget",1),("dmgLevel",7),("dmgLevel_vsPlayer",7),("knockbackDist",1f),("mapHitType",1)})Set(attack,f,v);
-  var extreme=clone("AtkParam_Pc",69300,Owner+61);foreach(var c in attack.Cells)Set(extreme,c.Def.InternalName,c.Value);Set(extreme,"atkBehaviorId",12);
+  var extreme=clone("AtkParam_Pc",69300,Owner+61);foreach(var c in attack.Cells)Set(extreme,c.Def.InternalName,c.Value);
+  var fastAttack=clone("AtkParam_Pc",69300,Owner+62);foreach(var c in attack.Cells)Set(fastAttack,c.Def.InternalName,c.Value);
+  ContactPower(attack,12,20,false);ContactPower(fastAttack,18,30,false);ContactPower(extreme,30,50,true);
   var bullet=clone("Bullet",7720606,Owner+50);
   foreach(var(f,v)in new(string,object)[]{("atkId_Bullet",Owner+60),("sfxId_Bullet",-1),("sfxId_Hit",-1),("sfxId_Flick",-1),("life",0.04f),("lifeRandomRange",0f),("hitRadius",0.75f),("hitRadiusMax",0.75f),("initVellocity",0f),("minVellocity",0f),("maxVellocity",0f),("gravityInRange",0f),("gravityOutRange",0f),("accelInRange",0f),("accelOutRange",0f),("HitBulletID",-1),("intervalCreateBulletId",-1),("numShoot",1),("launchConditionType",0),("isUseSharedHitList",1),("dmgHitRecordLifeTime",0.1f),("isHitBothTeam",0),("isPenetrateMap",1),("isCheckWall_byCenterRay",1),("staminaDamp",0),("knockbackDamp",0),("spEffectIDForShooter",-1),("spEffectId0",-1),("spEffectId1",-1),("spEffectId2",-1),("spEffectId3",-1),("spEffectId4",-1)})Set(bullet,f,v);
   // Suppress the native contact only while the swept high-speed contact owns
@@ -23,6 +25,37 @@ static class LightningRam {
   foreach(var c in harmless.Cells){string n=c.Def.InternalName;if((n.StartsWith("atk")&&n!="atkObj")||n.StartsWith("guardAtk")||n.StartsWith("dmgLevel")||n=="regainableSlotDamage"||n=="reviveHighHpCutRate")Set(harmless,n,0);if(n.StartsWith("spEffectId"))Set(harmless,n,-1);}
   foreach(string f in new[]{"opposeTarget","friendlyTarget","selfTarget"})Set(harmless,f,0);
   var behavior=clone("BehaviorParam_PC",300000710,Owner+90);Set(behavior,"refId",Owner+69);
+ }
+ static void ContactPower(PARAM.Row row,float poise,float rescue,bool extreme){
+  Set(row,"atkSuperArmor",poise);Set(row,"atkSuperArmorCorrection",100);
+  Set(row,"reviveDamage",rescue);Set(row,"reviveDamageCorrection",100);
+  Set(row,"atkBehaviorId",extreme?12:0);
+ }
+ public static void PowerStage(string root,Func<string,Memory<byte>,PARAM> parse,bool mmv){
+  string input=Path.Combine(root,mmv?"dist/mmv/mod/regulation.bin":"dist/mod/regulation.bin");
+  string dir=Path.Combine(root,"work/lightning-ram-power",mmv?"mmv":"standalone");Directory.CreateDirectory(dir);
+  var b=SFUtil.DecryptNightreignRegulation(input);var before=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=b.Files.Single(f=>Name(f)=="AtkParam_Pc.param");var table=parse("AtkParam_Pc",file.Bytes);
+  var regular=table.Rows.Single(r=>r.ID==Owner+60);var extreme=table.Rows.Single(r=>r.ID==Owner+61);
+  Check(Convert.ToInt32(regular["atkBehaviorId"].Value)==0&&Convert.ToInt32(extreme["atkBehaviorId"].Value)==12,"Unexpected Ram attack rows");
+  Check(!table.Rows.Any(r=>r.ID==Owner+62),"Fast attack ID collision");
+  var fast=new PARAM.Row(regular){ID=Owner+62};table.Rows.Add(fast);
+  ContactPower(regular,12,20,false);ContactPower(fast,18,30,false);ContactPower(extreme,30,50,true);
+  table.Rows=table.Rows.OrderBy(r=>r.ID).ToList();file.Bytes=table.Write();
+  string output=Path.Combine(dir,"regulation.bin");SFUtil.EncryptNightreignRegulation(output,b,b.Compression);
+  var actual=SFUtil.DecryptNightreignRegulation(output);
+  Check(actual.Version==b.Version&&actual.Compression==b.Compression&&actual.Files.Count==b.Files.Count,"Binder changed");
+  string[] allowed={"atkSuperArmor","atkSuperArmorCorrection","reviveDamage","reviveDamageCorrection"};
+  foreach(var f in actual.Files){
+   Check(f.Bytes.Span.SequenceEqual(b.Files.Single(x=>x.ID==f.ID).Bytes.Span),"Readback mismatch");
+   if(f.ID!=file.ID){Check(f.Bytes.Span.SequenceEqual(before[f.ID]),"Unrelated table changed");continue;}
+   var old=parse("AtkParam_Pc",before[f.ID]);var now=parse("AtkParam_Pc",f.Bytes);
+   Check(now.Rows.Count==old.Rows.Count+1,"Unexpected row count");
+   foreach(var r in old.Rows){var nr=now.Rows.Single(x=>x.ID==r.ID);Check(nr.Name==r.Name,"Name changed");foreach(var c in r.Cells)if(!(r.ID==Owner+60||r.ID==Owner+61)||!allowed.Contains(c.Def.InternalName))Check(Value(c.Value)==Value(nr[c.Def.InternalName].Value),"Unrelated attack field changed");}
+   foreach(var row in new[]{regular,fast,extreme})Check(Same(row,now.Rows.Single(r=>r.ID==row.ID)),"Tier readback mismatch");
+  }
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),addedAttack=Owner+62,tiers=new[]{new{speed=6,attack=Owner+60,poise=12,rescue=20},new{speed=10,attack=Owner+62,poise=18,rescue=30},new{speed=15,attack=Owner+61,poise=30,rescue=50}},onlyPowerFieldsAndOneRowChanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: Ram power tiers roundtrip; only four fields on two private rows and one new private row changed");
  }
  public static void Extreme(string root,BND4 native,Func<string,Memory<byte>,PARAM> parse,bool mmv){
   string input=Path.Combine(root,mmv?"dist/mmv/mod/regulation.bin":"dist/mod/regulation.bin");

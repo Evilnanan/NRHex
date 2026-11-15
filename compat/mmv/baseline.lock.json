@@ -1,21 +1,13 @@
 {
   "schemaVersion": 1,
-  "scope": "mod/**, dll/** and root *.me3; excluding *.log, logs/** and dll/target/release/0987.txt",
-  "fileCount": 4459,
-  "totalBytes": 6916182559,
-  "sha256": "5eb0eafc683102a36b577f25ba88cd5d61f79fc0003bfa52312360a1630f3981",
+  "scope": "mod/**, dll/**, root *.me3 and referenced native DLL/config files; excluding *.log, logs/** and dll/target/release/0987.txt",
+  "fileCount": 4683,
+  "totalBytes": 7290254562,
+  "sha256": "7279ca8765ef81565ba0023b47d44e75558786bf381f7301ced8c594a1d79356",
   "criticalFiles": {
-    "Daybreak Launcher - 2.1.9 Beta2-Release.me3": {
-      "bytes": 769,
-      "sha256": "8b6c938326b2f0389376955ab06051e52cf643aa145c096bf1d734b10ffda476"
-    },
-    "dll/ChanceSetter.dll": {
-      "bytes": 3125972,
-      "sha256": "643748e7b28d7e723405a10741d4800f1824566fcc9a998eeeb7d766b925153a"
-    },
-    "dll/RestoredLegendaryStones.dll": {
-      "bytes": 2838235,
-      "sha256": "51bef3ddc321e6eeaa8da5c087b0cd9a1e71a8604f20a47e7113e18e9c67da59"
+    "Daybreak Launcher - 2.1.9 Beta2-Hotfix1.me3": {
+      "bytes": 695,
+      "sha256": "486f676040ab89bea83b6bd72062a8431ad998a785a61983cad0f1ed053440f3"
     },
     "dll/ServerRedirector/cl_server_redirector.dll": {
       "bytes": 881664,
@@ -34,13 +26,18 @@
       "sha256": "f9dad9cba8a02d7cb6192d8a79ad3f571aa6bfb20d3737df88c8e8502a21c084"
     },
     "mod/action/script/c0000.hks": {
-      "bytes": 1184534,
-      "sha256": "786f8a7bc89452d9531e2299b224c8945701c422437eca9aacbeb10a57a17f4d"
+      "bytes": 1194588,
+      "sha256": "96339bb15f57559cd42a940d616fcc2a18a10f50845cfc22b46b356ab66c3b29"
     },
     "mod/regulation.bin": {
-      "bytes": 3579136,
-      "sha256": "3305ac374b4da1db440e2b6644bc2c3c0ae96b98df9627f1a0e7a2b06d265c06"
+      "bytes": 2542672,
+      "sha256": "f7c39ad0cad7653530df4c119b96c9b09abc0d38dccf32dd649275a160bf0342"
+    },
+    "tools/ChanceSetter.dll": {
+      "bytes": 3129911,
+      "sha256": "cf33fa2ece515b2635308b6524a1af7cce3bda2af94765ac8b5f6c53ac5775d4"
     }
   },
-  "compatibilityVerified": false
+  "compatibilityVerified": false,
+  "reviewedPack": "Daybreak 2.1.9 Beta2-Hotfix1 + 2.1.9beta2H1 Chinese translation"
 }

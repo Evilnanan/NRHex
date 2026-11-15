@@ -1,4 +1,5 @@
 // Generated from this target's weapon, behavior, bullet, attack and resolved TAE data.
+pub const HITS_BY_WEAPON:&[(i32,i32,i32,bool)]=&[];
 pub const HITS:&[(i32,i32,bool)]=&[
  (100500,31710,true),
  (100510,31700,true),

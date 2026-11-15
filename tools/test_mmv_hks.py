@@ -121,7 +121,7 @@ class FragmentTests(unittest.TestCase):
         for path in ('assets/original/action/script/c0000.hks', 'dist/mod/action/script/c0000.hks'):
             reader = Reader((ROOT / path).read_bytes()); reader.function(); readers.append(reader)
         merged, report = compose(source, *readers, json.loads(PLAN.read_text(encoding='utf8')))
-        self.assertEqual(len(report['functions']), 174)
+        self.assertEqual(len(report['functions']), 173)
         self.assertIn('ExecTravelMagnification', report['functions'])
         self.assertTrue(report['inverseRestoresMmvSource'])
         by_name = {f['name']: f for f in readers[1].functions}
@@ -196,9 +196,9 @@ class FragmentTests(unittest.TestCase):
         plan = json.loads(PLAN.read_text(encoding='utf8'))
         merged, report = compose(source, *readers, plan)
         fixes = [e for e in report['edits'] if e['reason'].endswith(':source-fix')]
-        self.assertEqual([e['reason'] for e in fixes], ['ExecAttack:source-fix'])
-        self.assertEqual(fixes[0]['after'], fixes[0]['before'].replace(
-            'c_SwordArtsID == 328', 'IsHalfBlendArts(c_SwordArtsID) == TRUE'))
+        # Hotfix1 incorporates the former MMV-only movement correction.
+        # Keep upstream routing intact instead of patching it a second time.
+        self.assertEqual(fixes, [])
 
         def routing(text):
             named = functions(text)
@@ -228,7 +228,7 @@ class FragmentTests(unittest.TestCase):
             old.globals().c_SwordArtsID = art; old.globals().category = 0
             self.assertEqual(old.globals().IsHalfBlendArts(art), 1)
             old_action(0)
-            self.assertEqual(old.globals().result[1], 'full')
+            self.assertEqual(old.globals().result[1], 'half')
 
         lua, action = routing(merged)
         # Cover all current action types, including MMV's 328/334/335, and
@@ -246,11 +246,7 @@ class FragmentTests(unittest.TestCase):
                 self.assertEqual(result[2], 'W_SwordArtsOneShot')
             cases += 1
 
-        changed = source.replace(plan['sourceFixes']['ExecAttack']['old'],
-                                 plan['sourceFixes']['ExecAttack']['new'])
-        with self.assertRaisesRegex(ValueError, 'MMV source fix needs review: ExecAttack'):
-            compose(changed, *readers, plan)
-        print(f'PASS: reproduced both MMV movement regressions; {cases} repaired routing cases; source drift rejected')
+        print(f'PASS: upstream movement fixes preserved; {cases} routing cases')
 
 
 if __name__ == '__main__':

@@ -116,12 +116,16 @@ static class MmvStage {
                 var b = FMG.Read(old.Bytes).Entries.ToDictionary(e => e.ID, e => e.Text);
                 var n = FMG.Read(file.Bytes).Entries.ToDictionary(e => e.ID, e => e.Text);
                 var fmg = FMG.Read(targets[name].Bytes);
-                var m = fmg.Entries.ToDictionary(e => e.ID);
+                // Hotfix1 contains duplicate upstream text IDs. Preserve every
+                // untouched entry; never choose an arbitrary duplicate to edit.
+                var m = fmg.Entries.GroupBy(e => e.ID).ToDictionary(g => g.Key, g => g.ToArray());
                 Require(b.Keys.All(n.ContainsKey), $"Deleted text entry needs an adapter: {relative}/{name}");
                 foreach (var (id, text) in n) {
                     bool existsBefore = b.TryGetValue(id, out var before);
                     if (existsBefore && text == before) continue;
-                    if (m.TryGetValue(id, out var current)) {
+                    if (m.TryGetValue(id, out var matches)) {
+                        Require(matches.Length == 1, $"Ambiguous changed text ID: {relative}/{name}/{id}");
+                        var current = matches[0];
                         Require(current.Text == text || existsBefore && current.Text == before, $"Text collision: {relative}/{name}/{id}");
                         current.Text = text;
                     } else {
@@ -129,7 +133,8 @@ static class MmvStage {
                         fmg.Entries.Add(new FMG.Entry(fmg, id, text));
                     }
                 }
-                fmg.Entries.Sort((a, b) => a.ID.CompareTo(b.ID));
+                var orderedEntries = fmg.Entries.OrderBy(e => e.ID).ToArray();
+                fmg.Entries.Clear(); fmg.Entries.AddRange(orderedEntries);
                 targets[name].Bytes = fmg.Write();
                 var parsed = FMG.Read(targets[name].Bytes);
                 Require(fmg.Entries.Select(e => (e.ID, e.Text)).SequenceEqual(parsed.Entries.Select(e => (e.ID, e.Text))), "Text readback mismatch");

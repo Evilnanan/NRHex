@@ -9,9 +9,10 @@ pub const CRASH_QUERY:i32=990062;
 pub const BULLET:i32=OWNER+50;
 pub const ATTACK:i32=OWNER+60;
 pub const EXTREME_ATTACK:i32=OWNER+61;
-pub fn attack(id:i32)->bool{matches!(id,ATTACK|EXTREME_ATTACK)}
+pub const FAST_ATTACK:i32=OWNER+62;
+pub fn attack(id:i32)->bool{matches!(id,ATTACK|EXTREME_ATTACK|FAST_ATTACK)}
 pub fn attack_for_damage(damage:f32)->i32{
- if contact_tier(damage).is_some_and(|(_,level,_)|level==10){EXTREME_ATTACK}else{ATTACK}
+ match contact_tier(damage){Some((_,10,_))=>EXTREME_ATTACK,Some((_,7,_))=>FAST_ATTACK,_=>ATTACK}
 }
 const CONTACT_SPEED:f32=6.;
 #[derive(Clone,Copy,Debug,PartialEq)]enum EnemyResponse{Suppressed,Yield,Deflect,Rebound}
@@ -205,7 +206,7 @@ pub unsafe extern "system" fn rebase(physics:usize,delta:*const f32){
  // Remote owners receive their own native rebase callback exactly once too.
  if let Ok(mut contacts)=CONTACTS.lock(){for (&(owner,_,_),position)in contacts.iter_mut(){if owner==handle{*position=position.add(shift);}}}
 }
-fn crash_loss(maximum:i32)->i32{((i64::from(maximum.max(0))+5)/10)as i32}
+fn crash_loss(maximum:i32)->i32{((i64::from(maximum.max(0))+2)/4)as i32}
 // Native HP-cost settlement: fixed max-HP loss, no offensive scaling and no
 // self-hit (which could trigger rescue, retaliation or the rolling contact logic).
 pub unsafe fn crash_damage(actor:usize,base:usize){
@@ -302,7 +303,7 @@ pub unsafe fn query(actor:usize,art_id:i32,hand:i32,held:bool,window:bool,angle:
   let w=crate::arts_hand_weapon(actor,hand,base).filter(|w|!selected(actor,*w,base));
   if let Some(state)=crate::ARTS.get(){if let Ok(mut state)=state.lock(){state.notify(w,true);}}
  }
- let stats=native_actor::stats(actor);let can_drive=held&&read_i32(stats+0x15c)>=18;
+ let stats=native_actor::stats(actor);let can_drive=held&&read_i32(stats+0x15c)>0;
  let mut rotation=Point([0.;4]);let get:unsafe extern "system" fn(usize,*mut f32)->*const f32=std::mem::transmute(base+crate::CHR_ROTATION_RVA);get(actor,rotation.0.as_mut_ptr());
  let wish=steering_wish(rotation.0[1],angle);
  let result={let Ok(mut s)=STATE.lock()else{return 0;};
@@ -319,7 +320,8 @@ pub unsafe fn query(actor:usize,art_id:i32,hand:i32,held:bool,window:bool,angle:
   if initial{if !can_drive||s.rebound>0.{return 0;}s.active=true;s.powered=true;s.started=false;s.rolling=false;s.window=false;s.motion=Motion::default();s.detach=0.;s.step_body=None;s.step_grace=0.;s.travel=Travel::default();s.yielding=Default::default();s.effective_speed=0.;s.generation=GENERATION.fetch_add(1,Ordering::Relaxed);}
   let cycle=window&&!s.window;s.window=window;
   if cycle{s.powered=can_drive;}
-  // Native stamina is still required once per roll; FP is free while owned.
+  // Any positive stamina permits a roll, including a native debit below zero.
+  // FP is free while owned; zero/negative stamina cannot power the next roll.
   // Check the next roll only at its boundary, not after the current debit.
   s.drive=held&&s.powered;
   if !s.drive&&!s.motion.locked&&!s.motion.airborne&&s.started{s.active=false;s.ending=true;return 3;}
@@ -609,7 +611,10 @@ fn leading_offset(v:V,dt:f32)->V{let horizontal=V(v.0,0.,v.2);horizontal.unit().
 pub unsafe fn allow_contact(target:usize,bullet:usize,generation:Option<u64>,base:usize)->bool{
  let Some(generation)=generation else{return false;};
  let owner=read_ptr(bullet+0xb0)as u64;let handle=read_ptr(target+8)as u64;
- if handle==owner||!crate::spatial_ready(target)||crate::ambulance::party_member(target,base){return false;}
+ if handle==owner||!crate::spatial_ready(target){return false;}
+ // Native rescue owns downed allies; exclude standing/reviving allies and
+ // retain the same per-pass dedup as hostile contacts.
+ if crate::ambulance::party_member(target,base)&&ptr::read((target+0x710)as*const u8)!=1{return false;}
  if STATE.lock().is_ok_and(|s|s.handle==owner&&(!s.active||s.generation!=generation)){return false;}
  let actor=crate::static_charge::resolve_actor(base,owner);if !crate::spatial_ready(actor){return false;}
  let position=V::from(crate::position(actor,base));
@@ -863,7 +868,7 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
    assert!(!s.active&&!s.drive&&s.ending);assert_eq!(s.motion.velocity,V::default());
    assert_eq!(s.push,(6. ..15.).contains(&speed));assert_eq!(s.crash,speed>=15.);assert_eq!(std::mem::take(&mut s.crash_pending),speed>=15.);assert!(!s.crash_pending);
   }
-  assert_eq!(crash_loss(300),30);assert_eq!(crash_loss(305),31);assert_eq!(crash_loss(0),0);assert_eq!(crash_loss(i32::MAX),214748365);
+  assert_eq!(crash_loss(300),75);assert_eq!(crash_loss(306),77);assert_eq!(crash_loss(0),0);assert_eq!(crash_loss(i32::MAX),536870912);
  }
  #[test]fn displayed_roll_rate_tracks_observed_travel_and_stops_without_sticky_speed(){
   let mut speed=0.;for _ in 0..120{speed=visual_speed(speed,10./60.,1./60.);}

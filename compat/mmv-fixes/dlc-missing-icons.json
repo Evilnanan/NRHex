@@ -1,14 +1,14 @@
 {
   "id": "dlc-missing-icons",
   "sourceFiles": {
-    "menu/21_common_dlc01_h.sblytbnd.dcx": "13130d1c404e3115b50ca955b7e2b50bded47edd3c8e48829dc521136707eb12",
-    "menu/21_common_dlc01_h.tpf.dcx": "18b2e3a1ea70254bedb56b76bac07f573668e81e2534e4017df900e3a4bc71c7"
+    "menu/21_common_dlc01_h.sblytbnd.dcx": "fef458e42c9807671b7abe0a9796d872bbcf71664b7a96e6745fb2dcd9d2925f",
+    "menu/21_common_dlc01_h.tpf.dcx": "f3bb3dbc8510743c0e6b36cc19e4afd7ba34b125746e4a250263950473e17e65"
   },
   "originalFiles": {
     "menu/21_common_dlc01_h.sblytbnd.dcx": "e46224c37f7e2c526ffb6accc2db3f212b5dd4c62cc7764e0350fccbe8288848",
     "menu/21_common_dlc01_h.tpf.dcx": "71c6d5f2c54dda5b2117ed41693ab642e9a92c0b9087b70c784dc2c91cd9d53f"
   },
-  "missing": {
+  "providedByMmv": {
     "SB_ItemIcon_DLC01_0": [
       "MENU_ItemIcon_21297.png"
     ],
@@ -25,5 +25,7 @@
       "MENU_StatusIcon_20529.png",
       "MENU_StatusIcon_22297.png"
     ]
-  }
+  },
+  "missing": {},
+  "reviewedVersion": "2.1.9 Beta2-Hotfix1"
 }

@@ -1,10 +1,12 @@
 # MMV 构建目标
 
+当前输入基线：Daybreak / MMV **2.1.9 Beta2-Hotfix1**，配套 **2.1.9beta2H1 汉化包**。本地安装位于 `D:/Users/OwO/Documents/me3-profiles/MMV`，旧包保留在 `MMV-beta2`。升级记录与验证边界见 [Hotfix1 适配记录](../../docs/research/mmv-beta2-hotfix1.md)。
+
 采用同仓库、同主分支维护两种发行目标。海克斯逻辑、数值、中文和英文源继续共用；MMV 特有的资源合并及兼容策略放在这里，不复制一份 Rust 代码或文案长期维护。
 
 加载方式为 **现有 MMV 包＋独立 NRHex-MMV 包**，由 ME3 显式声明覆盖优先级。MMV 安装目录作为只读依赖，不改原文件、原 profile 或原 DLL；适配时保留 MMV 自身玩法。遇到同名资源，合并副本只写入 NRHex-MMV 的暂存／发行目录。ME3 的加载顺序只能决定整文件覆盖，不能替代同名资源内部的合并。
 
-**当前已实现全部 23 份资源的合并、配套 DLL 和独立 ME3 配置构建，已确认测试版启动并完成主更新钩子安装；具体玩法、重投与联机仍待实测。** 默认只输出测试版 `dist/mmv/`（含 Ctrl+F6）。群友版编译移除测试热键，与测试版共用合并资源和玩法代码；暂不在仓库内生成，使用 `-Variant community -CommunityDestination <外部绝对路径>` 才构建，`both` 同样必须指定外部目录。不操作游戏进程。`-Variant dist/community/both` 选择目标；`-BuildOnly` 准备完整包但不替换正在使用的版本；`-AuditOnly` 只检查；`-StageOnly` 仅生成并验证合并资源。
+**当前已实现全部共享资源的合并、配套 DLL 和独立 ME3 配置构建，已确认测试版启动并完成主更新钩子安装；具体玩法、重投与联机仍待实测。** 默认只输出测试版 `dist/mmv/`（含 Ctrl+F6）。群友版编译移除测试热键，与测试版共用合并资源和玩法代码；暂不在仓库内生成，使用 `-Variant community -CommunityDestination <外部绝对路径>` 才构建，`both` 同样必须指定外部目录。不操作游戏进程。`-Variant dist/community/both` 选择目标；`-BuildOnly` 准备完整包但不替换正在使用的版本；`-AuditOnly` 只检查；`-StageOnly` 仅生成并验证合并资源。
 
 独立版入口为 `dist/启动测试版.ps1`，MMV 入口为 `dist/启动MMV测试版.ps1`。两者分别加载自己的资源与 DLL；MMV 配置位于 `dist/mmv/NRHex-MMV.me3`。不同时启动两版。
 
@@ -40,7 +42,7 @@ MMV 路径也可以通过 `NRHEX_MMV` 指定。脚本使用当前 `dist/mod` 作
 
 工具要求 Python 3.12+（含 pefile 和下述 Lupa 依赖）、PowerShell、.NET 10、Rust、Smithbox/SoulsFormats 及匹配版本的原始游戏文件。沿用 `NRHEX_GAME`、`NRHEX_SMITHBOX` 和 `NRHEX_ME3`。检查报告、编译缓存及生成的条件表放在 `work/compat/mmv/`，发行目录为 `dist/mmv/`；不写入原 MMV、独立版 `dist/mod` 或未指定的群友版目录。
 
-`baseline.lock.json` 锁定 MMV 的所有 mod 资源、dll 目录文件和根目录 ME3 配置；日志、存档不计入。除 `.log` 和 `logs/` 外，明确排除已核实为 nraio 运行日志的 `dll/target/release/0987.txt`，不笼统忽略 `.txt` 配置。锁文件不包含 MMV 游戏资源，也不代表该版本已经兼容。内容变化后检查会停止，不能通过每次自动重录锁来跳过复核。
+`baseline.lock.json` 锁定 MMV 的所有 mod 资源、dll 目录文件、根目录 ME3 配置，以及入口引用的其他目录 DLL 及相邻 INI/YAML（包括 Hotfix1 的 `tools/ChanceSetter`）；日志、存档不计入。除 `.log` 和 `logs/` 外，明确排除已核实为 nraio 运行日志的 `dll/target/release/0987.txt`，不笼统忽略 `.txt` 配置。锁文件不包含 MMV 游戏资源，也不代表该版本已经兼容。内容变化后检查会停止，不能通过每次自动重录锁来跳过复核。
 
 首次选择 MMV 基线时使用 `-RecordBaseline`。已有锁时拒绝覆盖。升级 MMV 时，先保留旧锁、复核新输入，再显式移走旧锁并重录，检查 Git 差异后重新完成兼容验证。锁不绑定安装盘符。
 
@@ -80,7 +82,7 @@ MMV 路径也可以通过 `NRHEX_MMV` 指定。脚本使用当前 `dist/mod` 作
 
 ### 百般武艺新增武器／战技
 
-`HexBuild --arts-target-export <overlay>` 读取目标武器、战技、攻击行为及TAE；`tools/build_mmv_arts.py` 根据 `compat/mmv/arts.json` 的逐项审查生成目标表，通过 `NRHEX_ARTS_DATA` 注入共享运行时。302条新武器默认战技、4把新弓及属性面板已覆盖；37种公共攻击链战技可随机。新增动作通知在MMV副本合并，原包不变。未纳入的67条记录及原因见[MMV百般武艺适配](../../docs/research/mmv-arts.md)。
+`HexBuild --arts-target-export <overlay>` 读取目标武器、战技、攻击行为及TAE；`tools/build_mmv_arts.py` 根据 `compat/mmv/arts.json` 的逐项审查生成目标表，通过 `NRHEX_ARTS_DATA` 注入共享运行时。Hotfix1 的346条新武器默认战技、5把新弓及属性面板已覆盖；39种公共攻击链战技可随机。新增动作通知在MMV副本合并，原包不变。原始排除记录及原因见[MMV百般武艺适配](../../docs/research/mmv-arts.md)。
 
 ### 亮剑自动估算
 

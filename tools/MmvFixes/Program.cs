@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Xml.Linq;
 using SoulsFormats;
 
-if(args.Length!=4)throw new ArgumentException("MmvFixes <repository> <MMV> <original-menu-extract> <output>");
+if(args.Length!=4&&!(args.Length==5&&args[4]=="--audit-icons"))throw new ArgumentException("MmvFixes <repository> <MMV> <original-menu-extract> <output> [--audit-icons]");
 var root=Path.GetFullPath(args[0]);var mmv=Path.GetFullPath(args[1]);var original=Path.GetFullPath(args[2]);var output=Path.GetFullPath(args[3]);
 if(output.StartsWith(mmv+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)||output==mmv)throw new InvalidDataException("Fix package must be outside MMV");
 var drive=Path.GetPathRoot(root)!;
@@ -24,6 +24,20 @@ using var boneSpec=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"compat
 using var corvianSpec=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"compat/mmv-fixes/c6210-twist-bones.json")));
 var boneSpecs=new[]{boneSpec.RootElement,corvianSpec.RootElement};
 using var iconSpec=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"compat/mmv-fixes/dlc-missing-icons.json")));
+if(args.Contains("--audit-icons")){
+ var layoutAudit=BND4.Read(Path.Combine(mmv,"mod/menu/21_common_dlc01_h.sblytbnd.dcx"));
+ var textureAudit=TPF.Read(Path.Combine(mmv,"mod/menu/21_common_dlc01_h.tpf.dcx"));
+ var wanted=iconSpec.RootElement.GetProperty("missing").EnumerateObject().SelectMany(e=>e.Value.EnumerateArray().Select(v=>v.GetString()!)).ToHashSet();
+ if(iconSpec.RootElement.TryGetProperty("providedByMmv",out var supplied))wanted.UnionWith(supplied.EnumerateObject().SelectMany(e=>e.Value.EnumerateArray().Select(v=>v.GetString()!)));
+ var found=new List<object>();var presentAudit=new HashSet<string>();
+ foreach(var member in layoutAudit.Files){using var stream=new MemoryStream(member.Bytes.ToArray());var xml=XDocument.Load(stream);foreach(var e in xml.Root!.Elements()){
+  string name=(string)e.Attribute("name")!;if(!wanted.Contains(name))continue;
+  string image=(string)xml.Root.Attribute("imagePath")!;var texture=textureAudit.Textures.SingleOrDefault(t=>image.Replace('\\','/').Split('/').Last().Split('.')[0]==t.Name);
+  presentAudit.Add(name);found.Add(new{name,image,entry=e.ToString(),texturePresent=texture!=null});
+ }}
+ Directory.CreateDirectory(output);File.WriteAllText(Path.Combine(output,"icon-audit.json"),JsonSerializer.Serialize(new{found,missing=wanted.Except(presentAudit),sources=iconSpec.RootElement.GetProperty("sourceFiles").EnumerateObject().ToDictionary(e=>e.Name,e=>Hash(Path.Combine(mmv,"mod",e.Name)))},new JsonSerializerOptions{WriteIndented=true}));
+ Console.WriteLine($"Icon audit: {found.Count} present, {wanted.Count-presentAudit.Count} absent");return;
+}
 var inputs=new Dictionary<string,string>();
 foreach(var spec in boneSpecs.Append(iconSpec.RootElement))foreach(var field in spec.GetProperty("sourceFiles").EnumerateObject()){
  var path=Path.Combine(mmv,"mod",field.Name);Check(Hash(path)==field.Value.GetString(),"MMV changed; review/remove this fix before rebuilding: "+field.Name);inputs[path]=Hash(path);
@@ -63,6 +77,14 @@ var oldLayouts=layouts.Files.Select(f=>(f.ID,f.Name,f.Flags,Data:f.Bytes.ToArray
 var oldTextures=textures.Textures.Select(t=>(t.Name,t.Format,t.Flags1,t.Type,Data:t.Bytes.ToArray())).ToArray();
 XDocument Xml(BinderFile f){using var stream=new MemoryStream(f.Bytes.ToArray());return XDocument.Load(stream);}
 var present=layouts.Files.SelectMany(f=>Xml(f).Root!.Elements().Select(e=>(string)e.Attribute("name")!)).ToHashSet();
+if(iconSpec.RootElement.TryGetProperty("providedByMmv",out var provided)){
+ var supplied=provided.EnumerateObject().SelectMany(e=>e.Value.EnumerateArray().Select(v=>v.GetString()!)).ToHashSet();
+ Check(supplied.All(present.Contains),"An upstream-restored icon is missing again; review the current MMV pack");
+ foreach(var member in layouts.Files){var doc=Xml(member);if(!doc.Root!.Elements().Any(e=>supplied.Contains((string)e.Attribute("name")!)))continue;
+  string image=(string)doc.Root.Attribute("imagePath")!;string texture=Path.GetFileNameWithoutExtension(image.Replace('\\','/'));
+  Check(textures.Textures.Any(t=>t.Name==texture),"An upstream-restored icon texture is missing: "+image);
+ }
+}
 var added=new List<string>();
 foreach(var entry in iconSpec.RootElement.GetProperty("missing").EnumerateObject()){
  var wanted=entry.Value.EnumerateArray().Select(v=>v.GetString()!).ToHashSet();Check(!wanted.Any(present.Contains),"An icon is now provided by MMV; review/remove the old fix");
@@ -82,7 +104,9 @@ var readLayouts=BND4.Read(layoutPath);BinderCheck(layouts,readLayouts);var readT
 Check(readTextures.Textures.Count==textures.Textures.Count&&textures.Textures.Zip(readTextures.Textures).All(p=>p.First.Name==p.Second.Name&&p.First.Bytes.SequenceEqual(p.Second.Bytes)),"Texture readback failed");
 foreach(var x in oldLayouts){var y=readLayouts.Files.Single(f=>f.ID==x.ID);Check(x.Name==y.Name&&x.Flags==y.Flags&&x.Data.AsSpan().SequenceEqual(y.Bytes.Span),"Existing MMV layout changed");}
 foreach(var x in oldTextures){var y=readTextures.Textures.Single(f=>f.Name==x.Name);Check(x.Format==y.Format&&x.Flags1==y.Flags1&&x.Type==y.Type&&x.Data.SequenceEqual(y.Bytes),"Existing MMV texture changed");}
+// Do not ship atlas overrides when upstream already supplies every icon.
+if(added.Count==0){File.Delete(layoutPath);File.Delete(texturePath);}
 Check(inputs.All(x=>Hash(x.Key)==x.Value),"Source modified during build");
 var files=Directory.GetFiles(Path.Combine(output,"mod"),"*",SearchOption.AllDirectories).ToDictionary(p=>Path.GetRelativePath(output,p).Replace('\\','/'),Hash);
-File.WriteAllText(Path.Combine(output,"manifest.json"),JsonSerializer.Serialize(new{schemaVersion=1,name="MMV-Fixes",sourceFiles=inputs.Where(x=>Path.GetFullPath(x.Key).StartsWith(mmv+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)).ToDictionary(x=>x.Key,x=>x.Value),buildInputs=inputs,files,fixes=boneSpecs.Select(s=>s.GetProperty("id").GetString()!).Append("dlc-missing-icons").ToArray(),restoredIcons=added.Order(),behaviorPatchedFields,existingMmvAtlasEntriesUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-Console.WriteLine($"PASS: {behaviorPatchedFields} bone fields corrected; {added.Count} missing icons restored in two supplemental atlases; MMV inputs unchanged. {output}");
+File.WriteAllText(Path.Combine(output,"manifest.json"),JsonSerializer.Serialize(new{schemaVersion=1,name="MMV-Fixes",sourceFiles=inputs.Where(x=>Path.GetFullPath(x.Key).StartsWith(mmv+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)).ToDictionary(x=>x.Key,x=>x.Value),buildInputs=inputs,files,fixes=boneSpecs.Select(s=>s.GetProperty("id").GetString()!).Concat(added.Count>0?new[]{"dlc-missing-icons"}:Array.Empty<string>()).ToArray(),restoredIcons=added.Order(),behaviorPatchedFields,existingMmvAtlasEntriesUnchanged=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+Console.WriteLine($"PASS: {behaviorPatchedFields} bone fields corrected; {added.Count} missing icons restored; {(added.Count>0?2:0)} atlas overrides emitted; MMV inputs unchanged. {output}");
