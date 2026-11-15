@@ -121,6 +121,15 @@ pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
   let base=BASE.load(Ordering::Acquire);let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);
   return crate::light_footed::query(read_ptr(context),number(vm,2)as i32,number(vm,3)as i32,base);
  }
+
+ if matches!(code,crate::lightning_ram::QUERY|crate::lightning_ram::STOP_QUERY|crate::lightning_ram::CRASH_QUERY)&&ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{
+  let actor=read_ptr(context);let base=BASE.load(Ordering::Acquire);
+  let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);
+  if code==crate::lightning_ram::QUERY{return crate::lightning_ram::query(actor,number(vm,2)as i32,number(vm,3)as i32,number(vm,4)>0.,number(vm,5)!=0.,number(vm,6),base);}
+  if code==crate::lightning_ram::CRASH_QUERY{crate::lightning_ram::crash_damage(actor,base);return 0;}
+  if code==crate::lightning_ram::STOP_QUERY{if crate::is_local(actor,base){crate::lightning_ram::reset();}return 0;}
+ }
+
  if code==crate::onyx_mastery::DASH_QUERY{
   return i32::from(ACTIVE.load(Ordering::Acquire)&&context!=0&&crate::onyx_mastery::dash_ready(read_ptr(context),BASE.load(Ordering::Acquire)));
  }
@@ -176,7 +185,11 @@ pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
   if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}
   return i32::from(crate::cat_wall::enabled(read_ptr(context),BASE.load(Ordering::Acquire)));
  }
- if code!=QUERY{return std::mem::transmute::<*mut u8,Env>(ENV_ORIGINAL.load(Ordering::Acquire))(context,code,vm);}
+ if code!=QUERY{
+  let result=std::mem::transmute::<*mut u8,Env>(ENV_ORIGINAL.load(Ordering::Acquire))(context,code,vm);
+  if code==334&&ACTIVE.load(Ordering::Acquire){crate::ram_stagger::ultimate_query(context,vm,result,BASE.load(Ordering::Acquire));}
+  return result;
+ }
  if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}
  let base=BASE.load(Ordering::Acquire);let actor=read_ptr(context);
  let Some(owner)=owned(actor,base)else{return 0;};

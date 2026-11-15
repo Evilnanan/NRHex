@@ -103,7 +103,14 @@ class LightFootedTests(unittest.TestCase):
         prior = subprocess.check_output(['git', 'show', '5d4b3ea:dist/mod/action/script/c0000.hks'], cwd=ROOT)
         result, report = patch(prior)
         self.assertEqual(set(report), set(NAMES))
-        self.assertEqual(result, self.current)
+        generated = Reader(result); generated.function()
+        current = Reader(self.current); current.function()
+        expected = {f["name"]: f for f in generated.functions}
+        for f in current.functions:
+            if f["name"] in NAMES:
+                self.assertEqual(f["code"], expected[f["name"]]["code"], f["name"])
+                self.assertEqual(f["constants"], expected[f["name"]]["constants"], f["name"])
+        self.assertEqual(patch(self.current), (self.current, {}))
         self.assertEqual(patch(result), (result, {}))
 
     def test_old_sprint_bypass_is_not_mistaken_for_current_patch(self):

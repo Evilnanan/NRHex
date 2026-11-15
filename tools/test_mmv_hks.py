@@ -90,7 +90,7 @@ class FragmentTests(unittest.TestCase):
                         return call
                     mapping = {}
                     for name in global_names:
-                        if name in ('env', 'act', 'ExecWallJump', 'ExecEventHalfBlend', 'ExecEventAllBody', 'GetHalfBlendInfo', 'GetVariable', 'ChangeMoveSpeedIndex', 'SprintStart_onActivate'):
+                        if name in ('env', 'act', 'ExecWallJump', 'ExecEventHalfBlend', 'ExecEventAllBody', 'GetHalfBlendInfo', 'GetVariable', 'ChangeMoveSpeedIndex', 'SprintStart_onActivate', 'ExecNearDeath', 'ExecDeath', 'ExecTalk', 'ExecMovableEventAnim', 'ExecDamage', 'ExecBirdAct', 'ExecFookShot', 'SetAIActionState', 'ClearAttackQueue', 'SetArtsGeneratorTransitionIndex', 'GetAttackRequest', 'CalcDamageCount', 'ExecFallStart', 'ExecWeaponChange', 'ExecEvasion', 'ExecItem', 'ExecAttack', 'ExecMagic', 'ExecQuickTurnOnCancelTiming', 'ExecJump', 'ExecHandChange', 'ExecGuardOnCancelTiming', 'MoveStartonCancelTiming', 'ExecGesture'):
                             mapping[name] = function(name)
                         elif name == 'TRUE': mapping[name] = 1
                         elif name.startswith('Event_'): mapping[name] = name
@@ -151,6 +151,7 @@ class FragmentTests(unittest.TestCase):
                         return call
                     mapping = {name: function(name) if name in callables or not name.isupper() and name not in {'c_Style','c_SwordArtsHand','c_SwordArtsID'}
                                else 1 if name == 'TRUE' else 17 if name == 'ATTACK_REQUEST_BACKSTEP' else seed % 4 for name in names}
+                    mapping.update({name: name for name in names if name.startswith('Event_')})
                     return mapping, calls
                 values = [17 if seed % 5 == 0 else seed % 4 for _ in inputs]
                 expected_globals, expected_calls = world()

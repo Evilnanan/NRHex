@@ -1,0 +1,54 @@
+{
+  "inputSha256": "E481C907745719A5F311049BFCE9F83D49DFD57E3726089AC4C8677C7B41E0AB",
+  "outputSha256": "8C8A8CC41E53FE244567E11675A7386A7FF2CC543BDFAE6908A4278C98B7C08D",
+  "eventInputSha256": "C9977B82A230A744A24933F3BA255603C537E2FB4CDC10B9009E94693A478FC5",
+  "eventOutputSha256": "DAFA6A013E0D834134BEF1736807D1BABA00068CD8A8B12405DD0CA7CB8C5216",
+  "hexCount": 49,
+  "historyBit": 51,
+  "historyBytes": 7,
+  "addedRows": {
+    "SpEffectParam": [
+      95005600,
+      95005601,
+      96210051
+    ],
+    "AttachEffectParam": [
+      95005600
+    ],
+    "PermanentBuffParam": [
+      95005600
+    ],
+    "EquipParamGoods": [
+      95005600
+    ],
+    "ItemTableParam": [
+      95110151
+    ],
+    "Bullet": [
+      95005650
+    ],
+    "AtkParam_Pc": [
+      95005660,
+      95005661,
+      95005669
+    ],
+    "BehaviorParam_PC": [
+      95005690
+    ]
+  },
+  "allExistingRowsAndUnrelatedTablesUnchanged": true,
+  "onlyThreeExistingEventsExtended": true,
+  "gameplayVerified": false,
+  "multiplayerVerified": false,
+  "version": "0.17.340",
+  "branch": "main",
+  "standaloneTestsPassed": 548,
+  "optInTestsNotRunInOrdinarySuite": 39,
+  "nativeVelocityAndFeeBoundaryTestPassed": true,
+  "runtimeSignatureCount": 244,
+  "hksLuaBytecodeDifferentialCases": 29120,
+  "mmvInteriorFragmentCases": 6912,
+  "featureBranchUserAccepted": true,
+  "mergedGameplayVerified": false,
+  "dllSha256": "86c7ed91743c14f323e427da73bc023553bad70cf4a03f8e1595877b04c8caad"
+}

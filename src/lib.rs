@@ -97,6 +97,11 @@ mod archmage_data { include!(concat!(env!("OUT_DIR"), "/archmage_data.rs")); }
 mod archmage_runtime;
 mod archmage_cost;
 mod slingshot;
+mod ram_motion;
+mod lightning_ram;
+mod ram_native_contact;
+mod ram_stagger;
+mod ram_ground;
 mod slingshot_runtime;
 mod devils_gaze;
 mod devils_gaze_runtime;
@@ -381,7 +386,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
-fn signatures()->[(&'static str,u32);233] {
+ fn signatures()->[(&'static str,u32);244] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -470,6 +475,17 @@ fn signatures()->[(&'static str,u32);233] {
   (REWARD_HIDE_PATTERN,REWARD_HIDE_RVA as u32),(REWARD_SHOW_PATTERN,REWARD_SHOW_RVA as u32),
   (ARTS_ID_PATTERN,ARTS_ID_RVA as u32),(ARTS_PARAM_PATTERN,ARTS_PARAM_RVA as u32),(ARTS_REF_PATTERN,ARTS_REF_RVA as u32),
   (ARTS_RAW_PATTERN,ARTS_RAW_RVA as u32),
+  (ram_stagger::NODE_PATTERN,ram_stagger::NODE_RVA as u32),
+  (ram_ground::SOUND_PATTERN,ram_ground::SOUND_RVA as u32),
+  (ram_ground::MATERIAL_PATTERN,ram_ground::MATERIAL_RVA as u32),
+  (lightning_ram::IMPACT_PATTERN,lightning_ram::IMPACT_RVA as u32),
+  (lightning_ram::MOTION_PATTERN,lightning_ram::MOTION_RVA as u32),
+  (lightning_ram::REBASE_PATTERN,lightning_ram::REBASE_RVA as u32),
+  (ram_native_contact::SLOPE_PATTERN,ram_native_contact::SLOPE_RVA as u32),
+  (ram_native_contact::CONTACTS_PATTERN,ram_native_contact::CONTACTS_RVA as u32),
+  (ram_native_contact::QUERY_PATTERN,ram_native_contact::QUERY_RVA as u32),
+  (ram_native_contact::SNAP_PATTERN,ram_native_contact::SNAP_RVA as u32),
+  (lightning_ram::BODY_PATTERN,lightning_ram::BODY_RVA as u32),
   (arts_network::SNAPSHOT_PATTERN,arts_network::SNAPSHOT_RVA as u32),
   (ARTS_BEHAVIOR_PATTERN,ARTS_BEHAVIOR_RVA as u32),(PC_BEHAVIOR_LOOKUP_PATTERN,0xe6fcb0),
   (ARTS_DROP_PATTERN,ARTS_DROP_RVA as u32),(ARTS_SERIALIZE_PATTERN,ARTS_SERIALIZE_RVA as u32),
@@ -537,6 +553,102 @@ pub unsafe extern "system" fn DllMain(h:*mut c_void,reason:u32,_:*mut c_void)->i
  }
  win::TRUE
 }
+fn extra_hook_targets()->Vec<(usize,*const u8,&'static AtomicPtr<u8>)>{
+ vec![
+   (soul_target::RVA,soul_target::update as*const u8,&soul_target::ORIGINAL),
+   (soul_immunity::GATE_RVA,soul_immunity::gate_detour as*const u8,&soul_immunity::GATE_ORIGINAL),
+   (soul_immunity::RVA,soul_immunity::immunity as*const u8,&soul_immunity::ORIGINAL),
+   (deliberate_punch::COMMIT_RVA,deliberate_punch::commit_detour as*const u8,&deliberate_punch::COMMIT_ORIGINAL),
+   (deliberate_punch::OBJECT_RVA,deliberate_punch::object_detour as*const u8,&deliberate_punch::OBJECT_ORIGINAL),
+   (deliberate_punch::SCALE_RVA,deliberate_punch::scale_detour as*const u8,&deliberate_punch::SCALE_ORIGINAL),
+   (basics::RESTAGE_RVA,basics::restage_detour as*const u8,&basics::RESTAGE_ORIGINAL),
+   (sword_projectile::BIND_RVA,sword_projectile::bind as*const u8,&sword_projectile::BIND_ORIGINAL),
+   (sword_projectile::CHILD_RVA,sword_projectile::child as*const u8,&sword_projectile::CHILD_ORIGINAL),
+   (sword_projectile::RESET_RVA,sword_projectile::reset as*const u8,&sword_projectile::RESET_ORIGINAL),
+   (sword_projectile::STEP_RVA,sword_projectile::step as*const u8,&sword_projectile::STEP_ORIGINAL),
+   (sword_projectile::MOTION_RVA,sword_projectile::motion as*const u8,&sword_projectile::MOTION_ORIGINAL),
+   (snack::SPEND_RVA,snack::spent as *const u8,&snack::SPEND_ORIGINAL),
+   (snack::PRICE_RVA,snack::price as *const u8,&snack::PRICE_ORIGINAL),
+   (metal::CONSUME_RVA,metal::consumed as *const u8,&metal::CONSUME_ORIGINAL),
+   (wraith::CAN_RVA,wraith::can_use as *const u8,&wraith::CAN_ORIGINAL),
+   (wraith::USE_RVA,wraith::used as *const u8,&wraith::USE_ORIGINAL),
+   (wraith::PARAM_RVA,wraith::param as *const u8,&wraith::PARAM_ORIGINAL),
+   (wraith::TOKEN_RVA,wraith::token as *const u8,&wraith::TOKEN_ORIGINAL),
+   (wraith::XP_RVA,wraith::xp as *const u8,&wraith::XP_ORIGINAL),
+   (action_stamina::MELEE_RVA,action_stamina::melee_detour as *const u8,&action_stamina::MELEE_ORIGINAL),
+   (action_stamina::RVA,action_stamina::detour as *const u8,&action_stamina::ORIGINAL),
+   (basics_hud::RVA,basics_hud::detour as *const u8,&basics_hud::ORIGINAL),
+   (echo_cast::EMIT_RVA,echo_cast::emit as *const u8,&echo_cast::EMIT_ORIGINAL),
+   (echo_cast::FACTORY_RVA,echo_cast::factory as *const u8,&echo_cast::FACTORY_ORIGINAL),
+   (echo_cast::INITIALIZE_RVA,echo_cast::initialize as *const u8,&echo_cast::INITIALIZE_ORIGINAL),
+   (echo_cast::FINISH_RVA,echo_cast::finish as *const u8,&echo_cast::FINISH_ORIGINAL),
+   (light_footed::TAE_RVA,light_footed::tae as *const u8,&light_footed::TAE_ORIGINAL),
+   (ambulance::ENV_RVA,ambulance::env as *const u8,&ambulance::ENV_ORIGINAL),
+   (ambulance::COST_RVA,ambulance::cost as *const u8,&ambulance::COST_ORIGINAL),
+   (ambulance::HIT_RVA,ambulance::hit_detour as *const u8,&ambulance::HIT_ORIGINAL),
+
+
+
+
+
+   (potential_fission::CREATE_RVA,potential_fission::create as *const u8,&potential_fission::CREATE_ORIGINAL),
+   (potential_fission::GROUP_RVA,potential_fission::group as *const u8,&potential_fission::GROUP_ORIGINAL),
+   (erosion::RVA,erosion::detour as *const u8,&erosion::ORIGINAL),
+   (balloon_runtime::STATE_RVA,balloon_runtime::state_detour as *const u8,&balloon_runtime::STATE_ORIGINAL),
+   (balloon_team::TEAM_RVA,balloon_team::team_detour as *const u8,&balloon_team::TEAM_ORIGINAL),
+   (balloon_team::HIT_RVA,balloon_team::hit_detour as *const u8,&balloon_team::HIT_ORIGINAL),
+   (balloon_team::BULLET_RVA,balloon_team::bullet_detour as *const u8,&balloon_team::BULLET_ORIGINAL),
+   (death_dance::RVA,death_dance::detour as *const u8,&death_dance::ORIGINAL),
+   (sword_regain::DIRECT_RVA,sword_regain::direct as *const u8,&sword_regain::DIRECT_ORIGINAL),
+   (sword_regain::RECEIVED_RVA,sword_regain::received as *const u8,&sword_regain::RECEIVED_ORIGINAL),
+   (essence_reaver::RATE_RVA,essence_reaver::rate_detour as *const u8,&essence_reaver::RATE_ORIGINAL),
+   (reward_reroll::CTOR_RVA,reward_reroll::constructor as *const u8,&reward_reroll::CTOR_ORIGINAL),
+   (reward_reroll::TEXT_RVA,reward_reroll::text as *const u8,&reward_reroll::TEXT_ORIGINAL),
+   (reward_reroll::ENABLE_RVA,reward_reroll::enabled as *const u8,&reward_reroll::ENABLE_ORIGINAL),
+   (reward_reroll::PRESS_RVA,reward_reroll::press as *const u8,&reward_reroll::PRESS_ORIGINAL),
+   (parry::NOTIFY_RVA,parry::notify_detour as *const u8,&parry::NOTIFY_ORIGINAL),
+   (parry::COST_RVA,parry::cost_detour as *const u8,&parry::COST_ORIGINAL),
+   (parry::REPEL_RVA,parry::repel as *const u8,&parry::REPEL_ORIGINAL),
+   (parry::RVA,parry::detour as *const u8,&parry::ORIGINAL),
+   (erosion::COLLECT_RVA,erosion::collect as *const u8,&erosion::COLLECT_ORIGINAL),
+   (erosion::CONTACT_RVA,devils_gaze_hit::detour as *const u8,&erosion::CONTACT_ORIGINAL),
+   (lightning_ram::IMPACT_RVA,lightning_ram::resolved_impact as *const u8,&lightning_ram::IMPACT_ORIGINAL),
+   (ram_ground::SOUND_RVA,ram_ground::sound as *const u8,&ram_ground::SOUND_ORIGINAL),
+   (lightning_ram::MOTION_RVA,lightning_ram::motion_detour as *const u8,&lightning_ram::MOTION_ORIGINAL),
+   (lightning_ram::REBASE_RVA,lightning_ram::rebase as *const u8,&lightning_ram::REBASE_ORIGINAL),
+   (ram_native_contact::SLOPE_RVA,ram_native_contact::slope as *const u8,&ram_native_contact::SLOPE_ORIGINAL),
+   (ram_native_contact::CONTACTS_RVA,ram_native_contact::contacts as *const u8,&ram_native_contact::CONTACTS_ORIGINAL),
+   (ram_native_contact::QUERY_RVA,ram_native_contact::query as *const u8,&ram_native_contact::QUERY_ORIGINAL),
+   (ram_native_contact::SNAP_RVA,ram_native_contact::snap_detour as *const u8,&ram_native_contact::SNAP_ORIGINAL),
+   (slingshot_runtime::RVA,slingshot_runtime::detour as *const u8,&slingshot_runtime::ORIGINAL),
+   (slingshot_runtime::HORIZONTAL_RVA,slingshot_runtime::horizontal as *const u8,&slingshot_runtime::HORIZONTAL_ORIGINAL),
+   (ARTS_DROP_RVA,arts_drop_detour as *const u8,&ARTS_DROP_ORIG),
+   (ARTS_SERIALIZE_RVA,arts_serialize_wrapper as *const u8,&ARTS_SERIALIZE_ORIG),
+   (ARTS_REWARD_COPY_RVA,arts_reward_copy_detour as *const u8,&ARTS_REWARD_COPY_ORIG),
+   (ARTS_PICKUP_RVA,arts_pickup_detour as *const u8,&ARTS_PICKUP_ORIG),
+   (ARTS_ITEM_CREATE_RVA,arts_item_create_detour as *const u8,&ARTS_ITEM_CREATE_ORIG),
+   (ARTS_BULLET_RVA,arts_bullet_detour as *const u8,&ARTS_BULLET_ORIG),
+   (onyx_fp::CHECK_RVA,onyx_fp::check as *const u8,&onyx_fp::CHECK_ORIGINAL),
+   (onyx_fp::RESERVE_RVA,onyx_fp::reserve as *const u8,&onyx_fp::RESERVE_ORIGINAL),
+   (onyx_fp::RATE_RVA,onyx_fp::rate as *const u8,&onyx_fp::RATE_ORIGINAL),
+   (SELF_MARK_RVA,self_mark_detour as *const u8,&SELF_MARK_ORIG),
+   (LAVA_SFX_CREATE_RVA,lava_sfx_create_detour as *const u8,&LAVA_SFX_CREATE_ORIG),
+   (LAVA_SFX_UPDATE_RVA,lava_sfx_update_detour as *const u8,&LAVA_SFX_UPDATE_ORIG),
+   (SFX_MATRIX_RVA,sfx_matrix_detour as *const u8,&SFX_MATRIX_ORIG),
+   (LAVA_CLEANUP_RVA,lava_cleanup_detour as *const u8,&LAVA_CLEANUP_ORIG),
+   (glass_cannon::OBJECT_RVA,glass_cannon::object_detour as *const u8,&glass_cannon::OBJECT_ORIGINAL),
+   (hero_audio::RVA,hero_audio::detour as *const u8,&hero_audio::ORIGINAL),
+   (cage_hud::RVA,cage_hud::detour as *const u8,&cage_hud::ORIGINAL),
+   (archmage_runtime::RVA,archmage_runtime::wrapper as *const u8,&archmage_runtime::ORIGINAL),
+   (archmage_cost::SELECT_RVA,archmage_cost::select as *const u8,&archmage_cost::SELECT_ORIGINAL),
+   (archmage_cost::COST_RVA,archmage_cost::wrapper as *const u8,&archmage_cost::COST_ORIGINAL),
+   (DEATH_RVA,death_detour as *const u8,&DEATH_ORIG),
+   (spirit_runtime::KILL_RVA,spirit_runtime::kill_detour as *const u8,&spirit_runtime::KILL_ORIGINAL),
+   (essence_reaver::SEND_RVA,essence_reaver::send_hook as *const u8,&essence_reaver::SEND_ORIGINAL),
+   (spirit_runtime::RECEIVE_RVA,spirit_runtime::receive_detour as *const u8,&spirit_runtime::RECEIVE_ORIGINAL),
+   (SPIRIT_MODEL_RVA,spirit_runtime::spirit_model_detour as *const u8,&SPIRIT_MODEL_ORIG)]
+}
+
 unsafe extern "system" fn worker(_:*mut c_void)->u32 {
  let dir=match module_path(MODULE.load(Ordering::Acquire)){Ok(p)=>p.parent().unwrap().to_path_buf(),Err(_)=>return 1};
  log::init(&dir,"NRHex.log",log::Level::Info);
@@ -651,91 +763,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   basics_hud::CONTINUE.store(base.add(basics_hud::RVA+5)as*mut u8,Ordering::Release);
   action_stamina::CLAMP.store(base.add(action_stamina::CLAMP_RVA)as*mut u8,Ordering::Release);
   soul_immunity::GATE_RESUME.store(base.add(soul_immunity::GATE_RVA+7)as*mut u8,Ordering::Release);
-  let arts_transfer_targets=[
-   (soul_target::RVA,soul_target::update as*const u8,&soul_target::ORIGINAL),
-   (soul_immunity::GATE_RVA,soul_immunity::gate_detour as*const u8,&soul_immunity::GATE_ORIGINAL),
-   (soul_immunity::RVA,soul_immunity::immunity as*const u8,&soul_immunity::ORIGINAL),
-   (deliberate_punch::COMMIT_RVA,deliberate_punch::commit_detour as*const u8,&deliberate_punch::COMMIT_ORIGINAL),
-   (deliberate_punch::OBJECT_RVA,deliberate_punch::object_detour as*const u8,&deliberate_punch::OBJECT_ORIGINAL),
-   (deliberate_punch::SCALE_RVA,deliberate_punch::scale_detour as*const u8,&deliberate_punch::SCALE_ORIGINAL),
-   (basics::RESTAGE_RVA,basics::restage_detour as*const u8,&basics::RESTAGE_ORIGINAL),
-   (sword_projectile::BIND_RVA,sword_projectile::bind as*const u8,&sword_projectile::BIND_ORIGINAL),
-   (sword_projectile::CHILD_RVA,sword_projectile::child as*const u8,&sword_projectile::CHILD_ORIGINAL),
-   (sword_projectile::RESET_RVA,sword_projectile::reset as*const u8,&sword_projectile::RESET_ORIGINAL),
-   (sword_projectile::STEP_RVA,sword_projectile::step as*const u8,&sword_projectile::STEP_ORIGINAL),
-   (sword_projectile::MOTION_RVA,sword_projectile::motion as*const u8,&sword_projectile::MOTION_ORIGINAL),
-   (snack::SPEND_RVA,snack::spent as *const u8,&snack::SPEND_ORIGINAL),
-   (snack::PRICE_RVA,snack::price as *const u8,&snack::PRICE_ORIGINAL),
-   (metal::CONSUME_RVA,metal::consumed as *const u8,&metal::CONSUME_ORIGINAL),
-   (wraith::CAN_RVA,wraith::can_use as *const u8,&wraith::CAN_ORIGINAL),
-   (wraith::USE_RVA,wraith::used as *const u8,&wraith::USE_ORIGINAL),
-   (wraith::PARAM_RVA,wraith::param as *const u8,&wraith::PARAM_ORIGINAL),
-   (wraith::TOKEN_RVA,wraith::token as *const u8,&wraith::TOKEN_ORIGINAL),
-   (wraith::XP_RVA,wraith::xp as *const u8,&wraith::XP_ORIGINAL),
-   (action_stamina::MELEE_RVA,action_stamina::melee_detour as *const u8,&action_stamina::MELEE_ORIGINAL),
-   (action_stamina::RVA,action_stamina::detour as *const u8,&action_stamina::ORIGINAL),
-   (basics_hud::RVA,basics_hud::detour as *const u8,&basics_hud::ORIGINAL),
-   (echo_cast::EMIT_RVA,echo_cast::emit as *const u8,&echo_cast::EMIT_ORIGINAL),
-   (echo_cast::FACTORY_RVA,echo_cast::factory as *const u8,&echo_cast::FACTORY_ORIGINAL),
-   (echo_cast::INITIALIZE_RVA,echo_cast::initialize as *const u8,&echo_cast::INITIALIZE_ORIGINAL),
-   (echo_cast::FINISH_RVA,echo_cast::finish as *const u8,&echo_cast::FINISH_ORIGINAL),
-   (light_footed::TAE_RVA,light_footed::tae as *const u8,&light_footed::TAE_ORIGINAL),
-   (ambulance::ENV_RVA,ambulance::env as *const u8,&ambulance::ENV_ORIGINAL),
-   (ambulance::COST_RVA,ambulance::cost as *const u8,&ambulance::COST_ORIGINAL),
-   (ambulance::HIT_RVA,ambulance::hit_detour as *const u8,&ambulance::HIT_ORIGINAL),
-
-
-
-
-
-   (potential_fission::CREATE_RVA,potential_fission::create as *const u8,&potential_fission::CREATE_ORIGINAL),
-   (potential_fission::GROUP_RVA,potential_fission::group as *const u8,&potential_fission::GROUP_ORIGINAL),
-   (erosion::RVA,erosion::detour as *const u8,&erosion::ORIGINAL),
-   (balloon_runtime::STATE_RVA,balloon_runtime::state_detour as *const u8,&balloon_runtime::STATE_ORIGINAL),
-   (balloon_team::TEAM_RVA,balloon_team::team_detour as *const u8,&balloon_team::TEAM_ORIGINAL),
-   (balloon_team::HIT_RVA,balloon_team::hit_detour as *const u8,&balloon_team::HIT_ORIGINAL),
-   (balloon_team::BULLET_RVA,balloon_team::bullet_detour as *const u8,&balloon_team::BULLET_ORIGINAL),
-   (death_dance::RVA,death_dance::detour as *const u8,&death_dance::ORIGINAL),
-   (sword_regain::DIRECT_RVA,sword_regain::direct as *const u8,&sword_regain::DIRECT_ORIGINAL),
-   (sword_regain::RECEIVED_RVA,sword_regain::received as *const u8,&sword_regain::RECEIVED_ORIGINAL),
-   (essence_reaver::RATE_RVA,essence_reaver::rate_detour as *const u8,&essence_reaver::RATE_ORIGINAL),
-   (reward_reroll::CTOR_RVA,reward_reroll::constructor as *const u8,&reward_reroll::CTOR_ORIGINAL),
-   (reward_reroll::TEXT_RVA,reward_reroll::text as *const u8,&reward_reroll::TEXT_ORIGINAL),
-   (reward_reroll::ENABLE_RVA,reward_reroll::enabled as *const u8,&reward_reroll::ENABLE_ORIGINAL),
-   (reward_reroll::PRESS_RVA,reward_reroll::press as *const u8,&reward_reroll::PRESS_ORIGINAL),
-   (parry::NOTIFY_RVA,parry::notify_detour as *const u8,&parry::NOTIFY_ORIGINAL),
-   (parry::COST_RVA,parry::cost_detour as *const u8,&parry::COST_ORIGINAL),
-   (parry::REPEL_RVA,parry::repel as *const u8,&parry::REPEL_ORIGINAL),
-   (parry::RVA,parry::detour as *const u8,&parry::ORIGINAL),
-   (erosion::COLLECT_RVA,erosion::collect as *const u8,&erosion::COLLECT_ORIGINAL),
-   (erosion::CONTACT_RVA,devils_gaze_hit::detour as *const u8,&erosion::CONTACT_ORIGINAL),
-   (slingshot_runtime::RVA,slingshot_runtime::detour as *const u8,&slingshot_runtime::ORIGINAL),
-   (slingshot_runtime::HORIZONTAL_RVA,slingshot_runtime::horizontal as *const u8,&slingshot_runtime::HORIZONTAL_ORIGINAL),
-   (ARTS_DROP_RVA,arts_drop_detour as *const u8,&ARTS_DROP_ORIG),
-   (ARTS_SERIALIZE_RVA,arts_serialize_wrapper as *const u8,&ARTS_SERIALIZE_ORIG),
-   (ARTS_REWARD_COPY_RVA,arts_reward_copy_detour as *const u8,&ARTS_REWARD_COPY_ORIG),
-   (ARTS_PICKUP_RVA,arts_pickup_detour as *const u8,&ARTS_PICKUP_ORIG),
-   (ARTS_ITEM_CREATE_RVA,arts_item_create_detour as *const u8,&ARTS_ITEM_CREATE_ORIG),
-   (ARTS_BULLET_RVA,arts_bullet_detour as *const u8,&ARTS_BULLET_ORIG),
-   (onyx_fp::CHECK_RVA,onyx_fp::check as *const u8,&onyx_fp::CHECK_ORIGINAL),
-   (onyx_fp::RESERVE_RVA,onyx_fp::reserve as *const u8,&onyx_fp::RESERVE_ORIGINAL),
-   (onyx_fp::RATE_RVA,onyx_fp::rate as *const u8,&onyx_fp::RATE_ORIGINAL),
-   (SELF_MARK_RVA,self_mark_detour as *const u8,&SELF_MARK_ORIG),
-   (LAVA_SFX_CREATE_RVA,lava_sfx_create_detour as *const u8,&LAVA_SFX_CREATE_ORIG),
-   (LAVA_SFX_UPDATE_RVA,lava_sfx_update_detour as *const u8,&LAVA_SFX_UPDATE_ORIG),
-   (SFX_MATRIX_RVA,sfx_matrix_detour as *const u8,&SFX_MATRIX_ORIG),
-   (LAVA_CLEANUP_RVA,lava_cleanup_detour as *const u8,&LAVA_CLEANUP_ORIG),
-   (glass_cannon::OBJECT_RVA,glass_cannon::object_detour as *const u8,&glass_cannon::OBJECT_ORIGINAL),
-   (hero_audio::RVA,hero_audio::detour as *const u8,&hero_audio::ORIGINAL),
-   (cage_hud::RVA,cage_hud::detour as *const u8,&cage_hud::ORIGINAL),
-   (archmage_runtime::RVA,archmage_runtime::wrapper as *const u8,&archmage_runtime::ORIGINAL),
-   (archmage_cost::SELECT_RVA,archmage_cost::select as *const u8,&archmage_cost::SELECT_ORIGINAL),
-   (archmage_cost::COST_RVA,archmage_cost::wrapper as *const u8,&archmage_cost::COST_ORIGINAL),
-   (DEATH_RVA,death_detour as *const u8,&DEATH_ORIG),
-   (spirit_runtime::KILL_RVA,spirit_runtime::kill_detour as *const u8,&spirit_runtime::KILL_ORIGINAL),
-   (essence_reaver::SEND_RVA,essence_reaver::send_hook as *const u8,&essence_reaver::SEND_ORIGINAL),
-   (spirit_runtime::RECEIVE_RVA,spirit_runtime::receive_detour as *const u8,&spirit_runtime::RECEIVE_ORIGINAL),
-   (SPIRIT_MODEL_RVA,spirit_runtime::spirit_model_detour as *const u8,&SPIRIT_MODEL_ORIG)];
+  let arts_transfer_targets=extra_hook_targets();
   let mut arts_transfer_prepared=Vec::new();
   for (rva,detour,original) in arts_transfer_targets {
    let p=hook::prepare(base.add(rva) as *mut u8,detour,64)?;
@@ -1178,11 +1206,12 @@ unsafe fn arts_weapon(reference:usize)->Option<arts::Weapon>{
 unsafe fn arts_overlay(reference:usize)->Option<i32>{
  if !ACTIVE.load(Ordering::Acquire){return None;}
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);if world==0{return None;}
- let player=read_ptr(world+0x174e8);if player==0||(!has_effect(player,arts::OWNER,base)&&!onyx_mastery::owned(player,base)){return None;}
+ let player=read_ptr(world+0x174e8);if player==0||(!has_effect(player,arts::OWNER,base)&&!onyx_mastery::owned(player,base)&&!has_effect(player,lightning_ram::OWNER,base)){return None;}
  let w=arts_weapon(reference)?;let equip=read_ptr(player+0x670);if equip==0{return None;}
  // Only this player's six weapon slots use the getter overlay. Native inventory
  // and drops stay original; the serializer separately patches outgoing snapshots.
  if !(0..6).any(|i|read_i32(equip+0x1c+4*i) as u32==w.handle){return None;}
+ if lightning_ram::selected(player,w,base){return Some(504);}
  if onyx_mastery::selected(player,w,base){return Some(1041);}
  ARTS.get()?.lock().ok()?.selected(w)
 }
@@ -1225,7 +1254,7 @@ unsafe fn arts_transfers_enabled()->bool{
  if !ACTIVE.load(Ordering::Acquire){return false;}
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);
  if world==0{return false;}let player=read_ptr(world+0x174e8);
- player!=0&&(has_effect(player,arts::OWNER,base)||has_effect(player,archmage::OWNER,base))
+ player!=0&&(has_effect(player,arts::OWNER,base)||has_effect(player,archmage::OWNER,base)||has_effect(player,lightning_ram::OWNER,base))
 }
 unsafe extern "system" fn arts_drop_detour(menu:usize,quantity:i32,flag:u8)->usize{
  let original:unsafe extern "system" fn(usize,i32,u8)->usize=std::mem::transmute(ARTS_DROP_ORIG.load(Ordering::Acquire));
@@ -1331,6 +1360,7 @@ unsafe fn arts_emitter(module:usize,behavior:i32,descriptor:usize,source:i32)->O
  arts::emitter_dummy(selected,w.base,behavior,read_i32(descriptor))
 }
 unsafe fn arts_actor_selection(player:usize,w:arts::Weapon,base:usize)->Option<i32>{
+ if lightning_ram::selected(player,w,base){return Some(504);}
  if onyx_mastery::selected(player,w,base){return Some(1041);}
  if is_local(player,base){return ARTS.get()?.lock().ok()?.selected(w);}
  // Peer instances already carry the transmitted +1C skill. Cross-weapon TAE
@@ -1350,6 +1380,7 @@ unsafe fn arts_behavior_call(original:ArtsBehaviorFn,player:usize,judge:i32,sour
  // Preserve the native five-argument call and its side effects, including miss
  // and common-fallback results. Change only the resulting PC behavior row ID.
  let native=original(player,judge,source,flags,extra);
+ if ACTIVE.load(Ordering::Acquire){if let Some(id)=lightning_ram::behavior(player,judge,source,BASE.load(Ordering::Acquire)){return id;}}
  if ACTIVE.load(Ordering::Acquire){if let Some(id)=onyx_mastery::behavior(player,judge,source,BASE.load(Ordering::Acquire)){return id;}}
  if !ACTIVE.load(Ordering::Acquire)||!arts::behavior_judge(judge){return native;}
  let base=BASE.load(Ordering::Acquire);
@@ -1421,7 +1452,7 @@ unsafe fn update_arts(player:usize,base:usize){
  let Some(state)=ARTS.get() else{return;};let owned=has_effect(player,arts::OWNER,base);
  let modules=read_ptr(player+0x1b8);if modules==0{return;}let stats=read_ptr(modules);if stats==0{return;}
  let alive=read_i32(stats+0x140)>0;let context=read_ptr(base+0x3c131c8);
- let pending={let Ok(mut s)=state.lock() else{return;};s.synchronize(context,owned,alive);s.tick()};
+ let pending={let Ok(mut s)=state.lock() else{return;};s.synchronize(context,owned,alive);s.reserve_empty(has_effect(player,lightning_ram::OWNER,base)&&!has_effect(player,reward_cycle_runtime::RESET,base));s.tick()};
  if let Some(w)=pending{reforge_art(w,base);}
  arts_network::update(player,base);
  let used=has_effect(player,arts::USED,base);
@@ -1646,6 +1677,7 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  // Capture before native healing can change HP; never hold a lock across it.
  if ACTIVE.load(Ordering::Acquire)&&matches!(effect,arts::BUSY|arts::USE_LEFT|arts::USE_RIGHT)&&is_local(player,base)&&has_effect(player,arts::OWNER,base){
   let w=if effect==arts::BUSY{None}else{arts_hand_weapon(player,if effect==arts::USE_LEFT{0}else{1},base)};
+  let w=w.filter(|w|!lightning_ram::selected(player,*w,base));
   if let Some(state)=ARTS.get(){if let Ok(mut s)=state.lock(){s.notify(w,effect!=arts::BUSY);}}
  }
  if ACTIVE.load(Ordering::Acquire)&&effect==arts::PREPARE&&is_local(player,base)&&has_effect(player,arts::OWNER,base){
@@ -1742,10 +1774,14 @@ unsafe fn update_jiahao(player:usize,base:usize,_dt:f32){
 // Same native speed getter used by the CT's module+1818 field, without writing it.
 unsafe extern "system" fn speed_detour(controller:usize)->f32 {
  let original:unsafe extern "system" fn(usize)->f32=std::mem::transmute(SPEED_ORIG.load(Ordering::Acquire));
- let rate=original(controller);let player=ESCAPE_PLAYER.load(Ordering::Acquire);
- if !ACTIVE.load(Ordering::Acquire)||player==0||controller==0||read_ptr(controller+8)!=player{return rate;}
- let modules=read_ptr(player+0x1b8);
- if modules!=0&&read_ptr(modules+0x28).checked_add(0x1800)==Some(controller){2.0}else{rate}
+ let mut rate=original(controller);let player=ESCAPE_PLAYER.load(Ordering::Acquire);
+ if !ACTIVE.load(Ordering::Acquire)||controller==0{return rate;}
+ if player!=0&&read_ptr(controller+8)==player{
+  let modules=read_ptr(player+0x1b8);
+  if modules!=0&&read_ptr(modules+0x28).checked_add(0x1800)==Some(controller){rate=2.0;}
+ }
+ // One native entry/trampoline for both features; never install a second hook.
+ lightning_ram::speed(controller,rate)
 }
 unsafe fn update_escape(player:usize,base:usize,dt:f32){
  let modules=read_ptr(player+0x1b8);if modules==0{ESCAPE_PLAYER.store(0,Ordering::Release);return;}
@@ -2360,6 +2396,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  onyx_mastery::update(player,base);
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
+ lightning_ram::update(player,base,dt);
  update_chant(player,base);
  update_runtime(player,base,dt);
  update_sword(player,base);
@@ -2547,6 +2584,12 @@ mod tests {
   ptr::write_unaligned((p+0x88) as *mut usize,0);assert_eq!(lava_parameter_id(p),None);
   assert_eq!(lava_parameter_id(0),None);
  }}
+ #[test]fn shared_animation_speed_has_one_installation_site(){
+  assert_eq!(signatures().iter().filter(|(_,rva)|*rva==SPEED_RVA as u32).count(),1);
+  let mut sites:Vec<_>=extra_hook_targets().iter().map(|(rva,_,_)|(*rva,5)).collect();
+  sites.push((SPEED_RVA,5));
+  hook::validate_patch_sites(sites).expect("extra hooks must not duplicate the shared animation speed entry");
+ }
  #[test]fn arts_shadow_preserves_native_drop_data_and_nested_reads(){unsafe{
   let mut entry=[0u64;4];ptr::write_unaligned((entry.as_mut_ptr() as *mut u8).add(8) as *mut u32,0x80800042);ptr::write_unaligned((entry.as_mut_ptr() as *mut u8).add(0x1c) as *mut i32,100);
   let reference=[0x80800042u64,entry.as_ptr() as u64,2000000];let original=entry;

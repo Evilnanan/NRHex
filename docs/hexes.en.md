@@ -253,3 +253,8 @@ Obtain an Onyx Lord’s Greatsword. Its attacks use less stamina. Hold its skill
 ## Travel Light
 
 Damage negation -50%. Move faster while using items, casting spells, or using skills that allow movement.
+
+<!-- hex:95005600 -->
+## Can’t Stop!
+
+Replaces your unarmed skill with Lightning Ram. Gain speed as you roll. At high speed, you cannot stop at will.

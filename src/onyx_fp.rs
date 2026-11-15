@@ -1,5 +1,5 @@
-//! Exclude only Wildcard Arts' free-skill multiplier while quoting/reserving
-//! mastered Onyx costs. No shared PARAM, effect node, or FP balance is edited.
+//! Scoped native art quotes/reservations: preserve mastered Onyx costs and
+//! waive owned Lightning Ram only. No shared PARAM or FP balance is edited.
 use crate::{ptr,read_ptr,read_i32,ACTIVE,BASE};
 use std::{cell::Cell,sync::atomic::{AtomicPtr,Ordering}};
 pub const CHECK_RVA:usize=0x48f9b0;
@@ -11,15 +11,16 @@ pub const RATE_PATTERN:&str="48 8B 41 08 F3 0F 10 15 E0 D4 DE 02 0F 28 CA 48 85 
 pub static CHECK_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static RESERVE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub static RATE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
-thread_local!{static FILTER:Cell<usize>=const{Cell::new(0)};}
-pub struct Guard(usize);
+thread_local!{static FILTER:Cell<usize>=const{Cell::new(0)};static FREE:Cell<usize>=const{Cell::new(0)};}
+pub struct Guard(usize,usize);
 impl Guard{
  pub unsafe fn enter(actor:usize,hand:Option<i32>,base:usize)->Self{
   let manager=if ACTIVE.load(Ordering::Acquire)&&crate::onyx_mastery::fp_exception(actor,hand,base){read_ptr(actor+0x190)}else{0};
-  Self(FILTER.with(|s|s.replace(manager)))
+  let free=if ACTIVE.load(Ordering::Acquire)&&hand.is_some_and(|hand|crate::lightning_ram::free_art(actor,hand,base)){read_ptr(actor+0x190)}else{0};
+  Self(FILTER.with(|s|s.replace(manager)),FREE.with(|s|s.replace(free)))
  }
 }
-impl Drop for Guard{fn drop(&mut self){FILTER.with(|s|s.set(self.0));}}
+impl Drop for Guard{fn drop(&mut self){FILTER.with(|s|s.set(self.0));FREE.with(|s|s.set(self.1));}}
 pub unsafe extern "system" fn check(module:usize,button:i32,hand:i32)->u8{
  let original:unsafe extern "system" fn(usize,i32,i32)->u8=std::mem::transmute(CHECK_ORIGINAL.load(Ordering::Acquire));
  let actor=if module!=0{read_ptr(module+8)}else{0};
@@ -34,6 +35,7 @@ pub unsafe extern "system" fn reserve(module:usize,button:i32,hand:i32){
 }
 pub unsafe extern "system" fn rate(manager:usize)->f32{
  let original:unsafe extern "system" fn(usize)->f32=std::mem::transmute(RATE_ORIGINAL.load(Ordering::Acquire));
+ if manager!=0&&ACTIVE.load(Ordering::Acquire)&&FREE.with(Cell::get)==manager{return 0.;}
  if manager==0||!ACTIVE.load(Ordering::Acquire)||FILTER.with(Cell::get)!=manager{return original(manager);}
  // Match native 5061B0's eligibility, multiplication order, null-row default
  // and negative/NaN exclusion; omit only the Wildcard Arts owner effect.

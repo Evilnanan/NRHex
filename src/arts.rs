@@ -15,8 +15,13 @@ pub struct Weapon {pub handle:u32,pub original:i32,pub base:i32}
 #[derive(Clone,Copy,Debug)]
 struct Entry {weapon:Weapon,selected:i32}
 #[derive(Default)]
-pub struct Arts {entries:BTreeMap<u32,Entry>,drops:BTreeMap<u32,Entry>,pending:Option<Weapon>,busy:bool,quiet:u8,owned:bool,context:usize,network_dirty:bool}
+pub struct Arts {entries:BTreeMap<u32,Entry>,drops:BTreeMap<u32,Entry>,pending:Option<Weapon>,busy:bool,quiet:u8,owned:bool,context:usize,network_dirty:bool,empty_reserved:bool}
 impl Arts {
+ pub fn reserve_empty(&mut self,reserved:bool){
+  if self.empty_reserved!=reserved{self.empty_reserved=reserved;self.network_dirty=true;}
+  if reserved{self.entries.retain(|_,e|e.weapon.base!=110000);if self.pending.is_some_and(|w|w.base==110000){self.pending=None;}}
+ }
+ fn excluded(&self,w:Weapon)->bool{protected(w.original)||crate::lightning_ram::reserved(self.empty_reserved,w.base)}
  pub fn synchronize(&mut self,context:usize,owned:bool,alive:bool){
   if self.context!=context{self.network_dirty=false;}
   else if !owned&&!self.entries.is_empty(){self.network_dirty=true;}
@@ -26,10 +31,10 @@ impl Arts {
  }
  pub fn notify(&mut self,weapon:Option<Weapon>,used:bool){
   if !self.owned{return;}self.busy=true;self.quiet=0;
-  if used&&self.pending.is_none(){if let Some(w)=weapon{if !protected(w.original){self.pending=Some(w);}}}
+  if used&&self.pending.is_none(){if let Some(w)=weapon{if !self.excluded(w){self.pending=Some(w);}}}
  }
  pub fn selected(&self,w:Weapon)->Option<i32>{
-  if !self.owned||protected(w.original){return None;}
+  if !self.owned||self.excluded(w){return None;}
   self.entries.get(&w.handle).filter(|e|e.weapon==w).map(|e|e.selected)
  }
  /// Returning from an attack to a fresh preparation is a chain boundary.
@@ -44,7 +49,7 @@ impl Arts {
   self.quiet=self.quiet.saturating_add(1);
   if self.quiet>=2 {self.pending.take()}else{None}
  }
- pub fn reforge(&mut self,w:Weapon,id:i32){if self.owned&&!protected(w.original){self.network_dirty=true;self.entries.insert(w.handle,Entry{weapon:w,selected:id});}}
+ pub fn reforge(&mut self,w:Weapon,id:i32){if self.owned&&!self.excluded(w){self.network_dirty=true;self.entries.insert(w.handle,Entry{weapon:w,selected:id});}}
  /// Native world UID includes the producing player and the drop sequence.
  /// It identifies the actual ground item, even for otherwise identical weapons.
  pub fn network_pending(&self)->bool{self.network_dirty}
@@ -54,7 +59,7 @@ impl Arts {
   if uid==0{return;}if let Some(id)=self.selected(w){self.drops.insert(uid,Entry{weapon:w,selected:id});}
  }
  pub fn picked_up(&mut self,uid:u32,w:Weapon)->bool{
-  if !self.owned||protected(w.original){return false;}
+  if !self.owned||self.excluded(w){return false;}
   let Some(e)=self.drops.get(&uid).copied() else{return false;};
   if e.weapon.base!=w.base||e.weapon.original!=w.original{return false;}
   self.reforge(w,e.selected);true
@@ -112,6 +117,14 @@ pub fn behavior(judge:i32,skill:i32)->Option<i32>{
  use super::*;
  fn w(handle:u32,original:i32)->Weapon{Weapon{handle,original,base:2000000}}
  fn state()->Arts{let mut a=Arts::default();a.synchronize(1,true,true);a}
+ #[test]fn ram_reserves_all_empty_instances_but_not_real_weapons(){
+  let mut a=state();let empty=Weapon{base:110000,..w(3,503)};let real=w(4,504);
+  a.reforge(empty,100);a.notify(Some(empty),true);a.reserve_empty(true);
+  assert!(!a.has_pending());assert_eq!(a.selected(empty),None);assert!(a.network_pending());a.network_sent();
+  for handle in 10..16{let w=Weapon{handle,..empty};a.reforge(w,100);a.notify(Some(w),true);assert_eq!(a.selected(w),None);assert!(!a.has_pending());}
+  a.reforge(real,504);assert_eq!(a.selected(real),Some(504));a.notify(Some(real),true);assert!(a.has_pending());
+  a.reserve_empty(false);assert!(a.network_pending());a.reforge(empty,100);assert_eq!(a.selected(empty),Some(100));
+ }
  #[test]fn target_weapon_catalogue_and_reviewed_behavior_maps_preserve_boundaries(){
   assert!(crate::arts_data::DEFAULTS.windows(2).all(|w|w[0].0<w[1].0));
   for &(base,id) in &crate::arts_data::DEFAULTS{assert_eq!(original(base,-1),Some(id));assert_eq!(original(base,12345),Some(12345));}
