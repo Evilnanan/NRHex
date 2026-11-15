@@ -1206,14 +1206,28 @@ unsafe fn arts_weapon(reference:usize)->Option<arts::Weapon>{
 unsafe fn arts_overlay(reference:usize)->Option<i32>{
  if !ACTIVE.load(Ordering::Acquire){return None;}
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);if world==0{return None;}
- let player=read_ptr(world+0x174e8);if player==0||(!has_effect(player,arts::OWNER,base)&&!onyx_mastery::owned(player,base)&&!has_effect(player,lightning_ram::OWNER,base)){return None;}
- let w=arts_weapon(reference)?;let equip=read_ptr(player+0x670);if equip==0{return None;}
- // Only this player's six weapon slots use the getter overlay. Native inventory
- // and drops stay original; the serializer separately patches outgoing snapshots.
- if !(0..6).any(|i|read_i32(equip+0x1c+4*i) as u32==w.handle){return None;}
- if lightning_ram::selected(player,w,base){return Some(504);}
- if onyx_mastery::selected(player,w,base){return Some(1041);}
- ARTS.get()?.lock().ok()?.selected(w)
+ let w=arts_weapon(reference)?;let player=read_ptr(world+0x174e8);
+ if player!=0&&arts_equipped(player,w.handle){
+  if lightning_ram::selected(player,w,base){return Some(504);}
+  if onyx_mastery::selected(player,w,base){return Some(1041);}
+  if has_effect(player,arts::OWNER,base){return ARTS.get()?.lock().ok()?.selected(w);}
+  return None;
+ }
+ // Empty-hand Ram is an ownership rule, unlike a random result stored in a
+ // particular Wildcard weapon. Apply that same rule to the observer's current
+ // party replica, even when its action instance still has native Kick. Never
+ // use the observer's ownership or change shared weapon parameters/inventory.
+ if !lightning_ram::reserved(true,w.base){return None;}
+ let get:unsafe extern "system" fn(usize,i32)->usize=std::mem::transmute(base+0x5197e0);
+ for slot in 1..=3{
+  let peer=get(world,slot);
+  if peer!=0&&peer!=player&&arts_equipped(peer,w.handle)&&lightning_ram::selected(peer,w,base){return Some(504);}
+ }
+ None
+}
+unsafe fn arts_equipped(player:usize,handle:u32)->bool{
+ let equip=read_ptr(player+0x670);
+ equip!=0&&(0..6).any(|i|read_i32(equip+0x1c+4*i) as u32==handle)
 }
 unsafe fn arts_shadow(reference:usize,id:i32)->([u64;3],[u64;4]){
  let r=ptr::read_unaligned(reference as *const [u64;3]);let mut entry=ptr::read_unaligned(r[1] as *const [u64;4]);

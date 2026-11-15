@@ -114,6 +114,9 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Jiahao HKS action patch failed.' }
         dotnet run --project tools/JiahaoTae/JiahaoTae.csproj -- $PSScriptRoot
         if ($LASTEXITCODE -ne 0) { throw 'Jiahao native backstep animation patch failed.' }
+        dotnet run --project tools/HexBuild -- $PSScriptRoot --jiahao-followup
+        if ($LASTEXITCODE -ne 0) { throw 'Jiahao early attack window patch failed.' }
+        Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'work/jiahao-followup/standalone/mod/chr/c0000.anibnd.dcx') -Destination (Join-Path $PSScriptRoot 'dist/mod/chr/c0000.anibnd.dcx') -Force
         & python -X utf8 tools/verify_jiahao.py
         if ($LASTEXITCODE -ne 0) { throw 'Jiahao script readback failed.' }
         & python -X utf8 tools/build_arts_hks.py

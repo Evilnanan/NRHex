@@ -409,6 +409,29 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
   }
  }
  ptr::write_unaligned((a+0x78)as*mut i32,1);
+ // An observer need not own Ram. Its teammate's empty slots can still have
+ // the native Kick override even when the public equipment preview says Ram.
+ let mut remote=vec![0usize;0x780/8];let peer=remote.as_mut_ptr()as usize;
+ let mut remote_equipment=equipment.clone();remote[0x190/8]=peer;remote[0x670/8]=remote_equipment.as_mut_ptr()as usize;
+ let mut party_jump=vec![0x48,0xb8];party_jump.extend_from_slice(&(no_party as*const()as usize).to_le_bytes());party_jump.extend_from_slice(&[0xff,0xe0]);
+ ptr::copy_nonoverlapping(party_jump.as_ptr(),(base+0x5197e0)as*mut u8,party_jump.len());
+ // Keep the local slots disjoint; merely sharing the same weapon type must
+ // never grant the observer or an unequipped/NPC instance the replacement.
+ for i in 0..6{equipment[0x1c/4+i]=0x80800100+i as u32;}
+ ptr::write_unaligned((a+0x78)as*mut i32,0);PARTY.with(|p|p.set(peer));
+ for owned in [0,1]{ptr::write_unaligned((peer+0x78)as*mut i32,owned);
+  for i in 0..6{let mut r=[0u64;3];reference(r.as_mut_ptr(),&remote_equipment[0x1c/4+i]);let address=r.as_ptr()as usize;
+   assert_eq!(crate::arts_raw_detour(address),if owned==1{504}else{503},"peer empty-slot raw skill");
+   assert_eq!(crate::arts_id_detour(address),if owned==1{113}else{112},"peer animation selector");
+   let mut result=-1;crate::arts_param_detour(address,&mut result as*mut i32 as usize);assert_eq!(result,if owned==1{504}else{503});
+   assert_eq!(entries[i*8+7],503,"peer inventory must remain untouched");
+  }
+ }
+ let mut r=[0u64;3];reference(r.as_mut_ptr(),&remote_equipment[0x1c/4]);let address=r.as_ptr()as usize;
+ remote_equipment[0x1c/4]=0;assert_eq!(crate::arts_raw_detour(address),503,"unequipped peer instance");remote_equipment[0x1c/4]=0x80800010;
+ entries[4]=2000000;r[2]=2000000;assert_eq!(crate::arts_raw_detour(address),503,"real peer weapon stays native");entries[4]=110000;r[2]=110000;
+ PARTY.with(|p|p.set(0));assert_eq!(crate::arts_raw_detour(address),503,"departed peer must not retain replacement");
+ for i in 0..6{equipment[0x1c/4+i]=0x80800010+i as u32;}ptr::write_unaligned((a+0x78)as*mut i32,1);
  // A real weapon already carrying Ram also qualifies; other skills do not.
  entries[4]=2000000;entries[7]=504;assert!(art(a,0,base));entries[7]=100;assert!(!art(a,0,base));entries[4]=110000;entries[7]=503;
  // The existing check/reserve scopes quote the real native fee as zero.

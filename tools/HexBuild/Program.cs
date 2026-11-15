@@ -12,6 +12,7 @@ var game=Environment.GetEnvironmentVariable("NRHEX_GAME")??Path.Combine(drive,"P
 AppDomain.CurrentDomain.AssemblyResolve+=(_,a)=>{var p=Path.Combine(smith,new AssemblyName(a.Name).Name+".dll");return File.Exists(p)?Assembly.LoadFrom(p):null;};
 NativeLibrary.SetDllImportResolver(typeof(BND4).Assembly,(n,a,p)=>{var f=Path.Combine(game,n.EndsWith(".dll")?n:n+".dll");return File.Exists(f)?NativeLibrary.Load(f):IntPtr.Zero;});
 Directory.SetCurrentDirectory(game);
+if(args.Contains("--jiahao-followup")){JiahaoFollowup.Stage(root,args.Contains("--mmv"));return;}
 if(args.Contains("--storm-audio-probe")){StormAudio.Probe(root,smith,game);return;}
 // Text-only work does not require parsing parameters or rebuilding gameplay assets.
 if(args.Contains("--light-footed-texts")){

@@ -68,6 +68,10 @@ static class MmvTae {
                         if (name=="a40.tae"&&a.ID==30210&&e.Type==227&&BitConverter.ToInt32(e.GetParameterBytes(false))==OnyxDash.Flag) {
                             Check(start==0&&Math.Abs(end-OnyxDash.FootContact(old))<0.00001f,"Onyx dash source window changed");
                             end=OnyxDash.FootContact(target.v);
+                        } else if (JiahaoFollowup.IsExtra(a.ID, e)) {
+                            var expected = JiahaoFollowup.Window(old, e);
+                            Check(start == expected.Start && end == expected.End, "Jiahao early cancel source window changed");
+                            (start, end) = JiahaoFollowup.Window(target.v, e);
                         } else if (e.Type == 302 && start > 0) {
                             // Ultimate markers follow native expenditure/release events.
                             // MMV can add alternate conditioned bullet IDs; match the
