@@ -62,7 +62,7 @@ impl Drop for ContactGuard{fn drop(&mut self){CONTACT.with(|s|s.set(self.0));}}
 pub fn active_contact()->bool{CONTACT.with(Cell::get)}
 pub fn private_attack(id:i32,table:i32)->bool{table==1&&((ATTACK..=ATTACK+3).contains(&id)||id==crate::soul_critical::ATTACK||crate::lightning_ram::attack(id))}
 pub fn snapshot_attack(id:i32,table:i32)->bool{private_attack(id,table)&&!crate::lightning_ram::attack(id)}
-pub fn passive_bullet(id:i32)->bool{private_bullet(id)&&id!=crate::lightning_ram::BULLET}
+pub fn passive_bullet(id:i32)->bool{(private_bullet(id)&&id!=crate::lightning_ram::BULLET)||id==crate::cold_juice::BULLET}
 pub fn private_bullet(id:i32)->bool{(BULLET..=BULLET+7).contains(&id)||matches!(id,crate::soul_critical::BULLET|crate::soul_critical::PRELUDE|crate::lightning_ram::BULLET)}
 unsafe fn visual(actor:usize,base:usize,ready:bool){
  let current=has_effect(actor,READY,base);if ready==current{return;}
@@ -282,6 +282,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  let _outer=crate::soul_immunity::contact(None);
  let _ram_outer=crate::lightning_ram::ContactScope::enter(false);
  let _passive_outer=ContactGuard(CONTACT.with(|s|s.replace(false)));
+ if ACTIVE.load(Ordering::Acquire)&&bullet!=0&&read_i32(bullet+0xa4)==crate::cold_juice::BULLET{return crate::cold_juice::contact(original,hit,target,bullet);}
  if !ACTIVE.load(Ordering::Acquire)||bullet==0||!private_bullet(read_i32(bullet+0xa4)){return original(hit,target,bullet);}
  // The visual carrier must never consume a target in the shared hit list.
  if read_i32(bullet+0xa4)==crate::soul_critical::PRELUDE{return 0;}

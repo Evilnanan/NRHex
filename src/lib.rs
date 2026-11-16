@@ -63,6 +63,7 @@ mod parry;
 mod parry_turn;
 mod night_blessing;
 mod heartstealer;
+mod cold_juice;
 mod ultimate_awakening;
 mod ultimate_unstoppable;
 mod ultimate_challenge;
@@ -1070,6 +1071,8 @@ unsafe fn strengthen_constructed_hit(hit:usize) {
 unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  if !ACTIVE.load(Ordering::Acquire)||hit==0||context==0{return;}
  static_charge::constructed(hit,context);
+ cold_juice::constructed(hit,context);
+ ram_damage::ironjar_constructed(hit,context);
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);
  if world==0{return;}
  let local=read_ptr(world+0x174e8);
@@ -1744,6 +1747,7 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
   }
  }
  if result!=0&&ACTIVE.load(Ordering::Acquire) {
+  if effect==runtime::FLASK_TRIGGER{cold_juice::flask(player,base);}
   let base=BASE.load(Ordering::Acquire);
   if matches!(effect,flasks::GRANTED|flasks::CAPTURE|flasks::CHURCH|flasks::CHURCH_REQUEST) && is_local(player,base) {
    if let Some(state)=FLASKS.get(){if let Ok(mut f)=state.lock(){f.applied(effect);}}
@@ -2424,6 +2428,7 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  basics::update(player,base);
  deliberate_punch::update(player,base);
  static_charge::update(player,base,dt);
+ cold_juice::update(player,base,dt);
  soul_critical::update(player,base);
  onyx_mastery::update(player,base);
  night_blessing::update(player,base,dt);

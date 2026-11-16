@@ -9,7 +9,7 @@ pub const BASE_PATTERN:&str="66 44 0F 6E C1 48 8D 55 A8 49 8B CD 45 33 C9 4C 8B 
 pub static ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 
 unsafe fn fixed_attack(context:usize){
- if context!=0&&(read_i32(context+8)==balloon::ATTACK||crate::static_charge::private_attack(read_i32(context+8),read_i32(context+0xc)))&&read_i32(context+0xc)==1 {
+ if context!=0&&(read_i32(context+8)==balloon::ATTACK||read_i32(context+8)==crate::cold_juice::ATTACK||crate::static_charge::private_attack(read_i32(context+8),read_i32(context+0xc)))&&read_i32(context+0xc)==1 {
   // Native 6C3200 selects its fixed-attack branch with context+F8. The
   // ordinary branch uses equipped-weapon attack, unsuitable for HP scaling.
   // This per-attack context is copied by E70350 before cached/network hits.
@@ -20,7 +20,7 @@ pub unsafe extern "system" fn before_construct(context:usize){
  if ACTIVE.load(Ordering::Acquire){crate::static_charge::before_construct(context);fixed_attack(context);}
 }
 
-unsafe fn source_actor(context:usize,resolve:unsafe extern "system" fn(u64)->usize)->usize {
+pub(crate) unsafe fn source_actor(context:usize,resolve:unsafe extern "system" fn(u64)->usize)->usize {
  let source=read_ptr(context);if source==0{return 0;}
  let vtable=read_ptr(source);if vtable==0{return 0;}
  let get=read_ptr(vtable+0x10);if get==0{return 0;}

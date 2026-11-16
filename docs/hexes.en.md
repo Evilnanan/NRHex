@@ -258,3 +258,8 @@ Damage negation -50%. Move faster while using items, casting spells, or using sk
 ## I Can’t Stop!
 
 Replaces your unarmed skill with Lightning Ram. Hold the skill button to keep accelerating.
+
+<!-- hex:95005700 -->
+## Iced Juice
+
+Using a flask causes frostbite, grants frost weapon buffs, and creates an ice storm that pursues the first enemy struck.

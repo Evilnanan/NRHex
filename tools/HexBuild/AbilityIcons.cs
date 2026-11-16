@@ -5,8 +5,8 @@ static class AbilityIcons {
  static void Check(bool value,string message){if(!value)throw new InvalidDataException(message);}
  static string Name(BinderFile file)=>file.Name.Replace('\\','/').Split('/').Last();
  static string Hash(string path)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(path)));
- public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes){
-  var hex=hexes.Single(hex=>hex.Id==Erosion.Owner);
+ public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes,int owner=Erosion.Owner,int previousLarge=21207,int previousSmall=22207){
+  var hex=hexes.Single(hex=>hex.Id==owner);
   string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,".work/ability-icons/staged");Directory.CreateDirectory(directory);
   var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(file=>file.ID,file=>file.Bytes.ToArray());
   Check(binder.Compression==RegulationCompression.Format,"Unexpected regulation compression");
@@ -17,7 +17,7 @@ static class AbilityIcons {
   foreach(var (table,field) in fields){
    var file=binder.Files.Single(file=>Name(file)==table+".param");var parameters=parse(table,file.Bytes);
    var row=parameters.Rows.Single(row=>row.ID==hex.Id);int current=Convert.ToInt32(row[field.Field].Value);
-   int previous=table=="PermanentBuffParam"?21207:table=="EquipParamGoods"?20207:22207;
+   int previous=table=="PermanentBuffParam"?previousLarge:table=="EquipParamGoods"?previousLarge-1000:previousSmall;
    Check(current==previous||current==field.Value,$"Unexpected icon {table}/{hex.Id}: {current}");
    row[field.Field].Value=Convert.ChangeType(field.Value,row[field.Field].Value.GetType());file.Bytes=parameters.Write();
   }
@@ -42,6 +42,6 @@ static class AbilityIcons {
    }
   }
   File.WriteAllText(Path.Combine(directory,"validation.json"),JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),owner=hex.Id,largeIcon=hex.LargeIcon,smallIcon=hex.SmallIcon,changes,unrelatedRowsAndFieldsPreserved=true,gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: Erosion icons read back; all unrelated parameter fields preserved");
+  Console.WriteLine($"PASS: ability {owner} icons read back; all unrelated parameter fields preserved");
  }
 }

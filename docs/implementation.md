@@ -349,3 +349,8 @@ tools/HexBuild/StormAudio.cs直接从当前sd.bhd／sd.bdt选择性提取cs_m19�
 ## 灵魂暴击
 
 `src/soul_critical.rs`在有效处决的主段通知中生成一次冲击波，使用累计折后伤害构建5:3物魔固定快照，复用引雷的弹丸同步和命中去重通道。`HexBuild/SoulCritical.cs`负责目标版本主段表、私有参数、公共特效依赖与抽取／清理接入。公式、主段识别、原生证据及验证边界见[研究记录](research/soul-critical.md)。
+
+
+## 冰镇果汁
+
+`cold_juice.rs`与`HexBuild/ColdJuice.cs`接入原生喝瓶通知、双手冻伤附魔及可转为追踪的冰风暴；沿用原生冻伤负面，不设致死保护。数值、生命周期、联机载荷及待实机验证项见[研究记录](research/cold-juice.md)。

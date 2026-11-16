@@ -87,6 +87,7 @@ fn arc_velocity(arc:&mut Arc,native:Point,dt:f32)->Option<Point>{
 pub unsafe extern "system" fn motion(ins:usize,row_ref:usize,dt:f32){
  let original:unsafe extern "system" fn(usize,usize,f32)=std::mem::transmute(MOTION_ORIGINAL.load(Ordering::Acquire));
  original(ins,row_ref,dt);
+ if ACTIVE.load(Ordering::Acquire){crate::cold_juice::motion(ins,dt);}
  if !ACTIVE.load(Ordering::Acquire){return;}
  let Some(mut value)=instance(ins)else{return;};
  let Some(arc)=value.arc.as_mut()else{return;};
@@ -171,6 +172,7 @@ pub unsafe extern "system" fn bind(ins:usize,payload:usize,target:usize,transfor
  original(ins,payload,target,transform,mode,index);
  crate::echo_cast::held_bound(ins);
  crate::static_charge::bound(ins);
+ crate::cold_juice::bound(ins);
  let Some(mut flight)=INITIALIZE.with(Cell::get)else{return;};
  let p=point(ins);if !finite(p){return;}
  let row=param(ins,BASE.load(Ordering::Acquire));
@@ -194,11 +196,13 @@ pub unsafe extern "system" fn child(ins:usize,position:usize,orientation:usize,b
 pub unsafe extern "system" fn reset(ins:usize){
  crate::echo_cast::held_reset(ins);
  crate::static_charge::retired(ins);
+ crate::cold_juice::retired(ins);
  if let Ok(mut state)=STATE.lock(){state.instances.remove(&ins);}
  let original:unsafe extern "system" fn(usize)=std::mem::transmute(RESET_ORIGINAL.load(Ordering::Acquire));original(ins);
 }
 unsafe extern "system" fn after_move(ins:usize)->u8{
  if !ACTIVE.load(Ordering::Acquire){return 0;}
+ if crate::cold_juice::after_move(ins){return 1;}
  let Some(mut value)=instance(ins)else{return 0;};
  let p=point(ins);if !finite(p){return 0;}
  let base=BASE.load(Ordering::Acquire);let row=param(ins,base);

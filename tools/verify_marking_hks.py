@@ -2,6 +2,7 @@
 import struct
 from build_marking_hks import check,QUERY,EVENTS,ORIGIN_QUERY,ORIGIN_EVENTS
 from hks_bytecode import instructions
+from build_light_footed_hks import QUERY as LIGHT_QUERY
 
 def verify(data):
  r=check(data);cases=0
@@ -15,7 +16,8 @@ def verify(data):
  for fid in [1,2,3,4]:
   f=r.functions[fid];words=instructions(f);callsites=[i for i,x in enumerate(words)if x['op']==2 and x['c']==1]
   # Origin and follow-up observers precede the untouched native callback.
-  stop=callsites[1]+1;a=f['slots']-8;assert a>=3
+  lightweight=LIGHT_QUERY in f['constants']
+  stop=callsites[1]+1;a=f['slots']-8-(5 if lightweight else 0);assert a>=3
   for event in events:
    regs={i:('original',i)for i in range(f['slots'])};regs[0]=event;saved={i:regs[i]for i in range(a)};calls=[]
    globals_={'env':lambda *args:calls.append(args)};pc=0
@@ -33,7 +35,8 @@ def verify(data):
    else:raise AssertionError('Observer loop')
    mode=next((i+(10 if event.endswith('_Upper')else 0)for i,name in enumerate(EVENTS,1)if event in[name,name+'_Upper']),0)
    origin=next((i+(10 if event.endswith('_Upper')else 0)for i,name in enumerate(ORIGIN_EVENTS,1)if event in[name,name+'_Upper']),0)
-   assert calls==[(ORIGIN_QUERY,float(origin)),(QUERY,float(mode))],(fid,event,calls)
+   expected=([(LIGHT_QUERY,-1.,-1.)] if lightweight else [])+[(ORIGIN_QUERY,float(origin)),(QUERY,float(mode))]
+   assert calls==expected,(fid,event,calls)
    assert all(regs[i]==v for i,v in saved.items());cases+=1
  return cases
 if __name__=='__main__':

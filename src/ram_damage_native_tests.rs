@@ -13,6 +13,8 @@ unsafe extern "system" fn row(out:usize,_:i32,_:i32)->usize{put(out+16,ROW.with(
 unsafe extern "system" fn empty(out:usize,_:i32)->usize{put(out+8,0usize);out}
 unsafe extern "system" fn zero_ref(_:usize,out:usize,_:i32){ptr::write_bytes(out as*mut u8,0,12);}
 unsafe extern "system" fn scale(_:usize,_:usize,_:usize,_:i32)->f32{1.}
+unsafe extern "system" fn bullet_kind(_:usize)->i32{3}
+unsafe extern "system" fn owner(handle:u64)->usize{if handle==77{123}else{0}}
 fn rows(path:&str,size:usize)->BTreeMap<i32,Vec<u8>>{
  let raw=std::fs::read(std::env::var_os(path).expect(path)).unwrap();let count=u16::from_le_bytes(raw[10..12].try_into().unwrap())as usize;
  (0..count).map(|i|{let a=64+i*24;let id=i32::from_le_bytes(raw[a..a+4].try_into().unwrap());let off=u64::from_le_bytes(raw[a+8..a+16].try_into().unwrap())as usize;(id,raw[off..off+size].to_vec())}).collect()
@@ -42,6 +44,7 @@ fn ram_native_melee_skill_bonuses_and_velocity_base_apply_once(){unsafe{
  let mut hit=[0u8;0x300];let h=hit.as_mut_ptr()as usize;
  let mut stats=[0u64;0x1000/8];let st=stats.as_mut_ptr()as usize;put(st+0x84c,1f32);put(st+0x850,1f32);
  let mut bullet=[0u64;0x300/8];let b=bullet.as_mut_ptr()as usize;put(b+0xa4,lightning_ram::BULLET);put(b+8,55u64);
+ let mut vt=[0usize;4];vt[2]=bullet_kind as*const()as usize;put(b,vt.as_ptr()as usize);put(b+0xb0,77u64);
  let mut payload=[0u8;0x220];let pp=payload.as_mut_ptr()as usize;put(pp+4,lightning_ram::BULLET);
  let mut group=[1i32;2];let gp=group.as_mut_ptr()as usize;
  for level in [1,15]{for speed in [6f32,10.,15.,19.25]{
@@ -73,6 +76,15 @@ fn ram_native_melee_skill_bonuses_and_velocity_base_apply_once(){unsafe{
   let one=[1f32;5];let rates=[1.5f32;5];let cuts=[0.5f32;5];let mut out=[0f32;5];
   let result=crate::glass_cannon::detour(out.as_mut_ptr(),hit.as_ptr()as*const f32,rates.as_ptr(),cuts.as_ptr(),one.as_ptr(),one.as_ptr(),one.as_ptr(),one.as_ptr(),1.,1.,1.,1.,1.,1.,1.);
   assert_eq!(result,base_damage*1.5*0.5);static_charge::leave();
+  // Ironjar is a source-side addition to a freshly built hit, before the
+  // unchanged native recipient calculation. Identity/status are fixtures;
+  // this does not establish live multiplayer state replication.
+  put(c,b);put(c+8,id);put(c+12,1i32);put(h+0x148,45f32);put(h+0x150,60f32);
+  ironjar_hit(h,c,owner,|actor|actor==123);
+  assert_eq!(float(h+0x148),90.);assert_eq!(float(h+0x150),60.);
+  static_charge::enter(module.as_ptr()as usize,0,h);
+  let doubled=crate::glass_cannon::detour(out.as_mut_ptr(),hit.as_ptr()as*const f32,rates.as_ptr(),cuts.as_ptr(),one.as_ptr(),one.as_ptr(),one.as_ptr(),one.as_ptr(),1.,1.,1.,1.,1.,1.,1.);
+  assert_eq!(doubled,base_damage*2.*1.5*0.5);static_charge::leave();
  }}
  // Without a Ram row, this new mid-hook leaves the native base untouched.
  ROW.with(|r|r.set(attacks[&300000711].as_ptr()as usize));init(c);put(c+8,300000711i32);put(c+12,1i32);context[0xf8]=1;

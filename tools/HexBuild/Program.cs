@@ -115,6 +115,9 @@ if(args.Contains("--lightning-ram-power")){LightningRam.PowerStage(root,Parse,ar
 if(args.Contains("--lightning-ram-extreme")){LightningRam.Extreme(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-ram-objects")){LightningRam.Objects(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-ram-physical")){LightningRam.Physical(root,Parse,args.Contains("--mmv"));return;}
+if(args.Contains("--cold-juice-stage")){ColdJuice.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
+if(args.Contains("--cold-juice-frost-stage")){int at=Array.IndexOf(args,"--cold-juice-frost-stage");ColdJuice.FrostStage(args[at+1],args[at+2],Parse);return;}
+if(args.Contains("--cold-juice-visual-stage")){int at=Array.IndexOf(args,"--cold-juice-visual-stage");ColdJuice.Visual(root,args[at+1],args[at+2]);return;}
 if(args.Contains("--lightning-ram-stage")){LightningRam.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
 if(args.Contains("--onyx-check")){OnyxMastery.Verify(root,bnd,Parse,args.Contains("--mmv"),args.Contains("--tune"));return;}
 if(args.Contains("--onyx-dash-map")){int at=Array.IndexOf(args,"--onyx-dash-map");OnyxMastery.DashMap(args[at+1],args[at+2],Parse);return;}
@@ -252,6 +255,7 @@ if(args.Contains("--ambulance-stage")){Ambulance.Stage(root,bnd,Parse,HexCatalog
 if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ability-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root));return;}
+if(args.Contains("--cold-juice-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root),ColdJuice.Owner,21291,22291);return;}
 if(args.Contains("--erosion-spell-stage")){var i=Array.IndexOf(args,"--erosion-spell-stage");ErosionSources.TuneSpell(args[i+1],args[i+2],Parse);return;}
 if(args.Contains("--erosion-tiers-check")){ErosionSources.VerifyTiers(Path.Combine(root,"dist/mod/regulation.bin"),Parse);return;}
 if(args.Contains("--erosion-sources-stage")){var i=Array.IndexOf(args,"--erosion-sources-stage");ErosionSources.Stage(root,args[i+1],args[i+2],Parse);return;}
@@ -960,7 +964,7 @@ foreach(var h in hexes){
  if(h.Id==DeathDance.Owner)DeathDance.Owners(s);
  if(h.Id==Erosion.Owner)Erosion.Owners(s);
  if(h.Id==Sniper.Owner)Sniper.OwnerEffect(s);
- if(h.Id==LightningRam.Owner)Set(s,"isDisableNetSync",0);
+ if(h.Id==LightningRam.Owner||h.Id==ColdJuice.Owner)Set(s,"isDisableNetSync",0);
  if(h.Id==Bartender.Owner)Bartender.OwnerEffect(s,pars["SpEffectParam"].Rows.Single(r=>r.ID==7035700));
  if(h.Id==95000500)Set(s,"changeHpEstusFlaskCorrectRate",.5f);
  if(h.Id==95001400){Set(s,"artsConsumptionRate",0f);}
@@ -1010,6 +1014,7 @@ StaticCharge.Mechanics(Clone);
 SoulCritical.Mechanics(Clone);
 OnyxMastery.Mechanics(Clone,pars["ItemLotParam_map"]);
 LightningRam.Mechanics(Clone);
+ColdJuice.Mechanics(Clone);
 PotentialFission.Mechanics(Clone);
 foreach(var weaponParam in new[]{"EquipParamCustomWeapon","EquipParamWeapon"})pars[weaponParam]=Parse(weaponParam,bnd.Files.Single(f=>Path.GetFileName(f.Name)==weaponParam+".param").Bytes);
 PotentialFission.Generate(pars,Path.Combine(root,"src/fission_catalog.rs"));
@@ -1431,6 +1436,7 @@ OnyxMastery.Events(ev);
 LightFooted.Events(ev);
 
 LightningRam.Events(ev);
+ColdJuice.Events(ev);
 Basics.Events(ev);
 Sniper.Events(ev);
 UltimateUnstoppable.Events(ev);
@@ -1489,6 +1495,7 @@ SoulCritical.TargetMap(root,Path.Combine(root,"dist"),Parse,Path.Combine(root,"s
 var soulResources=Path.Combine(root,".work/soul-critical/full");Directory.CreateDirectory(soulResources);
 SoulCritical.Resources(root,Path.Combine(root,"dist/mod"),soulResources);
 File.Copy(Path.Combine(soulResources,"sfxbnd_commoneffects_dlc01.ffxbnd.dcx"),Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"),true);
+ColdJuice.Visual(root,Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"),Path.Combine(root,"dist/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx"));
 
 OnyxMastery.Animations(Path.Combine(root,"dist/mod"),Path.Combine(root,"dist/mod/chr/c0000.anibnd.dcx"));
 OnyxBehavior.Stage(root,Path.Combine(root,"assets/original/chr/c0000.behbnd.dcx"),Path.Combine(root,"dist/mod/chr/c0000.behbnd.dcx"),Path.Combine(root,"work/onyx-behavior/standalone"));

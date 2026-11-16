@@ -174,10 +174,12 @@ pub unsafe extern "system" fn factory(manager:usize,payload:usize,error:usize)->
  let continuous=if ticket.as_ref().is_some_and(|ticket|stream::eligible(ticket,payload)){ticket.take().map(|ticket|stream::seed(ticket))}else{None};
  let _stream=stream::factory(continuous.clone());
  let _held=held::factory(seed.clone());
+ let _cold=crate::cold_juice::factory(payload);
  let _static=crate::static_charge::factory(payload);
  let _flight=crate::sword_projectile::factory_scope(payload);
  let result=original(manager,payload,error);
  crate::static_charge::factory_done(result);
+ crate::cold_juice::group(result);
  held::group(result,seed);
  stream::group(result,continuous);
  crate::sword_projectile::factory_done(result);
@@ -197,6 +199,7 @@ unsafe fn bind(queue:&mut Queue,group:usize,replay:bool,shots:Shots){
  queue.groups.push(Binding{group,id:read_i32(group),replay,shots});
 }
 pub unsafe extern "system" fn initialize(group:usize,out:usize,transform:usize,target:u32,index:u32)->usize{
+ let _cold=crate::cold_juice::initialize(group);
  let _static=crate::static_charge::initialize(group);
  let _held=held::initialize(group);
  let continuous=stream::source(group);
@@ -219,6 +222,7 @@ pub unsafe extern "system" fn initialize(group:usize,out:usize,transform:usize,t
 }
 pub unsafe extern "system" fn finish(group:usize){
  crate::static_charge::finished(group);
+ crate::cold_juice::finish(group);
  held::finish(group);
  stream::finish(group);
  crate::sword_projectile::finish_group(group);
