@@ -97,7 +97,7 @@ Max HP +50%, damage negation -30%, piercing resistance -100%. Explodes on death 
 <!-- hex:95001800 -->
 ## Enhanced [Necromancy]
 
-Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.
+Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit. Defeating powerful enemies charges your Ultimate Art gauge.
 
 <!-- hex:95002000 -->
 ## Don't Change the Channel
@@ -252,7 +252,7 @@ Obtain an Onyx Lord’s Greatsword. Its attacks use less stamina. Hold its skill
 <!-- hex:95005400 -->
 ## Lightweight
 
-Damage negation -50%. Move faster while using items, casting spells, or using skills that allow movement.
+Damage negation -50%. Move faster while using items, casting spells, or using skills.
 
 <!-- hex:95005600 -->
 ## I Can’t Stop!
