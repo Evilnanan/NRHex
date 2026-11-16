@@ -1,7 +1,7 @@
 using SoulsFormats;
 using System.Security.Cryptography;
 using System.Text.Json;
-static class LightningRam {
+static partial class LightningRam {
  public const int Owner=95005600;
  public static readonly int[] Markers=[Owner+1];
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
@@ -14,6 +14,7 @@ static class LightningRam {
    if(n.StartsWith("spEffectId"))Set(attack,n,-1);
   }
   foreach(var(f,v)in new(string,object)[]{("atkPhys",1),("atkSuperArmor",6f),("atkSuperArmorCorrection",100),("ultimateChargeCorrection",30),("reviveDamage",0f),("reviveDamageCorrection",0),("atkAttribute",0),("spAttribute",0),("selfTarget",0),("friendlyTarget",0),("opposeTarget",1),("dmgLevel",7),("dmgLevel_vsPlayer",7),("knockbackDist",1f),("mapHitType",1)})Set(attack,f,v);
+  MeleeFields(attack);
   var extreme=clone("AtkParam_Pc",69300,Owner+61);foreach(var c in attack.Cells)Set(extreme,c.Def.InternalName,c.Value);
   var fastAttack=clone("AtkParam_Pc",69300,Owner+62);foreach(var c in attack.Cells)Set(fastAttack,c.Def.InternalName,c.Value);
   ContactPower(attack,12,20,false);ContactPower(fastAttack,18,30,false);ContactPower(extreme,30,50,true);

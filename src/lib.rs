@@ -99,6 +99,7 @@ mod archmage_cost;
 mod slingshot;
 mod ram_motion;
 mod lightning_ram;
+mod ram_damage;
 mod ram_native_contact;
 mod ram_stagger;
 mod ram_ground;
@@ -386,8 +387,9 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
- fn signatures()->[(&'static str,u32);248] {
- [(night_blessing::COLLECT_PATTERN,night_blessing::COLLECT_RVA as u32),
+ fn signatures()->[(&'static str,u32);249] {
+ [(ram_damage::PATTERN,ram_damage::RVA as u32),
+  (night_blessing::COLLECT_PATTERN,night_blessing::COLLECT_RVA as u32),
   (night_blessing::RATE_PATTERN,night_blessing::RATE_RVA as u32),
   (night_blessing::POINT_PATTERN,night_blessing::POINT_RVA as u32),
   (deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
@@ -559,6 +561,7 @@ pub unsafe extern "system" fn DllMain(h:*mut c_void,reason:u32,_:*mut c_void)->i
 }
 fn extra_hook_targets()->Vec<(usize,*const u8,&'static AtomicPtr<u8>)>{
  vec![
+   (ram_damage::RVA,ram_damage::detour as*const u8,&ram_damage::ORIGINAL),
    (night_blessing::COLLECT_RVA,night_blessing::collect as*const u8,&night_blessing::COLLECT_ORIGINAL),
    (night_blessing::RATE_RVA,night_blessing::rate as*const u8,&night_blessing::RATE_ORIGINAL),
    (night_blessing::POINT_RVA,night_blessing::point as*const u8,&night_blessing::POINT_ORIGINAL),
@@ -886,6 +889,7 @@ unsafe extern "system" fn sword_rates_detour() {
 // generic source pointer. Preserve the original spell categories and conditions.
 unsafe extern "system" fn on_sword_attack_rates(manager:usize,context:usize){
  if !ACTIVE.load(Ordering::Acquire)||manager==0||context==0{return;}
+ ram_damage::categories(context);
  let Some(bonuses)=SWORD_BONUSES.get() else{return;};
  if bonuses.for_attack(read_i32(context+8),read_i32(context+0xc)).is_none(){return;}
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);

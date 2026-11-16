@@ -876,6 +876,9 @@ if(args.Contains("--parry-stage")){Parry.Stage(root,bnd,Parse,hexes);Parry.Build
 if(args.Contains("--parry-followup")){ParryFollowup.Stage(root,Parse);return;}
 if(args.Contains("--parry-followup-actions")){ParryFollowup.Actions(root,Parse("SpEffectParam",bnd.Files.Single(f=>Path.GetFileName(f.Name)=="SpEffectParam.param").Bytes));return;}
 if(args.Contains("--contract-heart")){HeartMist.Stage(root,bnd,Parse);return;}
+if(args.Contains("--ram-melee")){
+ int i=Array.IndexOf(args,"--ram-melee");LightningRam.MeleeStage(root,Parse,args[i+1],args[i+2]);return;
+}
 if(args.Contains("--night-blessing-latched")){
  int i=Array.IndexOf(args,"--night-blessing-latched");
  NightBlessing.Latched(root,Parse,args[i+1],args[i+2]);return;

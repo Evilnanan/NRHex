@@ -39,9 +39,11 @@ fn native_ram_speed_selects_poise_and_rescue_before_construction(){unsafe{
   crate::ability_damage::before_construct(cp);assert_eq!(read_i32(cp+8),id);assert_eq!(context[0xf8],1);
   assert_eq!(poise(0,0,0,999.,cp,0),p);assert_eq!(rescue(cp),r);
   int(hp+0x40,id);int(hp+0x44,1);float(hp+0x148,p*1.5);float(hp+0x150,r*2.);
-  constructed(hp,cp);assert_eq!(read_i32(hp+0x40),id);
   let expected=damage+if speed>=15.{30.*level as f32}else{0.};
-  assert_eq!(ptr::read_unaligned(hp as*const[f32;5]),[expected,0.,0.,0.,0.]);
+  assert_eq!(ram_base(cp),Some(expected));
+  let native=[expected*1.5+7.,0.,0.,0.,0.];ptr::write_unaligned(hp as*mut[f32;5],native);
+  constructed(hp,cp);assert_eq!(read_i32(hp+0x40),id);
+  assert_eq!(ptr::read_unaligned(hp as*const[f32;5]),native);
   let stored=seed(bp).unwrap();assert_eq!(stored.damage,damage);assert_eq!(stored.ram_level,level);if level>0{assert_eq!(stored.victim,Some(0xdead_beef_abcd_1234));}
   assert_eq!(ptr::read_unaligned((hp+0x148)as*const f32),p*1.5);assert_eq!(ptr::read_unaligned((hp+0x150)as*const f32),r*2.);
  }}

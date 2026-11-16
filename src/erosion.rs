@@ -42,7 +42,8 @@ pub unsafe extern "system" fn contact(hit:usize,target:usize,bullet:usize)->u8{
  let original:unsafe extern "system" fn(usize,usize,usize)->u8=std::mem::transmute(CONTACT_ORIGINAL.load(Ordering::Acquire));
  let item=ACTIVE.load(Ordering::Acquire)&&bullet!=0&&read_i32(bullet+0x2c0)>=0;
  let passive=ACTIVE.load(Ordering::Acquire)&&bullet!=0
-  &&(crate::static_charge::private_bullet(read_i32(bullet+0xa4))||source_data::PASSIVE_BULLETS.binary_search(&read_i32(bullet+0xa4)).is_ok());
+  &&read_i32(bullet+0xa4)!=crate::lightning_ram::BULLET
+  &&(crate::static_charge::passive_bullet(read_i32(bullet+0xa4))||source_data::PASSIVE_BULLETS.binary_search(&read_i32(bullet+0xa4)).is_ok());
  let _passive=PassiveGuard::enter(passive);
  let _scope=ItemGuard::enter(item);
  crate::static_charge::contact(original,hit,target,bullet)

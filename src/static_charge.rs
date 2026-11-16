@@ -61,6 +61,8 @@ struct ContactGuard(bool);
 impl Drop for ContactGuard{fn drop(&mut self){CONTACT.with(|s|s.set(self.0));}}
 pub fn active_contact()->bool{CONTACT.with(Cell::get)}
 pub fn private_attack(id:i32,table:i32)->bool{table==1&&((ATTACK..=ATTACK+3).contains(&id)||id==crate::soul_critical::ATTACK||crate::lightning_ram::attack(id))}
+pub fn snapshot_attack(id:i32,table:i32)->bool{private_attack(id,table)&&!crate::lightning_ram::attack(id)}
+pub fn passive_bullet(id:i32)->bool{private_bullet(id)&&id!=crate::lightning_ram::BULLET}
 pub fn private_bullet(id:i32)->bool{(BULLET..=BULLET+7).contains(&id)||matches!(id,crate::soul_critical::BULLET|crate::soul_critical::PRELUDE|crate::lightning_ram::BULLET)}
 unsafe fn visual(actor:usize,base:usize,ready:bool){
  let current=has_effect(actor,READY,base);if ready==current{return;}
@@ -133,14 +135,14 @@ fn first_contact(module:usize,hit:usize)->bool{DISPATCH.with(|s|{let mut s=s.bor
 unsafe fn key(source:usize,target:usize,hit:usize)->Key{Key{source:if source!=0{read_ptr(source+8)as u64}else{0},target:read_ptr(target+8)as u64,attack:read_i32(hit+0x40),table:read_i32(hit+0x44),components:ptr::read_unaligned(hit as*const[u32;5]),point:ptr::read_unaligned((hit+0x1f0)as*const[u32;3])}}
 struct Sample{key:Key,value:f32}
 static SAMPLES:Mutex<BTreeMap<usize,Sample>>=Mutex::new(BTreeMap::new());
-#[derive(Default)]struct Calculation{key:Option<Key>,hit:usize,delta:[f32;5],sampled:bool,lightning:Option<f32>,soul:bool,ram:bool,object:f32}
+#[derive(Default)]struct Calculation{key:Option<Key>,hit:usize,delta:[f32;5],sampled:bool,lightning:Option<f32>,soul:bool,object:f32}
 thread_local!{static CALC:RefCell<Vec<Calculation>>=const{RefCell::new(Vec::new())};}
 pub unsafe fn enter(module:usize,source:usize,hit:usize){
  let mut c=Calculation{object:1.,..Default::default()};
  if ACTIVE.load(Ordering::Acquire)&&module!=0&&hit!=0{
   let target=read_ptr(module+8);let base=BASE.load(Ordering::Acquire);
-  let private=private_attack(read_i32(hit+0x40),read_i32(hit+0x44));
-  if private{c.ram=crate::lightning_ram::attack(read_i32(hit+0x40));c.soul=read_i32(hit+0x40)==crate::soul_critical::ATTACK;c.lightning=Some(if c.soul||c.ram{ptr::read_unaligned(hit as*const[f32;5]).iter().sum()}else{ptr::read_unaligned((hit+0xc)as*const f32)});}
+  let private=snapshot_attack(read_i32(hit+0x40),read_i32(hit+0x44));
+  if private{c.soul=read_i32(hit+0x40)==crate::soul_critical::ATTACK;c.lightning=Some(if c.soul{ptr::read_unaligned(hit as*const[f32;5]).iter().sum()}else{ptr::read_unaligned((hit+0xc)as*const f32)});}
   // Capture any source while the local owner holds the augment. A later
   // accepted hit can reuse a preview made before the first mark was applied.
   let world=read_ptr(base+crate::WORLD_RVA);let local=if world!=0{read_ptr(world+0x174e8)}else{0};
@@ -159,7 +161,7 @@ pub fn candidate(value:f32){if !value.is_finite()||value<0.{return;}CALC.with(|s
 // These inputs have already passed the attacker's native aggregation. A new
 // elemental strike must not aggregate those bonuses again. Preserve only the
 // new target's defensive coefficients, including object defense (possibly 0).
-pub fn fixed_components()->Option<[f32;5]>{CALC.with(|s|s.borrow().last().and_then(|c|c.lightning.map(|d|{let d=d*c.object;if c.ram{[d,0.,0.,0.,0.]}else if c.soul{crate::soul_critical::components(d)}else{[0.,0.,0.,d,0.]}})))}
+pub fn fixed_components()->Option<[f32;5]>{CALC.with(|s|s.borrow().last().and_then(|c|c.lightning.map(|d|{let d=d*c.object;if c.soul{crate::soul_critical::components(d)}else{[0.,0.,0.,d,0.]}})))}
 pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  if !ACTIVE.load(Ordering::Acquire)||module==0||hit==0{return;}
  let base=BASE.load(Ordering::Acquire);let target=read_ptr(module+8);if target==0{return;}
@@ -171,7 +173,7 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  // Already marked recipients collect all accepted attack sources. Private
  // lightning contributes to existing marks but cannot spend another charge.
  if let Ok(mut s)=STATE.lock(){s.credit(target_handle,damage);}
- if private_attack(read_i32(hit+0x40),read_i32(hit+0x44))||source==target{return;}
+ if snapshot_attack(read_i32(hit+0x40),read_i32(hit+0x44))||source==target{return;}
  let outgoing=crate::is_local(source,base)&&has_effect(source,OWNER,base);
  let incoming=crate::is_local(target,base)&&has_effect(target,OWNER,base);
  let owner=if outgoing{
@@ -251,24 +253,26 @@ pub unsafe fn pending_soul_victim(instance:usize)->Option<u64>{
 pub unsafe fn child(instance:usize,bullet:i32)->ChildGuard{ChildGuard(CHILD.with(|s|s.replace(if private_bullet(bullet){seed(instance)}else{None})))}
 pub fn finished(group:usize){if let Ok(mut f)=FLIGHTS.lock(){f.groups.remove(&group);}}
 pub fn retired(instance:usize){if let Ok(mut f)=FLIGHTS.lock(){f.instances.remove(&instance);}}
+pub unsafe fn ram_base(context:usize)->Option<f32>{
+ if context==0||read_i32(context+0xc)!=1||!crate::lightning_ram::attack(read_i32(context+8)){return None;}
+ let snapshot=seed(read_ptr(context)).or_else(||SEED.with(|s|s.borrow().clone()))?;
+ Some(crate::lightning_ram::contact_damage(snapshot.damage,snapshot.ram_level))
+}
 pub unsafe fn before_construct(context:usize){
  if context==0||read_i32(context+0xc)!=1||!crate::lightning_ram::attack(read_i32(context+8)){return;}
  let damage=seed(read_ptr(context)).or_else(||SEED.with(|s|s.borrow().clone())).map_or(0.,|s|s.damage);
+ crate::ram_damage::categories(context);
  // Select before native poise/rescue construction, preserving source
  // modifiers, native copies and recipient rescue rules.
  ptr::write_unaligned((context+8)as*mut i32,crate::lightning_ram::attack_for_damage(damage));
 }
 pub unsafe fn constructed(hit:usize,context:usize){
  if let Ok(mut s)=SAMPLES.lock(){s.remove(&hit);}
- if !private_attack(read_i32(hit+0x40),read_i32(hit+0x44)){return;}
+ if !snapshot_attack(read_i32(hit+0x40),read_i32(hit+0x44)){return;}
  let snapshot=seed(read_ptr(context)).or_else(||SEED.with(|s|s.borrow().clone()));
  let damage=snapshot.as_ref().map_or(0.,|s|s.damage);
- let ram=crate::lightning_ram::attack(read_i32(hit+0x40));
- // Only the extreme contact selects native atkBehaviorId=12 (ultimate
- // stagger). Each speed tier also has its own base poise/rescue values.
- // Persist the private row ID in the hit, including native copies/dispatch.
- if ram{ptr::write_unaligned((hit+0x40)as*mut i32,crate::lightning_ram::attack_for_damage(damage));}
- ptr::write_unaligned(hit as*mut[f32;5],if ram{[crate::lightning_ram::contact_damage(damage,snapshot.as_ref().map_or(0,|s|s.ram_level)),0.,0.,0.,0.]}else if read_i32(hit+0x40)==crate::soul_critical::ATTACK{crate::soul_critical::components(damage)}else{[0.,0.,0.,damage,0.]});
+ // Ram is already constructed with its velocity base and native modifiers.
+ ptr::write_unaligned(hit as*mut[f32;5],if read_i32(hit+0x40)==crate::soul_critical::ATTACK{crate::soul_critical::components(damage)}else{[0.,0.,0.,damage,0.]});
  // Native attack context is fixed, no equipped-weapon contribution. Recipient
  // calculation independently suppresses offensive factors already captured.
 }
@@ -277,6 +281,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  // attacks. Restore it only when the nested synchronous contact returns.
  let _outer=crate::soul_immunity::contact(None);
  let _ram_outer=crate::lightning_ram::ContactScope::enter(false);
+ let _passive_outer=ContactGuard(CONTACT.with(|s|s.replace(false)));
  if !ACTIVE.load(Ordering::Acquire)||bullet==0||!private_bullet(read_i32(bullet+0xa4)){return original(hit,target,bullet);}
  // The visual carrier must never consume a target in the shared hit list.
  if read_i32(bullet+0xa4)==crate::soul_critical::PRELUDE{return 0;}
@@ -295,7 +300,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
     &&matches!(ptr::read((target+0x710)as*const u8),1|2){return 0;}
  {let Ok(mut targets)=seed.targets.lock()else{return 0;};if !targets.insert(handle){return 0;}}
  let _immunity=crate::soul_immunity::contact((read_i32(bullet+0xa4)==crate::soul_critical::BULLET&&seed.victim==Some(handle)).then_some((target,hit)));
- let _guard=ContactGuard(CONTACT.with(|s|s.replace(true)));
+ let _guard=ContactGuard(CONTACT.with(|s|s.replace(!ram)));
  let _impact=crate::soul_impact::contact(hit,target,bullet);
  let _ram_impact=if ram&&!rescue{Some(crate::lightning_ram::contact_impact(hit,target,seed.damage,base))}else{None};
  let result=original(hit,target,bullet);
@@ -314,14 +319,16 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
   }
  }}
  #[test]fn ram_extreme_stagger_row_tracks_seed_speed_without_changing_damage(){unsafe{
-  let mut hit=[0u8;0x80];let h=hit.as_mut_ptr()as usize;let context=[0usize;1];
+  let mut hit=[0u8;0x80];let h=hit.as_mut_ptr()as usize;let mut context=[0u8;0x120];let cp=context.as_mut_ptr()as usize;
   for (speed,id)in[(6.,crate::lightning_ram::ATTACK),(10.,crate::lightning_ram::FAST_ATTACK),(14.99,crate::lightning_ram::FAST_ATTACK),(15.,crate::lightning_ram::EXTREME_ATTACK),(30.,crate::lightning_ram::EXTREME_ATTACK)]{
    let damage=speed*speed*1.5;
    let _guard=SeedGuard(SEED.with(|s|s.replace(Some(Arc::new(Discharge{damage,ram_level:0,victim:None,targets:Mutex::new(BTreeSet::new())})))),None);
-   ptr::write_unaligned((h+0x40)as*mut i32,crate::lightning_ram::ATTACK);ptr::write_unaligned((h+0x44)as*mut i32,1);
-   constructed(h,context.as_ptr()as usize);
+   ptr::write_unaligned((cp+8)as*mut i32,crate::lightning_ram::ATTACK);ptr::write_unaligned((cp+12)as*mut i32,1);before_construct(cp);
+   assert_eq!(read_i32(cp+8),id);assert_eq!(ram_base(cp),Some(damage));
+   ptr::write_unaligned((h+0x40)as*mut i32,id);ptr::write_unaligned((h+0x44)as*mut i32,1);ptr::write_unaligned(h as*mut[f32;5],[damage*2.,0.,0.,0.,0.]);
+   constructed(h,cp);
    assert_eq!(read_i32(h+0x40),id);assert!(private_attack(id,1));assert!(!private_attack(id,0));
-   assert_eq!(ptr::read_unaligned(h as*const[f32;5]),[damage,0.,0.,0.,0.]);
+   assert_eq!(ptr::read_unaligned(h as*const[f32;5]),[damage*2.,0.,0.,0.,0.]);
   }
  }}
  fn state()->State{State{meter:Meter::default(),evasion:Evasion::default(),marks:Vec::new(),pending:Vec::new(),scene:0,time:0.}}

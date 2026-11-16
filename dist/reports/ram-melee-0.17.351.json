@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "version": "0.17.351",
+  "gitBase": "3704ba637552047bb03b6bd17b1614e9f15036e6",
+  "generatedUtc": "2026-11-16T08:55:45.706932+00:00",
+  "mechanics": {
+    "attacks": [
+      95005660,
+      95005661,
+      95005662
+    ],
+    "basePhysical": "1.5 * speed^2 + (speed >= 15 ? 30 * emissionLevel : 0)",
+    "nativeReference": 300000711,
+    "atkType": 1,
+    "categories": [
+      112,
+      128,
+      130
+    ],
+    "nativeSourceBonuses": true,
+    "weaponPanelContribution": false,
+    "erosionSource": "weapon/skill; native correction retained",
+    "canTriggerStaticCharge": true,
+    "poiseRescueAndImpactUnchanged": true,
+    "lowSpeedOriginalAttacksUnchanged": true
+  },
+  "validation": {
+    "unitTests": {
+      "standalone": {
+        "passed": 560,
+        "ignored": 43,
+        "logSha256": "5a86749a9713cdcb9dc94a79fcfc9930a0bb27cfba5b73fbce9fd08231841333"
+      },
+      "mmv": {
+        "passed": 566,
+        "ignored": 43,
+        "logSha256": "e6a88096547d4e05fcf29785ebb21b46978faaf88a95ea2420d4872785c2e427"
+      }
+    },
+    "nativeIsolation": {
+      "standalone": {
+        "passed": 1,
+        "ignored": 0,
+        "logSha256": "a32b52e9d3688cdb51e040adc588226f870425b62364a6285b971cb6824efa29"
+      },
+      "mmv": {
+        "passed": 1,
+        "ignored": 0,
+        "logSha256": "af0a05f0b1741b48d956ff5f91b753c6f7e92ffc62f1e2117b2bd6e3979f28d5"
+      },
+      "snapshotRegression": {
+        "passed": 1,
+        "ignored": 0,
+        "logSha256": "43682c2854bc3c2669b33ca3e0ac86df7e65976718ba626a61dd0e81301ebafb"
+      },
+      "poiseRescueRegression": {
+        "passed": 1,
+        "ignored": 0,
+        "logSha256": "c1a13ec6f10b014240091f6642075a42faf0b594ecba08dd3e27fd0ca94b8e0c"
+      },
+      "scope": "Current EXE category aggregation, base attack, rate serialization and recipient combiner; PARAM/stats/actors are fixtures"
+    },
+    "supportedExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "uniqueNativeSignatures": 249,
+    "signatureLogSha256": "91034d49593d23a9d3600b44d5e145895c752189a1d53cd7552d02d8289d7af1",
+    "resourceStages": {
+      "standalone": {
+        "inputSha256": "044AF64F585FC35EC068033E28FBEF061DDC169EC0D6A977B71E664A6891E7D1",
+        "outputSha256": "86CF5DC3B3D3499AB810C79AB7B13B059F79A1B5AE60693653CAF4DA6B0F38C5",
+        "changed": [
+          95005660,
+          95005661,
+          95005662
+        ],
+        "fields": [
+          "atkType",
+          "subCategory1",
+          "subCategory2",
+          "subCategory3",
+          "subCategory4",
+          "subCategory5",
+          "isDisableBothHandsAtkBonus"
+        ],
+        "nativeReference": 300000711,
+        "unrelatedRowsAndTablesUnchanged": true,
+        "otherAttackFieldsUnchanged": true,
+        "gameplayVerified": false
+      },
+      "mmv": {
+        "inputSha256": "4D1A849B33DDBCA1E50CC371F54FFEBBFFDD16665732A0B180AE36CD1861979D",
+        "outputSha256": "C80E5198EC350685645EB80A68A5241C55322B19C3174A55F4B0B8283226FA73",
+        "changed": [
+          95005660,
+          95005661,
+          95005662
+        ],
+        "fields": [
+          "atkType",
+          "subCategory1",
+          "subCategory2",
+          "subCategory3",
+          "subCategory4",
+          "subCategory5",
+          "isDisableBothHandsAtkBonus"
+        ],
+        "nativeReference": 300000711,
+        "unrelatedRowsAndTablesUnchanged": true,
+        "otherAttackFieldsUnchanged": true,
+        "gameplayVerified": false
+      }
+    },
+    "profilesValidated": [
+      "standalone",
+      "mmv-community"
+    ]
+  },
+  "artifacts": {
+    "standaloneDll": "a43a3d6c0b9273b3186097b0d1b8e8c80766776ce5b39631eacf599cff9eb0f0",
+    "standaloneRegulation": "86cf5dc3b3d3499ab810c79ab7b13b059f79a1b5ae60693653caf4da6b0f38c5",
+    "mmvCommunityDll": {
+      "MayhemAugments/mod/event/m46_50_00_00.emevd.dcx": "5d928333ac7c2bfc02bfa596c7ac22709a442d4e1c4290d8a3ce53fda9cbfe52",
+      "MayhemAugments/mod/event/m46_80_00_00.emevd.dcx": "30eb7487d44c7ed9c3fe6274c394919fa603cdd65306b8c649da7ae52a8d0618",
+      "MayhemAugments/mod/map/mapstudio/m46_60_00_00.msb.dcx": "c81436c7ae69d78bdad3d1054b8bdbab2934ceb5f125c7373ec0066936b62118",
+      "MayhemAugments/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "4c2d1b1fd050c3a9b535c36d5a018cf3e9453ee35f69f28f488f0e1fec2cf734",
+      "MayhemAugments/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "4de936f9b29014466db501d9cc23c970c56c1af7b8a148dead4f1e7099050be8",
+      "MayhemAugments/mod/event/m41_00_00_00.emevd.dcx": "f4b09100990aae0e5520de0796d06e049faa6bf8c5f54e7f3553e89777877de3",
+      "MayhemAugments/mod/event/m41_01_00_00.emevd.dcx": "47cece5fefa89ae81effff481e3fcd42cea672b5211b5abe8ef271d6636be1a1",
+      "MayhemAugments/mod/event/m46_70_00_00.emevd.dcx": "0cd0a6095c4fd944b0552fe9ccab5913159bb7809a4209cc424e8a459416912f",
+      "MayhemAugments/mod/map/mapstudio/m46_80_00_00.msb.dcx": "0cce73df158f60358bf2d26707db3df4c4ace09061a20f0758b12e56747ba2cc",
+      "MayhemAugments/mod/msg/engus/item_dlc01.msgbnd.dcx": "e9935328a643994da80e658b7d20e372ac9e2a85ae9ce7aca840011568f5bf20",
+      "MayhemAugments/mod/script/talk/m00_00_00_00.talkesdbnd.dcx": "914625577f1c4442246cd290fad4267b2b5f6f7736a2628ceab7cd3e622487f3",
+      "MayhemAugments/mod/sfx/sfxbnd_commoneffects_dlc01.ffxbnd.dcx": "98f10a9e1c86a3a0f08aa4e718ad662a27c5e337f3f9649041d922e5c4b478e7",
+      "MayhemAugments/mod/event/m51_00_00_00.emevd.dcx": "ed06844bedc1b812fce48b8f7fddfe5cb204bdd7ba000fe50028feb1a9463764",
+      "MayhemAugments/mod/chr/c0000.anibnd.dcx": "d139a7cbaf36908d7b32203b7ea763d3ffc69ccf1f2b750c329216a6e3b98d2f",
+      "MayhemAugments/mod/action/script/c0000.hks": "dd56114ec0e0d6bf8efcd86380a4cdf55cbd153ae8f130dd510df6e9ecbf3185",
+      "MayhemAugments/mod/event/m46_60_00_00.emevd.dcx": "db9d551887c046bc8379115cf87d7bd7258cc54f84f166af2a545340a9ae0272",
+      "MayhemAugments/mod/chr/c0000_a9x.anibnd.dcx": "853224baa60a0b391735f383968fd401d65884033e0c30a362e8036d2d4fddce",
+      "MayhemAugments/mod/event/common_func.emevd.dcx": "986ee1fae9c194b060d7782fbe59cba54a2c7c81cd750e49fce4f5e524463987",
+      "MayhemAugments/mod/chr/c0000.behbnd.dcx": "da0e259623d31b6def61898ecdc391cf1859e4c1e3a05a0257afc576d9bc77de",
+      "MayhemAugments/mod/map/mapstudio/m46_70_00_00.msb.dcx": "f08a09c20e941a0f089f30b4e3e3342afcc93ab049a1fceeafc50f8771e6262f",
+      "MayhemAugments/mod/regulation.bin": "c80e5198ec350685645eb80a68a5241c55322b19c3174a55f4b0b8283226fa73",
+      "MayhemAugments/mod/map/mapstudio/m46_50_00_00.msb.dcx": "fd91721785ee1bcd8479a61d34ee590e7b13247bb75c927b2757b10fc983aea8",
+      "MayhemAugments/mod/event/m41_30_00_00.emevd.dcx": "0bd80b07daf8ab88d244e2ae4edfa4f86ae450b9456996c9d81d45f848fce478",
+      "MayhemAugments/mod/msg/engus/menu_dlc01.msgbnd.dcx": "850220ca1240731b16eacea3488df23c5234973430c8e6d29e16dfab1f98c72f",
+      "MayhemAugments/mod/event/common.emevd.dcx": "102e2d87a65549ee3d64cbaa4be1a8851582e13ae3c357567fe8bbcd3e6e3286",
+      "MayhemAugments/natives/NRHex.dll": "30da9e3a3c3a9e0fb54956115281939ab3f6031f6a1bff5c98e8c1e567b91ddb",
+      "MayhemAugments/natives/NRHex.ini": "208831318ef6c1e199d575e357d9c8b33762fd7f2d55815ab040f5a33a07bb01",
+      "Mayhem Augments.me3": "67177aa2d48e724c0553cb952407d864abcc0869d610fac09f12fcf36dc36e1b"
+    },
+    "mmvZip": "14ad9304860f948eedf6b3914d1e4fef3444b6ae47631bdb8b8aa172b0f63176"
+  },
+  "mmvBaseFingerprint": "7279ca8765ef81565ba0023b47d44e75558786bf381f7301ced8c594a1d79356",
+  "gameplayVerified": false,
+  "networkGameplayVerified": false
+}
