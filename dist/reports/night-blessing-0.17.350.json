@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "version": "0.17.350",
+  "gitBase": "ed4b2b71b9bd9805e44f1093de01fc4ff761afba",
+  "generatedUtc": "2026-11-16T06:53:21.205824+00:00",
+  "mechanics": {
+    "owner": 95002500,
+    "activation": "living local holder, damaging base Night Tide, HP strictly below 20%; latch persists until grace/expedition reset",
+    "baseRain": {
+      "99810": {
+        "maxHpPercent": 2,
+        "flat": 15
+      },
+      "99811": {
+        "maxHpPercent": 2,
+        "flat": 30
+      }
+    },
+    "tickSeconds": 1,
+    "heal": "2B",
+    "damage": "B*(1+eligibleExposureSeconds/30)+0.1*max(preHealHP-0.2*maxHP,0)",
+    "order": "snapshot, native healing, native damage",
+    "rounding": "truncate positive amounts; saturate i32",
+    "pause": "outside base rain, down/revival, and native prolonged-exposure rows 99871/72/76/77",
+    "nativeProlongedRainUnchanged": true,
+    "legacyAttackHealBacklashRemoved": true,
+    "otherPeriodicEffectsUnchanged": true,
+    "savedLatch": 95002505,
+    "graceReset": 95002506
+  },
+  "validation": {
+    "unitTests": {
+      "standalone": {
+        "passed": 559,
+        "ignored": 42,
+        "logSha256": "cb307af0f8d740422c03bfa86a53891ba254a6690f23bb44a9d0d98ac63ee9fe"
+      },
+      "mmv": {
+        "passed": 565,
+        "ignored": 42,
+        "logSha256": "c4e15ab8276cc06966054256f25ca4d8f5573c7e866464ad7ed5e1763d7f9f2c"
+      }
+    },
+    "nativeIsolation": {
+      "standalone": {
+        "passed": 1,
+        "ignored": 0,
+        "logSha256": "34b4f085c5798b21f941b98cdbae2ff7bb95615dd0e1131b2e989d338702d275"
+      },
+      "mmv": {
+        "passed": 1,
+        "ignored": 0,
+        "logSha256": "73a8a0b75481a020f4273c0cad05f9b70aa37d17321b58957e52042f9b6e7f51"
+      },
+      "scope": "real original collectors/getters/periodic ordering and compiled hooks; actor/world services and HP sink are fixtures"
+    },
+    "supportedExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "uniqueNativeSignatures": 248,
+    "signaturesLogSha256": "91034d49593d23a9d3600b44d5e145895c752189a1d53cd7552d02d8289d7af1",
+    "resourceStages": {
+      "standalone": {
+        "inputSha256": "D80F759A0CBDD9FDBE9EAC10F139E7AA6EABE3D22337BE618BC2C1E312511E8D",
+        "outputSha256": "044AF64F585FC35EC068033E28FBEF061DDC169EC0D6A977B71E664A6891E7D1",
+        "onlySupportEffectsChanged": [
+          95002501,
+          95002502,
+          95002503,
+          95002504,
+          95002505,
+          95002506,
+          95002507,
+          95002508,
+          95002509,
+          95002510,
+          95002511
+        ],
+        "unrelatedRowsAndTablesUnchanged": true,
+        "bilingualChanges": {
+          "zhocn/item_dlc01.msgbnd.dcx": [
+            95002500
+          ],
+          "zhocn/menu_dlc01.msgbnd.dcx": [
+            95002500,
+            95002503
+          ],
+          "engus/item_dlc01.msgbnd.dcx": [
+            95002500
+          ],
+          "engus/menu_dlc01.msgbnd.dcx": [
+            95002500,
+            95002503
+          ]
+        },
+        "parameterReadbackSha256": "82677fca2e86fe5201b4e5b7b4f48b52fca1fa727f119684531b9b0bf9745ec6",
+        "textReadbackSha256": "0842dbba20e71d175a1ee8cc78fd8d1c9a7f2868986e21c45f8712c06e34b828"
+      },
+      "mmv": {
+        "inputSha256": "EA331DED4A15DC2D824E8564F37F71CA3B978EB5794E1E25AE97A7A0EF305F1E",
+        "outputSha256": "4D1A849B33DDBCA1E50CC371F54FFEBBFFDD16665732A0B180AE36CD1861979D",
+        "onlySupportEffectsChanged": [
+          95002501,
+          95002502,
+          95002503,
+          95002504,
+          95002505,
+          95002506,
+          95002507,
+          95002508,
+          95002509,
+          95002510,
+          95002511
+        ],
+        "unrelatedRowsAndTablesUnchanged": true,
+        "bilingualChanges": {
+          "zhocn/item_dlc01.msgbnd.dcx": [
+            95002500
+          ],
+          "zhocn/menu_dlc01.msgbnd.dcx": [
+            95002500,
+            95002503
+          ],
+          "engus/item_dlc01.msgbnd.dcx": [
+            95002500
+          ],
+          "engus/menu_dlc01.msgbnd.dcx": [
+            95002500,
+            95002503
+          ]
+        },
+        "parameterReadbackSha256": "24a476581afebf66ef80558ab1b842cc2b2d22ac42f4e42aeda27439c6dd2cec",
+        "textReadbackSha256": "d3095711b930a115d9faad5c0f78f251a16a5367cc487e1be291b4de62ed78c7"
+      }
+    }
+  },
+  "artifacts": {
+    "dist/natives/NRHex.dll": "6b995846bafd2497eacd703ce1ae27b74f11f6cf535caa0602d22730e8fd9f2e",
+    "dist/mod/regulation.bin": "044af64f585fc35ec068033e28fbef061ddc169ec0d6a977b71e664a6891e7d1",
+    "dist/mod/msg/zhocn/item_dlc01.msgbnd.dcx": "6409a037fcae2067f5a015af515dede12abc2f4a277f8a1f6355ff01092638c4",
+    "dist/mod/msg/zhocn/menu_dlc01.msgbnd.dcx": "14dc642ac0c10bb2c65d047297022cbc35cf74ea989e533c0fe677608dab0f88",
+    "dist/mod/msg/engus/item_dlc01.msgbnd.dcx": "4d47b34794f467a6ba369f95d6817abb16283c241a20b288d2f567ff093b882f",
+    "dist/mod/msg/engus/menu_dlc01.msgbnd.dcx": "67ccd9e665399149ac54cae9c8cf4fbd743d3a5df3fe1b20c8bc7886666e790c",
+    "mmv-dist-dll": "730e7c2170143c4e1a9cde5e5e2b7e60b2b47141aa6c3bedd26d653136483821",
+    "mmv-community-dll": "c4f38ffb62fa4ff71e5ea5da2063f660fe0021315103c637cba88e15442d3fcd"
+  },
+  "mmv": {
+    "sourceFingerprint": "7279ca8765ef81565ba0023b47d44e75558786bf381f7301ced8c594a1d79356",
+    "communityPackage": "/workspace/builds/MA-MMV-0.17.350",
+    "zipSha256": "e335c7d4716a6308240dd70b063b1d978f2fdf624f287fd76f60737e3b0ecee0",
+    "previousTestOverlayPreserved": true,
+    "sourceFilesReadOnly": true
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

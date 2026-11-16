@@ -56,8 +56,8 @@
   {
     "textId": 95002503,
     "ownerId": 95002500,
-    "zhInfo": "在夜雨中提升20%攻击力",
-    "enInfo": "Boosts attack power by 20% in the Night's Tide."
+    "zhInfo": "已激活黑夜赐福。夜雨中持续回血，雨伤随淋雨时间和当前血量提升。触碰赐福重置",
+    "enInfo": "Night's Blessing is active. Heals in the Night's Tide, but Tide damage rises with exposure time and current HP. Touch a Site of Grace to reset."
   },
   {
     "textId": 95003801,

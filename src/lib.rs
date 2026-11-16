@@ -386,8 +386,11 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
- fn signatures()->[(&'static str,u32);245] {
- [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
+ fn signatures()->[(&'static str,u32);248] {
+ [(night_blessing::COLLECT_PATTERN,night_blessing::COLLECT_RVA as u32),
+  (night_blessing::RATE_PATTERN,night_blessing::RATE_RVA as u32),
+  (night_blessing::POINT_PATTERN,night_blessing::POINT_RVA as u32),
+  (deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
   (deliberate_punch::SCALE_PATTERN,deliberate_punch::SCALE_RVA as u32),
@@ -556,6 +559,9 @@ pub unsafe extern "system" fn DllMain(h:*mut c_void,reason:u32,_:*mut c_void)->i
 }
 fn extra_hook_targets()->Vec<(usize,*const u8,&'static AtomicPtr<u8>)>{
  vec![
+   (night_blessing::COLLECT_RVA,night_blessing::collect as*const u8,&night_blessing::COLLECT_ORIGINAL),
+   (night_blessing::RATE_RVA,night_blessing::rate as*const u8,&night_blessing::RATE_ORIGINAL),
+   (night_blessing::POINT_RVA,night_blessing::point as*const u8,&night_blessing::POINT_ORIGINAL),
    (soul_target::RVA,soul_target::update as*const u8,&soul_target::ORIGINAL),
    (soul_immunity::GATE_RVA,soul_immunity::gate_detour as*const u8,&soul_immunity::GATE_ORIGINAL),
    (soul_immunity::RVA,soul_immunity::immunity as*const u8,&soul_immunity::ORIGINAL),
