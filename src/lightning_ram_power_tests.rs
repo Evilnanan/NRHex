@@ -30,18 +30,21 @@ fn native_ram_speed_selects_poise_and_rescue_before_construction(){unsafe{
  let mut bullet=[0usize;0x300/8];let bp=bullet.as_mut_ptr()as usize;int(bp+0xa4,crate::lightning_ram::BULLET);ptr::write_unaligned((bp+8)as*mut u64,55);
  let mut hit=[0u8;0x300];let hp=hit.as_mut_ptr()as usize;
  let mut context=[0u8;0x120];let cp=context.as_mut_ptr()as usize;ptr::write_unaligned(cp as*mut usize,bp);int(cp+12,1);
- for(speed,id,p,r)in[(6.,crate::lightning_ram::ATTACK,12.,20.),(9.99,crate::lightning_ram::ATTACK,12.,20.),(10.,crate::lightning_ram::FAST_ATTACK,18.,30.),(14.99,crate::lightning_ram::FAST_ATTACK,18.,30.),(15.,crate::lightning_ram::EXTREME_ATTACK,30.,50.),(30.,crate::lightning_ram::EXTREME_ATTACK,30.,50.)]{
-  let damage=speed*speed*1.5;ptr::write_unaligned((dp+0x30)as*mut[f32;4],[damage,1.,1.,1.]);copy(pp,dp);
-  assert_eq!(ptr::read_unaligned((pp+0x124)as*const[f32;4]),[damage,1.,1.,1.]);
+ for level in [0,1,15]{for(speed,id,p,r)in[(6.,crate::lightning_ram::ATTACK,12.,20.),(9.99,crate::lightning_ram::ATTACK,12.,20.),(10.,crate::lightning_ram::FAST_ATTACK,18.,30.),(14.99,crate::lightning_ram::FAST_ATTACK,18.,30.),(15.,crate::lightning_ram::EXTREME_ATTACK,30.,50.),(30.,crate::lightning_ram::EXTREME_ATTACK,30.,50.)]{
+  let damage=speed*speed*1.5;let limbs=if level==0{[1.;3]}else{crate::lightning_ram::encode_roll(0xdead_beef_abcd_1234,level)};
+  let packet=[damage,limbs[0],limbs[1],limbs[2]];ptr::write_unaligned((dp+0x30)as*mut[f32;4],packet);copy(pp,dp);
+  assert_eq!(ptr::read_unaligned((pp+0x124)as*const[f32;4]),packet);
   {let _f=factory(pp);assert_eq!(ptr::read_unaligned((pp+0x124)as*const[f32;4]),[1.;4]);factory_done(gp);let _i=initialize(gp);bound(bp);}
   int(cp+8,crate::lightning_ram::ATTACK);context[0xf8]=0;
   crate::ability_damage::before_construct(cp);assert_eq!(read_i32(cp+8),id);assert_eq!(context[0xf8],1);
   assert_eq!(poise(0,0,0,999.,cp,0),p);assert_eq!(rescue(cp),r);
   int(hp+0x40,id);int(hp+0x44,1);float(hp+0x148,p*1.5);float(hp+0x150,r*2.);
   constructed(hp,cp);assert_eq!(read_i32(hp+0x40),id);
-  assert_eq!(ptr::read_unaligned(hp as*const[f32;5]),[damage,0.,0.,0.,0.]);
+  let expected=damage+if speed>=15.{30.*level as f32}else{0.};
+  assert_eq!(ptr::read_unaligned(hp as*const[f32;5]),[expected,0.,0.,0.,0.]);
+  let stored=seed(bp).unwrap();assert_eq!(stored.damage,damage);assert_eq!(stored.ram_level,level);if level>0{assert_eq!(stored.victim,Some(0xdead_beef_abcd_1234));}
   assert_eq!(ptr::read_unaligned((hp+0x148)as*const f32),p*1.5);assert_eq!(ptr::read_unaligned((hp+0x150)as*const f32),r*2.);
- }
+ }}
  retired(bp);finished(gp);ROWS.with(|r|r.set([0;3]));ACTIVE.store(old_active,Ordering::Release);assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
- println!("PASS: native transport and poise/rescue getters at all speed boundaries; source modifiers retained and HP damage unchanged");
+ println!("PASS: native transport and poise/rescue getters at all speed boundaries; source modifiers retained; level bonus only changes extreme HP damage, never speed or tiers");
 }}

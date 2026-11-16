@@ -17,8 +17,8 @@ pub static MELEE_CONTINUE:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 unsafe extern "system" fn melee(actor:usize,stats:usize,delta:i32,weapon:i32,behavior:i32){
  let base=BASE.load(Ordering::Acquire);
  let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);
- let eligible=ACTIVE.load(Ordering::Acquire)&&delta<0&&delta!=i32::MIN&&stats!=0&&crate::is_local(actor,base)&&crate::native_actor::stats(actor)==stats;
- let adjusted=if eligible{-crate::onyx_mastery::melee_cost(actor,weapon,behavior,-delta,base)}else{delta};
+ let eligible=ACTIVE.load(Ordering::Acquire)&&delta<=0&&delta!=i32::MIN&&stats!=0&&crate::is_local(actor,base)&&crate::native_actor::stats(actor)==stats;
+ let adjusted=if eligible{-crate::lightning_ram::action_cost(actor,behavior,weapon,-delta,base).unwrap_or_else(||crate::onyx_mastery::melee_cost(actor,weapon,behavior,-delta,base))}else{delta};
  add(stats,adjusted,0);
 }
 // Native melee hitbox creation pays separately from bullet/spell contexts.
@@ -64,14 +64,23 @@ unsafe extern "system" fn consume(context:usize,stats:usize,delta:i32,force:u8){
  let base=BASE.load(Ordering::Acquire);
  let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);
  let actor=if context!=0{read_ptr(context)}else{0};
- if !ACTIVE.load(Ordering::Acquire)||delta>=0||delta==i32::MIN||stats==0||!crate::is_local(actor,base)||crate::native_actor::stats(actor)!=stats{
+ if !ACTIVE.load(Ordering::Acquire)||delta>0||delta==i32::MIN||stats==0||!crate::is_local(actor,base)||crate::native_actor::stats(actor)!=stats{
   add(stats,delta,force);return;
  }
+ if roll_payment(context,actor,stats,delta,force,base){return;}
  let delta=-crate::onyx_mastery::cost(context,actor,-delta,base);
  if storm(context,actor,base){force_debit(stats,-delta);return;}
  let extra=crate::echo_cost::extra(context,-delta,base);
  add(stats,delta,force);
  force_debit(stats,extra);
+}
+unsafe fn roll_payment(context:usize,actor:usize,stats:usize,delta:i32,force:u8,base:usize)->bool{
+ let behavior=read_i32(context+8);
+ if read_i32(context+0xc)>=0||!matches!(behavior,300000710|300000711|300000715|300000716|95005690){return false;}
+ let get:unsafe extern "system" fn(usize,i32)->i32=std::mem::transmute(read_ptr(read_ptr(actor)+0x250));
+ let weapon=get(actor,read_i32(context+0x38));
+ let Some(cost)=crate::lightning_ram::action_cost(actor,behavior,weapon,-delta,base)else{return false;};
+ let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);add(stats,-cost,force);true
 }
 // Native CALL has not pushed its return address: RSP is 16-byte aligned.
 // RBX is the exact context whose cached C0 fee the native caller just loaded.

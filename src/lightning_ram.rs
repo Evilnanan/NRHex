@@ -114,12 +114,62 @@ pub const REBASE_PATTERN:&str="48 89 5C 24 18 57 48 83 EC 50 0F 29 74 24 40 48 8
 pub static REBASE_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 pub const BODY_RVA:usize=0xda26c0;
 pub const BODY_PATTERN:&str="40 53 48 83 EC 20 8B C1 8B D9 25 FF FF FF 00 3D FF FF FF 00 74 5D 48 8B 0D ? ? ? ? 48 85 C9";
+// Ground power 160 -> 20 stamina/s; airborne power 80 -> at most 10/s.
+#[derive(Debug)]struct MotorFee{started:bool,remainder:f64,weapon:i32}
+impl Default for MotorFee{fn default()->Self{Self{started:false,remainder:0.,weapon:110000}}}
+impl MotorFee{
+ fn action(&mut self,cost:i32,weapon:i32)->i32{self.weapon=weapon;if std::mem::replace(&mut self.started,true){0}else{cost}}
+ fn charge(&mut self,work:f32,rate:f32)->i32{
+  if !work.is_finite()||work<=0.||!rate.is_finite()||rate<0.{return 0;}
+  self.remainder+=f64::from(work)*0.125*f64::from(rate);
+  let whole=(self.remainder+1e-6).floor().min(f64::from(i32::MAX))as i32;
+  self.remainder=(self.remainder-f64::from(whole)).max(0.);whole
+ }
+}
+fn roll_behavior(id:i32)->bool{matches!(id,300000710|300000711|300000715|300000716)||id==OWNER+90}
+pub(crate) unsafe fn action_cost(actor:usize,behavior:i32,weapon:i32,cost:i32,base:usize)->Option<i32>{
+ if !roll_behavior(behavior)||!eligible(actor,base){return None;}
+ let mut s=STATE.lock().ok()?;
+ if s.actor!=actor||s.handle!=read_ptr(actor+8)as u64||!s.active||s.interrupted{return None;}
+ Some(s.fee.action(cost,weapon))
+}
+// HKS act(110), SetStaminaRecoveryDisabled: one-update action flag, cleared
+// by the native action lifecycle. Never clear other callers' recovery flags.
+pub const RECOVERY_FLAG_RVA:usize=0x3f5ace;
+pub const RECOVERY_FLAG_PATTERN:&str="48 8B 07 48 8B 48 60 48 8B 81 C8 00 00 00 83 48 18 40";
+unsafe fn disable_recovery(actor:usize){
+ let coord=read_ptr(actor+0x60);let flags=if coord!=0{read_ptr(coord+0xc8)}else{0};
+ if flags!=0{let p=(flags+0x18)as*mut u32;ptr::write(p,ptr::read(p)|0x40);}
+}
+unsafe fn motor_cost_rate(actor:usize,weapon:i32)->f32{
+ // Same PlayerIns virtual cost calculation used by both native payment paths.
+ // A large reference fee preserves fractional reductions before integer debit.
+ let vt=read_ptr(actor);if vt==0{return 1.;}let address=read_ptr(vt+0x348);if address==0{return 1.;}
+ let getter:unsafe extern "system" fn(usize,i32,i32,u8,i32)->i32=std::mem::transmute(address);
+ getter(actor,10000,weapon,0,1).max(0)as f32/10000.
+}
+// Three exact finite f32 limbs carry generation + emission-time level.
+// Keep velocity damage separate: tiers and recoil always use physical speed.
+pub(crate) fn encode_roll(generation:u64,level:i32)->[f32;3]{
+ [(generation&0xffffff)as f32,((generation>>24)&0xffffff)as f32,((generation>>48)as u32|((level.clamp(1,15)as u32)<<16)|0x400000)as f32]
+}
+pub(crate) fn decode_roll(v:[f32;3])->Option<(u64,i32)>{
+ if v.iter().all(|x|x.is_finite()&&x.fract()==0.)&&(0. ..16777216.).contains(&v[0])&&(0. ..16777216.).contains(&v[1])&&(4259840. ..5242880.).contains(&v[2]){
+  let high=v[2]as u32;let generation=v[0]as u64|((v[1]as u64)<<24)|((u64::from(high&0xffff))<<48);
+  if generation!=0{return Some((generation,((high>>16)&15)as i32));}
+ }
+ // Accept already in-flight snapshots from the previous format without bonus.
+ crate::soul_immunity::decode(v).map(|g|(g,0))
+}
+pub(crate) fn contact_damage(velocity_damage:f32,level:i32)->f32{
+ velocity_damage+if attack_for_damage(velocity_damage)==EXTREME_ATTACK{30.*level.clamp(0,15)as f32}else{0.}
+}
 // a713_040010 travels 3.700m before the 22/30s continuation window.
 const ROLL_SPEED:f32=3.700/(22./30.);
-#[derive(Default)]struct State{pending:Vec<PendingStagger>,actor:usize,handle:u64,stats:usize,motion:Motion,travel:Travel,yielding:crate::ram_motion::Yielding,effective_speed:f32,detach:f32,step_body:Option<u32>,step_grace:f32,push:bool,active:bool,interrupted:bool,queried:bool,missed_updates:u8,drive:bool,powered:bool,wish:V,window:bool,recoil:bool,ending:bool,crash:bool,crash_pending:bool,rebound:f32,started:bool,rolling:bool,visual_speed:f32,trail:Option<V>,generation:u64}
+#[derive(Default)]struct State{pending:Vec<PendingStagger>,actor:usize,handle:u64,stats:usize,motion:Motion,travel:Travel,yielding:crate::ram_motion::Yielding,effective_speed:f32,detach:f32,step_body:Option<u32>,step_grace:f32,push:bool,active:bool,interrupted:bool,queried:bool,missed_updates:u8,drive:bool,fee:MotorFee,wish:V,window:bool,recoil:bool,ending:bool,crash:bool,crash_pending:bool,rebound:f32,started:bool,rolling:bool,visual_speed:f32,trail:Option<V>,generation:u64}
 static GENERATION:AtomicU64=AtomicU64::new(1);
 static CONTACTS:Mutex<BTreeMap<(u64,u64,u64),V>>=Mutex::new(BTreeMap::new());
-static STATE:Mutex<State>=Mutex::new(State{pending:Vec::new(),actor:0,handle:0,stats:0,motion:Motion{velocity:V(0.,0.,0.),spin:V(0.,0.,0.),initialized:false,locked:false,airborne:false,support:None},travel:Travel{previous:None,blocked:0.},yielding:crate::ram_motion::Yielding{body:None,age:0.,knocked:0.},effective_speed:0.,detach:0.,step_body:None,step_grace:0.,push:false,active:false,interrupted:false,queried:false,missed_updates:0,drive:false,powered:false,wish:V(0.,0.,0.),window:false,recoil:false,ending:false,crash:false,crash_pending:false,rebound:0.,started:false,rolling:false,visual_speed:0.,trail:None,generation:0});
+static STATE:Mutex<State>=Mutex::new(State{pending:Vec::new(),actor:0,handle:0,stats:0,motion:Motion{motor_work:0.,velocity:V(0.,0.,0.),spin:V(0.,0.,0.),initialized:false,locked:false,airborne:false,support:None},travel:Travel{previous:None,blocked:0.},yielding:crate::ram_motion::Yielding{body:None,age:0.,knocked:0.},effective_speed:0.,detach:0.,step_body:None,step_grace:0.,push:false,active:false,interrupted:false,queried:false,missed_updates:0,drive:false,fee:MotorFee{started:false,remainder:0.,weapon:110000},wish:V(0.,0.,0.),window:false,recoil:false,ending:false,crash:false,crash_pending:false,rebound:0.,started:false,rolling:false,visual_speed:0.,trail:None,generation:0});
 // No game calls under STATE or on a Havok worker. Match the current local
 // actor, generation handle, physics module and the exact live proxy object.
 unsafe fn managed_actor(s:&State,base:usize)->Option<usize>{
@@ -317,16 +367,14 @@ pub unsafe fn query(actor:usize,art_id:i32,hand:i32,held:bool,window:bool,angle:
   // Activation only arms the simulation. The real a713 attack behavior
   // opens rolling; the windup has substantial root motion of its own.
   let initial=!s.active;
-  if initial{if !can_drive||s.rebound>0.{return 0;}s.active=true;s.powered=true;s.started=false;s.rolling=false;s.window=false;s.motion=Motion::default();s.detach=0.;s.step_body=None;s.step_grace=0.;s.travel=Travel::default();s.yielding=Default::default();s.effective_speed=0.;s.generation=GENERATION.fetch_add(1,Ordering::Relaxed);}
+  if initial{if !can_drive||s.rebound>0.{return 0;}s.active=true;s.fee=MotorFee::default();s.started=false;s.rolling=false;s.window=false;s.motion=Motion::default();s.detach=0.;s.step_body=None;s.step_grace=0.;s.travel=Travel::default();s.yielding=Default::default();s.effective_speed=0.;s.generation=GENERATION.fetch_add(1,Ordering::Relaxed);}
   let cycle=window&&!s.window;s.window=window;
-  if cycle{s.powered=can_drive;}
-  // Any positive stamina permits a roll, including a native debit below zero.
-  // FP is free while owned; zero/negative stamina cannot power the next roll.
-  // Check the next roll only at its boundary, not after the current debit.
-  s.drive=held&&s.powered;
+  // Recheck every update, not only at animation-cycle boundaries.
+  s.drive=can_drive;
   if !s.drive&&!s.motion.locked&&!s.motion.airborne&&s.started{s.active=false;s.ending=true;return 3;}
   if cycle{2}else if s.started&&(s.motion.locked||s.motion.airborne){1}else{0}
  };
+ if STATE.lock().is_ok_and(|s|s.actor==actor&&s.active&&s.drive&&s.started){disable_recovery(actor);}
  result
 }
 #[derive(Clone,Copy)]struct Contact{normal:V,point:V,fraction:f32,body:u32}
@@ -546,15 +594,25 @@ unsafe extern "system" fn velocity(physics:usize,vector:*mut f32,time:usize){
   }
   !s.active&&s.rebound<=0.
  };
- let desired={let Ok(mut s)=STATE.lock()else{return;};let drive=s.drive;let wish=s.wish;
-  if stopped{V::default()}else{
-   if !s.motion.advance(dt,drive&&rebound<=0.&&!obstructed,wish,if step_air{None}else{ground}){s.active=false;return;}
+ let stats=native_actor::stats(actor);
+ let fee_context=STATE.lock().ok().filter(|s|s.actor==actor&&s.active).map(|s|s.fee.weapon);
+ let rate=fee_context.map(|weapon|motor_cost_rate(actor,weapon)).unwrap_or(0.);
+ let stamina=if stats!=0{read_i32(stats+0x15c).max(0)}else{0};
+ let available=stamina>0;
+ let exempt=stats!=0&&(ptr::read((stats+0x189)as*const u8)&0x21!=0||ptr::read((base+0x3c0f2f7)as*const u8)!=0);
+ let (desired,cost,working)={let Ok(mut s)=STATE.lock()else{return;};let drive=s.drive&&available;let wish=s.wish;
+  if stopped{(V::default(),0,false)}else{
+   let budget=if exempt||rate<=0.{f32::INFINITY}else{((f64::from(stamina)-s.fee.remainder).max(0.)/(0.125*f64::from(rate)))as f32};
+   if !s.motion.advance_with_budget(dt,drive&&rebound<=0.&&!obstructed,wish,if step_air{None}else{ground},budget){s.active=false;return;}
    // No independent wall bounce. Compliance expires promptly and blocked
    // motion cannot receive engine power, so corners never store new energy.
    let spin=s.motion.spin.len();s.visual_speed=visual_speed(s.visual_speed,spin*dt,dt);
-   let candidate=s.motion.velocity;s.travel.submit(position,candidate,dt);candidate
+   let candidate=s.motion.velocity;let work=s.motion.motor_work;
+   let cost=s.fee.charge(work,if exempt{0.}else{rate});s.travel.submit(position,candidate,dt);(candidate,cost,work>0.)
   }
  };
+ if working&&rate>0.{disable_recovery(actor);}
+ if cost>0{let add:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);add(stats,-cost.min(read_i32(stats+0x15c).max(0)),0);}
  // Only the stack-local native velocity is replaced. Both capsules, normal
  // collision resolution and native movement/network updates consume it.
  ptr::write_unaligned(vector as*mut[f32;4],desired.array());
@@ -730,13 +788,13 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
  }
  #[test]fn resistant_enemy_rebound_never_arms_wall_hp_cost(){
   for speed in [6.,9.99,10.,15.,30.]{
-   let mut s=State{active:true,drive:true,motion:Motion{velocity:V(speed,0.,0.),..Default::default()},..Default::default()};
+   let mut s=State{active:true,drive:true,motion:Motion{motor_work:0.,velocity:V(speed,0.,0.),..Default::default()},..Default::default()};
    s.enemy_collision(EnemyContact{speed,normal:V(-1.,0.,0.),medium:Some(0)},EnemyResponse::Rebound,true);
    assert_eq!(s.active,speed<15.);assert_eq!(s.drive,speed<15.);assert_eq!(s.ending,speed>=15.);assert!(!s.crash_pending&&!s.push);
    assert_eq!(s.crash,speed>=15.);assert_eq!(s.rebound>0.,speed>=15.);
   }
   for response in [EnemyResponse::Suppressed,EnemyResponse::Yield,EnemyResponse::Deflect]{
-   let mut s=State{active:true,drive:true,motion:Motion{velocity:V(15.,0.,3.),..Default::default()},..Default::default()};
+   let mut s=State{active:true,drive:true,motion:Motion{motor_work:0.,velocity:V(15.,0.,3.),..Default::default()},..Default::default()};
    s.enemy_collision(EnemyContact{speed:15.,normal:V(-1.,0.,0.),medium:Some(0)},response,true);
    let suppressed=response==EnemyResponse::Suppressed;
    assert_eq!(s.active,suppressed);assert_eq!(s.drive,suppressed);assert_eq!(s.crash,!suppressed);assert!(!s.push&&!s.crash_pending);
@@ -745,7 +803,7 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
  #[test]fn medium_reaction_precheck_gates_extreme_rebound_but_not_damage(){
   for medium in [None,Some(0),Some(1),Some(2),Some(5),Some(10)]{
    for response in [EnemyResponse::Suppressed,EnemyResponse::Yield,EnemyResponse::Deflect,EnemyResponse::Rebound]{
-    let mut s=State{active:true,drive:true,motion:Motion{velocity:V(20.,0.,0.),..Default::default()},..Default::default()};
+    let mut s=State{active:true,drive:true,motion:Motion{motor_work:0.,velocity:V(20.,0.,0.),..Default::default()},..Default::default()};
     s.enemy_collision(EnemyContact{speed:20.,normal:V(-1.,0.,0.),medium},response,true);
     let bounce=medium==Some(0)&&response!=EnemyResponse::Suppressed;
     assert_eq!(s.crash,bounce);assert_eq!(s.active,!bounce);assert!(!s.push&&!s.crash_pending);
@@ -760,14 +818,14 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
    ptr::write_unaligned((h+0x200)as*mut[f32;4],[0.,0.,sign,0.]);
    let normal=model_contact_normal(h);assert_eq!(normal,V(0.,0.,-1.));
    for (v,seed,bounce)in [(V(30.,0.,16.),34.,true),(V(0.,0.,14.99),30.,true),(V(0.,0.,20.),14.,false),(V(0.,0.,15.),15.,true)]{
-    let mut s=State{active:true,drive:true,motion:Motion{velocity:v,..Default::default()},..Default::default()};
+    let mut s=State{active:true,drive:true,motion:Motion{motor_work:0.,velocity:v,..Default::default()},..Default::default()};
     s.enemy_collision(EnemyContact{speed:seed,normal,medium:Some(0)},EnemyResponse::Rebound,true);
     assert_eq!(s.crash,bounce);assert_eq!(s.active,!bounce);assert!(!s.push&&!s.crash_pending);
     assert!(s.motion.velocity.len()<=v.len()+0.0001);
    }
   }
   // Native suppressed hits on a prone model remain non-blocking.
-  let mut s=State{active:true,drive:true,motion:Motion{velocity:V(20.,0.,0.),..Default::default()},..Default::default()};
+  let mut s=State{active:true,drive:true,motion:Motion{motor_work:0.,velocity:V(20.,0.,0.),..Default::default()},..Default::default()};
   s.enemy_collision(EnemyContact{speed:20.,normal:V(0.,1.,0.),medium:Some(0)},EnemyResponse::Suppressed,true);
   assert!(s.active&&!s.crash);assert_eq!(s.motion.velocity,V(20.,0.,0.));
   for normal in [[0.,0.,0.,0.],[f32::NAN,0.,0.,0.]]{
@@ -791,7 +849,7 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
   }
   #[test]fn unconfirmed_ultimate_stagger_never_rebounds_even_if_level_two_immune(){
    for response in [EnemyResponse::Rebound,EnemyResponse::Deflect,EnemyResponse::Yield,EnemyResponse::Suppressed]{
-    let mut s=State{active:true,drive:true,motion:Motion{velocity:V(20.,0.,0.),..Default::default()},..Default::default()};
+    let mut s=State{active:true,drive:true,motion:Motion{motor_work:0.,velocity:V(20.,0.,0.),..Default::default()},..Default::default()};
     s.enemy_collision(EnemyContact{speed:20.,normal:V(-1.,0.,0.),medium:Some(0)},response,false);
     assert!(s.active&&!s.crash&&s.rebound==0.&&!s.crash_pending);
    }
@@ -805,7 +863,7 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
    }
   }
   #[test]fn trailing_soft_target_hits_do_not_redirect_the_owner(){
-  let mut s=State{active:true,drive:true,motion:Motion{velocity:V(15.,0.,0.),..Default::default()},..Default::default()};
+  let mut s=State{active:true,drive:true,motion:Motion{motor_work:0.,velocity:V(15.,0.,0.),..Default::default()},..Default::default()};
   s.enemy_collision(EnemyContact{speed:15.,normal:V(1.,0.,0.),medium:Some(2)},EnemyResponse::Rebound,true);
   assert!(s.active&&s.drive&&!s.crash&&!s.push);assert_eq!(s.motion.velocity,V(15.,0.,0.));
  }
@@ -844,7 +902,7 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
  #[test]fn origin_translation_preserves_speed_and_all_position_histories(){
   for shift in [V(0.,0.,-32.),V(-24.,0.,-32.),V(0.,8.,0.)]{
    let v=V(8.,-1.,14.);let from=V(31.2,59.7,32.3);let dt=0.0234;
-   let mut s=State{active:true,drive:true,started:true,trail:Some(from),generation:7,effective_speed:v.len(),motion:Motion{velocity:v,locked:true,..Default::default()},..Default::default()};
+   let mut s=State{active:true,drive:true,started:true,trail:Some(from),generation:7,effective_speed:v.len(),motion:Motion{motor_work:0.,velocity:v,locked:true,..Default::default()},..Default::default()};
    s.travel.submit(from,v,dt);s.rebase(shift);
    let resolved=s.travel.resolve(from.add(v.scale(dt)).add(shift)).unwrap();
    assert!((resolved.velocity.len()-v.len()).abs()<0.001);assert!(!resolved.stopped);
@@ -878,3 +936,5 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
   assert_eq!(roll_rate(f32::NAN),1.);assert_eq!(roll_rate(1000.),8.);
  }
 }
+
+#[cfg(test)]#[path="ram_cost_tests.rs"]mod cost_tests;

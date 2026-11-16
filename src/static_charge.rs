@@ -204,7 +204,7 @@ unsafe fn emit_kind(p:Pending,bullet:i32,victim:Option<u64>,base:usize)->bool{
  ptr::write_unaligned((at+0x14)as*mut i32,bullet);
  for offset in [0x28,0x2c]{ptr::write_unaligned((at+offset)as*mut i32,0x10);}
  d.0[0xa8]=0xff;d.0[0x105]=0xff;
- let v=victim.map(crate::soul_immunity::encode).unwrap_or([1.;3]);
+ let v=if bullet==crate::lightning_ram::BULLET{crate::lightning_ram::encode_roll(victim.unwrap_or(1),level(base))}else{victim.map(crate::soul_immunity::encode).unwrap_or([1.;3])};
  ptr::write_unaligned((at+0x30)as*mut[f32;4],[p.damage,v[0],v[1],v[2]]);
  ptr::write_unaligned((at+0x44)as*mut u32,15); // fixed independent pose + direct row + network
  ptr::write_unaligned((at+0x50)as*mut[[f32;4];4],[[1.,0.,0.,0.],[0.,1.,0.,0.],[0.,0.,1.,0.],[p.point[0],p.point[1],p.point[2],1.]]);
@@ -213,7 +213,7 @@ unsafe fn emit_kind(p:Pending,bullet:i32,victim:Option<u64>,base:usize)->bool{
  let emit:unsafe extern "system" fn(usize,usize,usize,usize)->usize=std::mem::transmute(crate::echo_cast::EMIT_ORIGINAL.load(Ordering::Acquire));
  emit(manager,&mut out as*mut i32 as usize,at,&mut error as*mut i32 as usize);out>=0
 }
-struct Discharge{damage:f32,victim:Option<u64>,targets:Mutex<BTreeSet<u64>>}
+struct Discharge{damage:f32,ram_level:i32,victim:Option<u64>,targets:Mutex<BTreeSet<u64>>}
 #[derive(Default)]struct Flights{groups:BTreeMap<usize,(i32,Arc<Discharge>)>,instances:BTreeMap<usize,(u64,Arc<Discharge>)>}
 static FLIGHTS:Mutex<Flights>=Mutex::new(Flights{groups:BTreeMap::new(),instances:BTreeMap::new()});
 thread_local!{static SEED:RefCell<Option<Arc<Discharge>>>=const{RefCell::new(None)};static CHILD:RefCell<Option<Arc<Discharge>>>=const{RefCell::new(None)};}
@@ -225,8 +225,11 @@ pub unsafe fn factory(payload:usize)->SeedGuard{
  let private=ACTIVE.load(Ordering::Acquire)&&payload!=0&&private_bullet(read_i32(payload+4));
  let seed=if private{CHILD.with(|s|s.borrow().clone()).or_else(||{
   let damage=ptr::read_unaligned((payload+0x124)as*const f32);
-  let victim=if matches!(read_i32(payload+4),crate::soul_critical::BULLET|crate::lightning_ram::BULLET){crate::soul_immunity::decode(ptr::read_unaligned((payload+0x128)as*const[f32;3]))}else{None};
-  (matches!(read_i32(payload+4),BULLET|LEAK_BULLET|crate::soul_critical::BULLET|crate::lightning_ram::BULLET)&&damage.is_finite()&&damage>0.).then(||Arc::new(Discharge{damage,victim,targets:Mutex::new(BTreeSet::new())}))
+  let metadata=ptr::read_unaligned((payload+0x128)as*const[f32;3]);
+  let roll=(read_i32(payload+4)==crate::lightning_ram::BULLET).then(||crate::lightning_ram::decode_roll(metadata)).flatten();
+  let victim=if read_i32(payload+4)==crate::lightning_ram::BULLET{roll.map(|r|r.0)}else if read_i32(payload+4)==crate::soul_critical::BULLET{crate::soul_immunity::decode(metadata)}else{None};
+  let ram_level=roll.map_or(0,|r|r.1);
+  (matches!(read_i32(payload+4),BULLET|LEAK_BULLET|crate::soul_critical::BULLET|crate::lightning_ram::BULLET)&&damage.is_finite()&&damage>0.).then(||Arc::new(Discharge{damage,ram_level,victim,targets:Mutex::new(BTreeSet::new())}))
  })}else{None};
  let restore=if private{let p=payload+0x124;let v=ptr::read_unaligned(p as*const[f32;4]);ptr::write_unaligned(p as*mut[f32;4],[1.;4]);Some((p,v))}else{None};
  SeedGuard(SEED.with(|s|s.replace(seed)),restore)
@@ -258,13 +261,14 @@ pub unsafe fn before_construct(context:usize){
 pub unsafe fn constructed(hit:usize,context:usize){
  if let Ok(mut s)=SAMPLES.lock(){s.remove(&hit);}
  if !private_attack(read_i32(hit+0x40),read_i32(hit+0x44)){return;}
- let damage=seed(read_ptr(context)).or_else(||SEED.with(|s|s.borrow().clone())).map_or(0.,|s|s.damage);
+ let snapshot=seed(read_ptr(context)).or_else(||SEED.with(|s|s.borrow().clone()));
+ let damage=snapshot.as_ref().map_or(0.,|s|s.damage);
  let ram=crate::lightning_ram::attack(read_i32(hit+0x40));
  // Only the extreme contact selects native atkBehaviorId=12 (ultimate
  // stagger). Each speed tier also has its own base poise/rescue values.
  // Persist the private row ID in the hit, including native copies/dispatch.
  if ram{ptr::write_unaligned((hit+0x40)as*mut i32,crate::lightning_ram::attack_for_damage(damage));}
- ptr::write_unaligned(hit as*mut[f32;5],if ram{[damage,0.,0.,0.,0.]}else if read_i32(hit+0x40)==crate::soul_critical::ATTACK{crate::soul_critical::components(damage)}else{[0.,0.,0.,damage,0.]});
+ ptr::write_unaligned(hit as*mut[f32;5],if ram{[crate::lightning_ram::contact_damage(damage,snapshot.as_ref().map_or(0,|s|s.ram_level)),0.,0.,0.,0.]}else if read_i32(hit+0x40)==crate::soul_critical::ATTACK{crate::soul_critical::components(damage)}else{[0.,0.,0.,damage,0.]});
  // Native attack context is fixed, no equipped-weapon contribution. Recipient
  // calculation independently suppresses offensive factors already captured.
 }
@@ -313,7 +317,7 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
   let mut hit=[0u8;0x80];let h=hit.as_mut_ptr()as usize;let context=[0usize;1];
   for (speed,id)in[(6.,crate::lightning_ram::ATTACK),(10.,crate::lightning_ram::FAST_ATTACK),(14.99,crate::lightning_ram::FAST_ATTACK),(15.,crate::lightning_ram::EXTREME_ATTACK),(30.,crate::lightning_ram::EXTREME_ATTACK)]{
    let damage=speed*speed*1.5;
-   let _guard=SeedGuard(SEED.with(|s|s.replace(Some(Arc::new(Discharge{damage,victim:None,targets:Mutex::new(BTreeSet::new())})))),None);
+   let _guard=SeedGuard(SEED.with(|s|s.replace(Some(Arc::new(Discharge{damage,ram_level:0,victim:None,targets:Mutex::new(BTreeSet::new())})))),None);
    ptr::write_unaligned((h+0x40)as*mut i32,crate::lightning_ram::ATTACK);ptr::write_unaligned((h+0x44)as*mut i32,1);
    constructed(h,context.as_ptr()as usize);
    assert_eq!(read_i32(h+0x40),id);assert!(private_attack(id,1));assert!(!private_attack(id,0));

@@ -142,14 +142,19 @@ fn traction(velocity:V,spin:V,n:V,normal_impulse:f32)->(V,V){
  let impulse=if impulse.len()<=STATIC_GRIP*load{impulse}else{impulse.unit().scale(SLIDING_GRIP*load)};
  (velocity.add(impulse),spin.sub(impulse.scale(1./INERTIA)))
 }
-fn spin_motor(spin:V,heading:V,dt:f32,drive:bool,power:f32,acceleration:f32)->V{
- if !drive{return spin;}
+fn spin_motor(spin:V,heading:V,dt:f32,drive:bool,power:f32,acceleration:f32)->(V,f32){
+ if !drive{return (spin,0.);}
  let added=(power/(INERTIA*spin.len().max(4.))).min(acceleration)*dt;
- let v=spin.add(heading.scale(added));v.scale((SAFETY_SPEED/v.len().max(0.00001)).min(1.))
+ let v=spin.add(heading.scale(added));let v=v.scale((SAFETY_SPEED/v.len().max(0.00001)).min(1.));
+ // Bill only positive motor work, before grip, gravity and drag. Bound the
+ // discrete energy increment by the configured output power.
+ (v,(0.5*INERTIA*(v.dot(v)-spin.dot(spin))).clamp(0.,power*dt))
 }
-#[derive(Default,Debug)]pub struct Motion{pub velocity:V,pub spin:V,pub initialized:bool,pub locked:bool,pub airborne:bool,pub support:Option<V>}
+#[derive(Default,Debug)]pub struct Motion{pub motor_work:f32,pub velocity:V,pub spin:V,pub initialized:bool,pub locked:bool,pub airborne:bool,pub support:Option<V>}
 impl Motion{
- pub fn advance(&mut self,dt:f32,drive:bool,wish:V,ground:Option<V>)->bool{
+ pub fn advance(&mut self,dt:f32,drive:bool,wish:V,ground:Option<V>)->bool{self.advance_with_budget(dt,drive,wish,ground,f32::INFINITY)}
+ pub fn advance_with_budget(&mut self,dt:f32,drive:bool,wish:V,ground:Option<V>,work_budget:f32)->bool{
+  self.motor_work=0.;
   if !dt.is_finite()||dt<0.||dt>0.25||!self.velocity.finite()||!self.spin.finite(){*self=Self::default();return false;}
   if dt==0.{return true;}
   if !self.initialized{
@@ -177,6 +182,7 @@ impl Motion{
   self.support=ground;self.airborne=ground.is_none();
   let steps=(dt*120.).ceil()as usize;let h=dt/steps as f32;
   for _ in 0..steps{
+   let remaining=(work_budget-self.motor_work).max(0.)/h;
    if let Some(n)=ground{
     let before=self.velocity.unit();
     self.velocity=steer(self.velocity,wish,n,h);
@@ -185,13 +191,13 @@ impl Motion{
      let c=before.dot(heading).clamp(-1.,1.);let s=n.dot(before.cross(heading));
      self.spin=self.spin.scale(c).add(n.cross(self.spin).scale(s));
     }
-    self.spin=spin_motor(self.spin.plane(n),heading,h,drive,160.,30.);
+    let (spin,work)=spin_motor(self.spin.plane(n),heading,h,drive,160f32.min(remaining),30.);self.spin=spin;self.motor_work+=work;
     (self.velocity,self.spin)=traction(self.velocity,self.spin,n,GRAVITY*n.1*h);
     let speed=self.velocity.len();let next=(speed-(1.2+0.035*speed*speed)*h).max(0.);
     self.velocity=self.velocity.unit().scale(next).add(V(0.,-GRAVITY,0.).plane(n).scale(h));
    }else{
     let heading=if self.spin.len()>0.1{self.spin.unit()}else{V(wish.0,0.,wish.2).unit()};
-    self.spin=spin_motor(self.spin,heading,h,drive,80.,10.);
+    let (spin,work)=spin_motor(self.spin,heading,h,drive,80f32.min(remaining),10.);self.spin=spin;self.motor_work+=work;
     self.spin=self.spin.scale((-(0.15+0.015*self.spin.len())*h).exp());
     let v=self.velocity;self.velocity=v.add(V(0.,-GRAVITY,0.).sub(v.scale(0.01*v.len())).scale(h));
    }

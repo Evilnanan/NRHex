@@ -386,7 +386,7 @@ const NEW_392810_PATTERN:&str="48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8D 6
 const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 75 05 E8 D9 00 BA FF 8B 58 08 E8 D1 19 B9 FF 84";
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
- fn signatures()->[(&'static str,u32);244] {
+ fn signatures()->[(&'static str,u32);245] {
  [(deliberate_punch::DISPATCH_PATTERN,deliberate_punch::DISPATCH_RVA as u32),
   (deliberate_punch::COMMIT_PATTERN,deliberate_punch::COMMIT_RVA as u32),
   (deliberate_punch::OBJECT_PATTERN,deliberate_punch::OBJECT_RVA as u32),
@@ -479,6 +479,7 @@ const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
   (ram_ground::SOUND_PATTERN,ram_ground::SOUND_RVA as u32),
   (ram_ground::MATERIAL_PATTERN,ram_ground::MATERIAL_RVA as u32),
   (lightning_ram::IMPACT_PATTERN,lightning_ram::IMPACT_RVA as u32),
+  (lightning_ram::RECOVERY_FLAG_PATTERN,lightning_ram::RECOVERY_FLAG_RVA as u32),
   (lightning_ram::MOTION_PATTERN,lightning_ram::MOTION_RVA as u32),
   (lightning_ram::REBASE_PATTERN,lightning_ram::REBASE_RVA as u32),
   (ram_native_contact::SLOPE_PATTERN,ram_native_contact::SLOPE_RVA as u32),

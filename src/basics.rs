@@ -138,14 +138,14 @@ pub unsafe extern "system" fn restage_detour(){
   for hero in [9,10]{assert_eq!(cooldown_effect(Some(hero)),Some(OWNER+3));}
   for hero in [None,Some(0),Some(6),Some(7),Some(8)]{assert_eq!(cooldown_effect(hero),None);}
  }
- #[test]fn ultimate_and_necromancy_conflicts_use_ownership_in_every_draw_route(){
+ #[test]fn basics_excludes_ultimates_in_one_direction_in_every_draw_route(){
   use crate::reward_choices::*;
   let index=|id|crate::hex_pool::OWNER_IDS.iter().position(|&v|v==id).unwrap();
   let basics=index(OWNER);let conflicts=CONFLICTS.map(index);
   for bits in 0..(1usize<<(CONFLICTS.len()+1)){
    let owned=mask(std::iter::once(basics).chain(conflicts).enumerate().filter_map(|(i,id)|(bits&(1<<i)!=0).then_some(id)));
    let unavailable=ownership_exclusions(owned.clone());
-   assert_eq!(unavailable.contains(&basics),bits!=0);
+   assert_eq!(unavailable.contains(&basics),bits&1!=0);
    for id in conflicts{assert_eq!(unavailable.contains(&id),owned.contains(&id)||bits&1!=0);}
    for seen in [Default::default(),all(crate::hex_pool::HEX_COUNT)]{
     let round=crate::reward_cycle::Round::new(&unavailable,&seen);

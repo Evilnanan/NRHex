@@ -6,6 +6,7 @@ static class SpiritRework {
  static void Set(PARAM.Row row,string field,object value){row[field].Value=Convert.ChangeType(value,row[field].Value.GetType());}
  static string Hash(string path)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(path)));
  public static void Configure(Func<string,int,int,PARAM.Row> add,PARAM.Row drain){
+  SpiritCharge.Configure(add);
   Set(drain,"changeHpRate",100f/60f);Set(drain,"changeHpPoint",0);Set(drain,"motionInterval",1f);
   foreach(string field in new[]{"physicsAttackRate","magicAttackRate","fireAttackRate","thunderAttackRate","darkAttackRate"})Set(drain,field,.25f);
   Set(drain,"vfxId",95001804);

@@ -13,7 +13,6 @@ pub fn ownership_exclusions(mut owned:HexSet)->HexSet{
  let basics=index(crate::basics::OWNER);
  let conflicts=crate::basics::CONFLICTS.map(index);
  if owned.contains(&basics){owned.extend(conflicts);}
- else if conflicts.iter().any(|i|owned.contains(i)){owned.insert(basics);}
  let pact=index(95002600);let shell=index(95000700);let jiahao=index(95001300);
  if owned.contains(&pact){owned.extend([shell,jiahao]);}
  else if owned.contains(&shell)||owned.contains(&jiahao){owned.insert(pact);}
@@ -103,7 +102,7 @@ pub fn is_hex_good(encoded:u32)->bool{
    let blocked=combat_exclusions(owned,hero,Some(1600));
    for seen in [HexSet::new(),all(HEX_COUNT)]{
     let round=crate::reward_cycle::Round::new(&blocked,&seen);let focused=round.preferred([basics,necromancy,0]).unwrap();let random=round.draw(|n|Some(n-1)).unwrap();let refresh=crate::reward_cycle::Single::new(&blocked,&seen,&mask([0,1]));
-    for (id,excluded)in [(basics,flags!=0),(necromancy,hero!=Some(6)||flags!=0)]{
+    for (id,excluded)in [(basics,flags&1!=0),(necromancy,hero!=Some(6)||flags!=0)]{
      assert_eq!(round.candidates.contains(&id),!excluded,"{hero:?}/{flags}/{id}");assert_eq!(refresh.candidates.contains(&id),!excluded);
      if excluded{assert!(!focused.contains(&id));assert!(!random.contains(&id));}
     }

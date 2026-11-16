@@ -174,6 +174,7 @@ unsafe fn reward_key(attributes: usize) -> Option<crate::spirit_kills::Key> {
 
 fn store_capture(state: &mut spirit::Spirits, candidate: Option<crate::spirit_kills::Candidate>) {
     let Some(candidate) = candidate else { return; };
+    state.queue_kill_charge();
     let stored = state.defeated(candidate.soul, candidate.corpse, candidate.max_hp);
     nlog_info!("Soul native kill: npc={} think={} corpse={} max_hp={} stored={}",
         candidate.soul.npc, candidate.soul.think, candidate.corpse, candidate.max_hp, stored);
@@ -406,16 +407,17 @@ pub(crate) unsafe fn flush_capture(base: usize) {
     if world == 0 { return; }
     let player = read_ptr(world + 0x174e8);
     if player == 0 || stats(player) == 0 { return; }
-    let cue = SPIRITS
+    let (cue, charges) = SPIRITS
         .get()
         .and_then(|s| s.lock().ok().and_then(|mut s| {
-            if s.owned_by(player) { s.take_capture_cue() } else { None }
-        }));
-    let Some(corpse) = cue else {
-        return;
-    };
+            if s.owned_by(player) { Some((s.take_capture_cue(), s.take_kill_charges())) } else { None }
+        })).unwrap_or_default();
     let apply: unsafe extern "system" fn(usize, i32, u8) -> u8 =
         std::mem::transmute(base + APPLY_SELF_RVA);
+    // Same instant SpEffect collection as native on-kill gauge rewards.
+    // Keep engine charge multipliers, blocked charging and ready notification.
+    for _ in 0..charges { apply(player, spirit::KILL_CHARGE, 0); }
+    let Some(corpse) = cue else { return; };
     apply(player, spirit::CAPTURE_CUE, 0);
     nlog_info!("Soul collection cue requested: owner={} corpse={} effect={}",
         ptr::read_unaligned((player + 8) as *const u64), corpse, spirit::CAPTURE_CUE);

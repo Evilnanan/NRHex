@@ -97,7 +97,7 @@ Max HP +50%, damage negation -30%, piercing resistance -100%. Explodes on death 
 <!-- hex:95001800 -->
 ## Enhanced [Necromancy]
 
-Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.
+Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.
 
 <!-- hex:95002000 -->
 ## Don't Change the Channel

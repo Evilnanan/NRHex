@@ -2,6 +2,7 @@
 pub const OWNER: i32 = 95001800;
 pub const PASSIVE: i32 = 95001801;
 pub const CAPTURE_CUE: i32 = 95001802;
+pub const KILL_CHARGE: i32 = 95001805;
 pub const NATIVE_DRAIN: i32 = 705200;
 pub const FIRST_NPC: i32 = 95400000;
 // Native 391DC0/3918D0 descriptor: NPC row, AI row, optional PC initialization.
@@ -22,6 +23,7 @@ pub struct Spirits {
     pending: bool,
     live: u64,
     capture_cue: Option<u64>,
+    pending_charges: u32,
     retry_in: f32,
 }
 impl Spirits {
@@ -39,6 +41,7 @@ impl Spirits {
             self.stored_max_hp = 0;
             self.pending = false;
             self.capture_cue = None;
+            self.pending_charges = 0;
             self.retry_in = 0.;
         }
         self.owned = owned;
@@ -53,6 +56,14 @@ impl Spirits {
         } else {
             false
         }
+    }
+    // Count every confirmed eligible kill, including souls weaker than storage.
+    pub fn queue_kill_charge(&mut self) {
+        if self.owned { self.pending_charges = self.pending_charges.saturating_add(1); }
+    }
+    pub fn take_kill_charges(&mut self) -> u32 {
+        let count = std::mem::take(&mut self.pending_charges);
+        if self.owned { count } else { 0 }
     }
     pub fn ultimate(&mut self) {
         if self.owned && self.live == 0 && self.soul.is_some() && !self.pending {

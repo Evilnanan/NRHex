@@ -358,6 +358,10 @@ if(args.Contains("--spirit-cue-visibility-only")){SpiritPlacement.StageVisibilit
 var names=new[]{"SpEffectParam","AttachEffectParam","PermanentBuffParam","EquipParamGoods","ItemTableParam","ItemLotParam_enemy","ItemLotParam_map","Bullet","AtkParam_Pc","AtkParam_Npc","BehaviorParam_PC","SpEffectVfxParam","NpcParam","NpcThinkParam","MultiPlayCorrectionParam","ChaosMatchingCorrectParam","ChaosMatchingMutationCategoryParam","ChaosMatchingMutationEnemyTableParam","SpEffectSetParam","LotBaseMapPatternFlag"};
 var files=names.ToDictionary(n=>n,n=>bnd.Files.Single(f=>Path.GetFileName(f.Name)==n+".param"));
 var pars=files.ToDictionary(k=>k.Key,k=>Parse(k.Key,k.Value.Bytes));
+if(args.Contains("--spirit-charge-stage")){
+ int i=Array.IndexOf(args,"--spirit-charge-stage");
+ SpiritCharge.Stage(root,Parse,args[i+1],args[i+2]);return;
+}
 if(args.Contains("--spirit-rework-probe")){SpiritRework.Probe(root,bnd,Parse);return;}
 if(args.Contains("--angel-chant-probe")){AngelChant.Probe(root,bnd,Parse);return;}
 if(args.Contains("--chant-rework-probe")){ChantRework.Probe(root,bnd,Parse);return;}

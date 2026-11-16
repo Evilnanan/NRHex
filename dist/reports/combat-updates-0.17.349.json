@@ -1,0 +1,548 @@
+{
+  "schemaVersion": 1,
+  "version": "0.17.349",
+  "gitBase": "919184080906db240b4a271dd79c8a235303d5b1",
+  "workingTreeChanges": true,
+  "generatedUtc": "2026-11-16T04:06:33.476369+00:00",
+  "mechanics": {
+    "lightningRam": {
+      "groundFullPowerStaminaPerSecond": 20,
+      "airFullPowerStaminaPerSecond": 10,
+      "nativeStartupRetained": true,
+      "nominalStartupStamina": 18,
+      "workOnly": true,
+      "coastingCost": 0,
+      "nativeImmunityAndCostRatesPreserved": true,
+      "extremeThresholdMps": 15,
+      "extremeExtraPhysicalDamagePerLevel": 30,
+      "level15ThresholdDamageBeforeDefenses": 787.5,
+      "tierAndRecoilUseSpeedOnly": true
+    },
+    "spiritCharge": {
+      "effect": 95001805,
+      "nativeTemplate": 7090001,
+      "baseGaugePercent": 25,
+      "nativeGaugeChargeRateApplied": true,
+      "naturalRegenRateNotDuplicated": true,
+      "eligibility": "existing confirmed collectible strong-enemy souls, independent of replacing stored soul",
+      "nativeKillReceiptDeduplication": true
+    },
+    "basicsExclusion": {
+      "ownedBasicsExcludes": [
+        95000400,
+        95003800,
+        95003900,
+        95004000,
+        95001800
+      ],
+      "ownedUltimateDoesNotExcludeBasics": true,
+      "routes": [
+        "random",
+        "focused",
+        "refresh"
+      ],
+      "exceptionalBlindBoxUnchanged": true
+    }
+  },
+  "validation": {
+    "unitTests": {
+      "standalone": {
+        "passed": 560,
+        "ignored": 41,
+        "logSha256": "13c82927c144e20dd4f58a89aeccb461f9e16e0cd0711b95a102e0d77a98cbac"
+      },
+      "mmv": {
+        "passed": 566,
+        "ignored": 41,
+        "logSha256": "979bf30ac134363c69ffd596ac5674ad8b5b924f0372d0bc9c3db82afb3f7e21"
+      }
+    },
+    "nativeIsolation": {
+      "native-motion.log": {
+        "passed": true,
+        "logSha256": "337e23c95936835747f6f478b1c3ff45e72e498c4d0849fadccc4762e1394c2b"
+      },
+      "native-power.log": {
+        "passed": true,
+        "logSha256": "121dbdc6e96229ff9fcfaf12ad1c6df6dd1883d925b1bda336543ca1d7dc18b3"
+      },
+      "native-stamina.log": {
+        "passed": true,
+        "logSha256": "5fccd7ede341a6e2c292ffc6e46a0ed6304e236e2351a8c5af72803c112c289e"
+      },
+      "native-shared-snapshot.log": {
+        "passed": true,
+        "logSha256": "1600d7be6393f7363bb4e28b63f403dc5d4a47f9bf428bd690e7495eba64860f"
+      },
+      "native-spirit-kills.log": {
+        "passed": true,
+        "logSha256": "9e5f0cecbde452129b96630f2981b00d8b314753d9929fee9092a514ac391a8d"
+      },
+      "native-spirit-charge.log": {
+        "passed": true,
+        "logSha256": "480eedb615cd0ce997b53b66659e1002b8dd557318d93f4229ec599cd1b10546"
+      },
+      "native-spirit-charge-mmv.log": {
+        "passed": true,
+        "logSha256": "000806099c53ee872981aa99312ad62b323eba30bb7b8a0da9b06cf639c85cb1"
+      }
+    },
+    "nativeDependenciesUseFixtures": true,
+    "signatureCount": 245,
+    "signaturesPassed": true,
+    "gameExeSha256": "9545e8732919bb6a63904cb73223641b3c4f9a67869be5722612acca413e8b3a",
+    "parameterReadback": {
+      "standalone": {
+        "inputSha256": "DA06B02E95A22C4B4EF5D477240B56F614F033626CEBF9F11749BD561AA0AE43",
+        "outputSha256": "D80F759A0CBDD9FDBE9EAC10F139E7AA6EABE3D22337BE618BC2C1E312511E8D",
+        "added": 95001805,
+        "nativeSource": 7090001,
+        "ultimateArtGauge": 25,
+        "localOnly": true,
+        "existingRowsAndOtherTablesUnchanged": true,
+        "gameplayVerified": false
+      },
+      "mmv": {
+        "inputSha256": "E5BE336F13782CF1128542750A9A918B8A41997769941E234ACA08CB736E834E",
+        "outputSha256": "EA331DED4A15DC2D824E8564F37F71CA3B978EB5794E1E25AE97A7A0EF305F1E",
+        "added": 95001805,
+        "nativeSource": 7090001,
+        "ultimateArtGauge": 25,
+        "localOnly": true,
+        "existingRowsAndOtherTablesUnchanged": true,
+        "gameplayVerified": false
+      }
+    },
+    "textReadback": {
+      "standalone": {
+        "source": "docs/hexes.md",
+        "sourceSha256": "016718640AEFC8CFAEC2F667B99BBC69839C7A0A5C549A5B5176BD3CAD647481",
+        "englishSource": "docs/hexes.en.md",
+        "englishSourceSha256": "8BE1ADD43FE6E9D544FA8680E2748347E8D5CEDA25825908C6FC321B3FCFC91B",
+        "statusSource": "data/text/status-effects.json",
+        "statusSourceSha256": "70132BA137011EDA1DDBC71D40986F57327779734D748AB86C0101C1C7D216AA",
+        "statusOnly": false,
+        "reports": [
+          {
+            "language": "zhocn",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "DC0A3737C990DC38BC9D722BB2093C982500692CB4DAF614CAA959C028E827CE",
+            "outputSha256": "7699F9F85BCAC3EE4C71DE0B1E5A3E6A5700A68E5CA3B3AE761AB36C5CED6069",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95001800,
+                "before": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来",
+                "after": "打倒强敌时，累积绝招量表。储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95001800,
+                "before": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来",
+                "after": "打倒强敌时，累积绝招量表。储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95001800,
+                "before": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来",
+                "after": "打倒强敌时，累积绝招量表。储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "zhocn",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "C62BF4A9A4F5C630742CB5A987AB962D6D62AB4B1120C8EB9BD11BA2007DBC00",
+            "outputSha256": "EFAB2CB00DC67B18FD32B6B535456BDA5A004A7BB42725FE621CB0B0D2F1B4E5",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95001800,
+                "before": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来",
+                "after": "打倒强敌时，累积绝招量表。储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "E7789247E506871DBBBCE09DAF464C49B6247C823E28CEE3BF002DFEAEE4C8D2",
+            "outputSha256": "B2FF2C90729279F9467746C47E03933A0AA34BFA890C8F7C4FBEB04ED3730748",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95001800,
+                "before": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.",
+                "after": "Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95001800,
+                "before": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.",
+                "after": "Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95001800,
+                "before": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.",
+                "after": "Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "36EDCE6E5EED8AF0EB9DA13A64B5066601252BCF4AB434B9B1052C8A641B7A31",
+            "outputSha256": "CB8AF3C1EF03B6D2196F8246FD5415D052EC93B15F91DECA60436903992252E6",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95001800,
+                "before": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.",
+                "after": "Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          }
+        ]
+      },
+      "mmv": {
+        "source": "docs/hexes.md",
+        "sourceSha256": "016718640AEFC8CFAEC2F667B99BBC69839C7A0A5C549A5B5176BD3CAD647481",
+        "englishSource": "docs/hexes.en.md",
+        "englishSourceSha256": "8BE1ADD43FE6E9D544FA8680E2748347E8D5CEDA25825908C6FC321B3FCFC91B",
+        "statusSource": "data/text/status-effects.json",
+        "statusSourceSha256": "70132BA137011EDA1DDBC71D40986F57327779734D748AB86C0101C1C7D216AA",
+        "statusOnly": false,
+        "reports": [
+          {
+            "language": "zhocn",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "563673DB8BDB78C5A957BDFED7A61033E358C6DC86BBD0C87FE43EE749FD013A",
+            "outputSha256": "5AF3C570749C26B28B6D589B0EFA68CE1A3BEC521CC44CC8E66F0DCA19B33829",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95001800,
+                "before": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来",
+                "after": "打倒强敌时，累积绝招量表。储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95001800,
+                "before": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来",
+                "after": "打倒强敌时，累积绝招量表。储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95001800,
+                "before": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来",
+                "after": "打倒强敌时，累积绝招量表。储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "zhocn",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "B21F28886DB0BC91B00F5B08AFAEA7E4D27247D0DACC8CBA73B7C3A1D7B6C598",
+            "outputSha256": "1779F47FB6AF3ADD4A4839620EEDEA6BDFF3735223062FA9DA82599C5AA90E48",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95001800,
+                "before": "储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来",
+                "after": "打倒强敌时，累积绝招量表。储存最近打败的强大灵魂。发动绝招时，将其化作死灵召唤出来"
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "item_dlc01.msgbnd.dcx",
+            "inputSha256": "9D85801E7CBB9A5719D2D7F7BDB9983D47A520605A4AB44301C6BA71FB0A639A",
+            "outputSha256": "AE72F7F65B7B6168B44463E5D90356307EDBC8CBCE29E3CD6F61E521A6C51778",
+            "changes": [
+              {
+                "fmg": "AttachEffectInfo.fmg",
+                "id": 95001800,
+                "before": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.",
+                "after": "Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+              },
+              {
+                "fmg": "PermanentBuffInfo.fmg",
+                "id": 95001800,
+                "before": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.",
+                "after": "Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+              },
+              {
+                "fmg": "PermanentBuffCaption.fmg",
+                "id": 95001800,
+                "before": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.",
+                "after": "Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          },
+          {
+            "language": "engus",
+            "file": "menu_dlc01.msgbnd.dcx",
+            "inputSha256": "D8FB687591763075757E3C70AEE7DFC0A66189C45E917B336EFCF9BF04B9DE31",
+            "outputSha256": "D256FCA7EA6E30D9F62AF45D32ECBC79FB91DF9C6B619DFBB1E32B455B723989",
+            "changes": [
+              {
+                "fmg": "SpEffectInfo.fmg",
+                "id": 95001800,
+                "before": "Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit.",
+                "after": "Defeating powerful enemies charges your Ultimate Art gauge. Stores the soul of a recently defeated powerful enemy. Using your Ultimate Art summons it as a spirit."
+              }
+            ],
+            "unrelatedEntriesAndMembersUnchanged": true
+          }
+        ]
+      }
+    }
+  },
+  "mmv": {
+    "baselineFingerprint": "7279ca8765ef81565ba0023b47d44e75558786bf381f7301ced8c594a1d79356",
+    "profileValidated": true,
+    "previousTestOverlayPreserved": true,
+    "runtimeCatalogs": {
+      "erosion_sources.rs": "70cf3920f3e09b835667d470c046b1d26f15ba52e9bf66c71af5763f8e507294",
+      "soul_critical_data.rs": "18546c8315f3efae1cbe62a88375b61303744609ddd40b44bd66e75849d82993",
+      "arts_data.rs": "288b3e6d82d0f6bd4596bc75d81ad9ca8f0ca73f1fa27eb0eb128b797425890b",
+      "archmage_data.rs": "e5683f6dee3f9a4e93714cc9f057033e601107a90e931c0c658149f7221b6b29",
+      "cage_data.rs": "86819d1bf5e994c557466efb8db06033faa6a01d576381e0a19adeef9ab3faed",
+      "parry_data.rs": "c30b7fcf408b3c079e9821d8d9e9d7b67a0fb400fcce29a23cdac0e9336568fc",
+      "sword_map.rs": "64ab96eb006b02c136f1a71a5fe9fca76bdb49eea545ef3c0d40629d94eae1f2",
+      "spirit_target_data.rs": "0bd862bafa629f7a84bf4b0924d533472f65c24a1b48f2f1e130ad147fe9c2c8",
+      "echo_cast_data.rs": "180f34c5ca27757ef11d2f755ce53ac32cdb766b411bb3a9418bad788c40fa17"
+    },
+    "resourceManifestSha256": "7b7438dff1aa054fa1ad81fad8fef043592af977cc66239748c1d02234112d50"
+  },
+  "artifacts": {
+    "standaloneTest": {
+      "path": "/workspace/NRHex/dist/natives/NRHex.dll",
+      "sha256": "1d4594a643ddfcd842c0672ff4294cd235a9be3f8f633e3a311ed3d3c2cb019d",
+      "features": [
+        "test-hotkeys"
+      ]
+    },
+    "standaloneCommunity": {
+      "path": "/workspace/NRHex/.work/ram-acceleration/standalone-target/x86_64-pc-windows-gnu/release/NRHex.dll",
+      "sha256": "1b4066188095a1e5a92be1e386c9191a854369c22a2d63432d312ff4af8efc65",
+      "features": [
+        "cage-demand"
+      ]
+    },
+    "mmvTest": {
+      "path": "/workspace/NRHex/work/compat/mmv/targets/dist/release/NRHex.dll",
+      "sha256": "57c74da367ce01fa86447c34062734575c9f4198c26a79fa60b4e2584a36494c",
+      "features": [
+        "cage-demand",
+        "mmv-compat",
+        "test-hotkeys"
+      ]
+    },
+    "mmvCommunity": {
+      "path": "/workspace/builds/MA-MMV-0.17.349/MayhemAugments/natives/NRHex.dll",
+      "sha256": "503b13223a4aae224c36e838cbb5ffa8ead16b7391cda4b267b67f4f0d48dc87",
+      "features": [
+        "cage-demand",
+        "mmv-compat"
+      ]
+    },
+    "mmvCommunityZip": {
+      "path": "/workspace/NRHex/.work/ram-acceleration/MA-MMV-0.17.349.zip",
+      "sha256": "4e18148f01951fe536c8f25fa60c7df48b9cba59f4b45f60a231740f4fd62148",
+      "crcVerified": true,
+      "members": 28
+    }
+  },
+  "sourceInputs": {
+    "src/ability_damage.rs": "85cebe091705c5c0a38af9fd9e924f4dce7e119b832da1e9b25666a7fcfdba00",
+    "src/actor_lifecycle.rs": "bb455b81194294f8459e258ee721521fa8714209f5fc5f6fc31676af18354ad3",
+    "src/ambulance.rs": "938a8d857c33dd6db6d7652a511933bf9d876388895715acc6117fcf90a01b57",
+    "src/ambulance_native_tests.rs": "4f0a77a372a41613622ce2f968f2d40241d6d1b2dc736e578bbca200f7549059",
+    "src/archmage.rs": "5bfcb2c2ac99fabf8b3de20ffa5f59261710ba4245aa6740c94df1c17e74d261",
+    "src/archmage_cost.rs": "21cff45b1cf56da9ad3e6e2438496c34310ebf59bf0c59c5b7762db3c985f05c",
+    "src/archmage_data.rs": "0b0e98ca3567c9eab1670f7025f5e7ea6154668a0e35c253675bd9df470eb302",
+    "src/archmage_runtime.rs": "b5dbcac18bf2952f12a4b9c2ccaee636374a07d9dbad78a3df8cf4675d528e95",
+    "src/arts.rs": "0d74848a23f503b2783d90d5c9f65c879c3ba30802027d6971634c5de33b0a44",
+    "src/arts_data.rs": "5f9f27b7ccac6917bff6546120139cb27d39e651395616966b1b175b90f7c785",
+    "src/arts_network.rs": "83956590224343a234df0bef0b9bdc85fdf94ef92a4205c9826f4ce03cb9d5e3",
+    "src/balloon.rs": "c03520884c3d450ae8ce916129fbdc8824749d068cc42cd511e4cd9fe1e40b9a",
+    "src/balloon_runtime.rs": "375d688db3dbfdb9a80ea3c88c6d20249015b81df0ab13d132c01f336e18a893",
+    "src/balloon_team.rs": "302161773594638e8ea1f5e662a3c4267da5184402214b838b26aa60cc4e0a2f",
+    "src/basics.rs": "04086f257b57a2d9a88562f4a1d1ee779bd7e99768d37e37ed1f9dc917b7c0f0",
+    "src/basics_native_tests.rs": "10b5b39f9110c62a4e1fc9e70556f5df9b9e78fc755b333272093fffe7630544",
+    "src/cage_catalog.rs": "13fe503d18b822b58e99066968c5460dbfcb507c8a192fd213d68dc3d1210f43",
+    "src/cage_data.rs": "fde3638bc0f949ca2dd747da92645a922a678ffc882f42b46d25870c3175fb0d",
+    "src/cage_demand.rs": "412da21cd6d0e39dd6b9fd5e9f38e81f406437351f7bbd9cb0055475046fa5eb",
+    "src/cage_hud.rs": "de5c92cd798654597cbfdd12cb85a3ebbf3cd2f5c80fe45ba47c4aa848fa5bf6",
+    "src/cage_lifecycle_probe.rs": "a20437ef8e791bc5965326bf4d54912d785f9c21e5f08254f8b81e367dad5abf",
+    "src/cage_mutation.rs": "12873ee128c3f7d8ac1f6f7356ae1f3ad5e7827fecc90b0cb740416a2204e103",
+    "src/cage_trace.rs": "0b4cbe98dd850e86c7bdc36576c614c63d4f43af3f61b6ed4d1adec5942af1ba",
+    "src/cat.rs": "fcb17944679f22b239f0da385ac23d756aab7bae5aff275f067c9e83ddea7e1d",
+    "src/cat_arena_native_tests.rs": "491499b538d1c915ad5be665ba58dd036c3e6a73f88635305f5ee0f3cfb2e09c",
+    "src/cat_jump.rs": "81f06415ff9fe5a9f64a121d6492dbe1ede7550898a061b60d1fc1bd2c975cdc",
+    "src/cat_wall.rs": "ed1e002bcb3d9b1b2dabde26c0567a14ec3c69e3e1bc568092b47e7ee311e131",
+    "src/chant.rs": "8fc920a07023028f3af13c5a9ba9bd7965892506441a51023717e11ec1ef1a3c",
+    "src/crystal.rs": "d2f5be3994ea72eeacbc0f961ba631946064d4dd023f0909d2a2edccea060990",
+    "src/death_dance.rs": "8f3fbf6f5d3c62dd91146ef27f3cabc76a830b794dfb489f1a247e4e07f199d1",
+    "src/death_dance_flask_tests.rs": "a7c8c12d8bf265c26dc1e8a09fff7104cb84925edce6d9e65d1f207f4bc7eebb",
+    "src/death_dance_native_tests.rs": "8264b2eb506cbfda505e5490c8f9df232bd30fd7ed17e72e2f1e4dde8ce269a8",
+    "src/devils_gaze.rs": "59eae50ab78461f4a0b2b2817c51129f96493117b0f97b4fb3721d78e82ffadd",
+    "src/devils_gaze_audio.rs": "0eb4774aff6455508b515944485c59828f5198d28fe3344ec946f7619b526818",
+    "src/devils_gaze_hit.rs": "0cb7ae51f67ce3a8081f06e2e214b5f3f1567c1f5523f0ac05c6ad8fe1317aa8",
+    "src/devils_gaze_runtime.rs": "8dfe99a86dc5607a8bee46810bad5a8d2a600ab40c4040382d4d7124e2ce61ef",
+    "src/devils_gaze_scaling.rs": "9092cace4b613753f2c3c843fd9caa71d0458fa436ce1e142de62fd1e05e79f0",
+    "src/double_dip.rs": "5a619bc4b174a7ae136f6edbfdb043839b5f3bbc28116126aa4ec6cf61aa396c",
+    "src/double_dip_native_tests.rs": "c3be1733b08e775d6501da364fadafe135213baadc8381bffa4bf88df26dd2fc",
+    "src/echo_cast.rs": "b196b06d31bc74841597747be509cb4173f8564c90c222b491f82fbd41398425",
+    "src/echo_cast_data.rs": "d4a8c623c811598b03481100b204ad4d3c34626b73f2899861078eefe0c90e9a",
+    "src/echo_cast_held.rs": "e8fb6a15af65b1dba421fa50aa8ffdaf5e5de931f232bf657e5ecc705100bd21",
+    "src/echo_cast_native_tests.rs": "342efc44458fc8aafa0b4d7f235b1e97f56b24d43ec6f940002cb063b235cb04",
+    "src/echo_cast_stream.rs": "57a36251646b65d8697771ca6fb45ba678cd25653b1409792413a121ec6e0445",
+    "src/echo_cost.rs": "8c5f39f97cc37f36ceadf32db3e3f85458a8f030e27cc16ae800fe6db4bfb1ed",
+    "src/erosion.rs": "b66cdeae794a50c396b63229faaa0fd2f6028efafc2692227e6b88ab367074a3",
+    "src/erosion_native_tests.rs": "e7fed8d58aea2b3c4567a5fbbad0b7ffaeb8dbd4bed5c1579684b35e540aa98b",
+    "src/escape.rs": "cc5a50ae5b4af1f576b104d8a9521564691fba0cd2850d8a00d1c7e42a2d9d94",
+    "src/essence_reaver.rs": "31f9966ff2128691ecb39f2c0a7cba29215cba900664899edbb5d7f5c3c9e6ba",
+    "src/fission_catalog.rs": "27246b2aff7a2d79b26eaa6419d17a92e6fcb006032d3e93723477cc4299964c",
+    "src/flasks.rs": "1b56c6ce01d9366b3843af7c1a541ca756db315753f741f0c9f0ae2ce6017686",
+    "src/glass_cannon.rs": "e31d75ad4454bfe8ffeb7a73128b58fe994a6f2ff129a6e233b460d7080f9480",
+    "src/glass_cannon_native_tests.rs": "aca38980576d51ab34ed01810cb57b396f8230299968f286a52ced9cb312f78b",
+    "src/heartstealer.rs": "b30bdd0088fbf4f13da5c5c7c4ab6b2e82f75bca62546e7e9cfbbc6548413405",
+    "src/heartstealer_native_tests.rs": "044759172d59f12755a931dee991306e1f09fd83cb901af4f31a3b44911d44f5",
+    "src/hero_audio.rs": "df9748eb42e2a50ac557987536a9338824295930c129b7cdd46501fe85bb82da",
+    "src/hex_pool.rs": "3afc782430631ac4d18bfaf2763cfc8fadddb4f2a2a14b118c46458764bae82f",
+    "src/hook.rs": "0cc2a4984f223288f792bed9ddb9e63a00d5cdda159e34487438e007296f66cd",
+    "src/jiahao.rs": "98091b6db2651999d2a2bb8a97821a830c2e5d7012985e4c9e3ecbc1093e6fe5",
+    "src/level_rewards.rs": "6f0f3ddc3a51d42475ccb29676e1739d0bd997460ba0dbbaa0a77ad9dfdb5a02",
+    "src/lib.rs": "eb5ab3e4c84f83336d756c4a36d76c84203c67d052dc5c9ef1065c3e62356053",
+    "src/log.rs": "65820958773fb973b42f168d72312d97ce44137a8a115df72f99061cfd0560d0",
+    "src/marking.rs": "53a13bd98c5484f6877a3ffaf46ce2cf01aa9bb49298e516078e97e560f6b549",
+    "src/marking_native_tests.rs": "b0607240581d3ad1470e7fe70eae7caa42dcc0ff99f8688987c5ea6ec86d405a",
+    "src/marking_poison_native_tests.rs": "2b407b35abef4835f9982cd9936719eaed950eac1f74274c1deef3b66b89472b",
+    "src/metal.rs": "5e699bd1039addaf6a375950faff7fd91ccc6cbfc77a64e0cf3a0073f0406dda",
+    "src/metal_native_tests.rs": "d9453a53e7c44b2f019d102a15193de0610ef15247b5419f07aa2b6f8b28192a",
+    "src/mmv_compat.rs": "4bebaf13f8d9094d9112c01d61c4c805b1e15bc22a9109d9acba0f08f95c2c3b",
+    "src/momentum.rs": "26ebfb3dd747c2216a0d2953676552a39afa08ed5b4a43b38a90af714276a568",
+    "src/momentum_native_tests.rs": "feec09e5fcd8550ddbb487757e53f9ebe3d417b152f880b88843c68e01efb2b4",
+    "src/native_actor.rs": "a1c10262edf5307a0dd7565964c50aae92674dafa1e4e2b30172fcc728654838",
+    "src/native_party.rs": "9fb2be55721ca61a5e501e6b18c6d32dcee3206f1d4194637ef69e0910f64a94",
+    "src/night_blessing.rs": "3698b71aa50b71c5d5e58493e023aa0e64c86194d7f05be060b69948d2537d6e",
+    "src/noisy.rs": "0be84967fc9bf38ef937931b31ca9d15874938847cc1f595cd04ed97c1798787",
+    "src/ominous_pact.rs": "cd698f7da7727b3ab931d2ad0c55a82b41f6e549b094413334853787ee7d1214",
+    "src/parry.rs": "40e99d809b7ad846f485505263387a38a2daea6d7bb4535b867c41e41f764a72",
+    "src/parry_data.rs": "196c150bbe7d33663275a3a923b888579d64ca7d194a671c912ef5254b330805",
+    "src/parry_turn.rs": "283437cb1f7ec79e889f8407b14ce6b974b4bdf2006db7e9c7b8b0a505ed2175",
+    "src/pattern.rs": "8b132a2475c4f78ed601b86c246fe5f1730ac8e987d71853bcb1f5b2f382aa8e",
+    "src/pe.rs": "460e26b9aa66cc5e147b0ec2a0eb3c2c0be36df2160e6e67bd63d3e109dcf074",
+    "src/personal_reward.rs": "09c29e62d2912832b215870bba46543c90fc66eaff567166f82afbc0dd621944",
+    "src/potential_fission.rs": "d081352e5a9ee3d612621f043ddfd7ed52f410414b9d4f6954fde82017748fa5",
+    "src/potential_fission_native_tests.rs": "538d89700e5139efa798e3464be77643c27e3321c0fb47ee964573912b9bc917",
+    "src/red_envelope.rs": "6a8f8d3038dc50c55acc20044c5fa09b74e44659b7c5b1e137dc9b099c8ea462",
+    "src/reward_choices.rs": "e60b3eae83e1ff5fb9c568239317d342d422d6e01fc9a6f6a4855c2608926a76",
+    "src/reward_cycle.rs": "15148e1092f23e4032a7547b02d25195e08c15da85f7ada23731c01c8d76a331",
+    "src/reward_cycle_runtime.rs": "3117225d1e3ea96d27f13f156ac51eb94915486996184ed682f59a159fe867d9",
+    "src/reward_recovery.rs": "89c775c0fc473c6fb10fa4795beba3228a93a8fcdba07cacda2de4de9ed35746",
+    "src/reward_reroll.rs": "c3e1d795e9a2320c5097dbe26bb5f3939eb3cae0f17dc510c37dc6336576ae50",
+    "src/reward_template_native_tests.rs": "83980f2f683116d1cbe469f7702766e9223b58f1e5e6cb4c8d6dacca57736b6f",
+    "src/reward_terrain.rs": "995e080e8d8df5f6944e300df05e538df25534af747ee4338456f03a1fcc0dca",
+    "src/runtime.rs": "dd62bd810b1ee09a38468db05c4fec945f6bf6e1264ddc9b5a682a44e0c9a57c",
+    "src/slingshot.rs": "4150c1cd1a17ca071ae84ae2544d9bbfdf67348ab0b3166220e3ea92756a2652",
+    "src/slingshot_runtime.rs": "6c994bf608a54fda7f7c0a7fad753f5006de4cce126012b887fc7a02a70c868b",
+    "src/snack.rs": "da96dc9b06407a5a5a3004f6720773ba04164062e47543124be47c5788c4f4c4",
+    "src/snack_native_tests.rs": "f70ea587b59e468a22e12a53260dc07913847e9e0b286612b80592eeacb9d3b6",
+    "src/sniper.rs": "8079b2b95caaff17ab198f5c7965e31fadd3e4ebf44c8b2911c2f8bf7a1d5946",
+    "src/sniper_native_tests.rs": "18b5c8e052d63f4fb60a189d2234484089272a08d1fdd45b01ec5653dc212c84",
+    "src/spirit.rs": "c6480a1f767e30abcdc975e0e6771e479baec06933a9022b1a27cdf15286dfe2",
+    "src/spirit_bosses.rs": "33d61eceb7cb4f13d966dcb3acafc367e75e0b851b8fcec78c1aeff9313432df",
+    "src/spirit_cage_models.rs": "6633f6f97875fcf64662f6534b8385924810c1413a3a49254a111fb0210744bc",
+    "src/spirit_kill_native_tests.rs": "3e1b657b3a3f2b03db937f0dcbe9bd8338da94e8ad873c729ccdf0a00da8cd78",
+    "src/spirit_kills.rs": "fdadb7d36e2cad4b752b81bd64c3c2cac7ddcb4373cd2f98dd7ff521c9fbaf2a",
+    "src/spirit_npcs.rs": "3e7562e45edd301465997ac0ec5834fa0324b1717c37b574a5471dad26db8499",
+    "src/spirit_placement.rs": "d20dd4677117a1030853dcca51699ccb6f5c8f87c5df3f3dc3b29adb6062634b",
+    "src/spirit_runtime.rs": "c117ec585a41d3112d829d52729970ff13c9da73e410c48c2e27b5bb13b96963",
+    "src/spirit_target_data.rs": "2b7cffa78d0a1ffefc256d9346182b72f69e2de0c99259ab1493548d1811b8b8",
+    "src/status_display.rs": "01435046367bc03119d24e2aa5d45e63b9be038f17834737a4aefbfb9fe00d1d",
+    "src/status_sync.rs": "3d0c0dcdc72668263e91823f0271692930faf5b8170af89fd4ab37fe6969429a",
+    "src/storm_audio.rs": "865a14f0066ffb042235642dbfc31e9a018baad8d8fe3af07301fa585dda1854",
+    "src/strength.rs": "44ca2cbbc3c7b63502724a691017e38d41be752c7c2a78d0d3f0b19d746657b9",
+    "src/strength_sword.rs": "36d172491931f18f00617601a8fc4976224341199820e51cbd82c60e2fe5656b",
+    "src/sword.rs": "1eb34a80dc3c8741e726613dd638fd7df7c3b40595b6a1b67e3bb600e95aceb5",
+    "src/sword_csv.rs": "03894a4d0e63d361778bc3dc8d7ce3469925dbe24c2d9749c0dc07f2313532f5",
+    "src/sword_hit_rules.rs": "d980c0715afc44903b8453883164aa615f82aa357622c55916783e4e56f7b956",
+    "src/sword_map.rs": "af38a9d6775e445f95178be7929f553b390d01ac5bd829b6fc69c60dcc6d156a",
+    "src/sword_projectile.rs": "14f2d5f6aa2d8511f0ff487b5d00b3a936cc73661aafa3dfb8130c6c0e3fb694",
+    "src/sword_projectile_native_tests.rs": "49102782a4cc45881a5bc84ee9c67c89e81c293a84d380c620c9ff3a78370529",
+    "src/sword_projectile_stages.rs": "6e5d48d5895dab97c9a5d620720a1acb72263abde40c347a992943244bbfb73c",
+    "src/sword_regain.rs": "2e500316de3118c6dca43f10eaede8bde3b8e5802789a0ac97fca28c4797a5e3",
+    "src/ultimate_awakening.rs": "2ed6d004f19f85907d472da46b7c0a23b8b86b0db4592d9a64f48a66f5dc6333",
+    "src/ultimate_awakening_native_tests.rs": "1fa550c926fc6d7abc0a6b4705a7beecf19c3124cbfbacadead70c1d1925492b",
+    "src/ultimate_challenge.rs": "df370b584882d84bf3e66bb6e3faa2245b198afd7b1c0feb6dbf38cc3c1ac066",
+    "src/ultimate_challenge_native_tests.rs": "b6f1100483f22e169c1b6f558d5ee06e4dbe330a88bcab1545a7b3ad54a77a3d",
+    "src/ultimate_timing_native_tests.rs": "fd3ca48e34cc360a95d647a674fe22e78a546e4390ca0e6a76ddeb0e4c82da10",
+    "src/ultimate_unstoppable.rs": "e3c42a3aa71334ef2a775a46295612804987ef161f26f93ae01f4cb9195b2d85",
+    "src/ultimate_unstoppable_native_tests.rs": "6ebde0a67f217938ac3568de96e1700ea91eac262d5e872d232d87449396716a",
+    "src/wall_input.rs": "f9d372e0b334f2bb6815a787ddad9f1b3245bf42600f43be5d73b59eb4798468",
+    "src/weapon_affinity.rs": "c6c20338d7941318cc9222c2d47bfa92d0666a46fa5b3162126831b2c0f83032",
+    "src/weapon_affinity_native_tests.rs": "1a5e5d185bd3f1a254ac89ff1d6cc1d443b9bb60843ac148f8d51c3d39b8390a",
+    "src/win.rs": "d1e6fef6deba2eb4fa0b1ac362f5842290257ab65c8ab18d7d76d66f63b4e499",
+    "src/wraith.rs": "82beafd68c7dc3fece1bed408fc66ff789405c9eccbbc41aa1b5afd641d56c0a",
+    "src/wraith_native_tests.rs": "ba49fc31d7baa6a7d5cad4a697ff9bbbef03605ea8640f11d284fb4c04168a4b",
+    "src/onyx_fp_tests.rs": "e9fa30c85db6118eba8fd4dc1a6d0fa49527d9b0b45bfc42fc35b208467dbc54",
+    "src/erosion_sources.rs": "70cf3920f3e09b835667d470c046b1d26f15ba52e9bf66c71af5763f8e507294",
+    "src/action_stamina.rs": "8385873d661796ab32a8d42f279ef77da3436e0613bdcbe435b9886c25f9a98e",
+    "src/ram_cost_tests.rs": "4b265d144a7c11778c3a87bb533c1bf568fd3ef152cc4ab29b0fb216140c7313",
+    "src/parry_recovery_tests.rs": "00e64b44dff278be263a1b43d338434953738b9f0bb5f952a1608a9e719f0546",
+    "src/basics_hud.rs": "3b9d1e911859d82c413edc763189cf7ae260d442f4dd9394b3975e98b14b37c9",
+    "src/ram_ground.rs": "2b0d23330e18212c14fc58560048decce2be49ec52ee99afe8963dfa7c0cffb2",
+    "src/bartender.rs": "897e5f34d03ac9cc02e2b0269b8817f87c7dbdb56056dc52a4b9cfabeaa972d0",
+    "src/noisy_ground.rs": "6fb473404ebf85a26c833f65e1fdd4288df4c5a316ded4b60e0cd3d8da87453f",
+    "src/soul_critical_data.rs": "448c4dcec965768055c0f34758a108e47c82d7a5c2ebc72e964aee9176505b1b",
+    "src/soul_immunity.rs": "5c3346337a05151637cd3aa3dd7d537d8df8c0a3939fb0a667b4ac6f29d69c78",
+    "src/soul_target.rs": "4f8597c846faff51d6b4930725db3e85f58dae7a700468085ad167ffb014e060",
+    "src/deliberate_punch_native_tests.rs": "6baf7850aef1c7c572618f84fb3d47ee60b46d79523e5ae99f795f49549db116",
+    "src/light_footed.rs": "3d0a77cfe07522fcd4e1f575103fc4b99b0b6935c4d86df35fe4f6179eecbe05",
+    "src/basics_hud_tests.rs": "ba68e1a69aad0af463689443fd7dcfeb3f8d720437102f2089cb981b1c41e5a6",
+    "src/action_stamina_tests.rs": "18e20dfe7c7943cc755c64ff1f1fe3379fdd7b0a48444d6063cdf698f1c470f5",
+    "src/static_charge.rs": "88a475dcb44ef578628ae579d591aef6fecdc645546ae55dd46a792bdfe6a900",
+    "src/noisy_ground_native_tests.rs": "c0c9df627f908b5f00ceb86ab474b500a61b9b1df3dad308f27b6a1034b5f0b4",
+    "src/soul_critical.rs": "84f1bd456c62772bef2da11ac1c72017768f08d2168b4844cbc39e7e0fb30120",
+    "src/soul_impact.rs": "83c4377de84370af9591db46568239aa748281bfeddf74feebc1d21326854c4e",
+    "src/deliberate_punch.rs": "cbc7756c9e7789398fb8479cba1c0ee8c6eccff1d5dc5a80932e0ccc25ed9f6c",
+    "src/lightning_ram_power_tests.rs": "53e27fdf53581b8592cbf6ce7f162f4f3a42ea84a36aabc2a6a350feb4700c71",
+    "src/onyx_dash_data.rs": "b52b664147b459128dc73e47ce24dcba61d8b1e7b6584297f8b5449f71d8d857",
+    "src/ram_stagger.rs": "a7e7e7ea2413adf99bf7980ce57480a3afbc154f158c79a2621c51c2c1e2bbd0",
+    "src/lightning_ram_native_tests.rs": "20de48aeb5915dd6d551d55fbec550fcd58a46be11651efc01edcaba2872ed9d",
+    "src/onyx_dash_tests.rs": "5b9f65ad11804017d99d581f2cd6a2a0cdfcc0882b7623b0a6e773b69e14c270",
+    "src/onyx_dash_mmv_data.rs": "f31e9bf77b6497dd2603cc66c26750e8c26311625c8bc9dd89f73fbe4f164962",
+    "src/onyx_fp.rs": "502a8816dec8c7a12466cc8aa3c818b49e1a967efc28487aa7a2a6db63f11293",
+    "src/static_charge_tests.rs": "80ec2d2c49cbd68c2634f6158a1e25389fb670cb744c680285338deecb283f8f",
+    "src/onyx_mastery.rs": "b60e4f8d60a880773408fd07704086a9e16f8eaf6b2b1cd8ad60cc23f85bd541",
+    "src/lightning_ram.rs": "f65be29db68e9bf8366292a8e778db531952844a6dce7b3f3f6b2f9a2e438549",
+    "src/ram_native_contact.rs": "3354cee4b6c7a65e2b0ee6d8c118adf2ed8fc90069b88c0a89f48e48e6d9b222",
+    "src/ram_motion.rs": "3c2e930909871a1b22aa110eafcffe94351e5fa9ea5e4677754a763fa99be3e2",
+    "src/light_footed_native_tests.rs": "a7f2a5c089a0042d9ccb4a7b78495b93eaadb0abb0be255faeb6a837f507643b",
+    "src/balloon_team/native_tests.rs": "433c7aa392dd59e246b2cb29a1a9530c8f24cd757065be814d8ea3ee5b177f3b",
+    "src/bin/hostcheck.rs": "774c1621629da1be10eeeed7d866f2cf6ad29c2fa1367c39925c0fff72b3fac9",
+    "src/bin/scancheck.rs": "4285686d3427ff32740dcb39cdd1c90191ab1a549b1aa4f3afe33afd885586cb",
+    "src/spirit_placement/tests.rs": "0d886f51210c6ca01b3ce52f22d9a7c162daa7d401e2a5ad44618af3c8def890",
+    "src/spirit_runtime/tests.rs": "fa0e316f92def515f563e5bc53fdbf8b0d9d456224c80a4e9fbd6f3b76224c0c",
+    "Cargo.toml": "8c10f9ad58428b9e3607a7a9b31e7054cc28451fc5d8bae6599fa3f4e831c7a6",
+    "Cargo.lock": "637ace977bf26821b23d00e61a5c843ea40d2e7dd54a5b60c9962b36565306ab",
+    "tools/HexBuild/SpiritCharge.cs": "efffdeeabab7242559b6d123ee402370cdb5a836ffda7cf4e5533e5fc57ee454",
+    "tools/HexBuild/SpiritRework.cs": "b7bfb34e8dad888f62ae469c2a8aa620b10ef12e860101e5db1c0469761f1469",
+    "tools/HexBuild/Program.cs": "930f189fef8efcddd0f0928e0d5e9cc9500c2f13f0bcdd771468814863fd81d4",
+    "docs/hexes.md": "016718640aefc8cfaec2f667b99bbc69839c7a0a5c549a5b5176bd3cad647481",
+    "docs/hexes.en.md": "8be1add43fe6e9d544fa8680e2748347e8d5ceda25825908c6fc321b3fcfc91b"
+  },
+  "gameplayVerified": false,
+  "multiplayerVerified": false
+}

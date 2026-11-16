@@ -4,6 +4,7 @@ use super::*;
 use crate::win::*;
 use sha2::{Digest,Sha256};
 unsafe extern "system" fn has(actor:usize,id:i32)->u8{u8::from(id==OWNER&&read_i32(actor+0x78)==1||id==5750&&read_i32(actor+0x7c)==1)}
+unsafe extern "system" fn stamina_rate(_:usize,fee:i32,_:i32,_:u8,_:i32)->i32{fee}
 unsafe extern "system" fn rotation(_:usize,out:*mut f32)->*const f32{ptr::copy_nonoverlapping([0.;4].as_ptr(),out,4);out}
 unsafe extern "system" fn set_rotation(_:usize,p:*const f32){assert!(ptr::read(p.add(1)).is_finite());}
 unsafe extern "system" fn weapon(actor:usize,source:i32)->i32{assert!(matches!(source,-1|-2));read_i32(actor+if source==-2{0x80}else{0x84})}
@@ -135,12 +136,13 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  let mut attack_rows=[0u8;0x100];attack_rows[0x62]=10;attack_rows[0xe2]=20;OBJECT_ROWS.store(attack_rows.as_ptr()as usize,Ordering::Relaxed);
  let mut world=vec![0usize;0x17500/8];let mut actor=vec![0usize;0x780/8];let mut modules=vec![0usize;0x120/8];let mut stats=vec![0i32;0x200/4];let mut physics=vec![0usize;0x600/8];let mut controller=vec![0usize;0xc8/8];let mut geometry=vec![0usize;0xa0/8];
  #[repr(align(16))]struct Vec4([f32;4]);let mut desired=Vec4([0.,0.,-4.,0.]);let mut submitted=Vec4([f32::NAN;4]);
- let mut vt=vec![0usize;0x280/8];vt[0x250/8]=weapon as*const()as usize;vt[0x258/8]=handle as*const()as usize;actor[0]=vt.as_mut_ptr()as usize;
+ let mut vt=vec![0usize;0x350/8];vt[0x348/8]=stamina_rate as*const()as usize;vt[0x250/8]=weapon as*const()as usize;vt[0x258/8]=handle as*const()as usize;actor[0]=vt.as_mut_ptr()as usize;
  let mut equipment=vec![0u32;0x100/4];let mut entries=vec![0u32;6*0x20/4];
  ENTRIES.store(entries.as_mut_ptr()as usize,Ordering::Release);
  for i in 0..6{let id=0x80800010+i as u32;equipment[0x1c/4+i]=id;entries[i*8+2]=id;entries[i*8+4]=110000;entries[i*8+7]=503;}
  actor[0x670/8]=equipment.as_mut_ptr()as usize;
- let a=actor.as_mut_ptr()as usize;actor[1]=123;actor[0x190/8]=a;actor[0x1b8/8]=modules.as_mut_ptr()as usize;modules[0]=stats.as_mut_ptr()as usize;modules[0x68/8]=physics.as_mut_ptr()as usize;stats[0x140/4]=100;physics[1]=a;
+ let a=actor.as_mut_ptr()as usize;actor[1]=123;actor[0x190/8]=a;actor[0x1b8/8]=modules.as_mut_ptr()as usize;modules[0]=stats.as_mut_ptr()as usize;modules[0x68/8]=physics.as_mut_ptr()as usize;stats[0x140/4]=100;stats[0x15c/4]=100000;stats[0x160/4]=100000;
+ ptr::write((stats.as_mut_ptr()as usize+0x189)as*mut u8,0x21);physics[1]=a;
  ptr::write_unaligned((a+0x78)as*mut i32,1);ptr::write_unaligned((a+0x80)as*mut i32,110000);ptr::write_unaligned((a+0x84)as*mut i32,110000);
  physics[0x98/8]=controller.as_mut_ptr()as usize;controller[0xa0/8]=submitted.0.as_mut_ptr()as usize;world[0x174e8/8]=a;geometry[0x98/8]=123;
  ptr::write_unaligned((base+crate::WORLD_RVA)as*mut usize,world.as_ptr()as usize);ptr::write_unaligned((base+0x3c1e028)as*mut usize,geometry.as_ptr()as usize);ptr::write_unaligned((base+0x3c1d9a8)as*mut usize,1);
@@ -368,7 +370,7 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  assert_eq!(query(a,113,1,false,false,0.,base),3);assert!(!STATE.lock().unwrap().active);
  reset();stats[0x150/4]=0;assert_eq!(query(a,113,1,true,false,0.,base),0);assert!(STATE.lock().unwrap().active);
  stats[0x150/4]=100;
- // FP can stay zero through repeated rolls; stamina gates the next roll.
+ // FP can stay zero through repeated rolls; stamina gates every update.
  reset();stats[0x150/4]=0;stats[0x15c/4]=40;
  assert_eq!(query(a,113,1,true,false,0.,base),0);
  {let mut s=STATE.lock().unwrap();s.started=true;s.rolling=true;s.motion.velocity=V(0.,0.,-12.);s.motion.locked=true;}
@@ -380,8 +382,8 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  let before=STATE.lock().unwrap().motion.velocity;
  assert_eq!(query(a,113,1,true,true,0.,base),2);
  assert!(STATE.lock().unwrap().drive);assert_eq!(stats[0x15c/4],1,"eligibility does not debit stamina");
- stats[0x15c/4]=-17; // The accepted native roll may spend beyond the remaining point.
- for _ in 0..4{assert_eq!(query(a,113,1,true,false,0.,base),1);assert!(STATE.lock().unwrap().drive);}
+ stats[0x15c/4]=-17; // Startup/native external costs can spend past zero.
+ for _ in 0..4{assert_eq!(query(a,113,1,true,false,0.,base),1);assert!(!STATE.lock().unwrap().drive);}
  assert_eq!(query(a,113,1,true,true,0.,base),2);
  assert!(!STATE.lock().unwrap().drive);assert_eq!(STATE.lock().unwrap().motion.velocity,before);
  for stamina in [-50,-1,0,1,17,18]{
@@ -393,9 +395,30 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  {let mut s=STATE.lock().unwrap();s.started=true;s.rolling=true;}
  assert_eq!(query(a,113,1,true,true,0.,base),2);
  stats[0x15c/4]=-17;
- assert_eq!(query(a,113,1,true,false,0.,base),0);assert!(STATE.lock().unwrap().drive);
- assert_eq!(query(a,113,1,true,true,0.,base),3,"recover at next boundary when unpowered and slow");
+ assert_eq!(query(a,113,1,true,false,0.,base),3);assert!(!STATE.lock().unwrap().drive);
+ assert_eq!(query(a,113,1,true,true,0.,base),3,"recover immediately when unpowered and slow");
  reset();stats[0x150/4]=100;stats[0x15c/4]=100;
+ // Accepted Ram payments retain only the first native fee of this roll,
+ // across low/high-speed behavior replacements and free-cost effects.
+ let add_sp:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);
+ ptr::write_unaligned((base+0x3c0f338)as*mut usize,1);
+ for immunity in [0u8,1,0x20,0x21]{for debug_free in [0u8,1]{for startup in [0,9,18]{
+  reset();stats[0x15c/4]=90;ptr::write((stats.as_mut_ptr()as usize+0x189)as*mut u8,immunity);ptr::write((base+0x3c0f2f7)as*mut u8,debug_free);
+  query(a,113,1,true,false,0.,base);
+  assert_eq!(action_cost(a,300000710,110000,startup,base),Some(startup));
+  add_sp(stats.as_mut_ptr()as usize,-startup,0);
+  let expected=90-if immunity==0&&debug_free==0{startup}else{0};assert_eq!(stats[0x15c/4],expected);
+  for behavior in [300000710,300000711,300000715,300000716,OWNER+90]{
+   let cost=action_cost(a,behavior,110000,18,base).unwrap();assert_eq!(cost,0);add_sp(stats.as_mut_ptr()as usize,-cost,0);
+  }
+  assert_eq!(stats[0x15c/4],expected);assert_eq!(action_cost(a,300000720,110000,18,base),None);
+  actor[0x78/8]=0;assert_eq!(action_cost(a,300000710,110000,18,base),None);ptr::write_unaligned((a+0x78)as*mut i32,1);
+  world[0x174e8/8]=0;assert_eq!(action_cost(a,300000710,110000,18,base),None);world[0x174e8/8]=a;
+ }}}
+ // Same per-update flag as native HKS act(110), preserving unrelated flags.
+ let mut coord=[0usize;0xd0/8];let mut action_flags=[0u32;0x30/4];coord[0xc8/8]=action_flags.as_mut_ptr()as usize;
+ actor[0x60/8]=coord.as_mut_ptr()as usize;action_flags[0x18/4]=0x1234;disable_recovery(a);assert_eq!(action_flags[0x18/4],0x1274);
+ actor[0x60/8]=0;ptr::write((stats.as_mut_ptr()as usize+0x189)as*mut u8,0x21);ptr::write((base+0x3c0f2f7)as*mut u8,0);reset();
  // Every empty slot uses the same three real art getter detours as Wildcard Arts.
  let old_id=crate::ARTS_ID_ORIG.swap(id_art as*const()as*mut u8,Ordering::AcqRel);
  let old_raw=crate::ARTS_RAW_ORIG.swap(raw_art as*const()as*mut u8,Ordering::AcqRel);

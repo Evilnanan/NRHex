@@ -5,6 +5,7 @@ use std::cell::Cell;
 
 thread_local! {
     static REWARDS: Cell<u32> = const { Cell::new(0) };
+    static CHARGES: Cell<u32> = const { Cell::new(0) };
     static CUES: Cell<u32> = const { Cell::new(0) };
     static SPECIAL: Cell<u8> = const { Cell::new(0) };
     static AMOUNT: Cell<i32> = const { Cell::new(0) };
@@ -49,7 +50,9 @@ unsafe extern "system" fn reward_effect(_: usize, _: usize, special: u8) {
     SPECIAL.with(|value| value.set(special));
 }
 unsafe extern "system" fn cue(_: usize, id: i32, flag: u8) -> u8 {
-    assert_eq!((id, flag), (spirit::CAPTURE_CUE, 0));
+    assert_eq!(flag, 0);
+    if id == spirit::KILL_CHARGE { CHARGES.with(|value| value.set(value.get()+1)); return 1; }
+    assert_eq!(id, spirit::CAPTURE_CUE);
     CUES.with(|value| value.set(value.get() + 1));
     1
 }
@@ -179,6 +182,7 @@ fn native_kill_settlement_preserves_rewards_and_captures_without_last_attacker()
     assert_eq!(REWARDS.with(Cell::get), 1);
     assert_eq!(SPECIAL.with(Cell::get), 1);
     assert_eq!(CUES.with(Cell::get), 1);
+    assert_eq!(CHARGES.with(Cell::get), 1);
     state.lock().unwrap().created(555);
     assert_eq!(native(actor), 0.);
     assert_eq!(REWARDS.with(Cell::get), 1);
@@ -186,13 +190,21 @@ fn native_kill_settlement_preserves_rewards_and_captures_without_last_attacker()
     kill_detour(player, 0., actor, 1);
     assert_eq!(state.lock().unwrap().request_status().0, None);
 
+    assert_eq!(CHARGES.with(Cell::get), 1, "duplicate local settlement cannot charge twice");
     state.lock().unwrap().synchronize(player, false);
     ptr::write((actor + 0x1f4) as *mut u8, 0);
     integer(row.as_mut_ptr() as usize + 0x2c, 1234);
     assert_eq!(native(actor), 1234.);
     assert_eq!(AMOUNT.with(Cell::get), 1234);
     assert_eq!(state.lock().unwrap().request_status().0, Some(48010010));
+    let charges=CHARGES.with(Cell::get);let cues=CUES.with(Cell::get);
+    pointer(actor+8,124);integer(attributes+0x144,1000);
+    kill_detour(player,0.,actor,1);
+    assert_eq!(CHARGES.with(Cell::get),charges+1,"weaker confirmed soul still charges");
+    assert_eq!(CUES.with(Cell::get),cues,"weaker soul does not replace storage");
+    pointer(actor+8,123);integer(attributes+0x144,10000);
     for receipt_first in [false, true] {
+        let charged = CHARGES.with(Cell::get);
         state.lock().unwrap().synchronize(player, false);
         let mut packet = [0u8; 20];
         PACKET_AVAILABLE.with(|value| value.set(true));
@@ -200,11 +212,14 @@ fn native_kill_settlement_preserves_rewards_and_captures_without_last_attacker()
         assert_eq!(receive_detour(0, &mut packet), 1);
         assert_eq!(kill_detour(player, 0., 0, 1), 0);
         if receipt_first { observe_soul(actor, base, false); }
+        flush_capture(base);
+        assert_eq!(CHARGES.with(Cell::get), charged+1);
         assert_eq!(state.lock().unwrap().request_status().0, Some(48010010));
         state.lock().unwrap().created(556);
         receive_detour(0, &mut packet);
         kill_detour(player, 0., 0, 1);
         assert_eq!(state.lock().unwrap().request_status().0, None);
+        assert_eq!(CHARGES.with(Cell::get), charged+1, "duplicate remote receipt cannot charge twice");
         PACKET_AVAILABLE.with(|value| value.set(false));
         assert_eq!(receive_detour(0, &mut packet), 0);
         assert_eq!(RECEIPT.with(|receipt| receipt.get()), None);
@@ -234,3 +249,45 @@ fn native_kill_settlement_preserves_rewards_and_captures_without_last_attacker()
     if !hook.relay.is_null() { VirtualFree(hook.relay as *mut _, 0, MEM_RELEASE); }
     assert_ne!(VirtualFree(memory, 0, MEM_RELEASE), 0);
 } }
+
+fn charge_row(bytes:&[u8],id:i32)->[u8;1024]{
+ let count=u16::from_le_bytes(bytes[10..12].try_into().unwrap())as usize;
+ for i in 0..count{let at=64+i*24;if i32::from_le_bytes(bytes[at..at+4].try_into().unwrap())==id{let off=u64::from_le_bytes(bytes[at+8..at+16].try_into().unwrap())as usize;return bytes[off..off+1024].try_into().unwrap();}}
+ panic!("Missing effect {id}")
+}
+unsafe extern "system" fn charge_owner(_:usize)->usize{1}
+unsafe extern "system" fn charge_is_player(_:usize)->u8{1}
+thread_local!{static READY:Cell<u32>=const{Cell::new(0)};}
+unsafe extern "system" fn charge_ready(_:usize){READY.with(|v|v.set(v.get()+1));}
+#[test]
+#[ignore="requires NRHEX_NATIVE_EXE and NRHEX_SPIRIT_CHARGE_FIXTURES; run alone"]
+fn native_spirit_charge_uses_installed_pulse_multipliers_clamp_and_ready(){unsafe{
+ let raw=std::fs::read(std::env::var_os("NRHEX_NATIVE_EXE").unwrap()).unwrap();assert_eq!(format!("{:x}",Sha256::digest(&raw)),crate::EXE_HASH);
+ let headers=crate::pe::Headers::parse(&raw,0).unwrap();let memory=VirtualAlloc(ptr::null_mut(),headers.image_size as usize,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);assert!(!memory.is_null());let base=memory as usize;
+ for s in &headers.sections{ptr::copy_nonoverlapping(raw[s.raw_offset as usize..].as_ptr(),(base+s.virtual_address as usize)as*mut u8,s.raw_size as usize);}
+ for(rva,f)in[(0x42c120,charge_owner as*const()as usize),(0x3d4180,charge_is_player as*const()as usize),(0x48c2d0,charge_ready as*const()as usize)]{jump(base,rva,f);}
+ let bytes=std::fs::read(std::env::var_os("NRHEX_SPIRIT_CHARGE_FIXTURES").unwrap()).unwrap();
+ let pulse=charge_row(&bytes,spirit::KILL_CHARGE);let native=charge_row(&bytes,7090001);let rate=charge_row(&bytes,7000900);let penalty=charge_row(&bytes,6840200);
+ let field=|r:&[u8],off|f32::from_le_bytes(r[off..off+4].try_into().unwrap());
+ assert_eq!(field(&pulse,0x394),25.);assert_eq!(field(&native,0x394),5.);
+ let mut manager=[0usize;4];let mut nodes=[[0usize;0x88/8];3];let m=manager.as_mut_ptr()as usize;
+ for (i,row)in[&pulse,&rate,&penalty].into_iter().enumerate(){nodes[i][0]=row.as_ptr()as usize;integer(nodes[i].as_mut_ptr()as usize+0x68,4);}
+ manager[1]=nodes[0].as_ptr()as usize;
+ let collect:unsafe extern "system" fn(usize,*mut f32)=std::mem::transmute(base+0x508c70);
+ let add:unsafe extern "system" fn(usize,f32)=std::mem::transmute(base+crate::GAUGE_ADD_PERCENT_RVA);
+ for buffs in 0..=2{
+  nodes[0][0x38/8]=if buffs>0{nodes[1].as_ptr()as usize}else{0};nodes[1][0x38/8]=if buffs>1{nodes[2].as_ptr()as usize}else{0};
+  let multiplier=if buffs>0{field(&rate,0x3d0)}else{1.}*if buffs>1{field(&penalty,0x3d0)}else{1.};
+  let mut gains=[0.;2];collect(m,gains.as_mut_ptr());assert!((gains[0]-25.*multiplier).abs()<0.0001);assert_eq!(gains[1],0.);
+  for maximum in [100.,250.,360.]{for current in [0.,maximum*0.5,maximum*0.9,maximum]{for blocked in [false,true]{
+   let mut gauge=[0u8;0x48];let g=gauge.as_mut_ptr()as usize;ptr::write_unaligned((g+0x18)as*mut f32,maximum);ptr::write_unaligned((g+0x14)as*mut f32,current);gauge[0x31]=if blocked{4}else{0};READY.with(|v|v.set(0));
+   add(g,gains[0]);let expected=if blocked{current}else{(current+maximum*gains[0]*0.01).min(maximum)};
+   assert!((ptr::read_unaligned((g+0x14)as*const f32)-expected).abs()<0.0001);
+   assert_eq!(READY.with(Cell::get),u32::from(!blocked&&current<maximum&&expected>=maximum));
+  }}}
+ }
+ // One-use/native inactive nodes cannot be collected on another update.
+ nodes[0][0x38/8]=0;
+ for flag in [0,2,0x80000004u32]{integer(nodes[0].as_mut_ptr()as usize+0x68,flag as i32);let mut gains=[-1.;2];collect(m,gains.as_mut_ptr());assert_eq!(gains,[0.,0.]);}
+ assert_ne!(VirtualFree(memory,0,MEM_RELEASE),0);
+}}

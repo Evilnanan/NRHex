@@ -582,3 +582,25 @@ fn native_spawn_uses_a_free_slot_and_preserves_six_argument_creation_and_four_ar
         assert_ne!(VirtualFree(memory, 0, MEM_RELEASE), 0);
     }
 }
+
+#[test]
+fn confirmed_strong_kills_charge_even_when_stored_soul_is_stronger() {
+    let mut state=spirit::Spirits::default();state.synchronize(1,true);
+    let soul=spirit::Soul{npc:48010010,think:48010000,chara_init:-1};
+    let strong=crate::spirit_kills::Candidate{soul,corpse:1,max_hp:10000};
+    let weak=crate::spirit_kills::Candidate{soul,corpse:2,max_hp:1000};
+    for candidate in [strong,weak] {
+        let captured=state.kills.observe(candidate,None);store_capture(&mut state,captured);
+        if candidate.corpse==1 { assert_eq!(state.take_kill_charges(),0,"death observation alone is not a reward"); }
+        let captured=state.kills.settle(candidate.corpse);store_capture(&mut state,captured);
+    }
+    // Both count even though the second cannot replace storage or its cue.
+    assert_eq!(state.take_kill_charges(),2);
+    assert_eq!(state.take_capture_cue(),Some(1));
+    let captured=state.kills.settle(2);store_capture(&mut state,captured);
+    assert_eq!(state.take_kill_charges(),0);
+    state.queue_kill_charge();state.queue_kill_charge();
+    assert_eq!(state.take_kill_charges(),2);assert_eq!(state.take_kill_charges(),0);
+    state.queue_kill_charge();state.synchronize(1,false);assert_eq!(state.take_kill_charges(),0);
+    state.queue_kill_charge();assert_eq!(state.take_kill_charges(),0);
+}
