@@ -2,14 +2,17 @@ using SoulsFormats;
 using System.Text.Json;
 
 static class AbilityIcons {
+ static readonly JsonSerializerOptions CellJson=new(){NumberHandling=System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals};
  static void Check(bool value,string message){if(!value)throw new InvalidDataException(message);}
  static string Name(BinderFile file)=>file.Name.Replace('\\','/').Split('/').Last();
  static string Hash(string path)=>Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(path)));
- public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes,int owner=Erosion.Owner,int previousLarge=21207,int previousSmall=22207){
+ public static void Stage(string root,Func<string,Memory<byte>,PARAM> parse,Hex[] hexes,int owner=Erosion.Owner,int previousLarge=21207,int previousSmall=22207,string? inputMod=null,string? outputStage=null){
   var hex=hexes.Single(hex=>hex.Id==owner);
-  string input=Path.Combine(root,"dist/mod/regulation.bin"),directory=Path.Combine(root,".work/ability-icons/staged");Directory.CreateDirectory(directory);
+  string input=Path.Combine(inputMod??Path.Combine(root,"dist/mod"),"regulation.bin"),directory=outputStage??Path.Combine(root,".work/ability-icons/staged");Directory.CreateDirectory(directory);
   var binder=SFUtil.DecryptNightreignRegulation(input);var before=binder.Files.ToDictionary(file=>file.ID,file=>file.Bytes.ToArray());
-  Check(binder.Compression==RegulationCompression.Format,"Unexpected regulation compression");
+  // Standalone uses the normalized format; explicit overlays retain their
+  // own already-loaded compression and are verified again after writing.
+  if(inputMod==null)Check(binder.Compression==RegulationCompression.Format,"Unexpected regulation compression");
   var fields=new Dictionary<string,(string Field,int Value)>{
    ["SpEffectParam"]=("iconId",hex.SmallIcon),["AttachEffectParam"]=("statusIconId",hex.SmallIcon),
    ["PermanentBuffParam"]=("iconId",hex.LargeIcon),["EquipParamGoods"]=("iconId",hex.LargeIcon-1000)
@@ -35,7 +38,7 @@ static class AbilityIcons {
     foreach(var cell in rows.First.Cells){
      object value=rows.Second[cell.Def.InternalName].Value;
      if(rows.First.ID==hex.Id&&cell.Def.InternalName==field.Field)Check(Convert.ToInt32(value)==field.Value,"Target icon readback failed");
-     if(JsonSerializer.Serialize(cell.Value)==JsonSerializer.Serialize(value))continue;
+     if(JsonSerializer.Serialize(cell.Value,CellJson)==JsonSerializer.Serialize(value,CellJson))continue;
      Check(rows.First.ID==hex.Id&&cell.Def.InternalName==field.Field,"Unrelated field changed");
      changes.Add(new{table,id=hex.Id,field=field.Field,before=cell.Value,after=value});
     }

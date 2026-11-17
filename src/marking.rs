@@ -8,7 +8,7 @@ pub unsafe fn constructed(hit:usize,context:usize,owned:impl FnOnce()->bool,airb
  // Caller has already matched context[0] against the local ChrIns. Never
  // change a shared AtkParam, poison-relic follow-up, projectile or other skill.
  if hit!=0&&context!=0&&read_i32(context+8)==ATTACK&&read_i32(context+0xc)==1&&owned(){
-  ptr::write((hit+0x24)as*mut u8,if airborne(){AIR_IMPACT}else{IMPACT});
+  crate::impact::set(hit,if airborne(){AIR_IMPACT}else{IMPACT});
  }
 }
 pub const CARRIER:i32=OWNER+1;
@@ -93,7 +93,8 @@ pub unsafe fn route(target:usize,effect:i32,source:usize,context:usize,base:usiz
    for original in [0,1,2,3,7,9,255]{
     let mut hit=[0xabu8;0x300];hit[0x24]=original;let before=hit;
     constructed(hit.as_mut_ptr()as usize,context.as_ptr()as usize,||owned,||airborne);
-    for i in 0..hit.len(){assert_eq!(hit[i],if i==0x24&&owned&&attack==ATTACK&&table==1{if airborne{AIR_IMPACT}else{IMPACT}}else{before[i]});}
+    let enabled=owned&&attack==ATTACK&&table==1;let level=if airborne{AIR_IMPACT}else{IMPACT};
+    for i in 0..hit.len(){assert_eq!(hit[i],if enabled&&i==0x24{level}else if enabled&&i==0x1e{crate::impact::override_id(level).unwrap()}else{before[i]});}
    }
   }}}}
  }}

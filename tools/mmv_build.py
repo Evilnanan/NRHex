@@ -234,6 +234,7 @@ def main(argv=None) -> int:
         behavior = json.loads((behavior_work / 'validation.json').read_text(encoding='utf8'))
         report['onyxBehaviorAdapter'] = behavior
         report['partialPreview']['files'][behavior['file']] = behavior['sha256']
+        report['partialPreview']['files']['action/variablenameid.txt'] = digest(REPORTS / 'staged/mod/action/variablenameid.txt')
         report['partialPreview']['files']['chr/c0000_a9x.anibnd.dcx'] = digest(REPORTS / 'staged/mod/chr/c0000_a9x.anibnd.dcx')
         # Apply the private launch-chain revision even when the standalone
         # resource snapshot predates it; never alter the MMV source package.
@@ -281,7 +282,7 @@ def main(argv=None) -> int:
 
         # The behavior/motion adapter generates these two runtime files even
         # when the standalone resource snapshot does not contain them yet.
-        generated_motion = {'chr/c0000.behbnd.dcx', 'chr/c0000_a9x.anibnd.dcx'}
+        generated_motion = {'chr/c0000.behbnd.dcx', 'chr/c0000_a9x.anibnd.dcx', 'action/variablenameid.txt'}
         if set(report['partialPreview']['files']) != set(before) | generated_motion:
             raise ValueError('Adapters do not cover exactly the shared resources and generated Onyx motion files')
         report['partialPreview'].update(stage='merged-resources', releaseReady=False)

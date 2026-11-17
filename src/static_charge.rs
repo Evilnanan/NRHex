@@ -13,7 +13,9 @@ pub const PACKET_RVA:usize=0x33e1a3;
 pub const PACKET_PATTERN:&str="0F 10 47 30 0F 11 46 70";
 const DISTANCE:f64=80.;
 pub const EVASION_QUERY:i32=990055;
-const MELEE_RANGE:f32=6.;
+fn active_hit(kind:Option<crate::weapon_contact::Kind>,hp:i32,ally:bool,rescue:bool)->bool{
+ kind.is_some()&&if ally{rescue}else{hp>0}
+}
 #[derive(Default)]struct Meter{distance:f64,last:Option<(usize,u64,u32,[f32;4])>}
 impl Meter{
  fn observe(&mut self,identity:usize,handle:u64,map:u32,point:Option<[f32;4]>){
@@ -177,9 +179,10 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  let outgoing=crate::is_local(source,base)&&has_effect(source,OWNER,base);
  let incoming=crate::is_local(target,base)&&has_effect(target,OWNER,base);
  let owner=if outgoing{
-  let categories=ptr::read_unaligned((hit+0x124) as *const [u32;8]);
-  if !crate::jiahao::melee_attack(&categories) || !crate::sword::near(crate::sword_hit_distance(source,hit,base),MELEE_RANGE){return;}
-  if crate::ambulance::party_member(target,base)&&!crate::ambulance::static_rescue(target,hit,base){return;}source
+  // Keep native teammate rescue as a separate existing exception: its HP
+  // damage is zero, but the accepted rescue hit can still spend a charge.
+  let ally=crate::ambulance::party_member(target,base);
+  if !active_hit(crate::weapon_contact::at_contact(source,hit,base),read_i32(hit+0x280),ally,ally&&crate::ambulance::static_rescue(target,hit,base)){return;}source
  }else if incoming{
   // Friendly rescue is not an incoming attack against the recipient.
   if source!=0&&crate::ambulance::party_member(source,base){return;}target
@@ -311,6 +314,13 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
  result
 }
 #[cfg(test)]mod tests{
+ #[test]fn active_proc_requires_damage_or_rescue_without_an_extra_distance_limit(){
+  use crate::weapon_contact::Kind;
+  for kind in [None,Some(Kind::Direct),Some(Kind::SwordSpell)]{for hp in [-1,0,1]{for ally in [false,true]{for rescue in [false,true]{
+   let expected=kind.is_some()&&if ally{rescue}else{hp>0};
+   assert_eq!(super::active_hit(kind,hp,ally,rescue),expected);
+  }}}}
+ }
  use super::*;
  #[test]fn ram_power_selection_preserves_other_attack_contexts(){unsafe{
   let mut context=[0u8;0x110];let cp=context.as_mut_ptr()as usize;

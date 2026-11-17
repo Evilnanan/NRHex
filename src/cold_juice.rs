@@ -6,6 +6,7 @@ pub const FROST:i32=OWNER+1;
 pub const RIGHT:i32=OWNER+2;
 pub const LEFT:i32=OWNER+4;
 pub const BULLET:i32=OWNER+50;
+pub const START_VISUAL:i32=OWNER+51;
 pub const ATTACK:i32=OWNER+60;
 type Point=[f32;4];
 #[derive(Clone,Copy,Debug,PartialEq)]struct Seed{serial:u16,level:u8,life:f32,target:u64}
@@ -94,15 +95,17 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
 }
 
 #[repr(C,align(16))]struct Descriptor([u8;0x110]);
-unsafe fn emit(owner:u64,seed:Seed,point:Point,base:usize)->bool{
+fn emission(seed:Seed,visual:bool)->(i32,[f32;4]){if visual{(START_VISUAL,[1.;4])}else{(BULLET,seed.encode())}}
+unsafe fn emit(owner:u64,seed:Seed,point:Point,base:usize,visual:bool)->bool{
  let manager=read_ptr(base+0x3c0ae30);let original=crate::echo_cast::EMIT_ORIGINAL.load(Ordering::Acquire);if manager==0||original.is_null()||!point[..3].iter().all(|x|x.is_finite()){return false;}
  let mut d=Descriptor([0;0x110]);let p=d.0.as_mut_ptr()as usize;
  ptr::write_unaligned(p as*mut u64,owner);
  for off in [8,0xc,0x14,0x18,0x1c,0x24,0xe0,0xf0]{ptr::write_unaligned((p+off)as*mut i32,-1);}
- ptr::write_unaligned((p+0x14)as*mut i32,BULLET);
+ let (bullet,coefficients)=emission(seed,visual);
+ ptr::write_unaligned((p+0x14)as*mut i32,bullet);
  for off in [0x28,0x2c]{ptr::write_unaligned((p+off)as*mut i32,0x10);}
  d.0[0xa8]=0xff;d.0[0x105]=0xff;
- ptr::write_unaligned((p+0x30)as*mut[f32;4],seed.encode());ptr::write_unaligned((p+0x44)as*mut u32,15);
+ ptr::write_unaligned((p+0x30)as*mut[f32;4],coefficients);ptr::write_unaligned((p+0x44)as*mut u32,15);
  ptr::write_unaligned((p+0x50)as*mut[Point;4],[[1.,0.,0.,0.],[0.,1.,0.,0.],[0.,0.,1.,0.],point]);ptr::write_unaligned((p+0xb8)as*mut u64,u64::MAX);
  let mut out=-1i32;let mut error=-1i32;let emit:unsafe extern "system" fn(usize,usize,usize,usize)->usize=std::mem::transmute(original);
  emit(manager,&mut out as*mut i32 as usize,p,&mut error as*mut i32 as usize);out>=0
@@ -118,12 +121,15 @@ pub unsafe fn flask(actor:usize,base:usize){
  if crate::bartender::can_enchant(actor,1.,base){apply(actor,LEFT+1,0);}
  if !crate::has_state(actor,260,base){apply(actor,FROST,0);}
  let game=read_ptr(base+crate::GAME_DATA_RVA);let data=if game!=0{read_ptr(game+8)}else{0};let level=if data!=0{read_i32(data+0x68).clamp(1,15)as u8}else{1};
- emit(owner,Seed{serial,level,life:3.,target:0},crate::position(actor,base),base);
+ let seed=Seed{serial,level,life:3.,target:0};let point=crate::position(actor,base);
+ // Once per flask, not when the persistent storm is replaced for pursuit.
+ // The separate native visual has no attack, frost payload or child chain.
+ if emit(owner,seed,point,base,false){emit(owner,seed,point,base,true);}
 }
 pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
  if !ACTIVE.load(Ordering::Acquire)||module==0||source==0||hit==0{return;}let base=BASE.load(Ordering::Acquire);
- if !crate::is_local(source,base)||!has_effect(source,OWNER,base)||read_ptr(hit+0x228)!=source||crate::spell_percentage(hit).is_some()||read_i32(hit+0x280)<=0{return;}
- if !crate::jiahao::melee_attack(&ptr::read_unaligned((hit+0x124)as*const[u32;8])){return;}
+ if !crate::is_local(source,base)||!has_effect(source,OWNER,base)||read_i32(hit+0x280)<=0{return;}
+ if crate::weapon_contact::at_contact(source,hit,base).is_none(){return;}
  let target=read_ptr(module+8);if target==0||target==source||crate::ambulance::party_member(target,base){return;}
  let owner=read_ptr(source+8)as u64;
  if let Ok(mut s)=STATE.lock(){if s.pending.is_none()&&s.latest.get(&owner).and_then(|(_,i,_)|s.flights.get(i)).is_some_and(|f|f.left>0.&&f.seed.target==0){s.pending=Some(read_ptr(target+8)as u64);}}
@@ -138,11 +144,17 @@ pub unsafe fn update(actor:usize,base:usize,dt:f32){
   s.pending.take().and_then(|target|s.latest.get(&owner).and_then(|(_,i,_)|s.flights.get(i).map(|f|(*i,*f,target))))
  };
  if let Some((ins,f,target))=pending{if f.left>0.&&f.seed.target==0&&read_ptr(ins+8)as u64==f.handle{
-  let point=ptr::read_unaligned((ins+0x10)as*const Point);emit(owner,Seed{life:3.,target,..f.seed},point,base);
+  let point=ptr::read_unaligned((ins+0x10)as*const Point);emit(owner,Seed{life:3.,target,..f.seed},point,base,false);
  }}
 }
 #[cfg(test)]mod tests{
  use super::*;
+ #[test]fn start_visual_uses_native_coefficients_without_storm_metadata(){
+  let seed=Seed{serial:41,level:15,life:3.,target:0};
+  assert_eq!(emission(seed,true),(START_VISUAL,[1.;4]));assert!(Seed::decode(emission(seed,true).1).is_none());
+  assert_eq!(emission(seed,false),(BULLET,seed.encode()));
+  let chase=Seed{target:0xffff_ffff_1000_1234,..seed};assert_eq!(emission(chase,false),(BULLET,chase.encode()));
+ }
  #[test]fn wire_metadata_preserves_handles_level_duration_and_generation(){for serial in [1,2048,4095]{for level in 1..=15{for life in [0.05,3.,3.25,6.]{for target in [0,0xffff_ffff_1000_1234,u64::MAX-1]{let s=Seed{serial,level,life,target};let v=s.encode();assert!(v.iter().all(|v|v.is_finite()));assert_eq!(Seed::decode(v),Some(s));}}}}assert!(Seed::decode([f32::NAN;4]).is_none());assert!(Seed::decode([1.;4]).is_none());}
  #[test]fn phases_cannot_rearm_or_replace_newer_flasks(){let a=Seed{serial:4095,level:1,life:3.,target:0};let b=Seed{target:17,life:5.,..a};assert!(newer(b,a));assert!(!newer(a,b));assert!(!newer(b,b));assert!(newer(Seed{serial:1,..a},b));assert!(!newer(a,Seed{serial:1,..a}));}
  #[test]fn wire_scope_rebuilds_fresh_hits_and_restores_native_coefficients(){unsafe{

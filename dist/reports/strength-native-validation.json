@@ -1,8 +1,10 @@
 {
-  "version": "0.9.1",
+  "version": "0.17.358",
   "ownerEffect": 95001100,
   "attackParamDmgLevelOffset": "0x72",
   "hitInputOffset": "0x24",
+  "wireOverrideOffset": "0x1e",
+  "networkRoundtripGuard": "tools/verify_impact_transport.py",
   "mapping": {
     "0": 1,
     "1": 2,

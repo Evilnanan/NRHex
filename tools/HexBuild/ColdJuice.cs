@@ -2,7 +2,7 @@ using SoulsFormats;
 using System.Security.Cryptography;
 using System.Text.Json;
 static class ColdJuice {
- public const int Owner=95005700, Sfx=950957;
+ public const int Owner=95005700, Sfx=950957, StartVisual=Owner+51;
  public static readonly int[] Markers=Enumerable.Range(1,7).Select(i=>Owner+i).ToArray();
  public static void Mechanics(Func<string,int,int,PARAM.Row> clone){
   var self=clone("SpEffectParam",8450103,Owner+1);
@@ -19,7 +19,32 @@ static class ColdJuice {
   foreach(var c in attack.Cells){var n=c.Def.InternalName;if((n.StartsWith("atk")&&n!="atkObj")||n.StartsWith("guardAtk")||n=="regainableSlotDamage"||n=="reviveHighHpCutRate")Set(attack,n,0);if(n.StartsWith("spEffectId"))Set(attack,n,-1);}
   foreach(var(f,v)in new(string,object)[]{("atkMag",40),("atkSuperArmor",2f),("atkSuperArmorCorrection",100),("atkAttribute",3),("atkType",3),("atkMaterial",6),("dmgLevel",1),("dmgLevel_vsPlayer",1),("selfTarget",0),("friendlyTarget",0),("opposeTarget",1),("reviveDamage",0f),("reviveDamageCorrection",0),("isDisableBothHandsAtkBonus",1)})Set(attack,f,v);
   var bullet=clone("Bullet",12441002,Owner+50);
-  foreach(var(f,v)in new(string,object)[]{("atkId_Bullet",Owner+60),("sfxId_Bullet",Sfx),("life",7f),("hitRadius",3f),("hitRadiusMax",-1f),("dmgHitRecordLifeTime",0.4f),("isUseSharedHitList",1),("HitBulletID",-1),("intervalCreateBulletId",-1),("spEffectId0",Owner+6),("spEffectIDForShooter",0),("initVellocity",0f),("minVellocity",0f),("maxVellocity",0f),("gravityInRange",0f),("gravityOutRange",0f),("accelInRange",0f),("accelOutRange",0f),("homingAngle",0),("isPenetrateMap",1),("FollowType",0)})Set(bullet,f,v);
+  foreach(var(f,v)in new(string,object)[]{("atkId_Bullet",Owner+60),("sfxId_Bullet",334308),("life",7f),("hitRadius",3f),("hitRadiusMax",-1f),("dmgHitRecordLifeTime",0.4f),("isUseSharedHitList",1),("HitBulletID",-1),("intervalCreateBulletId",-1),("spEffectId0",Owner+6),("spEffectIDForShooter",0),("initVellocity",0f),("minVellocity",0f),("maxVellocity",0f),("gravityInRange",0f),("gravityOutRange",0f),("accelInRange",0f),("accelOutRange",0f),("homingAngle",0),("isPenetrateMap",1),("FollowType",0)})Set(bullet,f,v);
+  ConfigureStartVisual(clone("Bullet",12441000,StartVisual));
+ }
+ static void ConfigureStartVisual(PARAM.Row row){
+  Check(Convert.ToInt32(row["sfxId_Bullet"].Value)==334307,"Native storm start visual changed");
+  // Retain the native 0.1s carrier and FXR's own appearance/termination rules.
+  // Do not inherit its damage/frost or spawn a second native damage storm.
+  foreach(var(f,v)in new(string,object)[]{("atkId_Bullet",-1),("HitBulletID",-1),("intervalCreateBulletId",-1),("spEffectIDForShooter",0),("hitRadius",0f),("hitRadiusMax",-1f)})Set(row,f,v);
+  for(int i=0;i<5;i++)Set(row,"spEffectId"+i,0);
+ }
+ public static void StartVisualStage(BND4 native,string input,string output,Func<string,Memory<byte>,PARAM> parse){
+  var b=SFUtil.DecryptNightreignRegulation(input);var previous=b.Files.ToDictionary(f=>f.ID,f=>f.Bytes.ToArray());
+  var file=b.Files.Single(f=>Name(f)=="Bullet.param");var p=parse("Bullet",file.Bytes);var old=parse("Bullet",file.Bytes);
+  var storm=p.Rows.Single(r=>r.ID==Owner+50);Check(Convert.ToInt32(storm["sfxId_Bullet"].Value) is Sfx or 334308,"Unexpected persistent storm visual");Set(storm,"sfxId_Bullet",334308);
+  var source=parse("Bullet",native.Files.Single(f=>Name(f)=="Bullet.param").Bytes).Rows.Single(r=>r.ID==12441000);
+  Check(!p.Rows.Any(r=>r.ID==StartVisual),"Start visual ID already exists; inspect before replacing");
+  var start=new PARAM.Row(source){ID=StartVisual};ConfigureStartVisual(start);p.Rows.Add(start);p.Rows=p.Rows.OrderBy(r=>r.ID).ToList();file.Bytes=p.Write();
+  Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output))!);SFUtil.EncryptNightreignRegulation(output,b,b.Compression);
+  var actual=SFUtil.DecryptNightreignRegulation(output);Check(actual.Version==b.Version&&actual.Compression==b.Compression&&actual.Files.Count==b.Files.Count,"Binder metadata changed");
+  foreach(var f in actual.Files){var intended=b.Files.Single(x=>x.ID==f.ID);Check(f.Name==intended.Name&&f.Flags==intended.Flags&&f.Bytes.Span.SequenceEqual(intended.Bytes.Span),"Parameter roundtrip mismatch");if(f.ID!=file.ID)Check(f.Bytes.Span.SequenceEqual(previous[f.ID]),"Unrelated table changed");}
+  var readback=parse("Bullet",actual.Files.Single(f=>f.ID==file.ID).Bytes);
+  Set(old.Rows.Single(r=>r.ID==Owner+50),"sfxId_Bullet",334308);
+  Check(readback.Rows.Count==old.Rows.Count+1&&old.Rows.OrderBy(r=>r.ID).Zip(readback.Rows.Where(r=>r.ID!=StartVisual).OrderBy(r=>r.ID)).All(x=>Same(x.First,x.Second)),"Existing bullet changed beyond storm visual");
+  Check(Same(readback.Rows.Single(r=>r.ID==StartVisual),start),"Visual carrier differs");
+  File.WriteAllText(output+".validation.json",JsonSerializer.Serialize(new{inputSha256=Hash(input),outputSha256=Hash(output),newBullet=StartVisual,startSfx=334307,loopSfx=334308,noAttackOrChildren=true,onlyExistingFieldChanged="Bullet/95005750/sfxId_Bullet",gameplayVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  Console.WriteLine("PASS: native start visual carrier added; persistent visual restored to native; all other rows and tables unchanged");
  }
  static string Value(object? v)=>v switch{
   float n=>"f32:"+BitConverter.SingleToInt32Bits(n).ToString("X8"),

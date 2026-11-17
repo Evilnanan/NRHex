@@ -166,10 +166,10 @@ pub(crate) fn contact_damage(velocity_damage:f32,level:i32)->f32{
 }
 // a713_040010 travels 3.700m before the 22/30s continuation window.
 const ROLL_SPEED:f32=3.700/(22./30.);
-#[derive(Default)]struct State{pending:Vec<PendingStagger>,actor:usize,handle:u64,stats:usize,motion:Motion,travel:Travel,yielding:crate::ram_motion::Yielding,effective_speed:f32,detach:f32,step_body:Option<u32>,step_grace:f32,push:bool,active:bool,interrupted:bool,queried:bool,missed_updates:u8,drive:bool,fee:MotorFee,wish:V,window:bool,recoil:bool,ending:bool,crash:bool,crash_pending:bool,rebound:f32,started:bool,rolling:bool,visual_speed:f32,trail:Option<V>,generation:u64}
+#[derive(Default)]struct State{pending:Vec<PendingStagger>,actor:usize,handle:u64,stats:usize,motion:Motion,travel:Travel,yielding:crate::ram_motion::Yielding,effective_speed:f32,detach:f32,step_body:Option<u32>,step_grace:f32,push:bool,active:bool,interrupted:bool,queried:bool,missed_updates:u8,drive:bool,fee:MotorFee,wish:V,window:bool,recoil:bool,ending:bool,crash:bool,crash_pending:bool,rebound:f32,started:bool,rolling:bool,visual_speed:f32,trail:Option<V>,generation:u64,sync_cycle:u32}
 static GENERATION:AtomicU64=AtomicU64::new(1);
 static CONTACTS:Mutex<BTreeMap<(u64,u64,u64),V>>=Mutex::new(BTreeMap::new());
-static STATE:Mutex<State>=Mutex::new(State{pending:Vec::new(),actor:0,handle:0,stats:0,motion:Motion{motor_work:0.,velocity:V(0.,0.,0.),spin:V(0.,0.,0.),initialized:false,locked:false,airborne:false,support:None},travel:Travel{previous:None,blocked:0.},yielding:crate::ram_motion::Yielding{body:None,age:0.,knocked:0.},effective_speed:0.,detach:0.,step_body:None,step_grace:0.,push:false,active:false,interrupted:false,queried:false,missed_updates:0,drive:false,fee:MotorFee{started:false,remainder:0.,weapon:110000},wish:V(0.,0.,0.),window:false,recoil:false,ending:false,crash:false,crash_pending:false,rebound:0.,started:false,rolling:false,visual_speed:0.,trail:None,generation:0});
+static STATE:Mutex<State>=Mutex::new(State{pending:Vec::new(),actor:0,handle:0,stats:0,motion:Motion{motor_work:0.,velocity:V(0.,0.,0.),spin:V(0.,0.,0.),initialized:false,locked:false,airborne:false,support:None},travel:Travel{previous:None,blocked:0.},yielding:crate::ram_motion::Yielding{body:None,age:0.,knocked:0.},effective_speed:0.,detach:0.,step_body:None,step_grace:0.,push:false,active:false,interrupted:false,queried:false,missed_updates:0,drive:false,fee:MotorFee{started:false,remainder:0.,weapon:110000},wish:V(0.,0.,0.),window:false,recoil:false,ending:false,crash:false,crash_pending:false,rebound:0.,started:false,rolling:false,visual_speed:0.,trail:None,generation:0,sync_cycle:0});
 // No game calls under STATE or on a Havok worker. Match the current local
 // actor, generation handle, physics module and the exact live proxy object.
 unsafe fn managed_actor(s:&State,base:usize)->Option<usize>{
@@ -251,6 +251,7 @@ pub unsafe extern "system" fn rebase(physics:usize,delta:*const f32){
  let Some(shift)=shift.filter(|v|v.finite())else{return;};
  let actor=read_ptr(physics+8);if actor==0||read_ptr(read_ptr(actor+0x1b8)+0x68)!=physics{return;}
  let handle=read_ptr(actor+8)as u64;
+ crate::ram_peer_visual::rebase(actor,handle,shift);
  if let Ok(mut s)=STATE.lock(){if s.actor==actor&&s.handle==handle{s.rebase(shift);}}
  // Contact history is expressed in the owning character's coordinate frame.
  // Remote owners receive their own native rebase callback exactly once too.
@@ -329,9 +330,21 @@ fn visual_speed(previous:f32,distance:f32,dt:f32)->f32{
  previous+(measured-previous)*(1.-(-dt/0.06).exp())
 }
 fn roll_rate(speed:f32)->f32{if speed.is_finite(){(speed/ROLL_SPEED).clamp(0.25,8.)}else{1.}}
+// Diagnostic snapshots never invoke native code or change motor state.
+#[cfg(feature="ram-sync-probe")]
+pub fn sync_probe(actor:usize)->Option<(u64,bool,bool,bool,f32)>{
+ let s=STATE.try_lock().ok()?;
+ (s.actor==actor).then(||(s.generation,s.active,s.started,s.rolling,roll_rate(s.visual_speed)))
+}
+pub(crate) fn sync_frame(actor:usize)->Option<(u64,u32,f32,bool)>{
+ let s=STATE.try_lock().ok()?;
+ (s.actor==actor).then(||(s.generation,s.sync_cycle,roll_rate(s.visual_speed),s.active&&s.started&&s.rolling&&!s.interrupted))
+}
 pub unsafe fn speed(context:usize,native:f32)->f32{
  if !ACTIVE.load(Ordering::Acquire){return native;}
- let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+crate::WORLD_RVA);if world==0{return native;}
+ let base=BASE.load(Ordering::Acquire);
+ if let Some(rate)=crate::ram_sync::speed(context,base).or_else(||crate::ram_peer_visual::speed(context,base)){return native*rate;}
+ let world=read_ptr(base+crate::WORLD_RVA);if world==0{return native;}
  let actor=read_ptr(world+0x174e8);if !eligible(actor,base){return native;}
  let animation=read_ptr(read_ptr(actor+0x1b8)+0x28);
  if animation==0||context!=animation+0x1800{return native;}
@@ -367,14 +380,16 @@ pub unsafe fn query(actor:usize,art_id:i32,hand:i32,held:bool,window:bool,angle:
   // Activation only arms the simulation. The real a713 attack behavior
   // opens rolling; the windup has substantial root motion of its own.
   let initial=!s.active;
-  if initial{if !can_drive||s.rebound>0.{return 0;}s.active=true;s.fee=MotorFee::default();s.started=false;s.rolling=false;s.window=false;s.motion=Motion::default();s.detach=0.;s.step_body=None;s.step_grace=0.;s.travel=Travel::default();s.yielding=Default::default();s.effective_speed=0.;s.generation=GENERATION.fetch_add(1,Ordering::Relaxed);}
+  if initial{if !can_drive||s.rebound>0.{return 0;}s.active=true;s.fee=MotorFee::default();s.started=false;s.rolling=false;s.window=false;s.motion=Motion::default();s.detach=0.;s.step_body=None;s.step_grace=0.;s.travel=Travel::default();s.yielding=Default::default();s.effective_speed=0.;s.generation=GENERATION.fetch_add(1,Ordering::Relaxed);s.sync_cycle=0;}
   let cycle=window&&!s.window;s.window=window;
   // Recheck every update, not only at animation-cycle boundaries.
   s.drive=can_drive;
   if !s.drive&&!s.motion.locked&&!s.motion.airborne&&s.started{s.active=false;s.ending=true;return 3;}
-  if cycle{2}else if s.started&&(s.motion.locked||s.motion.airborne){1}else{0}
+  if cycle{s.sync_cycle=s.sync_cycle.wrapping_add(1);2}else if s.started&&(s.motion.locked||s.motion.airborne){1}else{0}
  };
  if STATE.lock().is_ok_and(|s|s.actor==actor&&s.active&&s.drive&&s.started){disable_recovery(actor);}
+ #[cfg(feature="ram-sync-probe")]
+ if result==2{crate::ram_sync_probe::cycle(actor);}
  result
 }
 #[derive(Clone,Copy)]struct Contact{normal:V,point:V,fraction:f32,body:u32}

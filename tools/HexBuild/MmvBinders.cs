@@ -63,12 +63,18 @@ static class MmvBinders {
                 }
             }
             Check(target.Files.Select(f => f.ID).Distinct().Count() == target.Files.Count, "Duplicate merged binder ID");
+            // Preserve the native SFX section order (effects, textures, models,
+            // resource lists). Appending private effects after resource lists
+            // produced a different runtime result despite identical members.
+            if (sfx) target.Files.Sort((a, b) => a.ID.CompareTo(b.ID));
             string output = Path.Combine(root, "work/compat/mmv/staged/mod", relative);
             Directory.CreateDirectory(Path.GetDirectoryName(output)!); target.Write(output);
             var actual = BND4.Read(output);
             Check(actual.Version == target.Version && actual.Format == target.Format && actual.Compression == target.Compression &&
                 actual.BigEndian == target.BigEndian && actual.Unicode == target.Unicode && actual.Files.Count == target.Files.Count,
                 "Merged binder metadata readback mismatch");
+            if (sfx) Check(actual.Files.Select(f => f.ID).SequenceEqual(actual.Files.Select(f => f.ID).Order()),
+                "Merged SFX binder sections are not in native ID order");
             foreach (var pair in target.Files.Zip(actual.Files)) {
                 Check(pair.First.ID == pair.Second.ID && pair.First.Name == pair.Second.Name && pair.First.Flags == pair.Second.Flags &&
                     pair.First.Bytes.Span.SequenceEqual(pair.Second.Bytes.Span), "Merged binder member readback mismatch");

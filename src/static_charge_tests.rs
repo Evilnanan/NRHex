@@ -171,19 +171,21 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  check_timed_release(base,&mut world,sp,ap);source[1]=123;ally[1]=456;
  let module=[0usize,ap];let mp=module.as_ptr()as usize;
  int(hp+0x40,100);int(hp+0x44,1);int(hp+0x280,0);float(hp+0x150,30.);float(hp+0x258,1.);
+ ptr::write_unaligned((hp+0x228)as*mut usize,sp);
  SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});STATE.lock().unwrap().meter.distance=DISTANCE;
- // Drive the real outgoing callback at an exact hit distance. Failed contacts keep the charge.
+ // Drive the real outgoing callback. Failed attack categories keep the charge.
  let mut physics=[0u8;0x90];let mut parts=[0usize;0x70/8];parts[0x68/8]=physics.as_mut_ptr() as usize;
  source[0x60/8]=sp;source[0x1b8/8]=parts.as_ptr() as usize;
  float(hp+0x1f4,crate::sword::CASTER_HEIGHT);
- for (melee,ranged,distance) in [(false,false,1.),(true,true,1.),(true,false,6.01)] {
+ for (melee,ranged,distance) in [(false,false,1.),(true,true,1.)] {
   int(hp+0x124+4*4,if melee{4}else{0});int(hp+0x124+3*4,if ranged{1<<9}else{0});
   float(hp+0x1f0,distance);
   SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});
   let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);
   assert_eq!(STATE.lock().unwrap().meter.distance,DISTANCE);
  }
- float(hp+0x1f0,6.);SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});
+ int(hp+0x124+4*4,4);int(hp+0x124+3*4,0);
+ float(hp+0x1f0,60.);SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});
  {let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().marks.len(),1);assert_eq!(STATE.lock().unwrap().marks[0].sum,500.);
  STATE.lock().unwrap().marks.clear();STATE.lock().unwrap().meter.distance=DISTANCE;
  int(hp+0x40,ATTACK);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,DISTANCE);

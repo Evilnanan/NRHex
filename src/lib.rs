@@ -41,7 +41,7 @@ mod sniper;
 mod wraith;
 mod metal;
 mod double_dip;
-mod strength_sword;
+mod impact;
 mod sword_hit_rules;
 mod escape;
 mod jiahao;
@@ -100,6 +100,10 @@ mod archmage_cost;
 mod slingshot;
 mod ram_motion;
 mod lightning_ram;
+mod ram_peer_visual;
+mod ram_sync;
+mod weapon_contact;
+#[cfg(feature="ram-sync-probe")]mod ram_sync_probe;
 mod ram_damage;
 mod ram_native_contact;
 mod ram_stagger;
@@ -389,7 +393,7 @@ const NEW_66C7D0_PATTERN:&str="40 53 48 83 EC 20 48 8B 81 A0 05 00 00 48 85 C0 7
 
 const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
  fn signatures()->[(&'static str,u32);249] {
- [(ram_damage::PATTERN,ram_damage::RVA as u32),
+ [(impact::REBUILD_PATTERN,impact::REBUILD_RVA as u32),(ram_damage::PATTERN,ram_damage::RVA as u32),
   (night_blessing::COLLECT_PATTERN,night_blessing::COLLECT_RVA as u32),
   (night_blessing::RATE_PATTERN,night_blessing::RATE_RVA as u32),
   (night_blessing::POINT_PATTERN,night_blessing::POINT_RVA as u32),
@@ -408,7 +412,7 @@ const NEAR_DEATH_STATE_PATTERN:&str="80 B9 10 07 00 00 01 0F 94 C0 C3";
   (sword_projectile::MODE_PATTERN,sword_projectile::MODE_RVA as u32),
   (sword_projectile::PARAM_PATTERN,sword_projectile::PARAM_RVA as u32),
   (sword_projectile::MOTION_PATTERN,sword_projectile::MOTION_RVA as u32),
-  (echo_cast::FACTORY_PATTERN,echo_cast::FACTORY_RVA as u32),(echo_cast::TARGET_COPY_PATTERN,echo_cast::TARGET_COPY_RVA as u32),(echo_cast::RELEASE_PATTERN,echo_cast::RELEASE_RVA as u32),(echo_cast::TARGET_VALID_PATTERN,echo_cast::TARGET_VALID_RVA as u32),(light_footed::TAE_PATTERN,light_footed::TAE_RVA as u32),(ambulance::ENV_PATTERN,ambulance::ENV_RVA as u32),(ambulance::NUMBER_PATTERN,ambulance::NUMBER_RVA as u32),(ambulance::COST_PATTERN,ambulance::COST_RVA as u32),(ambulance::HIT_PATTERN,ambulance::HIT_RVA as u32),(ambulance::MODE_PATTERN,ambulance::MODE_RVA as u32),(ambulance::COMMON_PATTERN,ambulance::COMMON_RVA as u32),(ambulance::FORMULA_PATTERN,ambulance::FORMULA_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(strength_sword::PATTERN,strength_sword::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
+  (echo_cast::FACTORY_PATTERN,echo_cast::FACTORY_RVA as u32),(echo_cast::TARGET_COPY_PATTERN,echo_cast::TARGET_COPY_RVA as u32),(echo_cast::RELEASE_PATTERN,echo_cast::RELEASE_RVA as u32),(echo_cast::TARGET_VALID_PATTERN,echo_cast::TARGET_VALID_RVA as u32),(light_footed::TAE_PATTERN,light_footed::TAE_RVA as u32),(ambulance::ENV_PATTERN,ambulance::ENV_RVA as u32),(ambulance::NUMBER_PATTERN,ambulance::NUMBER_RVA as u32),(ambulance::COST_PATTERN,ambulance::COST_RVA as u32),(ambulance::HIT_PATTERN,ambulance::HIT_RVA as u32),(ambulance::MODE_PATTERN,ambulance::MODE_RVA as u32),(ambulance::COMMON_PATTERN,ambulance::COMMON_RVA as u32),(ambulance::FORMULA_PATTERN,ambulance::FORMULA_RVA as u32),(potential_fission::LOOKUP_PATTERN,potential_fission::LOOKUP_RVA as u32),(potential_fission::CREATE_PATTERN,potential_fission::CREATE_RVA as u32),(potential_fission::GROUP_PATTERN,potential_fission::GROUP_RVA as u32),(death_dance::DEBIT_PATTERN,death_dance::DEBIT_RVA as u32),(erosion::PATTERN,erosion::RVA as u32),(erosion::IMMUNE_PATTERN,erosion::IMMUNE_RVA as u32),(death_dance::PATTERN,death_dance::RVA as u32),(death_dance::SET_PATTERN,death_dance::SET_RVA as u32),(death_dance::FINISH_PATTERN,death_dance::FINISH_RVA as u32),(sword_regain::DESCRIPTOR_PATTERN,sword_regain::DESCRIPTOR_RVA as u32),(sword_regain::RATE_PATTERN,sword_regain::RATE_RVA as u32),(sword_regain::DIRECT_PATTERN,sword_regain::DIRECT_RVA as u32),(sword_regain::RECEIVED_PATTERN,sword_regain::RECEIVED_RVA as u32),(sword_hit_rules::PATTERN,sword_hit_rules::RVA as u32),(slingshot_runtime::PATTERN,slingshot_runtime::RVA as u32),(slingshot_runtime::HORIZONTAL_PATTERN,slingshot_runtime::HORIZONTAL_RVA as u32),(devils_gaze_hit::PATTERN,devils_gaze_hit::RVA as u32),(devils_gaze_hit::LOOKUP_PATTERN,devils_gaze_hit::LOOKUP_RVA as u32),(devils_gaze_audio::REQUEST_PATTERN,devils_gaze_audio::REQUEST_RVA as u32),(devils_gaze_runtime::EMIT_PATTERN,devils_gaze_runtime::EMIT_RVA as u32),(devils_gaze_runtime::DEPTH_PATTERN,devils_gaze_runtime::DEPTH_RVA as u32),(STAMINA_ADD_PATTERN,STAMINA_ADD_RVA as u32),(STAMINA_SET_PATTERN,0x427f00),(WORLD_PATTERN,0x3e0ace),(SPAWN_PATTERN,SPAWN_RVA as u32),
   (snack::PRICE_PATTERN,snack::PRICE_RVA as u32),(snack::SPEND_PATTERN,snack::SPEND_RVA as u32),(snack::BUY_A_PATTERN,snack::BUY_A_RVA as u32),(snack::BUY_B_PATTERN,snack::BUY_B_RVA as u32),(snack::ITEM_A_PATTERN,snack::ITEM_A_RVA as u32),(snack::ITEM_B_PATTERN,snack::ITEM_B_RVA as u32),(snack::RARITY_PATTERN,snack::RARITY_RVA as u32),
   (metal::CONSUME_PATTERN,metal::CONSUME_RVA as u32),(metal::QUANTITY_PATTERN,0x1f5ca0),
   (wraith::REGISTER_PATTERN,0x66f040),(wraith::INVENTORY_PATTERN,0x1f5610),(wraith::SLOT_PATTERN,0x1f7840),(wraith::CREDIT_PATTERN,0x34e0b0),
@@ -748,7 +752,7 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   let reward_prepared=hook::prepare(reward_target,reward_create_detour as *const u8,64)?;
   let dispatch_target=base.add(HIT_BUILD_RVA) as *mut u8;
   let dispatch_prepared=hook::prepare(dispatch_target,strength_detour as *const u8,64)?;
-  let combination_target=base.add(strength_sword::RVA) as *mut u8;
+  let combination_target=base.add(deliberate_punch::DISPATCH_RVA) as *mut u8;
   let combination_prepared=hook::prepare(combination_target,deliberate_punch::dispatch as *const u8,64)?;
   link_dispatch_hooks(combination_prepared.trampoline);
   let charged_target=base.add(sword_hit_rules::RVA) as *mut u8;
@@ -790,6 +794,9 @@ unsafe extern "system" fn worker(_:*mut c_void)->u32 {
   if arts_param_prepared.stolen!=5{return Err("Arts param entry must relocate its five-byte native jump".into());}
   #[cfg(feature="cage-lifecycle-probe")]
   arts_transfer_prepared.extend(cage_lifecycle_probe::prepare(base as usize)?);
+  arts_transfer_prepared.extend(ram_sync::prepare(base as usize)?);
+  #[cfg(feature="ram-sync-probe")]
+  arts_transfer_prepared.extend(ram_sync_probe::prepare(base as usize)?);
   #[cfg(feature="cage-demand")]
   arts_transfer_prepared.extend(cage_demand::prepare(base as usize)?);
   // Publish before patching: the detour always has a valid original target.
@@ -1064,10 +1071,6 @@ unsafe extern "system" fn strength_detour() {
   before=sym ability_damage::before_construct,after=sym on_strength_constructed,original=sym HIT_BUILD_ORIG
  );
 }
-unsafe fn strengthen_constructed_hit(hit:usize) {
- let original=ptr::read((hit+0x24) as *const u8);
- ptr::write((hit+0x24) as *mut u8,strength::remap(original));
-}
 unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  if !ACTIVE.load(Ordering::Acquire)||hit==0||context==0{return;}
  static_charge::constructed(hit,context);
@@ -1076,17 +1079,9 @@ unsafe extern "system" fn on_strength_constructed(hit:usize,context:usize) {
  let base=BASE.load(Ordering::Acquire);let world=read_ptr(base+WORLD_RVA);
  if world==0{return;}
  let local=read_ptr(world+0x174e8);
- // Native E7039B and E70A72 confirm context[0] is the generic source;
- // compare first before treating it as the local player's ChrIns.
- // Deliberately exclude projectile sources, even when their resolved owner
- // is local. Projectile synergy is evaluated separately at actual contact.
- if local==0||read_ptr(context)!=local{return;}
- deliberate_punch::constructed(local,hit,base);
- // Sword spells are evaluated at contact, across the complete impact dispatch.
- // Do not pre-boost a direct spell here and boost it a second time there.
- if spell_percentage(hit).is_some()&&has_effect(local,sword::OWNER,base){return;}
- if strength::applies(read_i32(context+8),read_i32(context+12))&&has_effect(local,strength::OWNER,base){strengthen_constructed_hit(hit);}
- marking::constructed(hit,context,||has_effect(local,marking::OWNER,base),||marking::air_started(local));
+ // Commit both native impact representations before any hit serialization.
+ impact::constructed(local,hit,context,base);
+ if local!=0&&read_ptr(context)==local{deliberate_punch::constructed(local,hit,base);}
 }
 
 // One native patch per shared entry. Publish the complete chain before enabling it.
@@ -1095,10 +1090,9 @@ fn link_contact_hooks(native:*mut u8){
  erosion::CONTACT_ORIGINAL.store(native,Ordering::Release);
  devils_gaze_hit::ORIGINAL.store(erosion::contact as*const()as*mut u8,Ordering::Release);
 }
-// 43D260: accepted-hit scopes -> projectile impact modifiers -> native.
+// 43D260: accepted-hit scopes -> native. Impact is finalized at construction.
 fn link_dispatch_hooks(native:*mut u8){
- strength_sword::ORIGINAL.store(native,Ordering::Release);
- deliberate_punch::DISPATCH_ORIGINAL.store(strength_sword::detour as*const()as*mut u8,Ordering::Release);
+ deliberate_punch::DISPATCH_ORIGINAL.store(native,Ordering::Release);
 }
 unsafe fn spatial_ready(player:usize)->bool {
  if player==0 {return false;}
@@ -2434,6 +2428,10 @@ unsafe extern "system" fn on_update(player:usize,dt:f32) {
  night_blessing::update(player,base,dt);
  slingshot_runtime::update(player,base,dt);
  lightning_ram::update(player,base,dt);
+ ram_peer_visual::update(player,base,dt);
+ ram_sync::update(player,base);
+ #[cfg(feature="ram-sync-probe")]
+ ram_sync_probe::update(player,base);
  update_chant(player,base);
  update_runtime(player,base,dt);
  update_sword(player,base);
@@ -2490,12 +2488,10 @@ mod tests {
    assert_eq!((m,s,h,a,b),(11,22,33,4,5));0x1234_5678_9abc_def0
   }
   let active=ACTIVE.swap(false,Ordering::AcqRel);
-  let old_strength=strength_sword::ORIGINAL.load(Ordering::Acquire);
   let old_punch=deliberate_punch::DISPATCH_ORIGINAL.load(Ordering::Acquire);
   link_dispatch_hooks(native as*const()as*mut u8);
-  assert_eq!(deliberate_punch::DISPATCH_ORIGINAL.load(Ordering::Acquire),strength_sword::detour as*const()as*mut u8);
+  assert_eq!(deliberate_punch::DISPATCH_ORIGINAL.load(Ordering::Acquire),native as*const()as*mut u8);
   assert_eq!(deliberate_punch::dispatch(11,22,33,4,5),0x1234_5678_9abc_def0);
-  strength_sword::ORIGINAL.store(old_strength,Ordering::Release);
   deliberate_punch::DISPATCH_ORIGINAL.store(old_punch,Ordering::Release);
   ACTIVE.store(active,Ordering::Release);
  }}
@@ -2707,12 +2703,12 @@ mod tests {
   assert!(sword::near(Some(5.),sword::NEAR_DISTANCE));
   assert!(!sword::near(Some(5.001),sword::NEAR_DISTANCE));
  }
- #[test] fn constructed_impact_stays_boosted_for_shared_and_network_copies(){unsafe{
+ #[test] fn constructed_impact_stays_boosted_for_same_layout_copies(){unsafe{
   for original in [0,1,2,3,8,7] {
-   let mut hit=[0u8;0x300];hit[0x24]=original;strengthen_constructed_hit(hit.as_mut_ptr() as usize);
+   let mut hit=[0u8;0x300];hit[0x24]=original;impact::boost(hit.as_mut_ptr() as usize);
    for _ in 0..3 {let transmitted=hit;assert_eq!(transmitted[0x24],strength::remap(original));}
    // A newly constructed attack starts from its own native input again.
-   hit[0x24]=original;strengthen_constructed_hit(hit.as_mut_ptr() as usize);
+   hit[0x24]=original;impact::boost(hit.as_mut_ptr() as usize);
    assert_eq!(hit[0x24],strength::remap(original));
   }
  }}

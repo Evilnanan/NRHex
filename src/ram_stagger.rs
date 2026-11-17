@@ -6,7 +6,7 @@ pub const NODE_PATTERN:&str="48 89 5C 24 08 48 89 74 24 10 48 89 7C 24 18 41 56 
 const NAMES:[&[u8];6]=[b"DamageExtraLarge_CMSG\0",b"DamageSpecial_CMSG\0",b"Event20002_CMSG\0",b"Event20000_CMSG\0",b"Event20005_CMSG\0",b"DamageSpecial_CMSG\0"];
 // Same graph used by hkbIsNodeActive: character+98, graph+E0 active nodes.
 // Re-resolve through the current animation module on every observation.
-unsafe fn graph(actor:usize,base:usize)->Option<usize>{
+pub(crate) unsafe fn graph(actor:usize,base:usize)->Option<usize>{
  if actor==0{return None;}let modules=read_ptr(actor+0x1b8);if modules==0{return None;}
  let anim=read_ptr(modules+0x28);if anim==0||read_ptr(anim+8)!=actor{return None;}
  let instance=read_ptr(anim+0x10);if instance==0{return None;}

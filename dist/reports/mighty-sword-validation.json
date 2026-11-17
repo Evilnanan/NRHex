@@ -1,21 +1,19 @@
 {
-  "wholeNativeDispatch": "0x43d260",
-  "stackArgumentsPreserved": 5,
-  "consumers": {
+  "version": "0.17.358",
+  "impactStage": "E70350 fresh construction",
+  "nativeConsumers": {
     "0x43d4be": "0x439e80",
     "0x43da15": "0x48d980",
     "0x43e12f": "0x4391e0",
     "0x43e14c": "0x438dd0"
   },
-  "recipientNativeReactionMappingPreserved": true,
   "hitInput": "0x24",
-  "nativeReactionOutput": "0x2b6",
-  "ordinaryProjectileContactRange": 5,
-  "spellCasterDistanceGate": false,
-  "collisionSource": "0x228",
+  "wireOverride": "0x1e",
+  "packetField": "0x8c",
   "nativeBulletKind": 3,
-  "cachedHitsNotReboosted": true,
-  "sourceDirectSpellsNotDoubleBoosted": true,
+  "ordinaryProjectilesExcluded": true,
+  "receivedDescriptorNotReboosted": true,
+  "nativeExecutionCheck": "impact::native_tests::compiled_modifiers_survive_native_wire_rebuild_without_reapplying",
   "gameplayVerified": false,
   "multiplayerVerified": false
 }

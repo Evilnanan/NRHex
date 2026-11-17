@@ -47,9 +47,11 @@ check(0x439efc,'41 F6 80 C1 02 00 00 08') # cached hits skip recalculation.
 check(0x43e110,'F6 86 C1 02 00 00 08') # cached reaction path differs too.
 source=(root/'src/lib.rs').read_text(encoding='utf8')
 scope=source[source.index('unsafe extern "system" fn on_strength_constructed'):source.index('unsafe fn spatial_ready')]
-assert 'read_ptr(context)!=local' in scope and 'has_effect(local,strength::OWNER,base)' in scope
-assert 'strengthen_constructed_hit(hit)' in scope and '0x2c1' not in scope
+assert 'impact::constructed(local,hit,context,base)' in scope
+impact=(root/'src/impact.rs').read_text(encoding='utf8')
+assert 'read_ptr(context)==local' in impact and 'has_effect(local,crate::strength::OWNER,base)' in impact
+assert 'context+0x10e' in impact and 'hit+0x1e' in impact and 'hit+0x24' in impact
 assert 'on_strength_end' not in source and 'HIT_DISPATCH_ORIG' not in source
 assert 'nlog_' not in scope
-(root/'dist/reports/strength-native-validation.json').write_text(json.dumps(dict(version='0.9.1',ownerEffect=95001100,attackParamDmgLevelOffset='0x72',hitInputOffset='0x24',mapping={0:1,1:2,2:3,3:7,8:2},hookRva='0xe70350',abi='RCX hit; RDX detail; R8 source context; R9B flag; stack int, pointer, float',sourceContextOwnerOffset='0x0',nativeDefensesAndReactionsRetained=True,boostedInputRetainedForReplayAndCopies=True,sevenArgumentAbiUnitTested=True,gameplayVerified=False,multiplayerVerified=False),ensure_ascii=False,indent=2),encoding='utf8')
+(root/'dist/reports/strength-native-validation.json').write_text(json.dumps(dict(version='0.17.358',ownerEffect=95001100,attackParamDmgLevelOffset='0x72',hitInputOffset='0x24',wireOverrideOffset='0x1e',networkRoundtripGuard='tools/verify_impact_transport.py',mapping={0:1,1:2,2:3,3:7,8:2},hookRva='0xe70350',abi='RCX hit; RDX detail; R8 source context; R9B flag; stack int, pointer, float',sourceContextOwnerOffset='0x0',nativeDefensesAndReactionsRetained=True,boostedInputRetainedForReplayAndCopies=True,sevenArgumentAbiUnitTested=True,gameplayVerified=False,multiplayerVerified=False),ensure_ascii=False,indent=2),encoding='utf8')
 print('PASS: source-owned hit construction before cached-hit replay, all seven constructor arguments, native defense/reaction consumers verified.')

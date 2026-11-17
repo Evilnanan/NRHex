@@ -32,10 +32,10 @@ fn native_marking_constructor_uses_upward_cut_and_retains_copies(){unsafe{
  let call:unsafe extern "system" fn(usize,usize,usize,u8,i32,usize,f32)->u64=std::mem::transmute(crate::strength_detour as*const());
  for owned in [false,true]{OWNED.with(|s|s.set(owned));for airborne in [false,true]{reset();start(player,if airborne{2}else{1},base);for mighty in [false,true]{MIGHTY.with(|s|s.set(mighty));for local in [false,true]{for table in [0,1]{for attack in [ATTACK,600000120,300000290]{
   let native=row(&params,attack);let mut context=[0usize;0x120/8];context[0]=if local{player}else{player+8};ptr::write_unaligned((context.as_mut_ptr()as usize+8)as*mut i32,attack);ptr::write_unaligned((context.as_mut_ptr()as usize+12)as*mut i32,table);
-  let mut hit=[0u8;0x300];let h=hit.as_mut_ptr()as usize;let context=context.as_mut_ptr()as usize;
+ let mut hit=[0u8;0x300];hit[0x124+130/8]|=1<<(130%8);let h=hit.as_mut_ptr()as usize;let context=context.as_mut_ptr()as usize;
   assert_eq!(call(h,native.as_ptr()as usize,context,173,-249,0x12345678,1.25),0xabcdef0123456789);
   let expected=if local&&owned&&table==1&&attack==ATTACK{if airborne{AIR_IMPACT}else{IMPACT}}else if local&&mighty&&!(table==1&&attack==600000120){crate::strength::remap(native[0x72])}else{native[0x72]};assert_eq!(hit[0x24],expected);assert_eq!(crate::read_i32(h+0x280),0x12345678);
-  // Native cached/network copies keep the constructed input, independently
+   // Same-layout cached copies keep the constructed input, independently
   // of later ownership changes; no target mapping is overwritten here.
   let copied=hit;OWNED.with(|s|s.set(!owned));assert_eq!(copied[0x24],expected);OWNED.with(|s|s.set(owned));assert_eq!(hit[0x2b6],0);
  }}}}}}

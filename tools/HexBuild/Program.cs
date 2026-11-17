@@ -110,12 +110,15 @@ if(args.Contains("--mmv-wylder-bleed-stage")){
 if(args.Contains("--mmv-raider-check")){MmvRaider.Verify(args[Array.IndexOf(args,"--mmv-raider-check")+1],Parse);return;}
 if(args.Contains("--soul-critical-map")){SoulCritical.TargetMap(root,args[Array.IndexOf(args,"--soul-critical-map")+1],Parse);return;}
 if(args.Contains("--onyx-behavior-stage")){int at=Array.IndexOf(args,"--onyx-behavior-stage");OnyxBehavior.Stage(root,args[at+1],args[at+2],args[at+3]);return;}
+if(args.Contains("--ram-sync-behavior-stage")){int at=Array.IndexOf(args,"--ram-sync-behavior-stage");OnyxBehavior.Stage(root,args[at+1],args[at+2],args[at+3],true);return;}
+if(args.Contains("--ram-sync-name-stage")){int at=Array.IndexOf(args,"--ram-sync-name-stage");var registrySource=args[at+1]=="original"?RamSyncNames.Original(root,smith,game):args[at+1];RamSyncNames.Stage(registrySource,args[at+2]);return;}
 if(args.Contains("--onyx-planted-stage")){int at=Array.IndexOf(args,"--onyx-planted-stage");OnyxMastery.RefreshPlanted(args[at+1],args[at+2],Parse);return;}
 if(args.Contains("--lightning-ram-power")){LightningRam.PowerStage(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-ram-extreme")){LightningRam.Extreme(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-ram-objects")){LightningRam.Objects(root,bnd,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--lightning-ram-physical")){LightningRam.Physical(root,Parse,args.Contains("--mmv"));return;}
 if(args.Contains("--cold-juice-stage")){ColdJuice.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
+if(args.Contains("--cold-juice-start-visual")){int at=Array.IndexOf(args,"--cold-juice-start-visual");ColdJuice.StartVisualStage(bnd,args[at+1],args[at+2],Parse);return;}
 if(args.Contains("--cold-juice-frost-stage")){int at=Array.IndexOf(args,"--cold-juice-frost-stage");ColdJuice.FrostStage(args[at+1],args[at+2],Parse);return;}
 if(args.Contains("--cold-juice-visual-stage")){int at=Array.IndexOf(args,"--cold-juice-visual-stage");ColdJuice.Visual(root,args[at+1],args[at+2]);return;}
 if(args.Contains("--lightning-ram-stage")){LightningRam.Stage(root,bnd,Parse,HexCatalog.Load(root),args.Contains("--mmv"));return;}
@@ -255,7 +258,7 @@ if(args.Contains("--ambulance-stage")){Ambulance.Stage(root,bnd,Parse,HexCatalog
 if(args.Contains("--reward-template-stage")){RewardTemplate.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--potential-fission-stage")){PotentialFission.Stage(root,bnd,Parse,HexCatalog.Load(root));return;}
 if(args.Contains("--ability-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root));return;}
-if(args.Contains("--cold-juice-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root),ColdJuice.Owner,21291,22291);return;}
+if(args.Contains("--cold-juice-icons-stage")){AbilityIcons.Stage(root,Parse,HexCatalog.Load(root),ColdJuice.Owner,21291,22291,inputMod:args.Contains("--input-mod")?args[Array.IndexOf(args,"--input-mod")+1]:null,outputStage:args.Contains("--output-stage")?args[Array.IndexOf(args,"--output-stage")+1]:null);return;}
 if(args.Contains("--erosion-spell-stage")){var i=Array.IndexOf(args,"--erosion-spell-stage");ErosionSources.TuneSpell(args[i+1],args[i+2],Parse);return;}
 if(args.Contains("--erosion-tiers-check")){ErosionSources.VerifyTiers(Path.Combine(root,"dist/mod/regulation.bin"),Parse);return;}
 if(args.Contains("--erosion-sources-stage")){var i=Array.IndexOf(args,"--erosion-sources-stage");ErosionSources.Stage(root,args[i+1],args[i+2],Parse);return;}

@@ -195,6 +195,8 @@ if __name__ == '__main__':
     a = p.parse_args()
     raw = a.source.read_bytes()
     result, report = patch(raw)
+    from build_ram_sync_behavior import patch as ram_sync_patch
+    result, report['ramSync'] = ram_sync_patch(result)
     a.output.write_bytes(result)
     report.update(inputSha256=hashlib.sha256(raw).hexdigest(), outputSha256=hashlib.sha256(result).hexdigest())
     a.output.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n')
