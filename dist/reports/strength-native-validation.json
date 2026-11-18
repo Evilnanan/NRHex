@@ -1,5 +1,5 @@
 {
-  "version": "0.17.358",
+  "version": "0.17.361",
   "ownerEffect": 95001100,
   "attackParamDmgLevelOffset": "0x72",
   "hitInputOffset": "0x24",
@@ -10,6 +10,8 @@
     "1": 2,
     "2": 3,
     "3": 7,
+    "4": 10,
+    "7": 4,
     "8": 2
   },
   "hookRva": "0xe70350",

@@ -66,6 +66,7 @@ try:
     cases = []
     for name, native, wanted in [('mighty0', 0, 1), ('mighty1', 1, 2),
                                   ('mighty2', 2, 3), ('mighty3', 3, 7),
+                                  ('mighty7', 7, 4), ('mighty4', 4, 10),
                                   ('mighty8', 8, 2), ('slideGround', 1, 9),
                                   ('slideAir', 1, 3)]:
         override = next(i for i, level in mapping.items() if level == wanted)
@@ -87,7 +88,7 @@ try:
             outcomes.append(dict(override=wire_override, receiverImpact=rebuilt[0x24]))
         cases.append(dict(name=name, nativeImpact=native, senderImpact=wanted, outcomes=outcomes))
     report = dict(exeSha256=digest, overrideMapping=mapping, cases=cases,
-                  nativeFragmentCases=14, gameProcessAccessed=False,
+                  nativeFragmentCases=sum(len(case['outcomes']) for case in cases), gameProcessAccessed=False,
                   liveMultiplayerVerified=False,
                   path=['435780 hit+1E to message+8C', 'DDFB20 sends type 0F, size 150',
                         '434FA0 message+8C to context+C8', 'E70350 override/default reconstruction'])
