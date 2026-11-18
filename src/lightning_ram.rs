@@ -57,7 +57,8 @@ pub static IMPACT_ORIGINAL:AtomicPtr<u8>=AtomicPtr::new(ptr::null_mut());
 // from that notification kind or a previously queued action.
 pub unsafe extern "system" fn resolved_impact(actor:usize,level:u8,hit:usize)->u8{
  let original:unsafe extern "system" fn(usize,u8,usize)->u8=std::mem::transmute(IMPACT_ORIGINAL.load(Ordering::Acquire));
- let result=original(actor,level,hit);
+ let incoming = crate::light_footed::incoming_impact(actor, level, hit);
+ let result=original(actor,incoming,hit);
  if ACTIVE.load(Ordering::Acquire)&&CONTACT.with(std::cell::Cell::get){RESOLUTION.with(|s|{
   if let Some(mut r)=s.get().filter(|r|r.hit==hit&&r.target==actor){r.value=Some(result);r.suppressed=level==0;s.set(Some(r));}
  });}

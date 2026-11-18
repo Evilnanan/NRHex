@@ -95,6 +95,7 @@ PARAM Parse(string name,Memory<byte> bytes){
  }
  p.ApplyParamdef(d);return p;
 }
+if(args.Contains("--lightweight-rework")){int at=Array.IndexOf(args,"--lightweight-rework");LightFooted.Rework(root,Parse,args[at+1],args[at+2]);return;}
 if(args.Contains("--light-footed-stage")){int at=Array.IndexOf(args,"--light-footed-stage");LightFooted.Stage(root,bnd,Parse,HexCatalog.Load(root),args[at+1],args[at+2]);return;}
 if(args.Contains("--metal-guard-stage")){int at=Array.IndexOf(args,"--metal-guard-stage");MetalGuard.Stage(root,bnd,Parse,args[at+1],args[at+2]);return;}
 if(args.Contains("--parry-counter-hit-stage")){ParryCounterHit.Stage(root,Parse,args.Contains("--mmv"));return;}

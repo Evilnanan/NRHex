@@ -44,6 +44,25 @@ pub unsafe fn query(actor:usize,upper:i32,lower:i32,base:usize)->i32{
 }
 pub unsafe fn update(actor:usize,base:usize){let owner=identity(actor,base);if let Ok(mut s)=STATE.lock(){s.tick(owner);}}
 pub fn reset(){if let Ok(mut s)=STATE.lock(){*s=State::default();}}
+/// Adjust the recipient's input before native poise and reaction selection.
+/// The native caller can suppress even a nonzero attack tier for this hit.
+pub unsafe fn incoming_impact(actor: usize, level: u8, hit: usize) -> u8 {
+ let boosted = crate::strength::remap(level);
+ if boosted == level || hit == 0 || !ACTIVE.load(Ordering::Acquire) {
+  return level;
+ }
+ let base = BASE.load(Ordering::Acquire);
+ if !is_local(actor, base) || !has_effect(actor, OWNER, base) {
+  return level;
+ }
+ if ptr::read((hit + 0x2b9) as *const u8) != 0 || ptr::read((hit + 0x2ba) as *const u8) != 0 {
+  return level;
+ }
+ if !crate::strength::applies(read_i32(hit + 0x40), read_i32(hit + 0x44)) {
+  return level;
+ }
+ boosted
+}
 type Tae=unsafe extern "system" fn(usize,usize);
 pub unsafe extern "system" fn tae(event:usize,descriptor:usize){
  let original:Tae=std::mem::transmute(TAE_ORIGINAL.load(Ordering::Acquire));

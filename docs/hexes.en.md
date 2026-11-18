@@ -252,7 +252,7 @@ Obtain an Onyx Lord’s Greatsword. Its attacks use less stamina. Hold its skill
 <!-- hex:95005400 -->
 ## Lightweight
 
-Damage negation -50%. Move faster while using items, casting spells, or using skills.
+Damage negation -35%. Attacks knock you back more easily. Move faster while using items, casting spells, or using skills.
 
 <!-- hex:95005600 -->
 ## I Can’t Stop!

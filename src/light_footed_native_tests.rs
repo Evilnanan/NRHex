@@ -29,6 +29,29 @@ fn native_tae_limits_are_scoped_to_mobile_owner_and_fresh_state(){unsafe{
  let prepared=crate::hook::prepare((base+TAE_RVA)as*mut u8,tae as*const u8,64).unwrap();
  let previous_base=BASE.swap(base,Ordering::AcqRel);let previous_active=ACTIVE.swap(true,Ordering::AcqRel);let previous_original=TAE_ORIGINAL.swap(prepared.trampoline,Ordering::AcqRel);
  put(a+0x190,a);put(ph+8,a);put(ph+0x420,a);int(ph+0x414,-1);int(st+0x140,100);int(st+0x15c,100);ptr::write((ph+0x92)as*mut u8,1);
+ // Feed the production callback into the EXE's explicit reaction path.
+ let mut hit = [0u8; 0x300];
+ hit[0x121] = 3;
+ let h = hit.as_mut_ptr() as usize;
+ let resolver = &crate::lightning_ram::IMPACT_ORIGINAL;
+ let previous_resolver = resolver.swap((base + crate::lightning_ram::IMPACT_RVA) as *mut u8, Ordering::AcqRel);
+ for owns in [false, true] {
+  OWNS.store(owns, Ordering::Relaxed);
+  for level in 0..=11 {
+   let expected = if owns { crate::strength::remap(level) } else { level };
+   assert_eq!(crate::lightning_ram::resolved_impact(a, level, h), expected);
+   assert_eq!(crate::lightning_ram::resolved_impact(a + 8, level, h), level);
+  }
+ }
+ for flag in [0x2b9, 0x2ba] {
+  hit[flag] = 1;
+  assert_eq!(crate::lightning_ram::resolved_impact(a, 0, h), 0);
+  hit[flag] = 0;
+ }
+ int(h + 0x40, 600000120);
+ int(h + 0x44, 1);
+ assert_eq!(crate::lightning_ram::resolved_impact(a, 0, h), 0);
+ resolver.store(previous_resolver, Ordering::Release);
  let mut cases=0;
  for owns in [false,true]{for upper in [0,1,10,11,12,13,104,105]{for lower in [0,1,2,11]{
   OWNS.store(owns,Ordering::Relaxed);let active=owns&&lower==1&&matches!(upper,11|12|104);

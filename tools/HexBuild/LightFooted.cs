@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 
 static class LightFooted {
+ const float DamageTakenRate=1.35f;
  public const int Owner=95005400;
  public static readonly string[] DamageFields=["slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"];
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
@@ -11,7 +12,24 @@ static class LightFooted {
  static string Value(object v)=>v is byte[] b?Convert.ToHexString(b):Convert.ToString(v,System.Globalization.CultureInfo.InvariantCulture)!;
  static bool Same(PARAM.Row a,PARAM.Row b)=>a.ID==b.ID&&a.Name==b.Name&&a.Cells.Zip(b.Cells).All(p=>p.First.Def.InternalName==p.Second.Def.InternalName&&Value(p.First.Value)==Value(p.Second.Value));
  static string Hash(string p)=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p)));
- public static void OwnerEffect(PARAM.Row r){foreach(var f in DamageFields)Set(r,f,1.5f);}
+ public static void OwnerEffect(PARAM.Row r){foreach(var f in DamageFields)Set(r,f,DamageTakenRate);}
+ public static void Rework(string root,Func<string,Memory<byte>,PARAM> parse,string inputMod,string output){
+  Directory.CreateDirectory(output);
+  var binder=SFUtil.DecryptNightreignRegulation(Path.Combine(inputMod,"regulation.bin"));
+  var file=binder.Files.Single(f=>Name(f)=="SpEffectParam.param");
+  var table=parse("SpEffectParam",file.Bytes);
+  var owner=table.Rows.Single(r=>r.ID==Owner);
+  Check(DamageFields.All(f=>Convert.ToSingle(owner[f].Value) is 1.5f or DamageTakenRate),"Unexpected Lightweight damage rates");
+  OwnerEffect(owner);
+  file.Bytes=table.Write();
+  string path=Path.Combine(output,"regulation.bin");
+  SFUtil.EncryptNightreignRegulation(path,binder,binder.Compression);
+  var actual=SFUtil.DecryptNightreignRegulation(path);
+  Check(actual.Files.Count==binder.Files.Count && actual.Files.Zip(binder.Files).All(p=>p.First.ID==p.Second.ID && p.First.Bytes.Span.SequenceEqual(p.Second.Bytes.Span)),"Lightweight regulation readback failed");
+  var result=parse("SpEffectParam",actual.Files.Single(f=>f.ID==file.ID).Bytes).Rows.Single(r=>r.ID==Owner);
+  Check(DamageFields.All(f=>Convert.ToSingle(result[f].Value)==DamageTakenRate),"Lightweight damage rates failed readback");
+  HexTexts.Stage(root,HexCatalog.Load(root),Path.Combine(output,"msg"),allRewards:true,onlyIds:[Owner],inputMod:inputMod);
+ }
  static bool Removal(EMEVD.Instruction i,int id)=>i.Bank==2004&&i.ID==21&&i.ArgData.Length==8&&BitConverter.ToInt32(i.ArgData)==20000&&BitConverter.ToInt32(i.ArgData,4)==id;
  public static void Events(EMEVD ev){
   foreach(int id in new[]{1111,9100941}){
@@ -65,7 +83,7 @@ static class LightFooted {
   }
   RewardCatalog.Write(Path.Combine(dir,"hex_pool.rs"),hexes);
   HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:[Owner],inputMod:mod);
-  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{owner=Owner,damageTakenMultiplier=1.5,historyBit=50,hexCount=hexes.Length,inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),addedRows=added.ToDictionary(x=>x.Key,x=>x.Value.Order().ToArray()),allExistingRowsAndUnrelatedTablesUnchanged=true,onlyThreeExistingEventsExtended=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
+  File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{owner=Owner,damageTakenMultiplier=DamageTakenRate,historyBit=50,hexCount=hexes.Length,inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),addedRows=added.ToDictionary(x=>x.Key,x=>x.Value.Order().ToArray()),allExistingRowsAndUnrelatedTablesUnchanged=true,onlyThreeExistingEventsExtended=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
   Console.WriteLine("PASS: Light-footed reward, damage penalty, Mystery Box and lifecycle staged; existing rows and unrelated events preserved");
  }
 }
