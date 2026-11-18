@@ -9,6 +9,15 @@ ORIGIN_EVENTS=['W_HurtDaggerAttack','W_AirHurtDaggerAttack']
 def abx(op,a,bx):return op<<25|bx<<8|a
 def abc(op,a,b,c):return op<<25|b<<17|c<<8|a
 def patch_observer(source,query,events,fids=(1,2,3,4)):
+ def argument(f,a,const,glob):
+  code=[abx(25,a+2,const(0))]
+  for i,name in enumerate(events,1):
+   for suffix,mode in [('',i),('_Upper',i+10)]:
+    code+=[abx(25,a+3,const(name+suffix)),abc(4,0,0,a+3),abx(28,0,0x10000),abx(25,a+2,const(mode))]
+  return code
+ return patch_queries(source,query,fids,argument)
+
+def patch_queries(source,query,fids,argument):
  r=Reader(source);r.function();edits=[];audit={}
  for fid in fids:
   f=r.functions[fid];cs=f['constants'];assert query not in cs;extra=[];encoded=bytearray()
@@ -21,10 +30,7 @@ def patch_observer(source,query,events,fids=(1,2,3,4)):
    else:extra.append(float(v));encoded.extend(b'\x03'+struct.pack('>f',v))
    return i
   def glob(a,v):return [abx(91,a,const(v)),abx(76,20,const(v)+1)]
-  a=f['slots'];prefix=glob(a,'env')+[abx(25,a+1,const(query)),abx(25,a+2,const(0))]
-  for i,name in enumerate(events,1):
-   for suffix,mode in [('',i),('_Upper',i+10)]:
-    prefix+=[abx(25,a+3,const(name+suffix)),abc(4,0,0,a+3),abx(28,0,0x10000),abx(25,a+2,const(mode))]
+  a=f['slots'];prefix=glob(a,'env')+[abx(25,a+1,const(query))]+argument(f,a,const,glob)
   prefix+=[abc(2,a,3,1)]
   while len(encoded)%4:encoded.append(0);extra.append(None)
   old=[v[0]for v in struct.iter_unpack('>I',f['code'])];new=prefix+old;n=len(prefix)

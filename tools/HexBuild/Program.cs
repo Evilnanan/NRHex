@@ -112,6 +112,14 @@ if(args.Contains("--mmv-raider-check")){MmvRaider.Verify(args[Array.IndexOf(args
 if(args.Contains("--soul-critical-map")){SoulCritical.TargetMap(root,args[Array.IndexOf(args,"--soul-critical-map")+1],Parse);return;}
 if(args.Contains("--onyx-behavior-stage")){int at=Array.IndexOf(args,"--onyx-behavior-stage");OnyxBehavior.Stage(root,args[at+1],args[at+2],args[at+3]);return;}
 if(args.Contains("--ram-sync-behavior-stage")){int at=Array.IndexOf(args,"--ram-sync-behavior-stage");OnyxBehavior.Stage(root,args[at+1],args[at+2],args[at+3],true);return;}
+if(args.Contains("--ram-sync-verify-package")){
+ int at=Array.IndexOf(args,"--ram-sync-verify-package");
+ var baseMod=args[at+2]=="original"?Path.Combine(root,"assets/original"):args[at+2];
+ var registry=Path.Combine(baseMod,"action/variablenameid.txt");
+ if(!File.Exists(registry))registry=RamSyncNames.Original(root,smith,game);
+ RamSyncNames.VerifyPackage(root,args[at+1],registry,baseMod);
+ return;
+}
 if(args.Contains("--ram-sync-name-stage")){int at=Array.IndexOf(args,"--ram-sync-name-stage");var registrySource=args[at+1]=="original"?RamSyncNames.Original(root,smith,game):args[at+1];RamSyncNames.Stage(registrySource,args[at+2]);return;}
 if(args.Contains("--onyx-planted-stage")){int at=Array.IndexOf(args,"--onyx-planted-stage");OnyxMastery.RefreshPlanted(args[at+1],args[at+2],Parse);return;}
 if(args.Contains("--lightning-ram-power")){LightningRam.PowerStage(root,Parse,args.Contains("--mmv"));return;}

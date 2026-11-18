@@ -228,6 +228,11 @@ def build(root: Path, mmv: Path, files: dict, me3: Path, variant='dist', install
         if not path.resolve().is_relative_to((staging / 'mod').resolve()) or sha(path).lower() != digest.lower():
             raise ValueError(f'Staged file missing or changed: {name}')
         payload[prefix + '/' + name] = path.read_bytes()
+    if not {'chr/c0000.behbnd.dcx', 'action/variablenameid.txt'} <= files.keys():
+        raise ValueError('MMV package lacks the Ram behavior graph or variable registry')
+    subprocess.run(['dotnet', 'run', '--project', str(root / 'tools/HexBuild'), '--', str(root),
+                    '--ram-sync-verify-package', str(staging / 'mod'), str(mmv / 'mod')],
+                   check=True)
     payload[native_prefix + '/NRHex.dll'] = dll.read_bytes()
     ini = output / native_prefix / 'NRHex.ini'
     fallback_ini = root / ('dist/natives/NRHex.ini' if hotkeys else 'dist/mmv/natives/NRHex.ini')

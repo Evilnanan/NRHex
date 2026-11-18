@@ -5,10 +5,12 @@ use std::{collections::VecDeque,sync::Mutex,time::Instant};
 const WINDOW:f32=0.20;
 const NATIVE_SPEED:f32=3.7/(22./30.);
 const STALE:f32=0.25;
-const ROLL:&[u8]=b"a713_040010_hkx_AutoSet_00\0";
+pub(super) const ROLL:&[u8]=b"a713_040010_hkx_AutoSet_00\0";
+pub(super) const ROLL_ALT:&[u8]=b"a713_040010_hkx_AutoSet_01\0";
 const START:&[u8]=b"a713_040000_hkx_AutoSet_00\0";
+const START_ALT:&[u8]=b"a713_040000_hkx_AutoSet_01\0";
 const ACTION:&[u8]=b"SwordArtsOneshotComboEnd_CMSG\0";
-fn phase(mut active:impl FnMut(&[u8])->bool)->bool{active(ACTION)&&active(ROLL)&&!active(START)}
+fn phase(mut active:impl FnMut(&[u8])->bool)->bool{active(ACTION)&&(active(ROLL)||active(ROLL_ALT))&&!active(START)&&!active(START_ALT)}
 fn allowed(owned:bool,fast:bool,reset:bool,alive:bool)->bool{owned&&fast&&!reset&&alive}
 
 #[derive(Default)]struct Travel{samples:VecDeque<(f64,V)>,time:f64,idle:f32,speed:f32}
@@ -61,7 +63,7 @@ unsafe fn owner_ready(actor:usize,base:usize)->bool{
  stats!=0&&allowed(has_effect(actor,crate::lightning_ram::OWNER,base),has_effect(actor,crate::lightning_ram::FAST,base),
   has_effect(actor,crate::reward_cycle_runtime::RESET,base),!native_actor::incapacitated(actor,stats))
 }
-unsafe fn rolling(graph:usize,base:usize)->bool{
+pub(super) unsafe fn rolling(graph:usize,base:usize)->bool{
  let query:unsafe extern "system" fn(usize,*const u8)->u8=std::mem::transmute(base+crate::ram_stagger::NODE_RVA);
  phase(|name|query(graph,name.as_ptr())!=0)
 }
@@ -101,7 +103,10 @@ pub fn rebase(actor:usize,handle:u64,delta:V){if let Ok(mut s)=STATE.lock(){for 
  use super::*;
  #[test]fn only_fast_owned_roll_phase_not_start_damage_or_recovery(){
   for owned in [false,true]{for fast in [false,true]{for reset in [false,true]{for alive in [false,true]{assert_eq!(allowed(owned,fast,reset,alive),owned&&fast&&!reset&&alive);}}}}
-  assert!(phase(|n|[ACTION,ROLL].contains(&n)));
+  for clip in [ROLL, ROLL_ALT] {
+   assert!(phase(|n|[ACTION,clip].contains(&n)));
+   for start in [START, START_ALT] { assert!(!phase(|n|[ACTION,clip,start].contains(&n))); }
+  }
   for nodes in [vec![START],vec![ROLL],vec![ACTION],vec![ACTION,ROLL,START],vec![]]{assert!(!phase(|n|nodes.contains(&n)));}
  }
  #[test]fn smooth_stream_and_packet_bursts_converge_without_sawtooth(){

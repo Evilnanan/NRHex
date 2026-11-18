@@ -45,7 +45,8 @@ def main():
             continue
         if p.suffix == '.log':
             continue
-        if p.suffix not in ('.bin', '.dcx', '.hks') or p.resolve() != p.absolute():
+        is_registry = p == ROOT / 'dist/mod/action/variablenameid.txt'
+        if (not is_registry and p.suffix not in ('.bin', '.dcx', '.hks')) or p.resolve() != p.absolute():
             raise ValueError(f'Unexpected release asset: {p}')
         data = p.read_bytes()
         payload[p.relative_to(ROOT / 'dist').as_posix()] = data
@@ -77,6 +78,8 @@ source = "mod"
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_bytes(data)
             assert p.read_bytes() == data, name
+        subprocess.run(['dotnet', 'run', '--project', str(ROOT / 'tools/HexBuild'), '--', str(ROOT),
+                        '--ram-sync-verify-package', str(stage / 'mod'), 'original'], check=True)
         with (reports / 'profile-validation.log').open('w', encoding='utf8') as log:
             subprocess.run([str(me3), 'profile', 'show', '--file', str(stage / profile)],
                            check=True, stdout=log, stderr=subprocess.STDOUT)

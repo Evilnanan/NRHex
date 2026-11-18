@@ -3,7 +3,25 @@ import struct
 from build_onyx_behavior import Graph
 
 VARIABLES = [('MARamSyncV1', 3), ('MARamGeneration', 3), ('MARamCycle', 3),
-             ('MARamSample', 3), ('MARamRate', 4), ('MARamPhase', 4)]
+             ('MARamSample', 3), ('MARamRate', 4), ('MARamPhase', 4),
+             ('MAArtsActionV1', 3), ('MAArtsWeapon', 3), ('MAArtsCast', 3), ('MAArtsSample', 3)]
+
+
+def variable_layout(raw):
+    graph = Graph(raw)
+    _, data = graph.objects('hkbBehaviorGraphData')[0]
+    _, strings = graph.objects('hkbBehaviorGraphStringData')[0]
+    names = [graph.text(item) for item in graph.refs(graph.q(strings + 56))]
+    _, start, count = graph.items[graph.q(data + 40)]
+    if count != len(names):
+        raise ValueError('Ram graph variable and type counts differ')
+    return [(name, graph.data[start + 6 * i + 4]) for i, name in enumerate(names)]
+
+
+def verify(raw, baseline):
+    expected = variable_layout(baseline) + VARIABLES
+    if variable_layout(raw) != expected:
+        raise ValueError('Packaged graph variable names, order or types differ from the target graph plus Ram variables')
 
 
 def patch(raw):
@@ -65,11 +83,17 @@ if __name__ == '__main__':
     from pathlib import Path
     parser = argparse.ArgumentParser()
     parser.add_argument('source', type=Path)
-    parser.add_argument('output', type=Path)
+    parser.add_argument('output', type=Path, nargs='?')
+    parser.add_argument('--verify-against', type=Path)
     args = parser.parse_args()
     source = args.source.read_bytes()
+    if args.verify_against:
+        verify(source, args.verify_against.read_bytes())
+        raise SystemExit(0)
+    if args.output is None:
+        parser.error('output is required when patching')
     result, report = patch(source)
     args.output.write_bytes(result)
     report.update(inputSha256=hashlib.sha256(source).hexdigest(), outputSha256=hashlib.sha256(result).hexdigest())
     args.output.with_suffix('.json').write_text(json.dumps(report, indent=2))
-    print('PASS: six typed Ram sync variables appended; original graph indices and nodes preserved')
+    print('PASS: typed Ram and Arts sync variables appended; original graph indices and nodes preserved')

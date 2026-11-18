@@ -15,8 +15,11 @@ pub struct Weapon {pub handle:u32,pub original:i32,pub base:i32}
 #[derive(Clone,Copy,Debug)]
 struct Entry {weapon:Weapon,selected:i32}
 #[derive(Default)]
-pub struct Arts {entries:BTreeMap<u32,Entry>,drops:BTreeMap<u32,Entry>,pending:Option<Weapon>,busy:bool,quiet:u8,owned:bool,context:usize,network_dirty:bool,empty_reserved:bool}
+pub struct Arts {pub chain:crate::arts_cast::Chain,entries:BTreeMap<u32,Entry>,drops:BTreeMap<u32,Entry>,pending:Option<Weapon>,busy:bool,quiet:u8,owned:bool,context:usize,network_dirty:bool,empty_reserved:bool}
 impl Arts {
+ pub fn observe_cast(&mut self,hand:i32,w:Weapon,request:bool){
+  if self.owned&&!self.excluded(w){let skill=self.selected(w).unwrap_or(w.original);if w.base>0&&(0..=0x3fff_fffe).contains(&skill){self.chain.observe(hand,w,skill,request);}}
+ }
  pub fn reserve_empty(&mut self,reserved:bool){
   if self.empty_reserved!=reserved{self.empty_reserved=reserved;self.network_dirty=true;}
   if reserved{self.entries.retain(|_,e|e.weapon.base!=110000);if self.pending.is_some_and(|w|w.base==110000){self.pending=None;}}
@@ -26,6 +29,7 @@ impl Arts {
   if self.context!=context{self.network_dirty=false;}
   else if !owned&&!self.entries.is_empty(){self.network_dirty=true;}
   if self.context!=context||!owned {self.entries.clear();self.drops.clear();self.pending=None;self.busy=false;self.quiet=0;}
+  if self.context!=context||!owned||!alive{self.chain.cast=None;}
   self.context=context;self.owned=owned;
   if !alive{self.pending=None;self.busy=false;self.quiet=0;}
  }
@@ -39,12 +43,13 @@ impl Arts {
  }
  /// Returning from an attack to a fresh preparation is a chain boundary.
  /// The script exits the old stance before asking for a new skill.
- pub fn prepare(&mut self)->Option<Weapon>{self.pending.take()}
+ pub fn prepare(&mut self)->Option<Weapon>{self.chain.close();self.pending.take()}
  pub fn has_pending(&self)->bool{self.pending.is_some()}
  /// TAE supplies the exact source weapon even before the first script pulse.
  pub fn behavior(&self,judge:i32,w:Weapon)->Option<i32>{behavior(judge,self.selected(w)?)}
  /// Two updates without a skill node confirm that the whole chain has exited.
  pub fn tick(&mut self)->Option<Weapon>{
+  self.chain.tick(self.busy);
   if self.busy{self.busy=false;self.quiet=0;return None;}
   self.quiet=self.quiet.saturating_add(1);
   if self.quiet>=2 {self.pending.take()}else{None}

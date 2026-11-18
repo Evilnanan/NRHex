@@ -2,12 +2,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Security.Cryptography;
-using System.Text.Json;
 using SoulsFormats;
 
 static class RamSyncNames {
- static readonly string[] Names={"MARamSyncV1","MARamGeneration","MARamCycle","MARamSample","MARamRate","MARamPhase"};
+ static readonly string[] Names={"MARamSyncV1","MARamGeneration","MARamCycle","MARamSample","MARamRate","MARamPhase","MAArtsActionV1","MAArtsWeapon","MAArtsCast","MAArtsSample"};
  public static string Original(string root,string smith,string game){
   var assembly=Assembly.LoadFrom(Path.Combine(smith,"Andre.Formats.dll"));
   // A full build may already have registered the same Andre archive resolver.
@@ -22,7 +20,7 @@ static class RamSyncNames {
   using var stream=File.OpenRead(Path.Combine(game,"data0.bdt"));var data=entry.ReadFile(stream);
   var output=Path.Combine(root,"work/ram-animation-sync/original/action/variablenameid.txt");Directory.CreateDirectory(Path.GetDirectoryName(output)!);File.WriteAllBytes(output,data);return output;
  }
- public static void Stage(string source,string output){
+ static byte[] PatchedRegistry(string source){
   // Registry syntax and added names are ASCII; preserve non-ASCII comments
   // byte-for-byte (the stock file uses Shift-JIS, MMV can use another encoding).
   var raw=File.ReadAllBytes(source);var encoding=Encoding.Latin1;
@@ -37,8 +35,33 @@ static class RamSyncNames {
   if(!changed.EndsWith('\n'))changed+=ending;
   for(int i=0;i<Names.Length;i++)changed+=$"{count+i+1,-5}= \"{Names[i]}\"{ending}";
   changed+=tail;
-  var bytes=encoding.GetBytes(changed);Directory.CreateDirectory(Path.GetDirectoryName(output)!);File.WriteAllBytes(output,bytes);
+  return encoding.GetBytes(changed);
+ }
+ public static void Stage(string source,string output){
+  var bytes=PatchedRegistry(source);
+  Directory.CreateDirectory(Path.GetDirectoryName(output)!);
+  File.WriteAllBytes(output,bytes);
   if(!File.ReadAllBytes(output).AsSpan().SequenceEqual(bytes))throw new InvalidDataException("Variable registry readback mismatch");
-  Console.WriteLine(JsonSerializer.Serialize(new{source,output,added=Names.Select((n,i)=>new{name=n,id=count+i+1}),sha256=Convert.ToHexString(SHA256.HashData(bytes)),originalEntriesPreserved=true}));
+ }
+ public static void VerifyPackage(string root,string mod,string registry,string baseMod){
+  var names=Path.Combine(mod,"action/variablenameid.txt");
+  if(!File.ReadAllBytes(names).AsSpan().SequenceEqual(PatchedRegistry(registry)))
+   throw new InvalidDataException("Packaged Ram variable registry does not match the target game or MMV registry");
+  static byte[] Graph(string mod){
+   var binder=BND4.Read(Path.Combine(mod,"chr/c0000.behbnd.dcx"));
+   return binder.Files.Single(f=>f.ID==7000500&&f.Name.EndsWith("c0000.hkx")).Bytes.ToArray();
+  }
+  var work=Directory.CreateTempSubdirectory("ram-sync-").FullName;
+  try{
+   var actual=Path.Combine(work,"packaged.hkx");
+   var original=Path.Combine(work,"baseline.hkx");
+   File.WriteAllBytes(actual,Graph(mod));
+   File.WriteAllBytes(original,Graph(baseMod));
+   var start=new System.Diagnostics.ProcessStartInfo("python"){UseShellExecute=false};
+   foreach(var arg in new[]{Path.Combine(root,"tools/build_ram_sync_behavior.py"),actual,"--verify-against",original})start.ArgumentList.Add(arg);
+   using var process=System.Diagnostics.Process.Start(start)!;
+   process.WaitForExit();
+   if(process.ExitCode!=0)throw new InvalidDataException("Packaged Ram behavior graph failed validation");
+  }finally{Directory.Delete(work,true);}
  }
 }

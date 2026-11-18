@@ -116,6 +116,14 @@ unsafe fn toward_down(owner:Identity,base:usize,angle:f32,speed:f32)->bool{
 }
 type Env=unsafe extern "system" fn(usize,i32,usize)->i32;
 pub unsafe extern "system" fn env(context:usize,code:i32,vm:usize)->i32{
+ if matches!(code,crate::arts_cast::QUERY|crate::arts_cast::REQUEST){
+  if ACTIVE.load(Ordering::Acquire)&&context!=0&&vm!=0{
+   let base=BASE.load(Ordering::Acquire);
+   let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);
+   crate::arts_cast::begin(read_ptr(context),number(vm,2)as i32,code==crate::arts_cast::REQUEST,base);
+  }
+  return 0;
+ }
  if code==crate::light_footed::QUERY{
   if !ACTIVE.load(Ordering::Acquire)||context==0||vm==0{return 0;}
   let base=BASE.load(Ordering::Acquire);let number:unsafe extern "system" fn(usize,i32)->f32=std::mem::transmute(base+NUMBER_RVA);

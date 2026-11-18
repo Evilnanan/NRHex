@@ -47,6 +47,7 @@ mod escape;
 mod jiahao;
 mod arts;
 mod arts_network;
+mod arts_cast;
 mod noisy;
 mod noisy_ground;
 mod balloon;
@@ -1385,6 +1386,9 @@ unsafe fn arts_actor_selection(player:usize,w:arts::Weapon,base:usize)->Option<i
  if lightning_ram::selected(player,w,base){return Some(504);}
  if onyx_mastery::selected(player,w,base){return Some(1041);}
  if is_local(player,base){return ARTS.get()?.lock().ok()?.selected(w);}
+ if let Some(cast)=ram_sync::arts_cast(player,base){
+  if cast.matches(w)&&arts_hand_weapon(player,cast.hand,base).is_some_and(|hand|hand.handle==w.handle){return Some(cast.skill);}
+ }
  // Peer instances already carry the transmitted +1C skill. Cross-weapon TAE
  // behavior still needs the same variation lookup as the owning player's overlay.
  (arts::pool(w.base).contains(&w.original)).then_some(w.original)
@@ -1707,7 +1711,11 @@ unsafe extern "system" fn effect_detour(player:usize,mut effect:i32,source:usize
  if ACTIVE.load(Ordering::Acquire)&&matches!(effect,arts::BUSY|arts::USE_LEFT|arts::USE_RIGHT)&&is_local(player,base)&&has_effect(player,arts::OWNER,base){
   let w=if effect==arts::BUSY{None}else{arts_hand_weapon(player,if effect==arts::USE_LEFT{0}else{1},base)};
   let w=w.filter(|w|!lightning_ram::selected(player,*w,base));
-  if let Some(state)=ARTS.get(){if let Ok(mut s)=state.lock(){s.notify(w,effect!=arts::BUSY);}}
+  let cast_weapon=w.filter(|w|!onyx_mastery::selected(player,*w,base));
+  if let Some(mut state)=ARTS.get().and_then(|s|s.lock().ok()){
+   if let Some(w)=cast_weapon{state.observe_cast(i32::from(effect==arts::USE_RIGHT),w,false);}
+   state.notify(w,effect!=arts::BUSY);
+  }
  }
  if ACTIVE.load(Ordering::Acquire)&&effect==arts::PREPARE&&is_local(player,base)&&has_effect(player,arts::OWNER,base){
   let pending=ARTS.get().and_then(|state|state.lock().ok()?.prepare());

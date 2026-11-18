@@ -121,7 +121,9 @@ class FragmentTests(unittest.TestCase):
         for path in ('assets/original/action/script/c0000.hks', 'dist/mod/action/script/c0000.hks'):
             reader = Reader((ROOT / path).read_bytes()); reader.function(); readers.append(reader)
         merged, report = compose(source, *readers, json.loads(PLAN.read_text(encoding='utf8')))
-        self.assertEqual(len(report['functions']), 173)
+        self.assertEqual(len(report['functions']), 176)
+        from build_arts_cast_hks import NAMES
+        self.assertTrue(NAMES.issubset(report['functions']))
         self.assertIn('ExecTravelMagnification', report['functions'])
         self.assertTrue(report['inverseRestoresMmvSource'])
         by_name = {f['name']: f for f in readers[1].functions}
