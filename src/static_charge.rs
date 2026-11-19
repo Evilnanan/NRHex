@@ -13,8 +13,17 @@ pub const PACKET_RVA:usize=0x33e1a3;
 pub const PACKET_PATTERN:&str="0F 10 47 30 0F 11 46 70";
 const DISTANCE:f64=80.;
 pub const EVASION_QUERY:i32=990055;
-fn active_hit(kind:Option<crate::weapon_contact::Kind>,hp:i32,ally:bool,rescue:bool)->bool{
- kind.is_some()&&if ally{rescue}else{hp>0}
+unsafe fn can_transmit(source:usize,hit:usize,base:usize)->bool{
+ if read_i32(hit+0x44)==1&&crate::lightning_ram::attack(read_i32(hit+0x40)){
+  let bullet=read_ptr(hit+0x228);
+  // The bound roll generation identifies a live attack ball, including a reconstructed one.
+  return seed(bullet).is_some_and(|s|s.victim.is_some())&&read_i32(bullet+0xa4)==crate::lightning_ram::BULLET
+   &&read_ptr(bullet+0xb0)==read_ptr(source+8);
+ }
+ crate::weapon_contact::at_contact(source,hit,base).is_some()
+}
+fn active_hit(eligible:bool,hp:i32,ally:bool,rescue:bool)->bool{
+ eligible&&if ally{rescue}else{hp>0}
 }
 #[derive(Default)]struct Meter{distance:f64,last:Option<(usize,u64,u32,[f32;4])>}
 impl Meter{
@@ -182,7 +191,7 @@ pub unsafe fn outgoing(module:usize,source:usize,hit:usize){
   // Keep native teammate rescue as a separate existing exception: its HP
   // damage is zero, but the accepted rescue hit can still spend a charge.
   let ally=crate::ambulance::party_member(target,base);
-  if !active_hit(crate::weapon_contact::at_contact(source,hit,base),read_i32(hit+0x280),ally,ally&&crate::ambulance::static_rescue(target,hit,base)){return;}source
+  if !active_hit(can_transmit(source,hit,base),read_i32(hit+0x280),ally,ally&&crate::ambulance::static_rescue(target,hit,base)){return;}source
  }else if incoming{
   // Friendly rescue is not an incoming attack against the recipient.
   if source!=0&&crate::ambulance::party_member(source,base){return;}target
@@ -315,10 +324,9 @@ pub unsafe fn contact(original:unsafe extern "system" fn(usize,usize,usize)->u8,
 }
 #[cfg(test)]mod tests{
  #[test]fn active_proc_requires_damage_or_rescue_without_an_extra_distance_limit(){
-  use crate::weapon_contact::Kind;
-  for kind in [None,Some(Kind::Direct),Some(Kind::SwordSpell)]{for hp in [-1,0,1]{for ally in [false,true]{for rescue in [false,true]{
-   let expected=kind.is_some()&&if ally{rescue}else{hp>0};
-   assert_eq!(super::active_hit(kind,hp,ally,rescue),expected);
+  for eligible in [false,true]{for hp in [-1,0,1]{for ally in [false,true]{for rescue in [false,true]{
+   let expected=eligible&&if ally{rescue}else{hp>0};
+   assert_eq!(super::active_hit(eligible,hp,ally,rescue),expected);
   }}}}
  }
  use super::*;

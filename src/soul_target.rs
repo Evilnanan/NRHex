@@ -48,7 +48,6 @@ pub unsafe extern "system" fn update(attack:usize){
  unsafe extern "system" fn zero(_:usize,_:usize)->usize{0}
  unsafe extern "system" fn copy(out:usize,src:usize)->usize{ptr::copy_nonoverlapping(src as*const u8,out as*mut u8,0x2d0);out}
  unsafe extern "system" fn nop(_:usize){}
- #[unsafe(naked)]unsafe extern "system" fn cookie(){core::arch::naked_asm!("ret");}
  unsafe extern "system" fn reaction(_:usize,_:usize,_:usize,_:u8,_:u8){}
  unsafe extern "system" fn dispatch(_:usize,_:usize,hit:usize,_:u8,extra:u8){
   EVENTS.with(|s|s.borrow_mut().push((ptr::read((hit+0x121)as*const u8),extra,ptr::read(hit as*const f32),ptr::read((hit+0x24)as*const u8))));
@@ -77,7 +76,9 @@ pub unsafe extern "system" fn update(attack:usize){
   (0x427260,yes as*const()as usize),(0x39bd20,zero as*const()as usize),
   (0x33ba30,copy as*const()as usize),(0x490910,zero as*const()as usize),
   (0x438610,reaction as*const()as usize),(0x43d260,dispatch as*const()as usize),
-  (0x26909a0,cookie as*const()as usize),(0x52cef0,route as*const()as usize),(0x5361f0,nop as*const()as usize)]{patch(base,rva,f);}
+  (0x52cef0,route as*const()as usize),(0x5361f0,nop as*const()as usize)]{patch(base,rva,f);}
+ // The cookie check preserves RAX, which holds the native vector result.
+ ptr::write((base+0x26909a0)as*mut u8,0xc3);
  let prepared=crate::hook::prepare((base+crate::soul_immunity::GATE_RVA)as*mut u8,crate::soul_immunity::gate_detour as*const u8,64).unwrap();
  assert_eq!(prepared.stolen,7);
  let previous_resume=crate::soul_immunity::GATE_RESUME.swap((base+crate::soul_immunity::GATE_RVA+7)as*mut u8,Ordering::AcqRel);

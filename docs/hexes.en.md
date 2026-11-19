@@ -240,7 +240,7 @@ Switching weapons changes their enchantment affinity.
 Move to charge. Your next melee hit marks the target. Getting hit marks you instead. Damage taken over 2s powers the bolt.
 
 <!-- hex:95005200 -->
-## Soul Critical
+## Abyssal Execution
 
 Critical hits unleash a shockwave.
 
@@ -252,10 +252,10 @@ Obtain an Onyx Lord’s Greatsword. Its attacks use less stamina. Hold its skill
 <!-- hex:95005400 -->
 ## Lightweight
 
-Damage negation -35%. Attacks knock you back more easily. Move faster while using items, casting spells, or using skills.
+Move faster while using items, casting spells, or using skills. Hits knock you off balance more easily.
 
 <!-- hex:95005600 -->
-## I Can’t Stop!
+## Spin Me Right Round
 
 Replaces your unarmed skill with Lightning Ram. Hold the skill button to keep accelerating.
 

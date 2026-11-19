@@ -187,6 +187,29 @@ fn native_static_snapshot_binding_damage_and_hit_dedup(){unsafe{
  int(hp+0x124+4*4,4);int(hp+0x124+3*4,0);
  float(hp+0x1f0,60.);SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});
  {let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().marks.len(),1);assert_eq!(STATE.lock().unwrap().marks[0].sum,500.);
+ // The high-speed attack has a bullet direct source. Drive the same accepted-hit
+ // callback for enemy damage and zero-HP teammate rescue, including duplicate notifications.
+ int(pp+4,crate::lightning_ram::BULLET);int(bp+0xa4,crate::lightning_ram::BULLET);
+ let roll=crate::lightning_ram::encode_roll(77,15);
+ ptr::write_unaligned((pp+0x124)as*mut[f32;4],[600.,roll[0],roll[1],roll[2]]);
+ {let _f=factory(pp);bound(bp);}
+ ptr::write_unaligned((hp+0x228)as*mut usize,bp);
+ for id in [crate::lightning_ram::ATTACK,crate::lightning_ram::FAST_ATTACK,crate::lightning_ram::EXTREME_ATTACK]{
+  int(hp+0x40,id);
+  for (ally,hp_damage,owner,expected) in [(false,23,123,true),(false,0,123,false),(true,0,123,true),(false,23,987,false)]{
+   reset();STATE.lock().unwrap().meter.distance=DISTANCE;
+   TEAM.with(|s|s.set(if ally{ap}else{0}));
+   ptr::write_unaligned((bp+0xb0)as*mut usize,owner);
+   int(hp+0x280,hp_damage);
+   SAMPLES.lock().unwrap().insert(hp,Sample{key:key(sp,ap,hp),value:500.});
+   let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);outgoing(mp,sp,hp);
+   let state=STATE.lock().unwrap();
+   assert_eq!(state.meter.distance,if expected{0.}else{DISTANCE});
+   assert_eq!(state.marks.len(),usize::from(expected));
+   if expected{assert_eq!((state.marks[0].owner,state.marks[0].target,state.marks[0].sum),(123,456,500.));}
+  }
+ }
+ retired(bp);ptr::write_unaligned((hp+0x228)as*mut usize,sp);TEAM.with(|s|s.set(ap));int(hp+0x280,0);
  STATE.lock().unwrap().marks.clear();STATE.lock().unwrap().meter.distance=DISTANCE;
  int(hp+0x40,ATTACK);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,DISTANCE);
  int(hp+0x40,100);ptr::write((ap+0x710)as*mut u8,0);{let _dispatch=dispatch_scope(mp,hp);outgoing(mp,sp,hp);}assert_eq!(STATE.lock().unwrap().meter.distance,DISTANCE);

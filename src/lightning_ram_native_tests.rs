@@ -527,9 +527,12 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
   for (mapping,expected)in[(0u8,2u8),(1,0),(10,5)]{
    row[0x14a]=mapping;
    let before=(victim.clone(),victim_modules,action,hit,effects,node,row,poise);
-   let _scope=ContactScope::enter(true);let _hit=impact_scope(hitptr,target,600.,V(-1.,0.,0.),None);
-   assert_eq!(medium_impact(target),Some(expected));assert!(RESOLUTION.with(|r|r.get().unwrap().value.is_none()));
-   drop(_hit);
+   let _scope=ContactScope::enter(true);
+   for speed in [6.,10.,15.]{
+    let _hit=contact_impact(hitptr,target,speed*speed*1.5,base);
+    assert_eq!(ENEMY_CONTACT.with(|c|c.get().unwrap().medium),Some(expected));
+    assert!(RESOLUTION.with(|r|r.get().unwrap().value.is_none()));
+   }
    assert_eq!(before,(victim.clone(),victim_modules,action,hit,effects,node,row,poise));
    // Reuse the captured Golden Hippo contact: normal closing speed was only
    // 11.998669 although this was a valid tier-10 hit at 15.826884 m/s.
@@ -551,7 +554,7 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
   reaction(module.as_ptr()as usize,hitptr,kind);
   let s=STATE.lock().unwrap();let once=s.motion.velocity;
   if !local{assert_eq!(once,V(speed,0.,0.));assert!(s.active);}
-  else{assert!(s.active&&!s.crash&&!s.push);assert_eq!(s.yielding.knocked>0.,kind!=3&&(impact==10||impact==0)||impact==0);}
+  else{assert!(s.active&&!s.crash&&!s.push);assert_eq!(s.yielding.knocked,0.);assert_eq!(once,V(-speed*0.15,0.,0.));}
   drop(s);reaction(module.as_ptr()as usize,hitptr,kind);assert_eq!(STATE.lock().unwrap().motion.velocity,once);
  }
  // Execute the real reaction writer: native suppressed impacts enter the
@@ -772,8 +775,16 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
   *STATE.lock().unwrap()=State{actor:a,handle:entity,active:true,generation:77,..Default::default()};CONTACTS.lock().unwrap().clear();
   ptr::write_unaligned((physics.as_mut_ptr()as usize+0x70)as*mut[f32;4],[0.,0.,0.,1.]);
   assert!(allow_contact(target,b,Some(77),base));assert!(!allow_contact(target,b,None,base));assert!(!allow_contact(a,b,Some(77),base));assert!(!allow_contact(target,b,Some(76),base));
-  accepted_contact(target,b,Some(77),0,base);assert!(allow_contact(target,b,Some(77),base));
-  accepted_contact(target,b,Some(77),1,base);assert!(!allow_contact(target,b,Some(77),base));
+  {
+   let _contact=ContactScope::enter(true);
+   let _hit=impact_scope(hitptr,target,150.,V(-1.,0.,0.),Some(0));
+   STATE.lock().unwrap().motion.velocity=V(10.,0.,0.);
+   accepted_contact(target,b,Some(77),0,base);assert!(allow_contact(target,b,Some(77),base));
+   assert_eq!(STATE.lock().unwrap().motion.velocity,V(10.,0.,0.));
+   accepted_contact(target,b,Some(77),1,base);assert!(!allow_contact(target,b,Some(77),base));
+   assert_eq!(STATE.lock().unwrap().motion.velocity,V(-1.5,0.,0.));
+   assert!(ENEMY_CONTACT.with(|c|c.get().is_none()));
+  }
   ptr::write_unaligned((physics.as_mut_ptr()as usize+0x70)as*mut[f32;4],[3.01,0.,0.,1.]);assert!(allow_contact(target,b,Some(77),base));
   STATE.lock().unwrap().active=false;assert!(!allow_contact(target,b,Some(77),base));
   bullet[0xb0/8]=(entity+1)as usize;assert!(allow_contact(target,b,Some(19),base));accepted_contact(target,b,Some(19),1,base);assert!(!allow_contact(target,b,Some(19),base));

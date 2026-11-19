@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 
 static class LightFooted {
- const float DamageTakenRate=1.35f;
+ const float DamageTakenRate=1f;
  public const int Owner=95005400;
  public static readonly string[] DamageFields=["slashDamageCutRate","blowDamageCutRate","thrustDamageCutRate","neutralDamageCutRate","magicDamageCutRate","fireDamageCutRate","thunderDamageCutRate","darkDamageCutRate"];
  static string Name(BinderFile f)=>f.Name.Replace('\\','/').Split('/').Last();
@@ -19,7 +19,7 @@ static class LightFooted {
   var file=binder.Files.Single(f=>Name(f)=="SpEffectParam.param");
   var table=parse("SpEffectParam",file.Bytes);
   var owner=table.Rows.Single(r=>r.ID==Owner);
-  Check(DamageFields.All(f=>Convert.ToSingle(owner[f].Value) is 1.5f or DamageTakenRate),"Unexpected Lightweight damage rates");
+  Check(DamageFields.All(f=>Convert.ToSingle(owner[f].Value) is 1.5f or 1.35f or DamageTakenRate),"Unexpected Lightweight damage rates");
   OwnerEffect(owner);
   file.Bytes=table.Write();
   string path=Path.Combine(output,"regulation.bin");
@@ -84,6 +84,6 @@ static class LightFooted {
   RewardCatalog.Write(Path.Combine(dir,"hex_pool.rs"),hexes);
   HexTexts.Stage(root,hexes,Path.Combine(dir,"texts"),allRewards:true,onlyIds:[Owner],inputMod:mod);
   File.WriteAllText(Path.Combine(dir,"validation.json"),JsonSerializer.Serialize(new{owner=Owner,damageTakenMultiplier=DamageTakenRate,historyBit=50,hexCount=hexes.Length,inputSha256=Hash(input),outputSha256=Hash(output),eventInputSha256=Hash(eventInput),eventOutputSha256=Hash(eventOutput),addedRows=added.ToDictionary(x=>x.Key,x=>x.Value.Order().ToArray()),allExistingRowsAndUnrelatedTablesUnchanged=true,onlyThreeExistingEventsExtended=true,gameplayVerified=false,multiplayerVerified=false},new JsonSerializerOptions{WriteIndented=true}));
-  Console.WriteLine("PASS: Light-footed reward, damage penalty, Mystery Box and lifecycle staged; existing rows and unrelated events preserved");
+  Console.WriteLine("PASS: Light-footed reward, neutral damage rates, Mystery Box and lifecycle staged; existing rows and unrelated events preserved");
  }
 }

@@ -15,7 +15,7 @@ pub fn attack_for_damage(damage:f32)->i32{
  match contact_tier(damage){Some((_,10,_))=>EXTREME_ATTACK,Some((_,7,_))=>FAST_ATTACK,_=>ATTACK}
 }
 const CONTACT_SPEED:f32=6.;
-#[derive(Clone,Copy,Debug,PartialEq)]enum EnemyResponse{Suppressed,Yield,Deflect,Rebound}
+#[derive(Clone,Copy,Debug,PartialEq)]enum EnemyResponse{Suppressed,Yield,Deflect,Resistant,Rebound}
 fn contact_tier(damage:f32)->Option<(f32,u8,u8)>{
  if !damage.is_finite()||damage<=0.{return None;}
  let speed=(damage/1.5).sqrt();
@@ -31,6 +31,7 @@ fn enemy_velocity(v:V,normal:V,response:EnemyResponse)->V{
  let next=match response{
   EnemyResponse::Suppressed|EnemyResponse::Yield=>v.add(n.scale(closing*0.05)),
   EnemyResponse::Deflect=>tangent.scale(0.85).add(n.scale(closing*0.1)),
+  EnemyResponse::Resistant=>tangent.scale(0.70).add(n.scale(closing*0.15)),
   EnemyResponse::Rebound=>tangent.scale(0.65).add(n.scale(closing*0.35)).add(V(0.,2.5,0.)),
  };
  next.scale((v.len()/next.len().max(0.00001)).min(1.))
@@ -103,8 +104,9 @@ unsafe fn model_contact_normal(hit:usize)->V{
 }
 pub unsafe fn contact_impact(hit:usize,target:usize,damage:f32,_base:usize)->ImpactGuard{
  if hit==0||!attack(read_i32(hit+0x40))||read_i32(hit+0x44)!=1{return ImpactGuard(None);}
- let normal=if CONTACT.with(std::cell::Cell::get){model_contact_normal(hit)}else{V::default()};
- let medium=if CONTACT.with(std::cell::Cell::get)&&attack_for_damage(damage)==EXTREME_ATTACK{medium_impact(target)}else{None};
+ let (normal,medium)=if CONTACT.with(std::cell::Cell::get){
+  (model_contact_normal(hit),medium_impact(target))
+ }else{(V::default(),None)};
  impact_scope(hit,target,damage,normal,medium)
 }
 pub const MOTION_RVA:usize=0x4702bb;
@@ -213,12 +215,21 @@ impl State{
   let valid_normal=contact.normal.finite()&&contact.normal.len()>0.5;
   if !bounce&&(!valid_normal||incoming.dot(contact.normal)>= -0.5){return;}
   let normal=if valid_normal{contact.normal.unit()}else{incoming.unit().scale(-1.)};
-  let response=if bounce{EnemyResponse::Rebound}else if response==EnemyResponse::Rebound{EnemyResponse::Deflect}else{response};
+  let response=if bounce{EnemyResponse::Rebound}
+   else if contact.medium==Some(0){EnemyResponse::Resistant}
+   else if response==EnemyResponse::Rebound{EnemyResponse::Deflect}else{response};
   self.motion.velocity=if bounce{rebound_velocity(incoming,normal,contact.speed)}else{enemy_velocity(incoming,normal,response)};
   self.travel=Travel::default();self.detach=0.;self.step_body=None;self.step_grace=0.;self.yielding=Default::default();
   match response{
    EnemyResponse::Suppressed|EnemyResponse::Yield=>{self.yielding.knocked=0.12;}
-   EnemyResponse::Deflect=>{if self.motion.velocity.len()<=crate::ram_motion::RELEASE{self.motion.locked=false;}}
+   EnemyResponse::Resistant|EnemyResponse::Deflect=>{
+    if response==EnemyResponse::Resistant{
+     // Retained inward spin would drive us straight back into the same target on the next ground step.
+     let velocity=self.motion.velocity;
+     self.motion.spin=velocity.unit().scale(self.motion.spin.len().min(velocity.len()));
+    }
+    if self.motion.velocity.len()<=crate::ram_motion::RELEASE{self.motion.locked=false;}
+   }
    EnemyResponse::Rebound=>{
     self.active=false;self.drive=false;self.ending=true;self.crash_pending=false;
     self.crash=true;self.rebound=0.45;self.motion.airborne=true;self.motion.support=None;
@@ -700,6 +711,15 @@ pub unsafe fn accepted_contact(target:usize,bullet:usize,generation:Option<u64>,
  if result==0{return;}let Some(generation)=generation else{return;};
  let owner=read_ptr(bullet+0xb0)as u64;let actor=crate::static_charge::resolve_actor(base,owner);
  if !crate::spatial_ready(actor){return;}
+ // An accepted hit can deal damage without sending a reaction notification.
+ // reaction() already took the contact if it applied movement feedback.
+ if let Some(contact)=ENEMY_CONTACT.with(std::cell::Cell::take).filter(|c|c.medium==Some(0)){
+  if let Ok(mut s)=STATE.lock(){
+   if s.active&&s.actor==actor&&s.handle==owner&&s.generation==generation{
+    s.enemy_collision(contact,EnemyResponse::Resistant,false);
+   }
+  }
+ }
  let position=V::from(crate::position(actor,base));
  if let Ok(mut contacts)=CONTACTS.lock(){
   if contacts.len()>1024{contacts.clear();}
@@ -789,7 +809,7 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
   for level in 0..12{assert_eq!(enemy_response(3,level),EnemyResponse::Rebound);assert_eq!(enemy_response(99999,level),enemy_response(0,level));}
  }
  #[test]fn collision_response_loses_energy_and_preserves_symmetric_glancing_motion(){
-  for response in [EnemyResponse::Suppressed,EnemyResponse::Yield,EnemyResponse::Deflect,EnemyResponse::Rebound]{
+  for response in [EnemyResponse::Suppressed,EnemyResponse::Yield,EnemyResponse::Deflect,EnemyResponse::Resistant,EnemyResponse::Rebound]{
    for speed in [6.,10.,15.,30.]{for side in [0.,0.3,0.7,1.]{
     let v=V(speed,0.,speed*side);let out=enemy_velocity(v,V(-1.,0.,0.),response);
     assert!(out.len()<=v.len()+0.0001);assert!(out.2>=0.);
@@ -814,6 +834,24 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
    s.enemy_collision(EnemyContact{speed:15.,normal:V(-1.,0.,0.),medium:Some(0)},response,true);
    let suppressed=response==EnemyResponse::Suppressed;
    assert_eq!(s.active,suppressed);assert_eq!(s.drive,suppressed);assert_eq!(s.crash,!suppressed);assert!(!s.push&&!s.crash_pending);
+  }
+ }
+ #[test]fn resistant_contacts_deflect_at_all_three_speeds(){
+  for speed in [6.,10.,20.]{
+   let velocity=V(speed,0.,0.);
+   for normal in [V(-1.,0.,0.),V(-1.,0.,1.).unit(),V(1.,0.,0.),V::default()]{
+    for medium in [Some(0),Some(2),None]{
+     let mut s=State{active:true,motion:Motion{velocity,spin:velocity,..Default::default()},..Default::default()};
+     s.enemy_collision(EnemyContact{speed,normal,medium},EnemyResponse::Yield,false);
+     let expected=if normal.0>=0.{velocity}
+      else if medium!=Some(0){enemy_velocity(velocity,normal,EnemyResponse::Yield)}
+      else if normal.2==0.{V(-0.15*speed,0.,0.)}else{V(0.275*speed,0.,0.425*speed)};
+     assert!(s.motion.velocity.sub(expected).len()<0.0001);
+     let expected_spin=if medium==Some(0){expected}else{velocity};
+     assert!(s.motion.spin.sub(expected_spin).len()<0.0001);
+     assert!(s.active&&!s.crash&&!s.crash_pending);
+    }
+   }
   }
  }
  #[test]fn medium_reaction_precheck_gates_extreme_rebound_but_not_damage(){
