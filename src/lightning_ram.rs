@@ -15,7 +15,7 @@ pub fn attack_for_damage(damage:f32)->i32{
  match contact_tier(damage){Some((_,10,_))=>EXTREME_ATTACK,Some((_,7,_))=>FAST_ATTACK,_=>ATTACK}
 }
 const CONTACT_SPEED:f32=6.;
-#[derive(Clone,Copy,Debug,PartialEq)]enum EnemyResponse{Suppressed,Yield,Deflect,Resistant,Rebound}
+#[derive(Clone,Copy,Debug,PartialEq)]enum EnemyResponse{Suppressed,Yield,Deflect,Rebound}
 fn contact_tier(damage:f32)->Option<(f32,u8,u8)>{
  if !damage.is_finite()||damage<=0.{return None;}
  let speed=(damage/1.5).sqrt();
@@ -26,12 +26,16 @@ fn enemy_response(kind:i32,impact:u8)->EnemyResponse{
  if kind==3{return EnemyResponse::Rebound;}
  match impact{4|6|7|9|10=>EnemyResponse::Yield,1|2|3|5|8|11=>EnemyResponse::Deflect,_=>EnemyResponse::Rebound}
 }
+fn slide_retention(closing:f32,speed:f32)->f32{
+ let angle=(closing/speed.max(0.00001)).clamp(0.,1.).acos().to_degrees();
+ let t=((angle-15.)/45.).clamp(0.,1.);
+ 0.25+0.60*t*t*(3.-2.*t)
+}
 fn enemy_velocity(v:V,normal:V,response:EnemyResponse)->V{
  let n=normal;let closing=(-v.dot(n)).max(0.);let tangent=v.add(n.scale(closing));
  let next=match response{
   EnemyResponse::Suppressed|EnemyResponse::Yield=>v.add(n.scale(closing*0.05)),
-  EnemyResponse::Deflect=>tangent.scale(0.85).add(n.scale(closing*0.1)),
-  EnemyResponse::Resistant=>tangent.scale(0.70).add(n.scale(closing*0.15)),
+  EnemyResponse::Deflect=>tangent.scale(slide_retention(closing,v.len())),
   EnemyResponse::Rebound=>tangent.scale(0.65).add(n.scale(closing*0.35)).add(V(0.,2.5,0.)),
  };
  next.scale((v.len()/next.len().max(0.00001)).min(1.))
@@ -169,10 +173,12 @@ pub(crate) fn contact_damage(velocity_damage:f32,level:i32)->f32{
 }
 // a713_040010 travels 3.700m before the 22/30s continuation window.
 const ROLL_SPEED:f32=3.700/(22./30.);
-#[derive(Default)]struct State{pending:Vec<PendingStagger>,actor:usize,handle:u64,stats:usize,motion:Motion,travel:Travel,yielding:crate::ram_motion::Yielding,effective_speed:f32,detach:f32,step_body:Option<u32>,step_grace:f32,push:bool,active:bool,interrupted:bool,queried:bool,missed_updates:u8,drive:bool,fee:MotorFee,wish:V,window:bool,recoil:bool,ending:bool,crash:bool,crash_pending:bool,rebound:f32,started:bool,rolling:bool,visual_speed:f32,trail:Option<V>,generation:u64,sync_cycle:u32}
+const DEFLECT_TIME:f32=0.1;
+fn remove_inward(v:V,outward:V)->V{v.sub(outward.scale(v.dot(outward).min(0.)))}
+#[derive(Default)]struct State{startup_hand:Option<i32>,deflection:Option<(V,f32)>,pending:Vec<PendingStagger>,actor:usize,handle:u64,stats:usize,motion:Motion,travel:Travel,yielding:crate::ram_motion::Yielding,effective_speed:f32,detach:f32,step_body:Option<u32>,step_grace:f32,push:bool,active:bool,interrupted:bool,queried:bool,missed_updates:u8,drive:bool,fee:MotorFee,wish:V,window:bool,recoil:bool,ending:bool,crash:bool,crash_pending:bool,rebound:f32,started:bool,rolling:bool,visual_speed:f32,trail:Option<V>,generation:u64,sync_cycle:u32}
 static GENERATION:AtomicU64=AtomicU64::new(1);
 static CONTACTS:Mutex<BTreeMap<(u64,u64,u64),V>>=Mutex::new(BTreeMap::new());
-static STATE:Mutex<State>=Mutex::new(State{pending:Vec::new(),actor:0,handle:0,stats:0,motion:Motion{motor_work:0.,velocity:V(0.,0.,0.),spin:V(0.,0.,0.),initialized:false,locked:false,airborne:false,support:None},travel:Travel{previous:None,blocked:0.},yielding:crate::ram_motion::Yielding{body:None,age:0.,knocked:0.},effective_speed:0.,detach:0.,step_body:None,step_grace:0.,push:false,active:false,interrupted:false,queried:false,missed_updates:0,drive:false,fee:MotorFee{started:false,remainder:0.,weapon:110000},wish:V(0.,0.,0.),window:false,recoil:false,ending:false,crash:false,crash_pending:false,rebound:0.,started:false,rolling:false,visual_speed:0.,trail:None,generation:0,sync_cycle:0});
+static STATE:Mutex<State>=Mutex::new(State{startup_hand:None,deflection:None,pending:Vec::new(),actor:0,handle:0,stats:0,motion:Motion{motor_work:0.,velocity:V(0.,0.,0.),spin:V(0.,0.,0.),initialized:false,locked:false,airborne:false,support:None},travel:Travel{previous:None,blocked:0.},yielding:crate::ram_motion::Yielding{body:None,age:0.,knocked:0.},effective_speed:0.,detach:0.,step_body:None,step_grace:0.,push:false,active:false,interrupted:false,queried:false,missed_updates:0,drive:false,fee:MotorFee{started:false,remainder:0.,weapon:110000},wish:V(0.,0.,0.),window:false,recoil:false,ending:false,crash:false,crash_pending:false,rebound:0.,started:false,rolling:false,visual_speed:0.,trail:None,generation:0,sync_cycle:0});
 // No game calls under STATE or on a Havok worker. Match the current local
 // actor, generation handle, physics module and the exact live proxy object.
 unsafe fn managed_actor(s:&State,base:usize)->Option<usize>{
@@ -212,30 +218,57 @@ impl State{
   // Only a newly confirmed ultimate-stagger animation may rebound us.
   // Native level-2 immunity still separates large targets from small mobs.
   let bounce=staggered&&response!=EnemyResponse::Suppressed&&contact.medium==Some(0)&&contact.speed>=15.;
-  let valid_normal=contact.normal.finite()&&contact.normal.len()>0.5;
-  if !bounce&&(!valid_normal||incoming.dot(contact.normal)>= -0.5){return;}
-  let normal=if valid_normal{contact.normal.unit()}else{incoming.unit().scale(-1.)};
+  let surface=contact.normal;
+  let valid_normal=surface.finite()&&surface.len()>0.5;
+  if !bounce&&valid_normal&&incoming.dot(surface)>= -0.5{return;}
   let response=if bounce{EnemyResponse::Rebound}
-   else if contact.medium==Some(0){EnemyResponse::Resistant}
+   else if contact.medium.is_some_and(|level|level!=0){EnemyResponse::Yield}
    else if response==EnemyResponse::Rebound{EnemyResponse::Deflect}else{response};
+  // No surface to slide along: a confirmed hit still pays the head-on pass cost.
+  let response=if !bounce&&!valid_normal{EnemyResponse::Yield}else{response};
+  let mut normal=if valid_normal{surface.unit()}else{incoming.unit().scale(-1.)};
+  if response==EnemyResponse::Deflect{
+   // Stay in the support plane when striking the inclined flank of a model.
+   if let Some(ground)=self.motion.support.filter(|_|!self.motion.airborne){
+    let tangent=normal.plane(ground);
+    if tangent.len()>0.2{normal=tangent.unit();}
+   }
+  }
   self.motion.velocity=if bounce{rebound_velocity(incoming,normal,contact.speed)}else{enemy_velocity(incoming,normal,response)};
   self.travel=Travel::default();self.detach=0.;self.step_body=None;self.step_grace=0.;self.yielding=Default::default();
   match response{
    EnemyResponse::Suppressed|EnemyResponse::Yield=>{self.yielding.knocked=0.12;}
-   EnemyResponse::Resistant|EnemyResponse::Deflect=>{
-    if response==EnemyResponse::Resistant{
-     // Retained inward spin would drive us straight back into the same target on the next ground step.
-     let velocity=self.motion.velocity;
-     self.motion.spin=velocity.unit().scale(self.motion.spin.len().min(velocity.len()));
-    }
+   EnemyResponse::Deflect=>{
+    let spin=remove_inward(self.motion.spin,normal);
+    let tangent=spin.plane(normal);
+    let limit=self.motion.velocity.plane(normal).len();
+    self.motion.spin=spin.sub(tangent).add(tangent.scale((limit/tangent.len().max(0.00001)).min(1.)));
+    self.deflection=Some((normal,DEFLECT_TIME));
     if self.motion.velocity.len()<=crate::ram_motion::RELEASE{self.motion.locked=false;}
    }
    EnemyResponse::Rebound=>{
-    self.active=false;self.drive=false;self.ending=true;self.crash_pending=false;
+    self.deflection=None;self.active=false;self.drive=false;self.ending=true;self.crash_pending=false;
     self.crash=true;self.rebound=0.45;self.motion.airborne=true;self.motion.support=None;
     self.motion.spin=V::default();self.motion.locked=false;self.visual_speed=0.;self.pending.clear();
    }
   }
+ }
+ fn advance_roll(&mut self,dt:f32,drive:bool,wish:V,ground:Option<V>,budget:f32)->bool{
+  let Some((outward,left))=self.deflection else{return self.motion.advance_with_budget(dt,drive,wish,ground,budget);};
+  let held=dt.min(left);
+  self.motion.velocity=remove_inward(self.motion.velocity,outward);
+  self.motion.spin=remove_inward(self.motion.spin,outward);
+  let sliding_wish=remove_inward(wish,outward);
+  if !self.motion.advance_with_budget(held,drive,sliding_wish,ground,budget){return false;}
+  self.motion.velocity=remove_inward(self.motion.velocity,outward);
+  self.motion.spin=remove_inward(self.motion.spin,outward);
+  self.deflection=(left>held+1e-6).then_some((outward,left-held));
+  if dt>held{
+   let work=self.motion.motor_work;
+   if !self.motion.advance_with_budget(dt-held,drive,wish,ground,(budget-work).max(0.)){return false;}
+   self.motion.motor_work+=work;
+  }
+  true
  }
  fn rebase(&mut self,delta:V){
   if let Some((position,_,_))=&mut self.travel.previous{*position=position.add(delta);}
@@ -246,7 +279,7 @@ impl State{
   else{self.missed_updates=self.missed_updates.saturating_add(1);self.missed_updates>=2}
  }
  fn wall_stop(&mut self,speed:f32){
-  self.active=false;self.drive=false;self.ending=true;self.motion=Motion::default();
+  self.deflection=None;self.active=false;self.drive=false;self.ending=true;self.motion=Motion::default();
   self.travel=Travel::default();self.detach=0.;self.step_body=None;self.step_grace=0.;self.effective_speed=0.;self.visual_speed=0.;
   self.yielding=Default::default();self.pending.clear();
   self.push=(6. ..crate::ram_motion::CRASH_SPEED).contains(&speed);self.rebound=0.;self.crash=speed>=crate::ram_motion::CRASH_SPEED;self.crash_pending=self.crash;
@@ -370,7 +403,22 @@ pub unsafe fn behavior(actor:usize,judge:i32,source:i32,base:usize)->Option<i32>
  }else{has_effect(actor,FAST,base)};
  if high{Some(OWNER+90)}else{Some(300000000+judge-3000)}
 }
-pub unsafe fn free_art(actor:usize,hand:i32,base:usize)->bool{eligible(actor,base)&&art(actor,hand,base)}
+pub unsafe fn managed_art(actor:usize,hand:i32,base:usize)->bool{eligible(actor,base)&&art(actor,hand,base)}
+impl State{
+ unsafe fn bind(&mut self,actor:usize,stats:usize){
+  let handle=read_ptr(actor+8)as u64;
+  if (self.actor,self.handle,self.stats)!=(actor,handle,stats){*self=State{actor,handle,stats,..Default::default()};}
+ }
+}
+pub(super) unsafe fn record_startup(actor:usize,hand:i32,allowed:bool){
+ let stats=native_actor::stats(actor);
+ if let Ok(mut s)=STATE.lock(){
+  s.bind(actor,stats);
+  // A new native L2 reservation supersedes any previous drive, even on a quick restart.
+  s.active=false;s.drive=false;s.started=false;s.rolling=false;
+  s.startup_hand=allowed.then_some(hand);
+ }
+}
 // 0 native / 1 coast / 2 next roll / 3 recovery / 4 damaging crash / 5 enemy recoil / 6 harmless wall push.
 pub unsafe fn query(actor:usize,art_id:i32,hand:i32,held:bool,window:bool,angle:f32,base:usize)->i32{
  if art_id!=113||!eligible(actor,base)||!art(actor,hand,base){return 0;}
@@ -382,7 +430,7 @@ pub unsafe fn query(actor:usize,art_id:i32,hand:i32,held:bool,window:bool,angle:
  let mut rotation=Point([0.;4]);let get:unsafe extern "system" fn(usize,*mut f32)->*const f32=std::mem::transmute(base+crate::CHR_ROTATION_RVA);get(actor,rotation.0.as_mut_ptr());
  let wish=steering_wish(rotation.0[1],angle);
  let result={let Ok(mut s)=STATE.lock()else{return 0;};
-  if s.actor!=actor||s.handle!=read_ptr(actor+8)as u64||s.stats!=stats{*s=State{actor,handle:read_ptr(actor+8)as u64,stats,..Default::default()};}
+  s.bind(actor,stats);
   s.queried=true;
   if s.recoil{s.recoil=false;s.active=false;s.interrupted=true;return 5;}
   if s.crash{s.crash=false;s.interrupted=true;return 4;}
@@ -392,7 +440,7 @@ pub unsafe fn query(actor:usize,art_id:i32,hand:i32,held:bool,window:bool,angle:
   // Activation only arms the simulation. The real a713 attack behavior
   // opens rolling; the windup has substantial root motion of its own.
   let initial=!s.active;
-  if initial{if !can_drive||s.rebound>0.{return 0;}s.active=true;s.fee=MotorFee::default();s.started=false;s.rolling=false;s.window=false;s.motion=Motion::default();s.detach=0.;s.step_body=None;s.step_grace=0.;s.travel=Travel::default();s.yielding=Default::default();s.effective_speed=0.;s.generation=GENERATION.fetch_add(1,Ordering::Relaxed);s.sync_cycle=0;}
+  if initial{if !can_drive||s.rebound>0.||s.startup_hand!=Some(hand){return 0;}s.startup_hand=None;s.active=true;s.deflection=None;s.fee=MotorFee::default();s.started=false;s.rolling=false;s.window=false;s.motion=Motion::default();s.detach=0.;s.step_body=None;s.step_grace=0.;s.travel=Travel::default();s.yielding=Default::default();s.effective_speed=0.;s.generation=GENERATION.fetch_add(1,Ordering::Relaxed);s.sync_cycle=0;}
   let cycle=window&&!s.window;s.window=window;
   // Recheck every update, not only at animation-cycle boundaries.
   s.drive=can_drive;
@@ -630,7 +678,7 @@ unsafe extern "system" fn velocity(physics:usize,vector:*mut f32,time:usize){
  let (desired,cost,working)={let Ok(mut s)=STATE.lock()else{return;};let drive=s.drive&&available;let wish=s.wish;
   if stopped{(V::default(),0,false)}else{
    let budget=if exempt||rate<=0.{f32::INFINITY}else{((f64::from(stamina)-s.fee.remainder).max(0.)/(0.125*f64::from(rate)))as f32};
-   if !s.motion.advance_with_budget(dt,drive&&rebound<=0.&&!obstructed,wish,if step_air{None}else{ground},budget){s.active=false;return;}
+   if !s.advance_roll(dt,drive&&rebound<=0.&&!obstructed,wish,if step_air{None}else{ground},budget){s.active=false;return;}
    // No independent wall bounce. Compliance expires promptly and blocked
    // motion cannot receive engine power, so corners never store new energy.
    let spin=s.motion.spin.len();s.visual_speed=visual_speed(s.visual_speed,spin*dt,dt);
@@ -713,10 +761,10 @@ pub unsafe fn accepted_contact(target:usize,bullet:usize,generation:Option<u64>,
  if !crate::spatial_ready(actor){return;}
  // An accepted hit can deal damage without sending a reaction notification.
  // reaction() already took the contact if it applied movement feedback.
- if let Some(contact)=ENEMY_CONTACT.with(std::cell::Cell::take).filter(|c|c.medium==Some(0)){
+ if let Some(contact)=ENEMY_CONTACT.with(std::cell::Cell::take).filter(|_|CONTACT.with(std::cell::Cell::get)){
   if let Ok(mut s)=STATE.lock(){
    if s.active&&s.actor==actor&&s.handle==owner&&s.generation==generation{
-    s.enemy_collision(contact,EnemyResponse::Resistant,false);
+    s.enemy_collision(contact,EnemyResponse::Yield,false);
    }
   }
  }
@@ -809,7 +857,7 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
   for level in 0..12{assert_eq!(enemy_response(3,level),EnemyResponse::Rebound);assert_eq!(enemy_response(99999,level),enemy_response(0,level));}
  }
  #[test]fn collision_response_loses_energy_and_preserves_symmetric_glancing_motion(){
-  for response in [EnemyResponse::Suppressed,EnemyResponse::Yield,EnemyResponse::Deflect,EnemyResponse::Resistant,EnemyResponse::Rebound]{
+  for response in [EnemyResponse::Suppressed,EnemyResponse::Yield,EnemyResponse::Deflect,EnemyResponse::Rebound]{
    for speed in [6.,10.,15.,30.]{for side in [0.,0.3,0.7,1.]{
     let v=V(speed,0.,speed*side);let out=enemy_velocity(v,V(-1.,0.,0.),response);
     assert!(out.len()<=v.len()+0.0001);assert!(out.2>=0.);
@@ -818,8 +866,12 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
    }}
   }
   assert_eq!(enemy_velocity(V(20.,0.,0.),V(-1.,0.,0.),EnemyResponse::Yield),V(19.,0.,0.));
+  assert_eq!(enemy_velocity(V(20.,0.,10.),V(-1.,0.,0.),EnemyResponse::Yield),V(19.,0.,10.));
   let glance=enemy_velocity(V(10.,0.,10.),V(-1.,0.,0.),EnemyResponse::Deflect);
-  assert!(glance.0<0.&&glance.2>8.);
+  assert!(glance.sub(V(0.,0.,6.94444)).len()<0.001);
+  for (angle,expected) in [(0f32,0.25),(15.,0.25),(30.,0.40556),(60.,0.85),(89.,0.85)]{
+   assert!((slide_retention(angle.to_radians().cos(),1.)-expected).abs()<0.0001);
+  }
   assert_eq!(enemy_velocity(V::default(),V(-1.,0.,0.),EnemyResponse::Rebound),V::default());
  }
  #[test]fn resistant_enemy_rebound_never_arms_wall_hp_cost(){
@@ -836,20 +888,41 @@ pub unsafe fn local_bullet(bullet:usize)->bool{STATE.lock().is_ok_and(|s|s.handl
    assert_eq!(s.active,suppressed);assert_eq!(s.drive,suppressed);assert_eq!(s.crash,!suppressed);assert!(!s.push&&!s.crash_pending);
   }
  }
- #[test]fn resistant_contacts_deflect_at_all_three_speeds(){
-  for speed in [6.,10.,20.]{
-   let velocity=V(speed,0.,0.);
-   for normal in [V(-1.,0.,0.),V(-1.,0.,1.).unit(),V(1.,0.,0.),V::default()]{
-    for medium in [Some(0),Some(2),None]{
-     let mut s=State{active:true,motion:Motion{velocity,spin:velocity,..Default::default()},..Default::default()};
-     s.enemy_collision(EnemyContact{speed,normal,medium},EnemyResponse::Yield,false);
-     let expected=if normal.0>=0.{velocity}
-      else if medium!=Some(0){enemy_velocity(velocity,normal,EnemyResponse::Yield)}
-      else if normal.2==0.{V(-0.15*speed,0.,0.)}else{V(0.275*speed,0.,0.425*speed)};
-     assert!(s.motion.velocity.sub(expected).len()<0.0001);
-     let expected_spin=if medium==Some(0){expected}else{velocity};
-     assert!(s.motion.spin.sub(expected_spin).len()<0.0001);
-     assert!(s.active&&!s.crash&&!s.crash_pending);
+ #[test]fn pass_cost_depends_on_incidence_for_all_targets(){
+  let velocity=V(20.,0.,10.);
+  for medium in [Some(0),Some(2),None]{
+   for (normal,expected) in [(V(-1.,0.,0.),V(19.,0.,10.)),(V(1.,0.,0.),velocity),(V::default(),velocity.scale(0.95))]{
+    let mut s=State{motion:Motion{velocity,spin:velocity,..Default::default()},..Default::default()};
+    s.enemy_collision(EnemyContact{speed:velocity.len(),normal,medium},EnemyResponse::Yield,false);
+    assert!(s.motion.velocity.sub(expected).len()<1e-4);
+    assert_eq!(s.motion.spin,velocity);
+    assert!(s.deflection.is_none());
+   }
+  }
+ }
+ #[test]fn deflection_slides_and_accepts_side_or_outward_input_immediately(){
+  let ground=V(0.,1.,0.);let forward=V(0.,0.,1.);let normal=forward.scale(-1.);
+  for hz in [30.,60.,120.]{
+   for side in [0.,8.]{
+    for wish in [forward,V(1.,0.,0.),normal]{
+     let velocity=V(side,0.,12.);
+     let mut s=State{motion:Motion{velocity,spin:velocity,initialized:true,support:Some(ground),..Default::default()},..Default::default()};
+     s.enemy_collision(EnemyContact{speed:velocity.len(),normal,medium:Some(0)},EnemyResponse::Deflect,false);
+     assert_eq!(s.motion.velocity,V(side*slide_retention(12.,velocity.len()),0.,0.));
+     assert!(s.motion.spin.len()<=s.motion.velocity.len()+1e-5);
+     let mut pos=V::default();
+     for _ in 0..(hz/10.) as usize{
+      assert!(s.advance_roll(1./hz,true,wish,Some(ground),f32::INFINITY));
+      pos=pos.add(s.motion.velocity.scale(1./hz));
+      assert!(pos.2<1e-5);
+     }
+     if side>0.||wish.0>0.{assert!(pos.0>0.);}
+     if side==0.&&wish==normal{assert!(pos.2<0.);}
+     assert!(s.deflection.is_none());
+     if side==0.&&wish==forward{
+      assert!(s.advance_roll(1./hz,true,wish,Some(ground),f32::INFINITY));
+      assert!(s.motion.velocity.2>0.);
+     }
     }
    }
   }

@@ -62,7 +62,7 @@ unsafe fn quote(module:usize,button:i32)->i32{
  let fee:unsafe extern "system" fn(usize,i32,usize)->i32=std::mem::transmute(BASE.load(Ordering::Acquire)+crate::onyx_mastery::ARTS_FEE_RVA);
  fee(reference.as_ptr()as usize,button,read_ptr(actor+0x190))
 }
-unsafe extern "system" fn check_fp(module:usize,button:i32,_:i32)->u8{u8::from(read_i32(native_actor::stats(read_ptr(module+8))+0x150)>=quote(module,button))}
+unsafe extern "system" fn check_fp(module:usize,button:i32,_:i32)->u8{let fp=read_i32(native_actor::stats(read_ptr(module+8))+0x150);u8::from(fp>0&&fp>=quote(module,button)/2)}
 unsafe extern "system" fn reserve_fp(module:usize,button:i32,_:i32){ptr::write_unaligned((module+0x10)as*mut i32,quote(module,button));}
 unsafe extern "system" fn pay(stats:usize,amount:i32){let p=(stats+0x150)as*mut i32;ptr::write(p,(ptr::read(p)+amount).max(0));}
 unsafe extern "system" fn debit_hp(stats:usize,amount:i32,mode:u8,limit:u8,rate:f32,window:f32,refresh:u8){
@@ -315,9 +315,10 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  physics[0x98/8]=controller.as_mut_ptr()as usize;ptr::write_unaligned((phys+0x70)as*mut[f32;4],[0.;4]);reset();
  // A held left/right input must change the actual velocity submitted to
  // the original capsule; native facing is separately aligned with that velocity.
+ let paid_start=||record_startup(a,1,true);
  stats[0x150/4]=100;stats[0x15c/4]=100;
  for angle in [-90.,90.]{
-  reset();assert_eq!(query(a,113,1,true,false,angle,base),0);
+  reset();paid_start();assert_eq!(query(a,113,1,true,false,angle,base),0);
   {let mut s=STATE.lock().unwrap();s.started=true;s.rolling=true;s.motion.velocity=V(0.,0.,-12.);}
   desired.0=[0.,0.,-4.,0.];fixture(physics.as_mut_ptr()as usize,desired.0.as_mut_ptr(),time.as_ptr(),base+MOTION_RVA);
   assert!(desired.0[0]*angle<0.);assert!(desired.0[2]< -11.);
@@ -358,7 +359,7 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  // Identical action state must never override another player's capsule.
  world[0x174e8/8]=a+8;desired.0=[1.,2.,3.,0.];fixture(physics.as_mut_ptr()as usize,desired.0.as_mut_ptr(),time.as_ptr(),base+MOTION_RVA);assert_eq!(submitted.0,[1.,2.,3.,0.]);
  assert!(art(a,1,base),"remote owner must retain Ram presentation");assert_eq!(query(a,113,1,true,false,0.,base),0,"remote input must not drive local simulation");
- world[0x174e8/8]=a;reset();stats[0x150/4]=100;stats[0x15c/4]=100;
+ world[0x174e8/8]=a;reset();paid_start();stats[0x150/4]=100;stats[0x15c/4]=100;
  assert_eq!(query(a,113,1,true,false,0.,base),0);assert_eq!(stats[0x150/4],100);
  for _ in 0..5{assert_eq!(query(a,113,1,true,false,0.,base),0);}assert_eq!(stats[0x150/4],100,"native startup is not charged twice");
  assert_eq!(query(a,113,1,true,true,0.,base),2);assert_eq!(stats[0x150/4],100);
@@ -368,10 +369,10 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  assert_eq!(query(a,113,1,false,true,0.,base),2);assert_eq!(stats[0x150/4],100);
  {let mut s=STATE.lock().unwrap();s.motion.locked=false;}
  assert_eq!(query(a,113,1,false,false,0.,base),3);assert!(!STATE.lock().unwrap().active);
- reset();stats[0x150/4]=0;assert_eq!(query(a,113,1,true,false,0.,base),0);assert!(STATE.lock().unwrap().active);
+ reset();stats[0x150/4]=0;assert_eq!(query(a,113,1,true,false,0.,base),0);assert!(!STATE.lock().unwrap().active);
  stats[0x150/4]=100;
  // FP can stay zero through repeated rolls; stamina gates every update.
- reset();stats[0x150/4]=0;stats[0x15c/4]=40;
+ reset();paid_start();stats[0x150/4]=0;stats[0x15c/4]=40;
  assert_eq!(query(a,113,1,true,false,0.,base),0);
  {let mut s=STATE.lock().unwrap();s.started=true;s.rolling=true;s.motion.velocity=V(0.,0.,-12.);s.motion.locked=true;}
  assert_eq!(query(a,113,1,true,true,0.,base),2);assert_eq!(stats[0x150/4],0);
@@ -387,11 +388,11 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  assert_eq!(query(a,113,1,true,true,0.,base),2);
  assert!(!STATE.lock().unwrap().drive);assert_eq!(STATE.lock().unwrap().motion.velocity,before);
  for stamina in [-50,-1,0,1,17,18]{
-  reset();stats[0x15c/4]=stamina;
+  reset();paid_start();stats[0x15c/4]=stamina;
   assert_eq!(query(a,113,1,true,false,0.,base),0);
   assert_eq!(STATE.lock().unwrap().active,stamina>0,"startup eligibility at {stamina}");
  }
- reset();stats[0x15c/4]=1;query(a,113,1,true,false,0.,base);
+ reset();paid_start();stats[0x15c/4]=1;query(a,113,1,true,false,0.,base);
  {let mut s=STATE.lock().unwrap();s.started=true;s.rolling=true;}
  assert_eq!(query(a,113,1,true,true,0.,base),2);
  stats[0x15c/4]=-17;
@@ -403,7 +404,7 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  let add_sp:unsafe extern "system" fn(usize,i32,u8)=std::mem::transmute(base+crate::STAMINA_ADD_RVA);
  ptr::write_unaligned((base+0x3c0f338)as*mut usize,1);
  for immunity in [0u8,1,0x20,0x21]{for debug_free in [0u8,1]{for startup in [0,9,18]{
-  reset();stats[0x15c/4]=90;ptr::write((stats.as_mut_ptr()as usize+0x189)as*mut u8,immunity);ptr::write((base+0x3c0f2f7)as*mut u8,debug_free);
+  reset();paid_start();stats[0x15c/4]=90;ptr::write((stats.as_mut_ptr()as usize+0x189)as*mut u8,immunity);ptr::write((base+0x3c0f2f7)as*mut u8,debug_free);
   query(a,113,1,true,false,0.,base);
   assert_eq!(action_cost(a,300000710,110000,startup,base),Some(startup));
   add_sp(stats.as_mut_ptr()as usize,-startup,0);
@@ -457,26 +458,41 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
  for i in 0..6{equipment[0x1c/4+i]=0x80800010+i as u32;}ptr::write_unaligned((a+0x78)as*mut i32,1);
  // A real weapon already carrying Ram also qualifies; other skills do not.
  entries[4]=2000000;entries[7]=504;assert!(art(a,0,base));entries[7]=100;assert!(!art(a,0,base));entries[4]=110000;entries[7]=503;
- // The existing check/reserve scopes quote the real native fee as zero.
+ // Quote/reserve through the real fee calculator and exercise the startup decision.
  let old_check=crate::onyx_fp::CHECK_ORIGINAL.swap(check_fp as*const()as*mut u8,Ordering::AcqRel);
  let old_reserve=crate::onyx_fp::RESERVE_ORIGINAL.swap(reserve_fp as*const()as*mut u8,Ordering::AcqRel);
  let old_rate=crate::onyx_fp::RATE_ORIGINAL.swap(default_rate as*const()as*mut u8,Ordering::AcqRel);
  let rate_hook=crate::hook::prepare((base+crate::onyx_fp::RATE_RVA)as*mut u8,crate::onyx_fp::rate as*const u8,64).unwrap();crate::hook::write_code((base+crate::onyx_fp::RATE_RVA)as*mut u8,&rate_hook.patch).unwrap();
- let mut art_module=[0usize;4];art_module[1]=a;let am=art_module.as_mut_ptr()as usize;stats[0x150/4]=0;
+ let mut art_module=[0usize;4];art_module[1]=a;let am=art_module.as_mut_ptr()as usize;stats[0x150/4]=1;
  for owned in [0,1]{ptr::write_unaligned((a+0x78)as*mut i32,owned);
   for hand in [0,1]{for button in 0..4{
-   assert_eq!(crate::onyx_fp::check(am,button,hand),owned as u8);
-   crate::onyx_fp::reserve(am,button,hand);assert_eq!(read_i32(am+0x10),if owned==1{0}else{5});
-   assert_eq!(quote(am,button),5,"free scope escaped the native reservation");
+   assert_eq!(crate::onyx_fp::check(am,button,hand),u8::from(owned==1&&button!=3));
+   crate::onyx_fp::reserve(am,button,hand);assert_eq!(read_i32(am+0x10),if owned==0{5}else if button==3{10}else{0});
+   assert_eq!(quote(am,button),5,"scoped cost escaped the native reservation");
   }}
  }
  ptr::write_unaligned((a+0x78)as*mut i32,1);
  entries[4]=2000000;entries[7]=504;assert_eq!(crate::onyx_fp::check(am,0,0),1);
  entries[7]=100;assert_eq!(crate::onyx_fp::check(am,0,0),0);assert_eq!(crate::onyx_fp::check(am,0,1),1);
- entries[4]=110000;entries[7]=503;stats[0x150/4]=100;
+ entries[4]=110000;entries[7]=503;
+ for fp in [0,4,5,9,10]{
+  reset();stats[0x150/4]=fp;stats[0x15c/4]=100;
+  let accepted=crate::onyx_fp::check(am,3,1)!=0;
+  assert_eq!(accepted,fp>=5);
+  query(a,113,1,true,false,0.,base);assert!(!STATE.lock().unwrap().active,"a quote alone cannot start a roll");
+  crate::onyx_fp::reserve(am,3,1);assert_eq!(read_i32(am+0x10),10);
+  stats[0x150/4]=0;query(a,113,0,true,false,0.,base);assert!(!STATE.lock().unwrap().active);
+  query(a,113,1,true,false,0.,base);assert_eq!(STATE.lock().unwrap().active,accepted);
+  if accepted{
+   assert_eq!(query(a,113,1,true,true,0.,base),2);assert_eq!(stats[0x150/4],0);
+   crate::onyx_fp::reserve(am,3,1);query(a,113,1,true,true,0.,base);
+   assert!(!STATE.lock().unwrap().active,"a failed restart cannot reuse the prior startup");
+  }
+ }
+ stats[0x150/4]=100;
  crate::onyx_fp::CHECK_ORIGINAL.store(old_check,Ordering::Release);crate::onyx_fp::RESERVE_ORIGINAL.store(old_reserve,Ordering::Release);crate::onyx_fp::RATE_ORIGINAL.store(old_rate,Ordering::Release);
  // Windup has real native translation (up to 1.16m/s) but must not start power.
- reset();assert_eq!(query(a,113,1,true,false,0.,base),0);
+ reset();paid_start();assert_eq!(query(a,113,1,true,false,0.,base),0);
  for v in [0.3,0.9,1.2,3.]{desired.0=[0.,0.,-v,0.];fixture(physics.as_mut_ptr()as usize,desired.0.as_mut_ptr(),time.as_ptr(),base+MOTION_RVA);assert_eq!(desired.0[2],-v);assert!(!STATE.lock().unwrap().started);}
  assert_eq!(behavior(a,3710,-1,base),Some(300000710));
  desired.0=[0.,0.,-4.,0.];fixture(physics.as_mut_ptr()as usize,desired.0.as_mut_ptr(),time.as_ptr(),base+MOTION_RVA);assert!(STATE.lock().unwrap().started);assert!(desired.0[2]< -4.);
@@ -554,7 +570,12 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
   reaction(module.as_ptr()as usize,hitptr,kind);
   let s=STATE.lock().unwrap();let once=s.motion.velocity;
   if !local{assert_eq!(once,V(speed,0.,0.));assert!(s.active);}
-  else{assert!(s.active&&!s.crash&&!s.push);assert_eq!(s.yielding.knocked,0.);assert_eq!(once,V(-speed*0.15,0.,0.));}
+  else{
+   assert!(s.active&&!s.crash&&!s.push);
+   let pass=impact==0||(kind!=3&&impact==10);
+   assert_eq!(s.yielding.knocked,if pass{0.12}else{0.});
+   assert_eq!(once,V(if pass{speed-speed*0.05}else{0.},0.,0.));
+  }
   drop(s);reaction(module.as_ptr()as usize,hitptr,kind);assert_eq!(STATE.lock().unwrap().motion.velocity,once);
  }
  // Execute the real reaction writer: native suppressed impacts enter the
@@ -782,7 +803,7 @@ fn native_ram_velocity_submission_and_local_owner_boundary(){unsafe{
    accepted_contact(target,b,Some(77),0,base);assert!(allow_contact(target,b,Some(77),base));
    assert_eq!(STATE.lock().unwrap().motion.velocity,V(10.,0.,0.));
    accepted_contact(target,b,Some(77),1,base);assert!(!allow_contact(target,b,Some(77),base));
-   assert_eq!(STATE.lock().unwrap().motion.velocity,V(-1.5,0.,0.));
+   assert_eq!(STATE.lock().unwrap().motion.velocity,V(9.5,0.,0.));
    assert!(ENEMY_CONTACT.with(|c|c.get().is_none()));
   }
   ptr::write_unaligned((physics.as_mut_ptr()as usize+0x70)as*mut[f32;4],[3.01,0.,0.,1.]);assert!(allow_contact(target,b,Some(77),base));
